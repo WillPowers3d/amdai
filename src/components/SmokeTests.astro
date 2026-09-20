@@ -1,0 +1,21 @@
+---
+import { qwenGuide } from '../lib/status';
+---
+
+<div class="not-prose my-6 rounded-xl border border-line bg-raised/60 p-4">
+  <p class="font-mono text-[0.68rem] uppercase tracking-[0.14em] text-faint">Verify this week — do not trust a frozen pin</p>
+  <p class="mt-2 text-sm text-muted">
+    From <code class="font-mono">src/data/qwen-recommendations.yaml</code>. A stack that passed last month still has to pass these on <em>your</em> box.
+  </p>
+  <ol class="mt-4 grid gap-3">
+    {qwenGuide.smoke_tests.map((test, i) => (
+      <li class="text-sm">
+        <span class="font-medium">{i + 1}. {test.name}.</span>
+        <span class="text-muted"> Prompt: “{test.prompt}” Expect: {test.expect}</span>
+      </li>
+    ))}
+  </ol>
+  <p class="mt-4 text-xs text-faint">
+    tok/s is a sanity check (CPU crawl vs GPU), not a spec sheet. If VRAM never moves, you failed before the model did.
+  </p>
+</div>

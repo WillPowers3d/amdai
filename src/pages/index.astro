@@ -41,8 +41,8 @@ const updates = (await getCollection('updates')).sort((a, b) => b.data.date.valu
       <ol class="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         {[
           { n: '01', href: '/gpus', t: 'Pick the GPU', d: 'R9700 if you want 32 GB. RX 9070 XT if 16 GB is enough.' },
-          { n: '02', href: '/rocm', t: 'Install ROCm', d: 'AMD 10.0 family package. Not the distro archive metapackage.' },
-          { n: '03', href: '/software', t: 'Pick software', d: 'llama.cpp/Ollama for chat. Pinned vLLM to serve.' },
+          { n: '02', href: '/rocm', t: 'Install ROCm', d: 'Whatever the weekly card names. Not the distro archive metapackage.' },
+          { n: '03', href: '/software', t: 'Pick software', d: 'Official Qwen on llama.cpp first. Pinned vLLM if you serve.' },
           { n: '04', href: '/harnesses', t: 'Optional harness', d: 'Hermes Agent or OpenClaw on your local OpenAI-shaped API.' },
         ].map((step) => (
           <li class="rounded-2xl border border-line bg-raised/50 p-5">

@@ -24,6 +24,9 @@ inference:
 
 qwen:
   reliability_first: Official Qwen instruct, ~27B-class Q4/Q5 GGUF or equivalent, 32 GB VRAM
+  build: Official Qwen instruct (current Qwen-org card, 27B-class)
+  quant: Q4_K_M or Q5_K_M GGUF — confirm file size + KV cache on 32 GB
+  serve: llama.cpp / llama-server first; pinned vLLM only if you need a multi-client API
   then_capability: Same family at a higher quant, or a coder SKU, once the pipe is proven
   abliterated: Optional second checkpoint — smoke-test refusals and capability, do not assume the label
 

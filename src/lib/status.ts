@@ -23,6 +23,9 @@ export type WhatWorks = {
   };
   qwen: {
     reliability_first: string;
+    build: string;
+    quant: string;
+    serve: string;
     then_capability: string;
     abliterated: string;
   };

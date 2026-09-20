@@ -32,9 +32,13 @@ import { whatWorks } from '../lib/status';
       <dt class="font-mono text-[0.68rem] uppercase tracking-[0.14em] text-faint">Serving</dt>
       <dd class="mt-1 text-sm">{whatWorks.inference.serving}</dd>
     </div>
-    <div>
+    <div class="sm:col-span-2">
       <dt class="font-mono text-[0.68rem] uppercase tracking-[0.14em] text-faint">Qwen (reliability first)</dt>
-      <dd class="mt-1 text-sm">{whatWorks.qwen.reliability_first}</dd>
+      <dd class="mt-1 text-sm">
+        <span class="text-ink">{whatWorks.qwen.build}</span>
+        <span class="mt-1 block text-muted">Quant · {whatWorks.qwen.quant}</span>
+        <span class="mt-1 block text-muted">Serve · {whatWorks.qwen.serve}</span>
+      </dd>
     </div>
   </dl>
   <p class="mt-5 text-xs leading-relaxed text-faint">

@@ -20,7 +20,7 @@ Base chat models are trained to **refuse** some requests (weapons, crime, sexual
 
 ## Approaches (not a how-to for harm)
 
-**Refusal-direction ablation (“abliteration”).** Find a direction in activation space associated with “I can’t help with that,” then subtract / orthogonalize it (the [remove-refusals-with-transformers](https://huggingface.co/blog) / Heretic family of methods). No full retrain. Side effects: think-loops, template breakage, dropped MTP/vision tensors if someone re-saved sloppily.
+**Refusal-direction ablation (“abliteration”).** Find a direction in activation space associated with “I can’t help with that,” then subtract / orthogonalize it (the community “remove-refusals-with-transformers” writeups and the **Heretic** family of methods). No full retrain. Side effects: think-loops, template breakage, dropped MTP/vision tensors if someone re-saved sloppily.
 
 **Orthogonalization / projection.** Same family: make residual streams less able to express the refusal feature. Quality depends on the editor.
 
@@ -57,5 +57,7 @@ Table below is a **living YAML file** (`src/data/abliterated.yaml`). No download
 ## Qwen tradeoffs
 
 <QwenPicks />
+
+<SmokeTests />
 
 Refresh the YAML when a new Qwen.x drops. The [weekly status](/) will say whether we still recommend official instruct as the default — we should.

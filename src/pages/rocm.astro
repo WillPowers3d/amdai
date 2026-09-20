@@ -21,8 +21,8 @@ const updates = (await getCollection('updates')).sort((a, b) => b.data.date.valu
 
   <h2 id="version-notes">Version notes</h2>
   <p>
-    Short dated snapshots — not a changelog wall. The <a href="/">home status card</a> is the current recommendation.
-    These notes stay so you can see what changed.
+    Historical snapshots — including ROCm 10.0 and vLLM 0.29 as <strong>examples of a week</strong>, not permanent law.
+    The <a href="/">home status card</a> is the only “current recommendation.” If a note disagrees with the YAML, the YAML wins.
   </p>
   {updates.map((note) => <UpdateCard note={note} />)}
 </Doc>
