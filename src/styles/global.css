@@ -172,7 +172,17 @@ html[data-theme="light"] .astro-code span {
   text-decoration: var(--shiki-light-text-decoration) !important;
 }
 
+.reading-track {
+  height: 3px;
+  background: color-mix(in srgb, var(--accent) 28%, transparent);
+}
+
 .reading-bar {
+  height: 100%;
+  width: 100%;
+  background: var(--accent);
+  box-shadow: 0 0 10px color-mix(in srgb, var(--accent) 75%, transparent);
   transform-origin: left center;
   transform: scaleX(var(--progress, 0));
+  will-change: transform;
 }

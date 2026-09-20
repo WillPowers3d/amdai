@@ -2,7 +2,6 @@
 import Base from './Base.astro';
 import Sidebar from '../components/Sidebar.astro';
 import Toc from '../components/Toc.astro';
-import ReadingProgress from '../components/ReadingProgress.astro';
 
 interface Heading {
   depth: number;
@@ -22,7 +21,6 @@ const { title, description, kicker, updated, headings = [] } = Astro.props;
 ---
 
 <Base title={title} description={description}>
-  <ReadingProgress />
   <div class="mx-auto grid max-w-6xl gap-10 px-4 py-10 sm:px-6 lg:grid-cols-[1fr_16rem] xl:grid-cols-[15rem_1fr_15rem]">
     <Sidebar />
     <main id="main" class="min-w-0">

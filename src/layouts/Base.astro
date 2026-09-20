@@ -8,6 +8,7 @@ import '@fontsource/ibm-plex-mono/500.css';
 import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import ReadingProgress from '../components/ReadingProgress.astro';
 import { site } from '../lib/site';
 
 interface Props {
@@ -48,6 +49,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
   </head>
   <body class="min-h-screen antialiased">
     <a class="skip-link" href="#main">Skip to content</a>
+    <ReadingProgress />
     <Header />
     <slot />
     <Footer />

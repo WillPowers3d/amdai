@@ -1,18 +1,46 @@
-<div id="reading-progress" class="reading-bar pointer-events-none fixed inset-x-0 top-0 z-50 h-0.5 bg-accent" style="--progress: 0;"></div>
+<div
+  id="reading-progress"
+  class="reading-track pointer-events-none fixed inset-x-0 top-0 z-50"
+  role="progressbar"
+  aria-label="Reading progress"
+  aria-valuemin="0"
+  aria-valuemax="100"
+  aria-valuenow="0"
+>
+  <div class="reading-bar" style="--progress: 0;"></div>
+</div>
 
 <script>
-  const bar = document.getElementById('reading-progress');
-  const article = document.getElementById('article');
+  const track = document.getElementById('reading-progress');
+  const bar = track?.querySelector<HTMLElement>('.reading-bar');
+
+  const ratio = (scrolled: number, total: number) => {
+    if (total <= 1) return 1;
+    return Math.min(Math.max(scrolled / total, 0), 1);
+  };
 
   const update = () => {
-    if (!bar || !article) return;
-    const rect = article.getBoundingClientRect();
-    const total = article.offsetHeight - window.innerHeight;
-    const scrolled = Math.min(Math.max(-rect.top, 0), Math.max(total, 1));
-    bar.style.setProperty('--progress', String(scrolled / Math.max(total, 1)));
+    if (!track || !bar) return;
+
+    const article = document.getElementById('article');
+    let progress = 0;
+
+    if (article) {
+      const rect = article.getBoundingClientRect();
+      const total = article.offsetHeight - window.innerHeight;
+      progress = ratio(Math.max(-rect.top, 0), total);
+    } else {
+      const doc = document.documentElement;
+      const total = doc.scrollHeight - window.innerHeight;
+      progress = ratio(window.scrollY || doc.scrollTop, total);
+    }
+
+    bar.style.setProperty('--progress', String(progress));
+    track.setAttribute('aria-valuenow', String(Math.round(progress * 100)));
   };
 
   update();
   window.addEventListener('scroll', update, { passive: true });
   window.addEventListener('resize', update);
+  document.addEventListener('astro:page-load', update);
 </script>
