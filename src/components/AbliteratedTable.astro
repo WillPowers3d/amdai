@@ -1,0 +1,33 @@
+---
+import { abliteratedGuide } from '../lib/status';
+---
+
+<div class="not-prose my-6 overflow-x-auto rounded-xl border border-line">
+  <table class="min-w-[48rem] w-full text-left text-sm">
+    <caption class="sr-only">Notable abliterated or uncensored Qwen variants</caption>
+    <thead class="bg-raised">
+      <tr>
+        <th class="px-3 py-2 font-medium">Variant</th>
+        <th class="px-3 py-2 font-medium">Method</th>
+        <th class="px-3 py-2 font-medium">32 GB fit</th>
+        <th class="px-3 py-2 font-medium">Backends</th>
+        <th class="px-3 py-2 font-medium">Reliability</th>
+      </tr>
+    </thead>
+    <tbody>
+      {abliteratedGuide.rows.map((row) => (
+        <tr class="border-t border-line align-top">
+          <td class="px-3 py-2">
+            <span class="font-medium">{row.name}</span>
+            <span class="mt-0.5 block text-xs text-faint">{row.repo}</span>
+          </td>
+          <td class="px-3 py-2 text-muted">{row.method}</td>
+          <td class="px-3 py-2 text-muted">{row.vram_32gb}</td>
+          <td class="px-3 py-2 text-muted">{row.backends}</td>
+          <td class="px-3 py-2 text-muted">{row.reliability}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+  <p class="px-3 py-2 text-xs text-faint">Table from <code>src/data/abliterated.yaml</code> · {abliteratedGuide.as_of}. No download stats. Confirm the live model card.</p>
+</div>

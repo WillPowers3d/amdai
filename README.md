@@ -1,6 +1,8 @@
 # R9700 Lab Notes
 
-A static documentation and tutorial site for running **local AI** on the **AMD Radeon AI PRO R9700** (the card people often call an “AMD R9700 Pro”) and other home-lab AMD GPUs with **ROCm**.
+A static documentation and tutorial site for **local AI** on the **AMD Radeon AI PRO R9700** (often called an “AMD R9700 Pro”) and other home-lab AMD GPUs with **ROCm**.
+
+It is a **living tracker**, not a frozen manual. Version pins are dated snapshots. The home page “what works this week” card is the current recommendation.
 
 Audience: hobbyists and home-lab users. Not enterprise Instinct marketing.
 
@@ -10,7 +12,7 @@ Audience: hobbyists and home-lab users. Not enterprise Instinct marketing.
 - MDX content collections
 - TypeScript
 - Tailwind CSS 4
-- Shiki syntax highlighting
+- YAML data files for weekly status
 
 ## Run locally
 
@@ -28,70 +30,50 @@ npm run build
 npm run preview
 ```
 
-`npm run build` writes a static site to `dist/`. No secrets, accounts, or paid hosting are required.
-
-When you publish, set `site` in `astro.config.mjs` to your public URL so sitemap and canonical links are correct.
+When you publish, set `site` in `astro.config.mjs` to your public URL.
 
 ## Information architecture
 
-| URL | Content |
+| URL | Section |
 | --- | --- |
-| `/` | Pitch, featured tutorials, official links |
-| `/gpus` | Naming, PRO vs RX vs Instinct, home-practical GPUs |
-| `/rocm` | What ROCm is, Linux-first install overview |
-| `/local-ai` | llama.cpp, Ollama, vLLM, VRAM and power |
-| `/tutorials` | Starter walkthroughs |
-| `/blog` | Short notes and deep dives |
+| `/` | Home + living status card |
+| `/start` | Getting started (GPU → ROCm → software → harness) |
+| `/gpus` | AMD GPUs / R9700 naming |
+| `/rocm` | ROCm explainer + succinct version notes |
+| `/software` | vLLM, llama.cpp, Ollama, TGI |
+| `/abliterated` | Refusal removal / Qwen variants |
+| `/harnesses` | Hermes Agent and OpenClaw |
+| `/hardware` | PSU, cooling, VRAM |
+| `/tutorials` | How-tos |
+| `/troubleshooting` | Common failures |
+| `/faq` | Short answers |
+| `/blog` | Longer posts + version-note index |
 
-FAQ, a hardware guide, and troubleshooting are reserved in the footer as **coming later** — they are not empty routes.
+`/local-ai` redirects to `/software`.
+
+## Living updates (edit these, not the layouts)
+
+| File | Feeds |
+| --- | --- |
+| `src/data/what-works.yaml` | Home status card |
+| `src/data/qwen-recommendations.yaml` | Getting started / software / serve-Qwen |
+| `src/data/abliterated.yaml` | Abliterated table |
+
+Add a short dated note under `src/content/updates/` when a **line** changes (new Core SDK, new vLLM extras). Those render on `/rocm#version-notes` and the blog index.
 
 ## Authoring MDX
 
-Collections live under `src/content/`:
+| Folder | Routes |
+| --- | --- |
+| `src/content/guides/` | `/{id}` (`rocm.mdx` is rendered by `src/pages/rocm.astro`) |
+| `src/content/tutorials/` | `/tutorials/{id}` |
+| `src/content/blog/` | `/blog/{id}` |
+| `src/content/updates/` | Cards on `/rocm` and `/blog` |
 
-| Folder | Collection | Routes |
-| --- | --- | --- |
-| `src/content/guides/` | `guides` | `/{id}` — use ids `gpus`, `rocm`, `local-ai` |
-| `src/content/tutorials/` | `tutorials` | `/tutorials/{id}` |
-| `src/content/blog/` | `blog` | `/blog/{id}` |
+MDX can use `<Callout>`, `<QwenPicks />`, and `<AbliteratedTable />` without imports.
 
-Schemas are in `src/content.config.ts`. Frontmatter examples:
-
-```mdx
----
-title: Install ROCm on a home Linux box
-description: A conservative path…
-minutes: 35
-difficulty: starter
-updated: 2026-09-20
-featured: true
-order: 1
----
-```
-
-```mdx
----
-title: The name is Radeon AI PRO R9700
-description: Why forums say “R9700 Pro”…
-pubDate: 2026-09-12
-tags: [naming, hardware]
----
-```
-
-In MDX you can use the shared `Callout` component (no import required):
-
-```mdx
-<Callout type="linux">Linux is the realistic ROCm path.</Callout>
-```
-
-`type` may be `note`, `warn`, `linux`, or `check`.
-
-Site-wide names and official URLs live in `src/lib/site.ts`. Nav items are defined there so a new top-level section is one object plus a page or guide.
-
-## Design
-
-Dark theme by default (AMD-inspired red / near-black / warm gray). A header toggle switches to light and stores the choice in `localStorage`. No AMD logos or trademarks are used as artwork.
+Nav lives in `src/lib/site.ts`.
 
 ## Accuracy
 
-Product figures cited from AMD’s public R9700 page are labeled as vendor-published. This repo does **not** invent benchmarks or prices. Always re-check the live [ROCm support matrix](https://rocm.docs.amd.com/projects/install-on-linux/en/latest/reference/system-requirements.html) before you install.
+Product figures from AMD’s public R9700 page are labeled. ROCm 10.0 / vLLM 0.29 material is a **dated snapshot**. Always re-check the live [ROCm matrix](https://rocm.docs.amd.com/projects/install-on-linux/en/latest/reference/system-requirements.html) and [vLLM GPU install](https://docs.vllm.ai/en/stable/getting_started/installation/gpu/index.html).

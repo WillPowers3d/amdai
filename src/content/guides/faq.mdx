@@ -1,0 +1,37 @@
+---
+title: FAQ
+kicker: Short answers
+description: Newcomer questions for a home Radeon AI PRO R9700, ROCm, Qwen, and local agents.
+updated: 2026-09-20
+order: 9
+---
+
+**Is “R9700 Pro” a real SKU?**  
+The product is the **AMD Radeon AI PRO R9700**. There is no consumer RX 9700 in AMD’s current lineup. The gaming sibling is the RX 9070 series. [AMD GPUs](/gpus).
+
+**Will ROCm work for local LLMs on Ubuntu in 2026?**  
+Yes, for single-GPU inference, if you pin a current AMD **Core SDK** (10.0 line as of the [weekly card](/)) and a matching runtime. It is still not CUDA. Packaging is the hard part.
+
+**Can I `apt install rocm` from Ubuntu?**  
+You can. You probably should **not**, if you want ROCm 10.0, `gfx1201` first-class support, or vLLM 0.29. Distro archives lag. [ROCm](/rocm).
+
+**Windows?**  
+Vulkan (llama.cpp, some UIs) is the honest path. Full ROCm userspace is a Linux product. Limited PyTorch-on-Windows exists; do not expect `rocm-smi` culture.
+
+**Which Qwen should I run first?**  
+Official **instruct**, 27B-class at Q4/Q5 on 32 GB. Prove GPU use. Then coder or [abliterated](/abliterated) if you want that tradeoff.
+
+**vLLM 0.27 or 0.29?**  
+0.27 is what **AMD’s ROCm 10.0** docs were pairing. 0.29 is **upstream** ROCm extras / `vllm-openai-rocm`. Both are snapshots. Default PyPI vLLM is CUDA.
+
+**Do I need a harness?**  
+No. You need tokens on the GPU. Hermes or OpenClaw come after a loopback API works.
+
+**Is OpenClaw the same as Hermes?**  
+No. Hermes is an agent product from Nous. OpenClaw is a multi-channel self-hosted gateway. [Harnesses](/harnesses).
+
+**Will two R9700s double speed?**  
+Not automatically. Expect RCCL and topology work. Measure.
+
+**Can I fine-tune like a 4090 blog post?**  
+PyTorch ROCm exists. The cookbook is thinner. Inference is the supported-feeling path.

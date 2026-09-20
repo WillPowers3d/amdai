@@ -1,0 +1,17 @@
+---
+import { qwenGuide } from '../lib/status';
+---
+
+<div class="not-prose my-6 grid gap-3">
+  <p class="text-sm text-muted">{qwenGuide.principle}</p>
+  {qwenGuide.recommendations.map((item) => (
+    <article class="rounded-xl border border-line bg-raised/60 p-4">
+      <p class="font-mono text-[0.68rem] uppercase tracking-[0.14em] text-faint">{item.role}</p>
+      <h3 class="mt-1 font-serif text-xl">{item.name}</h3>
+      <p class="mt-2 text-sm text-muted">{item.why}</p>
+      <p class="mt-2 text-sm"><span class="text-faint">Serve · </span>{item.serve}</p>
+      <p class="mt-1 text-sm"><span class="text-faint">32 GB · </span>{item.vram_32gb}</p>
+      <p class="mt-1 text-sm text-faint">{item.notes}</p>
+    </article>
+  ))}
+</div>

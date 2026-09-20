@@ -3,7 +3,7 @@
   "type": "module",
   "version": "0.1.0",
   "private": true,
-  "description": "Home-lab documentation for local AI on the AMD Radeon AI PRO R9700 and ROCm.",
+  "description": "Living home-lab notes for the AMD Radeon AI PRO R9700, ROCm, Qwen, and local agent harnesses.",
   "engines": {
     "node": ">=22.12.0"
   },
@@ -26,7 +26,8 @@
     "@tailwindcss/vite": "^4.3.3",
     "astro": "^7.3.3",
     "tailwindcss": "^4.3.3",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "yaml": "^2.9.1"
   },
   "allowScripts": {
     "esbuild": true

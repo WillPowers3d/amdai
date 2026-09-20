@@ -1,0 +1,39 @@
+# Living "what works this week" snapshot.
+# Update this file when the frontier moves. Do not treat it as permanent law.
+as_of: 2026-09-20
+status: viable
+headline: Single-GPU local Qwen on a Radeon AI PRO R9700 is viable on Ubuntu when you pin ROCm and the inference stack. It is still not CUDA.
+summary: >
+  ROCm no longer "doesn't work" for home LLM inference, but packaging is the pain.
+  Use AMD's ROCm Core SDK 10.0 line (or a matching official vLLM ROCm image),
+  not the distro archive metapackage. Daily chat/agents: llama.cpp HIP or Ollama.
+  Serving with continuous batching: pinned vLLM. Fine-tune still lags CUDA.
+
+rocm:
+  recommended: AMD ROCm Core SDK 10.0.0, one RDNA4/gfx120x family package
+  install_prefix: /opt/rocm/core-10.0 (confirm on your box; TheRock scoped prefixes vary)
+  avoid: Ubuntu/Canonical archive `apt install rocm` if you want 10.0 or current vLLM
+  also_current: 7.14.1 is the last legacy/TheRock patch line before 10.0 — a valid pin, not "latest"
+
+inference:
+  least_pain: llama.cpp (HIP gfx1201, or Vulkan if HIP is messy) / Ollama for chat and agents
+  serving: vLLM 0.29.0 ROCm extras or Docker `vllm/vllm-openai-rocm:v0.29.0`
+  amd_supported_combo: ROCm 10.0 docs list vLLM 0.27 + PyTorch 2.13 + SGLang 0.5.15
+  do_not: plain `pip install vllm` from default PyPI (that is the CUDA wheel)
+
+qwen:
+  reliability_first: Official Qwen instruct, ~27B-class Q4/Q5 GGUF or equivalent, 32 GB VRAM
+  then_capability: Same family at a higher quant, or a coder SKU, once the pipe is proven
+  abliterated: Optional second checkpoint — smoke-test refusals and capability, do not assume the label
+
+verify:
+  - rocminfo shows gfx1201 for the R9700
+  - rocm-smi VRAM/compute moves during generate
+  - A short golden prompt finishes (no hang, no CPU-only crawl)
+  - If you use vLLM, the process is the ROCm build (hip/rocm in the version string)
+
+honesty:
+  - llama.cpp or Ollama on one card = least pain
+  - vLLM single-GPU Docker, pinned = production-shaped serving
+  - Multi consumer GPU = RCCL/atomics tax; test before you buy the second card for speed
+  - Fine-tune on Radeon is weaker than the CUDA cookbook

@@ -34,7 +34,9 @@ Public AMD product-page figures (verify there if you are buying or writing a BOM
 | Memory ECC | Yes, Linux only |
 | OS listed | Windows 10/11 64-bit, Linux x86-64 |
 
-ROCm documents the card as **LLVM target `gfx1201`**. That identifier shows up in `rocminfo`, llama.cpp HIP builds, and PyTorch wheel selectors. If a tool does not mention `gfx1201` (or a generic “RDNA 4 / gfx120x” bucket), treat support as unproven.
+ROCm documents the card as **LLVM target `gfx1201`**. On **Core SDK 10.0** it is a first-class RDNA4 row (same ISA family as RX 9070 / 9070 XT). That identifier shows up in `rocminfo`, llama.cpp HIP builds, and PyTorch/vLLM wheel selectors. If a tool does not mention `gfx1201` (or a generic gfx120x bucket), treat support as unproven.
+
+TheRock installs want **one** family package (`amdrocm-core-sdk10.0` plus a gfx120x suffix). See [ROCm](/rocm).
 
 Related official names you may see on the same generation:
 
@@ -89,4 +91,4 @@ This site does not list street prices. They move. What does not move as fast:
 - **12V-2x6** is not the same cable culture as dual 8-pin PRO cards from last generation. Use a PSU-native cable or an adapter the PSU vendor documents.
 - **ECC on Linux only** is a product-page fact, not a reason to skip Windows gaming drivers if you dual-boot. It is a reason not to assume parity features across OS.
 
-Next: [what ROCm actually is](/rocm), then [how local inference stacks map onto this hardware](/local-ai).
+Next: [what ROCm actually is](/rocm), then [AI software](/software) and [hardware realities](/hardware).

@@ -1,6 +1,6 @@
 ---
-title: Run a local LLM on ROCm
-description: Build llama.cpp for gfx1201, optionally try Ollama, and serve a small GGUF so you know the GPU is doing the work.
+title: Run a local Qwen (llama.cpp)
+description: Build llama.cpp for gfx1201, prove GPU use on a small GGUF, then step up to official Qwen instruct.
 minutes: 40
 difficulty: starter
 updated: 2026-09-20
@@ -8,10 +8,10 @@ featured: true
 order: 3
 ---
 
-Goal: a **chat-capable model on the R9700**, with `rocm-smi` showing GPU use. We start with **llama.cpp** because you control the backend. **Ollama** is the convenience option afterward.
+Goal: **official Qwen** generating on the R9700, with `rocm-smi` showing GPU use. We start with **llama.cpp** because you control the backend. **Ollama** is optional. **vLLM** is the [next tutorial](/tutorials/serve-qwen).
 
 <Callout type="check">
-Pick a **small** first model (a recent 7B–8B-class GGUF, Q4 or Q5). The 32 GB card can hold much more; a tiny model tells you whether the *pipeline* works. Do not start with a 70B download.
+Smoke-test with a **small** GGUF (7B–8B Q4/Q5) so you know the pipe works. Then step to a **27B-class official Qwen instruct** quant. Do not start with 70B or an [abliterated](/abliterated) checkpoint.
 </Callout>
 
 ## Prerequisites

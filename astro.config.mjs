@@ -16,6 +16,9 @@ export default defineConfig({
     plugins: [tailwindcss()],
   },
   integrations: [mdx(), sitemap()],
+  redirects: {
+    '/local-ai': '/software',
+  },
   markdown: {
     shikiConfig: {
       themes: {

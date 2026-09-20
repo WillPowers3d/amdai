@@ -1,0 +1,68 @@
+# Notable public Qwen abliterated / uncensored variants people run locally.
+# No download stats. VRAM is approximate from published GGUF sizes. Verify the model card.
+as_of: 2026-09-20
+
+search_patterns:
+  - abliterated
+  - uncensored
+  - heretic
+  - refusal ablation
+  - Huihui-Qwen
+  - Qwen3.8-27B-Uncensored
+
+rows:
+  - name: Qwen official instruct (control)
+    repo: Qwen org instruct cards
+    method: none (stock refusals)
+    size: 27B-class (family-dependent)
+    quant_example: Q4_K_M / Q5_K_M GGUF
+    vram_32gb: Usually comfortable at 4–5 bit
+    backends: llama.cpp, Ollama, vLLM — widest
+    reliability: Highest for "it just runs"
+    notes: Baseline. Use this to judge whether an edit broke thinking or templates.
+
+  - name: orcarouter Qwen3.8-27B Uncensored
+    repo: orcarouter/Qwen3.8-27B-Uncensored (GGUF sibling published)
+    method: Abliteration / refusal-direction work on Qwen3.8-27B
+    size: 27B
+    quant_example: Q4_K_M ~16.8 GB (publisher figure)
+    vram_32gb: Fits with context room if the card is honest
+    backends: llama.cpp first; check card for vLLM
+    reliability: Community writeups exist; still verify MTP/vision claims on your build
+    notes: Some GGUF repos are gated. Read the license and safety note on the card.
+
+  - name: Huihui Qwen3.8-27B abliterated
+    repo: huihui-ai/Huihui-Qwen3.8-27B-abliterated
+    method: Classic abliteration (remove-refusals-with-transformers style)
+    size: 27B
+    quant_example: Community GGUF / Ollama tags exist — confirm the exact file
+    vram_32gb: Same 27B envelope if you pick a 4–5 bit quant
+    backends: llama.cpp / Ollama commonly; vLLM unstated here
+    reliability: Older method; some builds keep early layers unablated. Test think-loops.
+    notes: Publisher frames it as experimental. MTP/vision "not modified" on the card.
+
+  - name: Heretic-style uncensored GGUF (e.g. JonathanColetti)
+    repo: JonathanColetti/Qwen3.8-27B-Uncensored-GGUF
+    method: Heretic refusal-direction minimization + MTP graft notes on the card
+    size: 27B
+    quant_example: Q4_K_M and others listed on the card
+    vram_32gb: Treat Q4 as the 32 GB daily quant until you measure cache
+    backends: llama.cpp (GGUF). vLLM is a different checkpoint format.
+    reliability: Card is unusually explicit about what quantization does to the refusal boundary
+    notes: Lower bits can change refusals again. Evaluate behavior on a high quant first.
+
+  - name: SFT-class refusal removal (e.g. Abliterated-SFT)
+    repo: jenerallee78/Qwen3.8-27B-Abliterated-SFT
+    method: Small SFT / LoRA on refusal, not only direction ablation
+    size: 27B
+    quant_example: Publisher GGUF notes exist — read GGUFs.md
+    vram_32gb: Unknown until you pick a quant. Do not invent a fit.
+    backends: llama.cpp tested by publisher; vLLM "compatible-by-registry, not load-tested"
+    reliability: Different failure mode (harness/system-prompt can restore refusals)
+    notes: Finicky with agent frames. Useful as a contrast, not the default.
+
+trust:
+  - Prefer SHA-256 or `huggingface-cli` revision pins over a random mirror
+  - Read LICENSE and the model card's intended-use / research language
+  - A jailbreak baked into the chat template is not the same as weight-level ablation
+  - If `config.json` advertises MTP or vision, confirm the tensors are actually in the file

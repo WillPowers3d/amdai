@@ -1,0 +1,57 @@
+---
+title: Hardware and power
+kicker: Home lab
+description: PSU, cooling, case, noise, and VRAM versus model size for a 32 GB Radeon AI PRO R9700 — no fake benches.
+updated: 2026-09-20
+order: 6
+---
+
+The card is a 300&nbsp;W-class workstation part, not a silent HTPC dongle. Plan the box like a small workstation.
+
+## Official R9700 figures (AMD product page)
+
+| Item | AMD-published |
+| --- | --- |
+| TBP | 300 W |
+| PSU recommendation | 750 W |
+| Power connector | 12V-2x6 |
+| Slot | Double slot, active cooling |
+| Memory | 32 GB GDDR6, 640 GB/s peak |
+| Bus | PCIe 5.0 x16 |
+| ECC | Linux only |
+
+Street prices change; we do not list them. Partner coolers change acoustics. Look at the **actual** AIB board.
+
+## PSU
+
+750 W is AMD’s *minimum recommendation* for the card in a generic system, not “headroom for a 5090-class CPU and six drives.” Use a quality unit with a **native** 12V-2x6 / 12VHPWR cable if that is what the card expects. Cheap pigtails are how people learn about transient spikes.
+
+## Cooling and noise
+
+Many AI PRO cards are compact **blower** designs that exhaust out the bracket. Good for a cramped workstation; loud at the desk when memory clocks sit at the top P-state. Leave the adjacent slot empty. Do not bury the intake in cables. Watch junction and memory temps with `rocm-smi` **while generating**, not at the GNOME wallpaper.
+
+Open-air test benches lie about case airflow. A small cube case will teach you about recirculation.
+
+## Case and risers
+
+A short dual-slot PRO card fits places a triple-slot 7900 XTX does not. A PCIe 4.0 x16 riser will usually *work*. Decode-bound chat may not care; fat prefill might. Prefer a direct x16 slot if you are chasing prefill.
+
+## VRAM versus model size (approximate)
+
+Weights + KV cache + batch share 32 GB. **Verify per file and context.** These are planning brackets, not promises:
+
+| Situation | 32 GB often means |
+| --- | --- |
+| 7B–14B high-quality quant | Easy, long context |
+| ~27B–32B Qwen-class, 4–5 bit | Daily driver if cache is sane |
+| Same at Q8 / long context | Tight; measure |
+| 70B dense | Aggressive quant, short context, or another GPU |
+| MoE with few active experts | File size can surprise you — read the card |
+
+A 16 GB RX 9070 XT is the better buy if you live in the 8B–14B bracket. The R9700 is the bracket above, or the same models with less compromise.
+
+Host RAM: 64 GB is comfortable next to a 32 GB GPU. 32 GB host works for inference-only and gets ugly if you also fine-tune.
+
+## What not to optimize first
+
+Do not buy a second card for “double tok/s” before you have [one GPU proven](/tutorials/verify-rocm). Multi-GPU at home pays an RCCL/topology tax. See the [weekly honesty list](/).

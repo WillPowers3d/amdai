@@ -4,31 +4,52 @@ import Base from '../../layouts/Base.astro';
 import Sidebar from '../../components/Sidebar.astro';
 
 const posts = (await getCollection('blog')).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+const updates = (await getCollection('updates')).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 ---
 
-<Base title="Blog" description="Naming notes, ROCm version caveats, and home-lab deep dives for AMD Radeon AI hardware.">
-  <div class="mx-auto grid max-w-6xl gap-10 px-4 py-10 sm:px-6 xl:grid-cols-[15rem_1fr]">
+<Base title="Blog" description="Longer home-lab notes plus succinct ROCm / vLLM version snapshots.">
+  <div class="mx-auto grid max-w-7xl gap-10 px-4 py-10 sm:px-6 xl:grid-cols-[15rem_1fr]">
     <Sidebar />
     <main id="main">
       <p class="font-mono text-[0.7rem] uppercase tracking-[0.16em] text-accent">Blog</p>
       <h1 class="mt-2 font-serif text-4xl tracking-tight sm:text-5xl">Notes from the bench</h1>
       <p class="mt-4 max-w-2xl text-lg text-muted">
-        Shorter pieces than the guides: naming confusion, version traps, and why Vulkan still shows up in an ROCm-flavored lab.
+        Longer pieces live here. Succinct ROCm/vLLM version updates are also listed so you can scan dates without opening the full changelog.
       </p>
-      <ul class="mt-10 divide-y divide-line border-y border-line">
-        {posts.map((post) => (
-          <li class="py-6">
-            <p class="font-mono text-[0.68rem] uppercase tracking-[0.14em] text-faint">
-              {post.data.pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
-              {post.data.tags.length > 0 && ` · ${post.data.tags.join(' · ')}`}
-            </p>
-            <h2 class="mt-2 font-serif text-2xl">
-              <a class="hover:text-accent-ink" href={`/blog/${post.id}`}>{post.data.title}</a>
-            </h2>
-            <p class="mt-2 max-w-2xl text-sm leading-relaxed text-muted">{post.data.description}</p>
-          </li>
-        ))}
-      </ul>
+
+      <section class="mt-10">
+        <h2 class="font-serif text-2xl">ROCm version notes</h2>
+        <ul class="mt-4 divide-y divide-line border-y border-line">
+          {updates.map((note) => (
+            <li class="py-4">
+              <p class="font-mono text-[0.68rem] uppercase tracking-[0.14em] text-faint">
+                {note.data.date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
+                {note.data.current ? ' · snapshot' : ''}
+              </p>
+              <a class="font-medium hover:text-accent-ink" href="/rocm#version-notes">{note.data.title}</a>
+              <p class="mt-1 text-sm text-muted">{note.data.summary}</p>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section class="mt-12">
+        <h2 class="font-serif text-2xl">Longer posts</h2>
+        <ul class="mt-4 divide-y divide-line border-y border-line">
+          {posts.map((post) => (
+            <li class="py-6">
+              <p class="font-mono text-[0.68rem] uppercase tracking-[0.14em] text-faint">
+                {post.data.pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
+                {post.data.tags.length > 0 && ` · ${post.data.tags.join(' · ')}`}
+              </p>
+              <h3 class="mt-2 font-serif text-2xl">
+                <a class="hover:text-accent-ink" href={`/blog/${post.id}`}>{post.data.title}</a>
+              </h3>
+              <p class="mt-2 max-w-2xl text-sm leading-relaxed text-muted">{post.data.description}</p>
+            </li>
+          ))}
+        </ul>
+      </section>
     </main>
   </div>
 </Base>

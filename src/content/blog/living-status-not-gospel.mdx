@@ -1,0 +1,22 @@
+---
+title: The weekly card is not scripture
+description: Why this site tracks ROCm and vLLM as dated snapshots, and how to refresh the YAML without redesigning pages.
+pubDate: 2026-09-20
+tags: [process, rocm]
+---
+
+The frontier on home AMD ROCm moves **weekly**. A tutorial that freezes “install ROCm 6.1 and pip install vllm” is how people lose a Saturday.
+
+This notebook keeps two layers:
+
+1. **`src/data/what-works.yaml`** — the [home](/) “what works this week” card. Qwen recommendation, ROCm line, inference default. Edit the file. Rebuild. No layout work.
+2. **[ROCm version notes](/rocm#version-notes)** — short dated cards (10.0.0, 7.14.1, vLLM 0.29). They stay so you can see *what we believed then*. They are labeled archive vs snapshot.
+
+Companion YAML:
+
+- `src/data/qwen-recommendations.yaml` — reliability vs capability vs optional abliterated
+- `src/data/abliterated.yaml` — the table on [/abliterated](/abliterated)
+
+When you update: change `as_of`, rewrite the headline in one sentence, and add a version note if a **line** changed (new Core SDK, new vLLM extras index). Do not silently mutate history.
+
+Verify on the box: `rocminfo` / `rocm-smi`, a golden prompt, and “is this the ROCm wheel.” Tokens-per-second brag posts are not a substitute.

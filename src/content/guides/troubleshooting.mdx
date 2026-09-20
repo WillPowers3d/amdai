@@ -1,0 +1,55 @@
+---
+title: Troubleshooting
+kicker: Failures
+description: GPU not seen, archive ROCm vs 10.0, CUDA wheels, CPU fallback, and harnesses that never hit the R9700.
+updated: 2026-09-20
+order: 8
+---
+
+Work **top down**. Do not fine-tune a jinja template while `rocminfo` is empty.
+
+## The GPU is not in `rocminfo`
+
+- `lspci` first. No AMD VGA/3D line → power cable, slot, or the card never initialized (`dmesg | grep -i amdgpu`).
+- `lsmod | grep amdgpu` empty → kernel module / Secure Boot / DKMS. TTY or SSH recovery; do not install a third driver to “fix” it.
+- Userspace from **Ubuntu archive `rocm`** on a box you thought was **Core SDK 10.0** → `gfx1201` never existed in that tree. See [ROCm](/rocm) and [install](/tutorials/install-rocm).
+- You installed **every** `amdrocm-core-sdk10.0-*` family package → TheRock wants **one** gfx family. Purge extras.
+
+## `Permission denied` on `/dev/kfd`
+
+You are not in `render`/`video`, or you never logged out. Containers need `/dev/kfd` **and** `/dev/dri` and the right GIDs.
+
+## PyTorch or vLLM never sees the card
+
+| Symptom | Likely cause |
+| --- | --- |
+| `torch.version.hip` is `None` | CUDA wheel from default PyPI |
+| `pip install vllm` then NVIDIA errors | Same — you wanted `--extra-index-url` ROCm or `vllm-openai-rocm` |
+| Available false, `rocminfo` fine | Groups, `HIP_VISIBLE_DEVICES`, or wheel built for the wrong gfx |
+| Device name is the iGPU | Visibility env; pick the discrete index |
+
+AMD’s 10.0 docs pin **vLLM 0.27 + PyTorch 2.13**. Upstream **vLLM 0.29** is a different pin (`rocm723` extras). Do not mix them in one venv. [Version notes](/rocm#version-notes).
+
+## Generation is glacial and VRAM is empty
+
+The process is on **CPU**. Ollama/Windows ROCm for `gfx1201` has been a frequent miss — use Linux + a backend that logs HIP/Vulkan, or llama.cpp you compiled.
+
+## llama.cpp HIP configure fails
+
+`HIP_PATH=/opt/rocm` or `/opt/rocm/core-10.0` (confirm). If CMake still sulks, [Vulkan](/blog/vulkan-is-an-on-ramp) tonight, HIP tomorrow.
+
+## vLLM dies on warmup / RCCL
+
+Single GPU first. Two home cards are an RCCL project. Read the image’s ROCm version. 0.21–0.25 warmup bugs were a documented class of pain — use a release the notes say is fixed, or AMD’s 0.27 image.
+
+## Qwen thinks forever or leaks tokens
+
+Wrong chat template (`--jinja`), or an [abliterated](/abliterated) edit that broke termination. Compare official instruct. Disable thinking if the card says to.
+
+## Harness is “broken”
+
+`curl` the inference URL. If curl is fine, the bug is Hermes/OpenClaw config (Ollama `/v1` vs native API, missing `VLLM_API_KEY`, iGPU endpoint). [Harnesses](/harnesses).
+
+## Firmware / MES / “it worked yesterday”
+
+RDNA4 still sees firmware and MES surprises after a kernel upgrade. If a stack died after `apt upgrade`, bisect kernel vs ROCm userspace. Check AMD’s release notes, not a Discord screenshot.

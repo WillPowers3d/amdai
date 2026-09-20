@@ -1,0 +1,63 @@
+---
+title: AI software on AMD at home
+kicker: Inference
+description: vLLM, llama.cpp, Ollama, Hugging Face TGI, and PyTorch — what each is for on ROCm, and when to pick it.
+updated: 2026-09-20
+order: 3
+---
+
+The model files are not the runtime. On a R9700 you choose a **server** that speaks HIP or Vulkan, then optionally a [harness](/harnesses) that speaks HTTP to that server.
+
+<Callout type="note">
+**Qwen first.** Get an official instruct checkpoint generating on the GPU. Then change servers. Then change weights (coder / abliterated). The [weekly status](/) names the pin we would try *this week*.
+</Callout>
+
+## Quick compare
+
+| Stack | Best at | Pain on Radeon | Pick when |
+| --- | --- | --- | --- |
+| **llama.cpp** | One user, GGUF, tight control | You compile HIP (`gfx1201`) or use Vulkan | First Qwen, debugging, agents that just need `/v1` |
+| **Ollama** | Pull + API with almost no flags | Bundled ROCm can miss `gfx1201`; Windows is worse | You want convenience *and* `rocm-smi` proves GPU use |
+| **vLLM** | Continuous batching, OpenAI server, spec decode | Version/wheel hell; multi-GPU RCCL | Several clients or a harness that needs a real server |
+| **HF TGI** | Production-shaped HF serving | Official ROCm image is **tested on Instinct**, not promised on Radeon | You already live in TGI and will validate on *this* card |
+| **PyTorch + HF** | Fine-tune, custom pipelines | Need the **gfx1201** ROCm wheel | Training loops, not your daily chat |
+
+## llama.cpp
+
+C/C++ GGUF runner. Backends that matter here: **HIP/ROCm** (`-DGGML_HIP=ON -DAMDGPU_TARGETS=gfx1201`) and **Vulkan**. Vulkan is a first-class on-ramp, not a consolation prize — see the [blog note](/blog/vulkan-is-an-on-ramp).
+
+Use it for the first [local Qwen](/tutorials/run-local-llm). `llama-server` gives harnesses an OpenAI-shaped loopback.
+
+## Ollama
+
+Same job as llama.cpp for many people, with model tags and a daemon. On Linux, treat GPU attach as **unproven until `rocm-smi` moves**. If it sits on CPU, upgrade, read the backend log, or go back to llama.cpp.
+
+## vLLM
+
+Throughput-oriented serving. Two different “official” stories:
+
+- **AMD’s ROCm 10.0 docs** (dated snapshot): vLLM **0.27** with PyTorch **2.13**, often via `rocm/vllm:…` images. That is the *supported combo*, not automatically the fastest combo.
+- **Upstream vLLM 0.29.0** (8–9 Sep 2026 snapshot): ROCm extras, e.g. `pip install vllm --extra-index-url https://wheels.vllm.ai/rocm/0.29.0/rocm723` or `docker pull vllm/vllm-openai-rocm:v0.29.0`. **`pip install vllm` with no extra index is CUDA.**
+
+<Callout type="warn">
+0.30 release candidates exist in the wild. Bleeding. Pin what you measure. The home card lists a **known-good** pair, not a forever pin.
+</Callout>
+
+Single-GPU Docker, pinned, is the honest “production-viable” home path. Two consumer cards is a different project (RCCL, topology). [Serve Qwen](/tutorials/serve-qwen) stays on one GPU.
+
+## Hugging Face TGI
+
+[TGI on AMD](https://huggingface.co/docs/text-generation-inference/en/installation_amd) publishes a ROCm Docker image and says it is **supported and tested on Instinct MI210 / MI250 / MI300**. Radeon may work; it is not the tested row. AWQ load is called out as unsupported on that ROCm build. Prefer vLLM or llama.cpp unless TGI is already your shop standard.
+
+## PyTorch / Transformers
+
+Install from AMD’s [PyTorch for ROCm](https://rocm.docs.amd.com/projects/ai-ecosystem/en/latest/frameworks/pytorch/install.html) with a **gfx1201** (or documented gfx12) selector. Confirm `torch.version.hip` before `from_pretrained`. Fine-tune on Radeon is possible and still a worse cookbook than CUDA — say that out loud before you plan a LoRA weekend.
+
+## Workload honesty
+
+- **One card, chat / Hermes / OpenClaw:** llama.cpp or Ollama.
+- **One card, OpenAI server for several chats:** vLLM Docker, pinned.
+- **Multi GPU at home:** measure; do not assume linear speedup.
+- **Fine-tune:** PyTorch ROCm, modest expectations.
+
+Hardware limits: [Hardware & power](/hardware).

@@ -1,0 +1,58 @@
+---
+title: Getting started
+kicker: Path
+description: One end-to-end path for a home AMD box — pick a GPU, install ROCm, serve Qwen, optionally add a harness.
+updated: 2026-09-20
+order: 0
+---
+
+Do this in order. Skip a layer and you will debug the wrong one.
+
+## 1. Pick the GPU
+
+- **32 GB local models:** [AMD Radeon AI PRO R9700](/gpus) (`gfx1201`). Official name — not an RX 9700.
+- **16 GB is enough:** Radeon RX 9070 XT (also `gfx1201` on current matrices). Same generation, half the VRAM.
+- **Already own a 7900 XTX:** still a practical home card (`gfx1100`). Different ROCm family package.
+
+Read [Hardware](/hardware) before you buy a PSU or a toaster case.
+
+## 2. Install ROCm on Linux
+
+Ubuntu LTS that AMD’s **current** matrix names. Then AMD’s **ROCm Core SDK 10.0** repo and **one** gfx-family package — not Canonical’s archive `rocm` metapackage if you care about 10.0 / modern vLLM.
+
+Walkthrough: [Install ROCm](/tutorials/install-rocm). Prove it: [Verify GPU and ROCm](/tutorials/verify-rocm).
+
+<Callout type="check">
+The [home status card](/) is the weekly pin. The [ROCm version notes](/rocm#version-notes) are history. Re-open AMD’s install page on the day you type commands.
+</Callout>
+
+## 3. Pick inference software
+
+Reliability path for Qwen on one R9700:
+
+1. **llama.cpp** (HIP `gfx1201`, Vulkan if HIP is angry) — first tokens, first golden prompt.
+2. **Ollama** — if you want a pull-and-chat wrapper and it actually attaches to the GPU.
+3. **vLLM** — when you want an OpenAI-shaped server, continuous batching, or several clients. Pin a **ROCm** wheel or `vllm/vllm-openai-rocm` image. Default `pip install vllm` is CUDA.
+
+Compare them on [AI software](/software). Run Qwen: [Local LLM tutorial](/tutorials/run-local-llm) then [Serve Qwen](/tutorials/serve-qwen).
+
+## 4. Optional harness
+
+A **harness** is the agent loop *above* the model: tools, memory, chat apps. It does not replace ROCm.
+
+- **[Hermes Agent](https://hermes-agent.nousresearch.com/)** (Nous Research) — local llama.cpp runtime (Vulkan on AMD unless you point at your own server) or any OpenAI-compatible endpoint.
+- **[OpenClaw](https://docs.openclaw.ai/)** — self-hosted gateway into Discord/Telegram/etc., with Ollama, vLLM, and llama.cpp providers.
+
+Details: [Harnesses](/harnesses). Stand up the model API first. Then point the harness at `127.0.0.1`.
+
+## 5. Qwen, then edits
+
+Default: **official Qwen instruct**, size that fits 32 GB at a sane quant. Prove reliability. Then a coder SKU or an [abliterated](/abliterated) checkpoint if you want that tradeoff.
+
+<QwenPicks />
+
+## Stop conditions
+
+- `rocminfo` has no `gfx1201` → do not download 20 GB.
+- `rocm-smi` idle while you “generate” → you are on CPU.
+- Harness is slow → check the **backend**, not the card’s reputation.

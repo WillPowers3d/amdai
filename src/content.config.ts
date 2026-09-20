@@ -37,4 +37,14 @@ const blog = defineCollection({
   }),
 });
 
-export const collections = { guides, tutorials, blog };
+const updates = defineCollection({
+  loader: glob({ base: './src/content/updates', pattern: '**/*.{md,mdx}' }),
+  schema: z.object({
+    title: z.string(),
+    date: z.coerce.date(),
+    summary: z.string(),
+    current: z.boolean().default(false),
+  }),
+});
+
+export const collections = { guides, tutorials, blog, updates };

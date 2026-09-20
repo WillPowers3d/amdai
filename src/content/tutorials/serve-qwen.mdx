@@ -1,0 +1,78 @@
+---
+title: Serve Qwen on the R9700
+description: Reliability-first path — official Qwen instruct on llama-server, then an optional pinned vLLM ROCm server for harnesses.
+minutes: 35
+difficulty: intermediate
+updated: 2026-09-20
+featured: true
+order: 4
+---
+
+Reliability first: **official Qwen instruct**, one GPU, a loopback API you can `curl`. Harnesses and [abliterated](/abliterated) weights come after.
+
+<QwenPicks />
+
+## Path A — llama-server (default)
+
+You already built llama.cpp in [Run a local Qwen](/tutorials/run-local-llm). Download an **official** Qwen instruct GGUF (Q4_K_M or Q5_K_M for 32 GB — confirm the file size on the card).
+
+```bash
+./build/bin/llama-server \
+  -m ~/models/YOUR-OFFICIAL-QWEN.gguf \
+  -ngl 99 \
+  --jinja \
+  --host 127.0.0.1 \
+  --port 8080
+```
+
+`--jinja` matters on current Qwen templates. In another terminal:
+
+```bash
+watch -n1 rocm-smi
+curl -s http://127.0.0.1:8080/v1/models
+```
+
+Then a tiny completion. If VRAM never moves, stop.
+
+Point [Hermes](/harnesses) or OpenClaw at `http://127.0.0.1:8080/v1` only after this works.
+
+## Path B — vLLM (when you need a real server)
+
+Two pins. Do not mix them in one venv. Check the [weekly card](/) before you copy.
+
+**Upstream 0.29 snapshot (week of 8–9 Sep 2026):**
+
+```bash
+# ROCm extras — NOT default PyPI
+pip install vllm --extra-index-url https://wheels.vllm.ai/rocm/0.29.0/rocm723
+# or
+docker pull vllm/vllm-openai-rocm:v0.29.0
+```
+
+**AMD ROCm 10.0 supported combo (docs snapshot):** vLLM **0.27** + PyTorch **2.13**, often `rocm/vllm:rocm10.0.0_…` — see [AMD’s vLLM page](https://rocm.docs.amd.com/projects/ai-ecosystem/en/latest/inference/vllm.html).
+
+```bash
+# Image tags change. Copy the current tag from AMD or vLLM docs.
+docker run --rm -it \
+  --device /dev/kfd --device /dev/dri \
+  --group-add video --ipc=host --network host \
+  -v "$HOME/models:/models" \
+  vllm/vllm-openai-rocm:v0.29.0 \
+  --model /models/YOUR-QWEN-HF \
+  --host 127.0.0.1 --port 8000
+```
+
+<Callout type="warn">
+`pip install vllm` with no extra index is **CUDA**. If import looks NVIDIA-shaped, you installed the wrong wheel.
+</Callout>
+
+OpenClaw’s vLLM provider defaults to `http://127.0.0.1:8000/v1` and wants `VLLM_API_KEY` set (dummy is fine if the server does not auth).
+
+## Golden checks
+
+1. Short “READY” completion.
+2. A second turn that stays in-template.
+3. `rocm-smi` during both.
+4. Only then: harness tools, then a second weight (coder / abliterated).
+
+If thinking never ends, try official instruct with thinking off, or fix `--jinja`. Do not “fix” it by downloading a random uncensored GGUF first.

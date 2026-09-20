@@ -1,38 +1,29 @@
 ---
-import { plannedSections, primaryNav, site } from '../lib/site';
+import { navGroups, primaryNav, site } from '../lib/site';
 ---
 
 <footer class="mt-16 border-t border-line bg-raised/40">
-  <div class="mx-auto grid max-w-6xl gap-10 px-4 py-12 sm:px-6 md:grid-cols-3">
-    <div>
+  <div class="mx-auto grid max-w-7xl gap-10 px-4 py-12 sm:px-6 md:grid-cols-4">
+    <div class="md:col-span-1">
       <p class="font-serif text-xl">{site.name}</p>
       <p class="mt-2 max-w-sm text-sm leading-relaxed text-muted">
-        Independent notes for hobbyists and home-lab users. Not an AMD publication. Product names belong to their owners.
+        Independent living notes for hobbyists. Not an AMD publication. Version pins are dated snapshots. Product names belong to their owners.
       </p>
     </div>
-    <div>
-      <p class="font-mono text-[0.7rem] uppercase tracking-[0.16em] text-faint">Sections</p>
-      <ul class="mt-3 grid gap-1.5 text-sm">
-        {primaryNav.map((item) => (
-          <li><a class="text-muted hover:text-ink" href={item.href}>{item.label}</a></li>
-        ))}
-      </ul>
-    </div>
-    <div id="planned">
-      <p class="font-mono text-[0.7rem] uppercase tracking-[0.16em] text-faint">Coming later</p>
-      <ul class="mt-3 grid gap-2 text-sm text-muted">
-        {plannedSections.map((item) => (
-          <li>
-            <span class="text-ink">{item.label}</span>
-            <span class="block text-faint">{item.description}</span>
-          </li>
-        ))}
-      </ul>
-    </div>
+    {navGroups.map((group) => (
+      <div>
+        <p class="font-mono text-[0.7rem] uppercase tracking-[0.16em] text-faint">{group.label}</p>
+        <ul class="mt-3 grid gap-1.5 text-sm">
+          {primaryNav.filter((item) => item.group === group.id).map((item) => (
+            <li><a class="text-muted hover:text-ink" href={item.href}>{item.label}</a></li>
+          ))}
+        </ul>
+      </div>
+    ))}
   </div>
   <div class="border-t border-line">
-    <p class="mx-auto max-w-6xl px-4 py-4 text-xs text-faint sm:px-6">
-      Specs cited from AMD public product pages are labeled as such. Always confirm the current ROCm support matrix before you install.
+    <p class="mx-auto max-w-7xl px-4 py-4 text-xs text-faint sm:px-6">
+      Refresh <code class="font-mono">src/data/what-works.yaml</code> when the frontier moves. Always confirm the live ROCm matrix.
     </p>
   </div>
 </footer>

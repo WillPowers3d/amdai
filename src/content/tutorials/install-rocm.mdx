@@ -58,17 +58,35 @@ Write down: **ROCm version**, **OS codename**, **install method**. One method on
 
 ## 3. Install using one official method
 
-### Option A — Package manager (what current ROCm docs push)
+<Callout type="warn">
+**Do not** `sudo apt install rocm` from the **Ubuntu/Canonical archive** if you want Core SDK **10.0**, first-class `gfx1201`, or a current vLLM ROCm wheel. Archive packages have lagged (7.1-era reports). Add **AMD’s 10.0 repo** (or use their runfile/container) from the versioned docs.
+</Callout>
 
-Follow the Ubuntu (or RHEL) package-manager chapter for your version. The shape is:
+### Option A — AMD package manager (TheRock / Core SDK 10.0)
+
+Follow the Ubuntu chapter on [Install ROCm](https://rocm.docs.amd.com/en/latest/install/rocm.html) for **10.0.0** (or the pin on the [weekly card](/)). The shape is:
 
 ```bash
-# Illustrative shape — replace with the repo lines from the docs you opened.
+# 1) Register AMD's signed 10.0 repo — copy the exact lines from the docs
+#    for your Ubuntu point release. Do not invent a sources.list from memory.
 sudo apt update
-sudo apt upgrade
-# add AMD's signed ROCm repo for YOUR version and Ubuntu release
-sudo apt update
-sudo apt install rocm  # metapackage name may differ; use the docs
+
+# 2) See what family packages exist THIS week
+apt-cache search amdrocm-core-sdk10.0
+
+# 3) Install ONE gfx family. R9700 is RDNA4 gfx1201.
+#    Docs have used a combined -gfx1200-gfx1201 suffix; some notes say -gfx1201.
+#    Example shape only:
+# sudo apt install amdrocm-core-sdk10.0-gfx1201
+```
+
+Confirm the prefix (`ls /opt/rocm`) and put `bin` on `PATH`. Installing **every** `amdrocm-core-sdk10.0-*` family at once is how you fight TheRock.
+
+### Option A2 — Distro `rocm` metapackage (usually the wrong default)
+
+```bash
+# Only if you *intentionally* want whatever Ubuntu shipped — not 10.0.
+sudo apt install rocm
 ```
 
 ### Option B — `amdgpu-install` usecases (common on Radeon desktops)
@@ -98,9 +116,10 @@ sudo usermod -aG render,video "$USER"
 
 Log out completely or reboot so the groups apply. New shells are not enough if you never left the session.
 
-If the docs tell you to add `/opt/rocm/bin` to `PATH` (or source an `env` file), do that in `~/.profile` rather than a one-off terminal:
+If the docs tell you to add ROCm `bin` to `PATH` (or source an `env` file), do that in `~/.profile`. TheRock 10.0 trees are often under `/opt/rocm/core-10.0` or `/opt/rocm/core` — **ls first**.
 
 ```bash
+# Adjust the prefix to what you actually installed
 echo 'export PATH="/opt/rocm/bin:$PATH"' >> ~/.profile
 ```
 

@@ -1,0 +1,36 @@
+---
+import { whatWorks } from '../lib/status';
+---
+
+<section class="status-panel rounded-2xl border border-line bg-raised p-5 sm:p-6" aria-labelledby="works-heading">
+  <div class="flex flex-wrap items-center justify-between gap-2">
+    <p class="font-mono text-[0.68rem] uppercase tracking-[0.16em] text-accent">What works this week</p>
+    <p class="font-mono text-[0.68rem] uppercase tracking-[0.14em] text-faint">
+      Snapshot {whatWorks.as_of} · {whatWorks.status}
+    </p>
+  </div>
+  <h2 id="works-heading" class="mt-2 font-serif text-2xl sm:text-3xl">{whatWorks.headline}</h2>
+  <p class="mt-3 max-w-3xl text-sm leading-relaxed text-muted">{whatWorks.summary}</p>
+  <dl class="mt-5 grid gap-4 sm:grid-cols-2">
+    <div>
+      <dt class="font-mono text-[0.68rem] uppercase tracking-[0.14em] text-faint">ROCm</dt>
+      <dd class="mt-1 text-sm">{whatWorks.rocm.recommended}</dd>
+    </div>
+    <div>
+      <dt class="font-mono text-[0.68rem] uppercase tracking-[0.14em] text-faint">Daily inference</dt>
+      <dd class="mt-1 text-sm">{whatWorks.inference.least_pain}</dd>
+    </div>
+    <div>
+      <dt class="font-mono text-[0.68rem] uppercase tracking-[0.14em] text-faint">Serving</dt>
+      <dd class="mt-1 text-sm">{whatWorks.inference.serving}</dd>
+    </div>
+    <div>
+      <dt class="font-mono text-[0.68rem] uppercase tracking-[0.14em] text-faint">Qwen (reliability first)</dt>
+      <dd class="mt-1 text-sm">{whatWorks.qwen.reliability_first}</dd>
+    </div>
+  </dl>
+  <p class="mt-5 text-xs leading-relaxed text-faint">
+    This block is driven by <code class="font-mono">src/data/what-works.yaml</code>.
+    Historical notes live under <a class="underline decoration-accent/40 underline-offset-2" href="/rocm">ROCm</a> and the <a class="underline decoration-accent/40 underline-offset-2" href="/blog">blog</a>. Re-check AMD’s matrix before you install.
+  </p>
+</section>

@@ -1,0 +1,39 @@
+# Qwen picks for a 32 GB Radeon AI PRO R9700. VRAM figures are approximate — verify the file size + KV cache.
+as_of: 2026-09-20
+principle: Reliability first, then capability. Official instruct weights are the default. Abliterated variants are a separate choice.
+
+recommendations:
+  - id: official-instruct-27b
+    role: reliability
+    name: Official Qwen instruct (27B-class)
+    why: Known chat template, widest llama.cpp / vLLM / Ollama coverage, least surprise on ROCm.
+    serve: llama.cpp GGUF Q4_K_M or Q5_K_M, or vLLM with the matching HF checkpoint
+    vram_32gb: Q4/Q5 usually fits with useful context. Q8 is tight once cache grows. Verify.
+    notes: Prefer the current Qwen instruct card from the Qwen org, not a random re-upload.
+
+  - id: official-coder
+    role: capability
+    name: Official Qwen coder SKU (size that fits)
+    why: Better for code-heavy harness work once the GPU path is proven.
+    serve: Same backends as instruct. Tool-calling quality varies by template and server.
+    vram_32gb: Same 27B-class envelope. Do not assume a 32B+ dense FP16 fits.
+    notes: Test the harness (Hermes / OpenClaw) against this model before switching production prompts.
+
+  - id: abliterated-27b
+    role: optional
+    name: Abliterated / uncensored Qwen 27B-class
+    why: Local adult use without hosted safety layers. Quality and ROCm quirks vary by editor.
+    serve: llama.cpp first. vLLM only if that exact repo is known to load.
+    vram_32gb: Published Q4_K_M GGUFs around 16–17 GB leave room for context on 32 GB. Confirm the card.
+    notes: See /abliterated. Smoke-test. Checksums. Licenses. Do not trust a download count.
+
+smoke_tests:
+  - name: Completes
+    prompt: Reply with the single word READY and nothing else.
+    expect: Short completion, GPU used.
+  - name: Template
+    prompt: A simple multi-turn follow-up (ask a fact, then "shorter").
+    expect: No leaked special tokens, no infinite think loop.
+  - name: Tools if needed
+    prompt: A one-tool dummy call through your harness.
+    expect: Tool JSON your server actually executes.
