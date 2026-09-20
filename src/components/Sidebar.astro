@@ -1,0 +1,77 @@
+---
+import { getCollection } from 'astro:content';
+import { primaryNav } from '../lib/site';
+
+interface Props {
+  current?: string;
+}
+
+const { current = Astro.url.pathname } = Astro.props;
+const tutorials = (await getCollection('tutorials')).sort((a, b) => a.data.order - b.data.order);
+const posts = (await getCollection('blog')).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+const isActive = (href: string) => current === href || current.startsWith(`${href}/`);
+---
+
+<aside class="hidden xl:block">
+  <nav class="sticky top-24 space-y-8 text-sm" aria-label="Section map">
+    <div>
+      <p class="mb-2 font-mono text-[0.68rem] uppercase tracking-[0.16em] text-faint">Guide</p>
+      <ul class="space-y-1">
+        {primaryNav.filter((item) => item.href !== '/tutorials' && item.href !== '/blog').map((item) => (
+          <li>
+            <a
+              href={item.href}
+              class:list={[
+                'block rounded-md px-2 py-1.5',
+                isActive(item.href) ? 'bg-accent-soft text-accent-ink' : 'text-muted hover:text-ink',
+              ]}
+            >
+              {item.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+    <div>
+      <p class="mb-2 font-mono text-[0.68rem] uppercase tracking-[0.16em] text-faint">Tutorials</p>
+      <ul class="space-y-1">
+        <li>
+          <a href="/tutorials" class:list={['block rounded-md px-2 py-1.5', current === '/tutorials' ? 'bg-accent-soft text-accent-ink' : 'text-muted hover:text-ink']}>
+            All tutorials
+          </a>
+        </li>
+        {tutorials.map((item) => {
+          const href = `/tutorials/${item.id}`;
+          return (
+            <li>
+              <a href={href} class:list={['block rounded-md px-2 py-1.5', current === href ? 'bg-accent-soft text-accent-ink' : 'text-muted hover:text-ink']}>
+                {item.data.title}
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+    <div>
+      <p class="mb-2 font-mono text-[0.68rem] uppercase tracking-[0.16em] text-faint">Blog</p>
+      <ul class="space-y-1">
+        <li>
+          <a href="/blog" class:list={['block rounded-md px-2 py-1.5', current === '/blog' ? 'bg-accent-soft text-accent-ink' : 'text-muted hover:text-ink']}>
+            All posts
+          </a>
+        </li>
+        {posts.map((item) => {
+          const href = `/blog/${item.id}`;
+          return (
+            <li>
+              <a href={href} class:list={['block rounded-md px-2 py-1.5', current === href ? 'bg-accent-soft text-accent-ink' : 'text-muted hover:text-ink']}>
+                {item.data.title}
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  </nav>
+</aside>

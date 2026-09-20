@@ -1,0 +1,84 @@
+---
+title: ROCm at home
+kicker: Software
+description: What ROCm is, why Linux is the home-lab path, how installs are structured, and the version traps that waste weekends.
+updated: 2026-09-20
+order: 2
+---
+
+**ROCm** (Radeon Open Compute) is AMD’s open GPU compute stack: drivers and user-space libraries so HIP, PyTorch, and a growing inference ecosystem can talk to the card. On the Radeon AI PRO R9700 that conversation happens through **`gfx1201`**.
+
+It is not “the AMD equivalent of clicking a Game Ready installer and forgetting it.” A working ROCm box is a **kernel module + userspace + (often) a matching framework wheel**. Those three can drift independently.
+
+<Callout type="linux">
+For a home lab, treat **Linux as the real ROCm platform**. Ubuntu LTS releases that appear on AMD’s current matrix are the least surprising choice. Windows exists in the docs, but it is a thinner slice — useful for some PyTorch or Vulkan inference, not a full substitute for `rocminfo`, `rocm-smi`, and the Linux package sets.
+</Callout>
+
+## What you are actually installing
+
+A useful mental model:
+
+1. **Kernel driver (`amdgpu`).** Speaks to the GPU. May come from your distro kernel, from AMD’s DKMS package, or from a combined installer. Mixing two driver sources is a classic way to get a black screen.
+2. **ROCm userspace.** HIP runtime, `rocminfo`, `rocm-smi`, math libraries, and headers. Versioned. This is what “I installed ROCm 7.x / 10.x” usually means.
+3. **Frameworks.** PyTorch, ONNX Runtime, JAX, vLLM, and so on. They ship **their own** ROCm-flavored builds. A system ROCm that is “fine” can still be the wrong partner for last month’s `torch` wheel.
+
+AMD’s current Linux install documentation describes several methods: **native package manager**, **amdgpu-install** (use-case driven; historically how Radeon desktop users bundled graphics + ROCm), **pip** for Python/ML wheels, **tarball**, and **runfile**. The page AMD wants you to start from changes when they unify docs. Begin at the [ROCm install hub](https://rocm.docs.amd.com/en/latest/install/rocm.html) or the [quick start](https://rocm.docs.amd.com/en/latest/install/quick-start.html), not a random gist.
+
+<Callout type="check">
+Before any `apt` or `dnf` command: open the [system requirements / GPU support matrix](https://rocm.docs.amd.com/projects/install-on-linux/en/latest/reference/system-requirements.html) and confirm **your exact marketing name**, **LLVM target**, and **OS version** are listed for the ROCm you intend to install. The R9700 has been listed as supported (`gfx1201`) on recent matrices; that is not a promise about every older ROCm still sitting on a mirror.
+</Callout>
+
+## Platforms that make sense at home
+
+**Best default:** a current Ubuntu LTS point release that the matrix names (recent docs have listed Ubuntu 24.04.x and 22.04.x for Radeon / AI PRO rows). Keep the install close to stock. Fancy kernels, third-party PPAs, and “I also game on the same rootfs with a different driver story” are possible but are how people lose a Saturday.
+
+**Also listed, depending on release:** selected RHEL, Rocky, Oracle Linux, SLES, and Debian versions. If you already live on Debian or Rocky, use the matrix — do not assume Ubuntu packages are interchangeable.
+
+**Windows:** recent “ROCm on Radeon” notes have described **Windows 11** with a **PyTorch + ROCm components** path, and they have been explicit that **the entire ROCm stack is not what you get**. Ollama and llama.cpp users on Windows often end up on **Vulkan** instead. If your goal is “learn HIP and serve models like a Linux box,” dual-boot or use Linux as the AI OS.
+
+**WSL:** treat as a special case. Check the current Radeon/Ryzen ROCm docs; do not copy a native-Linux tutorial into WSL and expect identical device nodes.
+
+## Install overview (no one-true command)
+
+The tutorial [Install ROCm on a home Linux box](/tutorials/install-rocm) walks a conservative path. The shape is always:
+
+1. Confirm the GPU is visible to the kernel (`lspci`, `lsmod`).
+2. Install **one** official method from the docs for your ROCm version and OS.
+3. Add your user to the groups the docs name (commonly `render` and `video`).
+4. Reboot.
+5. Run `rocminfo` and `rocm-smi` before you touch PyTorch.
+
+A command you will see in older and Radeon-oriented guides looks like:
+
+```bash
+# Pattern only — usecases and package names are version-specific.
+sudo amdgpu-install --list-usecase
+sudo amdgpu-install -y --usecase=graphics,rocm
+```
+
+AMD has also been steering general ROCm installs toward the **distro package manager** and documenting **runfile** for offline or tightly controlled machines. If two blog posts disagree, the **versioned official page for the ROCm you downloaded** wins.
+
+Do not mix: distro `amdgpu` + AMD DKMS + a leftover runfile + a container that bind-mounts `/dev/kfd` from a half-upgraded host. Pick a lane.
+
+## Version and compatibility caveats
+
+**The GPU can be “supported” and still miss a kernel.** `gfx1201` support landed in the ROCm series that listed RDNA 4. An older ROCm 6.x userspace that predates that row will not magically grow R9700 kernels because you exported `HSA_OVERRIDE_GFX_VERSION`.
+
+**PyTorch wheels are pinned.** AMD’s [PyTorch for ROCm](https://rocm.docs.amd.com/projects/ai-ecosystem/en/latest/frameworks/pytorch/install.html) page selects **torch version + ROCm version + `device-gfx1201`**. Installing `torch` from PyPI’s default CUDA index is the most common silent failure: `torch.cuda.is_available()` (HIP uses that name) stays false or the process never sees the device.
+
+**Userspace vs driver.** A new ROCm userspace on an ancient distro kernel — or the reverse — is a frequent source of `kfd` errors. Stay inside one release’s tested pair.
+
+**Containers help isolate frameworks, not the kernel.** vLLM and PyTorch images still need a host driver that the image’s ROCm expects. Read the image tag.
+
+**Multiple ROCm versions** are a documented advanced setup. Home labs rarely need them on day one. Prefer one ROCm, one venv or one container per project.
+
+## Useful official links
+
+- [ROCm documentation home](https://rocm.docs.amd.com/en/latest/)
+- [Install ROCm](https://rocm.docs.amd.com/en/latest/install/rocm.html)
+- [Linux system requirements](https://rocm.docs.amd.com/projects/install-on-linux/en/latest/reference/system-requirements.html)
+- [ROCm on Radeon and Ryzen](https://rocm.docs.amd.com/projects/radeon-ryzen/en/latest/) (legacy-to-current Radeon-specific notes)
+- [PyTorch for ROCm](https://rocm.docs.amd.com/projects/ai-ecosystem/en/latest/frameworks/pytorch/install.html)
+- [vLLM on ROCm](https://rocm.docs.amd.com/projects/ai-ecosystem/en/latest/inference/vllm.html)
+
+When you are ready to prove the stack: [verify GPU / ROCm](/tutorials/verify-rocm).

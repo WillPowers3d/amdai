@@ -1,0 +1,18 @@
+<div id="reading-progress" class="reading-bar pointer-events-none fixed inset-x-0 top-0 z-50 h-0.5 bg-accent" style="--progress: 0;"></div>
+
+<script>
+  const bar = document.getElementById('reading-progress');
+  const article = document.getElementById('article');
+
+  const update = () => {
+    if (!bar || !article) return;
+    const rect = article.getBoundingClientRect();
+    const total = article.offsetHeight - window.innerHeight;
+    const scrolled = Math.min(Math.max(-rect.top, 0), Math.max(total, 1));
+    bar.style.setProperty('--progress', String(scrolled / Math.max(total, 1)));
+  };
+
+  update();
+  window.addEventListener('scroll', update, { passive: true });
+  window.addEventListener('resize', update);
+</script>

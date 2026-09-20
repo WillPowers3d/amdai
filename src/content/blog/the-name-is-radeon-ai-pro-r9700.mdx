@@ -1,0 +1,33 @@
+---
+title: The name is Radeon AI PRO R9700
+description: Why forums say “R9700 Pro,” why that is not an RX 9700, and which string to put in a bug report.
+pubDate: 2026-09-12
+tags: [naming, hardware]
+---
+
+Type “AMD R9700 Pro” into a search box and you will get three different objects mashed together: a **workstation AI card**, a **consumer 9070**, and a **ghost 9700** that AMD did not ship as an RX.
+
+The product this notebook is about is the **AMD Radeon AI PRO R9700**. AMD’s product page uses that full string. ROCm matrices use it. The LLVM target is **`gfx1201`**.
+
+## Why the informal name stuck
+
+“R9700” is shorter. “PRO” is the part people remember when they mean “not the 16 GB gaming card.” Together you get **R9700 Pro**, which sounds like a sibling of **RX 7900 XTX** naming. It is not. The consumer RDNA 4 cards AMD launched are **Radeon RX 9070 XT / 9070 / 9070 GRE**. The four-digit “9070” is a deliberate consumer scheme. The AI PRO line kept a **R9700** style name on a different brand ladder.
+
+There is also leftover confusion from earlier rumor cycles that talked about an **RX 9700**. If you are shopping used listings, read the **exact** marketing name on the box. An RX 9070 XT is a fine home-lab GPU. It is not 32 GB. It is not this card.
+
+## What to write where
+
+| Place | Use |
+| --- | --- |
+| Purchase, warranty, OEM BOM | AMD Radeon AI PRO R9700 |
+| ROCm / PyTorch issue | Marketing name + `gfx1201` + `rocminfo` snippet |
+| llama.cpp discussion | Backend (HIP or Vulkan) + `gfx1201` / RADV GFX1201 |
+| Chat with humans | “R9700” is fine once everyone agrees which card |
+
+Related official names on the same generation include **Radeon AI PRO R9700S** and **Radeon AI PRO R9600D**. Those are not nicknames for the same SKU.
+
+## Instinct is a different sentence
+
+If a vendor pitch slides from “Radeon AI PRO” to “Instinct-class performance,” treat that as marketing gravity, not a part number. Instinct is the MI-series data-center line. The R9700 is a **desktop workstation** card. AMD even warns that these Radeon PRO / AI PRO families are not designed for datacenter use. Home tower: in scope. Dense rack: different hardware.
+
+The [AMD GPUs](/gpus) guide keeps the family tree and the public spec table. Use that when you are choosing between 16 GB, 24 GB, and 32 GB of reality.

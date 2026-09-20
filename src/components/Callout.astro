@@ -1,0 +1,65 @@
+---
+type Kind = 'note' | 'warn' | 'linux' | 'check';
+
+interface Props {
+  type?: Kind;
+  title?: string;
+}
+
+const labels: Record<Kind, string> = {
+  note: 'Note',
+  warn: 'Watch out',
+  linux: 'Linux first',
+  check: 'Verify with vendor',
+};
+
+const { type = 'note', title = labels[type] } = Astro.props;
+---
+
+<aside class:list={['callout', type]} role="note">
+  <p class="kicker">{title}</p>
+  <div class="body">
+    <slot />
+  </div>
+</aside>
+
+<style>
+  .callout {
+    border: 1px solid var(--line);
+    border-left-width: 3px;
+    background: var(--raised);
+    border-radius: 0.75rem;
+    padding: 0.95rem 1.05rem 1.05rem;
+    margin: 1.4rem 0;
+  }
+
+  .callout.note {
+    border-left-color: var(--accent);
+  }
+
+  .callout.warn {
+    border-left-color: var(--warn);
+  }
+
+  .callout.linux,
+  .callout.check {
+    border-left-color: var(--ok);
+  }
+
+  .kicker {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 0.4rem;
+  }
+
+  .body :global(p:last-child) {
+    margin-bottom: 0;
+  }
+
+  .body :global(p) {
+    margin: 0 0 0.7rem;
+  }
+</style>

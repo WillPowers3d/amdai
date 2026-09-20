@@ -1,0 +1,144 @@
+---
+title: Install ROCm on a home Linux box
+description: A conservative path to get ROCm userspace onto a machine with a Radeon AI PRO R9700 or another listed AMD GPU.
+minutes: 35
+difficulty: starter
+updated: 2026-09-20
+featured: true
+order: 1
+---
+
+This walkthrough is for a **dedicated or dual-boot Linux install** you are willing to reboot. It targets the **AMD Radeon AI PRO R9700** (`gfx1201`) and other GPUs on AMD’s current matrix. It is not a silent unattended script.
+
+<Callout type="check">
+Package names, repo URLs, and even the preferred installer change between ROCm releases. Use this page for **order of operations**. Copy exact `wget` / `amdgpu-install` lines from the [ROCm install docs](https://rocm.docs.amd.com/en/latest/install/rocm.html) for the version you chose.
+</Callout>
+
+## What you will have at the end
+
+- Kernel sees the GPU
+- A single ROCm userspace
+- Your user can talk to `/dev/kfd` and `/dev/dri`
+- `rocminfo` prints the marketing name and `gfx1201` (or your card’s target)
+
+## Prerequisites
+
+- A 64-bit x86 PC with the R9700 (or another listed card) in a PCIe slot, power cable seated, and a display or SSH path that still works if the GUI driver hiccups.
+- An OS **named on the matrix** for that GPU. For home Radeon / AI PRO rows, recent docs have listed **Ubuntu 24.04.x and 22.04.x** plus selected RHEL-family releases. Ubuntu LTS is the default this tutorial assumes.
+- Disk space for ROCm plus later models (20 GB free is a low floor; more is kinder).
+- Time to **reboot twice** if the first driver pass is messy.
+
+<Callout type="linux">
+Do this on Linux. Windows ROCm is a different, narrower product. If you only have Windows today, install Ubuntu on a spare drive or a second SSD instead of forcing this tutorial through WSL on the first try.
+</Callout>
+
+## 1. Confirm the hardware before you add repos
+
+```bash
+uname -r
+. /etc/os-release && echo "$PRETTY_NAME"
+lspci -nn | grep -Ei 'vga|display|3d'
+```
+
+You want a line that looks like an AMD device. The marketing string may appear as **Radeon AI PRO R9700** or a board-partner label. Note the PCI ID if you file bugs later.
+
+```bash
+lsmod | grep amdgpu
+```
+
+If `amdgpu` is already loaded from the distro kernel, that is normal. Decide now: you will either **keep the distro kernel module** and add userspace, or **install AMD’s DKMS package** as the docs for your chosen method require. Do not do both blindly.
+
+## 2. Open the official matrix and pick a ROCm version
+
+1. [System requirements](https://rocm.docs.amd.com/projects/install-on-linux/en/latest/reference/system-requirements.html) — GPU row + OS row.
+2. [Install ROCm](https://rocm.docs.amd.com/en/latest/install/rocm.html) — method selector for that version.
+3. If you specifically want Radeon desktop graphics + ROCm together, also skim [ROCm on Radeon and Ryzen](https://rocm.docs.amd.com/projects/radeon-ryzen/en/latest/) for the release that still documents `amdgpu-install` usecases.
+
+Write down: **ROCm version**, **OS codename**, **install method**. One method only.
+
+## 3. Install using one official method
+
+### Option A — Package manager (what current ROCm docs push)
+
+Follow the Ubuntu (or RHEL) package-manager chapter for your version. The shape is:
+
+```bash
+# Illustrative shape — replace with the repo lines from the docs you opened.
+sudo apt update
+sudo apt upgrade
+# add AMD's signed ROCm repo for YOUR version and Ubuntu release
+sudo apt update
+sudo apt install rocm  # metapackage name may differ; use the docs
+```
+
+### Option B — `amdgpu-install` usecases (common on Radeon desktops)
+
+Historically:
+
+```bash
+# Download the amdgpu-install package for your Ubuntu release from repo.radeon.com
+# as shown in the versioned Radeon install guide, then:
+sudo amdgpu-install --list-usecase
+sudo amdgpu-install -y --usecase=graphics,rocm
+```
+
+`--usecase=rocm` without graphics is a thing on headless boxes. `--no-dkms` is a thing if you **intentionally** keep the distro kernel module. Only use flags you can explain.
+
+### Option C — Runfile or tarball
+
+Use these when the machine cannot grow extra apt repos, or you need a self-contained tree. They still require a compatible kernel driver underneath.
+
+## 4. Groups, paths, and a reboot
+
+Most Linux ROCm guides require:
+
+```bash
+sudo usermod -aG render,video "$USER"
+```
+
+Log out completely or reboot so the groups apply. New shells are not enough if you never left the session.
+
+If the docs tell you to add `/opt/rocm/bin` to `PATH` (or source an `env` file), do that in `~/.profile` rather than a one-off terminal:
+
+```bash
+echo 'export PATH="/opt/rocm/bin:$PATH"' >> ~/.profile
+```
+
+Some installs already drop a profile snippet. Check before you duplicate it.
+
+```bash
+sudo reboot
+```
+
+## 5. Minimum verification (then stop)
+
+```bash
+groups | grep -E 'render|video'
+which rocminfo rocm-smi
+rocminfo | less
+rocm-smi
+```
+
+In `rocminfo`, find the agent that is a **GPU**, not the CPU. You want a marketing name that matches the card and a GFX target of **`gfx1201`** on the R9700.
+
+If `rocminfo` is missing, the userspace packages did not land. If it runs but lists only the CPU, the KFD device is not usable — groups, driver, or a GPU the userspace cannot target.
+
+Do **not** install PyTorch yet if this step failed. Continue in [Verify GPU and ROCm](/tutorials/verify-rocm).
+
+## Common failure modes
+
+**Black screen after reboot.** You mixed a desktop `amdgpu` stack with another driver story, or DKMS failed against this kernel. Recovery: TTY (`Ctrl+Alt+F3`) or SSH, then the official uninstall / purge steps for the method you used. Do not `apt install` a third driver to “fix” it.
+
+**`Permission denied` on `/dev/kfd`.** Groups did not apply, or you are inside a container without the right devices (`/dev/kfd`, `/dev/dri`).
+
+**Card missing from `rocminfo`.** Wrong ROCm for `gfx1201`, IOMMU / ACS oddities, or the card never initialized (`dmesg | grep -i amdgpu`).
+
+**Secure Boot.** DKMS modules will not load unsigned. Either enroll a MOK as your distro documents, disable Secure Boot, or use a signed distro module path the docs allow.
+
+## What not to do
+
+- Do not install CUDA-shaped advice (`nvidia-smi`, `nvcc`) and expect a translation layer.
+- Do not pin a blog’s ROCm 6.1 commands onto a 2026 R9700 and then override GFX versions.
+- Do not `sudo` every inference process to dodge group permissions.
+
+When `rocm-smi` looks sane, run a [local LLM](/tutorials/run-local-llm) or a [PyTorch/HIP check](/tutorials/verify-rocm).

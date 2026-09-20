@@ -1,0 +1,50 @@
+<button type="button" id="theme-toggle" class="theme-btn" aria-label="Switch color theme">
+  <span class="sr-only">Toggle theme</span>
+  <span aria-hidden="true" class="icon dark-icon">☾</span>
+  <span aria-hidden="true" class="icon light-icon">☀</span>
+</button>
+
+<script>
+  const root = document.documentElement;
+  const button = document.getElementById('theme-toggle');
+
+  const apply = (theme: string) => {
+    root.dataset.theme = theme;
+    localStorage.setItem('theme', theme);
+    if (button) {
+      button.setAttribute('aria-label', theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme');
+    }
+  };
+
+  button?.addEventListener('click', () => {
+    apply(root.dataset.theme === 'dark' ? 'light' : 'dark');
+  });
+</script>
+
+<style>
+  .theme-btn {
+    display: inline-flex;
+    height: 2.1rem;
+    width: 2.1rem;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--raised);
+    color: var(--ink);
+  }
+
+  .theme-btn:hover {
+    border-color: color-mix(in srgb, var(--accent) 55%, var(--line));
+  }
+
+  .icon {
+    font-size: 0.95rem;
+    line-height: 1;
+  }
+
+  :global([data-theme="dark"]) .light-icon,
+  :global([data-theme="light"]) .dark-icon {
+    display: none;
+  }
+</style>

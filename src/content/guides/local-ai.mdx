@@ -1,0 +1,64 @@
+---
+title: Local AI on AMD at home
+kicker: Workloads
+description: How llama.cpp, Ollama, vLLM, and Hugging Face map onto ROCm, plus VRAM, power, and cooling expectations for a 32 GB RDNA 4 card.
+updated: 2026-09-20
+order: 3
+---
+
+“Local AI” on this site means **you run the weights**. The Radeon AI PRO R9700 is interesting at home because **32 GB of GDDR6** and a current **`gfx1201`** ROCm listing overlap: large-enough models, on a desktop card, with an official compute path.
+
+That is still not “any model, any tool, any OS.” The stack you pick decides whether you are fighting HIP, Vulkan, or a Docker tag.
+
+## The tools people actually use
+
+**llama.cpp.** The lowest-friction way to run GGUF models. On Linux you can build a **HIP / ROCm** backend (`GGML_HIP`, target `gfx1201`) or a **Vulkan** backend. Vulkan is often the path of least resistance — especially on Windows, or when a HIP library is missing a kernel for a given architecture. HIP can be the right path once ROCm is healthy and you want that codepath. The [run a local LLM](/tutorials/run-local-llm) tutorial starts with a conservative Linux build.
+
+**Ollama.** Convenient model pull and an OpenAI-shaped API. GPU acceleration on AMD is **backend- and version-sensitive**. Linux + a ROCm-aware Ollama build is the intended home-lab story. On Windows, users of RDNA 4 cards have reported ROCm init failures and have fallen back to **Vulkan**. If Ollama is idle on CPU while `rocm-smi` shows a bored GPU, you do not have a “slow card” — you have a backend that never attached.
+
+**vLLM.** Throughput-oriented serving. AMD documents [vLLM inference on ROCm](https://rocm.docs.amd.com/projects/ai-ecosystem/en/latest/inference/vllm.html) and lists the Radeon AI PRO R9700 (`gfx1201`) among current Radeon targets. The docs recommend a **prebuilt Docker image** or a carefully matched pip set — not “pip install vllm” from a CUDA index. Warmup times and RCCL multi-GPU quirks show up in release notes; read them if you have two cards.
+
+**Hugging Face + PyTorch.** Fine-tuning, custom pipelines, Transformers, Diffusers. Install **ROCm PyTorch** from AMD’s index with the **gfx1201** (or documented gfx12) selector. Then `import torch` and confirm a HIP device before you download a 30 GB snapshot. Hugging Face is not a runtime; it is the pantry.
+
+**Others you will meet:** ONNX Runtime with ROCm/MIGraphX execution providers, LM Studio (often Vulkan/vendor GPU paths), text-generation-webui, ComfyUI for image models, llama-server and Kobold.cpp as llama.cpp frontends. Same rule: **which backend compiled in**, not the GUI name.
+
+<Callout type="note">
+This site does not publish homemade tokens-per-second tables. Community llama.cpp threads for the R9700 exist and are worth reading as *anecdote*, not as a spec sheet. Your cooling, memory clocks, Vulkan ICD, and quantization will move the number.
+</Callout>
+
+## Hardware expectations
+
+**VRAM is the hard wall.** Weights, KV cache, and batching share the same 32 GB. Rough planning only — **verify per model card and quant**:
+
+| Situation (approximate) | What 32 GB usually unlocks |
+| --- | --- |
+| 7B–14B dense, high-quality quant | Comfortable, room for longer context |
+| ~30B-class dense, 4–8 bit | Often fits; context is the next limit |
+| 70B-class dense | Needs aggressive quant, shorter context, or more GPUs |
+| MoE with few active experts | Can surprise you — check the GGUF size plus cache |
+
+A 16 GB RX 9070 XT can be the better *buy* if you live in the 7B–14B bracket. The R9700’s job is the bracket above that, or the same models with less compromise.
+
+**System RAM still matters.** Loading, mmap, tokenizer overhead, and CPU offload (if you go there) sit outside VRAM. 64 GB of host RAM is a comfortable companion for a 32 GB GPU; 32 GB host with a 32 GB GPU works for many inference-only setups and gets tight if you also fine-tune or run a desktop session full of browsers.
+
+**Power.** AMD lists **300 W TBP** and a **750 W PSU** recommendation for the R9700. That is board power, not “the rest of the PC is free.” A modern CPU, several drives, and headroom for transients all sit on the same PSU. Use a quality unit with a native **12V-2x6 / 12VHPWR** cable if that is what the card expects.
+
+**Cooling and acoustics.** Official boards are **double slot, active cooling**. Many AI PRO cards ship as compact blower-style designs that exhaust out the bracket — good for cramped workstations, loud if you sit next to them at 100% memory clock. Leave the adjacent slot empty if the cooler is a blower. Do not smother the intake against a cable nest. Watch junction and memory temperatures with `rocm-smi` under a real generate load, not at the desktop idle.
+
+**Case and risers.** A short PRO card can fit places a triple-slot 7900 XTX cannot. PCIe 5.0 x16 is the published bus; a 4.0 x16 riser will usually *work* and may matter less for decode-bound LLM generation than for fat prefill. If you chase prefill throughput, prefer a direct x16 slot.
+
+## Operating system choice, again
+
+- **Linux + ROCm:** HIP tools, vLLM images, PyTorch, `rocm-smi`. This is the path the rest of the site assumes.
+- **Linux + Vulkan only:** valid for llama.cpp if you do not want the ROCm userspace yet.
+- **Windows:** Adrenalin for the desktop; Vulkan for many local UIs; ROCm-on-Windows only where AMD’s current Radeon docs say so.
+
+## A sane first stack
+
+1. Ubuntu LTS from the [ROCm matrix](https://rocm.docs.amd.com/projects/install-on-linux/en/latest/reference/system-requirements.html).
+2. One official ROCm install ([tutorial](/tutorials/install-rocm)).
+3. [Verify](/tutorials/verify-rocm) with `rocm-smi` and a tiny PyTorch or HIP check.
+4. llama.cpp or Ollama for daily chat ([tutorial](/tutorials/run-local-llm)).
+5. Add vLLM or ROCm PyTorch when you need a server or training loop.
+
+If a layer fails, stop. Do not stack Ollama, three Docker runtimes, and a from-source vLLM on an unverified driver.

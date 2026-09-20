@@ -1,0 +1,156 @@
+---
+title: Verify GPU and ROCm
+description: Prove the R9700 is visible, that HIP works, and that PyTorch is using the card — before you download a 20 GB model.
+minutes: 20
+difficulty: starter
+updated: 2026-09-20
+featured: true
+order: 2
+---
+
+If you skip this page and jump to a 32B download, you will debug the wrong layer. Ten minutes here saves a night of “why is this on CPU.”
+
+## 1. Driver and device nodes
+
+```bash
+lsmod | grep amdgpu
+ls -l /dev/kfd /dev/dri
+rocm-smi
+```
+
+`rocm-smi` should show your GPU, memory size near **32 GB** on a R9700, and temperatures that look like a live card — not an empty table.
+
+```bash
+rocm-smi --showproductname --showmeminfo vram --showuse
+```
+
+Flags vary slightly by `rocm-smi` vintage; `rocm-smi --help` is the authority.
+
+Watch **compute** and **VRAM** in another terminal while you run the checks below. If they never move, the process is not on the GPU.
+
+## 2. `rocminfo` — the identity check
+
+```bash
+rocminfo
+```
+
+For the Radeon AI PRO R9700 you want, on a GPU agent:
+
+- Marketing name containing **Radeon AI PRO R9700** (partner cards may add a vendor prefix)
+- ISA / GFX **`gfx1201`**
+
+If you see `gfx1100` or similar, you are looking at a different GPU (or an iGPU). An iGPU listed first is normal on Ryzen boxes — later steps must pick the discrete device.
+
+```bash
+rocminfo | grep -E 'Marketing Name|gfx'
+```
+
+## 3. A tiny HIP / userspace smoke test
+
+If ROCm examples or `hipcc` are installed:
+
+```bash
+hipcc --version
+```
+
+A one-file check (save as `square.cpp`) that only proves the compiler and runtime:
+
+```cpp
+#include <hip/hip_runtime.h>
+#include <cstdio>
+
+__global__ void inc(int* x) { *x += 1; }
+
+int main() {
+  int h = 41, *d = nullptr;
+  hipMalloc(&d, sizeof(int));
+  hipMemcpy(d, &h, sizeof(int), hipMemcpyHostToDevice);
+  inc<<<1, 1>>>(d);
+  hipMemcpy(&h, d, sizeof(int), hipMemcpyDeviceToHost);
+  std::printf("result=%d device=%s\n", h, [] {
+    static hipDeviceProp_t p;
+    hipGetDeviceProperties(&p, 0);
+    return p.name;
+  }());
+  return h == 42 ? 0 : 1;
+}
+```
+
+```bash
+hipcc square.cpp -o square && ./square
+```
+
+You want `result=42` and a device name that is the Radeon, not a surprise iGPU. If `hipcc` is absent, skip to PyTorch — do not invent a second ROCm install just to get a compiler.
+
+<Callout type="note">
+If both an iGPU and the R9700 exist, set `HIP_VISIBLE_DEVICES` / `ROCR_VISIBLE_DEVICES` (and later `CUDA_VISIBLE_DEVICES` — PyTorch on ROCm still uses that name) so index `0` is the card you intend. Confirm with `rocm-smi` while the process runs.
+</Callout>
+
+## 4. PyTorch on HIP
+
+Use AMD’s current [Install PyTorch for ROCm](https://rocm.docs.amd.com/projects/ai-ecosystem/en/latest/frameworks/pytorch/install.html) instructions. They distinguish **gfx1201** wheels from other targets.
+
+```bash
+python3 -m venv ~/venvs/rocm-torch
+source ~/venvs/rocm-torch/bin/activate
+python -m pip install -U pip
+
+# Paste the index-url and torch[device-gfx1201]==… lines from AMD's page.
+# Do not install vanilla CUDA torch from pypi.org's default index.
+```
+
+Then:
+
+```python
+import torch
+
+print("torch", torch.__version__)
+print("hip", torch.version.hip)
+print("available", torch.cuda.is_available())
+print("count", torch.cuda.device_count())
+if torch.cuda.is_available():
+    print("name", torch.cuda.get_device_name(0))
+    x = torch.randn(2048, 2048, device="cuda")
+    y = x @ x
+    torch.cuda.synchronize()
+    print("matmul_ok", float(y[0, 0]))
+```
+
+Success looks like: HIP version string present, `available True`, device name is the R9700, and `rocm-smi` shows activity during the matmul.
+
+Failure patterns:
+
+| Symptom | Likely layer |
+| --- | --- |
+| `hip` is `None`, CUDA version set | Wrong wheel (NVIDIA build) |
+| `available False` | Userspace, groups, or wheel/arch mismatch |
+| Name is the iGPU | Device index / visibility env |
+| Import error on `libamdhip64` | `LD_LIBRARY_PATH` / ROCm not on the linker path |
+
+## 5. Optional: bandwidth sanity, not a benchmark
+
+```python
+import time, torch
+n = 256 * 1024 * 1024
+a = torch.empty(n, device="cuda", dtype=torch.float32)
+b = torch.empty_like(a)
+torch.cuda.synchronize()
+t0 = time.perf_counter()
+b.copy_(a)
+torch.cuda.synchronize()
+seconds = time.perf_counter() - t0
+gb = n * 4 / 1e9
+print(f"rough_copy {gb / seconds:.1f} GB/s")
+```
+
+AMD publishes **640 GB/s peak** on the R9700. A naive PyTorch copy will not hit that. Use this only as “is the number in a plausible band” versus “is it 8 GB/s because you are on host RAM.”
+
+## When to declare victory
+
+You can move on when:
+
+1. `rocm-smi` lists the card and ~32 GB VRAM
+2. `rocminfo` says `gfx1201` for that card
+3. Either `hipcc` or PyTorch ran a kernel and `rocm-smi` noticed
+
+Then [run a local LLM](/tutorials/run-local-llm). If step 1 already failed, go back to [install ROCm](/tutorials/install-rocm) — do not keep going down the framework path.

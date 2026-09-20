@@ -1,0 +1,152 @@
+---
+title: Run a local LLM on ROCm
+description: Build llama.cpp for gfx1201, optionally try Ollama, and serve a small GGUF so you know the GPU is doing the work.
+minutes: 40
+difficulty: starter
+updated: 2026-09-20
+featured: true
+order: 3
+---
+
+Goal: a **chat-capable model on the R9700**, with `rocm-smi` showing GPU use. We start with **llama.cpp** because you control the backend. **Ollama** is the convenience option afterward.
+
+<Callout type="check">
+Pick a **small** first model (a recent 7B–8B-class GGUF, Q4 or Q5). The 32 GB card can hold much more; a tiny model tells you whether the *pipeline* works. Do not start with a 70B download.
+</Callout>
+
+## Prerequisites
+
+- [ROCm installed](/tutorials/install-rocm) and [verified](/tutorials/verify-rocm)
+- Build tools: `git`, `cmake`, a C++ compiler, and ROCm HIP if you want the HIP backend
+- Disk for the repo plus one GGUF (plan several GB)
+
+```bash
+sudo apt install -y build-essential cmake git
+```
+
+Package names differ on Fedora/RHEL; install the equivalent compiler toolchain.
+
+## Path A — llama.cpp with HIP (ROCm)
+
+```bash
+git clone https://github.com/ggml-org/llama.cpp.git
+cd llama.cpp
+cmake -B build \
+  -DGGML_HIP=ON \
+  -DAMDGPU_TARGETS=gfx1201 \
+  -DCMAKE_BUILD_TYPE=Release
+cmake --build build -j"$(nproc)"
+```
+
+CMake option names have evolved (`GGML_HIP` is the current switch; older posts say `LLAMA_HIPBLAS`). If configure fails, read the repo’s HIP/ROCm build docs for the commit you cloned — not a 2024 gist.
+
+If CMake cannot find HIP:
+
+```bash
+export HIP_PATH=/opt/rocm
+export PATH="/opt/rocm/bin:$PATH"
+```
+
+Then re-run the configure step.
+
+List devices:
+
+```bash
+./build/bin/llama-cli --list-devices
+```
+
+You want the Radeon AI PRO R9700, not only an iGPU.
+
+### Get a GGUF
+
+Use a source you trust (Hugging Face model cards, official GGUF repos). Example *shape* — replace with a model you have actually chosen:
+
+```bash
+mkdir -p ~/models
+# huggingface-cli download … or wget the .gguf you picked
+```
+
+This site does not pin a filename that will rot next month. On a first pass, a well-known 8B-class instruct GGUF is enough.
+
+### Run with all layers on the GPU
+
+```bash
+./build/bin/llama-cli \
+  -m ~/models/YOUR-MODEL.gguf \
+  -ngl 99 \
+  -c 4096 \
+  -p "Say hello from a Radeon AI PRO R9700." \
+  -n 64
+```
+
+`-ngl 99` means “offload as many layers as will fit.” On 32 GB with a small model, that should be all of them.
+
+In another terminal:
+
+```bash
+watch -n1 rocm-smi
+```
+
+VRAM should rise and GPU use should tick during generation. If VRAM stays empty, you are on CPU or Vulkan-less software rendering — stop and fix devices.
+
+### llama-server for an API
+
+```bash
+./build/bin/llama-server \
+  -m ~/models/YOUR-MODEL.gguf \
+  -ngl 99 \
+  --host 127.0.0.1 \
+  --port 8080
+```
+
+Point a local OpenAI-compatible client at `http://127.0.0.1:8080`. Do not bind `0.0.0.0` on a home LAN unless you intend to expose it.
+
+## Path B — llama.cpp with Vulkan (fallback)
+
+If HIP configure is a mess and you still want a model tonight:
+
+```bash
+sudo apt install -y libvulkan-dev
+cmake -B build-vk -DGGML_VULKAN=ON -DCMAKE_BUILD_TYPE=Release
+cmake --build build-vk -j"$(nproc)"
+./build-vk/bin/llama-cli --list-devices
+```
+
+Pick the **RADV GFX1201** (or AMDVLK) device that is the R9700, not the Raphael/iGPU. Environment variables such as `GGML_VK_VISIBLE_DEVICES` or `VK_ICD_FILENAMES` show up in community notes when an iGPU steals index 0. Set them only after `--list-devices` shows the confusion.
+
+Vulkan is a legitimate backend. It is not “cheating.” It is a different compiler stack.
+
+## Path C — Ollama
+
+Install Ollama from [the official Linux instructions](https://ollama.com/download/linux). After install:
+
+```bash
+ollama --version
+ollama run llama3.1:8b
+```
+
+Tag names change; pick a small listed model.
+
+Then check whether the GPU attached:
+
+```bash
+rocm-smi
+# and Ollama's own logs / `ollama ps` for the runner
+```
+
+If generation is slow and VRAM never moves, Ollama did not initialize ROCm (or Vulkan) for `gfx1201`. That has happened on some Windows builds and older bundled ROCm libraries. Fixes are **version-specific**: upgrade Ollama, confirm a ROCm-enabled Linux build, or use llama.cpp until the convenience wrapper catches up. Do not set random `HSA_OVERRIDE_*` variables on a card the current ROCm already lists.
+
+## What “it works” looks like
+
+- Tokens stream at interactive speed for an 8B-class quant (you will know if you are on CPU)
+- `rocm-smi` shows VRAM occupied by roughly the weight file size plus cache
+- The process survives more than one prompt
+
+## Next experiments (optional)
+
+- Raise `-c` until VRAM or quality tells you to stop
+- Try a 20B–32B-class quant now that the pipe is proven
+- Compare HIP vs Vulkan on the **same** GGUF and context — keep notes, not leaderboards
+- When you want a production-shaped server, read AMD’s [vLLM on ROCm](https://rocm.docs.amd.com/projects/ai-ecosystem/en/latest/inference/vllm.html) and use their image, not a CUDA Dockerfile
+
+If something fails, isolate the layer: [ROCm verify](/tutorials/verify-rocm) first, model file second, server frontend last.

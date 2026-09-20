@@ -1,0 +1,52 @@
+---
+title: ROCm versions are a matching problem
+description: A changelog-style note on why “install the latest of everything” is the least reliable way to get gfx1201 working.
+pubDate: 2026-09-15
+tags: [rocm, changelog]
+---
+
+The R9700 is new enough that **old ROCm simply does not know it**. The card can be bolted into a beautiful Ubuntu install and still show up as a paperweight if userspace predates the `gfx1201` row.
+
+This is not a unique AMD sin. It is worse at home because we mix advice from three years of Reddit.
+
+## Three clocks, not one
+
+1. **Kernel `amdgpu`.** Distro HWE vs AMD DKMS vs “whatever the installer compiled at 1 a.m.”
+2. **ROCm userspace.** The `/opt/rocm` (or distro) tree with `rocminfo`.
+3. **Framework wheels / containers.** PyTorch `+rocmX.Y` and `device-gfx1201`, vLLM image tags, Ollama’s bundled libs.
+
+A green `rocm-smi` does not imply a green `import torch`. A green torch matmul does not imply Ollama attached its runner to HIP.
+
+## What recent public docs have been doing
+
+As of the pages we cited while writing this site (always re-open them):
+
+- Linux **system requirements** list the **Radeon AI PRO R9700** as supported, `gfx1201`, with OS footnotes that are tighter for Radeon/PRO than for some Instinct rows.
+- **ROCm 10.x** release notes include the R9000 AI PRO series on `gfx1201`.
+- PyTorch-for-ROCm install pages ask you to pick wheels by **GFX target**, not by vibes.
+- Windows matrices describe **PyTorch + some ROCm components**, and they say the **full stack is not there**.
+
+None of those sentences replace the matrix on the day you install.
+
+## A house rule that prevents most pain
+
+**Pick a ROCm version first.** Then pick the OS point release it names. Then pick frameworks that advertise that pair. Then stop updating any one of those “just because.”
+
+When you *do* upgrade, upgrade on purpose: read the release notes for **Radeon / gfx1201**, take a snapshot or a second rootfs if the box also has to boot a desktop you need on Monday, and re-run the [verify tutorial](/tutorials/verify-rocm) before you restore a 20 GB model cache.
+
+## Overrides are not a support matrix
+
+`HSA_OVERRIDE_GFX_VERSION` is a compatibility hammer from the era when consumer cards were ahead of official lists. On a card AMD already lists, it is usually the wrong tool. If `rocminfo` cannot see `gfx1201`, you have the wrong userspace — not a missing environment variable.
+
+## Practical changelog you can keep
+
+When something works, write down four lines in a text file next to your models:
+
+```text
+date: 2026-09-20
+os: Ubuntu 24.04.x (kernel …)
+rocm: (rocminfo version / /opt/rocm/.info)
+torch_or_llamacpp: (exact commit or wheel)
+```
+
+Future you will not remember which combination produced the first good `rocm-smi` spike. That file is the blog post that matters.

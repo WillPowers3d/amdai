@@ -1,0 +1,42 @@
+---
+title: Vulkan is an on-ramp, not a consolation prize
+description: Why llama.cpp on RADV still belongs in a ROCm-oriented home lab, especially on RDNA 4.
+pubDate: 2026-09-18
+tags: [llama.cpp, vulkan, rocm]
+---
+
+This site is about **ROCm at home**. It is still honest to say: a lot of people generated their first R9700 tokens on **Vulkan**.
+
+llama.cpp can compile a HIP backend and a Vulkan backend. They are different compilers pointing at the same memory. HIP is the path that shares DNA with PyTorch, vLLM, and `hipcc`. Vulkan is the path that shares DNA with the desktop driver you already needed to get a picture on the monitor.
+
+## When Vulkan is the right first backend
+
+- HIP CMake cannot find a ROCm that `rocminfo` insists is fine
+- You are on **Windows**, where a full ROCm userspace may not exist, and Adrenalin + Vulkan does
+- An iGPU/dGPU split is easier to see in `llama-cli --list-devices` as **RADV GFX1201** vs **RADV RAPHAEL_…**
+- You want a weekend result before you commit to PyTorch wheels
+
+Community threads for the R9700 spend a lot of time on RADV vs AMDVLK, visible devices, and whether memory clocks are actually at the top P-state. That work is real. It is also **not** a substitute for AMD’s published bandwidth or TOPS figures.
+
+## When you should still install ROCm
+
+You will want HIP/ROCm when you:
+
+- Install **PyTorch** or **vLLM** the way AMD documents
+- Care about `rocm-smi` counters in the same way a CUDA user cares about `nvidia-smi`
+- Debug library-level issues (rocBLAS kernels, missing `gfx1201` tensiles) instead of shader paths
+- Run more than “one GGUF in a terminal”
+
+Ollama sits in the middle: it may use ROCm, Vulkan, or surprise-CPU depending on the build and OS. If it is slow, look at the backend log before you blame RDNA 4.
+
+## A clean way to keep both
+
+On Linux, it is reasonable to have:
+
+1. Distro or AMD graphics stack with a working **RADV** ICD
+2. One **ROCm** userspace for HIP apps
+3. Two llama.cpp build directories: `build-hip` and `build-vk`
+
+Do not measure them against each other on different models, different `-c`, and different days, then declare a winner on the internet. Measure them to learn which layer you broke.
+
+The [local LLM tutorial](/tutorials/run-local-llm) includes both configure lines. Start with whichever configure script exits zero. Graduate to the other when you need it — not because a brand hierarchy told you to.

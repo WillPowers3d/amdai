@@ -1,0 +1,33 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Sidebar from '../../components/Sidebar.astro';
+
+const tutorials = (await getCollection('tutorials')).sort((a, b) => a.data.order - b.data.order);
+---
+
+<Base title="Tutorials" description="Starter walkthroughs for ROCm, verification, and a first local LLM on AMD Radeon hardware.">
+  <div class="mx-auto grid max-w-6xl gap-10 px-4 py-10 sm:px-6 xl:grid-cols-[15rem_1fr]">
+    <Sidebar />
+    <main id="main">
+      <p class="font-mono text-[0.7rem] uppercase tracking-[0.16em] text-accent">Tutorials</p>
+      <h1 class="mt-2 font-serif text-4xl tracking-tight sm:text-5xl">Do the work on a real box</h1>
+      <p class="mt-4 max-w-2xl text-lg text-muted">
+        Three starter paths: install ROCm on Linux, prove the GPU stack is alive, then run a local model. Commands are patterns — confirm package names and versions against AMD’s current docs before you copy them onto a machine you care about.
+      </p>
+      <ol class="mt-10 grid gap-4">
+        {tutorials.map((item, index) => (
+          <li>
+            <a class="block rounded-2xl border border-line bg-raised/50 p-5 transition-colors hover:border-accent/50" href={`/tutorials/${item.id}`}>
+              <p class="font-mono text-[0.68rem] uppercase tracking-[0.14em] text-faint">
+                {String(index + 1).padStart(2, '0')} · {item.data.difficulty} · {item.data.minutes} min
+              </p>
+              <h2 class="mt-2 font-serif text-2xl">{item.data.title}</h2>
+              <p class="mt-2 text-sm leading-relaxed text-muted">{item.data.description}</p>
+            </a>
+          </li>
+        ))}
+      </ol>
+    </main>
+  </div>
+</Base>
