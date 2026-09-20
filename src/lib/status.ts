@@ -18,6 +18,7 @@ export type WhatWorks = {
     least_pain: string;
     serving: string;
     amd_supported_combo: string;
+    known_good_this_week: string;
     do_not: string;
   };
   qwen: {

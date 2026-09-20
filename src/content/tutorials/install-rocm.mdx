@@ -116,11 +116,11 @@ sudo usermod -aG render,video "$USER"
 
 Log out completely or reboot so the groups apply. New shells are not enough if you never left the session.
 
-If the docs tell you to add ROCm `bin` to `PATH` (or source an `env` file), do that in `~/.profile`. TheRock 10.0 trees are often under `/opt/rocm/core-10.0` or `/opt/rocm/core` — **ls first**.
+If the docs tell you to add ROCm `bin` to `PATH`, do that in `~/.profile`. TheRock 10.0’s scoped prefix is **`/opt/rocm/core-10.0`** — **ls first** in case your install landed at `/opt/rocm/core` or `/opt/rocm`.
 
 ```bash
-# Adjust the prefix to what you actually installed
-echo 'export PATH="/opt/rocm/bin:$PATH"' >> ~/.profile
+# Typical 10.0 prefix; change if ls /opt/rocm says otherwise
+echo 'export PATH="/opt/rocm/core-10.0/bin:$PATH"' >> ~/.profile
 ```
 
 Some installs already drop a profile snippet. Check before you duplicate it.

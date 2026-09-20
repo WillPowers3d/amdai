@@ -55,9 +55,11 @@ Install from AMD’s [PyTorch for ROCm](https://rocm.docs.amd.com/projects/ai-ec
 
 ## Workload honesty
 
-- **One card, chat / Hermes / OpenClaw:** llama.cpp or Ollama.
-- **One card, OpenAI server for several chats:** vLLM Docker, pinned.
-- **Multi GPU at home:** measure; do not assume linear speedup.
-- **Fine-tune:** PyTorch ROCm, modest expectations.
+| Setup | Honest take |
+| --- | --- |
+| llama.cpp or Ollama, **one** card | Least pain. First chat, first harness. |
+| vLLM, **one** GPU, Docker/wheel **pinned** | Production-viable OpenAI server (batching, spec decode). |
+| Two+ consumer / PRO cards | RCCL / atomics tax. Measure before you buy speed. |
+| Fine-tune on Radeon | Possible. Still a thinner cookbook than CUDA. |
 
 Hardware limits: [Hardware & power](/hardware).

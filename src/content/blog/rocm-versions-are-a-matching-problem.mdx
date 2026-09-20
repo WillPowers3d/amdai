@@ -17,14 +17,14 @@ This is not a unique AMD sin. It is worse at home because we mix advice from thr
 
 A green `rocm-smi` does not imply a green `import torch`. A green torch matmul does not imply Ollama attached its runner to HIP.
 
-## What recent public docs have been doing
+## The pins as of mid-September 2026 (snapshots)
 
-As of the pages we cited while writing this site (always re-open them):
+These are **dated**, not gospel. The [weekly card](/) and [ROCm version notes](/rocm#version-notes) win if they disagree.
 
-- Linux **system requirements** list the **Radeon AI PRO R9700** as supported, `gfx1201`, with OS footnotes that are tighter for Radeon/PRO than for some Instinct rows.
-- **ROCm 10.x** release notes include the R9000 AI PRO series on `gfx1201`.
-- PyTorch-for-ROCm install pages ask you to pick wheels by **GFX target**, not by vibes.
-- Windows matrices describe **PyTorch + some ROCm components**, and they say the **full stack is not there**.
+- **AMD official:** Core SDK **10.0.0** (26 Aug) and the **7.14.1** patch (2 Sep). Packages are `amdrocm-*`, prefix **`/opt/rocm/core-10.0`**, **one** gfx family (`-gfx110x` vs `-gfx1201`). R9700 is first-class `gfx1201`.
+- **Not official-current:** Canonical archive `apt install rocm` (7.1 seen on 26.04). Do not use it if you want 10.0 or vLLM 0.29 extras.
+- **AMD-supported combo in 10.0 notes:** PyTorch **2.13**, vLLM **0.27**, SGLang **0.5.15**.
+- **What people were running that week:** upstream **vLLM 0.29.0** ROCm extras (`wheels.vllm.ai/rocm/0.29.0/rocm723` or `vllm/vllm-openai-rocm:v0.29.0`). Plain `pip install vllm` is CUDA. 0.30rc is bleeding.
 
 None of those sentences replace the matrix on the day you install.
 

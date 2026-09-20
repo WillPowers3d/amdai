@@ -14,11 +14,16 @@ It is no longer fair to say “ROCm doesn’t work” for **single-GPU** local L
 Linux is the real platform. Windows can do Vulkan inference and a thin PyTorch slice. Home labs that want HIP and server tools should plan on a listed Ubuntu (or other matrix) install.
 </Callout>
 
-## Two streams, one trap
+## Two official AMD lines — and the archive trap
 
-Since **7.14**, production ROCm is built on **TheRock**. **Core SDK 10.0.0** (AMD notes: 26 Aug 2026) is the current production line as of our [weekly snapshot](/). **7.14.1** (early Sep 2026) is the previous patch line — a valid pin, not “the new 10.0.”
+AMD’s current production story is **TheRock**, starting at **7.14**:
 
-**Canonical / Ubuntu archive** packages (people have seen **7.1**-era `apt install rocm` on new Ubuntu) are a **third** story. They will not give you 10.0, `amdrocm-*` prefixes, or a vLLM 0.29 extras wheel that expects a modern userspace.
+| Line | Date (public notes) | What it is |
+| --- | --- | --- |
+| **ROCm Core SDK 10.0.0** | 26 Aug 2026 | Current production. R9700 / RX 9000 first-class (`gfx1200`/`gfx1201`). |
+| **7.14.1** patch line | 2 Sep 2026 | Last 7.14 production patch. Valid if your wheel/image was built against it. |
+
+**Canonical / Ubuntu archive** is not those lines. People have pulled **7.1** via `apt install rocm` on new Ubuntu (including **26.04** reports). That will not give you 10.0, `amdrocm-*` packages, `/opt/rocm/core-10.0`, or a vLLM 0.29 extras wheel.
 
 <Callout type="warn">
 If you care about ROCm 10.0 or current vLLM ROCm builds, **do not** treat archive `apt install rocm` as the install. Add AMD’s 10.0 repo (or use their container/runfile) as the [install tutorial](/tutorials/install-rocm) describes.
@@ -29,11 +34,11 @@ If you care about ROCm 10.0 or current vLLM ROCm builds, **do not** treat archiv
 Official 10.0 transition notes:
 
 - Packages are named **`amdrocm-*`** so they do not collide with leftover `rocm` packages.
-- Install prefix is **scoped** (docs mention `/opt/rocm/core` style trees; expect something like **`/opt/rocm/core-10.0`** — confirm with `ls /opt/rocm`).
-- Install **one GPU family**, not the kitchen sink:
+- Install prefix: **`/opt/rocm/core-10.0`** (TheRock scoped prefixes; confirm with `ls /opt/rocm`).
+- Install **one GPU family**, not every SKU:
   - all-GPU: `amdrocm-core-sdk10.0`
-  - RDNA3-style: suffix like `-gfx110x`
-  - RDNA4 / RX 9000 / **Radeon AI PRO R9700**: gfx1200/gfx1201 family (docs list a combined `-gfx1200-gfx1201` suffix; some notes say `-gfx1201`). **`apt-cache search amdrocm-core-sdk10.0`** on the day you install.
+  - RDNA3 (7900-class): `amdrocm-core-sdk10.0-gfx110x`
+  - RDNA4 / RX 9000 / **Radeon AI PRO R9700**: `amdrocm-core-sdk10.0-gfx1201` (AMD’s 10.0 table also lists a combined `-gfx1200-gfx1201` suffix — `apt-cache search amdrocm-core-sdk10.0` on the day you install).
 
 R9700 is **first-class** on the 10.0 device table (`gfx1201`), same row as RX 9070 / 9070 XT.
 

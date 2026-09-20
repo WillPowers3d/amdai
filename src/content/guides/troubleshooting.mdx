@@ -52,4 +52,4 @@ Wrong chat template (`--jinja`), or an [abliterated](/abliterated) edit that bro
 
 ## Firmware / MES / “it worked yesterday”
 
-RDNA4 still sees firmware and MES surprises after a kernel upgrade. If a stack died after `apt upgrade`, bisect kernel vs ROCm userspace. Check AMD’s release notes, not a Discord screenshot.
+RDNA4 still sees firmware and MES surprises after a kernel upgrade. If a stack died after `apt upgrade`, bisect kernel vs ROCm userspace **before** you reinstall TheRock or rebuild llama.cpp. Check AMD’s release notes, not a Discord screenshot. If HIP is newly broken but the card still paints a desktop, try **Vulkan llama.cpp** before you nuke `/opt/rocm/core-10.0`.

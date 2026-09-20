@@ -18,9 +18,16 @@ Read [Hardware](/hardware) before you buy a PSU or a toaster case.
 
 ## 2. Install ROCm on Linux
 
-Ubuntu LTS that AMD’s **current** matrix names. Then AMD’s **ROCm Core SDK 10.0** repo and **one** gfx-family package — not Canonical’s archive `rocm` metapackage if you care about 10.0 / modern vLLM.
+Practical Ubuntu path (as of the [weekly card](/)):
+
+1. Use an Ubuntu LTS **named on AMD’s current matrix** (24.04.x is the usual home box).
+2. Add **AMD’s Core SDK 10.0 repo** — or skip host ROCm and run an **official vLLM ROCm image** if serving is all you need.
+3. Install **one** gfx family (`amdrocm-core-sdk10.0-gfx1201` on the R9700 — confirm with `apt-cache search`). Prefix is typically **`/opt/rocm/core-10.0`**.
+4. **Do not** `apt install rocm` from Canonical’s archive. On new Ubuntu (including 26.04 reports) that has lagged at **7.1** and will not give you 10.0 or vLLM 0.29 extras.
 
 Walkthrough: [Install ROCm](/tutorials/install-rocm). Prove it: [Verify GPU and ROCm](/tutorials/verify-rocm).
+
+Before you rebuild the world: check **firmware / MES** after a kernel upgrade, and try **Vulkan llama.cpp** if HIP configure is a mess.
 
 <Callout type="check">
 The [home status card](/) is the weekly pin. The [ROCm version notes](/rocm#version-notes) are history. Re-open AMD’s install page on the day you type commands.
@@ -32,7 +39,7 @@ Reliability path for Qwen on one R9700:
 
 1. **llama.cpp** (HIP `gfx1201`, Vulkan if HIP is angry) — first tokens, first golden prompt.
 2. **Ollama** — if you want a pull-and-chat wrapper and it actually attaches to the GPU.
-3. **vLLM** — when you want an OpenAI-shaped server, continuous batching, or several clients. Pin a **ROCm** wheel or `vllm/vllm-openai-rocm` image. Default `pip install vllm` is CUDA.
+3. **vLLM** — continuous batching, OpenAI server, spec decode. **Known good this week:** ROCm 10 + upstream **vLLM 0.29** ROCm extras (`wheels.vllm.ai/rocm/0.29.0/rocm723` or `vllm/vllm-openai-rocm:v0.29.0`). AMD’s 10.0 docs still pair **vLLM 0.27 + PyTorch 2.13**. Those are different pins. Default `pip install vllm` is CUDA.
 
 Compare them on [AI software](/software). Run Qwen: [Local LLM tutorial](/tutorials/run-local-llm) then [Serve Qwen](/tutorials/serve-qwen).
 

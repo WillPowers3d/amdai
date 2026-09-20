@@ -34,9 +34,9 @@ Public AMD product-page figures (verify there if you are buying or writing a BOM
 | Memory ECC | Yes, Linux only |
 | OS listed | Windows 10/11 64-bit, Linux x86-64 |
 
-ROCm documents the card as **LLVM target `gfx1201`**. On **Core SDK 10.0** it is a first-class RDNA4 row (same ISA family as RX 9070 / 9070 XT). That identifier shows up in `rocminfo`, llama.cpp HIP builds, and PyTorch/vLLM wheel selectors. If a tool does not mention `gfx1201` (or a generic gfx120x bucket), treat support as unproven.
+ROCm documents the card as **LLVM target `gfx1201`**. On **Core SDK 10.0.0** (26 Aug 2026 notes) it is a **first-class** RDNA4 row with the RX 9000 series (`gfx1200`/`gfx1201`). That identifier shows up in `rocminfo`, llama.cpp HIP builds, and PyTorch/vLLM wheel selectors. If a tool does not mention `gfx1201` (or a generic gfx120x bucket), treat support as unproven.
 
-TheRock installs want **one** family package (`amdrocm-core-sdk10.0` plus a gfx120x suffix). See [ROCm](/rocm).
+TheRock installs: **`amdrocm-*`**, prefix **`/opt/rocm/core-10.0`**, **one** family package (`amdrocm-core-sdk10.0-gfx1201` for this card — not `-gfx110x`). See [ROCm](/rocm).
 
 Related official names you may see on the same generation:
 

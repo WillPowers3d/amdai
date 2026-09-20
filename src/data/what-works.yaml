@@ -19,6 +19,7 @@ inference:
   least_pain: llama.cpp (HIP gfx1201, or Vulkan if HIP is messy) / Ollama for chat and agents
   serving: vLLM 0.29.0 ROCm extras or Docker `vllm/vllm-openai-rocm:v0.29.0`
   amd_supported_combo: ROCm 10.0 docs list vLLM 0.27 + PyTorch 2.13 + SGLang 0.5.15
+  known_good_this_week: ROCm Core SDK 10.0 + upstream vLLM 0.29 (ROCm extras / -rocm image)
   do_not: plain `pip install vllm` from default PyPI (that is the CUDA wheel)
 
 qwen:
@@ -31,6 +32,8 @@ verify:
   - rocm-smi VRAM/compute moves during generate
   - A short golden prompt finishes (no hang, no CPU-only crawl)
   - If you use vLLM, the process is the ROCm build (hip/rocm in the version string)
+  - After a kernel upgrade, check firmware/MES before you rebuild userspace
+  - If HIP llama.cpp is ugly, measure Vulkan before you rebuild the world
 
 honesty:
   - llama.cpp or Ollama on one card = least pain

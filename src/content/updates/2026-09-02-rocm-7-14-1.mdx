@@ -1,8 +1,8 @@
 ---
 title: ROCm 7.14.1 patch line
 date: 2026-09-02
-summary: Last 7.14 TheRock production patch before 10.0 became the line people mean by “current.” Still a valid pin if your vLLM/PyTorch wheel was built against it. Not a reason to install Ubuntu archive 7.1.
+summary: 2 Sep 2026 patch on the 7.14 TheRock line. Still a valid pin if your wheel/image was built against it. Not a reason to install Ubuntu archive 7.1.
 current: false
 ---
 
-7.14 is when TheRock went production. **7.14.1** is the patch train (early Sep 2026 in AMD’s public notes). If a container tag says `rocm7.14.1`, stay there on purpose. Do not “upgrade” by sprinkling 10.0 libraries into that image.
+7.14 is when TheRock went production. **7.14.1** is the 2 Sep 2026 patch train. If a container tag says `rocm7.14.1`, stay there on purpose. Do not “upgrade” by sprinkling 10.0 libraries into that image.
