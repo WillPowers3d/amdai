@@ -1,6 +1,7 @@
 # Notable public Qwen abliterated / uncensored variants people run locally.
 # No download stats. VRAM is approximate from published GGUF sizes. Verify the model card.
-as_of: 2026-09-20
+# Educational local open-weight context only — not a default recommend.
+as_of: 2026-09-21
 
 search_patterns:
   - abliterated
@@ -8,18 +9,29 @@ search_patterns:
   - heretic
   - refusal ablation
   - Huihui-Qwen
+  - Huihui-Qwen3-8B-abliterated-v2
   - Qwen3.8-27B-Uncensored
 
 rows:
   - name: Qwen official instruct (control)
-    repo: Qwen org instruct cards
+    repo: Qwen/Qwen2.5-7B-Instruct (this week's reliability control)
     method: none (stock refusals)
-    size: 27B-class (family-dependent)
-    quant_example: Q4_K_M / Q5_K_M GGUF
-    vram_32gb: Usually comfortable at 4–5 bit
-    backends: llama.cpp, Ollama, vLLM — widest
-    reliability: Highest for "it just runs"
+    size: 7B (7.61B-class)
+    quant_example: Official BF16 HF; GGUF Q4/Q5 if you want llama.cpp
+    vram_32gb: Comfortable at BF16 or 4–5 bit
+    backends: vLLM 0.27 (AMD-aligned), llama.cpp, widest
+    reliability: Highest for “it just runs”
     notes: Baseline. Use this to judge whether an edit broke thinking or templates.
+
+  - name: Huihui Qwen3-8B abliterated v2
+    repo: huihui-ai/Huihui-Qwen3-8B-abliterated-v2
+    method: Classic abliteration (remove-refusals-with-transformers); v2 uses a faster ablation pass
+    size: 8B (8.2B-class Qwen3)
+    quant_example: HF BF16; llama.cpp GGUF via mradermacher/Huihui-Qwen3-8B-abliterated-v2-GGUF (Q4_K_M ~5.1 GB on that card)
+    vram_32gb: Comfortable at 4–8 bit GGUF or BF16 on 32 GB if the file matches the card
+    backends: llama.cpp (GGUF mirrors). Publisher Ollama tag `huihui_ai/qwen3-abliterated:8b-v2`. vLLM unstated — treat as unknown.
+    reliability: Not the default. Stock Qwen3-8B on vLLM 0.29 is already an uncertain R9700 try; this edit is more so.
+    notes: v2 vs huihui-ai/Qwen3-8B-abliterated — publisher says layer 0 changed to fix garbled codes. Educational local open-weight use. Publisher research/experimental framing. Pin a revision.
 
   - name: orcarouter Qwen3.8-27B Uncensored
     repo: orcarouter/Qwen3.8-27B-Uncensored (GGUF sibling published)
@@ -66,3 +78,4 @@ trust:
   - Read LICENSE and the model card's intended-use / research language
   - A jailbreak baked into the chat template is not the same as weight-level ablation
   - If `config.json` advertises MTP or vision, confirm the tensors are actually in the file
+  - Educational local open-weight context only. These are not the reliability default.

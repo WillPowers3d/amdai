@@ -1,31 +1,39 @@
 # Qwen picks for a 32 GB Radeon AI PRO R9700. VRAM figures are approximate — verify the file size + KV cache.
-as_of: 2026-09-20
-principle: Reliability first, then capability. Official instruct weights are the default. Abliterated variants are a separate choice.
+as_of: 2026-09-21
+principle: Reliability first, then capability. Official Qwen2.5-7B-Instruct is the default. Qwen3-8B is a try. Abliterated variants are a separate choice.
 
 recommendations:
-  - id: official-instruct-27b
+  - id: official-instruct-7b
     role: reliability
-    name: Official Qwen instruct (27B-class)
-    why: Known chat template, widest llama.cpp / vLLM / Ollama coverage, least surprise on ROCm.
-    serve: llama.cpp GGUF Q4_K_M or Q5_K_M, or vLLM with the matching HF checkpoint
-    vram_32gb: Q4/Q5 usually fits with useful context. Q8 is tight once cache grows. Verify.
-    notes: Prefer the current Qwen instruct card from the Qwen org, not a random re-upload.
+    name: Qwen/Qwen2.5-7B-Instruct
+    why: Official instruct, known chat template, listed on the AMD-aligned vLLM 0.27 / ROCm 10 path. Least surprise on gfx1201 this week.
+    serve: AMD-aligned vLLM 0.27 with official BF16 HF weights. llama.cpp GGUF if you want HIP/Vulkan chat without vLLM.
+    vram_32gb: 7B-class BF16 should leave room for context on 32 GB. Confirm KV cache. Do not invent tok/s.
+    notes: This is the reliability default. Do not skip it for a newer Qwen3 card.
+
+  - id: official-qwen3-8b
+    role: capability
+    name: Qwen/Qwen3-8B
+    why: Newer Qwen3 dense instruct (8.2B) with thinking / non-thinking modes. Cutting-edge try on R9700 — not proven as the default.
+    serve: vLLM 0.29 ROCm Docker (`vllm/vllm-openai-rocm:v0.29.0`) or matching `https://wheels.vllm.ai/rocm/0.29.0/rocm723` wheels. Reasoning parser / enable_thinking need a smoke test.
+    vram_32gb: 8B-class BF16 should fit on 32 GB with useful context. Fit is not the same as “runs well on this ROCm pin.”
+    notes: Uncertain on R9700 this week. Flag hangs, empty think blocks, and hipBLAS issues before you promote it. Requires transformers ≥ 4.51 for the `qwen3` type.
 
   - id: official-coder
     role: capability
     name: Official Qwen coder SKU (size that fits)
-    why: Better for code-heavy harness work once the GPU path is proven.
-    serve: Same backends as instruct. Tool-calling quality varies by template and server.
-    vram_32gb: Same 27B-class envelope. Do not assume a 32B+ dense FP16 fits.
+    why: Better for code-heavy harness work once the GPU path is proven on the 7B instruct.
+    serve: Same backends as the reliability pick. Tool-calling quality varies by template and server.
+    vram_32gb: Stay in a 7B–8B envelope until the pipe is proven. Do not assume a 32B+ dense BF16 fits.
     notes: Test the harness (Hermes / OpenClaw) against this model before switching production prompts.
 
-  - id: abliterated-27b
+  - id: abliterated-qwen3-8b
     role: optional
-    name: Abliterated / uncensored Qwen 27B-class
-    why: Local adult use without hosted safety layers. Quality and ROCm quirks vary by editor.
-    serve: llama.cpp first. vLLM only if that exact repo is known to load.
-    vram_32gb: Published Q4_K_M GGUFs around 16–17 GB leave room for context on 32 GB. Confirm the card.
-    notes: See /abliterated. Smoke-test. Checksums. Licenses. Do not trust a download count.
+    name: huihui-ai/Huihui-Qwen3-8B-abliterated-v2
+    why: Local educational use — refusal-direction ablation of Qwen3-8B. Not the reliability default.
+    serve: llama.cpp via published GGUF mirrors (mradermacher/Huihui-Qwen3-8B-abliterated-v2-GGUF). HF BF16 only if stock Qwen3-8B already loads on your stack.
+    vram_32gb: Publisher GGUF card lists Q4_K_M ~5.1 GB, Q8_0 ~8.8 GB, f16 ~16.5 GB. Confirm the file you actually download.
+    notes: See /abliterated. Publisher frames v2 as research / experimental. Checksums. Licenses. Smoke-test. Do not trust a download count.
 
 smoke_tests:
   - name: Completes
@@ -34,6 +42,9 @@ smoke_tests:
   - name: Template
     prompt: A simple multi-turn follow-up (ask a fact, then "shorter").
     expect: No leaked special tokens, no infinite think loop.
+  - name: Qwen3 think switch
+    prompt: Same fact question, then a /no_think follow-up if you are on Qwen3.
+    expect: Thinking block only when enabled; no hang when disabled.
   - name: Tools if needed
     prompt: A one-tool dummy call through your harness.
     expect: Tool JSON your server actually executes.

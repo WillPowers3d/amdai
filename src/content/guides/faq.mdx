@@ -2,7 +2,7 @@
 title: FAQ
 kicker: Short answers
 description: Newcomer questions for a home Radeon AI PRO R9700, ROCm, Qwen, and local agents.
-updated: 2026-09-20
+updated: 2026-09-21
 order: 9
 ---
 
@@ -19,10 +19,13 @@ You can. You should **not**, if you want Core SDK 10.0, `gfx1201`, or vLLM 0.29 
 Vulkan (llama.cpp, some UIs) is the honest path. Full ROCm userspace is a Linux product. Limited PyTorch-on-Windows exists; do not expect `rocm-smi` culture.
 
 **Which Qwen should I run first?**  
-Official **instruct**, 27B-class at Q4/Q5 on 32 GB. Prove GPU use. Then coder or [abliterated](/abliterated) if you want that tradeoff.
+Official **[Qwen/Qwen2.5-7B-Instruct](https://huggingface.co/Qwen/Qwen2.5-7B-Instruct)** BF16 on AMD-aligned vLLM 0.27 / ROCm 10. Prove GPU use. Then a coder SKU, or the uncertain [Qwen3-8B](https://huggingface.co/Qwen/Qwen3-8B) try, or [abliterated](/abliterated) if you want that tradeoff. The [weekly card](/) wins if this paragraph ages.
 
 **vLLM 0.27 or 0.29?**  
-**0.27 + PyTorch 2.13** is AMD’s **10.0 supported combo**. **0.29.0** is upstream ROCm extras (`rocm723` / `vllm-openai-rocm:v0.29.0`) — the “known good this week” serving pin on the home card. Do not mix them in one venv. Default PyPI vLLM is CUDA. 0.30rc is bleeding.
+**0.27 + PyTorch 2.13** is AMD’s **10.0 supported combo** and the **reliability** serve pin this week (gfx1201 listed). **0.29.0** is upstream ROCm extras (`rocm723` / `vllm-openai-rocm:v0.29.0`) — community cutting-edge, used for the Qwen3-8B try, not the default. Do not mix them in one venv. Default PyPI vLLM is CUDA. 0.30rc is bleeding.
+
+**Can I fine-tune like a 4090 blog post?**  
+PyTorch ROCm exists. ROCm 10.0 has a known issue: training/fine-tune **GPU resets** on R9700 — try `TORCH_BLAS_PREFER_HIPBLASLT=0`. SGLang AITER may fail on this SKU. Community training writeups often use **ROCm 7.2.1**; keep **inference** on 10.0. The cookbook is thinner than CUDA.
 
 **Do I need a harness?**  
 No. You need tokens on the GPU. Hermes or OpenClaw come after a loopback API works.
@@ -32,6 +35,3 @@ No. Hermes is an agent product from Nous. OpenClaw is a multi-channel self-hoste
 
 **Will two R9700s double speed?**  
 Not automatically. Expect RCCL and topology work. Measure.
-
-**Can I fine-tune like a 4090 blog post?**  
-PyTorch ROCm exists. The cookbook is thinner. Inference is the supported-feeling path.
