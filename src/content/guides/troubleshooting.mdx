@@ -28,7 +28,7 @@ You are not in `render`/`video`, or you never logged out. Containers need `/dev/
 | Available false, `rocminfo` fine | Groups, `HIP_VISIBLE_DEVICES`, or wheel built for the wrong gfx |
 | Device name is the iGPU | Visibility env; pick the discrete index |
 
-AMD’s 10.0 docs pin **vLLM 0.27 + PyTorch 2.13**. Upstream **vLLM 0.29** is a different pin (`rocm723` extras). Do not mix them in one venv. [Version notes](/rocm#version-notes).
+AMD’s 10.0 docs pin **vLLM 0.27 + PyTorch 2.13**. Community ROCm Docker is a different pin (`vllm/vllm-openai-rocm:v0.30.0`; previous `v0.29.0`). Do not mix them in one venv. [Version notes](/rocm#version-notes).
 
 ## Generation is glacial and VRAM is empty
 

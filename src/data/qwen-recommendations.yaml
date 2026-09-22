@@ -1,31 +1,39 @@
 # Qwen picks for a 32 GB Radeon AI PRO R9700. VRAM figures are approximate — verify the file size + KV cache.
-as_of: 2026-09-21
-principle: Reliability first, then capability. Official Qwen2.5-7B-Instruct is the default. Qwen3-8B is a try. Abliterated variants are a separate choice.
+as_of: 2026-09-22
+principle: Reliability first, then capability. Official Qwen2.5-7B-Instruct is the default. Qwen3-8B is an unverified try. Abliterated variants are a separate educational choice.
 
 recommendations:
   - id: official-instruct-7b
     role: reliability
     name: Qwen/Qwen2.5-7B-Instruct
-    why: Official instruct, known chat template, listed on the AMD-aligned vLLM 0.27 / ROCm 10 path. Least surprise on gfx1201 this week.
-    serve: AMD-aligned vLLM 0.27 with official BF16 HF weights. llama.cpp GGUF if you want HIP/Vulkan chat without vLLM.
+    why: Official instruct, known chat template, listed on the AMD-validated vLLM 0.27 / ROCm 10 path. Least surprise on gfx1201 this week.
+    serve: AMD-validated vLLM 0.27 with official BF16 HF weights. llama.cpp GGUF if you want HIP/Vulkan chat without vLLM.
     vram_32gb: 7B-class BF16 should leave room for context on 32 GB. Confirm KV cache. Do not invent tok/s.
     notes: This is the reliability default. Do not skip it for a newer Qwen3 card.
 
   - id: official-qwen3-8b
     role: capability
     name: Qwen/Qwen3-8B
-    why: Newer Qwen3 dense instruct (8.2B) with thinking / non-thinking modes. Cutting-edge try on R9700 — not proven as the default.
-    serve: vLLM 0.29 ROCm Docker (`vllm/vllm-openai-rocm:v0.29.0`) or matching `https://wheels.vllm.ai/rocm/0.29.0/rocm723` wheels. Reasoning parser / enable_thinking need a smoke test.
+    why: Newer Qwen3 dense instruct (8.2B) with thinking / non-thinking modes. Cutting-edge try — unverified on a single R9700.
+    serve: Community ROCm Docker `vllm/vllm-openai-rocm:v0.30.0` (current try-tag) or previous `v0.29.0` / `https://wheels.vllm.ai/rocm/0.29.0/rocm723`. Reasoning parser / enable_thinking need a smoke test.
     vram_32gb: 8B-class BF16 should fit on 32 GB with useful context. Fit is not the same as “runs well on this ROCm pin.”
-    notes: Uncertain on R9700 this week. Flag hangs, empty think blocks, and hipBLAS issues before you promote it. Requires transformers ≥ 4.51 for the `qwen3` type.
+    notes: Unverified on R9700. Flag hangs, empty think blocks, and hipBLAS issues before you promote it. Requires transformers ≥ 4.51 for the `qwen3` type. Not a Stack Lab default.
 
   - id: official-coder
     role: capability
     name: Official Qwen coder SKU (size that fits)
     why: Better for code-heavy harness work once the GPU path is proven on the 7B instruct.
     serve: Same backends as the reliability pick. Tool-calling quality varies by template and server.
-    vram_32gb: Stay in a 7B–8B envelope until the pipe is proven. Do not assume a 32B+ dense BF16 fits.
+    vram_32gb: Stay in a 7B–9B envelope until the pipe is proven. Do not assume a 27B dense or 35B-A3B MoE fits one card.
     notes: Test the harness (Hermes / OpenClaw) against this model before switching production prompts.
+
+  - id: not-single-card
+    role: not-default
+    name: Qwen3.5 / 3.6 27B and 35B-A3B
+    why: Larger dense and MoE SKUs people ask about. Multi-GPU territory on this generation — not a single R9700 default.
+    serve: Do not treat AMD-validated vLLM 0.27 or the 0.30 community image as a promise for these on one 32 GB card.
+    vram_32gb: Unknown / does not fit as a comfortable single-card daily driver. Do not invent a fit.
+    notes: A public writeup (local-desktop) runs Qwen3.6-35B-A3B via llama.cpp multi-GPU. That is not advice for one R9700.
 
   - id: abliterated-qwen3-8b
     role: optional
@@ -34,6 +42,14 @@ recommendations:
     serve: llama.cpp via published GGUF mirrors (mradermacher/Huihui-Qwen3-8B-abliterated-v2-GGUF). HF BF16 only if stock Qwen3-8B already loads on your stack.
     vram_32gb: Publisher GGUF card lists Q4_K_M ~5.1 GB, Q8_0 ~8.8 GB, f16 ~16.5 GB. Confirm the file you actually download.
     notes: See /abliterated. Publisher frames v2 as research / experimental. Checksums. Licenses. Smoke-test. Do not trust a download count.
+
+  - id: abliterated-qwen35-9b
+    role: optional
+    name: huihui-ai/Huihui-Qwen3.5-9B-abliterated
+    why: Newer educational ablation of Qwen3.5-9B. Optional second experiment, not a profile.
+    serve: llama.cpp via mradermacher/Huihui-Qwen3.5-9B-abliterated-GGUF. Official Ollama ROCm is still the weaker path on gfx1201.
+    vram_32gb: Publisher GGUF card lists Q4_K_M ~5.7 GB, Q8_0 ~9.6 GB, f16 ~18.0 GB. Confirm the file. mmproj files exist on that card — confirm if you need vision.
+    notes: Publisher research / experimental framing. Qwen3.5 architecture may need a current llama.cpp. Not verified on R9700. Do not invent tok/s.
 
 smoke_tests:
   - name: Completes

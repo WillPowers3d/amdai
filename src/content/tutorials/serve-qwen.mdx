@@ -1,6 +1,6 @@
 ---
 title: Serve Qwen on the R9700
-description: Official Qwen instruct on a loopback /v1 — llama-server first, AMD-aligned vLLM 0.27 for reliability, vLLM 0.29 only as a try.
+description: Official Qwen instruct on a loopback /v1 — llama-server first, AMD-validated vLLM 0.27 for reliability, vLLM 0.30 Docker only as a try.
 minutes: 35
 difficulty: intermediate
 updated: 2026-09-22
@@ -47,24 +47,24 @@ Two pins. Do not mix them in one venv. The [weekly card](/) is the current recom
 
 Serve [Qwen/Qwen2.5-7B-Instruct](https://huggingface.co/Qwen/Qwen2.5-7B-Instruct) BF16. Copy the current image tag from [AMD’s vLLM page](https://rocm.docs.amd.com/projects/ai-ecosystem/en/latest/inference/vllm.html) (docs snapshot: vLLM **0.27** + PyTorch **2.13**).
 
-**Cutting-edge try (`qwen3-8b-try`) — vLLM 0.29 ROCm extras**
+**Cutting-edge try (`qwen3-8b-try`) — vLLM 0.30 ROCm Docker**
 
-Uncertain on R9700. For [Qwen/Qwen3-8B](https://huggingface.co/Qwen/Qwen3-8B) only after 0.27 works.
+Unverified on a single R9700. For [Qwen/Qwen3-8B](https://huggingface.co/Qwen/Qwen3-8B) only after 0.27 works. Previous try-tag `v0.29.0` is still valid if 0.30 misbehaves.
 
 ```bash
-# ROCm extras — NOT default PyPI
-pip install vllm --extra-index-url https://wheels.vllm.ai/rocm/0.29.0/rocm723
-# or
-docker pull vllm/vllm-openai-rocm:v0.29.0
+# Community ROCm image — NOT default PyPI
+docker pull vllm/vllm-openai-rocm:v0.30.0
+# previous: vllm/vllm-openai-rocm:v0.29.0
+# previous wheels: pip install vllm --extra-index-url https://wheels.vllm.ai/rocm/0.29.0/rocm723
 ```
 
 ```bash
-# Image tags change. Confirm against AMD or vLLM docs.
+# Image tags change. Confirm against AMD or vLLM / Docker Hub.
 docker run --rm -it \
   --device /dev/kfd --device /dev/dri \
   --group-add video --ipc=host --network host \
   -v "$HOME/models:/models" \
-  vllm/vllm-openai-rocm:v0.29.0 \
+  vllm/vllm-openai-rocm:v0.30.0 \
   --model /models/YOUR-QWEN-HF \
   --host 127.0.0.1 --port 8000
 ```

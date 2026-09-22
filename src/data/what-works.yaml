@@ -1,16 +1,16 @@
 # Living "what works this week" snapshot.
 # Update this file when the frontier moves. Do not treat it as permanent law.
-as_of: 2026-09-21
+as_of: 2026-09-22
 status: viable
-headline: Reliable Qwen is still Qwen2.5-7B-Instruct BF16 on ROCm 10 / vLLM 0.27. News this week — a Qwen3-8B try on vLLM 0.29, and R9700 training known issues.
+headline: Reliable Qwen is still Qwen2.5-7B-Instruct BF16 on ROCm 10 / vLLM 0.27. News — community ROCm image moved to v0.30.0; Qwen3-8B stays an unverified try.
 summary: >
   ROCm Core SDK 10.0.0 remains the Radeon AI PRO R9700 (gfx1201) inference line;
   official support is confirmed. Do not use Ubuntu apt ROCm 7.x as the primary path.
-  Community training writeups often sit on 7.2.1 — keep those off the inference box.
-  Daily chat: llama.cpp HIP (gfx1201) or Vulkan. Official Ollama ROCm is still rocky
-  on this card. Serving: AMD-aligned vLLM 0.27 for reliability; community vLLM 0.29
-  ROCm Docker or rocm723 wheels if you want the newer stack. Fine-tune still lags
-  CUDA and can reset the GPU on this SKU.
+  Daily chat: llama.cpp HIP (gfx1201) or Vulkan — prefer that over official Ollama ROCm
+  on this card. Serving: AMD-validated vLLM 0.27 for reliability. Community cutting-edge
+  Docker tag is now vllm/vllm-openai-rocm:v0.30.0 (0.29.0 is the previous try-tag).
+  Qwen3-8B is still unverified on a single R9700. Fine-tune still lags CUDA and can
+  reset the GPU on this SKU.
 
 rocm:
   recommended: AMD ROCm Core SDK 10.0.0, one RDNA4/gfx120x family package (R9700 = gfx1201; official support confirmed)
@@ -19,19 +19,19 @@ rocm:
   also_current: 7.14.1 is the last legacy/TheRock patch line before 10.0. Community R9700 *training* writeups often use 7.2.1 — use 10.0 for inference.
 
 inference:
-  least_pain: llama.cpp HIP (gfx1201 build) or Vulkan. Official Ollama ROCm is still rocky on R9700.
-  serving: Community cutting-edge — `vllm/vllm-openai-rocm:v0.29.0` or wheels `https://wheels.vllm.ai/rocm/0.29.0/rocm723`. No newer stable ROCm vLLM found 2026-09-21.
+  least_pain: llama.cpp HIP (gfx1201 build) or Vulkan. Prefer that over official Ollama ROCm on gfx1201 — still rocky on R9700.
+  serving: Community cutting-edge Docker — `vllm/vllm-openai-rocm:v0.30.0` (pushed ~2026-09-22Z). Previous try-tag `vllm/vllm-openai-rocm:v0.29.0` / wheels `https://wheels.vllm.ai/rocm/0.29.0/rocm723`.
   amd_supported_combo: ROCm 10.0 AI ecosystem matrix — vLLM 0.27 + PyTorch 2.13; gfx1201 listed
-  known_good_this_week: ROCm Core SDK 10.0.0 + AMD-aligned vLLM 0.27 (reliability). vLLM 0.29 ROCm Docker/wheels = cutting-edge community serve, not the default.
+  known_good_this_week: ROCm Core SDK 10.0.0 + AMD-validated vLLM 0.27 (reliability). vLLM 0.30 ROCm Docker = cutting-edge community serve, not the default.
   do_not: plain `pip install vllm` from default PyPI (that is the CUDA wheel)
 
 qwen:
-  reliability_first: Qwen/Qwen2.5-7B-Instruct BF16 on AMD-aligned vLLM 0.27 / ROCm 10
+  reliability_first: Qwen/Qwen2.5-7B-Instruct BF16 on AMD-validated vLLM 0.27 / ROCm 10
   build: Qwen/Qwen2.5-7B-Instruct
   quant: BF16 (official HF weights). 7B-class should leave room for KV cache on 32 GB — confirm; no invented tok/s.
-  serve: AMD-aligned vLLM 0.27 on ROCm 10. llama.cpp HIP/Vulkan if you want least-pain chat without the vLLM stack.
-  then_capability: Qwen/Qwen3-8B on vLLM 0.29 ROCm Docker — cutting-edge, uncertain on R9700. Not the reliability default.
-  abliterated: Optional. huihui-ai/Huihui-Qwen3-8B-abliterated-v2 (GGUF mirrors for llama.cpp). Educational local use only; not the default.
+  serve: AMD-validated vLLM 0.27 on ROCm 10. llama.cpp HIP/Vulkan if you want least-pain chat without the vLLM stack.
+  then_capability: Qwen/Qwen3-8B on vLLM 0.30 or 0.29 ROCm Docker — cutting-edge, unverified on R9700. Not the reliability default. Do not promote Qwen3.5/3.6 27B or 35B-A3B as single-card defaults.
+  abliterated: Optional educational. huihui-ai/Huihui-Qwen3-8B-abliterated-v2 (mradermacher GGUF). Newer optional huihui-ai/Huihui-Qwen3.5-9B-abliterated (+ GGUF). Not the default.
 
 verify:
   - rocminfo shows gfx1201 for the R9700
@@ -44,9 +44,12 @@ verify:
   - If you fine-tune, expect GPU-reset KIs — `TORCH_BLAS_PREFER_HIPBLASLT=0` before you blame the model
 
 honesty:
-  - llama.cpp HIP (gfx1201) or Vulkan = least-pain chat; official Ollama ROCm is still rocky on R9700
-  - AMD-aligned vLLM 0.27 = reliability serve on the 10.0 matrix (gfx1201 listed)
-  - vLLM 0.29 ROCm Docker/wheels = community cutting-edge; no newer stable ROCm vLLM this morning
+  - llama.cpp HIP (gfx1201) or Vulkan = least-pain chat; prefer that over official Ollama ROCm on gfx1201
+  - AMD-validated vLLM 0.27 = reliability serve on the 10.0 matrix (gfx1201 listed)
+  - Community ROCm Docker try-tag is v0.30.0; v0.29.0 is the previous pin
+  - Qwen3-8B is unverified on a single R9700 — 0.29 or 0.30 image, never the default
+  - Qwen3.5 / 3.6 27B and 35B-A3B are multi-GPU territory on this SKU, not single-card defaults
+  - A public writeup (local-desktop) runs Qwen3.6-35B-A3B via llama.cpp multi-GPU — not advice for one R9700
   - ROCm 10.0 KI — training/fine-tune GPU resets on R9700. Try `TORCH_BLAS_PREFER_HIPBLASLT=0`
   - SGLang AITER may fail on R9700
   - Community R9700 training writeups often use ROCm 7.2.1 — steer inference to 10.0

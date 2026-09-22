@@ -38,9 +38,9 @@ This is the same reliability pick as the [weekly card](/).
 ### `qwen3-8b-try` — cutting-edge
 
 - **Model:** [Qwen/Qwen3-8B](https://huggingface.co/Qwen/Qwen3-8B)
-- **Serve:** community **vLLM 0.29** ROCm Docker (`vllm/vllm-openai-rocm:v0.29.0`) or `wheels.vllm.ai/rocm/0.29.0/rocm723`
+- **Serve:** community ROCm Docker **`vllm/vllm-openai-rocm:v0.30.0`** (previous try-tag `v0.29.0`, or `wheels.vllm.ai/rocm/0.29.0/rocm723`)
 - **Use when:** you already proved `qwen-reliable`, and you want to smoke-test thinking / `/no_think`
-- **Honesty:** uncertain on R9700. Not the default. Do not skip the 7B instruct for this.
+- **Honesty:** unverified on a single R9700. Not the default. Do not skip the 7B instruct for this. Do not treat 27B / 35B-A3B Qwen3.5–3.6 as this profile.
 
 Abliterated checkpoints are **not** a Stack Lab default profile. If you experiment, do it after official instruct works — [Abliterated](/abliterated).
 
