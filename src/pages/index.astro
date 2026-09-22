@@ -29,7 +29,12 @@ const updates = (await getCollection('updates')).sort((a, b) => b.data.date.valu
           <div class="mt-8 flex flex-wrap gap-3">
             <a class="rounded-full bg-accent px-5 py-2.5 text-sm font-medium text-white" href="/start">Getting started</a>
             <a class="rounded-full border border-line bg-raised px-5 py-2.5 text-sm" href="/software">AI software</a>
+            <a class="rounded-full border border-line bg-raised px-5 py-2.5 text-sm" href="/stack-lab">Stack Lab</a>
           </div>
+          <p class="mt-4 max-w-xl text-sm text-faint">
+            Ubuntu companion (Origin repo / local app): profile <code class="font-mono">qwen-reliable</code> is the default;
+            <code class="font-mono">qwen3-8b-try</code> is the later cut. Same living catalog as the YAML on this page.
+          </p>
         </div>
         <StatusPanel />
       </div>
@@ -42,7 +47,7 @@ const updates = (await getCollection('updates')).sort((a, b) => b.data.date.valu
         {[
           { n: '01', href: '/gpus', t: 'Pick the GPU', d: 'R9700 if you want 32 GB. RX 9070 XT if 16 GB is enough.' },
           { n: '02', href: '/rocm', t: 'Install ROCm', d: 'Whatever the weekly card names. Not the distro archive metapackage.' },
-          { n: '03', href: '/software', t: 'Pick software', d: 'Official Qwen on llama.cpp first. Pinned vLLM if you serve.' },
+          { n: '03', href: '/software', t: 'Pick software', d: 'Official Qwen on llama.cpp first. Pinned vLLM if you serve. Stack Lab: qwen-reliable.' },
           { n: '04', href: '/harnesses', t: 'Optional harness', d: 'Hermes Agent or OpenClaw on your local OpenAI-shaped API.' },
         ].map((step) => (
           <li class="rounded-2xl border border-line bg-raised/50 p-5">

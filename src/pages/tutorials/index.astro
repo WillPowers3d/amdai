@@ -6,14 +6,14 @@ import Sidebar from '../../components/Sidebar.astro';
 const tutorials = (await getCollection('tutorials')).sort((a, b) => a.data.order - b.data.order);
 ---
 
-<Base title="Tutorials" description="ROCm 10.0, verification, official Qwen on llama.cpp, and optional pinned vLLM.">
+<Base title="Tutorials" description="ROCm 10.0, verification, official Qwen instruct on llama.cpp, then a loopback /v1 for harnesses.">
   <div class="mx-auto grid max-w-6xl gap-10 px-4 py-10 sm:px-6 xl:grid-cols-[15rem_1fr]">
     <Sidebar />
     <main id="main">
       <p class="font-mono text-[0.7rem] uppercase tracking-[0.16em] text-accent">Tutorials</p>
       <h1 class="mt-2 font-serif text-4xl tracking-tight sm:text-5xl">Do the work on a real box</h1>
       <p class="mt-4 max-w-2xl text-lg text-muted">
-        Install ROCm the TheRock 10.0 way, prove gfx1201, run official Qwen on llama.cpp, then optionally serve it with pinned vLLM. Confirm package names against AMD/vLLM docs and the weekly card before you copy them.
+        Install ROCm the TheRock 10.0 way, prove gfx1201, run official Qwen instruct on llama.cpp, then expose a loopback /v1. Pinned vLLM is optional. Confirm package names against AMD/vLLM docs and the weekly card before you copy them.
       </p>
       <ol class="mt-10 grid gap-4">
         {tutorials.map((item, index) => (

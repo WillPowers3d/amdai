@@ -1,40 +1,75 @@
 ---
 title: Agent harnesses
 kicker: Orchestration
-description: What sits above the model — Hermes Agent and OpenClaw — and how they attach to a home AMD inference server.
-updated: 2026-09-20
+description: Attach Hermes Agent or OpenClaw only after a local OpenAI-compatible /v1 is up — and how Hermes can draft the weekday YAML refresh.
+updated: 2026-09-22
 order: 5
 ---
 
-A **harness** is the agent loop: prompts, tool calls, memory, maybe a chat-app gateway. It is **not** the GPU stack. ROCm and vLLM/llama.cpp still have to work first.
+A **harness** is the agent loop: prompts, tool calls, memory, maybe a chat-app gateway. It is **not** the GPU stack. If `/v1` is down, the harness is a very expensive way to stare at a timeout.
 
-The user asked for “harnes (hermes, open claw).” The open-source projects that match those names:
+```text
+You  →  harness (tools, memory, channels)
+          →  HTTP  /v1  (OpenAI-shaped)
+            →  llama.cpp / vLLM   →  R9700 (ROCm or Vulkan)
+```
 
 | Informal | Project | Home |
 | --- | --- | --- |
 | Hermes | **Hermes Agent** (Nous Research) | [hermes-agent.nousresearch.com](https://hermes-agent.nousresearch.com/) · [github.com/NousResearch/hermes-agent](https://github.com/NousResearch/hermes-agent) |
 | Open Claw / OpenClaw | **OpenClaw** (OpenClaw Foundation, MIT) | [docs.openclaw.ai](https://docs.openclaw.ai/) · [github.com/openclaw/openclaw](https://github.com/openclaw/openclaw) |
 
-Nous also trains **Hermes** *models*. This page is the **agent product**, not the weight family. OpenClaw is sometimes styled with a lobster; the repo name is `openclaw/openclaw`.
+Nous also trains **Hermes** *models*. This page is the **agent product**. OpenClaw is sometimes styled with a lobster; the repo is `openclaw/openclaw`.
 
-```text
-You  →  harness (tools, memory, channels)
-          →  HTTP / native API
-            →  llama.cpp / Ollama / vLLM   →  R9700 (ROCm or Vulkan)
+## Attach after `/v1` is up
+
+Do these in order. Skip a step and you will debug the harness for a ROCm problem.
+
+1. [Verify ROCm](/tutorials/verify-rocm) — `rocminfo` shows `gfx1201`.
+2. Serve **official Qwen instruct** ([Serve Qwen](/tutorials/serve-qwen)). llama-server default is `http://127.0.0.1:8080`. vLLM default is `http://127.0.0.1:8000`.
+3. Prove the API on loopback:
+
+```bash
+# llama-server
+curl -s http://127.0.0.1:8080/v1/models
+curl -s http://127.0.0.1:8080/v1/chat/completions \
+  -H 'Content-Type: application/json' \
+  -d '{"model":"qwen","messages":[{"role":"user","content":"Reply with the single word READY and nothing else."}],"max_tokens":8}'
+
+# vLLM — same shape, port 8000
+curl -s http://127.0.0.1:8000/v1/models
 ```
+
+4. Watch `rocm-smi` during that completion. VRAM and compute must move.
+5. **Then** point Hermes or OpenClaw at that base URL.
+6. Only after a chat turn works, enable tools that can touch the filesystem or the network.
+
+<Callout type="linux">
+On AMD, stand up [llama.cpp or vLLM](/software) yourself. Do not let a harness download a CUDA llama.cpp “for convenience.” You own HIP/`gfx1201`; the harness only POSTs JSON.
+</Callout>
+
+[Radeon Stack Lab](/stack-lab) `qwen-reliable` is the profile you want under that `/v1` for daily use. `qwen3-8b-try` is the later experiment.
 
 ## Hermes Agent
 
 Hermes runs an agent loop (tools, optional multi-agent kanban, provider failover) and can:
 
-- **Manage llama.cpp** for you (download a runtime, pick a quant, grow context). Docs say the managed path on Windows/Linux is **CUDA or CPU**; **Vulkan builds serve AMD GPUs**. A `local_runtime.backend` field lists `auto | cuda | metal | vulkan | hip | cpu` — HIP may exist in config, but the public “requirements” line still highlights Vulkan for AMD. Treat managed HIP as *check the current docs*, not a promise.
-- **Attach to a server you already run** — llama-server, Ollama, vLLM, anything OpenAI-compatible. This is the reliable R9700 pattern: you own HIP/`gfx1201`, Hermes just POSTs to `http://127.0.0.1:8080` or `:11434` / `:8000`.
+- **Attach to a server you already run** — llama-server, Ollama, vLLM, anything OpenAI-compatible. This is the reliable R9700 pattern: `http://127.0.0.1:8080/v1` or `:8000/v1`.
+- **Manage llama.cpp** for you (download a runtime, pick a quant). Docs say the managed path on Windows/Linux is **CUDA or CPU**; **Vulkan builds serve AMD GPUs**. Config lists `local_runtime.backend`: `auto | cuda | metal | vulkan | hip | cpu`. Treat managed HIP as *check the current docs*, not a promise.
 
-<Callout type="linux">
-On AMD, stand up [llama.cpp or vLLM](/software) yourself, then point Hermes at that URL. Let Hermes manage Vulkan-llama.cpp only if you accept their catalog and backend choices.
-</Callout>
+Use Hermes when you want a dedicated agent desktop/CLI on top of local Qwen — not a dozen chat bridges.
 
-Use Hermes when you want a dedicated agent desktop/CLI on top of local Qwen, not a dozen chat bridges.
+### Overnight research loop (this site’s YAML)
+
+Local Hermes is a practical **overnight research** agent for the living tracker. It does **not** publish.
+
+1. Leave official instruct serving on `/v1` (the same URL you just curled).
+2. Attach Hermes to that endpoint.
+3. Point it at the weekday source list on [Weekday scrape](/maintain): ROCm notes, AMD vLLM page, vLLM releases, official Qwen cards.
+4. Ask for a **draft diff** to `src/data/what-works.yaml`, `qwen-recommendations.yaml`, and `abliterated.yaml` only. No invented benches. No download stats.
+5. In the morning: read the diff, run the smoke tests if a pin moved, `npm run build`, commit on `main`.
+
+If Hermes cannot `curl` `/v1` itself, it is not ready to “update the lab.” Fix the server first.
 
 ## OpenClaw
 
@@ -42,9 +77,9 @@ OpenClaw is a **self-hosted gateway**: one process that fronts Discord, Telegram
 
 Local attachments documented today:
 
-- **Ollama** — native `/api/chat` (do **not** append `/v1` if you want tool calls).
-- **vLLM** — `openai-completions` at `http://127.0.0.1:8000/v1`, `VLLM_API_KEY` set even if dummy.
-- **llama.cpp plugin** — OpenClaw can manage a pinned llama-server *or* attach to yours (`baseUrl: http://127.0.0.1:8080/v1`).
+- **llama.cpp plugin** — manage a pinned llama-server *or* attach to yours (`baseUrl: http://127.0.0.1:8080/v1`).
+- **vLLM** — `openai-completions` at `http://127.0.0.1:8000/v1`. Set `VLLM_API_KEY` even if dummy.
+- **Ollama** — native `/api/chat` (do **not** append `/v1` if you want tool calls). Official Ollama ROCm is still rocky on R9700; prove GPU use before you trust this path.
 
 Use OpenClaw when the point is “message the home agent from the apps you already use,” with the R9700 in the basement.
 
@@ -57,15 +92,8 @@ A gateway that can run tools on your machine is a **security** surface. Follow O
 | | Hermes Agent | OpenClaw |
 | --- | --- | --- |
 | Center of gravity | Agent loop + local models UI/CLI | Multi-channel gateway |
-| AMD-friendly attach | Your OpenAI-compatible server; managed Vulkan llama.cpp | Ollama / vLLM / llama.cpp providers |
-| You still need | Working Qwen on GPU | Same |
+| AMD-friendly attach | Your OpenAI `/v1`; managed Vulkan llama.cpp | Ollama / vLLM / llama.cpp providers |
+| Good overnight job | Draft YAML refreshes against live docs | Keep a chat channel on the same `/v1` |
+| You still need | Working official Qwen on GPU | Same |
 
-Neither project replaces ROCm. If the harness is “dumb,” run `curl` against the inference URL first.
-
-## Home AMD recipe
-
-1. [Verify ROCm](/tutorials/verify-rocm).
-2. Serve official Qwen ([tutorial](/tutorials/serve-qwen)).
-3. `curl` a completion on loopback.
-4. Point Hermes **or** OpenClaw at that endpoint.
-5. Only then enable tools that can touch the filesystem or the network.
+Neither project replaces ROCm. If the harness is “dumb,” `curl` the inference URL first.

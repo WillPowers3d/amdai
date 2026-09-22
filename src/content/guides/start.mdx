@@ -2,7 +2,7 @@
 title: Getting started
 kicker: Path
 description: One end-to-end path for a home AMD box — pick a GPU, install ROCm, serve Qwen, optionally add a harness.
-updated: 2026-09-21
+updated: 2026-09-22
 order: 0
 ---
 
@@ -43,6 +43,8 @@ Reliability path for Qwen on one R9700:
 
 Compare them on [AI software](/software). Run Qwen: [Local LLM tutorial](/tutorials/run-local-llm) then [Serve Qwen](/tutorials/serve-qwen).
 
+If you also run the Ubuntu **[Radeon Stack Lab](/stack-lab)** companion (Origin repo / local app), start on profile **`qwen-reliable`**. **`qwen3-8b-try`** is the later, uncertain cut.
+
 ## 4. Optional harness
 
 A **harness** is the agent loop *above* the model: tools, memory, chat apps. It does not replace ROCm.
@@ -50,11 +52,11 @@ A **harness** is the agent loop *above* the model: tools, memory, chat apps. It 
 - **[Hermes Agent](https://hermes-agent.nousresearch.com/)** (Nous Research) — local llama.cpp runtime (Vulkan on AMD unless you point at your own server) or any OpenAI-compatible endpoint.
 - **[OpenClaw](https://docs.openclaw.ai/)** — self-hosted gateway into Discord/Telegram/etc., with Ollama, vLLM, and llama.cpp providers.
 
-Details: [Harnesses](/harnesses). Stand up the model API first. Then point the harness at `127.0.0.1`.
+Details: [Harnesses](/harnesses). `curl` `/v1` first. Then point the harness at `127.0.0.1`. Local Hermes can also draft the [weekday YAML scrape](/maintain) overnight — a human still commits.
 
 ## 5. Qwen, then edits
 
-Default: **official Qwen instruct**, size that fits 32 GB at a sane quant. Prove reliability. Then a coder SKU or an [abliterated](/abliterated) checkpoint if you want that tradeoff.
+Default: official **[Qwen2.5-7B-Instruct](https://huggingface.co/Qwen/Qwen2.5-7B-Instruct)**. Prove reliability. Then a coder SKU, the Qwen3-8B try, or an [abliterated](/abliterated) checkpoint if you want that tradeoff.
 
 <QwenPicks />
 

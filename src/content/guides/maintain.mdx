@@ -1,0 +1,59 @@
+---
+title: Weekday scrape
+kicker: Maintain
+description: How a human or a local Hermes loop refreshes the living YAML without inventing benches.
+updated: 2026-09-22
+order: 10
+---
+
+The home card is **data**, not a layout. Weekday refresh means editing three files and, sometimes, adding a dated ROCm note. Do not redesign pages.
+
+## Files that move
+
+| File | Feeds | Touch when |
+| --- | --- | --- |
+| `src/data/what-works.yaml` | Home “what works this week” | Any pin, headline, or honesty line |
+| `src/data/qwen-recommendations.yaml` | Software / start / serve-Qwen picks | Reliability vs capability vs optional |
+| `src/data/abliterated.yaml` | Abliterated table | New notable local variant, or a dead repo |
+
+`as_of` is a calendar day. Bump it when you actually re-read sources. Leave it alone if nothing material changed.
+
+Add `src/content/updates/YYYY-MM-DD-….mdx` when a **line** changes (new Core SDK, new vLLM extras index). Label it a snapshot. Historical notes stay archived. The YAML wins if a note disagrees.
+
+## Sources to open (every weekday)
+
+1. [ROCm 10.0 release notes](https://rocm.docs.amd.com/en/docs-10.0.0/about/release-notes.html) and the live [GPU matrix](https://rocm.docs.amd.com/projects/install-on-linux/en/latest/reference/system-requirements.html)
+2. [AMD vLLM on ROCm](https://rocm.docs.amd.com/projects/ai-ecosystem/en/latest/inference/vllm.html) — supported combo vs community extras
+3. [vLLM releases](https://github.com/vllm-project/vllm/releases) and the ROCm extra-index / `-rocm` image tags
+4. Official Qwen cards: [Qwen2.5-7B-Instruct](https://huggingface.co/Qwen/Qwen2.5-7B-Instruct), [Qwen3-8B](https://huggingface.co/Qwen/Qwen3-8B)
+5. Optional: publisher cards for abliterated rows you already list — educational, not the default
+
+If you do not find a **newer stable** ROCm vLLM or Core SDK, keep the last `as_of`. Do not bump the date for theater.
+
+## Edit rules
+
+- **Reliability first.** Official instruct stays the default until a measured, dated reason says otherwise.
+- **Headline** is one sentence: what stayed true, what is news.
+- **No invented benches, prices, or download stats.** Publisher file sizes are fine if you say they are publisher figures.
+- **Unknowns stay unknown.** “Unstated on the card” is a valid cell.
+- **Companion profiles** stay aligned: `qwen-reliable` ↔ reliability pick; `qwen3-8b-try` ↔ capability try. See [Radeon Stack Lab](/stack-lab).
+- Copy that says “this week” on FAQ / start must match the YAML, or it must point at the home card.
+
+## Optional: Hermes as the overnight research loop
+
+Local [Hermes Agent](/harnesses) can be the overnight pass that *reads* those sources and *drafts* a YAML diff. It is not a bot that publishes.
+
+1. Serve official Qwen so `http://127.0.0.1:8080/v1` or `:8000/v1` already works.
+2. Attach Hermes to **that** URL (do not let it download a random CUDA llama.cpp).
+3. Give it the source list above plus “propose edits to `src/data/*.yaml` only; no benches.”
+4. In the morning: read the diff, smoke-test on the card if a pin moved, then commit on `main`.
+
+A golden prompt that finishes on GPU still beats a confident paragraph.
+
+## After you edit
+
+```bash
+npm run build
+```
+
+Commit the YAML (and the update note, if any) on `main`. Preview the home card before you walk away.

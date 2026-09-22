@@ -2,14 +2,14 @@
 title: AI software on AMD at home
 kicker: Inference
 description: vLLM, llama.cpp, Ollama, Hugging Face TGI, and PyTorch — what each is for on ROCm, and when to pick it.
-updated: 2026-09-21
+updated: 2026-09-22
 order: 3
 ---
 
 The model files are not the runtime. On a R9700 you choose a **server** that speaks HIP or Vulkan, then optionally a [harness](/harnesses) that speaks HTTP to that server.
 
 <Callout type="note">
-**Reliability first, then capability.** Official [Qwen2.5-7B-Instruct](https://huggingface.co/Qwen/Qwen2.5-7B-Instruct) on the GPU. Then a coder SKU or the uncertain Qwen3-8B try. Then an [abliterated](/abliterated) checkpoint if you want that tradeoff. The [weekly status](/) is the pin for *this week* — ROCm 10 / vLLM 0.29 below stay as dated examples, not law.
+**Reliability first, then capability.** Official [Qwen2.5-7B-Instruct](https://huggingface.co/Qwen/Qwen2.5-7B-Instruct) on the GPU (`qwen-reliable` in [Stack Lab](/stack-lab)). Then a coder SKU or the uncertain Qwen3-8B try (`qwen3-8b-try`). Then an [abliterated](/abliterated) checkpoint if you want that tradeoff. The [weekly status](/) is the pin for *this week* — ROCm 10 / vLLM 0.29 below stay as dated examples, not law.
 </Callout>
 
 <QwenPicks />

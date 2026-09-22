@@ -38,16 +38,18 @@ When you publish, set `site` in `astro.config.mjs` to your public URL.
 | --- | --- |
 | `/` | Home + living status card |
 | `/start` | Getting started (GPU → ROCm → software → harness) |
+| `/stack-lab` | Radeon Stack Lab companion (Ubuntu app, Origin repo / local) |
 | `/gpus` | AMD GPUs / R9700 naming |
 | `/rocm` | ROCm explainer + succinct version notes |
 | `/software` | vLLM, llama.cpp, Ollama, TGI |
 | `/abliterated` | Refusal removal / Qwen variants |
-| `/harnesses` | Hermes Agent and OpenClaw |
+| `/harnesses` | Hermes Agent and OpenClaw (`/v1` first) |
 | `/hardware` | PSU, cooling, VRAM |
 | `/tutorials` | How-tos |
 | `/troubleshooting` | Common failures |
 | `/faq` | Short answers |
 | `/blog` | Longer posts + version-note index |
+| `/maintain` | Weekday scrape checklist |
 
 `/local-ai` redirects to `/software`.
 
@@ -60,6 +62,10 @@ When you publish, set `site` in `astro.config.mjs` to your public URL.
 | `src/data/abliterated.yaml` | Abliterated table |
 
 Add a short dated note under `src/content/updates/` when a **line** changes (new Core SDK, new vLLM extras). Those render on `/rocm#version-notes` and the blog index.
+
+Weekday procedure (sources, edit rules, optional Hermes overnight loop): [docs/weekday-scrape.md](docs/weekday-scrape.md) and `/maintain`.
+
+**Radeon Stack Lab** is a separate Ubuntu companion (Origin repo / local app — no public domain documented here). Profiles: `qwen-reliable` (default, official instruct) and `qwen3-8b-try` (cutting-edge). Keep its living catalog aligned with the YAML.
 
 ## Authoring MDX
 

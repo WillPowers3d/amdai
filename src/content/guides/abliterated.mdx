@@ -2,62 +2,62 @@
 title: Abliterated models
 kicker: Weights
 description: What “abliterated” means, how people reduce refusals on local open weights, and which Qwen variants show up on a 32 GB R9700.
-updated: 2026-09-21
+updated: 2026-09-22
 order: 4
 ---
 
-**Abliterated** is community slang for *removing or shrinking a model’s refusal / guardrail behavior in the weights* so a local open model will do the task you asked — on **your** machine, without a hosted safety API in the middle.
+**Abliterated** means *the refusals were edited in the weights* so a local open model is more likely to do the task you asked — on **your** machine, with no hosted safety API in the middle.
 
-This page is technical and adult. You are responsible for what you run and what you generate. We do not host weights.
+This page is technical and adult. Educational context only. You are responsible for what you run. We do not host weights.
 
 <Callout type="note">
-Reliability first: start from **official Qwen2.5-7B-Instruct**. Use an abliterated checkpoint as a *second* model after the GPU path is proven. This week’s notable 8B edit is Huihui-Qwen3-8B-abliterated-v2 — educational local use, not the default. Compare them with the same smoke tests.
+**Default stays official instruct.** Start from [Qwen2.5-7B-Instruct](https://huggingface.co/Qwen/Qwen2.5-7B-Instruct) (`qwen-reliable` in [Stack Lab](/stack-lab)). An abliterated checkpoint is a *second* model after the GPU path is proven. This week’s notable 8B edit is Huihui-Qwen3-8B-abliterated-v2 — not a profile, not a default.
 </Callout>
 
 ## What people are editing
 
-Base chat models are trained to **refuse** some requests (weapons, crime, sexual content involving minors, etc.). “Uncensored” in a Hugging Face title can mean anything from a system-prompt jailbreak to a careful weight edit. Read the card.
+Base chat models are trained to **refuse** some requests. A Hugging Face title that says “uncensored” can mean a system-prompt jailbreak, a small SFT, or a real weight edit. Read the card.
 
-## Approaches (not a how-to for harm)
+## Approaches (not a how-to)
 
-**Refusal-direction ablation (“abliteration”).** Find a direction in activation space associated with “I can’t help with that,” then subtract / orthogonalize it (the community “remove-refusals-with-transformers” writeups and the **Heretic** family of methods). No full retrain. Side effects: think-loops, template breakage, dropped MTP/vision tensors if someone re-saved sloppily.
-
-**Orthogonalization / projection.** Same family: make residual streams less able to express the refusal feature. Quality depends on the editor.
-
-**Uncensor fine-tunes (SFT / LoRA).** Train on completions that fulfill where the base refused. Can preserve “stop thinking” behavior better than a crude ablation — or it can overfit a tiny panel. Harness/system prompts sometimes **restore** refusals.
-
-**Prompt-only “jailbreaks.”** A 1,400-character persona in the chat template is **not** a weight edit. It is easy to undo and easy to mistake for ablation. If a card’s refusal numbers were measured *with* that template, say so.
-
-**Serving without a hosted safety layer.** Stock Qwen + llama.cpp on loopback already has no Azure/OpenAI filter. Abliteration is extra. Do not confuse “no cloud moderator” with “weights will never refuse.”
+| Approach | What it actually is | Limit |
+| --- | --- | --- |
+| **Abliteration** | Subtract / orthogonalize a refusal direction in activations (community “remove-refusals-with-transformers”, **Heretic**-style). No full retrain. | Think-loops, broken templates, dropped MTP/vision tensors |
+| **Orthogonalization** | Same family: make residual streams less able to express “I can’t help.” | Quality is editor-dependent |
+| **Uncensor SFT / LoRA** | Train on completions that fulfill where the base refused | Harness or system prompts can **restore** refusals |
+| **Prompt jailbreaks** | A long persona in the chat template | Not a weight edit. Easy to undo. Easy to mistake for ablation |
+| **No hosted safety layer** | Stock Qwen + llama.cpp on loopback already has no cloud moderator | Weights can still refuse |
 
 ## How to find them
 
-Hugging Face search patterns that actually match repos: `abliterated`, `uncensored`, `heretic`, `Huihui-Qwen`, `Huihui-Qwen3-8B-abliterated-v2`, `Qwen3.8-27B-Uncensored`. Prefer the **publisher’s** card over a random re-quant. GGUF mirrors for the 8B v2 edit include `mradermacher/Huihui-Qwen3-8B-abliterated-v2-GGUF` — pin a revision, do not invent download stats.
+Search Hugging Face for: `abliterated`, `uncensored`, `heretic`, `Huihui-Qwen`, `Huihui-Qwen3-8B-abliterated-v2`, `Qwen3.8-27B-Uncensored`.
 
-Trust:
+Prefer the **publisher’s** card over a random re-quant. A published GGUF for the 8B v2 edit is `mradermacher/Huihui-Qwen3-8B-abliterated-v2-GGUF` — pin a revision. No download stats.
 
-- Pin a **revision** / SHA; do not “latest” a stranger’s GGUF.
-- Read **LICENSE** (Qwen line is often Apache-2.0 on the base; derivatives differ).
-- If the card advertises MTP or a vision tower, confirm those tensors survived the edit.
-- Gated repos exist for a reason — read the safety note they make you click.
+**Trust**
 
-Table below is a **living YAML file** (`src/data/abliterated.yaml`). No download counts. VRAM is approximate.
+- SHA-256 or `huggingface-cli` revision pins, not “latest”
+- Read **LICENSE** (Qwen base is often Apache-2.0; derivatives differ)
+- If the card advertises MTP or vision, confirm those tensors survived
+- Gated repos exist for a reason — read the note they make you click
+
+The table is `src/data/abliterated.yaml`. VRAM is approximate. Unknowns stay unknown.
 
 <AbliteratedTable />
 
-## ROCm / reliability
+## Reliability on this stack
 
 | Observation | What to do |
 | --- | --- |
-| llama.cpp + GGUF is the common path | Build HIP `gfx1201` or Vulkan; [tutorial](/tutorials/run-local-llm) |
-| vLLM may fail on hybrid / edited architectures | Try official instruct on vLLM first; treat abliterated vLLM as unproven unless the card says otherwise |
-| Thinking models + ablation | Watch for never-finishes-thinking; disable thinking if the card says so |
-| Agent harnesses | Some SFT-class edits **re-refuse** inside a tool/coding frame. Test in the harness you actually use. |
+| llama.cpp + GGUF is the common path | HIP `gfx1201` or Vulkan — [tutorial](/tutorials/run-local-llm) |
+| vLLM on edited / hybrid graphs | Prove official instruct on vLLM first. Abliterated vLLM is unproven unless the card says otherwise |
+| Thinking models + ablation | Watch for never-finishes-thinking |
+| Agent harnesses | Some SFT-class edits **re-refuse** inside a tool frame. Test in the harness you actually use |
 
-## Qwen tradeoffs
+## Official Qwen first, then a second checkpoint
 
 <QwenPicks />
 
 <SmokeTests />
 
-Refresh the YAML when a new Qwen.x drops. The [weekly status](/) will say whether we still recommend official instruct as the default — we should.
+Refresh the YAML when a new Qwen.x drops. The [weekly card](/) should still recommend official instruct as the default.
