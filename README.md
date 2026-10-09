@@ -65,7 +65,7 @@ Add a short dated note under `src/content/updates/` when a **line** changes (new
 
 Weekday procedure (sources, edit rules, optional Hermes overnight loop): [docs/weekday-scrape.md](docs/weekday-scrape.md) and `/maintain`.
 
-**Radeon Stack Lab** is a separate Ubuntu companion (Origin repo / local app — no public domain documented here). Profiles: `qwen-reliable` (default, official instruct) and `qwen3-8b-try` (cutting-edge). Keep its living catalog aligned with the YAML.
+**Radeon Stack Lab** is a separate Ubuntu companion (Origin repo / local app — no public domain documented here). Profile slot: `qwen-reliable` (model being reworked). There is no `qwen3-8b-try` on this pass. Keep its living catalog aligned with the YAML.
 
 ## Authoring MDX
 

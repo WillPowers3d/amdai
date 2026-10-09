@@ -1,8 +1,8 @@
 ---
 title: Radeon Stack Lab
 kicker: Companion
-description: The Ubuntu companion app that sits next to these notes — living catalog, qwen-reliable default, qwen3-8b-try cutting-edge.
-updated: 2026-09-22
+description: The Ubuntu companion app that sits next to these notes — living catalog. Named Qwen profiles are being reworked.
+updated: 2026-10-09
 order: 1
 ---
 
@@ -11,7 +11,7 @@ These notes are the **written** weekly tracker. **Radeon Stack Lab** is the **Ub
 It is an **independent** local app (Origin repo / local install). There is no public product domain to click. If you have the repo, run it next to this site. If you do not, this page is still the map of what the profiles mean.
 
 <Callout type="note">
-This site does not invent a download URL. Treat Stack Lab as “Origin repo / local app.” The [home status card](/) remains the pin if the app’s catalog and this YAML ever disagree — then refresh both.
+Named Qwen model slots are **being reworked**. There is no current `qwen3-8b-try` profile and no 7B instruct default on this pass. The [home status card](/) remains the pin if the app’s catalog and this YAML ever disagree — then refresh both.
 </Callout>
 
 ## What it is for
@@ -19,36 +19,26 @@ This site does not invent a download URL. Treat Stack Lab as “Origin repo / lo
 | Piece | Job |
 | --- | --- |
 | **Living catalog** | The same weekly ROCm / vLLM / Qwen story as `src/data/what-works.yaml` |
-| **`qwen-reliable`** | Default profile. Official instruct. Reliability first. |
-| **`qwen3-8b-try`** | Cutting-edge profile. Newer Qwen3, uncertain on R9700. |
+| **`qwen-reliable`** | Default profile slot — **being reworked**. No named model this pass. |
 
 The app does not replace ROCm, llama.cpp, or vLLM. It **selects a profile** and points you at a serve path those tools already understand.
 
 ## Profiles (conceptual)
 
-### `qwen-reliable` — default
+### `qwen-reliable` — default (being reworked)
 
-- **Model:** [Qwen/Qwen2.5-7B-Instruct](https://huggingface.co/Qwen/Qwen2.5-7B-Instruct)
-- **Quant / weights:** BF16 on the AMD-aligned vLLM path; GGUF if you are on llama.cpp
-- **Serve:** ROCm Core SDK **10.0.0** + **vLLM 0.27** (10.0 matrix, `gfx1201` listed), or llama.cpp HIP / Vulkan
-- **Use when:** first tokens, overnight chat, anything you need to trust tomorrow morning
+- **Model:** Being reworked
+- **Quant / weights:** Being reworked
+- **Serve:** ROCm Core SDK **10.0.0** + **vLLM 0.27** (10.0 matrix, `gfx1201` listed), or llama.cpp HIP / Vulkan — engine notes only; pick the model from a later catalog pass
+- **Use when:** first tokens, overnight chat, anything you need to trust tomorrow morning — after a default is named again
 
-This is the same reliability pick as the [weekly card](/).
-
-### `qwen3-8b-try` — cutting-edge
-
-- **Model:** [Qwen/Qwen3-8B](https://huggingface.co/Qwen/Qwen3-8B)
-- **Serve:** community ROCm Docker **`vllm/vllm-openai-rocm:v0.30.0`** (previous try-tag `v0.29.0`, or `wheels.vllm.ai/rocm/0.29.0/rocm723`)
-- **Use when:** you already proved `qwen-reliable`, and you want to smoke-test thinking / `/no_think`
-- **Honesty:** unverified on a single R9700. Not the default. Do not skip the 7B instruct for this. Do not treat 27B / 35B-A3B Qwen3.5–3.6 as this profile.
-
-Abliterated checkpoints are **not** a Stack Lab default profile. If you experiment, do it after official instruct works — [Abliterated](/abliterated).
+Abliterated checkpoints are **not** a Stack Lab default profile. If you experiment, do it after a stock official instruct works — [Abliterated](/abliterated).
 
 ## How it relates to this site
 
 ```text
 Radeon Stack Lab (Ubuntu app, local)
-    → profile: qwen-reliable | qwen3-8b-try
+    → profile: qwen-reliable (model slot being reworked)
         → same pins as src/data/*.yaml
             → llama.cpp / vLLM on the R9700
                 → optional harness on /v1
@@ -59,6 +49,6 @@ Weekday scrape updates the YAML here. The companion catalog should follow. Maint
 ## What to do if you only have these notes
 
 1. Follow [Getting started](/start).
-2. Serve official Qwen ([tutorial](/tutorials/serve-qwen)).
+2. Serve official Qwen ([tutorial](/tutorials/serve-qwen)) once the weekly card names a model.
 3. Attach a [harness](/harnesses) only after `/v1` answers.
-4. If you later clone the Origin repo for Stack Lab, start it on **`qwen-reliable`**.
+4. If you later clone the Origin repo for Stack Lab, do not assume a withdrawn 7B or 8B profile still exists.

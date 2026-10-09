@@ -11,7 +11,7 @@ Layouts read `src/data/what-works.yaml`, `src/data/qwen-recommendations.yaml`, a
 1. Open the sources listed on `/maintain` (ROCm 10 notes, AMD vLLM page, vLLM releases, official Qwen cards).
 2. If nothing material moved, **stop**. Leave `as_of` alone.
 3. If something moved: bump `as_of`, rewrite `headline` in one sentence, update the relevant keys. Do not invent tok/s, prices, or download counts.
-4. Keep **reliability** = official instruct (`qwen-reliable` in [Radeon Stack Lab](../src/content/guides/stack-lab.mdx)). Cutting-edge Qwen3 stays `qwen3-8b-try`.
+4. Keep **reliability** aligned with the YAML (`qwen-reliable` in [Radeon Stack Lab](../src/content/guides/stack-lab.mdx)). Do not restore withdrawn 7B / 8B defaults or a `qwen3-8b-try` profile on this pass.
 5. Add `src/content/updates/YYYY-MM-DD-*.mdx` only when a **line** changed (new Core SDK or extras index).
 6. Align FAQ / start “this week” sentences, or point them at the home card.
 7. `npm run build`, then commit on `main`.

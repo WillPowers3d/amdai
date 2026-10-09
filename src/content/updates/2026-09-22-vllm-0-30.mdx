@@ -1,7 +1,7 @@
 ---
 title: vLLM ROCm Docker try-tag v0.30.0
 date: 2026-09-22
-summary: Reliability unchanged — Qwen2.5-7B-Instruct BF16 on AMD-validated vLLM 0.27 / ROCm 10.0.0. Community image moved to vllm/vllm-openai-rocm:v0.30.0. Qwen3-8B stays unverified on one R9700.
+summary: Dated snapshot. AMD-validated vLLM 0.27 / ROCm 10.0.0 unchanged. Community image moved to vllm/vllm-openai-rocm:v0.30.0. Named Qwen defaults from that week were later withdrawn.
 current: false
 ---
 
@@ -9,6 +9,6 @@ Dated digest (2026-09-22, America/Chicago). ROCm **10.0.0** is still the R9700 (
 
 Community cutting-edge Docker tag moved: `vllm/vllm-openai-rocm:v0.30.0` (Docker Hub, pushed ~2026-09-22Z). Keep **`v0.29.0`** as the previous try-tag (`wheels.vllm.ai/rocm/0.29.0/rocm723` still documents that week). Do not mix 0.27 and 0.30 in one venv. Default PyPI `vllm` is still CUDA.
 
-[Qwen/Qwen3-8B](https://huggingface.co/Qwen/Qwen3-8B) may use the 0.29 or 0.30 image. **Unverified on a single R9700.** Not the default. Qwen3.5 / 3.6 **27B** and **35B-A3B** stay multi-GPU territory — a public llama.cpp multi-GPU writeup is not a single-card recipe.
+Named Qwen defaults from this week were **later withdrawn**. Qwen3.5 / 3.6 **27B** and **35B-A3B** stay multi-GPU territory — a public llama.cpp multi-GPU writeup is not a single-card recipe.
 
 Honesty unchanged: `TORCH_BLAS_PREFER_HIPBLASLT=0` on training resets; SGLang AITER may fail; prefer llama.cpp HIP/Vulkan over Ollama on gfx1201.

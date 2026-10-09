@@ -1,10 +1,10 @@
 ---
-title: Weekly refresh — vLLM 0.27 reliability, Qwen3-8B try
+title: Weekly refresh — vLLM 0.27 reliability (dated)
 date: 2026-09-21
-summary: ROCm 10.0.0 unchanged for gfx1201. Reliability serve is AMD-aligned vLLM 0.27 + Qwen2.5-7B-Instruct BF16. vLLM 0.29 ROCm Docker remains the community cutting-edge pin (no newer stable). Qwen3-8B is an uncertain try. R9700 training KIs documented.
+summary: Dated snapshot. ROCm 10.0.0 unchanged for gfx1201. Reliability serve is AMD-aligned vLLM 0.27. vLLM 0.29 ROCm Docker remains the community cutting-edge pin (no newer stable that week). Named Qwen defaults from that week were later withdrawn. R9700 training KIs documented.
 current: false
 ---
 
 This is a **dated weekly card**, not a new Core SDK line. ROCm **10.0.0** is still the R9700 inference pin ([release notes](https://rocm.docs.amd.com/en/docs-10.0.0/about/release-notes.html)). AMD’s 10.0 matrix still lists **vLLM 0.27**. Upstream [vLLM 0.29.0](https://github.com/vllm-project/vllm/releases/tag/v0.29.0) ROCm extras (`vllm/vllm-openai-rocm:v0.29.0`, `wheels.vllm.ai/rocm/0.29.0/rocm723`) stay as the community serve try — no newer stable ROCm vLLM found this morning.
 
-Reliability Qwen is **[Qwen/Qwen2.5-7B-Instruct](https://huggingface.co/Qwen/Qwen2.5-7B-Instruct)** BF16. Capability try is **[Qwen/Qwen3-8B](https://huggingface.co/Qwen/Qwen3-8B)** on the 0.29 ROCm image — flag uncertainty. Training/fine-tune on this SKU can GPU-reset (`TORCH_BLAS_PREFER_HIPBLASLT=0`); SGLang AITER may fail. Community training writeups often use ROCm 7.2.1 — keep inference on 10.0. TheRock [gfx1201 perf logs](https://github.com/ROCm/TheRock/issues/2591) are collection, not a bench table.
+Named Qwen defaults from this week were **later withdrawn** — do not treat them as current. Training/fine-tune on this SKU can GPU-reset (`TORCH_BLAS_PREFER_HIPBLASLT=0`); SGLang AITER may fail. Community training writeups often use ROCm 7.2.1 — keep inference on 10.0. TheRock [gfx1201 perf logs](https://github.com/ROCm/TheRock/issues/2591) are collection, not a bench table.

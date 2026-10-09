@@ -39,11 +39,11 @@ Reliability path for Qwen on one R9700:
 
 1. **llama.cpp** (HIP `gfx1201`, Vulkan if HIP is angry) — first tokens, first golden prompt.
 2. **Ollama** — if you want a pull-and-chat wrapper and it actually attaches to the GPU.
-3. **vLLM** — continuous batching, OpenAI server, spec decode. **Reliability this week:** ROCm 10 + AMD-validated **vLLM 0.27** (10.0 matrix, gfx1201 listed) for [Qwen2.5-7B-Instruct](https://huggingface.co/Qwen/Qwen2.5-7B-Instruct). **Community cutting-edge:** Docker **`vllm/vllm-openai-rocm:v0.30.0`** (previous try-tag `v0.29.0`) for the unverified Qwen3-8B try. Those are different pins. Default `pip install vllm` is CUDA. Prefer llama.cpp HIP/Vulkan over official Ollama ROCm on gfx1201.
+3. **vLLM** — continuous batching, OpenAI server, spec decode. **Reliability this week:** ROCm 10 + AMD-validated **vLLM 0.27** (10.0 matrix, gfx1201 listed). **Community cutting-edge:** Docker **`vllm/vllm-openai-rocm:v0.30.0`** (previous try-tag `v0.29.0`). Those are different pins. Default `pip install vllm` is CUDA. Prefer llama.cpp HIP/Vulkan over official Ollama ROCm on gfx1201. Named Qwen model is being reworked.
 
 Compare them on [AI software](/software). Run Qwen: [Local LLM tutorial](/tutorials/run-local-llm) then [Serve Qwen](/tutorials/serve-qwen).
 
-If you also run the Ubuntu **[Radeon Stack Lab](/stack-lab)** companion (Origin repo / local app), start on profile **`qwen-reliable`**. **`qwen3-8b-try`** is the later, uncertain cut.
+If you also run the Ubuntu **[Radeon Stack Lab](/stack-lab)** companion (Origin repo / local app), treat **`qwen-reliable`** as a slot being reworked. There is no `qwen3-8b-try` profile on this pass.
 
 ## 4. Optional harness
 
@@ -56,7 +56,7 @@ Details: [Harnesses](/harnesses). `curl` `/v1` first. Then point the harness at 
 
 ## 5. Qwen, then edits
 
-Default: official **[Qwen2.5-7B-Instruct](https://huggingface.co/Qwen/Qwen2.5-7B-Instruct)**. Prove reliability. Then a coder SKU, the Qwen3-8B try, or an [abliterated](/abliterated) checkpoint if you want that tradeoff.
+Default: **being reworked** — no named instruct card this pass. Prove GPU use on official Qwen weights the [weekly card](/) names. Then a coder SKU or an [abliterated](/abliterated) checkpoint if you want that tradeoff.
 
 <QwenPicks />
 

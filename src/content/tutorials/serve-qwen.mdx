@@ -45,11 +45,11 @@ Two pins. Do not mix them in one venv. The [weekly card](/) is the current recom
 
 **Reliability (`qwen-reliable`) — AMD-aligned vLLM 0.27 / ROCm 10**
 
-Serve [Qwen/Qwen2.5-7B-Instruct](https://huggingface.co/Qwen/Qwen2.5-7B-Instruct) BF16. Copy the current image tag from [AMD’s vLLM page](https://rocm.docs.amd.com/projects/ai-ecosystem/en/latest/inference/vllm.html) (docs snapshot: vLLM **0.27** + PyTorch **2.13**).
+Model slot **being reworked**. Copy the current image tag from [AMD’s vLLM page](https://rocm.docs.amd.com/projects/ai-ecosystem/en/latest/inference/vllm.html) (docs snapshot: vLLM **0.27** + PyTorch **2.13**). Do not treat a withdrawn 7B or 8B card as the serve target.
 
-**Cutting-edge try (`qwen3-8b-try`) — vLLM 0.30 ROCm Docker**
+**Community Docker — vLLM 0.30 ROCm image**
 
-Unverified on a single R9700. For [Qwen/Qwen3-8B](https://huggingface.co/Qwen/Qwen3-8B) only after 0.27 works. Previous try-tag `v0.29.0` is still valid if 0.30 misbehaves.
+Engine try-tag only. No named Qwen3-8B target. Previous try-tag `v0.29.0` is still valid if 0.30 misbehaves.
 
 ```bash
 # Community ROCm image — NOT default PyPI
@@ -84,6 +84,6 @@ OpenClaw’s vLLM provider wants `http://127.0.0.1:8000/v1` and `VLLM_API_KEY` s
 1. Short `READY` completion.
 2. A second turn that stays in-template.
 3. `rocm-smi` during both.
-4. Then: harness tools. Then, if you still want it, a second weight (coder / Qwen3-8B try / abliterated).
+4. Then: harness tools. Then, if you still want it, a second weight (coder / abliterated).
 
 If thinking never ends, stay on official instruct with thinking off, or fix `--jinja`. Do not “fix” it by grabbing a random uncensored GGUF.

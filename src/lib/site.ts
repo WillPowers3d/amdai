@@ -47,7 +47,7 @@ export const homeLink: NavItem = {
 
 export const primaryNav: NavItem[] = [
   { href: '/start', label: 'Getting started', description: 'GPU → ROCm → software → optional harness', group: 'path' },
-  { href: '/stack-lab', label: 'Stack Lab', description: 'Ubuntu companion — qwen-reliable vs qwen3-8b-try', group: 'path' },
+  { href: '/stack-lab', label: 'Stack Lab', description: 'Ubuntu companion — living catalog, profiles being reworked', group: 'path' },
   { href: '/gpus', label: 'AMD GPUs', description: 'R9700 naming, PRO vs RX vs Instinct', group: 'stack' },
   { href: '/rocm', label: 'ROCm', description: 'What it is, plus short version notes', group: 'stack' },
   { href: '/software', label: 'AI software', description: 'vLLM, llama.cpp, Ollama, TGI — when to pick each', group: 'stack' },

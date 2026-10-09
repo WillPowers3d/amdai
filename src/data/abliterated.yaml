@@ -9,30 +9,19 @@ search_patterns:
   - heretic
   - refusal ablation
   - Huihui-Qwen
-  - Huihui-Qwen3-8B-abliterated-v2
   - Huihui-Qwen3.5-9B-abliterated
   - Qwen3.8-27B-Uncensored
 
 rows:
-  - name: Qwen official instruct (control)
-    repo: Qwen/Qwen2.5-7B-Instruct (this week's reliability control)
+  - name: Official instruct (control)
+    repo: Being reworked — no named control this pass
     method: none (stock refusals)
-    size: 7B (7.61B-class)
-    quant_example: Official BF16 HF; GGUF Q4/Q5 if you want llama.cpp
-    vram_32gb: Comfortable at BF16 or 4–5 bit
-    backends: vLLM 0.27 (AMD-validated), llama.cpp, widest
-    reliability: Highest for “it just runs”
-    notes: Baseline. Use this to judge whether an edit broke thinking or templates.
-
-  - name: Huihui Qwen3-8B abliterated v2
-    repo: huihui-ai/Huihui-Qwen3-8B-abliterated-v2
-    method: Classic abliteration (remove-refusals-with-transformers); v2 uses a faster ablation pass
-    size: 8B (8.2B-class Qwen3)
-    quant_example: HF BF16; llama.cpp GGUF via mradermacher/Huihui-Qwen3-8B-abliterated-v2-GGUF (Q4_K_M ~5.1 GB on that card)
-    vram_32gb: Comfortable at 4–8 bit GGUF or BF16 on 32 GB if the file matches the card
-    backends: llama.cpp (GGUF mirrors). Publisher Ollama tag `huihui_ai/qwen3-abliterated:8b-v2`. vLLM unstated — treat as unknown.
-    reliability: Not the default. Stock Qwen3-8B on vLLM 0.29/0.30 is already an unverified R9700 try; this edit is more so.
-    notes: v2 vs huihui-ai/Qwen3-8B-abliterated — publisher says layer 0 changed to fix garbled codes. Educational local open-weight use. Publisher research/experimental framing. Pin a revision.
+    size: Being reworked
+    quant_example: Being reworked
+    vram_32gb: Being reworked
+    backends: llama.cpp, vLLM — confirm the weekly card
+    reliability: Use a stock official instruct as baseline once a default is named again
+    notes: Previous 7B control withdrawn. Do not treat a withdrawn card as current.
 
   - name: Huihui Qwen3.5-9B abliterated
     repo: huihui-ai/Huihui-Qwen3.5-9B-abliterated

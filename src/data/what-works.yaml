@@ -2,15 +2,15 @@
 # Update this file when the frontier moves. Do not treat it as permanent law.
 as_of: 2026-09-22
 status: viable
-headline: Reliable Qwen is still Qwen2.5-7B-Instruct BF16 on ROCm 10 / vLLM 0.27. News — community ROCm image moved to v0.30.0; Qwen3-8B stays an unverified try.
+headline: Qwen reliability pick is being reworked. ROCm 10 / vLLM 0.27 notes unchanged this pass.
 summary: >
   ROCm Core SDK 10.0.0 remains the Radeon AI PRO R9700 (gfx1201) inference line;
   official support is confirmed. Do not use Ubuntu apt ROCm 7.x as the primary path.
   Daily chat: llama.cpp HIP (gfx1201) or Vulkan — prefer that over official Ollama ROCm
   on this card. Serving: AMD-validated vLLM 0.27 for reliability. Community cutting-edge
   Docker tag is now vllm/vllm-openai-rocm:v0.30.0 (0.29.0 is the previous try-tag).
-  Qwen3-8B is still unverified on a single R9700. Fine-tune still lags CUDA and can
-  reset the GPU on this SKU.
+  The named Qwen default is withdrawn pending a later catalog pass. Fine-tune still
+  lags CUDA and can reset the GPU on this SKU.
 
 rocm:
   recommended: AMD ROCm Core SDK 10.0.0, one RDNA4/gfx120x family package (R9700 = gfx1201; official support confirmed)
@@ -26,12 +26,12 @@ inference:
   do_not: plain `pip install vllm` from default PyPI (that is the CUDA wheel)
 
 qwen:
-  reliability_first: Qwen/Qwen2.5-7B-Instruct BF16 on AMD-validated vLLM 0.27 / ROCm 10
-  build: Qwen/Qwen2.5-7B-Instruct
-  quant: BF16 (official HF weights). 7B-class should leave room for KV cache on 32 GB — confirm; no invented tok/s.
-  serve: AMD-validated vLLM 0.27 on ROCm 10. llama.cpp HIP/Vulkan if you want least-pain chat without the vLLM stack.
-  then_capability: Qwen/Qwen3-8B on vLLM 0.30 or 0.29 ROCm Docker — cutting-edge, unverified on R9700. Not the reliability default. Do not promote Qwen3.5/3.6 27B or 35B-A3B as single-card defaults.
-  abliterated: Optional educational. huihui-ai/Huihui-Qwen3-8B-abliterated-v2 (mradermacher GGUF). Newer optional huihui-ai/Huihui-Qwen3.5-9B-abliterated (+ GGUF). Not the default.
+  reliability_first: Being reworked — no named default this pass
+  build: Being reworked
+  quant: Being reworked
+  serve: AMD-validated vLLM 0.27 on ROCm 10, or llama.cpp HIP/Vulkan. Model slot empty.
+  then_capability: Being reworked. Do not promote Qwen3.5/3.6 27B or 35B-A3B as single-card defaults.
+  abliterated: Optional educational. See /abliterated. Not the default. No Qwen3-8B pointer.
 
 verify:
   - rocminfo shows gfx1201 for the R9700
@@ -40,14 +40,12 @@ verify:
   - If you use vLLM, the process is the ROCm build (hip/rocm in the version string)
   - After a kernel upgrade, check firmware/MES before you rebuild userspace
   - If HIP llama.cpp is ugly, measure Vulkan before you rebuild the world
-  - If you try Qwen3-8B, smoke-test thinking vs /no_think before you trust the template
   - If you fine-tune, expect GPU-reset KIs — `TORCH_BLAS_PREFER_HIPBLASLT=0` before you blame the model
 
 honesty:
   - llama.cpp HIP (gfx1201) or Vulkan = least-pain chat; prefer that over official Ollama ROCm on gfx1201
   - AMD-validated vLLM 0.27 = reliability serve on the 10.0 matrix (gfx1201 listed)
   - Community ROCm Docker try-tag is v0.30.0; v0.29.0 is the previous pin
-  - Qwen3-8B is unverified on a single R9700 — 0.29 or 0.30 image, never the default
   - Qwen3.5 / 3.6 27B and 35B-A3B are multi-GPU territory on this SKU, not single-card defaults
   - A public writeup (local-desktop) runs Qwen3.6-35B-A3B via llama.cpp multi-GPU — not advice for one R9700
   - ROCm 10.0 KI — training/fine-tune GPU resets on R9700. Try `TORCH_BLAS_PREFER_HIPBLASLT=0`

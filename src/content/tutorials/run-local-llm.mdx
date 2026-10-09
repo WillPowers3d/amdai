@@ -11,7 +11,7 @@ order: 3
 Goal: **official Qwen instruct** generating on the R9700, with `rocm-smi` showing GPU use. llama.cpp first (you control the backend). Ollama is optional and still rocky on this card. vLLM is the [next tutorial](/tutorials/serve-qwen).
 
 <Callout type="check">
-**Default:** [Qwen2.5-7B-Instruct](https://huggingface.co/Qwen/Qwen2.5-7B-Instruct) — the `qwen-reliable` profile in [Stack Lab](/stack-lab). Smoke-test on a small official GGUF (7B–8B Q4/Q5), then stay on official instruct. Do not start with 70B or an [abliterated](/abliterated) file.
+**Default:** being reworked — no named 7B or 8B card. Smoke-test on a small **official** GGUF, then stay on official instruct. Do not start with 70B or an [abliterated](/abliterated) file.
 </Callout>
 
 ## Do this in order
@@ -124,4 +124,4 @@ If VRAM never moves, go back to llama.cpp. Do not set random `HSA_OVERRIDE_*` on
 - `rocm-smi` VRAM is roughly the file plus cache
 - A second prompt still works
 
-Then: raise `-c`, or [serve `/v1`](/tutorials/serve-qwen) for a harness. Compare HIP vs Vulkan on the **same** GGUF if you like — notes, not leaderboards. Abliterated and Qwen3-8B come *after* this pipe is boring.
+Then: raise `-c`, or [serve `/v1`](/tutorials/serve-qwen) for a harness. Compare HIP vs Vulkan on the **same** GGUF if you like — notes, not leaderboards. Abliterated weights come *after* this pipe is boring.
