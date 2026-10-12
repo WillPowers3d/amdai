@@ -1,0 +1,167 @@
+# First-party local-AI benches. Every tok/s is from local-desktop or explicitly
+# "not measured". Do not invent scores, prices, or third-party leaderboards.
+as_of: 2026-10
+label: Measured on our rig, 2026-10
+source: local-desktop strata-test report / Local AI measurements
+
+test_rig:
+  label: Our test rig
+  host: local-desktop
+  gpus: Two AMD Radeon AI PRO R9700 (32 GB GDDR6, gfx1201)
+  ram: 256 GB DDR5
+  note: Daily-driver and 35B rows use ONE card. The second card is there; do not assume a split.
+
+# Allowed tok/s: 100.8, 88, 50, 108.3, 116.5, 32.6, 16. null = not measured.
+runs:
+  - id: qwen36-ud-q5-short
+    model: Qwen3.6-35B-A3B
+    official: Qwen/Qwen3.6-35B-A3B
+    gguf: unsloth/Qwen3.6-35B-A3B-GGUF
+    quant: UD-Q5_K_XL
+    engine: llama.cpp
+    backend: Vulkan
+    recipe: null
+    kv: f16
+    gpus: 1
+    offload: 0%
+    mtp: false
+    threads: null
+    context_label: short
+    context_tokens: 4096
+    metric: tg
+    tok_s: 100.8
+    calculator: /calculator?gpu=r9700&vram=32&n=1&split=0&ram=256&model=qwen36&tp=35&ap=3&layers=40&kvl=10&kvh=2&hd=256&quant=q5_k_m&ctx=4096&kv=f16&oh=1
+    notes: One R9700, f16 KV, nothing offloaded.
+
+  - id: qwen36-ud-q5-32k
+    model: Qwen3.6-35B-A3B
+    official: Qwen/Qwen3.6-35B-A3B
+    gguf: unsloth/Qwen3.6-35B-A3B-GGUF
+    quant: UD-Q5_K_XL
+    engine: llama.cpp
+    backend: Vulkan
+    recipe: null
+    kv: f16
+    gpus: 1
+    offload: 0%
+    mtp: false
+    threads: null
+    context_label: 32K
+    context_tokens: 32768
+    metric: tg
+    tok_s: 88
+    calculator: /calculator?gpu=r9700&vram=32&n=1&split=0&ram=256&model=qwen36&tp=35&ap=3&layers=40&kvl=10&kvh=2&hd=256&quant=q5_k_m&ctx=32768&kv=f16&oh=1
+    notes: One R9700, f16 KV, nothing offloaded.
+
+  - id: qwen36-ud-q5-256k
+    model: Qwen3.6-35B-A3B
+    official: Qwen/Qwen3.6-35B-A3B
+    gguf: unsloth/Qwen3.6-35B-A3B-GGUF
+    quant: UD-Q5_K_XL
+    engine: llama.cpp
+    backend: Vulkan
+    recipe: null
+    kv: f16
+    gpus: 1
+    offload: 0%
+    mtp: false
+    threads: null
+    context_label: 256K
+    context_tokens: 262144
+    metric: tg
+    tok_s: 50
+    calculator: /calculator?gpu=r9700&vram=32&n=1&split=0&ram=256&model=qwen36&tp=35&ap=3&layers=40&kvl=10&kvh=2&hd=256&quant=q5_k_m&ctx=262144&kv=f16&oh=1
+    notes: Full 262144 context on one R9700, f16 KV, nothing offloaded.
+
+  - id: qwen36-q5km-short
+    model: Qwen3.6-35B-A3B
+    official: Qwen/Qwen3.6-35B-A3B
+    gguf: unsloth/Qwen3.6-35B-A3B-GGUF
+    quant: Q5_K_M
+    engine: llama.cpp
+    backend: Vulkan
+    recipe: null
+    kv: f16
+    gpus: 1
+    offload: 0%
+    mtp: false
+    threads: null
+    context_label: short
+    context_tokens: 4096
+    metric: tg
+    tok_s: 108.3
+    calculator: /calculator?gpu=r9700&vram=32&n=1&split=0&ram=256&model=qwen36&tp=35&ap=3&layers=40&kvl=10&kvh=2&hd=256&quant=q5_k_m&ctx=4096&kv=f16&oh=1
+    notes: Sibling Q5 file on the same card. Long-context tok/s not measured.
+
+  - id: qwen36-q4km-short
+    model: Qwen3.6-35B-A3B
+    official: Qwen/Qwen3.6-35B-A3B
+    gguf: unsloth/Qwen3.6-35B-A3B-GGUF
+    quant: Q4_K_M
+    engine: llama.cpp
+    backend: Vulkan
+    recipe: null
+    kv: f16
+    gpus: 1
+    offload: 0%
+    mtp: false
+    threads: null
+    context_label: short
+    context_tokens: 4096
+    metric: tg
+    tok_s: 116.5
+    calculator: /calculator?gpu=r9700&vram=32&n=1&split=0&ram=256&model=qwen36&tp=35&ap=3&layers=40&kvl=10&kvh=2&hd=256&quant=q4_k_m&ctx=4096&kv=f16&oh=1
+    notes: Q4 floor. Prefer Q5 when it fits. Long-context tok/s not measured.
+
+  - id: flash-strata-262k
+    model: Qwen 3.8 Flash
+    official: Qwen/Qwen3.8-Flash-Next
+    gguf: unsloth/Qwen3.8-Flash-Next-GGUF
+    quant: UD-Q6_K_XL
+    engine: Strata
+    backend: HIP
+    recipe: strata-flash-q6
+    kv: not measured
+    gpus: 1
+    offload: not measured
+    mtp: false
+    threads: null
+    context_label: 262K
+    context_tokens: 262144
+    metric: tg
+    tok_s: 32.6
+    calculator: /calculator?gpu=r9700&vram=32&n=1&split=0&ram=256&model=flash&tp=125&ap=6&layers=48&kvl=12&kvh=2&hd=256&quant=q6_k&ctx=262144&kv=f16&oh=1
+    notes: Strata v0.1.42, no MTP, recipe strata-flash-q6. Writing (tg).
+
+  - id: flash-llamacpp-262k
+    model: Qwen 3.8 Flash
+    official: Qwen/Qwen3.8-Flash-Next
+    gguf: unsloth/Qwen3.8-Flash-Next-GGUF
+    quant: UD-Q6_K_XL
+    engine: llama.cpp
+    backend: not measured
+    recipe: null
+    kv: not measured
+    gpus: 1
+    offload: not measured
+    mtp: false
+    threads: 8
+    context_label: 262K
+    context_tokens: 262144
+    metric: tg
+    tok_s: 16
+    calculator: /calculator?gpu=r9700&vram=32&n=1&split=0&ram=256&model=flash&tp=125&ap=6&layers=48&kvl=12&kvh=2&hd=256&quant=q6_k&ctx=262144&kv=f16&oh=1
+    notes: llama.cpp Q6, 8 threads, same Flash file, no MTP. Writing (tg).
+
+# Official docs for words (pp/tg, cards, SKU) — not third-party tok/s.
+word_sources:
+  - title: llama.cpp llama-bench (pp / tg)
+    href: https://github.com/ggml-org/llama.cpp/blob/master/tools/llama-bench/README.md
+  - title: Qwen3.6-35B-A3B model card
+    href: https://huggingface.co/Qwen/Qwen3.6-35B-A3B
+  - title: Qwen3.8-Flash-Next model card
+    href: https://huggingface.co/Qwen/Qwen3.8-Flash-Next
+  - title: Strata v0.1.42 release notes
+    href: https://www.stratat.com/en/releases/v0.1.42
+  - title: AMD Radeon AI PRO R9700 product page
+    href: https://www.amd.com/en/products/graphics/workstations/radeon-ai-pro/ai-9000-series/amd-radeon-ai-pro-r9700.html

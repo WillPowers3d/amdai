@@ -32,6 +32,7 @@ export function ogSlug(pathname: string) {
   if (slug === 'forum' || slug.startsWith('forum-')) return 'forum';
   if (slug === 'harnesses' || slug.startsWith('harnesses-')) return 'stacks';
   if (slug === 'backends' || slug.startsWith('backends-')) return 'backends';
+  if (slug === 'benchmarks') return 'stacks';
   return OG_PAGES.has(slug) ? slug : 'default';
 }
 
@@ -86,6 +87,7 @@ export const homeLink: NavItem = {
 export const primaryNav: NavItem[] = [
   { href: '/start', label: 'Getting started', description: 'GPU → ROCm → llama.cpp → optional harness', group: 'path' },
   { href: '/stacks', label: 'Stacks', description: 'Daily driver and fast-agent cards from our test rig', group: 'path' },
+  { href: '/benchmarks', label: 'Benchmarks', description: 'First-party tok/s from the R9700 rig — no leaderboard spam', group: 'path' },
   { href: '/budget', label: 'Budget', description: 'Starter → Pro Radeon builds, no invented prices', group: 'path' },
   { href: '/calculator', label: 'Calculator', description: 'Quant + hardware VRAM / RAM fit estimates', group: 'path' },
   { href: '/quants', label: 'Quants', description: 'Q4–Q8, UD dynamic, KV types, why not below Q4', group: 'path' },

@@ -1,0 +1,277 @@
+---
+import Base from '../layouts/Base.astro';
+import Callout from '../components/Callout.astro';
+import { compareRows, MEASURED_LABEL, metricLabel } from '../lib/benchmarks';
+import { benchmarksFile } from '../lib/benchmarks-data';
+
+const file = benchmarksFile;
+const rows = compareRows(file);
+const thirtyFive = file.runs.filter((run) => run.model.includes('35B'));
+const flash = file.runs.filter((run) => run.model.includes('Flash'));
+---
+
+<Base
+  title="Benchmarks"
+  description="First-party Qwen decode speeds on a Radeon AI PRO R9700 — llama.cpp and Strata, measured on our test rig. No leaderboard spam."
+>
+  <main id="main" class="mx-auto max-w-6xl px-4 py-10 sm:px-6">
+    <p class="kicker">{file.label}</p>
+    <h1 class="display mt-3 text-4xl sm:text-5xl">Benchmarks</h1>
+    <p class="mt-4 max-w-2xl text-lg leading-relaxed text-muted">
+      How to read a local-AI speed number on Radeon, then the handful of figures we
+      actually ran on {file.test_rig.host}. Nothing here is a scraped leaderboard.
+      If a cell is empty we write <strong class="text-ink">not measured</strong>.
+    </p>
+    <div class="mt-6 flex flex-wrap gap-3">
+      <a class="btn-primary" href="#our-rig">Our test rig</a>
+      <a class="btn-secondary" href="#compare">Comparison table</a>
+      <a class="btn-ghost" href="/calculator">Calculator</a>
+      <a class="btn-ghost" href="/backends">Engines</a>
+    </div>
+
+    <section class="mt-12" aria-labelledby="method-heading">
+      <h2 id="method-heading" class="font-serif text-3xl">How to read a bench</h2>
+      <div class="mt-6 grid gap-4 md:grid-cols-2">
+        <article class="card p-5">
+          <p class="kicker">pp vs tg</p>
+          <h3 class="mt-2 text-xl tracking-tight">Prefill and decode</h3>
+          <p class="mt-3 text-sm leading-relaxed text-muted">
+            llama.cpp’s <code>llama-bench</code> prints <strong class="text-ink">pp</strong>
+            (prompt processing / prefill) and <strong class="text-ink">tg</strong>
+            (token generation / decode). Prefill is how fast the prompt is ingested.
+            Decode is how fast new tokens appear — the number people mean by “tok/s”
+            in chat. Every first-party figure on this page is <strong class="text-ink">tg</strong>
+            unless a column says otherwise.
+          </p>
+        </article>
+        <article class="card p-5">
+          <p class="kicker">Short vs long</p>
+          <h3 class="mt-2 text-xl tracking-tight">Context length changes the number</h3>
+          <p class="mt-3 text-sm leading-relaxed text-muted">
+            Short context is a small prompt — the happy path. At 32K and 256K the KV
+            cache is larger, the card works harder, and decode drops. Comparing a
+            4K blog number to a 262K daily driver is a category error.
+          </p>
+        </article>
+        <article class="card p-5">
+          <p class="kicker">Where the weights live</p>
+          <h3 class="mt-2 text-xl tracking-tight">VRAM, RAM, and offload</h3>
+          <p class="mt-3 text-sm leading-relaxed text-muted">
+            Tokens stay fast when the whole file and its KV sit in one GPU.
+            Spill into system RAM and decode falls off a cliff. Our 35B daily
+            driver is 0% RAM offload on one 32 GB card. Flash Q6 is a much larger
+            file — expect RAM to hold most of it. Fit check:
+            <a class="underline decoration-accent/40" href="/calculator">calculator</a>.
+          </p>
+        </article>
+        <article class="card p-5">
+          <p class="kicker">The runtime</p>
+          <h3 class="mt-2 text-xl tracking-tight">Engine is not optional</h3>
+          <p class="mt-3 text-sm leading-relaxed text-muted">
+            The same GGUF on llama.cpp and Strata is two different programs.
+            Consumer default is <a class="underline decoration-accent/40" href="/backends/llamacpp">llama.cpp</a>
+            (Vulkan on this 35B). Strata is the Flash try we measured. A score
+            without engine, quant, context, KV type, and gfx is not a score.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <section class="mt-12" aria-labelledby="split-heading">
+      <h2 id="split-heading" class="font-serif text-3xl">Measured here vs cited elsewhere</h2>
+      <div class="mt-6 grid gap-4 md:grid-cols-2">
+        <article class="rounded-2xl border border-ok/40 bg-ok/10 p-5">
+          <p class="kicker text-ok">{MEASURED_LABEL}</p>
+          <h3 class="mt-2 text-xl tracking-tight">Our test rig</h3>
+          <p class="mt-3 text-sm leading-relaxed text-muted">
+            Green numbers on this site come from {file.test_rig.host}. Source note:
+            {file.source}. If we did not run it, we do not print a tok/s.
+          </p>
+        </article>
+        <article class="card p-5">
+          <p class="kicker">Cited from elsewhere</p>
+          <h3 class="mt-2 text-xl tracking-tight">None on this page</h3>
+          <p class="mt-3 text-sm leading-relaxed text-muted">
+            We would rather omit a third-party table than paste an unverified
+            leaderboard. Official docs below are for words (pp/tg, model cards,
+            the SKU) — not for someone else’s tok/s.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <section id="our-rig" class="mt-12 scroll-mt-28" aria-labelledby="rig-heading">
+      <p class="kicker">{file.test_rig.host}</p>
+      <h2 id="rig-heading" class="mt-2 font-serif text-3xl">{file.test_rig.label}</h2>
+      <p class="mt-3 max-w-2xl text-muted">
+        {file.test_rig.gpus}. {file.test_rig.ram}. {file.test_rig.note}
+      </p>
+      <Callout type="check" title={MEASURED_LABEL}>
+        {file.source}. As of {file.as_of}. Exact serve flags stay TODO on
+        <a href="/stacks">stacks</a>.
+      </Callout>
+
+      <h3 class="mt-8 text-xl tracking-tight">Qwen3.6-35B-A3B · llama.cpp Vulkan</h3>
+      <p class="mt-2 max-w-2xl text-sm text-muted">
+        Unsloth GGUF, f16 KV, one R9700, 0% offload. Full 262144 context is available
+        for the daily driver. Long-context decode is only published for UD-Q5_K_XL.
+      </p>
+      <div class="card mt-4 overflow-x-auto">
+        <table class="table-lab min-w-[36rem]">
+          <thead>
+            <tr>
+              <th>Quant</th>
+              <th>Context</th>
+              <th>{metricLabel('tg')}</th>
+              <th>Fit</th>
+            </tr>
+          </thead>
+          <tbody>
+            {thirtyFive.map((run) => (
+              <tr>
+                <td class="font-medium">{run.quant}</td>
+                <td>{run.context_label}</td>
+                <td>{run.tok_s == null ? 'not measured' : `~${run.tok_s} tok/s`}</td>
+                <td>
+                  {run.calculator ? (
+                    <a class="underline decoration-accent/40" href={run.calculator}>Calculator</a>
+                  ) : (
+                    '—'
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="mt-10 text-xl tracking-tight">Qwen 3.8 Flash · UD-Q6_K_XL · no MTP</h3>
+      <p class="mt-2 max-w-2xl text-sm text-muted">
+        Same file, two engines, 262K. Strata v0.1.42 via <code>strata-flash-q6</code>
+        versus llama.cpp Q6 with 8 threads.
+      </p>
+      <div class="card mt-4 overflow-x-auto">
+        <table class="table-lab min-w-[36rem]">
+          <thead>
+            <tr>
+              <th>Engine</th>
+              <th>Context</th>
+              <th>{metricLabel('tg')}</th>
+              <th>Fit</th>
+            </tr>
+          </thead>
+          <tbody>
+            {flash.map((run) => (
+              <tr>
+                <td class="font-medium">
+                  {run.engine}
+                  {run.threads != null ? ` · ${run.threads} threads` : ''}
+                  {run.recipe ? ` · ${run.recipe}` : ''}
+                </td>
+                <td>{run.context_label}</td>
+                <td>{run.tok_s == null ? 'not measured' : `~${run.tok_s} tok/s`}</td>
+                <td>
+                  {run.calculator ? (
+                    <a class="underline decoration-accent/40" href={run.calculator}>Calculator</a>
+                  ) : (
+                    '—'
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="compare" class="mt-12 scroll-mt-28" aria-labelledby="compare-heading">
+      <h2 id="compare-heading" class="font-serif text-3xl">Engine × quant × context</h2>
+      <p class="mt-3 max-w-2xl text-muted">
+        Built only from the runs above. Share links open the matching
+        <a class="underline decoration-accent/40" href="/calculator">calculator</a>
+        preset — VRAM totals there stay estimates.
+      </p>
+      <div class="card mt-6 overflow-x-auto">
+        <table class="table-lab min-w-[44rem]">
+          <thead>
+            <tr>
+              <th>Engine</th>
+              <th>Quant</th>
+              <th>Context</th>
+              <th>Metric</th>
+              <th>tok/s</th>
+              <th>Calculator</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((row) => (
+              <tr>
+                <td class="font-medium">{row.engine}</td>
+                <td>{row.quant}</td>
+                <td>{row.context}</td>
+                <td>{row.metric}</td>
+                <td>{row.tok_s}</td>
+                <td>
+                  {row.calculator ? (
+                    <a class="underline decoration-accent/40" href={row.calculator}>Open</a>
+                  ) : (
+                    '—'
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p class="mt-3 text-xs text-faint">{file.label}. Source: {file.source}.</p>
+    </section>
+
+    <section id="reproduce" class="mt-12 scroll-mt-28" aria-labelledby="repro-heading">
+      <h2 id="repro-heading" class="font-serif text-3xl">How to reproduce</h2>
+      <ol class="mt-6 space-y-4 text-sm leading-relaxed text-muted">
+        <li>
+          <strong class="text-ink">Stack Lab — Benchmark my rig (upcoming).</strong>
+          The Ubuntu companion will grow a flow that records model, quant, context,
+          engine, gfx, and tok/s without inventing a number. It is not shipping in
+          this snapshot. Map of the profiles:
+          <a class="underline decoration-accent/40" href="/stack-lab">Radeon Stack Lab</a>.
+        </li>
+        <li>
+          <strong class="text-ink">llama.cpp on one R9700.</strong>
+          Daily-driver shape is Vulkan, UD-Q5_K_XL, 262144, f16 KV, 0% offload.
+          Compile and serve notes:
+          <a class="underline decoration-accent/40" href="/backends/llamacpp">llama.cpp</a>.
+          Exact flags stay TODO on <a class="underline decoration-accent/40" href="/stacks">stacks</a>.
+        </li>
+        <li>
+          <strong class="text-ink">Strata for Flash Q6.</strong>
+          v0.1.42, recipe <code>strata-flash-q6</code>, no MTP, 262K.
+          <a class="underline decoration-accent/40" href="/backends/strata">Strata</a>.
+          Do not treat this as a HIP-versus-Vulkan verdict.
+        </li>
+        <li>
+          <strong class="text-ink">No fake third-party scores.</strong>
+          If you post a number in the
+          <a class="underline decoration-accent/40" href="/forum/c/benchmarks">forum</a>,
+          include model, quant, context, engine, gfx, and KV type. A screenshot
+          without those is not a bench.
+        </li>
+      </ol>
+    </section>
+
+    <section id="sources" class="mt-12" aria-labelledby="sources-heading">
+      <h2 id="sources-heading" class="font-serif text-3xl">Sources for the words</h2>
+      <p class="mt-3 max-w-2xl text-sm text-muted">
+        Official pages for terminology and SKUs. They are not tok/s claims.
+        Third-party speed tables are omitted.
+      </p>
+      <ul class="mt-4 space-y-2 text-sm">
+        {file.word_sources.map((source) => (
+          <li>
+            <a class="underline decoration-accent/40" href={source.href} rel="noopener">{source.title}</a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  </main>
+</Base>

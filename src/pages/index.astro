@@ -46,7 +46,7 @@ const updates = (await getCollection('updates')).sort((a, b) => b.data.date.valu
     <section class="mx-auto max-w-7xl px-4 py-14 sm:px-6">
       <p class="kicker">From the rig</p>
       <h2 class="display mt-2 text-3xl sm:text-4xl">Tested stacks, measured where we have numbers</h2>
-      <div class="mt-8 grid gap-4 lg:grid-cols-2">
+      <div class="mt-8 grid gap-4 lg:grid-cols-3">
         <a class="card p-6" href="/stacks">
           <p class="kicker">Daily driver</p>
           <h3 class="mt-2 text-2xl tracking-tight">Qwen3.6-35B-A3B · UD-Q5_K_XL</h3>
@@ -63,6 +63,15 @@ const updates = (await getCollection('updates')).sort((a, b) => b.data.date.valu
           <p class="mt-4 flex flex-wrap gap-2">
             <span class="badge-tested">Tested on our rig</span>
             <span class="badge">~32.6 tok/s · Strata</span>
+          </p>
+        </a>
+        <a class="card p-6" href="/benchmarks">
+          <p class="kicker">First-party</p>
+          <h3 class="mt-2 text-2xl tracking-tight">Benchmarks</h3>
+          <p class="mt-3 text-muted">How to read pp/tg, then the local-desktop table: 35B llama.cpp and Flash Strata vs llama.cpp. Empty cells stay not measured.</p>
+          <p class="mt-4 flex flex-wrap gap-2">
+            <span class="badge-tested">Measured on our rig, 2026-10</span>
+            <span class="badge">No leaderboard spam</span>
           </p>
         </a>
       </div>

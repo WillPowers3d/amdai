@@ -76,6 +76,7 @@ Public site URL is `https://amdai.net` (`site` in `astro.config.mjs`; override w
 | `/rocm-problems/works` | Works on my rig (saved-rig form) |
 | `/rocm-problems/contribute` | Contributor guidelines for this site |
 | `/backends` | Inference engines compared — table + flowchart, llama.cpp default |
+| `/benchmarks` | First-party tok/s from the R9700 rig — methodology + local-desktop table |
 | `/backends/{id}` | Deep dive: architecture, ROCm, quants, install, sources |
 | `/software` | llama.cpp first; vLLM / Strata as tries |
 | `/abliterated` | Abliterated hub — vet files, catalog table, method/variant cards, llama.cpp notes |

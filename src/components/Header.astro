@@ -14,7 +14,7 @@ const isActive = (href: string) => {
   return current === href || current.startsWith(`${href}/`);
 };
 
-const pinned = primaryNav.filter((item) => ['/calculator', '/budget', '/stacks'].includes(item.href));
+const pinned = primaryNav.filter((item) => ['/calculator', '/budget', '/stacks', '/benchmarks'].includes(item.href));
 ---
 
 <header class="site-header">
