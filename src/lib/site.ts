@@ -89,7 +89,7 @@ export const primaryNav: NavItem[] = [
   { href: '/stacks', label: 'Stacks', description: 'Daily driver and fast-agent cards from our test rig', group: 'path' },
   { href: '/benchmarks', label: 'Benchmarks', description: 'First-party tok/s from the R9700 rig — no leaderboard spam', group: 'path' },
   { href: '/budget', label: 'Budget', description: 'Starter → Pro Radeon builds, no invented prices', group: 'path' },
-  { href: '/calculator', label: 'Calculator', description: 'Quant + hardware VRAM / RAM fit estimates', group: 'path' },
+  { href: '/calculator', label: 'Calculator', description: 'Size a model, ask what a Radeon can run, or read a speed floor — Q4+', group: 'path' },
   { href: '/quants', label: 'Quants', description: 'Q4–Q8, UD dynamic, KV types, why not below Q4', group: 'path' },
   { href: '/gpus', label: 'GPU directory', description: 'Radeon cards, gfx IDs, VRAM, official ROCm rows', group: 'stack' },
   { href: '/rocm', label: 'ROCm', description: 'What it is — stack, gfx IDs, Vulkan vs HIP, versions', group: 'stack' },

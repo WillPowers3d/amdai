@@ -6,17 +6,18 @@ import AskToggles from '../components/AskToggles.astro';
 import AbliteratedPicks from '../components/AbliteratedPicks.astro';
 import SaveSetupButton from '../components/SaveSetupButton.astro';
 import VramBar from '../components/VramBar.astro';
-import { CONTEXT_PRESETS, GPU_PRESETS, KV_TYPES, MODEL_PRESETS, QUANTS } from '../lib/calculator';
+import { BACKENDS, CONTEXT_PRESETS, GPU_PRESETS, KV_TYPES, MODEL_PRESETS, QUANTS } from '../lib/calculator';
 import { DEFAULT_PRIORITY } from '../lib/priority';
 import { DEFAULT_STYLE, DEFAULT_USAGE } from '../lib/ask';
 import { gpuProducts } from '../lib/affiliates';
 
 const fitGpus = gpuProducts();
+const groups = [...new Set(MODEL_PRESETS.map((m) => m.group))];
 ---
 
 <Base
   title="Quant + Hardware Calculator"
-  description="Estimate GGUF weights, KV cache, and whether a Qwen stack fits a Radeon card — Q4 and above only. Client-side, shareable URL."
+  description="Estimate GGUF weights, KV cache, and whether a stack fits a Radeon card — Q4 and above only. Client-side, shareable URL. AMD/Radeon first."
 >
   <main id="main" class="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-12">
     <p class="kicker">Estimate · not a bench</p>
@@ -24,8 +25,9 @@ const fitGpus = gpuProducts();
       <div class="max-w-2xl">
         <h1 class="display text-4xl sm:text-5xl">Quant + Hardware Calculator</h1>
         <p class="mt-4 text-lg leading-relaxed text-muted">
-          Pick a Radeon, a Qwen (or custom params), a quant at Q4 or above, and a context length.
-          Every total is an <strong class="font-medium text-ink">estimate</strong> — publisher file listings when we have them, otherwise bits-per-weight math. A matching tested badge shows first-party decode tok/s (and the one measured VRAM point: Q5_K_M 28.5 GB). Measured on our rig, 2026-10.
+          Three views, one engine: size a model, ask what a Radeon can hold, or read a decode-speed floor.
+          Totals are <strong class="font-medium text-ink">estimates</strong> unless a tested badge shows a first-party R9700 number.
+          Nothing below Q4. llama.cpp first. Qwen2.5 and Qwen3-8B are not offered.
         </p>
       </div>
       <div class="flex flex-wrap gap-2">
@@ -45,7 +47,13 @@ const fitGpus = gpuProducts();
       <span data-tested-label></span>
     </div>
 
-    <div class="tabs mt-8" role="group" aria-label="Stack presets">
+    <div class="tabs mt-8" role="tablist" aria-label="Calculator view">
+      <button type="button" class="tab is-on" data-view="model">Size this model</button>
+      <button type="button" class="tab" data-view="gpu">What this GPU can run</button>
+      <button type="button" class="tab" data-view="speed">Speed floor</button>
+    </div>
+
+    <div class="tabs mt-4" role="group" aria-label="Stack presets">
       <button type="button" class="tab is-on" data-stack="daily">Daily driver</button>
       <button type="button" class="tab" data-stack="fast">Fast agent</button>
       <button type="button" class="tab" data-stack="custom">Custom</button>
@@ -54,7 +62,7 @@ const fitGpus = gpuProducts();
     <form id="calc-form" class="mt-8 grid gap-8 lg:grid-cols-[minmax(0,1.05fr)_minmax(20rem,0.95fr)]">
       <div class="space-y-6">
         <fieldset class="rounded-2xl border border-line bg-raised/40 p-4 sm:p-5">
-          <legend class="px-1 font-serif text-2xl">GPU</legend>
+          <legend class="px-1 font-serif text-2xl">Radeon</legend>
           <div class="mt-3 grid gap-3 sm:grid-cols-2">
             <label class="block text-sm">
               <span class="text-faint">Preset</span>
@@ -68,7 +76,7 @@ const fitGpus = gpuProducts();
             </label>
             <label class="block text-sm">
               <span class="text-faint">VRAM per GPU (GB)</span>
-              <input class="field mt-1" type="number" name="vramGb" min="1" max="192" step="1" inputmode="decimal" />
+              <input class="field mt-1" type="number" name="vramGb" min="1" max="512" step="1" inputmode="decimal" />
             </label>
             <label class="block text-sm">
               <span class="text-faint">GPU count</span>
@@ -78,25 +86,54 @@ const fitGpus = gpuProducts();
               <span class="text-faint">System RAM (GB)</span>
               <input class="field mt-1" type="number" name="ramGb" min="0" max="1024" step="1" inputmode="decimal" />
             </label>
+            <label class="block text-sm">
+              <span class="text-faint">Published bandwidth (GB/s)</span>
+              <input class="field mt-1" type="number" name="bandwidthGBs" min="0" max="10000" step="1" inputmode="decimal" />
+              <span class="mt-1 block text-xs text-faint" data-bw-note></span>
+            </label>
+            <label class="block text-sm" data-unified-row hidden>
+              <span class="text-faint">Usable share of unified memory (%)</span>
+              <input class="field mt-1" type="number" name="usablePct" min="10" max="100" step="1" inputmode="decimal" />
+              <span class="mt-1 block text-xs text-faint">Estimate. APUs and Apple Silicon lend the GPU a slice of one pool — paste a runtime figure if you have one.</span>
+            </label>
           </div>
           <label class="mt-4 flex items-start gap-3 text-sm">
             <input class="mt-1 h-4 w-4 accent-[var(--accent)]" type="checkbox" name="split" />
             <span>
               Split the model across these cards
-              <span class="mt-0.5 block text-faint">Off = one full copy must fit a single GPU (house rule: one LLM per GPU). On = weights + KV divided by GPU count.</span>
+              <span class="mt-0.5 block text-faint">Off = one full copy must fit a single GPU (house rule: one LLM per GPU). On = weights + KV divided by GPU count, plus extra headroom for PCIe sync (estimate).</span>
+            </span>
+          </label>
+          <label class="mt-3 flex items-start gap-3 text-sm">
+            <input class="mt-1 h-4 w-4 accent-[var(--accent)]" type="checkbox" name="desktopSpare" />
+            <span>
+              Keep 5% desktop spare
+              <span class="mt-0.5 block text-faint">A “fits” answer leaves room for a display. Tight means it only clears with no spare.</span>
             </span>
           </label>
         </fieldset>
 
-        <fieldset class="rounded-2xl border border-line bg-raised/40 p-4 sm:p-5">
+        <fieldset class="rounded-2xl border border-line bg-raised/40 p-4 sm:p-5" data-model-fields>
           <legend class="px-1 font-serif text-2xl">Model</legend>
           <label class="mt-3 block text-sm">
             <span class="text-faint">Preset</span>
             <select name="modelId" class="field mt-1">
-              {MODEL_PRESETS.map((model) => <option value={model.id}>{model.name}</option>)}
+              {groups.map((group) => (
+                <optgroup label={group}>
+                  {MODEL_PRESETS.filter((m) => m.group === group).map((model) => (
+                    <option value={model.id}>{model.name}</option>
+                  ))}
+                </optgroup>
+              ))}
             </select>
           </label>
           <p class="mt-2 text-xs leading-relaxed text-faint" data-arch-note></p>
+          <label class="mt-4 block text-sm">
+            <span class="text-faint">Or read a local GGUF header</span>
+            <input class="field mt-1" type="file" name="gguf" accept=".gguf" />
+            <span class="mt-1 block text-xs text-faint">Header only, in this browser. Nothing uploads. Weight size is the file on disk.</span>
+            <span class="mt-1 block text-xs text-warn" data-gguf-status></span>
+          </label>
           <div class="mt-4 grid gap-3 sm:grid-cols-2">
             <label class="block text-sm">
               <span class="text-faint">Total params (billions)</span>
@@ -122,11 +159,30 @@ const fitGpus = gpuProducts();
               <span class="text-faint">Head dim</span>
               <input class="field mt-1" type="number" name="headDim" min="0" step="1" inputmode="numeric" />
             </label>
+            <label class="block text-sm">
+              <span class="text-faint">KV kind</span>
+              <select name="kvKind" class="field mt-1">
+                <option value="gqa">GQA / full + window</option>
+                <option value="mla">MLA (compressed)</option>
+              </select>
+            </label>
+            <label class="block text-sm">
+              <span class="text-faint">MLA dim</span>
+              <input class="field mt-1" type="number" name="mlaDim" min="0" step="1" inputmode="numeric" />
+            </label>
+            <label class="block text-sm">
+              <span class="text-faint">Sliding-window layers</span>
+              <input class="field mt-1" type="number" name="windowLayers" min="0" step="1" inputmode="numeric" />
+            </label>
+            <label class="block text-sm">
+              <span class="text-faint">Window tokens</span>
+              <input class="field mt-1" type="number" name="windowTokens" min="0" step="1" inputmode="numeric" />
+            </label>
           </div>
         </fieldset>
 
         <fieldset class="rounded-2xl border border-line bg-raised/40 p-4 sm:p-5">
-          <legend class="px-1 font-serif text-2xl">Quant, context, KV</legend>
+          <legend class="px-1 font-serif text-2xl">Quant, context, backend</legend>
           <p class="mt-2 text-xs text-faint">Nothing below Q4 is listed. Q1 / Q2 / Q3 / IQ1–IQ3 stay off this page, including draft heads.</p>
           <label class="mt-3 block text-sm">
             <span class="text-faint">Quant</span>
@@ -136,9 +192,9 @@ const fitGpus = gpuProducts();
           </label>
           <label class="mt-3 block text-sm">
             <span class="text-faint">Context length</span>
-            <input class="mt-2 w-full accent-[var(--accent)]" type="range" name="context" min="4096" max="262144" step="1024" />
+            <input class="mt-2 w-full accent-[var(--accent)]" type="range" name="context" min="2048" max="524288" step="1024" />
             <div class="mt-2 flex flex-wrap items-center gap-2">
-              <input class="field w-32" type="number" name="contextNum" min="4096" max="262144" step="1024" inputmode="numeric" />
+              <input class="field w-32" type="number" name="contextNum" min="2048" max="1048576" step="1024" inputmode="numeric" />
               <span class="text-xs text-faint" data-ctx-label></span>
             </div>
             <div class="mt-2 flex flex-wrap gap-1.5">
@@ -152,22 +208,58 @@ const fitGpus = gpuProducts();
           <label class="mt-3 block text-sm">
             <span class="text-faint">KV cache type</span>
             <select name="kvId" class="field mt-1">
-              {KV_TYPES.map((kv) => <option value={kv.id}>{kv.label} · {kv.bytes} B/elem</option>)}
+              {KV_TYPES.map((kv) => <option value={kv.id}>{kv.label} · {kv.flag}</option>)}
             </select>
           </label>
-          <label class="mt-3 block text-sm">
-            <span class="text-faint">Framework overhead (GiB, estimate)</span>
+          <div class="mt-3 grid gap-3 sm:grid-cols-2">
+            <label class="block text-sm">
+              <span class="text-faint">Inference backend</span>
+              <select name="backendId" class="field mt-1">
+                {BACKENDS.map((be) => <option value={be.id}>{be.name}</option>)}
+              </select>
+            </label>
+            <label class="block text-sm">
+              <span class="text-faint">llama.cpp path</span>
+              <select name="pathId" class="field mt-1">
+                <option value="vulkan">Vulkan</option>
+                <option value="hip">HIP / ROCm</option>
+              </select>
+            </label>
+            <label class="block text-sm">
+              <span class="text-faint">Concurrent sequences</span>
+              <input class="field mt-1" type="number" name="batch" min="1" max="16" step="1" inputmode="numeric" />
+              <span class="mt-1 block text-xs text-faint">Ollama multiplies KV per request. llama.cpp shares one pool.</span>
+            </label>
+            <label class="block text-sm">
+              <span class="text-faint">Controller efficiency</span>
+              <input class="field mt-1" type="number" name="efficiency" min="0.2" max="1" step="0.05" inputmode="decimal" />
+              <span class="mt-1 block text-xs text-faint">Speed-floor only. Default 0.75 is an estimate, not measured.</span>
+            </label>
+          </div>
+          <label class="mt-3 flex items-start gap-3 text-sm">
+            <input class="mt-1 h-4 w-4 accent-[var(--accent)]" type="checkbox" name="separableEmbed" />
+            <span>
+              Host token embeddings / n-gram table in system RAM
+              <span class="mt-0.5 block text-faint">llama.cpp can keep an untied embed table off the card. Subtracts a formula size — not a measured split.</span>
+            </span>
+          </label>
+          <label class="mt-3 flex items-start gap-3 text-sm">
+            <input class="mt-1 h-4 w-4 accent-[var(--accent)]" type="checkbox" name="overheadManual" />
+            <span>Override overhead (GiB)</span>
+          </label>
+          <label class="mt-2 block text-sm">
+            <span class="text-faint">Framework overhead (GiB)</span>
             <input class="field mt-1" type="number" name="overheadGiB" min="0" max="16" step="0.1" inputmode="decimal" />
-            <span class="mt-1 block text-xs text-faint">Default 1.0 GiB is a labeled estimate, not measured on our rig. Edit it.</span>
+            <span class="mt-1 block text-xs text-faint">Used only when override is on. Backend floors are estimates, not R9700 measurements.</span>
           </label>
         </fieldset>
       </div>
 
       <div class="space-y-4 lg:sticky lg:top-24 lg:self-start">
-        <section class="rounded-2xl border border-line bg-raised p-5" aria-live="polite">
-          <p class="font-mono text-[0.68rem] uppercase tracking-[0.16em] text-accent">Estimate</p>
+        <section class="rounded-2xl border border-line bg-raised p-5" aria-live="polite" data-panel="model">
+          <p class="font-mono text-[0.68rem] uppercase tracking-[0.16em] text-accent">Required VRAM · estimate</p>
           <p class="mt-2 font-serif text-3xl" data-verdict-label>Fits in VRAM (estimate)</p>
-          <p class="mt-1 text-sm text-faint">Per GPU vs the VRAM you entered. Totals in GiB (1024³).</p>
+          <p class="mt-1 text-sm text-faint">Per GPU vs the VRAM you entered. Totals in GiB (1024³). Desktop spare is extra.</p>
           <VramBar />
           <div class="mt-4 rounded-xl border border-line bg-canvas/60 p-3 text-sm leading-relaxed">
             <p class="font-medium" data-priority-headline></p>
@@ -196,10 +288,11 @@ const fitGpus = gpuProducts();
           </dl>
           <p class="mt-3 text-xs leading-relaxed text-faint" data-weights-note></p>
           <p class="mt-1 text-xs leading-relaxed text-faint" data-kv-note></p>
+          <p class="mt-1 text-xs leading-relaxed text-faint" data-oh-note></p>
           <div class="mt-5 rounded-xl border border-line p-3 text-sm">
             <p><span class="text-faint">Per GPU · </span><span class="tabular-nums" data-out="perGpu">—</span> GiB vs <span class="tabular-nums" data-out="vram">—</span> GB</p>
-            <p class="mt-1"><span class="text-faint">Available VRAM · </span><span class="tabular-nums" data-out="available">—</span> GB</p>
-            <p class="mt-1"><span class="text-faint">Overflow to system RAM · </span><span class="tabular-nums" data-out="overflow">—</span> GiB</p>
+            <p class="mt-1"><span class="text-faint">Usable pool · </span><span class="tabular-nums" data-out="available">—</span> GB</p>
+            <p class="mt-1"><span class="text-faint">Overflow to system RAM · </span><span class="tabular-nums" data-out="overflow">—</span> GiB (<span class="tabular-nums" data-out="ramPct">—</span>% of RAM)</p>
             <p class="mt-2 hidden text-sm text-warn" data-offload-warn></p>
           </div>
           <div class="mt-5 grid gap-3 text-sm sm:grid-cols-2">
@@ -218,33 +311,66 @@ const fitGpus = gpuProducts();
           </div>
         </section>
 
+        <section class="rounded-2xl border border-line bg-raised p-5" data-panel="gpu" hidden>
+          <p class="font-mono text-[0.68rem] uppercase tracking-[0.16em] text-accent">What this GPU can run</p>
+          <p class="mt-2 text-sm text-muted">Largest fits first. Highest Q4+ quant that clears the pool with your context, KV, and backend. Out of reach stays at Q4_K_M so you can see the miss.</p>
+          <h3 class="mt-4 font-serif text-xl">Runs on this pool</h3>
+          <ul class="mt-2 space-y-2 text-sm" data-gpu-fits></ul>
+          <h3 class="mt-6 font-serif text-xl">Out of reach</h3>
+          <ul class="mt-2 space-y-2 text-sm text-muted" data-gpu-misses></ul>
+        </section>
+
+        <section class="rounded-2xl border border-line bg-raised p-5" data-panel="speed" hidden>
+          <p class="font-mono text-[0.68rem] uppercase tracking-[0.16em] text-accent">Decode speed floor</p>
+          <p class="mt-2 font-serif text-3xl tabular-nums" data-speed-value>—</p>
+          <p class="mt-2 text-sm text-muted" data-speed-note></p>
+          <p class="mt-3 text-sm text-ok" data-speed-measured hidden></p>
+        </section>
+
+        <section class="rounded-2xl border border-line bg-raised/40 p-5">
+          <h3 class="font-serif text-xl">VRAM vs context</h3>
+          <p class="mt-1 text-xs text-faint">Same estimate at each preset window. Heights are relative to the largest total in the sweep.</p>
+          <div class="mt-4 flex h-36 items-end gap-1" data-sweep-chart></div>
+          <div class="mt-2 flex justify-between text-[0.65rem] text-faint" data-sweep-labels></div>
+        </section>
+
+        <section class="rounded-2xl border border-line bg-raised/40 p-5">
+          <h3 class="font-serif text-xl">Matching Radeon options</h3>
+          <p class="mt-1 text-xs text-faint">Smallest published VRAM first. Fit uses this model, quant, context, and backend — plus desktop spare.</p>
+          <ol class="mt-3 space-y-1.5 text-sm" data-match-list></ol>
+        </section>
+
         <div class="flex flex-wrap gap-2">
           <button type="button" id="share-btn" class="btn-primary">Copy share link</button>
+          <button type="button" id="export-btn" class="btn-secondary">Download JSON</button>
           <SaveSetupButton from="calculator" />
           <span class="self-center text-sm text-ok" data-share-status hidden>Copied</span>
         </div>
         <p class="break-all font-mono text-[0.7rem] text-faint" data-share-url></p>
 
         <details class="rounded-2xl border border-line bg-raised/40 p-4 text-sm leading-relaxed">
-          <summary class="cursor-pointer font-medium">Formulas (transparent, labeled estimates)</summary>
+          <summary class="cursor-pointer font-medium">How this result is calculated</summary>
           <div class="mt-3 space-y-3 text-muted">
             <p>
               <code class="text-ink">weights_GiB ≈ total_params × 10⁹ × bpw / 8 / 1024³</code>
-              Active experts do not shrink the file — they only change compute. When a Hugging Face listing exists for the selected Unsloth file, that decimal-GB size is converted to GiB instead of the formula.
+              A Hugging Face listing or a local GGUF file size replaces the formula when present. Active experts do not shrink the file.
             </p>
             <p>
-              <code class="text-ink">KV_GiB ≈ 2 × kv_layers × kv_heads × head_dim × context × bytes_kv / 1024³</code>
-              The 2 is K and V. Hybrid Qwen cards only grow KV on full-attention layers; that is why the daily-driver preset uses 10 KV layers, not 40.
+              <code class="text-ink">KV_GiB ≈ 2 × full_layers × heads × dim × context × bytes / 1024³</code>
+              plus sliding-window layers at <code class="text-ink">min(context, window)</code>, or MLA as <code class="text-ink">layers × dim × tensors × context × bytes</code>.
+              Hybrid Qwen cards only grow token-length KV on full-attention layers.
             </p>
             <p>
-              <code class="text-ink">total ≈ weights + KV + overhead</code>
-              Split on: available VRAM = GPUs × VRAM, and the total is divided across cards. Split off: one GPU must hold the whole total.
+              Backend overhead is a labeled floor plus a percent of weights+KV. llama.cpp Vulkan is the default path; HIP adds a small estimate. These are not R9700 measurements.
+              Ollama multiplies KV by concurrent sequences; the other backends share one pool.
             </p>
             <p>
-              Verdict: <strong class="text-ink">fits</strong> under 90% of one GPU’s VRAM, <strong class="text-ink">tight</strong> from 90% to 100%, <strong class="text-ink">no</strong> above 100% (overflow is the extra that would land in system RAM).
+              A card <strong class="text-ink">fits</strong> when the total plus 5% spare lands in the usable pool (more spare on a split).
+              <strong class="text-ink">Tight</strong> clears the label but not the spare.
+              <strong class="text-ink">No</strong> overflows — the extra is system RAM offload.
             </p>
             <p>
-              Bits-per-weight are nominal llama.cpp-family values (Q4_K_M 4.85, Q5_K_M 5.69, Q6_K 6.56, Q8_0 8.5, BF16 16). UD-Q5_K_XL / UD-Q6_K_XL share the Q5 / Q6 buckets unless a publisher file size is used.
+              Speed floor: published bandwidth × 75% controller / (active params × bpw / 8). Offered only when the file stays in VRAM. First-party tok/s appear only on the tested badge.
             </p>
           </div>
         </details>
@@ -276,33 +402,40 @@ const fitGpus = gpuProducts();
     applyGpuPreset,
     applyModelPreset,
     compute,
+    decimalGbToGiB,
+    exportEstimate,
     formatCtx,
     formatGiB,
+    formatTokS,
     gpuById,
     inputToQuery,
     modelById,
     queryToInput,
+    type BackendId,
     type CalcInput,
+    type CalcView,
     type GpuId,
     type KvId,
+    type KvKind,
     type ModelId,
+    type PathId,
     type QuantId,
   } from '../lib/calculator';
+  import { parseGgufHeader, ggufToBillions } from '../lib/gguf-header';
   import {
     PRIORITY_COPY,
     bestQuantForPriority,
     calculatorAdvice,
-    type Priority,
     type PriorityAdvice,
   } from '../lib/priority';
   import { USAGE_COPY, parseAsk, type AskState } from '../lib/ask';
 
   const form = document.getElementById('calc-form') as HTMLFormElement;
   const shareBtn = document.getElementById('share-btn');
+  const exportBtn = document.getElementById('export-btn');
   const applyBtn = document.getElementById('apply-priority') as HTMLButtonElement | null;
   let input: CalcInput = queryToInput(window.location.search);
   let ask: AskState = parseAsk(window.location.search);
-  let priority: Priority = ask.priority;
   let pendingApply: CalcInput | null = null;
 
   const field = <T extends HTMLElement>(name: string) => form.querySelector(`[name="${name}"]`) as T;
@@ -313,6 +446,9 @@ const fitGpus = gpuProducts();
     field<HTMLInputElement>('gpuCount').value = String(input.gpuCount);
     field<HTMLInputElement>('ramGb').value = String(input.ramGb);
     field<HTMLInputElement>('split').checked = input.split;
+    field<HTMLInputElement>('desktopSpare').checked = input.desktopSpare;
+    field<HTMLInputElement>('bandwidthGBs').value = String(input.bandwidthGBs);
+    field<HTMLInputElement>('usablePct').value = String(input.usablePct);
     field<HTMLSelectElement>('modelId').value = input.modelId;
     field<HTMLInputElement>('totalParamsB').value = String(input.totalParamsB);
     field<HTMLInputElement>('activeParamsB').value = String(input.activeParamsB);
@@ -320,13 +456,27 @@ const fitGpus = gpuProducts();
     field<HTMLInputElement>('kvLayers').value = String(input.kvLayers);
     field<HTMLInputElement>('kvHeads').value = String(input.kvHeads);
     field<HTMLInputElement>('headDim').value = String(input.headDim);
+    field<HTMLSelectElement>('kvKind').value = input.kvKind;
+    field<HTMLInputElement>('mlaDim').value = String(input.mlaDim);
+    field<HTMLInputElement>('windowLayers').value = String(input.windowLayers);
+    field<HTMLInputElement>('windowTokens').value = String(input.windowTokens);
     field<HTMLSelectElement>('quantId').value = input.quantId;
-    field<HTMLInputElement>('context').value = String(input.context);
+    field<HTMLInputElement>('context').value = String(Math.min(524288, input.context));
     field<HTMLInputElement>('contextNum').value = String(input.context);
     field<HTMLSelectElement>('kvId').value = input.kvId;
+    field<HTMLSelectElement>('backendId').value = input.backendId;
+    field<HTMLSelectElement>('pathId').value = input.pathId;
+    field<HTMLInputElement>('batch').value = String(input.batch);
+    field<HTMLInputElement>('efficiency').value = String(input.efficiency);
+    field<HTMLInputElement>('separableEmbed').checked = input.separableEmbed;
+    field<HTMLInputElement>('overheadManual').checked = input.overheadManual;
     field<HTMLInputElement>('overheadGiB').value = String(input.overheadGiB);
     const note = document.querySelector('[data-arch-note]');
     if (note) note.textContent = modelById(input.modelId).archNote;
+    const bw = document.querySelector('[data-bw-note]');
+    if (bw) bw.textContent = gpuById(input.gpuId).bandwidthNote;
+    const unified = document.querySelector<HTMLElement>('[data-unified-row]');
+    if (unified) unified.hidden = input.kind !== 'unified';
     document.querySelectorAll<HTMLInputElement>('input[name="priority"]').forEach((el) => {
       el.checked = el.value === ask.priority;
     });
@@ -341,11 +491,16 @@ const fitGpus = gpuProducts();
   function readForm(): CalcInput {
     const gpuId = field<HTMLSelectElement>('gpuId').value as GpuId;
     return {
+      ...input,
       gpuId,
       vramGb: Number(field<HTMLInputElement>('vramGb').value),
       gpuCount: Number(field<HTMLInputElement>('gpuCount').value),
       split: field<HTMLInputElement>('split').checked,
       ramGb: Number(field<HTMLInputElement>('ramGb').value),
+      desktopSpare: field<HTMLInputElement>('desktopSpare').checked,
+      bandwidthGBs: Number(field<HTMLInputElement>('bandwidthGBs').value),
+      usablePct: Number(field<HTMLInputElement>('usablePct').value),
+      kind: gpuById(gpuId).kind,
       modelId: field<HTMLSelectElement>('modelId').value as ModelId,
       totalParamsB: Number(field<HTMLInputElement>('totalParamsB').value),
       activeParamsB: Number(field<HTMLInputElement>('activeParamsB').value),
@@ -353,9 +508,19 @@ const fitGpus = gpuProducts();
       kvLayers: Number(field<HTMLInputElement>('kvLayers').value),
       kvHeads: Number(field<HTMLInputElement>('kvHeads').value),
       headDim: Number(field<HTMLInputElement>('headDim').value),
+      kvKind: field<HTMLSelectElement>('kvKind').value as KvKind,
+      mlaDim: Number(field<HTMLInputElement>('mlaDim').value),
+      windowLayers: Number(field<HTMLInputElement>('windowLayers').value),
+      windowTokens: Number(field<HTMLInputElement>('windowTokens').value),
       quantId: field<HTMLSelectElement>('quantId').value as QuantId,
       context: Number(field<HTMLInputElement>('contextNum').value || field<HTMLInputElement>('context').value),
       kvId: field<HTMLSelectElement>('kvId').value as KvId,
+      backendId: field<HTMLSelectElement>('backendId').value as BackendId,
+      pathId: field<HTMLSelectElement>('pathId').value as PathId,
+      batch: Number(field<HTMLInputElement>('batch').value),
+      efficiency: Number(field<HTMLInputElement>('efficiency').value),
+      separableEmbed: field<HTMLInputElement>('separableEmbed').checked,
+      overheadManual: field<HTMLInputElement>('overheadManual').checked,
       overheadGiB: Number(field<HTMLInputElement>('overheadGiB').value),
     };
   }
@@ -393,13 +558,60 @@ const fitGpus = gpuProducts();
     }
   }
 
+  function renderLists(result: ReturnType<typeof compute>) {
+    const fits = document.querySelector('[data-gpu-fits]');
+    const misses = document.querySelector('[data-gpu-misses]');
+    if (fits) {
+      fits.innerHTML = result.gpuFits.length
+        ? result.gpuFits
+            .map(
+              (row) =>
+                `<li class="rounded-xl border border-line bg-canvas/50 px-3 py-2"><span class="font-medium text-ink">${row.name}</span> · ${row.quant.label} · ${formatGiB(row.totalGiB)} GiB · ${row.verdict}${row.tested ? ' · tested on our rig' : ' · estimate'}</li>`,
+            )
+            .join('')
+        : '<li class="text-muted">Nothing in the catalog fits this pool at Q4 or above.</li>';
+    }
+    if (misses) {
+      misses.innerHTML = result.gpuMisses.length
+        ? result.gpuMisses
+            .map((row) => `<li>${row.name} needs about ${formatGiB(row.totalGiB)} GiB at Q4_K_M (estimate)</li>`)
+            .join('')
+        : '<li>Every catalog model has a Q4+ fit on this pool.</li>';
+    }
+
+    const match = document.querySelector('[data-match-list]');
+    if (match) {
+      match.innerHTML = result.matching
+        .filter((g) => g.verdict !== 'no')
+        .map(
+          (g) =>
+            `<li><span class="font-medium text-ink">${g.name}</span> · ${g.vramGb} GB · ${g.gfx} · ${g.verdict}</li>`,
+        )
+        .join('') || '<li class="text-muted">No listed Radeon clears this estimate. Offload or shorten context.</li>';
+    }
+
+    const chart = document.querySelector('[data-sweep-chart]');
+    const labels = document.querySelector('[data-sweep-labels]');
+    if (chart && labels) {
+      const max = Math.max(...result.sweep.map((row) => row.totalGiB), 0.01);
+      chart.innerHTML = result.sweep
+        .map((row) => {
+          const h = Math.max(8, (row.totalGiB / max) * 100);
+          const tone = row.verdict === 'fits' ? 'bg-ok' : row.verdict === 'tight' ? 'bg-warn' : 'bg-accent';
+          return `<div class="flex-1 rounded-t ${tone}/80" style="height:${h}%" title="${formatCtx(row.context)} · ${formatGiB(row.totalGiB)} GiB"></div>`;
+        })
+        .join('');
+      labels.innerHTML = result.sweep.map((row) => `<span>${formatCtx(row.context)}</span>`).join('');
+    }
+  }
+
   function render() {
     const result = compute(input);
     const advice = calculatorAdvice(input, result, ask.priority);
     const pick = bestQuantForPriority(input, ask.priority);
     const verdictEl = document.querySelector('[data-verdict-label]');
     if (verdictEl) {
-      verdictEl.textContent = `${result.verdictLabel} · estimate`;
+      verdictEl.textContent = `${result.verdictLabel} · ${result.tested ? 'tested on our rig' : 'estimate'}`;
       verdictEl.classList.toggle('text-ok', result.verdict === 'fits');
       verdictEl.classList.toggle('text-warn', result.verdict !== 'fits');
     }
@@ -409,16 +621,35 @@ const fitGpus = gpuProducts();
     setText('[data-out="total"]', `${formatGiB(result.totalGiB)} GiB`);
     setText('[data-out="perGpu"]', formatGiB(result.perGpuGiB));
     setText('[data-out="vram"]', String(input.vramGb));
-    setText('[data-out="available"]', String(result.availableVramGb));
+    setText('[data-out="available"]', formatGiB(result.availableVramGb));
     setText('[data-out="overflow"]', formatGiB(result.overflowGiB));
+    setText('[data-out="ramPct"]', result.overflowRamPct == null ? '—' : result.overflowRamPct.toFixed(1));
     setText('[data-weights-note]', result.weightsNote);
     setText('[data-kv-note]', result.kvNote);
+    setText('[data-oh-note]', result.overheadNote);
     setText('[data-best-quant-label]', PRIORITY_COPY[ask.priority].bestQuantLabel);
     setText('[data-out="bestQuant"]', pick ? `${pick.label} (estimate)` : 'No Q4+ quant fits fully in VRAM');
     setText('[data-out="maxBest"]', result.maxContextAtBest != null ? `${formatCtx(result.maxContextAtBest)} (estimate)` : '—');
     setText('[data-out="maxSelected"]', result.maxContextAtSelected != null ? `${formatCtx(result.maxContextAtSelected)} (estimate)` : '—');
     setText('[data-ctx-label]', `${formatCtx(input.context)} tokens`);
+    setText('[data-speed-value]', result.speed.offered ? `${formatTokS(result.speed.tokS)} tok/s · estimate` : 'Not offered');
+    setText('[data-speed-note]', result.speed.note);
+    const measured = document.querySelector<HTMLElement>('[data-speed-measured]');
+    if (measured) {
+      measured.hidden = !result.speed.measured;
+      measured.textContent = result.speed.measured?.label ?? '';
+    }
     renderAdvice(advice);
+    renderLists(result);
+
+    document.querySelectorAll<HTMLElement>('[data-panel]').forEach((el) => {
+      el.hidden = el.dataset.panel !== input.view && el.dataset.panel !== undefined && !['model', 'gpu', 'speed'].includes(el.dataset.panel ?? '');
+    });
+    document.querySelectorAll<HTMLElement>('[data-panel="model"]')[0] && ((document.querySelector<HTMLElement>('[data-panel="model"]') as HTMLElement).hidden = false);
+    const gpuPanel = document.querySelector<HTMLElement>('[data-panel="gpu"]');
+    const speedPanel = document.querySelector<HTMLElement>('[data-panel="speed"]');
+    if (gpuPanel) gpuPanel.hidden = input.view !== 'gpu';
+    if (speedPanel) speedPanel.hidden = input.view !== 'speed';
 
     const warn = document.querySelector('[data-offload-warn]');
     if (warn) {
@@ -450,7 +681,7 @@ const fitGpus = gpuProducts();
     const bar = document.querySelector<HTMLElement>('[data-vram-bar]');
     if (bar) {
       bar.hidden = false;
-      const cap = Math.max(input.vramGb, 0.01);
+      const cap = Math.max(input.kind === 'unified' ? result.usableVramGb : input.vramGb, 0.01);
       const used = result.perGpuGiB;
       const total = Math.max(result.totalGiB, 0.01);
       bar.style.setProperty('--used', `${Math.min(100, (used / cap) * 100)}%`);
@@ -459,7 +690,7 @@ const fitGpus = gpuProducts();
       bar.style.setProperty('--w-oh', `${(result.overheadGiB / total) * 100}%`);
       bar.dataset.overflow = result.overflowGiB > 0.05 ? '1' : '0';
       const usedLabel = bar.querySelector('[data-vram-used]');
-      if (usedLabel) usedLabel.textContent = `${formatGiB(used)} GiB / ${cap} GB`;
+      if (usedLabel) usedLabel.textContent = `${formatGiB(used)} GiB / ${formatGiB(cap)} GB`;
     }
 
     const needed = result.perGpuGiB;
@@ -481,44 +712,68 @@ const fitGpus = gpuProducts();
       btn.classList.toggle('is-on', on);
       btn.setAttribute('aria-pressed', String(on));
     });
+    document.querySelectorAll<HTMLButtonElement>('[data-view]').forEach((btn) => {
+      btn.classList.toggle('is-on', btn.dataset.view === input.view);
+    });
   }
 
   function sync(next: CalcInput) {
     input = next;
-    if (input.gpuId !== 'custom') {
-      const gpu = gpuById(input.gpuId);
-      if (input.vramGb !== gpu.vramGb && field<HTMLSelectElement>('gpuId').value === input.gpuId) {
-        /* keep custom VRAM if the user edited it on a named GPU */
-      }
-    }
     writeForm();
     render();
   }
 
   form.addEventListener('input', (event) => {
     const target = event.target as HTMLInputElement;
+    if (target.name === 'gguf') return;
     if (target.name === 'gpuId') {
       sync(applyGpuPreset(target.value as GpuId, readForm()));
       return;
     }
     if (target.name === 'modelId') {
-      sync(applyModelPreset(target.value as ModelId, readForm()));
+      sync(applyModelPreset(target.value as ModelId, { ...readForm(), fileWeightGiB: null }));
       return;
     }
     if (target.name === 'context') {
       field<HTMLInputElement>('contextNum').value = target.value;
     }
     if (target.name === 'contextNum') {
-      field<HTMLInputElement>('context').value = target.value;
+      field<HTMLInputElement>('context').value = String(Math.min(524288, Number(target.value)));
     }
     input = readForm();
     writeForm();
     render();
   });
 
-  form.addEventListener('change', () => {
+  form.addEventListener('change', (event) => {
+    const target = event.target as HTMLInputElement;
+    if (target.name === 'gguf') return;
     input = readForm();
     render();
+  });
+
+  field<HTMLInputElement>('gguf').addEventListener('change', async () => {
+    const file = field<HTMLInputElement>('gguf').files?.[0];
+    const status = document.querySelector('[data-gguf-status]');
+    if (!file) return;
+    const slice = await file.slice(0, 2_000_000).arrayBuffer();
+    const parsed = parseGgufHeader(slice, file.size);
+    if (!parsed.ok) {
+      if (status) status.textContent = parsed.error;
+      return;
+    }
+    if (status) status.textContent = `Read ${parsed.meta.name} (${parsed.meta.architecture || 'unknown arch'}). File stays local.`;
+    const billions = ggufToBillions(parsed.meta.parameterCount);
+    sync({
+      ...applyModelPreset('custom', readForm()),
+      fileWeightGiB: decimalGbToGiB(file.size / 1e9),
+      totalParamsB: billions ?? input.totalParamsB,
+      layers: parsed.meta.layers ?? input.layers,
+      kvLayers: parsed.meta.layers ?? input.kvLayers,
+      kvHeads: parsed.meta.kvHeads ?? input.kvHeads,
+      headDim: parsed.meta.headDim ?? input.headDim,
+      embedHidden: parsed.meta.embedHidden ?? input.embedHidden,
+    });
   });
 
   document.querySelectorAll<HTMLButtonElement>('[data-ctx]').forEach((btn) => {
@@ -542,6 +797,14 @@ const fitGpus = gpuProducts();
     });
   });
 
+  document.querySelectorAll<HTMLButtonElement>('[data-view]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      input = { ...readForm(), view: (btn.dataset.view || 'model') as CalcView };
+      writeForm();
+      render();
+    });
+  });
+
   shareBtn?.addEventListener('click', async () => {
     const url = `${window.location.origin}${window.location.pathname}?${shareQuery()}`;
     try {
@@ -554,6 +817,15 @@ const fitGpus = gpuProducts();
       status.removeAttribute('hidden');
       window.setTimeout(() => status.setAttribute('hidden', ''), 2000);
     }
+  });
+
+  exportBtn?.addEventListener('click', () => {
+    const blob = new Blob([exportEstimate(input, compute(input))], { type: 'application/json' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'amdai-calculator-estimate.json';
+    a.click();
+    URL.revokeObjectURL(a.href);
   });
 
   function readAsk(): AskState {
@@ -570,7 +842,6 @@ const fitGpus = gpuProducts();
   document.querySelectorAll<HTMLInputElement>('input[name="priority"], input[name="usage"], input[name="style"]').forEach((el) => {
     el.addEventListener('change', () => {
       ask = readAsk();
-      priority = ask.priority;
       writeForm();
       render();
     });
@@ -584,7 +855,6 @@ const fitGpus = gpuProducts();
   if (!window.location.search) {
     input = { ...DEFAULT_INPUT };
     ask = { priority: 'speed', usage: 'local', style: 'standard' };
-    priority = ask.priority;
   }
   writeForm();
   render();

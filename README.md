@@ -57,7 +57,7 @@ Public site URL is `https://amdai.net` (`site` in `astro.config.mjs`; override w
 | `/start` | Getting started (GPU → ROCm → llama.cpp → harness) |
 | `/stacks` | Recommended stack cards from the test rig |
 | `/budget` | Setup by budget — size/speed, local/hybrid, standard/abliterated |
-| `/calculator` | Quant + Hardware Calculator (client-side estimates, same size/speed toggle) |
+| `/calculator` | Quant + Hardware Calculator — size a model, ask what a Radeon can run, or read a speed floor (Q4+, client-side) |
 | `/quants` | Q4–Q8, UD dynamic, KV types, why not below Q4 |
 | `/gpus` | GPU directory — gfx IDs, VRAM, official ROCm rows |
 | `/stack-lab` | Radeon Stack Lab companion (Ubuntu app, Origin repo / local) |

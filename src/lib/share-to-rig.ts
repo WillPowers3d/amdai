@@ -79,6 +79,14 @@ export function shareToRigDraft(search: string, source: 'calculator' | 'budget' 
   const model = MODEL_PRESETS.find((m) => m.id === input.modelId);
   const quant = quantLabel(input.quantId);
   assertQuantAllowed(quant);
+  const backendName =
+    input.backendId === 'llamacpp'
+      ? 'llama.cpp'
+      : input.backendId === 'strata'
+        ? 'Strata'
+        : input.backendId === 'lmstudio'
+          ? 'LM Studio'
+          : input.backendId;
 
   return {
     name: `${gpu?.name ?? 'Custom GPU'} · ${model?.name ?? 'custom'}`,
@@ -91,7 +99,7 @@ export function shareToRigDraft(search: string, source: 'calculator' | 'budget' 
     os: '',
     distro: '',
     rocmVersion: '',
-    backend: 'llama.cpp',
+    backend: backendName,
     backendVersion: '',
     models: [{ name: model?.name ?? 'Custom', quant }],
     context: input.context,
