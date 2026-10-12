@@ -67,7 +67,7 @@
   --raised-2: #18181d;
   --ink: #f4efe8;
   --muted: #b9b1a7;
-  --faint: #7d766d;
+  --faint: #9c948b;
   --line: #2c2724;
   --accent: #e24a2f;
   --accent-ink: #ffd4c8;
@@ -180,7 +180,8 @@ body {
 .btn-primary,
 a.btn-primary {
   background: var(--accent);
-  color: #fff;
+  color: #1a0c0a;
+  font-weight: 600;
 }
 
 .btn-primary:hover {
@@ -303,10 +304,12 @@ input[type="range"] {
 }
 
 .tab[aria-selected="true"],
+.tab[aria-pressed="true"],
 .tab.is-on {
   background: var(--accent);
   border-color: var(--accent);
-  color: #fff;
+  color: #1a0c0a;
+  font-weight: 600;
 }
 
 .vram {

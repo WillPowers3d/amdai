@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://amdai.net/sitemap-index.xml

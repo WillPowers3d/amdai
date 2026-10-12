@@ -44,7 +44,7 @@ const fitGpus = gpuProducts();
       <span data-tested-label></span>
     </div>
 
-    <div class="tabs mt-8" role="tablist" aria-label="Stack presets">
+    <div class="tabs mt-8" role="group" aria-label="Stack presets">
       <button type="button" class="tab is-on" data-stack="daily">Daily driver</button>
       <button type="button" class="tab" data-stack="fast">Fast agent</button>
       <button type="button" class="tab" data-stack="custom">Custom</button>
@@ -172,7 +172,7 @@ const fitGpus = gpuProducts();
             <p class="font-medium" data-priority-headline></p>
             <p class="mt-2 text-muted" data-priority-body></p>
             <p class="mt-2 text-muted" data-usage-verdict></p>
-            <button type="button" id="apply-priority" hidden class="mt-3 rounded-full bg-accent px-3 py-1.5 text-xs text-white"></button>
+            <button type="button" id="apply-priority" hidden class="btn-primary mt-3 px-3 py-1.5 text-xs"></button>
           </div>
           <AbliteratedPicks />
           <dl class="mt-5 grid grid-cols-2 gap-3 text-sm">
@@ -478,7 +478,7 @@ const fitGpus = gpuProducts();
         (btn.dataset.stack === 'fast' && input.modelId === 'flash' && input.quantId === 'q6_k') ||
         (btn.dataset.stack === 'custom' && input.modelId === 'custom');
       btn.classList.toggle('is-on', on);
-      btn.setAttribute('aria-selected', String(on));
+      btn.setAttribute('aria-pressed', String(on));
     });
   }
 

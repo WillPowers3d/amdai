@@ -7,33 +7,12 @@
   <svg class="silicon-die" viewBox="0 0 320 320" fill="none">
     <rect x="48" y="48" width="224" height="224" rx="18" stroke="currentColor" stroke-opacity="0.28" stroke-width="1.2" />
     <rect x="68" y="68" width="184" height="184" rx="10" stroke="var(--accent)" stroke-opacity="0.55" stroke-width="1.2" />
-    {Array.from({ length: 6 }, (_, row) =>
-      Array.from({ length: 6 }, (_, col) => {
-        const hot = (row + col) % 5 === 0;
-        return (
-          <rect
-            x={86 + col * 26}
-            y={86 + row * 26}
-            width="18"
-            height="18"
-            rx="3"
-            fill={hot ? 'var(--accent)' : 'currentColor'}
-            fill-opacity={hot ? '0.55' : '0.08'}
-          />
-        );
-      }),
-    )}
-    {Array.from({ length: 7 }, (_, i) => (
-      <rect x={78 + i * 24} y="28" width="10" height="16" rx="2" fill="currentColor" fill-opacity="0.22" />
-    ))}
-    {Array.from({ length: 7 }, (_, i) => (
-      <rect x={78 + i * 24} y="276" width="10" height="16" rx="2" fill="currentColor" fill-opacity="0.22" />
-    ))}
-    {Array.from({ length: 7 }, (_, i) => (
-      <rect x="28" y={78 + i * 24} width="16" height="10" rx="2" fill="currentColor" fill-opacity="0.22" />
-    ))}
-    {Array.from({ length: 7 }, (_, i) => (
-      <rect x="276" y={78 + i * 24} width="16" height="10" rx="2" fill="currentColor" fill-opacity="0.22" />
-    ))}
+    <rect x="86" y="86" width="148" height="148" rx="6" fill="currentColor" fill-opacity="0.06" />
+    <rect x="112" y="112" width="28" height="28" rx="4" fill="var(--accent)" fill-opacity="0.5" />
+    <rect x="180" y="148" width="28" height="28" rx="4" fill="var(--accent)" fill-opacity="0.28" />
+    <rect x="78" y="28" width="164" height="16" rx="2" fill="currentColor" fill-opacity="0.18" />
+    <rect x="78" y="276" width="164" height="16" rx="2" fill="currentColor" fill-opacity="0.18" />
+    <rect x="28" y="78" width="16" height="164" rx="2" fill="currentColor" fill-opacity="0.18" />
+    <rect x="276" y="78" width="16" height="164" rx="2" fill="currentColor" fill-opacity="0.18" />
   </svg>
 </div>
