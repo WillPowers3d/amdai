@@ -1,0 +1,76 @@
+---
+import Base from '../../layouts/Base.astro';
+import HarnessesNav from '../../components/harnesses/HarnessesNav.astro';
+import {
+  CATEGORY_COPY,
+  harnessPath,
+  hybridLabel,
+  surfaceLabel,
+} from '../../lib/harnesses';
+import { harnesses, harnessesFile } from '../../lib/harnesses-data';
+
+const rows = harnesses();
+---
+
+<Base
+  title="Harness comparison"
+  description="Agent harnesses, chat UIs, and ComfyUI compared: local /v1, hybrid, tools, surfaces, used on our rig."
+>
+  <main id="main" class="mx-auto max-w-6xl px-4 py-10 sm:px-6">
+    <HarnessesNav current="compare" />
+    <h1 class="display mt-6 text-4xl sm:text-5xl">Compare harnesses</h1>
+    <p class="mt-4 max-w-2xl text-lg leading-relaxed text-muted">
+      Same catalog as the rest of this section. Tool-calling and long-context cells are
+      paraphrases of the cited docs — “not documented” means we did not find a first-party claim.
+      As of {harnessesFile.as_of}.
+    </p>
+    <p class="mt-4 text-sm">
+      <a class="btn-secondary" href="/harnesses/quiz">Pick a harness</a>
+      <a class="btn-ghost ml-2" href="/harnesses/connect">Connect snippets</a>
+    </p>
+
+    <div class="card mt-10 overflow-x-auto">
+      <table class="table-lab min-w-[64rem]">
+        <thead>
+          <tr>
+            <th>Harness</th>
+            <th>Category</th>
+            <th>Surfaces</th>
+            <th>Local /v1</th>
+            <th>Hybrid</th>
+            <th>Tools (cited)</th>
+            <th>On our rig</th>
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((row) => (
+            <tr>
+              <td>
+                <a class="font-medium hover:text-accent-ink" href={harnessPath(row.id)}>{row.title}</a>
+                <p class="mt-1 text-xs text-faint">{row.vendor}</p>
+              </td>
+              <td><a class="underline decoration-accent/40" href={CATEGORY_COPY[row.category].href}>{CATEGORY_COPY[row.category].label}</a></td>
+              <td class="text-sm text-muted">{row.surfaces.map(surfaceLabel).join(', ') || '—'}</td>
+              <td class="text-sm">
+                {row.local_ok ? <span class="badge">Yes</span> : <span class="badge-warn">Not first-class</span>}
+                <p class="mt-1 text-xs text-faint">{row.llama_base}</p>
+              </td>
+              <td class="text-sm text-muted">{hybridLabel(row)}</td>
+              <td class="max-w-xs text-sm text-muted">{row.tools}</td>
+              <td>{row.used_on_our_rig ? <span class="badge-tested">Used on our rig</span> : <span class="text-faint">—</span>}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+
+    <p class="mt-6 text-sm text-muted">
+      Local vs hybrid is the same question as
+      <a class="underline decoration-accent/40" href="/calculator?usage=local">fully local</a>
+      versus
+      <a class="underline decoration-accent/40" href="/calculator?usage=hybrid">hybrid</a>
+      on the calculator. Cursor’s override is hybrid-shaped even when the weights are local —
+      forum staff say requests still go through Cursor’s backend.
+    </p>
+  </main>
+</Base>

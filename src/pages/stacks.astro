@@ -68,6 +68,26 @@ import { stacksGuide } from '../lib/status';
               {stack.measured.map((line) => <li>{line}</li>)}
             </ul>
           </div>
+          {stack.id === 'daily-driver' && (
+            <p class="mt-5 text-sm text-muted">
+              Plug a harness into llama-server on <code>127.0.0.1:8080/v1</code> after
+              <code>curl</code> works.
+              <a class="ml-1 underline decoration-accent/40" href="/harnesses/hermes">Hermes Agent</a>
+              is used on our rig.
+              <a class="underline decoration-accent/40" href="/harnesses/connect#llama">Connect snippets</a>
+              · <a class="underline decoration-accent/40" href="/harnesses">All harnesses</a>.
+            </p>
+          )}
+          {stack.id === 'fast-agent' && (
+            <p class="mt-5 text-sm text-muted">
+              Plug a harness into Strata on <code>127.0.0.1:8083/v1</code>.
+              amdai’s daily agent is
+              <a class="underline decoration-accent/40" href="/harnesses/hermes">Hermes</a>,
+              pointed at this port and at llama-server.
+              <a class="underline decoration-accent/40" href="/harnesses/connect#strata">Connect snippets</a>
+              · <a class="underline decoration-accent/40" href="/harnesses">All harnesses</a>.
+            </p>
+          )}
         </li>
       ))}
     </ol>

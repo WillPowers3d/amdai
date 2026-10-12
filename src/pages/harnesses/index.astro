@@ -1,0 +1,146 @@
+---
+import Base from '../../layouts/Base.astro';
+import Callout from '../../components/Callout.astro';
+import HarnessesNav from '../../components/harnesses/HarnessesNav.astro';
+import HarnessCard from '../../components/harnesses/HarnessCard.astro';
+import {
+  CATEGORY_COPY,
+  harnessesByCategory,
+  harnessPath,
+  usedOnOurRig,
+  type HarnessCategory,
+} from '../../lib/harnesses';
+import { harnesses, harnessesFile } from '../../lib/harnesses-data';
+
+const all = harnesses();
+const onRig = usedOnOurRig(all);
+const categories = (Object.keys(CATEGORY_COPY) as HarnessCategory[]).map((id) => ({
+  id,
+  ...CATEGORY_COPY[id],
+  rows: harnessesByCategory(all, id),
+}));
+---
+
+<Base
+  title="Harnesses & frontends"
+  description="What to plug your local model into — agent harnesses, chat UIs, and ComfyUI on ROCm, talking to llama-server or Strata over an OpenAI-compatible API."
+>
+  <main id="main" class="mx-auto max-w-4xl px-4 py-10 sm:px-6">
+    <HarnessesNav current="overview" />
+    <h1 class="display mt-6 text-4xl sm:text-5xl">Harnesses &amp; frontends: what to plug your local model into</h1>
+    <p class="mt-4 max-w-2xl text-lg leading-relaxed text-muted">
+      A <strong class="text-ink">harness</strong> is the app or agent layer on top of an inference
+      server. <a class="underline decoration-accent/40" href="/backends">llama-server</a>,
+      <a class="underline decoration-accent/40" href="/stacks#fast-agent">Strata</a>,
+      vLLM, and Ollama run the weights. The harness talks to them over an
+      <strong class="text-ink">OpenAI-compatible API</strong>. It is not the GPU stack. If
+      <code>/v1</code> is down, the harness is a very expensive timeout.
+    </p>
+    <p class="mt-4 text-sm text-faint">
+      Cited from official repos and docs, checked {harnessesFile.as_of}. We do not invent features —
+      unclear items stay “not documented.” Exact serve flags for our rig stay TODO in
+      <a class="underline decoration-accent/40" href="/stacks">stacks</a>.
+    </p>
+
+    <pre class="mt-8 overflow-x-auto rounded-2xl border border-line bg-raised p-4 text-sm leading-relaxed" aria-label="Harness stack"><code>{`You  →  harness (tools, memory, channels, chat UI)
+          →  HTTP  OpenAI-shaped /v1
+            →  llama-server :8080  /  Strata :8083  /  vLLM :8000  /  Ollama :11434
+              →  R9700 (Vulkan or HIP)`}</code></pre>
+
+    <p class="mt-6 flex flex-wrap gap-3 text-sm">
+      <a class="btn-primary" href="/harnesses/connect">Copy-paste connect</a>
+      <a class="btn-secondary" href="/harnesses/quiz">Pick a harness</a>
+      <a class="btn-ghost" href="/harnesses/compare">Comparison table</a>
+    </p>
+
+    {onRig.length > 0 && (
+      <section class="card mt-10 p-5" aria-labelledby="rig-heading">
+        <p class="kicker">local-desktop</p>
+        <h2 id="rig-heading" class="mt-1 text-xl tracking-tight">Used on our rig</h2>
+        <p class="mt-2 text-sm text-muted">
+          amdai’s daily agent on the two-R9700 box. Pointed at Strata
+          <code>:{harnessesFile.strata_port}</code> and llama-server
+          <code>:{harnessesFile.llama_server_port}</code>.
+        </p>
+        <ul class="mt-4 space-y-3">
+          {onRig.map((row) => (
+            <li>
+              <a class="font-medium underline decoration-accent/40" href={harnessPath(row.id)}>{row.title}</a>
+              <span class="ml-2 badge-tested">Used on our rig</span>
+              <p class="mt-1 text-sm text-muted">{row.what_for}</p>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )}
+
+    <Callout type="linux">
+      On AMD, stand up <a href="/software">llama.cpp or vLLM</a> yourself. Do not let a harness
+      download a CUDA llama.cpp “for convenience.” You own HIP/<code>gfx1201</code>; the harness
+      only POSTs JSON. <code>curl</code> <code>/v1/models</code> before you debug the frontend.
+    </Callout>
+
+    <section class="mt-12" aria-labelledby="attach-heading">
+      <h2 id="attach-heading" class="text-2xl tracking-tight">Attach after <code>/v1</code> is up</h2>
+      <ol class="mt-4 space-y-2 text-sm leading-relaxed text-muted">
+        <li><strong class="text-ink">1.</strong> <a class="underline decoration-accent/40" href="/tutorials/verify-rocm">Verify ROCm</a> — <code>rocminfo</code> shows <code>gfx1201</code>.</li>
+        <li><strong class="text-ink">2.</strong> Serve official Qwen instruct — <a class="underline decoration-accent/40" href="/tutorials/serve-qwen">Serve Qwen</a>. llama-server default is <code>127.0.0.1:{harnessesFile.llama_server_port}</code>. This site’s Strata convention is <code>:{harnessesFile.strata_port}</code>.</li>
+        <li><strong class="text-ink">3.</strong> Prove the API on loopback. Snippets: <a class="underline decoration-accent/40" href="/harnesses/connect">Connect</a>.</li>
+        <li><strong class="text-ink">4.</strong> Watch a GPU meter during that completion. VRAM and compute must move.</li>
+        <li><strong class="text-ink">5.</strong> Then point the harness at that base URL. Model id must match <code>GET /v1/models</code> (placeholder on this site: <code>{harnessesFile.model_placeholder}</code>).</li>
+        <li><strong class="text-ink">6.</strong> Only after a chat turn works, enable tools that can touch the filesystem or the network.</li>
+      </ol>
+      <p class="mt-4 text-sm text-muted">
+        <a class="underline decoration-accent/40" href="/stack-lab">Radeon Stack Lab</a>
+        <code>qwen-reliable</code> is the daily driver (Qwen3.6-35B-A3B Q5).
+        <code>qwen-fast-agent</code> is Qwen 3.8 Flash on Strata. Cards:
+        <a class="underline decoration-accent/40" href="/stacks">recommended stacks</a>.
+      </p>
+    </section>
+
+    <section class="mt-12" aria-labelledby="cat-heading">
+      <h2 id="cat-heading" class="text-2xl tracking-tight">Categories</h2>
+      <div class="mt-5 grid gap-4 sm:grid-cols-3">
+        {categories.map((cat) => (
+          <a class="card block p-5" href={cat.href}>
+            <p class="kicker">{cat.rows.length} listed</p>
+            <h3 class="mt-2 text-xl tracking-tight">{cat.label}</h3>
+            <p class="mt-2 text-sm text-muted">{cat.lede}</p>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    {categories.map((cat) => (
+      <section class="mt-12" aria-labelledby={`${cat.id}-heading`}>
+        <div class="flex flex-wrap items-end justify-between gap-3">
+          <h2 id={`${cat.id}-heading`} class="text-2xl tracking-tight">{cat.label}</h2>
+          <a class="text-sm underline decoration-accent/40" href={cat.href}>All {cat.id}</a>
+        </div>
+        <p class="mt-2 text-sm text-muted">{cat.lede}</p>
+        <ul class="mt-5 grid gap-3">
+          {cat.rows.map((row) => (
+            <li>
+              <HarnessCard row={row} />
+            </li>
+          ))}
+        </ul>
+      </section>
+    ))}
+
+    <section class="mt-12 rounded-2xl border border-dashed border-line p-5" aria-labelledby="overnight-heading">
+      <h2 id="overnight-heading" class="text-xl tracking-tight">Overnight research loop (this site’s YAML)</h2>
+      <p class="mt-2 text-sm text-muted">
+        Local Hermes is a practical overnight research agent for the living tracker. It does
+        <strong class="text-ink"> not</strong> publish.
+      </p>
+      <ol class="mt-3 space-y-1.5 text-sm text-muted">
+        <li>Leave official instruct serving on <code>/v1</code> (the same URL you just curled).</li>
+        <li>Attach Hermes to that endpoint — <a class="underline decoration-accent/40" href="/harnesses/hermes">Hermes notes</a>.</li>
+        <li>Point it at the weekday source list on <a class="underline decoration-accent/40" href="/maintain">Weekday scrape</a>.</li>
+        <li>Ask for a draft diff to the living YAML only. No invented benches. No download stats.</li>
+        <li>In the morning: read the diff, run the smoke tests if a pin moved, <code>npm run build</code>, commit on <code>main</code>.</li>
+      </ol>
+    </section>
+  </main>
+</Base>

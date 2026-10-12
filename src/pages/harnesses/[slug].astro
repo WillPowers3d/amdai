@@ -1,0 +1,142 @@
+---
+import Base from '../../layouts/Base.astro';
+import Callout from '../../components/Callout.astro';
+import HarnessesNav from '../../components/harnesses/HarnessesNav.astro';
+import SnippetBlock from '../../components/harnesses/SnippetBlock.astro';
+import {
+  CATEGORY_COPY,
+  endpointSet,
+  harnessPath,
+  harnessSnippet,
+  hybridLabel,
+  surfaceLabel,
+} from '../../lib/harnesses';
+import { harness, harnesses, harnessesFile } from '../../lib/harnesses-data';
+
+export function getStaticPaths() {
+  return harnesses().map((row) => ({ params: { slug: row.id } }));
+}
+
+const row = harness(Astro.params.slug ?? '');
+if (!row) {
+  return new Response(null, { status: 404, statusText: 'Not found' });
+}
+
+const cat = CATEGORY_COPY[row.category];
+const llama = endpointSet(harnessesFile, 'llama');
+const strata = endpointSet(harnessesFile, 'strata');
+---
+
+<Base title={row.title} description={row.summary}>
+  <main id="main" class="mx-auto max-w-3xl px-4 py-10 sm:px-6">
+    <HarnessesNav current={row.category} />
+    <p class="mt-6 text-sm text-faint">
+      <a href="/harnesses">Harnesses</a>
+      {' / '}
+      <a href={cat.href}>{cat.label}</a>
+      {' / '}
+      {row.id}
+    </p>
+    <p class="mt-4 flex flex-wrap gap-2 text-xs">
+      <span class="badge">{cat.label}</span>
+      {row.used_on_our_rig && <span class="badge-tested">Used on our rig</span>}
+      <span class="badge">{hybridLabel(row)}</span>
+      {row.surfaces.map((surface) => <span class="badge">{surfaceLabel(surface)}</span>)}
+    </p>
+    <h1 class="display mt-4 text-4xl sm:text-5xl">{row.title}</h1>
+    <p class="mt-3 text-sm text-faint">
+      {row.vendor}. {row.version_note}
+    </p>
+    <p class="mt-4 text-lg leading-relaxed text-muted">{row.summary}</p>
+
+    {row.used_on_our_rig && (
+      <Callout type="check" title="Used on our rig">
+        amdai’s daily agent on local-desktop. Pointed at Strata
+        <code>:{harnessesFile.strata_port}</code> and llama-server
+        <code>:{harnessesFile.llama_server_port}</code>. Exact server flags stay TODO on
+        <a href="/stacks">recommended stacks</a>.
+      </Callout>
+    )}
+
+    <article class="prose-lab prose mt-10 max-w-none">
+      <h2 id="what">What it’s for</h2>
+      <p>{row.what_for}</p>
+
+      <h2 id="endpoint">Local endpoint</h2>
+      <dl>
+        <div>
+          <dt>llama-server base</dt>
+          <dd><code>{row.llama_base}</code></dd>
+        </div>
+        <div>
+          <dt>Strata base</dt>
+          <dd><code>{row.strata_base}</code></dd>
+        </div>
+        <div>
+          <dt>Model name</dt>
+          <dd>{row.model_field}</dd>
+        </div>
+        <div>
+          <dt>API key</dt>
+          <dd>{row.api_key}</dd>
+        </div>
+      </dl>
+
+      <h2 id="tools">Tool calling</h2>
+      <p>{row.tools}</p>
+
+      <h2 id="context">Long context</h2>
+      <p>{row.long_context}</p>
+
+      <h2 id="rocm">ROCm / Radeon gotchas</h2>
+      <p>{row.rocm}</p>
+
+      <h2 id="hybrid">Hybrid local + cloud</h2>
+      <p>{row.hybrid}</p>
+      <p>
+        This is the same question as the calculator’s
+        <a href="/calculator?usage=local">fully local</a>
+        versus
+        <a href="/calculator?usage=hybrid">hybrid</a>
+        toggle. This page does not quote cloud prices.
+      </p>
+
+      <h2 id="links">Official links</h2>
+      <ul>
+        <li><a href={row.homepage}>Home</a></li>
+        <li><a href={row.docs}>Docs used for this row</a></li>
+        {row.local_docs && <li><a href={row.local_docs}>Local-models docs</a></li>}
+        {row.llama_docs && <li><a href={row.llama_docs}>llama.cpp provider docs</a></li>}
+        {row.repo && <li><a href={row.repo}>Repository</a></li>}
+      </ul>
+
+      <h2 id="sources">Sources</h2>
+      <ul>
+        {row.sources.map((source) => (
+          <li><a href={source.href}>{source.title}</a></li>
+        ))}
+      </ul>
+    </article>
+
+    <section class="mt-10" aria-labelledby="snips-heading">
+      <h2 id="snips-heading" class="text-2xl tracking-tight">Copy-paste</h2>
+      <p class="mt-2 text-sm text-muted">
+        More on the <a class="underline decoration-accent/40" href={`/harnesses/connect#${row.id}`}>connect page</a>.
+        Prove <code>{llama.v1}/models</code> first.
+      </p>
+      <SnippetBlock snippet={harnessSnippet(row, llama)} />
+      <SnippetBlock snippet={harnessSnippet(row, strata)} />
+    </section>
+
+    <p class="mt-10 text-sm text-muted">
+      Next:
+      <a class="underline decoration-accent/40" href="/harnesses/compare">compare</a>
+      {' · '}
+      <a class="underline decoration-accent/40" href="/harnesses/quiz">quiz</a>
+      {' · '}
+      <a class="underline decoration-accent/40" href={harnessPath(row.id === 'hermes' ? 'openhands' : 'hermes')}>
+        {row.id === 'hermes' ? 'OpenHands' : 'Hermes Agent'}
+      </a>
+    </p>
+  </main>
+</Base>

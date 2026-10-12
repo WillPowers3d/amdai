@@ -1,0 +1,30 @@
+---
+import Base from '../../layouts/Base.astro';
+import HarnessesNav from '../../components/harnesses/HarnessesNav.astro';
+import HarnessCard from '../../components/harnesses/HarnessCard.astro';
+import { CATEGORY_COPY, harnessesByCategory } from '../../lib/harnesses';
+import { harnesses } from '../../lib/harnesses-data';
+
+const copy = CATEGORY_COPY.chat;
+const rows = harnessesByCategory(harnesses(), 'chat');
+---
+
+<Base title={copy.label} description={copy.lede}>
+  <main id="main" class="mx-auto max-w-4xl px-4 py-10 sm:px-6">
+    <HarnessesNav current="chat" />
+    <h1 class="display mt-6 text-4xl sm:text-5xl">{copy.label}</h1>
+    <p class="mt-4 max-w-2xl text-lg leading-relaxed text-muted">{copy.lede}</p>
+    <p class="mt-3 text-sm text-muted">
+      The llama.cpp built-in web UI is the same process as <code>/v1</code> on
+      <code>:8080</code>. LM Studio and Jan also <em>serve</em> a /v1 (ports 1234 and 1337) —
+      pointing them <em>at</em> our llama-server is a current-UI check, not always documented.
+    </p>
+    <ul class="mt-8 grid gap-3">
+      {rows.map((row) => (
+        <li>
+          <HarnessCard row={row} />
+        </li>
+      ))}
+    </ul>
+  </main>
+</Base>

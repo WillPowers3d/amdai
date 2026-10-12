@@ -1,0 +1,30 @@
+---
+import Base from '../../layouts/Base.astro';
+import Callout from '../../components/Callout.astro';
+import HarnessesNav from '../../components/harnesses/HarnessesNav.astro';
+import HarnessCard from '../../components/harnesses/HarnessCard.astro';
+import { CATEGORY_COPY, harnessesByCategory } from '../../lib/harnesses';
+import { harnesses } from '../../lib/harnesses-data';
+
+const copy = CATEGORY_COPY.image;
+const rows = harnessesByCategory(harnesses(), 'image');
+---
+
+<Base title={copy.label} description={copy.lede}>
+  <main id="main" class="mx-auto max-w-4xl px-4 py-10 sm:px-6">
+    <HarnessesNav current="image" />
+    <h1 class="display mt-6 text-4xl sm:text-5xl">{copy.label}</h1>
+    <p class="mt-4 max-w-2xl text-lg leading-relaxed text-muted">{copy.lede}</p>
+    <Callout type="note">
+      ComfyUI is HIP/ROCm PyTorch, not the llama.cpp Vulkan daily driver. It does not speak
+      llama-server or Strata <code>/v1</code>. Instinct-oriented Docker tags are not R9700 pins.
+    </Callout>
+    <ul class="mt-8 grid gap-3">
+      {rows.map((row) => (
+        <li>
+          <HarnessCard row={row} />
+        </li>
+      ))}
+    </ul>
+  </main>
+</Base>

@@ -1,0 +1,31 @@
+---
+import Base from '../../layouts/Base.astro';
+import HarnessesNav from '../../components/harnesses/HarnessesNav.astro';
+import HarnessCard from '../../components/harnesses/HarnessCard.astro';
+import { CATEGORY_COPY, harnessesByCategory } from '../../lib/harnesses';
+import { harnesses } from '../../lib/harnesses-data';
+
+const copy = CATEGORY_COPY.agent;
+const rows = harnessesByCategory(harnesses(), 'agent');
+---
+
+<Base title={copy.label} description={copy.lede}>
+  <main id="main" class="mx-auto max-w-4xl px-4 py-10 sm:px-6">
+    <HarnessesNav current="agents" />
+    <h1 class="display mt-6 text-4xl sm:text-5xl">{copy.label}</h1>
+    <p class="mt-4 max-w-2xl text-lg leading-relaxed text-muted">{copy.lede}</p>
+    <p class="mt-3 text-sm text-muted">
+      Hermes is amdai’s daily setup on local-desktop. Claude Code and Codex CLI attach only where the
+      local server implements their native APIs (Anthropic Messages / OpenAI Responses) — not a
+      drop-in <code>/v1/chat/completions</code> assumption. Cursor’s override is not a first-class
+      localhost path.
+    </p>
+    <ul class="mt-8 grid gap-3">
+      {rows.map((row) => (
+        <li>
+          <HarnessCard row={row} />
+        </li>
+      ))}
+    </ul>
+  </main>
+</Base>

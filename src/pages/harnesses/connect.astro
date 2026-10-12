@@ -1,0 +1,77 @@
+---
+import Base from '../../layouts/Base.astro';
+import Callout from '../../components/Callout.astro';
+import HarnessesNav from '../../components/harnesses/HarnessesNav.astro';
+import SnippetBlock from '../../components/harnesses/SnippetBlock.astro';
+import {
+  CATEGORY_COPY,
+  curlSnippet,
+  endpointSet,
+  harnessPath,
+  harnessSnippet,
+  type SnippetTarget,
+} from '../../lib/harnesses';
+import { harnesses, harnessesFile } from '../../lib/harnesses-data';
+
+const targets: SnippetTarget[] = ['llama', 'strata'];
+const rows = harnesses();
+---
+
+<Base
+  title="Connect a harness"
+  description="Copy-paste config for llama-server :8080 and Strata :8083. Exact serve flags for our rig stay TODO."
+>
+  <main id="main" class="mx-auto max-w-3xl px-4 py-10 sm:px-6">
+    <HarnessesNav current="connect" />
+    <h1 class="display mt-6 text-4xl sm:text-5xl">Connect to llama-server and Strata</h1>
+    <p class="mt-4 text-lg leading-relaxed text-muted">
+      Ports on this site: llama-server <code>127.0.0.1:{harnessesFile.llama_server_port}</code>
+      (<code>/v1</code>), Strata <code>:{harnessesFile.strata_port}</code>, vLLM
+      <code>:{harnessesFile.vllm_port}</code>. Model placeholder
+      <code>{harnessesFile.model_placeholder}</code> — replace it with the id from
+      <code>GET /v1/models</code>. API key placeholder
+      <code>{harnessesFile.api_key_placeholder}</code> when the client refuses an empty field.
+    </p>
+
+    <Callout type="warn">
+      Exact command lines for the <a href="/stacks">daily driver and Flash stack</a> stay
+      <strong>TODO</strong> until the rig owner fills <code>stacks.yaml</code>. These snippets only
+      set the harness side. We do not invent <code>-c</code>, <code>-ngl</code>, or measured VRAM.
+    </Callout>
+
+    <ul class="mt-6 space-y-1.5 text-sm text-muted">
+      {harnessesFile.notes.map((note) => <li>{note}</li>)}
+    </ul>
+
+    {targets.map((target) => {
+      const ep = endpointSet(harnessesFile, target);
+      return (
+        <section class="mt-12" id={target} aria-labelledby={`${target}-heading`}>
+          <h2 id={`${target}-heading`} class="text-2xl tracking-tight">{ep.label}</h2>
+          <p class="mt-2 text-sm text-muted">
+            Base for most OpenAI-compatible clients: <code>{ep.v1}</code>.
+            {target === 'llama' ? (
+              <> Daily driver stack: <a class="underline decoration-accent/40" href="/stacks#daily-driver">Qwen3.6-35B-A3B on llama.cpp Vulkan</a>.</>
+            ) : (
+              <> Fast-agent stack: <a class="underline decoration-accent/40" href="/stacks#fast-agent">Qwen 3.8 Flash on Strata</a>.</>
+            )}
+          </p>
+          <SnippetBlock snippet={curlSnippet(harnessesFile, target)} />
+        </section>
+      );
+    })}
+
+    {rows.map((row) => (
+      <section class="mt-12 border-t border-line pt-8" id={row.id} aria-labelledby={`${row.id}-snips`}>
+        <p class="kicker">{CATEGORY_COPY[row.category].label}</p>
+        <h2 id={`${row.id}-snips`} class="mt-1 text-2xl tracking-tight">
+          <a class="underline decoration-accent/40" href={harnessPath(row.id)}>{row.title}</a>
+        </h2>
+        <p class="mt-2 text-sm text-muted">{row.what_for}</p>
+        {targets.map((target) => (
+          <SnippetBlock snippet={harnessSnippet(row, endpointSet(harnessesFile, target))} />
+        ))}
+      </section>
+    ))}
+  </main>
+</Base>

@@ -1,0 +1,51 @@
+---
+import type { HarnessSnippet } from '../../lib/harnesses';
+
+interface Props {
+  snippet: HarnessSnippet;
+}
+
+const { snippet } = Astro.props;
+---
+
+<figure class="snippet-block">
+  <figcaption>
+    <span>{snippet.title}</span>
+    {snippet.filename && <code>{snippet.filename}</code>}
+  </figcaption>
+  <pre><code>{snippet.code}</code></pre>
+  {snippet.note && <p class="note">{snippet.note}</p>}
+</figure>
+
+<style>
+  .snippet-block {
+    margin: 1.25rem 0 0;
+    border: 1px solid var(--line);
+    border-radius: 1rem;
+    overflow: hidden;
+    background: var(--raised);
+  }
+  .snippet-block figcaption {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.5rem 1rem;
+    padding: 0.7rem 1rem 0;
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+  .snippet-block pre {
+    margin: 0.5rem 0 0;
+    padding: 0.85rem 1rem 1rem;
+    overflow-x: auto;
+    font-size: 0.82rem;
+    line-height: 1.45;
+  }
+  .snippet-block .note {
+    margin: 0;
+    padding: 0 1rem 0.85rem;
+    font-size: 0.8rem;
+    color: var(--faint);
+  }
+</style>

@@ -87,7 +87,14 @@ Public site URL is `https://amdai.net` (`site` in `astro.config.mjs`; override w
 | `/forum/mod` | Reports + audit log (mods/admins) |
 | `/account` | Optional saved rigs (off unless `ACCOUNTS_ENABLED=1`) |
 | `/privacy` | What optional accounts store |
-| `/harnesses` | Hermes Agent and OpenClaw (`/v1` first) |
+| `/harnesses` | Harnesses & frontends — what to plug your local model into |
+| `/harnesses/agents` | Agent harnesses (Hermes used on our rig, OpenHands, Aider, …) |
+| `/harnesses/chat` | Chat UIs (Open WebUI, LM Studio, llama.cpp web UI, …) |
+| `/harnesses/image` | ComfyUI on ROCm |
+| `/harnesses/compare` | Comparison table |
+| `/harnesses/quiz` | Pick a harness (GET, no JS required) |
+| `/harnesses/connect` | Copy-paste :8080 / :8083 snippets |
+| `/harnesses/{id}` | One harness: endpoint, tools, ROCm notes, hybrid |
 | `/hardware` | PSU, cooling, VRAM |
 | `/tutorials` | How-tos |
 | `/troubleshooting` | Common failures |
@@ -117,6 +124,7 @@ Public site URL is `https://amdai.net` (`site` in `astro.config.mjs`; override w
 | `src/data/budget-tiers.yaml` | `/budget` tiers; USD bands stay TODO until cited |
 | `src/data/errors.yaml` | Cited troubleshooter patterns |
 | `src/data/rocm-problems.yaml` | Cited `/rocm-problems` tracker (TODO if unverified) |
+| `src/data/harnesses.yaml` | Cited `/harnesses` catalog (no invented features) |
 | `src/data/backends.yaml` | Backend chooser rows |
 | `src/data/version-matrix.yaml` | ROCm × engine × card (or “no data”) |
 
@@ -130,7 +138,7 @@ Weekday procedure: [docs/weekday-scrape.md](docs/weekday-scrape.md) and `/mainta
 
 | Folder | Routes |
 | --- | --- |
-| `src/content/guides/` | `/{id}` (`rocm.mdx` and `abliterated.mdx` are excluded; live ROCm guide is `src/pages/rocm/`) |
+| `src/content/guides/` | `/{id}` (`rocm.mdx`, `abliterated.mdx`, and `harnesses.mdx` are excluded) |
 | `src/content/tutorials/` | `/tutorials/{id}` |
 | `src/content/blog/` | `/blog/{id}` |
 | `src/content/updates/` | Cards on `/rocm/versions` and `/blog` |

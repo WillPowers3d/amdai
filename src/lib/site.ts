@@ -30,6 +30,7 @@ export function ogSlug(pathname: string) {
   const slug = pathname.replace(/^\//, '').replace(/\/+$/, '').replace(/\//g, '-') || 'home';
   if (slug === 'rocm' || slug.startsWith('rocm-')) return 'rocm';
   if (slug === 'forum' || slug.startsWith('forum-')) return 'forum';
+  if (slug === 'harnesses' || slug.startsWith('harnesses-')) return 'stacks';
   return OG_PAGES.has(slug) ? slug : 'default';
 }
 
@@ -92,7 +93,7 @@ export const primaryNav: NavItem[] = [
   { href: '/backends', label: 'Backends', description: 'llama.cpp first; Vulkan, HIP, Strata, vLLM, Ollama', group: 'stack' },
   { href: '/software', label: 'AI software', description: 'llama.cpp first; vLLM and Strata as tries', group: 'stack' },
   { href: '/abliterated', label: 'Abliterated', description: 'Hub: what it is, how to vet files, catalog — educational only', group: 'stack' },
-  { href: '/harnesses', label: 'Harnesses', description: 'Hermes Agent and OpenClaw above the model', group: 'stack' },
+  { href: '/harnesses', label: 'Harnesses', description: 'What to plug your local model into — agents, chat UIs, ComfyUI', group: 'stack' },
   { href: '/hardware', label: 'Hardware', description: 'PSU, cooling, noise, VRAM vs model size', group: 'stack' },
   { href: '/stack-lab', label: 'Stack Lab', description: 'Ubuntu companion — same catalog as the YAML', group: 'path' },
   { href: '/tutorials', label: 'Tutorials', description: 'Practical how-tos for this stack', group: 'practice' },

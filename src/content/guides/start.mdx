@@ -49,10 +49,11 @@ Compare them on [AI software](/software). Run the daily driver: [Local LLM tutor
 
 A **harness** is the agent loop *above* the model. It does not replace ROCm.
 
-- **[Hermes Agent](https://hermes-agent.nousresearch.com/)** — local llama.cpp runtime (Vulkan on AMD unless you point at your own server) or any OpenAI-compatible endpoint.
-- **[OpenClaw](https://docs.openclaw.ai/)** — self-hosted gateway into Discord/Telegram/etc.
+- **[Hermes Agent](/harnesses/hermes)** — used on our rig (local-desktop), pointed at Strata `:8083` and llama-server.
+- **[OpenClaw](/harnesses/openclaw)** — self-hosted gateway into Discord/Telegram/etc.
+- Chat UIs, IDE agents, and ComfyUI on ROCm: [harnesses catalog](/harnesses).
 
-Details: [Harnesses](/harnesses). `curl` `/v1` first. Then point the harness at `127.0.0.1`.
+`curl` `/v1` first. Then point the harness at `127.0.0.1`. Snippets: [connect](/harnesses/connect).
 
 ## 5. Qwen
 

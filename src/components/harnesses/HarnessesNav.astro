@@ -1,0 +1,50 @@
+---
+interface Props {
+  current?: string;
+}
+
+const { current = 'overview' } = Astro.props;
+
+const items = [
+  { href: '/harnesses', id: 'overview', label: 'Overview' },
+  { href: '/harnesses/agents', id: 'agents', label: 'Agents' },
+  { href: '/harnesses/chat', id: 'chat', label: 'Chat UIs' },
+  { href: '/harnesses/image', id: 'image', label: 'Image / video' },
+  { href: '/harnesses/compare', id: 'compare', label: 'Compare' },
+  { href: '/harnesses/quiz', id: 'quiz', label: 'Pick one' },
+  { href: '/harnesses/connect', id: 'connect', label: 'Connect' },
+];
+---
+
+<nav class="harnesses-nav" aria-label="Harnesses">
+  <p class="kicker"><a href="/stacks">Stacks</a> / Harnesses</p>
+  <ul>
+    {items.map((item) => (
+      <li>
+        <a href={item.href} aria-current={item.id === current ? 'page' : undefined}>{item.label}</a>
+      </li>
+    ))}
+  </ul>
+</nav>
+
+<style>
+  .harnesses-nav ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+    margin: 0.75rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .harnesses-nav a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.95rem;
+  }
+  .harnesses-nav a[aria-current='page'] {
+    color: var(--ink);
+    text-decoration: underline;
+    text-decoration-color: color-mix(in srgb, var(--accent) 50%, transparent);
+    text-underline-offset: 0.2em;
+  }
+</style>

@@ -1,0 +1,589 @@
+# Cited harness / frontend catalog. Do not invent features or versions.
+# Exact llama.cpp / Strata flags for our rig stay TODO until stacks.yaml is filled.
+as_of: 2026-10-12
+llama_server_port: 8080
+strata_port: 8083
+vllm_port: 8000
+model_placeholder: qwen
+api_key_placeholder: local-not-a-secret
+
+notes:
+  - curl /v1/models on the inference server before you debug the harness.
+  - Do not let a harness download a CUDA llama.cpp "for convenience" on Radeon.
+  - Exact command lines for our daily driver and Flash stack stay TODO in stacks.yaml.
+
+harnesses:
+  - id: hermes
+    title: Hermes Agent
+    category: agent
+    vendor: Nous Research
+    used_on_our_rig: true
+    summary: >-
+      amdai’s daily agent on local-desktop. Tools, optional multi-agent loop, and
+      provider failover above a local OpenAI-compatible server.
+    what_for: Dedicated agent CLI/desktop on top of local Qwen — not a dozen chat bridges.
+    homepage: https://hermes-agent.nousresearch.com/
+    docs: https://hermes-agent.nousresearch.com/docs/integrations/providers
+    local_docs: https://hermes-agent.nousresearch.com/docs/user-guide/local-models
+    repo: https://github.com/NousResearch/hermes-agent
+    version_note: Docs checked 2026-10-12. Do not invent a release pin.
+    llama_base: http://127.0.0.1:8080/v1
+    strata_base: http://127.0.0.1:8083/v1
+    model_field: model.default (must match llama-server --alias / GET /v1/models id)
+    api_key: optional on custom; OPENAI_API_KEY still honored only for provider openai-api
+    tools: Native agent tools. Docs require at least 64K context or Hermes rejects the model at startup.
+    long_context: Set llama-server -c ≥ 65536 (our daily driver is 262144 — flags TODO).
+    rocm: >-
+      Attach to a server you already run. Managed local_runtime.backend auto
+      prefers Vulkan on AMD; hip is an explicit choice. Do not take the
+      CUDA managed download on a Radeon.
+    hybrid: Yes — Nous Portal / cloud providers plus a custom local endpoint; failover is documented.
+    local_ok: true
+    hybrid_ok: true
+    surfaces: [cli, desktop]
+    snippet: hermes-yaml
+    sources:
+      - title: Hermes — LLM and model providers
+        href: https://hermes-agent.nousresearch.com/docs/integrations/providers
+      - title: Hermes — local models (own llama-server, detect_ports, backends)
+        href: https://hermes-agent.nousresearch.com/docs/user-guide/local-models
+
+  - id: openhands
+    title: OpenHands
+    category: agent
+    vendor: All Hands
+    summary: Software-agent UI/CLI that talks to any LiteLLM-supported model, including local OpenAI-compatible servers.
+    what_for: Multi-step coding agent in a browser or CLI. Needs a capable instruction-tuned model.
+    homepage: https://docs.openhands.dev/
+    docs: https://docs.openhands.dev/openhands/usage/llms/local-llms
+    repo: https://github.com/All-Hands-AI/OpenHands
+    version_note: Docs checked 2026-10-12. Docs currently name Qwen3.6-35B-A3B as a local starting point.
+    llama_base: http://127.0.0.1:8080/v1
+    strata_base: http://127.0.0.1:8083/v1
+    model_field: "openai/<id from GET /v1/models> (the openai/ prefix is required)"
+    api_key: LLM_API_KEY=local-llm (any placeholder if the server has no auth)
+    tools: Agent tools via the OpenHands stack. Local models must be strong at tool-following — not documented as guaranteed on every GGUF.
+    long_context: Not documented as a first-class slider; size -c on the server.
+    rocm: OpenHands does not ship ROCm. You own llama-server / vLLM. Docker setups must use host.docker.internal, not 127.0.0.1.
+    hybrid: Yes — cloud LiteLLM providers plus local LLM_BASE_URL.
+    local_ok: true
+    hybrid_ok: true
+    surfaces: [web, cli]
+    snippet: openhands-env
+    sources:
+      - title: OpenHands — run local LLMs
+        href: https://docs.openhands.dev/openhands/usage/llms/local-llms
+      - title: OpenHands — LLM overview
+        href: https://docs.openhands.dev/openhands/usage/llms/llms
+
+  - id: aider
+    title: Aider
+    category: agent
+    vendor: Aider-AI
+    summary: Terminal pair-programmer that edits a git repo via any OpenAI-compatible endpoint.
+    what_for: CLI coding in the repo you already have. Prefix the model with openai/.
+    homepage: https://aider.chat/
+    docs: https://aider.chat/docs/llms/openai-compat.html
+    repo: https://github.com/Aider-AI/aider
+    version_note: Docs checked 2026-10-12.
+    llama_base: http://127.0.0.1:8080/v1
+    strata_base: http://127.0.0.1:8083/v1
+    model_field: openai/<model-id>
+    api_key: Required and must be non-empty even locally (OPENAI_API_KEY / --openai-api-key).
+    tools: Repo edits and git. Unknown models warn until you add .aider.model.settings.yml metadata.
+    long_context: Set max_input_tokens in model settings if aider does not know the model. Server -c still wins.
+    rocm: Aider never talks to the GPU. If it downloads nothing and still fails, curl /v1 first.
+    hybrid: Yes — cloud OpenAI-shaped providers or local base URL.
+    local_ok: true
+    hybrid_ok: true
+    surfaces: [cli]
+    snippet: aider-cli
+    sources:
+      - title: Aider — OpenAI compatible APIs
+        href: https://aider.chat/docs/llms/openai-compat.html
+      - title: Aider — advanced model settings
+        href: https://aider.chat/docs/config/adv-model-settings.html
+
+  - id: cline
+    title: Cline
+    category: agent
+    vendor: Cline
+    summary: VS Code / CLI coding agent with a first-class OpenAI Compatible provider.
+    what_for: In-editor agent that asks before it runs commands.
+    homepage: https://cline.bot/
+    docs: https://docs.cline.bot/provider-config/openai-compatible
+    repo: https://github.com/cline/cline
+    version_note: Docs checked 2026-10-12.
+    llama_base: http://127.0.0.1:8080/v1
+    strata_base: http://127.0.0.1:8083/v1
+    model_field: Model ID matching GET /v1/models (do not append /chat/completions to the base URL)
+    api_key: Any non-empty string for a local server
+    tools: File and terminal tools. Quality depends on the model’s tool-calling, not on Cline inventing a protocol.
+    long_context: Not documented as a Cline-side window; set -c on llama-server / Strata.
+    rocm: No Radeon runtime. Ollama/LM Studio helpers are documented; llama-server uses OpenAI Compatible.
+    hybrid: Yes — cloud providers plus OpenAI Compatible.
+    local_ok: true
+    hybrid_ok: true
+    surfaces: [ide, cli]
+    snippet: cline-fields
+    sources:
+      - title: Cline — OpenAI Compatible
+        href: https://docs.cline.bot/provider-config/openai-compatible
+
+  - id: roo
+    title: Roo Code
+    category: agent
+    vendor: Roo Code
+    summary: VS Code coding agent. Local path is documented for Ollama and LM Studio; OpenAI Compatible is also documented.
+    what_for: In-editor agent with filesystem and terminal tools.
+    homepage: https://docs.roocode.com/
+    docs: https://docs.roocode.com/faq
+    repo: https://github.com/RooCodeInc/Roo-Code
+    version_note: Docs checked 2026-10-12. Local-models page documents Ollama and LM Studio specifically.
+    llama_base: http://127.0.0.1:8080/v1
+    strata_base: http://127.0.0.1:8083/v1
+    model_field: Model ID on the OpenAI Compatible provider
+    api_key: Required field in the OpenAI Compatible UI
+    tools: Native OpenAI tool calling is required — Roo’s docs say a model without it cannot be used.
+    long_context: Not documented as a Roo-side control.
+    rocm: Same as Cline — you own the server. Official Ollama ROCm is rocky on gfx1201; prefer llama-server Vulkan.
+    hybrid: Yes — many cloud providers plus local Ollama / LM Studio / OpenAI Compatible.
+    local_ok: true
+    hybrid_ok: true
+    surfaces: [ide]
+    snippet: roo-fields
+    sources:
+      - title: Roo Code — OpenAI Compatible
+        href: https://roocodeinc.github.io/Roo-Code/providers/openai-compatible
+      - title: Roo Code — FAQ (local models)
+        href: https://docs.roocode.com/faq
+
+  - id: continue
+    title: Continue
+    category: agent
+    vendor: Continue
+    summary: IDE extension with config.yaml providers, including openai (any /v1) and a native llama.cpp provider.
+    what_for: Chat, edit, apply, and autocomplete roles in the editor.
+    homepage: https://docs.continue.dev/
+    docs: https://docs.continue.dev/customize/model-providers/top-level/openai
+    llama_docs: https://docs.continue.dev/customize/model-providers/more/llamacpp
+    repo: https://github.com/continuedev/continue
+    version_note: Docs checked 2026-10-12.
+    llama_base: http://127.0.0.1:8080/v1
+    strata_base: http://127.0.0.1:8083/v1
+    model_field: models[].model
+    api_key: apiKey in config.yaml (placeholder is fine locally)
+    tools: >-
+      Set capabilities: [tool_use] on the openai provider when the server
+      actually implements tools. Otherwise not documented as working.
+    long_context: Server -c. Community reports of leftover context with llama-server — reset / --context-shift is a server concern.
+    rocm: Continue does not build HIP. Point apiBase at your Vulkan or HIP llama-server.
+    hybrid: Yes — mix cloud and local models by role in one config.yaml.
+    local_ok: true
+    hybrid_ok: true
+    surfaces: [ide]
+    snippet: continue-yaml
+    sources:
+      - title: Continue — OpenAI / compatible apiBase
+        href: https://docs.continue.dev/customize/model-providers/top-level/openai
+      - title: Continue — llama.cpp provider
+        href: https://docs.continue.dev/customize/model-providers/more/llamacpp
+
+  - id: opencode
+    title: OpenCode
+    category: agent
+    vendor: OpenCode / SST
+    summary: Terminal coding agent with first-party llama-server provider docs.
+    what_for: CLI agent that you point at llama-server via opencode.json.
+    homepage: https://opencode.ai/
+    docs: https://dev.opencode.ai/docs/providers/
+    repo: https://github.com/sst/opencode
+    version_note: Docs checked 2026-10-12.
+    llama_base: http://127.0.0.1:8080/v1
+    strata_base: http://127.0.0.1:8083/v1
+    model_field: provider.<id>.models keys (must match the server id)
+    api_key: options.apiKey if the server requires one
+    tools: Agent tools in the product. Use @ai-sdk/openai-compatible for /v1/chat/completions; @ai-sdk/openai if the model uses /v1/responses.
+    long_context: Per-model limit.context / limit.output in opencode.json. Example in their docs uses 128000 — set yours to what the server actually has.
+    rocm: No GPU stack. Same /v1 you already curled.
+    hybrid: Yes — cloud providers plus custom OpenAI-compatible.
+    local_ok: true
+    hybrid_ok: true
+    surfaces: [cli]
+    snippet: opencode-json
+    sources:
+      - title: OpenCode — providers (llama.cpp example)
+        href: https://dev.opencode.ai/docs/providers/
+
+  - id: goose
+    title: Goose
+    category: agent
+    vendor: Block
+    summary: Local-first agent that can use the OpenAI provider against a custom host, or a declarative JSON provider.
+    what_for: Desktop/CLI agent with recipes. Local path is OpenAI-compatible or Ollama.
+    homepage: https://block.github.io/goose/
+    docs: https://block-goose.mintlify.app/api/providers/openai
+    repo: https://github.com/block/goose
+    version_note: Docs checked 2026-10-12.
+    llama_base: http://127.0.0.1:8080
+    strata_base: http://127.0.0.1:8083
+    model_field: GOOSE_MODEL
+    api_key: OPENAI_API_KEY=not-needed
+    tools: Tool calling depends on the model. Ollama path documents a toolshim; OpenAI-compatible is native function-calling if the server implements it.
+    long_context: context_limit on a declarative provider. Not documented as auto-detected from llama-server.
+    rocm: Goose does not install ROCm. OPENAI_HOST is the host root; OPENAI_BASE_PATH defaults to v1/chat/completions.
+    hybrid: Yes — 25+ cloud providers plus custom OpenAI host.
+    local_ok: true
+    hybrid_ok: true
+    surfaces: [cli, desktop]
+    snippet: goose-env
+    sources:
+      - title: Goose — OpenAI provider (local host example)
+        href: https://block-goose.mintlify.app/api/providers/openai
+      - title: Goose — custom / declarative providers
+        href: https://block-goose.mintlify.app/api/providers/custom
+
+  - id: claude-code
+    title: Claude Code
+    category: agent
+    vendor: Anthropic
+    summary: Official CLI speaks the Anthropic Messages API via ANTHROPIC_BASE_URL — not a drop-in OpenAI /v1/chat/completions client.
+    what_for: >-
+      Anthropic’s coding CLI. Local attach is “where supported”: a gateway or a
+      server that implements /v1/messages.
+    homepage: https://code.claude.com/docs/en/llm-gateway-connect
+    docs: https://code.claude.com/docs/en/llm-gateway-connect
+    version_note: Official docs describe LLM gateways. llama.cpp documents an Anthropic-compatible /v1/messages. We have not measured this pair on the rig.
+    llama_base: http://127.0.0.1:8080
+    strata_base: http://127.0.0.1:8083
+    model_field: claude --model <server id> (not documented against our alias)
+    api_key: ANTHROPIC_AUTH_TOKEN or ANTHROPIC_API_KEY — any non-empty value if the server ignores it
+    tools: Official tool use is Anthropic-shaped. Whether llama.cpp’s Messages endpoint maps every Claude Code tool is not documented here.
+    long_context: Not documented for a local llama-server pairing.
+    rocm: Claude Code never talks HIP. Do not set ANTHROPIC_BASE_URL to …/v1 — the client appends /v1/messages itself.
+    hybrid: Default is Anthropic cloud. Local is a gateway override.
+    local_ok: true
+    hybrid_ok: true
+    surfaces: [cli]
+    snippet: claude-code-env
+    sources:
+      - title: Claude Code — connect to an LLM gateway
+        href: https://code.claude.com/docs/en/llm-gateway-connect
+      - title: llama.cpp server — Anthropic-compatible /v1/messages
+        href: https://llama.app/docs/api.md
+
+  - id: codex-cli
+    title: Codex CLI
+    category: agent
+    vendor: OpenAI
+    summary: Official Codex CLI reads ~/.codex/config.toml. Custom providers use wire_api = responses (the only supported value in the current config reference).
+    what_for: OpenAI’s coding CLI against a local server that implements POST /v1/responses.
+    homepage: https://developers.openai.com/codex/config-reference
+    docs: https://developers.openai.com/codex/config-reference
+    repo: https://github.com/openai/codex
+    version_note: Config reference checked 2026-10-12. Built-in ids openai, ollama, lmstudio are reserved.
+    llama_base: http://127.0.0.1:8080/v1
+    strata_base: http://127.0.0.1:8083/v1
+    model_field: model = plus model_provider = your custom id
+    api_key: env_key on the provider table (placeholder env is fine locally)
+    tools: Codex agent tools. Completeness against llama.cpp’s Responses translator is not documented here.
+    long_context: Not documented as a Codex-side window for custom providers.
+    rocm: None. llama.cpp documents /v1/responses; LM Studio documents Codex because they implement Responses. Strata Responses support is not documented — treat as TODO.
+    hybrid: Default is OpenAI / ChatGPT login. Local is a custom model_providers row.
+    local_ok: true
+    hybrid_ok: true
+    surfaces: [cli]
+    snippet: codex-toml
+    sources:
+      - title: Codex — configuration reference
+        href: https://developers.openai.com/codex/config-reference
+      - title: Codex — advanced configuration
+        href: https://developers.openai.com/codex/config-advanced
+      - title: llama.cpp — POST /v1/responses
+        href: https://llama.app/docs/api.md
+      - title: LM Studio — Codex via Responses
+        href: https://lmstudio.ai/docs/developer/openai-compat
+
+  - id: cursor
+    title: Cursor
+    category: agent
+    vendor: Cursor
+    summary: IDE with an Override OpenAI Base URL (BYOK). Not documented as a first-class localhost / air-gapped attach.
+    what_for: Chat/Agent against a custom OpenAI-compatible URL where the override is supported.
+    homepage: https://cursor.com/
+    docs: https://forum.cursor.com/t/how-can-i-use-a-local-llm-on-my-desktop-ai-computer/152419
+    version_note: Staff replies on the Cursor forum (checked 2026-10-12). There is no official localhost recipe in Cursor docs we could open.
+    llama_base: https://your-reachable-host/v1
+    strata_base: https://your-reachable-host/v1
+    model_field: Custom model id (forwarded as-is for OpenAI-family names)
+    api_key: Non-empty OpenAI API Key field (required to save the override)
+    tools: Agent/Ask may send Responses-shaped payloads. Tab/autocomplete stay on Cursor’s own models per staff.
+    long_context: Not documented for a custom endpoint.
+    rocm: >-
+      Cursor does not run on the R9700. Forum staff say requests still go
+      through Cursor’s backend, so http://127.0.0.1 often fails. A public HTTPS
+      URL is the workaround they describe — that is not air-gapped.
+    hybrid: Default is Cursor-hosted models. Override is hybrid-shaped even when the weights are local.
+    local_ok: false
+    hybrid_ok: true
+    surfaces: [ide]
+    snippet: cursor-override
+    sources:
+      - title: Cursor forum — local LLM / architectural limit
+        href: https://forum.cursor.com/t/how-can-i-use-a-local-llm-on-my-desktop-ai-computer/152419
+      - title: Cursor forum — custom OpenAI-compatible API
+        href: https://forum.cursor.com/t/how-to-use-a-custom-openai-compatible-api-in-cursor-setup-limits-and-tips/171497
+
+  - id: openclaw
+    title: OpenClaw
+    category: agent
+    vendor: OpenClaw Foundation
+    summary: Self-hosted multi-channel gateway (Discord, Telegram, Slack, …) in front of a swappable /v1.
+    what_for: Message the home agent from apps you already use. Already documented on this site.
+    homepage: https://docs.openclaw.ai/
+    docs: https://docs.openclaw.ai/
+    repo: https://github.com/openclaw/openclaw
+    version_note: Existing site notes; docs checked previously. Re-verify attach keys on the live docs.
+    llama_base: http://127.0.0.1:8080/v1
+    strata_base: http://127.0.0.1:8083/v1
+    model_field: provider model id in ~/.openclaw/openclaw.json
+    api_key: VLLM_API_KEY even if dummy for vLLM; llama.cpp optional
+    tools: Channel tools + whatever the model supports. Follow OpenClaw allowlists — do not bind to the internet for a first test.
+    long_context: Server -c.
+    rocm: You own the server. Official Ollama ROCm is not the gfx1201 daily driver.
+    hybrid: Models are swappable; cloud and local providers are the point of the gateway.
+    local_ok: true
+    hybrid_ok: true
+    surfaces: [cli, web]
+    snippet: openclaw-json
+    sources:
+      - title: OpenClaw docs
+        href: https://docs.openclaw.ai/
+      - title: OpenClaw GitHub
+        href: https://github.com/openclaw/openclaw
+
+  - id: open-webui
+    title: Open WebUI
+    category: chat
+    vendor: Open WebUI
+    summary: Self-hosted chat UI. Connects to Ollama and any OpenAI-compatible server.
+    what_for: Browser chat, optional RAG, multi-user. Not an agent loop unless you add tools.
+    homepage: https://docs.openwebui.com/
+    docs: https://docs.openwebui.com/alternatives/lm-studio/
+    repo: https://github.com/open-webui/open-webui
+    version_note: Docs checked 2026-10-12.
+    llama_base: http://127.0.0.1:8080/v1
+    strata_base: http://127.0.0.1:8083/v1
+    model_field: Models appear after you add the connection
+    api_key: Connection field; placeholder if unused
+    tools: Optional tools / pipelines. Default is chat.
+    long_context: Server -c. UI does not replace the server window.
+    rocm: If Open WebUI runs in Docker, use host.docker.internal. Do not point it at a CUDA Ollama blob.
+    hybrid: Yes — local + cloud connections in one UI.
+    local_ok: true
+    hybrid_ok: true
+    surfaces: [web]
+    snippet: open-webui-fields
+    sources:
+      - title: Open WebUI — LM Studio / OpenAI-compatible connection
+        href: https://docs.openwebui.com/alternatives/lm-studio/
+
+  - id: lm-studio
+    title: LM Studio
+    category: chat
+    vendor: LM Studio
+    summary: Desktop app that both chats and serves an OpenAI-compatible API on port 1234 by default.
+    what_for: Local chat plus a /v1 others can call. Can also be the client against llama-server — check current UI; server mode is the documented OpenAI path.
+    homepage: https://lmstudio.ai/
+    docs: https://lmstudio.ai/docs/developer/openai-compat
+    version_note: Docs checked 2026-10-12. Default documented port is 1234, not 8080.
+    llama_base: http://127.0.0.1:8080/v1
+    strata_base: http://127.0.0.1:8083/v1
+    model_field: Model identifier shown in LM Studio (not gpt-4o-mini)
+    api_key: Optional unless you enabled auth
+    tools: Documented OpenAI endpoints include chat completions and Responses. Tool-calling completeness on Radeon GGUF is not documented.
+    long_context: Set in the app / server. Do not assume 262K.
+    rocm: LM Studio’s own engine on Linux/Windows AMD is a separate stack from this site’s llama.cpp Vulkan daily driver. Prefer pointing clients at our llama-server if the in-app AMD path is unclear.
+    hybrid: Desktop is local-first; remote OpenAI-shaped APIs exist in the product — details not fully documented here.
+    local_ok: true
+    hybrid_ok: true
+    surfaces: [desktop]
+    snippet: lmstudio-url
+    sources:
+      - title: LM Studio — OpenAI compatibility
+        href: https://lmstudio.ai/docs/developer/openai-compat
+
+  - id: jan
+    title: Jan
+    category: chat
+    vendor: Menlo / Jan
+    summary: >-
+      Desktop local-AI app with a built-in OpenAI-compatible server (default
+      127.0.0.1:1337/v1), powered by llama.cpp.
+    what_for: Local chat and a loopback /v1 for other tools.
+    homepage: https://jan.ai/
+    docs: https://github.com/janhq/jan/blob/dev/docs/src/pages/docs/desktop/api-server.mdx
+    repo: https://github.com/janhq/jan
+    version_note: Desktop API-server docs in the Jan repo, checked 2026-10-12.
+    llama_base: http://127.0.0.1:8080/v1
+    strata_base: http://127.0.0.1:8083/v1
+    model_field: Model id as listed in Jan
+    api_key: Optional in Settings; required in Authorization if you set one
+    tools: Chat completions documented. Images/audio endpoints listed as not yet supported on the API-server page we opened.
+    long_context: Set in Jan. Pointing Jan *at* our llama-server (instead of its built-in engine) is not documented on that page — treat as check the current UI.
+    rocm: >-
+      Jan’s llama.cpp backend on AMD is not documented as HIP gfx1201 on that
+      page. Safer: run our Vulkan llama-server and use Jan only as a client if
+      the UI allows a remote OpenAI URL.
+    hybrid: Remote API connections are mentioned in third-party writeups; official hybrid steps are not copied here.
+    local_ok: true
+    hybrid_ok: true
+    surfaces: [desktop]
+    snippet: jan-url
+    sources:
+      - title: Jan — local API server (repo docs)
+        href: https://github.com/janhq/jan/blob/dev/docs/src/pages/docs/desktop/api-server.mdx
+
+  - id: sillytavern
+    title: SillyTavern
+    category: chat
+    vendor: SillyTavern
+    summary: Character-oriented frontend. Connects to many local backends including llama.cpp and OpenAI-compatible Chat Completion.
+    what_for: Roleplay / character chat, not a coding agent.
+    homepage: https://docs.sillytavern.app/
+    docs: https://github.com/SillyTavern/SillyTavern-Docs/blob/main/Usage/API_Connections/index.md
+    repo: https://github.com/SillyTavern/SillyTavern
+    version_note: API connections index checked 2026-10-12.
+    llama_base: http://127.0.0.1:8080/v1
+    strata_base: http://127.0.0.1:8083/v1
+    model_field: Whatever the Chat Completion source lists after Connect
+    api_key: If the server requires one
+    tools: Optional function calling in Chat Completion sources — not documented as our daily-driver path.
+    long_context: Server -c. SillyTavern prompt plumbing can eat context; not measured here.
+    rocm: Frontend only. Keep llama-server on Vulkan.
+    hybrid: Cloud OpenAI-shaped sources plus local.
+    local_ok: true
+    hybrid_ok: true
+    surfaces: [web]
+    snippet: sillytavern-fields
+    sources:
+      - title: SillyTavern — API connections
+        href: https://github.com/SillyTavern/SillyTavern-Docs/blob/main/Usage/API_Connections/index.md
+
+  - id: librechat
+    title: LibreChat
+    category: chat
+    vendor: LibreChat
+    summary: Multi-provider chat UI. Custom OpenAI-compatible endpoints live in librechat.yaml.
+    what_for: One UI for local /v1 and cloud providers.
+    homepage: https://www.librechat.ai/
+    docs: https://www.librechat.ai/docs/quick_start/custom_endpoints
+    repo: https://github.com/danny-avila/LibreChat
+    version_note: Docs checked 2026-10-12.
+    llama_base: http://127.0.0.1:8080/v1
+    strata_base: http://127.0.0.1:8083/v1
+    model_field: endpoints.custom[].models.default
+    api_key: >-
+      '${LLAMA_KEY}' in yaml, real value in .env (placeholder locally)
+    tools: Product has tools/agents; whether they fire against llama-server tool-calling is not documented here.
+    long_context: Server -c.
+    rocm: Docker needs host.docker.internal. You own the GPU process.
+    hybrid: Yes — that is the product.
+    local_ok: true
+    hybrid_ok: true
+    surfaces: [web]
+    snippet: librechat-yaml
+    sources:
+      - title: LibreChat — custom endpoints
+        href: https://www.librechat.ai/docs/quick_start/custom_endpoints
+      - title: LibreChat — custom endpoint object
+        href: https://www.librechat.ai/docs/configuration/librechat_yaml/object_structure/custom_endpoint
+
+  - id: anythingllm
+    title: AnythingLLM
+    category: chat
+    vendor: Mintplex Labs
+    summary: Desktop/Docker workspace chat with a generic OpenAI provider and a dedicated LM Studio provider.
+    what_for: Docs + chat with a local /v1. RAG-shaped, not a coding agent.
+    homepage: https://anythingllm.com/
+    docs: https://github.com/Mintplex-Labs/anything-llm/blob/master/docker/.env.example
+    repo: https://github.com/Mintplex-Labs/anything-llm
+    version_note: docker/.env.example checked 2026-10-12.
+    llama_base: http://127.0.0.1:8080/v1
+    strata_base: http://127.0.0.1:8083/v1
+    model_field: GENERIC_OPEN_AI_MODEL_PREF / LMSTUDIO_MODEL_PREF
+    api_key: GENERIC_OPEN_AI_API_KEY=sk-123abc
+    tools: Workspace features; agent completeness against llama-server is not documented.
+    long_context: GENERIC_OPEN_AI_MODEL_TOKEN_LIMIT in env — set it to the server window, do not invent 262K.
+    rocm: >-
+      Use generic-openai against our llama-server. LOCAL_AI_BASE_PATH in the
+      example is :8080/v1 for LocalAI, which happens to match llama-server’s
+      default port.
+    hybrid: Multiple LLM_PROVIDER values including cloud OpenAI.
+    local_ok: true
+    hybrid_ok: true
+    surfaces: [desktop, web]
+    snippet: anythingllm-env
+    sources:
+      - title: AnythingLLM — docker .env.example
+        href: https://github.com/Mintplex-Labs/anything-llm/blob/master/docker/.env.example
+
+  - id: llamacpp-webui
+    title: llama.cpp built-in web UI
+    category: chat
+    vendor: ggml-org
+    summary: >-
+      llama-server serves a web UI on the same host:port as /v1 (default
+      127.0.0.1:8080). Disable with --no-webui.
+    what_for: Fastest chat on the daily-driver server. No extra process.
+    homepage: https://github.com/ggml-org/llama.cpp
+    docs: https://github.com/ggml-org/llama.cpp/blob/HEAD/tools/server/README.md
+    repo: https://github.com/ggml-org/llama.cpp
+    version_note: tools/server/README.md checked 2026-10-12.
+    llama_base: http://127.0.0.1:8080
+    strata_base: not documented — Strata is a different server; do not assume it ships this UI
+    model_field: The loaded GGUF (optional --alias)
+    api_key: --api-key if you set one
+    tools: Server README documents function calling / --tools. Completeness on Qwen3.6 is not measured here.
+    long_context: -c on the server. Our daily driver context is 262144; exact flags TODO.
+    rocm: This *is* the Vulkan (or HIP) process. Bind 127.0.0.1 unless you mean to share.
+    hybrid: No. This UI talks to the process you launched.
+    local_ok: true
+    hybrid_ok: false
+    surfaces: [web]
+    snippet: llamacpp-webui
+    sources:
+      - title: llama.cpp — tools/server README
+        href: https://github.com/ggml-org/llama.cpp/blob/HEAD/tools/server/README.md
+      - title: llama serve — built-in web UI
+        href: https://llama.app/docs/serve
+
+  - id: comfyui
+    title: ComfyUI on ROCm
+    category: image
+    vendor: comfyanonymous / AMD docs
+    summary: >-
+      Node-based image (and video) graphs. AMD documents install on ROCm-enabled
+      PyTorch, then python ComfyUI/main.py → http://127.0.0.1:8188.
+    what_for: Diffusion workflows on the Radeon — not an LLM harness. Does not speak llama-server /v1.
+    homepage: https://github.com/comfyanonymous/ComfyUI
+    docs: https://rocm.docs.amd.com/projects/ai-ecosystem/en/latest/inference/comfy.html
+    repo: https://github.com/comfyanonymous/ComfyUI
+    version_note: AMD AI-ecosystem ComfyUI page checked 2026-10-12. Instinct-oriented Docker pages exist too — do not treat those tags as R9700 pins.
+    llama_base: n/a
+    strata_base: n/a
+    model_field: n/a (diffusion checkpoints, not GGUF chat)
+    api_key: n/a
+    tools: Node graph, not LLM tools.
+    long_context: n/a
+    rocm: Needs a ROCm PyTorch wheel that lists your gfx. This is HIP/ROCm, not llama.cpp Vulkan. Consumer gfx1201 support follows the PyTorch wheel, not this site’s daily-driver GGUF path.
+    hybrid: Optional cloud nodes exist in the ecosystem; AMD’s page is local ROCm PyTorch.
+    local_ok: true
+    hybrid_ok: false
+    surfaces: [web]
+    snippet: comfyui
+    sources:
+      - title: AMD — ComfyUI image generation on ROCm
+        href: https://rocm.docs.amd.com/projects/ai-ecosystem/en/latest/inference/comfy.html
+      - title: ComfyUI repository
+        href: https://github.com/comfyanonymous/ComfyUI

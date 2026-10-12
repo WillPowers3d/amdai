@@ -1,0 +1,146 @@
+---
+import Base from '../../layouts/Base.astro';
+import HarnessesNav from '../../components/harnesses/HarnessesNav.astro';
+import {
+  CATEGORY_COPY,
+  harnessPath,
+  hybridLabel,
+  parseQuizAnswers,
+  pickHarness,
+  quizHasAnswers,
+  surfaceLabel,
+} from '../../lib/harnesses';
+import { harnesses } from '../../lib/harnesses-data';
+
+const answers = parseQuizAnswers(Astro.url.search);
+const submitted = quizHasAnswers(answers);
+const pick = submitted ? pickHarness(answers, harnesses()) : null;
+---
+
+<Base
+  title="Pick a harness"
+  description="Mini quiz: agent, chat, or image? Local or hybrid? CLI, IDE, desktop, or web? Reading the result needs no JavaScript."
+>
+  <main id="main" class="mx-auto max-w-3xl px-4 py-10 sm:px-6">
+    <HarnessesNav current="quiz" />
+    <h1 class="display mt-6 text-4xl sm:text-5xl">Pick a harness</h1>
+    <p class="mt-4 text-lg leading-relaxed text-muted">
+      Four questions. Submit is a GET — you can share the URL. The pick is a starting point from
+      cited docs, not a bench.
+    </p>
+
+    <form class="mt-8 space-y-6" method="get" action="/harnesses/quiz">
+      <fieldset class="rounded-2xl border border-line bg-raised/40 p-5">
+        <legend class="px-1 font-medium">What are you plugging in?</legend>
+        <div class="mt-3 grid gap-2 sm:grid-cols-3">
+          <label class="cursor-pointer rounded-2xl border border-line bg-canvas/70 p-4 has-[:checked]:border-accent has-[:checked]:ring-2 has-[:checked]:ring-accent">
+            <input class="sr-only" type="radio" name="job" value="agent" checked={answers.job === 'agent' || !answers.job} />
+            <span class="block font-medium">Agent</span>
+            <span class="mt-1 block text-sm text-muted">Tools, edits, a loop.</span>
+          </label>
+          <label class="cursor-pointer rounded-2xl border border-line bg-canvas/70 p-4 has-[:checked]:border-accent has-[:checked]:ring-2 has-[:checked]:ring-accent">
+            <input class="sr-only" type="radio" name="job" value="chat" checked={answers.job === 'chat'} />
+            <span class="block font-medium">Chat UI</span>
+            <span class="mt-1 block text-sm text-muted">Talk to the same /v1.</span>
+          </label>
+          <label class="cursor-pointer rounded-2xl border border-line bg-canvas/70 p-4 has-[:checked]:border-accent has-[:checked]:ring-2 has-[:checked]:ring-accent">
+            <input class="sr-only" type="radio" name="job" value="image" checked={answers.job === 'image'} />
+            <span class="block font-medium">Image / video</span>
+            <span class="mt-1 block text-sm text-muted">Diffusion, not GGUF chat.</span>
+          </label>
+        </div>
+      </fieldset>
+
+      <fieldset class="rounded-2xl border border-line bg-raised/40 p-5">
+        <legend class="px-1 font-medium">Local or hybrid?</legend>
+        <p class="mt-1 text-sm text-muted">
+          Same toggle as the <a class="underline decoration-accent/40" href="/calculator">calculator</a>.
+          No cloud prices.
+        </p>
+        <div class="mt-3 grid gap-2 sm:grid-cols-2">
+          <label class="cursor-pointer rounded-2xl border border-line bg-canvas/70 p-4 has-[:checked]:border-accent has-[:checked]:ring-2 has-[:checked]:ring-accent">
+            <input class="sr-only" type="radio" name="usage" value="local" checked={answers.usage !== 'hybrid'} />
+            <span class="block font-medium">Fully local</span>
+            <span class="mt-1 block text-sm text-muted">127.0.0.1 does the whole job.</span>
+          </label>
+          <label class="cursor-pointer rounded-2xl border border-line bg-canvas/70 p-4 has-[:checked]:border-accent has-[:checked]:ring-2 has-[:checked]:ring-accent">
+            <input class="sr-only" type="radio" name="usage" value="hybrid" checked={answers.usage === 'hybrid'} />
+            <span class="block font-medium">Hybrid</span>
+            <span class="mt-1 block text-sm text-muted">Local plus a cloud model for heavy turns.</span>
+          </label>
+        </div>
+      </fieldset>
+
+      <fieldset class="rounded-2xl border border-line bg-raised/40 p-5">
+        <legend class="px-1 font-medium">Where do you want to sit?</legend>
+        <div class="mt-3 grid gap-2 sm:grid-cols-2">
+          {([
+            ['cli', 'CLI', 'Terminal agent or pair-programmer.'],
+            ['ide', 'IDE', 'VS Code / editor extension.'],
+            ['desktop', 'Desktop', 'A local app window.'],
+            ['web', 'Web', 'Browser UI or gateway.'],
+          ] as const).map(([value, label, hint]) => (
+            <label class="cursor-pointer rounded-2xl border border-line bg-canvas/70 p-4 has-[:checked]:border-accent has-[:checked]:ring-2 has-[:checked]:ring-accent">
+              <input class="sr-only" type="radio" name="surface" value={value} checked={answers.surface === value || (!answers.surface && value === 'cli')} />
+              <span class="block font-medium">{label}</span>
+              <span class="mt-1 block text-sm text-muted">{hint}</span>
+            </label>
+          ))}
+        </div>
+      </fieldset>
+
+      <fieldset class="rounded-2xl border border-line bg-raised/40 p-5">
+        <legend class="px-1 font-medium">Do you need tools?</legend>
+        <div class="mt-3 grid gap-2 sm:grid-cols-2">
+          <label class="cursor-pointer rounded-2xl border border-line bg-canvas/70 p-4 has-[:checked]:border-accent has-[:checked]:ring-2 has-[:checked]:ring-accent">
+            <input class="sr-only" type="radio" name="tools" value="yes" checked={answers.tools !== 'no'} />
+            <span class="block font-medium">Yes — files, terminal, channels</span>
+          </label>
+          <label class="cursor-pointer rounded-2xl border border-line bg-canvas/70 p-4 has-[:checked]:border-accent has-[:checked]:ring-2 has-[:checked]:ring-accent">
+            <input class="sr-only" type="radio" name="tools" value="no" checked={answers.tools === 'no'} />
+            <span class="block font-medium">No — chat is enough</span>
+          </label>
+        </div>
+      </fieldset>
+
+      <div class="flex flex-wrap gap-3">
+        <button class="btn-primary" type="submit">Show a pick</button>
+        {submitted && <a class="btn-ghost" href="/harnesses/quiz">Clear</a>}
+      </div>
+    </form>
+
+    {pick && (
+      <section class="card mt-10 p-5" aria-labelledby="pick-heading">
+        <p class="kicker">Starting point</p>
+        <h2 id="pick-heading" class="mt-1 text-2xl tracking-tight">
+          <a class="underline decoration-accent/40" href={harnessPath(pick.primary.id)}>{pick.primary.title}</a>
+        </h2>
+        <p class="mt-3 flex flex-wrap gap-2 text-xs">
+          <span class="badge">{CATEGORY_COPY[pick.primary.category].label}</span>
+          {pick.primary.used_on_our_rig && <span class="badge-tested">Used on our rig</span>}
+          <span class="badge">{hybridLabel(pick.primary)}</span>
+          {pick.primary.surfaces.map((surface) => <span class="badge">{surfaceLabel(surface)}</span>)}
+        </p>
+        <p class="mt-4 text-muted">{pick.reason}</p>
+        <p class="mt-3 text-sm text-muted">{pick.usageNote}</p>
+        <p class="mt-5 flex flex-wrap gap-3 text-sm">
+          <a class="btn-primary" href={harnessPath(pick.primary.id)}>Open {pick.primary.title}</a>
+          <a class="btn-secondary" href="/harnesses/connect">Connect to :8080 / :8083</a>
+        </p>
+        {pick.alternates.length > 0 && (
+          <div class="mt-6">
+            <h3 class="text-lg tracking-tight">Also consider</h3>
+            <ul class="mt-2 space-y-2 text-sm">
+              {pick.alternates.map((row) => (
+                <li>
+                  <a class="underline decoration-accent/40" href={harnessPath(row.id)}>{row.title}</a>
+                  <span class="text-muted"> — {row.what_for}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </section>
+    )}
+  </main>
+</Base>
