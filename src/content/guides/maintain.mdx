@@ -2,7 +2,7 @@
 title: Weekday scrape
 kicker: Maintain
 description: How a human or a local Hermes loop refreshes the living YAML without inventing benches.
-updated: 2026-09-22
+updated: 2026-10-12
 order: 10
 ---
 
@@ -13,7 +13,9 @@ The home card is **data**, not a layout. Weekday refresh means editing three fil
 | File | Feeds | Touch when |
 | --- | --- | --- |
 | `src/data/what-works.yaml` | Home “what works this week” | Any pin, headline, or honesty line |
-| `src/data/qwen-recommendations.yaml` | Software / start / serve-Qwen picks | Reliability vs capability vs optional |
+| `src/data/qwen-recommendations.yaml` | Software / start / serve-Qwen picks | Daily driver vs fast agent vs optional |
+| `src/data/stacks.yaml` | `/stacks` cards | Command-line TODOs, measured tok/s |
+| `src/data/gpus.yaml` | GPU directory | Matrix or VRAM listing changes |
 | `src/data/abliterated.yaml` | Abliterated table | New notable local variant, or a dead repo |
 
 `as_of` is a calendar day. Bump it when you actually re-read sources. Leave it alone if nothing material changed.
@@ -25,7 +27,7 @@ Add `src/content/updates/YYYY-MM-DD-….mdx` when a **line** changes (new Core S
 1. [ROCm 10.0 release notes](https://rocm.docs.amd.com/en/docs-10.0.0/about/release-notes.html) and the live [GPU matrix](https://rocm.docs.amd.com/projects/install-on-linux/en/latest/reference/system-requirements.html)
 2. [AMD vLLM on ROCm](https://rocm.docs.amd.com/projects/ai-ecosystem/en/latest/inference/vllm.html) — supported combo vs community extras
 3. [vLLM releases](https://github.com/vllm-project/vllm/releases) and the ROCm extra-index / `-rocm` image tags
-4. Official Qwen cards the weekly YAML actually names (do not restore withdrawn 7B / 8B defaults on this pass)
+4. Official Qwen cards the weekly YAML actually names (Qwen3.6-35B-A3B and Qwen 3.8 Flash this pass)
 5. Optional: publisher cards for abliterated rows you already list — educational, not the default
 
 If you do not find a **newer stable** ROCm vLLM or Core SDK, keep the last `as_of`. Do not bump the date for theater.
@@ -36,7 +38,8 @@ If you do not find a **newer stable** ROCm vLLM or Core SDK, keep the last `as_o
 - **Headline** is one sentence: what stayed true, what is news.
 - **No invented benches, prices, or download stats.** Publisher file sizes are fine if you say they are publisher figures.
 - **Unknowns stay unknown.** “Unstated on the card” is a valid cell.
-- **Companion profiles** stay aligned with the YAML. `qwen-reliable` is a slot; there is no `qwen3-8b-try` on this pass. See [Radeon Stack Lab](/stack-lab).
+- **Companion profiles** stay aligned with the YAML. `qwen-reliable` = daily driver; `qwen-fast-agent` = Flash. See [Radeon Stack Lab](/stack-lab).
+- **Never invent measured VRAM, RAM, or flags.** Leave `<!-- TODO: exact command line / measured VRAM from rig owner -->` until the box owner fills them.
 - Copy that says “this week” on FAQ / start must match the YAML, or it must point at the home card.
 
 ## Optional: Hermes as the overnight research loop

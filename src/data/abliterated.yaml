@@ -1,27 +1,37 @@
 # Notable public Qwen abliterated / uncensored variants people run locally.
 # No download stats. VRAM is approximate from published GGUF sizes. Verify the model card.
 # Educational local open-weight context only — not a default recommend.
-as_of: 2026-09-22
+as_of: 2026-10-12
 
 search_patterns:
   - abliterated
   - uncensored
   - heretic
   - refusal ablation
+  - Huihui-Qwen3.8-27B-abliterated
   - Huihui-Qwen
-  - Huihui-Qwen3.5-9B-abliterated
   - Qwen3.8-27B-Uncensored
 
 rows:
   - name: Official instruct (control)
-    repo: Being reworked — no named control this pass
+    repo: Qwen/Qwen3.6-35B-A3B — the daily-driver control, not an abliterated card
     method: none (stock refusals)
-    size: Being reworked
-    quant_example: Being reworked
-    vram_32gb: Being reworked
-    backends: llama.cpp, vLLM — confirm the weekly card
-    reliability: Use a stock official instruct as baseline once a default is named again
-    notes: Previous 7B control withdrawn. Do not treat a withdrawn card as current.
+    size: 35B total / 3B active
+    quant_example: Unsloth UD-Q5_K_XL (publisher listing 26.6 GB)
+    vram_32gb: Daily driver on one R9700 at 262K f16 KV. See /stacks.
+    backends: llama.cpp Vulkan first. Not an abliterated experiment.
+    reliability: This is the reliability baseline. Prove it before you swap weights.
+    notes: Abliterated rows below are educational. They are not a replacement for this control.
+
+  - name: Huihui Qwen3.8-27B abliterated
+    repo: huihui-ai/Huihui-Qwen3.8-27B-abliterated
+    method: Classic abliteration (remove-refusals-with-transformers style)
+    size: 27B
+    quant_example: Community GGUF / Ollama tags exist — confirm the exact file
+    vram_32gb: Same 27B envelope if you pick a 4–5 bit quant. Confirm the file. Floor is still Q4.
+    backends: llama.cpp first. vLLM unstated here.
+    reliability: Primary educational row this pass. Publisher frames it as experimental. Some builds keep early layers unablated. Test think-loops.
+    notes: MTP/vision "not modified" on the card. Pin a revision. Not a Stack Lab profile. Not the daily driver.
 
   - name: Huihui Qwen3.5-9B abliterated
     repo: huihui-ai/Huihui-Qwen3.5-9B-abliterated
@@ -30,28 +40,18 @@ rows:
     quant_example: llama.cpp GGUF via mradermacher/Huihui-Qwen3.5-9B-abliterated-GGUF (Q4_K_M ~5.7 GB, Q8_0 ~9.6 GB, f16 ~18.0 GB on that card)
     vram_32gb: 4–8 bit GGUF should leave room on 32 GB if the file matches. f16 is tighter once cache grows. Confirm.
     backends: llama.cpp first. Publisher Ollama tag `huihui_ai/qwen3.5-abliterated:9b` — prefer HIP/Vulkan llama.cpp on gfx1201. vLLM unstated.
-    reliability: Optional newer educational row. Unverified on R9700. Qwen3.5 may need a current llama.cpp.
-    notes: Publisher research / experimental framing. mmproj files exist on the GGUF card — confirm whether you want vision tensors. Pin a revision. No download stats.
+    reliability: Smaller educational row. Unverified on our rig. Qwen3.5 may need a current llama.cpp.
+    notes: Publisher research / experimental framing. mmproj files exist on the GGUF card — confirm whether you want vision tensors.
 
   - name: orcarouter Qwen3.8-27B Uncensored
     repo: orcarouter/Qwen3.8-27B-Uncensored (GGUF sibling published)
     method: Abliteration / refusal-direction work on Qwen3.8-27B
     size: 27B
     quant_example: Q4_K_M ~16.8 GB (publisher figure)
-    vram_32gb: Fits with context room if the card is honest
+    vram_32gb: Fits with context room if the card is honest. Still never below Q4.
     backends: llama.cpp first; check card for vLLM
     reliability: Community writeups exist; still verify MTP/vision claims on your build
     notes: Some GGUF repos are gated. Read the license and safety note on the card.
-
-  - name: Huihui Qwen3.8-27B abliterated
-    repo: huihui-ai/Huihui-Qwen3.8-27B-abliterated
-    method: Classic abliteration (remove-refusals-with-transformers style)
-    size: 27B
-    quant_example: Community GGUF / Ollama tags exist — confirm the exact file
-    vram_32gb: Same 27B envelope if you pick a 4–5 bit quant
-    backends: llama.cpp / Ollama commonly; vLLM unstated here
-    reliability: Older method; some builds keep early layers unablated. Test think-loops.
-    notes: Publisher frames it as experimental. MTP/vision "not modified" on the card.
 
   - name: Heretic-style uncensored GGUF (e.g. JonathanColetti)
     repo: JonathanColetti/Qwen3.8-27B-Uncensored-GGUF
@@ -79,3 +79,4 @@ trust:
   - A jailbreak baked into the chat template is not the same as weight-level ablation
   - If `config.json` advertises MTP or vision, confirm the tensors are actually in the file
   - Educational local open-weight context only. These are not the reliability default.
+  - Never start here. Prove Qwen3.6-35B-A3B on llama.cpp first.

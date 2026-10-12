@@ -1,0 +1,59 @@
+---
+import { gpuDirectory } from '../lib/status';
+
+const families = [...new Set(gpuDirectory.cards.map((card) => card.family))];
+---
+
+<div class="not-prose my-8">
+  <p class="text-sm text-muted">
+    Snapshot {gpuDirectory.as_of}. Support follows AMD’s
+    <a class="text-accent-ink underline decoration-accent/40 underline-offset-2" href={gpuDirectory.matrix}>ROCm 10.1.0 matrix</a>
+    and the
+    <a class="text-accent-ink underline decoration-accent/40 underline-offset-2" href={gpuDirectory.linux_reqs}>Linux system requirements</a>
+    page. Re-check those links before you install.
+  </p>
+  <ul class="mt-3 list-disc space-y-1 pl-5 text-sm text-muted">
+    {gpuDirectory.notes.map((note) => <li>{note}</li>)}
+  </ul>
+
+  {families.map((family) => (
+    <section class="mt-8">
+      <h3 class="font-serif text-2xl">{family}</h3>
+      <div class="mt-3 overflow-x-auto rounded-xl border border-line">
+        <table class="min-w-[52rem] w-full text-left text-sm">
+          <thead class="bg-raised text-[0.72rem] uppercase tracking-[0.08em] text-faint">
+            <tr>
+              <th class="px-3 py-2 font-medium">Card</th>
+              <th class="px-3 py-2 font-medium">Arch</th>
+              <th class="px-3 py-2 font-medium">gfx</th>
+              <th class="px-3 py-2 font-medium">VRAM</th>
+              <th class="px-3 py-2 font-medium">ROCm</th>
+              <th class="px-3 py-2 font-medium">HSA_OVERRIDE</th>
+            </tr>
+          </thead>
+          <tbody>
+            {gpuDirectory.cards.filter((card) => card.family === family).map((card) => (
+              <tr class="border-t border-line align-top">
+                <td class="px-3 py-2.5 font-medium">{card.name}</td>
+                <td class="px-3 py-2.5 text-muted">{card.arch}</td>
+                <td class="px-3 py-2.5"><code class="rounded bg-accent-soft px-1.5 py-0.5 font-mono text-[0.8em] text-accent-ink">{card.gfx}</code></td>
+                <td class="px-3 py-2.5 tabular-nums">{card.vram_gb == null ? 'Confirm SKU' : `${card.vram_gb} GB`}</td>
+                <td class="px-3 py-2.5">
+                  <span class:list={['font-medium', card.support === 'official' ? 'text-ok' : 'text-warn']}>
+                    {card.support === 'official' ? 'Official' : 'Unofficial'}
+                  </span>
+                  <span class="mt-1 block text-xs text-muted">{card.rocm_note}</span>
+                </td>
+                <td class="px-3 py-2.5 text-xs text-muted">{card.hsa_override}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  ))}
+  <p class="mt-4 text-xs text-faint">
+    Driven by <code class="font-mono">src/data/gpus.yaml</code>. VRAM is the AMD-published SKU size, not a bench.
+    Open the <a class="underline decoration-accent/40 underline-offset-2" href="/calculator">Quant + Hardware Calculator</a> to estimate a fit.
+  </p>
+</div>

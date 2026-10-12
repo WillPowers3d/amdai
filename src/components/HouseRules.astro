@@ -1,0 +1,16 @@
+---
+import { qwenGuide } from '../lib/status';
+---
+
+<section class="not-prose my-6 rounded-2xl border border-line bg-raised/60 p-5" aria-labelledby="house-rules-heading">
+  <p class="font-mono text-[0.68rem] uppercase tracking-[0.16em] text-accent">Consumer house rules</p>
+  <h2 id="house-rules-heading" class="mt-2 font-serif text-2xl">How we pick a stack</h2>
+  <ol class="mt-4 grid gap-2 sm:grid-cols-2">
+    {(qwenGuide.house_rules ?? []).map((rule, i) => (
+      <li class="flex gap-3 rounded-xl border border-line bg-canvas/60 p-3 text-sm leading-relaxed">
+        <span class="font-mono text-[0.68rem] text-faint">{String(i + 1).padStart(2, '0')}</span>
+        <span>{rule}</span>
+      </li>
+    ))}
+  </ol>
+</section>

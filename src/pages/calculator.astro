@@ -1,0 +1,451 @@
+---
+import Base from '../layouts/Base.astro';
+import { CONTEXT_PRESETS, GPU_PRESETS, KV_TYPES, MODEL_PRESETS, QUANTS } from '../lib/calculator';
+---
+
+<Base
+  title="Quant + Hardware Calculator"
+  description="Estimate GGUF weights, KV cache, and whether a Qwen stack fits a Radeon card — Q4 and above only. Client-side, shareable URL."
+>
+  <main id="main" class="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-12">
+    <p class="font-mono text-[0.72rem] uppercase tracking-[0.18em] text-accent">Estimate · not a bench</p>
+    <div class="mt-3 flex flex-wrap items-end justify-between gap-4">
+      <div class="max-w-2xl">
+        <h1 class="font-serif text-4xl tracking-tight text-balance sm:text-5xl">Quant + Hardware Calculator</h1>
+        <p class="mt-4 text-lg leading-relaxed text-muted">
+          Pick a Radeon, a Qwen (or custom params), a quant at Q4 or above, and a context length.
+          Every total is an <strong class="font-medium text-ink">estimate</strong> — publisher file listings when we have them, otherwise bits-per-weight math. Not measured VRAM from our rig.
+        </p>
+      </div>
+      <div class="flex flex-wrap gap-2">
+        <a class="rounded-full border border-line bg-raised px-4 py-2 text-sm" href="/stacks">Recommended stacks</a>
+        <a class="rounded-full border border-line bg-raised px-4 py-2 text-sm" href="/gpus">GPU directory</a>
+      </div>
+    </div>
+
+    <div id="tested-badge" hidden class="mt-6 inline-flex max-w-3xl items-start gap-2 rounded-full border border-ok/40 bg-ok/10 px-4 py-2 text-sm text-ok">
+      <span aria-hidden="true">●</span>
+      <span data-tested-label></span>
+    </div>
+
+    <div class="mt-8 flex flex-wrap gap-2" role="group" aria-label="Stack presets">
+      <button type="button" class="preset-btn rounded-full bg-accent px-4 py-2 text-sm text-white" data-stack="daily">Daily driver</button>
+      <button type="button" class="preset-btn rounded-full border border-line bg-raised px-4 py-2 text-sm" data-stack="fast">Fast agent</button>
+      <button type="button" class="preset-btn rounded-full border border-line bg-raised px-4 py-2 text-sm" data-stack="custom">Custom</button>
+    </div>
+
+    <form id="calc-form" class="mt-8 grid gap-8 lg:grid-cols-[minmax(0,1.05fr)_minmax(20rem,0.95fr)]">
+      <div class="space-y-6">
+        <fieldset class="rounded-2xl border border-line bg-raised/40 p-4 sm:p-5">
+          <legend class="px-1 font-serif text-2xl">GPU</legend>
+          <div class="mt-3 grid gap-3 sm:grid-cols-2">
+            <label class="block text-sm">
+              <span class="text-faint">Preset</span>
+              <select name="gpuId" class="field mt-1">
+                {GPU_PRESETS.map((gpu) => (
+                  <option value={gpu.id}>
+                    {gpu.name}{gpu.vramGb ? ` · ${gpu.vramGb} GB` : ''}{gpu.gfx ? ` · ${gpu.gfx}` : ''}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label class="block text-sm">
+              <span class="text-faint">VRAM per GPU (GB)</span>
+              <input class="field mt-1" type="number" name="vramGb" min="1" max="192" step="1" inputmode="decimal" />
+            </label>
+            <label class="block text-sm">
+              <span class="text-faint">GPU count</span>
+              <input class="field mt-1" type="number" name="gpuCount" min="1" max="4" step="1" inputmode="numeric" />
+            </label>
+            <label class="block text-sm">
+              <span class="text-faint">System RAM (GB)</span>
+              <input class="field mt-1" type="number" name="ramGb" min="0" max="1024" step="1" inputmode="decimal" />
+            </label>
+          </div>
+          <label class="mt-4 flex items-start gap-3 text-sm">
+            <input class="mt-1 h-4 w-4 accent-[var(--accent)]" type="checkbox" name="split" />
+            <span>
+              Split the model across these cards
+              <span class="mt-0.5 block text-faint">Off = one full copy must fit a single GPU (house rule: one LLM per GPU). On = weights + KV divided by GPU count.</span>
+            </span>
+          </label>
+        </fieldset>
+
+        <fieldset class="rounded-2xl border border-line bg-raised/40 p-4 sm:p-5">
+          <legend class="px-1 font-serif text-2xl">Model</legend>
+          <label class="mt-3 block text-sm">
+            <span class="text-faint">Preset</span>
+            <select name="modelId" class="field mt-1">
+              {MODEL_PRESETS.map((model) => <option value={model.id}>{model.name}</option>)}
+            </select>
+          </label>
+          <p class="mt-2 text-xs leading-relaxed text-faint" data-arch-note></p>
+          <div class="mt-4 grid gap-3 sm:grid-cols-2">
+            <label class="block text-sm">
+              <span class="text-faint">Total params (billions)</span>
+              <input class="field mt-1" type="number" name="totalParamsB" min="0" step="0.1" inputmode="decimal" />
+            </label>
+            <label class="block text-sm">
+              <span class="text-faint">Active params (MoE, billions)</span>
+              <input class="field mt-1" type="number" name="activeParamsB" min="0" step="0.1" inputmode="decimal" />
+            </label>
+            <label class="block text-sm">
+              <span class="text-faint">Hidden layers</span>
+              <input class="field mt-1" type="number" name="layers" min="0" step="1" inputmode="numeric" />
+            </label>
+            <label class="block text-sm">
+              <span class="text-faint">KV-growing layers</span>
+              <input class="field mt-1" type="number" name="kvLayers" min="0" step="1" inputmode="numeric" />
+            </label>
+            <label class="block text-sm">
+              <span class="text-faint">KV heads</span>
+              <input class="field mt-1" type="number" name="kvHeads" min="0" step="1" inputmode="numeric" />
+            </label>
+            <label class="block text-sm">
+              <span class="text-faint">Head dim</span>
+              <input class="field mt-1" type="number" name="headDim" min="0" step="1" inputmode="numeric" />
+            </label>
+          </div>
+        </fieldset>
+
+        <fieldset class="rounded-2xl border border-line bg-raised/40 p-4 sm:p-5">
+          <legend class="px-1 font-serif text-2xl">Quant, context, KV</legend>
+          <p class="mt-2 text-xs text-faint">Nothing below Q4 is listed. Q1 / Q2 / Q3 / IQ1–IQ3 stay off this page, including draft heads.</p>
+          <label class="mt-3 block text-sm">
+            <span class="text-faint">Quant</span>
+            <select name="quantId" class="field mt-1">
+              {QUANTS.map((quant) => <option value={quant.id}>{quant.label} · {quant.bpw} bpw</option>)}
+            </select>
+          </label>
+          <label class="mt-3 block text-sm">
+            <span class="text-faint">Context length</span>
+            <input class="mt-2 w-full accent-[var(--accent)]" type="range" name="context" min="4096" max="262144" step="1024" />
+            <div class="mt-2 flex flex-wrap items-center gap-2">
+              <input class="field w-32" type="number" name="contextNum" min="4096" max="262144" step="1024" inputmode="numeric" />
+              <span class="text-xs text-faint" data-ctx-label></span>
+            </div>
+            <div class="mt-2 flex flex-wrap gap-1.5">
+              {CONTEXT_PRESETS.map((ctx) => (
+                <button type="button" class="rounded-full border border-line px-2.5 py-1 text-xs text-muted" data-ctx={ctx}>
+                  {ctx >= 1024 ? `${ctx / 1024}K` : ctx}
+                </button>
+              ))}
+            </div>
+          </label>
+          <label class="mt-3 block text-sm">
+            <span class="text-faint">KV cache type</span>
+            <select name="kvId" class="field mt-1">
+              {KV_TYPES.map((kv) => <option value={kv.id}>{kv.label} · {kv.bytes} B/elem</option>)}
+            </select>
+          </label>
+          <label class="mt-3 block text-sm">
+            <span class="text-faint">Framework overhead (GiB, estimate)</span>
+            <input class="field mt-1" type="number" name="overheadGiB" min="0" max="16" step="0.1" inputmode="decimal" />
+            <span class="mt-1 block text-xs text-faint">Default 1.0 GiB is a labeled estimate, not measured on our rig. Edit it.</span>
+          </label>
+        </fieldset>
+      </div>
+
+      <div class="space-y-4 lg:sticky lg:top-24 lg:self-start">
+        <section class="rounded-2xl border border-line bg-raised p-5" aria-live="polite">
+          <p class="font-mono text-[0.68rem] uppercase tracking-[0.16em] text-accent">Estimate</p>
+          <p class="mt-2 font-serif text-3xl" data-verdict-label>Fits in VRAM (estimate)</p>
+          <p class="mt-1 text-sm text-faint">Per GPU vs the VRAM you entered. Totals in GiB (1024³).</p>
+          <dl class="mt-5 grid grid-cols-2 gap-3 text-sm">
+            <div class="rounded-xl border border-line bg-canvas/50 p-3">
+              <dt class="text-faint">Weights</dt>
+              <dd class="mt-1 font-serif text-2xl tabular-nums" data-out="weights">—</dd>
+            </div>
+            <div class="rounded-xl border border-line bg-canvas/50 p-3">
+              <dt class="text-faint">KV cache</dt>
+              <dd class="mt-1 font-serif text-2xl tabular-nums" data-out="kv">—</dd>
+            </div>
+            <div class="rounded-xl border border-line bg-canvas/50 p-3">
+              <dt class="text-faint">Overhead</dt>
+              <dd class="mt-1 font-serif text-2xl tabular-nums" data-out="overhead">—</dd>
+            </div>
+            <div class="rounded-xl border border-line bg-canvas/50 p-3">
+              <dt class="text-faint">Total</dt>
+              <dd class="mt-1 font-serif text-2xl tabular-nums" data-out="total">—</dd>
+            </div>
+          </dl>
+          <p class="mt-3 text-xs leading-relaxed text-faint" data-weights-note></p>
+          <p class="mt-1 text-xs leading-relaxed text-faint" data-kv-note></p>
+          <div class="mt-5 rounded-xl border border-line p-3 text-sm">
+            <p><span class="text-faint">Per GPU · </span><span class="tabular-nums" data-out="perGpu">—</span> GiB vs <span class="tabular-nums" data-out="vram">—</span> GB</p>
+            <p class="mt-1"><span class="text-faint">Available VRAM · </span><span class="tabular-nums" data-out="available">—</span> GB</p>
+            <p class="mt-1"><span class="text-faint">Overflow to system RAM · </span><span class="tabular-nums" data-out="overflow">—</span> GiB</p>
+            <p class="mt-2 hidden text-sm text-warn" data-offload-warn>
+              Offloading weights or KV into system RAM is slow. Prefer a smaller context, a higher-efficiency quant at or above Q4, or another GPU — do not drop below Q4.
+            </p>
+          </div>
+          <div class="mt-5 grid gap-3 text-sm sm:grid-cols-2">
+            <div>
+              <p class="text-faint">Best quant that fits fully in VRAM</p>
+              <p class="mt-1 font-medium" data-out="bestQuant">—</p>
+            </div>
+            <div>
+              <p class="text-faint">Max context at that quant</p>
+              <p class="mt-1 font-medium tabular-nums" data-out="maxBest">—</p>
+            </div>
+            <div class="sm:col-span-2">
+              <p class="text-faint">Max context at the selected quant</p>
+              <p class="mt-1 font-medium tabular-nums" data-out="maxSelected">—</p>
+            </div>
+          </div>
+        </section>
+
+        <div class="flex flex-wrap gap-2">
+          <button type="button" id="share-btn" class="rounded-full bg-accent px-4 py-2 text-sm text-white">Copy share link</button>
+          <span class="self-center text-sm text-ok" data-share-status hidden>Copied</span>
+        </div>
+        <p class="break-all font-mono text-[0.7rem] text-faint" data-share-url></p>
+
+        <details class="rounded-2xl border border-line bg-raised/40 p-4 text-sm leading-relaxed">
+          <summary class="cursor-pointer font-medium">Formulas (transparent, labeled estimates)</summary>
+          <div class="mt-3 space-y-3 text-muted">
+            <p>
+              <code class="text-ink">weights_GiB ≈ total_params × 10⁹ × bpw / 8 / 1024³</code>
+              Active experts do not shrink the file — they only change compute. When a Hugging Face listing exists for the selected Unsloth file, that decimal-GB size is converted to GiB instead of the formula.
+            </p>
+            <p>
+              <code class="text-ink">KV_GiB ≈ 2 × kv_layers × kv_heads × head_dim × context × bytes_kv / 1024³</code>
+              The 2 is K and V. Hybrid Qwen cards only grow KV on full-attention layers; that is why the daily-driver preset uses 10 KV layers, not 40.
+            </p>
+            <p>
+              <code class="text-ink">total ≈ weights + KV + overhead</code>
+              Split on: available VRAM = GPUs × VRAM, and the total is divided across cards. Split off: one GPU must hold the whole total.
+            </p>
+            <p>
+              Verdict: <strong class="text-ink">fits</strong> under 90% of one GPU’s VRAM, <strong class="text-ink">tight</strong> from 90% to 100%, <strong class="text-ink">no</strong> above 100% (overflow is the extra that would land in system RAM).
+            </p>
+            <p>
+              Bits-per-weight are nominal llama.cpp-family values (Q4_K_M 4.85, Q5_K_M 5.69, Q6_K 6.56, Q8_0 8.5, BF16 16). UD-Q5_K_XL / UD-Q6_K_XL share the Q5 / Q6 buckets unless a publisher file size is used.
+            </p>
+          </div>
+        </details>
+      </div>
+    </form>
+  </main>
+</Base>
+
+<script>
+  import {
+    DEFAULT_INPUT,
+    applyGpuPreset,
+    applyModelPreset,
+    compute,
+    formatCtx,
+    formatGiB,
+    gpuById,
+    inputToQuery,
+    modelById,
+    queryToInput,
+    type CalcInput,
+    type GpuId,
+    type KvId,
+    type ModelId,
+    type QuantId,
+  } from '../lib/calculator';
+
+  const form = document.getElementById('calc-form') as HTMLFormElement;
+  const shareBtn = document.getElementById('share-btn');
+  let input: CalcInput = queryToInput(window.location.search);
+
+  const field = <T extends HTMLElement>(name: string) => form.querySelector(`[name="${name}"]`) as T;
+
+  function writeForm() {
+    field<HTMLSelectElement>('gpuId').value = input.gpuId;
+    field<HTMLInputElement>('vramGb').value = String(input.vramGb);
+    field<HTMLInputElement>('gpuCount').value = String(input.gpuCount);
+    field<HTMLInputElement>('ramGb').value = String(input.ramGb);
+    field<HTMLInputElement>('split').checked = input.split;
+    field<HTMLSelectElement>('modelId').value = input.modelId;
+    field<HTMLInputElement>('totalParamsB').value = String(input.totalParamsB);
+    field<HTMLInputElement>('activeParamsB').value = String(input.activeParamsB);
+    field<HTMLInputElement>('layers').value = String(input.layers);
+    field<HTMLInputElement>('kvLayers').value = String(input.kvLayers);
+    field<HTMLInputElement>('kvHeads').value = String(input.kvHeads);
+    field<HTMLInputElement>('headDim').value = String(input.headDim);
+    field<HTMLSelectElement>('quantId').value = input.quantId;
+    field<HTMLInputElement>('context').value = String(input.context);
+    field<HTMLInputElement>('contextNum').value = String(input.context);
+    field<HTMLSelectElement>('kvId').value = input.kvId;
+    field<HTMLInputElement>('overheadGiB').value = String(input.overheadGiB);
+    const note = document.querySelector('[data-arch-note]');
+    if (note) note.textContent = modelById(input.modelId).archNote;
+  }
+
+  function readForm(): CalcInput {
+    const gpuId = field<HTMLSelectElement>('gpuId').value as GpuId;
+    return {
+      gpuId,
+      vramGb: Number(field<HTMLInputElement>('vramGb').value),
+      gpuCount: Number(field<HTMLInputElement>('gpuCount').value),
+      split: field<HTMLInputElement>('split').checked,
+      ramGb: Number(field<HTMLInputElement>('ramGb').value),
+      modelId: field<HTMLSelectElement>('modelId').value as ModelId,
+      totalParamsB: Number(field<HTMLInputElement>('totalParamsB').value),
+      activeParamsB: Number(field<HTMLInputElement>('activeParamsB').value),
+      layers: Number(field<HTMLInputElement>('layers').value),
+      kvLayers: Number(field<HTMLInputElement>('kvLayers').value),
+      kvHeads: Number(field<HTMLInputElement>('kvHeads').value),
+      headDim: Number(field<HTMLInputElement>('headDim').value),
+      quantId: field<HTMLSelectElement>('quantId').value as QuantId,
+      context: Number(field<HTMLInputElement>('contextNum').value || field<HTMLInputElement>('context').value),
+      kvId: field<HTMLSelectElement>('kvId').value as KvId,
+      overheadGiB: Number(field<HTMLInputElement>('overheadGiB').value),
+    };
+  }
+
+  function setText(selector: string, value: string) {
+    document.querySelectorAll(selector).forEach((el) => {
+      el.textContent = value;
+    });
+  }
+
+  function render() {
+    const result = compute(input);
+    const verdictEl = document.querySelector('[data-verdict-label]');
+    if (verdictEl) {
+      verdictEl.textContent = `${result.verdictLabel} · estimate`;
+      verdictEl.classList.toggle('text-ok', result.verdict === 'fits');
+      verdictEl.classList.toggle('text-warn', result.verdict !== 'fits');
+    }
+    setText('[data-out="weights"]', `${formatGiB(result.weightsGiB)} GiB`);
+    setText('[data-out="kv"]', result.kvReady ? `${formatGiB(result.kvGiB)} GiB` : '—');
+    setText('[data-out="overhead"]', `${formatGiB(result.overheadGiB)} GiB`);
+    setText('[data-out="total"]', `${formatGiB(result.totalGiB)} GiB`);
+    setText('[data-out="perGpu"]', formatGiB(result.perGpuGiB));
+    setText('[data-out="vram"]', String(input.vramGb));
+    setText('[data-out="available"]', String(result.availableVramGb));
+    setText('[data-out="overflow"]', formatGiB(result.overflowGiB));
+    setText('[data-weights-note]', result.weightsNote);
+    setText('[data-kv-note]', result.kvNote);
+    setText('[data-out="bestQuant"]', result.bestQuant ? `${result.bestQuant.label} (estimate)` : 'No Q4+ quant fits fully in VRAM');
+    setText('[data-out="maxBest"]', result.maxContextAtBest != null ? `${formatCtx(result.maxContextAtBest)} (estimate)` : '—');
+    setText('[data-out="maxSelected"]', result.maxContextAtSelected != null ? `${formatCtx(result.maxContextAtSelected)} (estimate)` : '—');
+    setText('[data-ctx-label]', `${formatCtx(input.context)} tokens`);
+
+    const warn = document.querySelector('[data-offload-warn]');
+    warn?.classList.toggle('hidden', result.overflowGiB <= 0.05);
+
+    const badge = document.getElementById('tested-badge');
+    const badgeLabel = document.querySelector('[data-tested-label]');
+    if (badge && badgeLabel) {
+      if (result.tested) {
+        badge.hidden = false;
+        badgeLabel.textContent = result.tested.label;
+      } else {
+        badge.hidden = true;
+      }
+    }
+
+    const qs = inputToQuery(input);
+    const url = `${window.location.pathname}?${qs}`;
+    setText('[data-share-url]', url);
+    history.replaceState(null, '', url);
+
+    document.querySelectorAll<HTMLButtonElement>('[data-stack]').forEach((btn) => {
+      const on =
+        (btn.dataset.stack === 'daily' && input.modelId === 'qwen36' && input.quantId === 'q5_k_m' && input.gpuId === 'r9700') ||
+        (btn.dataset.stack === 'fast' && input.modelId === 'flash' && input.quantId === 'q6_k') ||
+        (btn.dataset.stack === 'custom' && input.modelId === 'custom');
+      btn.classList.toggle('bg-accent', on);
+      btn.classList.toggle('text-white', on);
+      btn.classList.toggle('border-line', !on);
+      btn.classList.toggle('bg-raised', !on);
+    });
+  }
+
+  function sync(next: CalcInput) {
+    input = next;
+    if (input.gpuId !== 'custom') {
+      const gpu = gpuById(input.gpuId);
+      if (input.vramGb !== gpu.vramGb && field<HTMLSelectElement>('gpuId').value === input.gpuId) {
+        /* keep custom VRAM if the user edited it on a named GPU */
+      }
+    }
+    writeForm();
+    render();
+  }
+
+  form.addEventListener('input', (event) => {
+    const target = event.target as HTMLInputElement;
+    if (target.name === 'gpuId') {
+      sync(applyGpuPreset(target.value as GpuId, readForm()));
+      return;
+    }
+    if (target.name === 'modelId') {
+      sync(applyModelPreset(target.value as ModelId, readForm()));
+      return;
+    }
+    if (target.name === 'context') {
+      field<HTMLInputElement>('contextNum').value = target.value;
+    }
+    if (target.name === 'contextNum') {
+      field<HTMLInputElement>('context').value = target.value;
+    }
+    input = readForm();
+    writeForm();
+    render();
+  });
+
+  form.addEventListener('change', () => {
+    input = readForm();
+    render();
+  });
+
+  document.querySelectorAll<HTMLButtonElement>('[data-ctx]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      input = { ...readForm(), context: Number(btn.dataset.ctx) };
+      writeForm();
+      render();
+    });
+  });
+
+  document.querySelectorAll<HTMLButtonElement>('[data-stack]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const stack = btn.dataset.stack;
+      if (stack === 'daily') {
+        sync(applyModelPreset('qwen36', applyGpuPreset('r9700', { ...DEFAULT_INPUT, gpuCount: 1, split: false, ramGb: 256 })));
+      } else if (stack === 'fast') {
+        sync(applyModelPreset('flash', applyGpuPreset('r9700', { ...DEFAULT_INPUT, gpuCount: 1, split: false, ramGb: 256 })));
+      } else {
+        sync(applyModelPreset('custom', { ...DEFAULT_INPUT, modelId: 'custom' }));
+      }
+    });
+  });
+
+  shareBtn?.addEventListener('click', async () => {
+    const url = `${window.location.origin}${window.location.pathname}?${inputToQuery(input)}`;
+    try {
+      await navigator.clipboard.writeText(url);
+    } catch {
+      window.prompt('Copy this share link', url);
+    }
+    const status = document.querySelector('[data-share-status]');
+    if (status) {
+      status.removeAttribute('hidden');
+      window.setTimeout(() => status.setAttribute('hidden', ''), 2000);
+    }
+  });
+
+  if (!window.location.search) {
+    input = { ...DEFAULT_INPUT };
+  }
+  writeForm();
+  render();
+</script>
+
+<style>
+  .field {
+    width: 100%;
+    border-radius: 0.75rem;
+    border: 1px solid var(--line);
+    background: var(--canvas);
+    color: var(--ink);
+    padding: 0.65rem 0.8rem;
+    min-height: 2.75rem;
+  }
+</style>

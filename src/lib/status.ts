@@ -2,6 +2,8 @@ import { parse } from 'yaml';
 import whatWorksRaw from '../data/what-works.yaml?raw';
 import qwenRaw from '../data/qwen-recommendations.yaml?raw';
 import abliteratedRaw from '../data/abliterated.yaml?raw';
+import stacksRaw from '../data/stacks.yaml?raw';
+import gpusRaw from '../data/gpus.yaml?raw';
 
 export type WhatWorks = {
   as_of: string;
@@ -46,6 +48,7 @@ export type QwenRec = {
 export type QwenGuide = {
   as_of: string;
   principle: string;
+  house_rules?: string[];
   recommendations: QwenRec[];
   smoke_tests: { name: string; prompt: string; expect: string }[];
 };
@@ -69,6 +72,56 @@ export type AbliteratedGuide = {
   trust: string[];
 };
 
+export type StackCard = {
+  id: string;
+  title: string;
+  kicker: string;
+  model: string;
+  official: string;
+  gguf: string;
+  quant: string;
+  engine: string;
+  gpus: string;
+  context: string | number;
+  kv: string;
+  offload: string;
+  measured: string[];
+  why: string;
+  calculator: string;
+};
+
+export type StacksGuide = {
+  as_of: string;
+  test_rig: {
+    label: string;
+    gpus: string;
+    ram: string;
+    note: string;
+  };
+  stacks: StackCard[];
+};
+
+export type GpuCard = {
+  name: string;
+  family: string;
+  arch: string;
+  gfx: string;
+  vram_gb: number | null;
+  support: 'official' | 'unofficial';
+  rocm_note: string;
+  hsa_override: string;
+};
+
+export type GpuDirectory = {
+  as_of: string;
+  matrix: string;
+  linux_reqs: string;
+  notes: string[];
+  cards: GpuCard[];
+};
+
 export const whatWorks = parse(whatWorksRaw) as WhatWorks;
 export const qwenGuide = parse(qwenRaw) as QwenGuide;
 export const abliteratedGuide = parse(abliteratedRaw) as AbliteratedGuide;
+export const stacksGuide = parse(stacksRaw) as StacksGuide;
+export const gpuDirectory = parse(gpusRaw) as GpuDirectory;

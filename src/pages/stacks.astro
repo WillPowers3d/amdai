@@ -1,0 +1,74 @@
+---
+import Base from '../layouts/Base.astro';
+import HouseRules from '../components/HouseRules.astro';
+import { stacksGuide } from '../lib/status';
+---
+
+<Base
+  title="Recommended stacks"
+  description="Daily driver and fast-agent Qwen stacks from our R9700 test rig — llama.cpp first, Strata when you need speed."
+>
+  <main id="main" class="mx-auto max-w-6xl px-4 py-10 sm:px-6">
+    <p class="font-mono text-[0.72rem] uppercase tracking-[0.18em] text-accent">From the test rig · snapshot {stacksGuide.as_of}</p>
+    <h1 class="mt-3 font-serif text-4xl tracking-tight sm:text-5xl">Recommended stacks</h1>
+    <p class="mt-4 max-w-2xl text-lg leading-relaxed text-muted">
+      {stacksGuide.test_rig.label}: {stacksGuide.test_rig.gpus}, {stacksGuide.test_rig.ram}.
+      {stacksGuide.test_rig.note}
+      Command lines and measured VRAM stay marked TODO until the rig owner fills them. We do not invent flags.
+    </p>
+    <div class="mt-6 flex flex-wrap gap-3">
+      <a class="rounded-full bg-accent px-5 py-2.5 text-sm font-medium text-white" href="/calculator">Quant + Hardware Calculator</a>
+      <a class="rounded-full border border-line bg-raised px-5 py-2.5 text-sm" href="/gpus">GPU directory</a>
+      <a class="rounded-full border border-line bg-raised px-5 py-2.5 text-sm" href="/start">Getting started</a>
+    </div>
+
+    <HouseRules />
+
+    <ol class="mt-4 grid gap-5">
+      {stacksGuide.stacks.map((stack) => (
+        <li class="rounded-2xl border border-line bg-raised/50 p-5 sm:p-6">
+          <p class="font-mono text-[0.68rem] uppercase tracking-[0.14em] text-faint">{stack.kicker}</p>
+          <div class="mt-1 flex flex-wrap items-end justify-between gap-3">
+            <h2 class="font-serif text-3xl">{stack.title}</h2>
+            <a class="rounded-full border border-line px-3 py-1.5 text-sm" href={stack.calculator}>Open in calculator</a>
+          </div>
+          <p class="mt-3 max-w-3xl text-muted">{stack.why}</p>
+          <dl class="mt-5 grid gap-3 sm:grid-cols-2">
+            <div>
+              <dt class="font-mono text-[0.68rem] uppercase tracking-[0.12em] text-faint">Model</dt>
+              <dd class="mt-1">{stack.model}</dd>
+              <dd class="text-sm text-muted">{stack.official}</dd>
+            </div>
+            <div>
+              <dt class="font-mono text-[0.68rem] uppercase tracking-[0.12em] text-faint">Weights</dt>
+              <dd class="mt-1">{stack.gguf}</dd>
+              <dd class="text-sm text-muted">{stack.quant}</dd>
+            </div>
+            <div>
+              <dt class="font-mono text-[0.68rem] uppercase tracking-[0.12em] text-faint">Engine</dt>
+              <dd class="mt-1">{stack.engine}</dd>
+            </div>
+            <div>
+              <dt class="font-mono text-[0.68rem] uppercase tracking-[0.12em] text-faint">GPUs</dt>
+              <dd class="mt-1">{stack.gpus}</dd>
+            </div>
+            <div>
+              <dt class="font-mono text-[0.68rem] uppercase tracking-[0.12em] text-faint">Context / KV</dt>
+              <dd class="mt-1">{stack.context} · {stack.kv}</dd>
+            </div>
+            <div>
+              <dt class="font-mono text-[0.68rem] uppercase tracking-[0.12em] text-faint">RAM offload</dt>
+              <dd class="mt-1">{stack.offload}</dd>
+            </div>
+          </dl>
+          <div class="mt-5 rounded-xl border border-dashed border-line bg-canvas/40 p-4">
+            <p class="font-mono text-[0.68rem] uppercase tracking-[0.12em] text-faint">What we know / still TODO</p>
+            <ul class="mt-2 space-y-1.5 text-sm text-muted">
+              {stack.measured.map((line) => <li>{line}</li>)}
+            </ul>
+          </div>
+        </li>
+      ))}
+    </ol>
+  </main>
+</Base>

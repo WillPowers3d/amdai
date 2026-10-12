@@ -1,39 +1,59 @@
-# Qwen picks for a 32 GB Radeon AI PRO R9700. VRAM figures are approximate — verify the file size + KV cache.
-as_of: 2026-09-22
-principle: Reliability first, then capability. The named default is being reworked. Abliterated variants are a separate educational choice.
+# Consumer Qwen picks, grounded in our test rig (two R9700 32 GB, 256 GB DDR5).
+# VRAM figures that are not publisher listings stay TODO — do not invent them.
+as_of: 2026-10-12
+principle: >
+  Reliability first on llama.cpp, then a faster agent engine if you need it.
+  Prefer Q5 over Q4. Never go below Q4. Load weights from fast NVMe.
+  One LLM per GPU unless you deliberately combine. Abliterated is educational only.
+
+house_rules:
+  - Prefer llama.cpp over vLLM for a home box. vLLM is a serve try, not the daily driver.
+  - Prefer Q5 over Q4. Q4_K_M is the floor. Never Q1, Q2, Q3, or IQ1–IQ3 — including draft / MTP heads.
+  - Keep GGUFs on fast NVMe. Do not run a 20-plus-GB file from a spinning disk.
+  - One LLM per GPU unless you deliberately combine (tensor/layer split).
+  - Daily driver on our rig uses 0% system RAM offload. Offload is slow — treat it as a last resort.
 
 recommendations:
-  - id: reliability-reworked
-    role: reliability
-    name: Being reworked
-    why: Previous named defaults were withdrawn. No replacement pin on this pass.
-    serve: Being reworked
-    vram_32gb: Being reworked
-    notes: Check the home card. Do not treat a withdrawn 7B or 8B card as current.
+  - id: daily-driver
+    role: daily driver
+    name: Qwen3.6-35B-A3B · UD-Q5_K_XL
+    why: >
+      Official Qwen/Qwen3.6-35B-A3B (35B total, 3B active, 262144 native context).
+      Unsloth GGUF UD-Q5_K_XL is the file we run every day on ONE Radeon AI PRO R9700
+      (32 GB, gfx1201) via llama.cpp Vulkan, f16 KV, no system RAM offload.
+    serve: "llama.cpp Vulkan (HIP gfx1201 is fine if it builds). TODO: exact command line / measured VRAM from rig owner."
+    vram_32gb: >
+      Publisher listing for Qwen3.6-35B-A3B-UD-Q5_K_XL.gguf is 26.6 GB (Hugging Face).
+      Measured VRAM + RAM on our rig is TODO. Calculator estimate — not a bench.
+    notes: >
+      Weights from unsloth/Qwen3.6-35B-A3B-GGUF. Keep the file on NVMe. See /stacks
+      and /calculator. Do not drop below Q5 unless the calculator says Q5 cannot fit.
 
-  - id: official-coder
-    role: capability
-    name: Official Qwen coder SKU (size that fits)
-    why: Better for code-heavy harness work once a reliability path is proven.
-    serve: Same backends as whatever the weekly card names. Tool-calling quality varies by template and server.
-    vram_32gb: Confirm file size + KV cache. Do not assume a 27B dense or 35B-A3B MoE fits one card.
-    notes: Test the harness (Hermes / OpenClaw) against this model before switching production prompts.
+  - id: fast-agent
+    role: fast agent
+    name: Qwen 3.8 Flash · UD-Q6_K_XL
+    why: >
+      Official Qwen3.8-Flash-Next (125B total, 6B active on the card). Unsloth
+      UD-Q6_K_XL served by Strata v0.1.42 at 262K on our test rig. Measured
+      ~32.6 tok/s versus llama.cpp ~16 tok/s on that same box. llama.cpp Q6 is
+      the fallback if you are not on Strata.
+    serve: "Strata v0.1.42 first; llama.cpp Q6 fallback. TODO: exact command line / measured VRAM+RAM from rig owner."
+    vram_32gb: >
+      Publisher UD-Q6_K_XL folder lists ~169 GB (Hugging Face, six shards).
+      That will not sit in 32 GB VRAM — expect system RAM to hold most of the file.
+      Measured split / VRAM / RAM on our rig is TODO. Offload is slow.
+    notes: >
+      Weights from unsloth/Qwen3.8-Flash-Next-GGUF. Fast NVMe is not optional at
+      this file size. Still never below Q4. Open /calculator with the Flash preset
+      before you buy a second card.
 
-  - id: not-single-card
-    role: not-default
-    name: Qwen3.5 / 3.6 27B and 35B-A3B
-    why: Larger dense and MoE SKUs people ask about. Multi-GPU territory on this generation — not a single R9700 default.
-    serve: Do not treat AMD-validated vLLM 0.27 or the 0.30 community image as a promise for these on one 32 GB card.
-    vram_32gb: Unknown / does not fit as a comfortable single-card daily driver. Do not invent a fit.
-    notes: A public writeup (local-desktop) runs Qwen3.6-35B-A3B via llama.cpp multi-GPU. That is not advice for one R9700.
-
-  - id: abliterated-qwen35-9b
-    role: optional
-    name: huihui-ai/Huihui-Qwen3.5-9B-abliterated
-    why: Newer educational ablation of Qwen3.5-9B. Optional second experiment, not a profile.
-    serve: llama.cpp via mradermacher/Huihui-Qwen3.5-9B-abliterated-GGUF. Official Ollama ROCm is still the weaker path on gfx1201.
-    vram_32gb: Publisher GGUF card lists Q4_K_M ~5.7 GB, Q8_0 ~9.6 GB, f16 ~18.0 GB. Confirm the file. mmproj files exist on that card — confirm if you need vision.
-    notes: Publisher research / experimental framing. Qwen3.5 architecture may need a current llama.cpp. Not verified on R9700. Do not invent tok/s.
+  - id: abliterated-optional
+    role: optional educational
+    name: Huihui-Qwen3.8-27B-abliterated
+    why: Educational refusal-removal study of Qwen3.8-27B. Not a default. Not a Stack Lab profile. Prove the official daily driver first.
+    serve: llama.cpp via a published GGUF — confirm the exact file. Not the reliability path.
+    vram_32gb: 27B-class. Confirm the GGUF size + KV. Do not invent a fit.
+    notes: See /abliterated. Pin a revision. Experimental publisher framing.
 
 smoke_tests:
   - name: Completes
@@ -43,7 +63,7 @@ smoke_tests:
     prompt: A simple multi-turn follow-up (ask a fact, then "shorter").
     expect: No leaked special tokens, no infinite think loop.
   - name: Qwen3 think switch
-    prompt: Same fact question, then a /no_think follow-up if you are on Qwen3.
+    prompt: Same fact question, then a /no_think follow-up if the template supports it.
     expect: Thinking block only when enabled; no hang when disabled.
   - name: Tools if needed
     prompt: A one-tool dummy call through your harness.

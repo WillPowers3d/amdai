@@ -3,7 +3,7 @@ title: Run a local Qwen (llama.cpp)
 description: Build llama.cpp for gfx1201, prove GPU use, then run official Qwen instruct — not an abliterated checkpoint first.
 minutes: 40
 difficulty: starter
-updated: 2026-09-22
+updated: 2026-10-12
 featured: true
 order: 3
 ---
@@ -11,7 +11,7 @@ order: 3
 Goal: **official Qwen instruct** generating on the R9700, with `rocm-smi` showing GPU use. llama.cpp first (you control the backend). Ollama is optional and still rocky on this card. vLLM is the [next tutorial](/tutorials/serve-qwen).
 
 <Callout type="check">
-**Default:** being reworked — no named 7B or 8B card. Smoke-test on a small **official** GGUF, then stay on official instruct. Do not start with 70B or an [abliterated](/abliterated) file.
+**Default:** Qwen3.6-35B-A3B Unsloth **UD-Q5_K_XL** on **one** R9700, Vulkan, 262144 context, f16 KV, no RAM offload. Do not start with an [abliterated](/abliterated) file. Keep the GGUF on NVMe.
 </Callout>
 
 ## Do this in order
@@ -52,25 +52,29 @@ You want the Radeon AI PRO R9700, not only an iGPU.
 
 ### Official GGUF
 
-Trust the card (Hugging Face official or a known GGUF publisher). This site does not pin a filename that will rot next month.
+Daily-driver file: [unsloth/Qwen3.6-35B-A3B-GGUF](https://huggingface.co/unsloth/Qwen3.6-35B-A3B-GGUF) · `Qwen3.6-35B-A3B-UD-Q5_K_XL.gguf` (publisher listing 26.6 GB). Pin a revision.
 
 ```bash
 mkdir -p ~/models
-# huggingface-cli download … the official instruct GGUF you chose
+# huggingface-cli download unsloth/Qwen3.6-35B-A3B-GGUF Qwen3.6-35B-A3B-UD-Q5_K_XL.gguf
 ```
 
 ### Run all layers on the GPU
 
+**TODO:** exact command line / measured VRAM from rig owner.
+
 ```bash
 ./build/bin/llama-cli \
-  -m ~/models/YOUR-OFFICIAL-QWEN.gguf \
+  -m ~/models/Qwen3.6-35B-A3B-UD-Q5_K_XL.gguf \
   -ngl 99 \
-  -c 4096 \
+  -c 262144 \
+  --cache-type-k f16 \
+  --cache-type-v f16 \
   -p "Say hello from a Radeon AI PRO R9700." \
   -n 64
 ```
 
-`-ngl 99` means “offload what fits.” On 32 GB with a 7B–8B quant, that should be everything.
+`-ngl 99` means “offload what fits.” The daily driver on our rig uses **0% system RAM offload**. If layers spill to RAM, stop and open the [calculator](/calculator) before you drop below Q5.
 
 ```bash
 watch -n1 rocm-smi
@@ -81,9 +85,13 @@ VRAM should rise. If it stays empty, you are on CPU — stop.
 ### llama-server (`/v1`)
 
 ```bash
+# TODO: exact command line / measured VRAM from rig owner
 ./build/bin/llama-server \
-  -m ~/models/YOUR-OFFICIAL-QWEN.gguf \
+  -m ~/models/Qwen3.6-35B-A3B-UD-Q5_K_XL.gguf \
   -ngl 99 \
+  -c 262144 \
+  --cache-type-k f16 \
+  --cache-type-v f16 \
   --host 127.0.0.1 \
   --port 8080
 ```
@@ -120,8 +128,8 @@ If VRAM never moves, go back to llama.cpp. Do not set random `HSA_OVERRIDE_*` on
 
 ## What “it works” looks like
 
-- Tokens stream at interactive speed for a 7B–8B quant (you will know CPU)
-- `rocm-smi` VRAM is roughly the file plus cache
+- Tokens stream at interactive speed (you will know CPU)
+- `rocm-smi` VRAM moves; daily driver should not be crawling through system RAM
 - A second prompt still works
 
 Then: raise `-c`, or [serve `/v1`](/tutorials/serve-qwen) for a harness. Compare HIP vs Vulkan on the **same** GGUF if you like — notes, not leaderboards. Abliterated weights come *after* this pipe is boring.

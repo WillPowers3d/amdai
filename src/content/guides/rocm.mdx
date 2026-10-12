@@ -20,7 +20,8 @@ AMD’s current production story is **TheRock**, starting at **7.14**:
 
 | Line | Date (public notes) | What it is |
 | --- | --- | --- |
-| **ROCm Core SDK 10.0.0** | 26 Aug 2026 | Current production. R9700 / RX 9000 first-class (`gfx1200`/`gfx1201`). |
+| **ROCm 10.1.0 matrix** | Live compatibility line | R9700 / RX 9070 XT still `gfx1201`. Re-read the matrix on install day. |
+| **ROCm Core SDK 10.0.0** | 26 Aug 2026 | Production 10.0 line. R9700 / RX 9000 first-class (`gfx1200`/`gfx1201`). |
 | **7.14.1** patch line | 2 Sep 2026 | Last 7.14 production patch. Valid if your wheel/image was built against it. |
 
 **Canonical / Ubuntu archive** is not those lines. People have pulled **7.1** via `apt install rocm` on new Ubuntu (including **26.04** reports). That will not give you 10.0, `amdrocm-*` packages, `/opt/rocm/core-10.0`, or a vLLM 0.29 extras wheel.

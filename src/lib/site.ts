@@ -1,9 +1,9 @@
 export const site = {
   name: 'R9700 Lab Notes',
   shortName: 'Lab Notes',
-  tagline: 'Local AI on the AMD Radeon AI PRO R9700 — for home labs, not data centers.',
+  tagline: 'Local AI on consumer AMD Radeon — ROCm notes from a real R9700 test rig.',
   description:
-    'Living notes for home-lab AMD ROCm: the Radeon AI PRO R9700, inference software, Qwen, and agent harnesses. Versions move weekly — treat pins as dated snapshots.',
+    'The consumer AMD ROCm notebook: llama.cpp and Qwen on Radeon GPUs, grounded in a two-R9700 test rig. Daily driver, fast agent stack, GPU directory, and a quant + hardware calculator.',
   officialGpu: 'AMD Radeon AI PRO R9700',
   informalGpu: 'R9700 Pro',
 };
@@ -14,6 +14,7 @@ export const officialLinks = {
   rocm: 'https://rocm.docs.amd.com/en/latest/',
   rocmInstall: 'https://rocm.docs.amd.com/en/latest/install/rocm.html',
   rocm10Notes: 'https://rocm.docs.amd.com/en/docs-10.0.0/about/release-notes.html',
+  rocm10Matrix: 'https://rocm.docs.amd.com/en/docs-10.1.0/compatibility/compatibility-matrix.html',
   rocmTransition: 'https://rocm.docs.amd.com/en/docs-10.0.0/about/transition-guide-TheRock.html',
   compatibility:
     'https://rocm.docs.amd.com/projects/install-on-linux/en/latest/reference/system-requirements.html',
@@ -29,6 +30,10 @@ export const officialLinks = {
   openclaw: 'https://docs.openclaw.ai/',
   openclawGithub: 'https://github.com/openclaw/openclaw',
   qwen: 'https://huggingface.co/Qwen',
+  qwen36: 'https://huggingface.co/Qwen/Qwen3.6-35B-A3B',
+  qwen36Gguf: 'https://huggingface.co/unsloth/Qwen3.6-35B-A3B-GGUF',
+  qwenFlash: 'https://huggingface.co/Qwen/Qwen3.8-Flash-Next',
+  qwenFlashGguf: 'https://huggingface.co/unsloth/Qwen3.8-Flash-Next-GGUF',
 };
 
 export type NavItem = {
@@ -46,14 +51,16 @@ export const homeLink: NavItem = {
 };
 
 export const primaryNav: NavItem[] = [
-  { href: '/start', label: 'Getting started', description: 'GPU → ROCm → software → optional harness', group: 'path' },
-  { href: '/stack-lab', label: 'Stack Lab', description: 'Ubuntu companion — living catalog, profiles being reworked', group: 'path' },
-  { href: '/gpus', label: 'AMD GPUs', description: 'R9700 naming, PRO vs RX vs Instinct', group: 'stack' },
+  { href: '/start', label: 'Getting started', description: 'GPU → ROCm → llama.cpp → optional harness', group: 'path' },
+  { href: '/stacks', label: 'Stacks', description: 'Daily driver and fast-agent cards from our test rig', group: 'path' },
+  { href: '/calculator', label: 'Calculator', description: 'Quant + hardware VRAM / RAM fit estimates', group: 'path' },
+  { href: '/gpus', label: 'GPU directory', description: 'Radeon cards, gfx IDs, VRAM, official ROCm rows', group: 'stack' },
   { href: '/rocm', label: 'ROCm', description: 'What it is, plus short version notes', group: 'stack' },
-  { href: '/software', label: 'AI software', description: 'vLLM, llama.cpp, Ollama, TGI — when to pick each', group: 'stack' },
-  { href: '/abliterated', label: 'Abliterated', description: 'Refusal removal, Qwen variants, trust notes', group: 'stack' },
+  { href: '/software', label: 'AI software', description: 'llama.cpp first; vLLM and Strata as tries', group: 'stack' },
+  { href: '/abliterated', label: 'Abliterated', description: 'Refusal removal — educational, never the default', group: 'stack' },
   { href: '/harnesses', label: 'Harnesses', description: 'Hermes Agent and OpenClaw above the model', group: 'stack' },
   { href: '/hardware', label: 'Hardware', description: 'PSU, cooling, noise, VRAM vs model size', group: 'stack' },
+  { href: '/stack-lab', label: 'Stack Lab', description: 'Ubuntu companion — same catalog as the YAML', group: 'path' },
   { href: '/tutorials', label: 'Tutorials', description: 'Practical how-tos for this stack', group: 'practice' },
   { href: '/troubleshooting', label: 'Troubleshooting', description: 'GPU not seen, wrong wheel, CPU fallback', group: 'practice' },
   { href: '/faq', label: 'FAQ', description: 'Short answers for a first home box', group: 'practice' },

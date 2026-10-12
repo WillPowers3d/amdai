@@ -1,8 +1,8 @@
 ---
 title: Getting started
 kicker: Path
-description: One end-to-end path for a home AMD box — pick a GPU, install ROCm, serve Qwen, optionally add a harness.
-updated: 2026-09-22
+description: One end-to-end path for a home AMD box — pick a GPU, install ROCm, run the daily-driver Qwen, optionally add a harness.
+updated: 2026-10-12
 order: 0
 ---
 
@@ -14,16 +14,16 @@ Do this in order. Skip a layer and you will debug the wrong one.
 - **16 GB is enough:** Radeon RX 9070 XT (also `gfx1201` on current matrices). Same generation, half the VRAM.
 - **Already own a 7900 XTX:** still a practical home card (`gfx1100`). Different ROCm family package.
 
-Read [Hardware](/hardware) before you buy a PSU or a toaster case.
+Read the [GPU directory](/gpus) and [Hardware](/hardware) before you buy a PSU. Estimate a fit on the [calculator](/calculator).
 
 ## 2. Install ROCm on Linux
 
 Practical Ubuntu path (as of the [weekly card](/)):
 
 1. Use an Ubuntu LTS **named on AMD’s current matrix** (24.04.x is the usual home box).
-2. Add **AMD’s Core SDK 10.0 repo** — or skip host ROCm and run an **official vLLM ROCm image** if serving is all you need.
+2. Add **AMD’s Core SDK 10.0 / 10.1 repo** — or skip host ROCm and run a **vLLM ROCm image** only if serving is all you need.
 3. Install **one** gfx family (`amdrocm-core-sdk10.0-gfx1201` on the R9700 — confirm with `apt-cache search`). Prefix is typically **`/opt/rocm/core-10.0`**.
-4. **Do not** `apt install rocm` from Canonical’s archive. On new Ubuntu (including 26.04 reports) that has lagged at **7.1** and will not give you 10.0 or a current vLLM ROCm image.
+4. **Do not** `apt install rocm` from Canonical’s archive.
 
 Walkthrough: [Install ROCm](/tutorials/install-rocm). Prove it: [Verify GPU and ROCm](/tutorials/verify-rocm).
 
@@ -35,28 +35,30 @@ The [home status card](/) is the weekly pin. The [ROCm version notes](/rocm#vers
 
 ## 3. Pick inference software
 
-Reliability path for Qwen on one R9700:
+Consumer default on this site:
 
-1. **llama.cpp** (HIP `gfx1201`, Vulkan if HIP is angry) — first tokens, first golden prompt.
-2. **Ollama** — if you want a pull-and-chat wrapper and it actually attaches to the GPU.
-3. **vLLM** — continuous batching, OpenAI server, spec decode. **Reliability this week:** ROCm 10 + AMD-validated **vLLM 0.27** (10.0 matrix, gfx1201 listed). **Community cutting-edge:** Docker **`vllm/vllm-openai-rocm:v0.30.0`** (previous try-tag `v0.29.0`). Those are different pins. Default `pip install vllm` is CUDA. Prefer llama.cpp HIP/Vulkan over official Ollama ROCm on gfx1201. Named Qwen model is being reworked.
+1. **llama.cpp** (Vulkan, or HIP `gfx1201`) — daily driver. Prefer that over official Ollama ROCm and over vLLM for a single-user box.
+2. **Strata v0.1.42** — fast-agent try on our rig for Qwen 3.8 Flash.
+3. **vLLM** — only when you need a multi-client server. **Try this week:** community / ROCm **0.31**. Conservative AMD pin on the 10.0 matrix is still **0.27**. Default `pip install vllm` is CUDA.
 
-Compare them on [AI software](/software). Run Qwen: [Local LLM tutorial](/tutorials/run-local-llm) then [Serve Qwen](/tutorials/serve-qwen).
+Compare them on [AI software](/software). Run the daily driver: [Local LLM tutorial](/tutorials/run-local-llm) then [Serve Qwen](/tutorials/serve-qwen). Cards: [Recommended stacks](/stacks).
 
-If you also run the Ubuntu **[Radeon Stack Lab](/stack-lab)** companion (Origin repo / local app), treat **`qwen-reliable`** as a slot being reworked. There is no `qwen3-8b-try` profile on this pass.
+<HouseRules />
 
 ## 4. Optional harness
 
-A **harness** is the agent loop *above* the model: tools, memory, chat apps. It does not replace ROCm.
+A **harness** is the agent loop *above* the model. It does not replace ROCm.
 
-- **[Hermes Agent](https://hermes-agent.nousresearch.com/)** (Nous Research) — local llama.cpp runtime (Vulkan on AMD unless you point at your own server) or any OpenAI-compatible endpoint.
-- **[OpenClaw](https://docs.openclaw.ai/)** — self-hosted gateway into Discord/Telegram/etc., with Ollama, vLLM, and llama.cpp providers.
+- **[Hermes Agent](https://hermes-agent.nousresearch.com/)** — local llama.cpp runtime (Vulkan on AMD unless you point at your own server) or any OpenAI-compatible endpoint.
+- **[OpenClaw](https://docs.openclaw.ai/)** — self-hosted gateway into Discord/Telegram/etc.
 
-Details: [Harnesses](/harnesses). `curl` `/v1` first. Then point the harness at `127.0.0.1`. Local Hermes can also draft the [weekday YAML scrape](/maintain) overnight — a human still commits.
+Details: [Harnesses](/harnesses). `curl` `/v1` first. Then point the harness at `127.0.0.1`.
 
-## 5. Qwen, then edits
+## 5. Qwen
 
-Default: **being reworked** — no named instruct card this pass. Prove GPU use on official Qwen weights the [weekly card](/) names. Then a coder SKU or an [abliterated](/abliterated) checkpoint if you want that tradeoff.
+Default: **Qwen3.6-35B-A3B** Unsloth **UD-Q5_K_XL** on **one** R9700, llama.cpp Vulkan, 262144 context, f16 KV, no RAM offload. Fast agents: **Qwen 3.8 Flash** UD-Q6_K_XL on Strata. Abliterated weights come after that pipe is boring.
+
+**TODO:** exact command line / measured VRAM from rig owner.
 
 <QwenPicks />
 
@@ -66,4 +68,5 @@ Default: **being reworked** — no named instruct card this pass. Prove GPU use 
 
 - `rocminfo` has no `gfx1201` → do not download 20 GB.
 - `rocm-smi` idle while you “generate” → you are on CPU.
+- File is on a spinning disk → move it to NVMe before you tune flags.
 - Harness is slow → check the **backend**, not the card’s reputation.

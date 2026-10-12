@@ -1,0 +1,211 @@
+# Consumer / workstation Radeon directory for local AI.
+# Support column follows AMD’s ROCm 10.1.0 compatibility matrix and the
+# Linux system-requirements page. Re-check those links before you install.
+# VRAM is the AMD-published SKU size, not a bench.
+as_of: 2026-10-12
+matrix: https://rocm.docs.amd.com/en/docs-10.1.0/compatibility/compatibility-matrix.html
+linux_reqs: https://rocm.docs.amd.com/projects/install-on-linux/en/latest/reference/system-requirements.html
+
+notes:
+  - Official support means the card appears on AMD’s current ROCm matrix. It is not a tok/s promise.
+  - HSA_OVERRIDE_GFX_VERSION (and friends) is an unofficial way to boot a binary on a gfx the build did not list. Research path, not a recommendation. Current gfx1201 cards should not need it on ROCm 10.x.
+  - There is no consumer “RX 9700.” The 32 GB workstation card is the Radeon AI PRO R9700.
+
+cards:
+  - name: AMD Radeon AI PRO R9700
+    family: Radeon AI PRO
+    arch: RDNA 4
+    gfx: gfx1201
+    vram_gb: 32
+    support: official
+    rocm_note: First-class on ROCm 10.0 / 10.1. Our test-rig daily driver.
+    hsa_override: Not needed on current 10.x.
+
+  - name: AMD Radeon AI PRO R9700S
+    family: Radeon AI PRO
+    arch: RDNA 4
+    gfx: gfx1201
+    vram_gb: null
+    support: official
+    rocm_note: Listed on the 10.1 matrix as gfx1201. Confirm VRAM on the product page — do not assume 32 GB.
+    hsa_override: Not needed on current 10.x.
+
+  - name: AMD Radeon AI PRO R9600D
+    family: Radeon AI PRO
+    arch: RDNA 4
+    gfx: gfx1201
+    vram_gb: null
+    support: official
+    rocm_note: Listed on the 10.1 matrix as gfx1201. Confirm VRAM on the product page.
+    hsa_override: Not needed on current 10.x.
+
+  - name: AMD Radeon AI PRO R9600
+    family: Radeon AI PRO
+    arch: RDNA 4
+    gfx: gfx1201
+    vram_gb: null
+    support: official
+    rocm_note: Listed on the 10.1 matrix as gfx1201. Confirm VRAM on the product page.
+    hsa_override: Not needed on current 10.x.
+
+  - name: AMD Radeon RX 9070 XT
+    family: Radeon RX
+    arch: RDNA 4
+    gfx: gfx1201
+    vram_gb: 16
+    support: official
+    rocm_note: Same LLVM target as the R9700, half the VRAM. Official on 10.0 / 10.1.
+    hsa_override: Not needed on current 10.x.
+
+  - name: AMD Radeon RX 9070 GRE
+    family: Radeon RX
+    arch: RDNA 4
+    gfx: gfx1201
+    vram_gb: 12
+    support: official
+    rocm_note: gfx1201 on the 10.1 matrix. 12 GB published for the GRE SKU — confirm the card you are buying.
+    hsa_override: Not needed on current 10.x.
+
+  - name: AMD Radeon RX 9070
+    family: Radeon RX
+    arch: RDNA 4
+    gfx: gfx1201
+    vram_gb: 16
+    support: official
+    rocm_note: gfx1201 on the 10.1 matrix.
+    hsa_override: Not needed on current 10.x.
+
+  - name: AMD Radeon RX 9060 XT
+    family: Radeon RX
+    arch: RDNA 4
+    gfx: gfx1200
+    vram_gb: 16
+    support: official
+    rocm_note: gfx1200. 8 GB and 16 GB SKUs exist — pick the listing, not the name. 8 GB XT LP is a different row.
+    hsa_override: Not needed on current 10.x.
+
+  - name: AMD Radeon RX 9060 XT LP
+    family: Radeon RX
+    arch: RDNA 4
+    gfx: gfx1200
+    vram_gb: 8
+    support: official
+    rocm_note: gfx1200, 8 GB. Tight for anything past a small Q5.
+    hsa_override: Not needed on current 10.x.
+
+  - name: AMD Radeon RX 9060
+    family: Radeon RX
+    arch: RDNA 4
+    gfx: gfx1200
+    vram_gb: null
+    support: official
+    rocm_note: gfx1200 on the 10.1 matrix. Confirm VRAM on the product page.
+    hsa_override: Not needed on current 10.x.
+
+  - name: AMD Radeon RX 7900 XTX
+    family: Radeon RX
+    arch: RDNA 3
+    gfx: gfx1100
+    vram_gb: 24
+    support: official
+    rocm_note: Best RDNA 3 consumer VRAM. Install the gfx110x family package, not gfx1201.
+    hsa_override: Not needed when the build lists gfx1100.
+
+  - name: AMD Radeon RX 7900 XT
+    family: Radeon RX
+    arch: RDNA 3
+    gfx: gfx1100
+    vram_gb: 20
+    support: official
+    rocm_note: gfx1100. 20 GB is a real bracket — run the calculator before you assume a 35B Q5 fit.
+    hsa_override: Not needed when the build lists gfx1100.
+
+  - name: AMD Radeon RX 7900 GRE
+    family: Radeon RX
+    arch: RDNA 3
+    gfx: gfx1100
+    vram_gb: 16
+    support: official
+    rocm_note: gfx1100, 16 GB.
+    hsa_override: Not needed when the build lists gfx1100.
+
+  - name: AMD Radeon RX 7800 XT
+    family: Radeon RX
+    arch: RDNA 3
+    gfx: gfx1101
+    vram_gb: 16
+    support: official
+    rocm_note: gfx1101. Official on 10.1.
+    hsa_override: Not needed when the build lists gfx1101.
+
+  - name: AMD Radeon RX 7700 XT
+    family: Radeon RX
+    arch: RDNA 3
+    gfx: gfx1101
+    vram_gb: 12
+    support: official
+    rocm_note: gfx1101, 12 GB.
+    hsa_override: Not needed when the build lists gfx1101.
+
+  - name: AMD Radeon RX 7700
+    family: Radeon RX
+    arch: RDNA 3
+    gfx: gfx1101
+    vram_gb: null
+    support: official
+    rocm_note: gfx1101 on the 10.1 matrix. Confirm VRAM on the product page.
+    hsa_override: Not needed when the build lists gfx1101.
+
+  - name: AMD Radeon RX 7600
+    family: Radeon RX
+    arch: RDNA 3
+    gfx: gfx1102
+    vram_gb: 8
+    support: official
+    rocm_note: gfx1102, 8 GB. Listed on the 10.1 compatibility matrix.
+    hsa_override: Not needed when the build lists gfx1102.
+
+  - name: AMD Radeon RX 6950 XT / 6900 XT
+    family: Radeon RX
+    arch: RDNA 2
+    gfx: gfx1030
+    vram_gb: 16
+    support: unofficial
+    rocm_note: RDNA 2 consumer cards are not on the current Radeon official row the way W6800 is. Community HIP/Vulkan paths exist.
+    hsa_override: Sometimes used (e.g. 10.3.0) when a build omits gfx1030. Unofficial. Prefer Vulkan llama.cpp if HIP is angry.
+
+  - name: AMD Radeon PRO W7900
+    family: Radeon PRO
+    arch: RDNA 3
+    gfx: gfx1100
+    vram_gb: 48
+    support: official
+    rocm_note: 48 GB workstation. Dual-slot sibling is also listed.
+    hsa_override: Not needed on current 10.x.
+
+  - name: AMD Radeon PRO W7800
+    family: Radeon PRO
+    arch: RDNA 3
+    gfx: gfx1100
+    vram_gb: 32
+    support: official
+    rocm_note: 32 GB and a separate 48 GB SKU are both listed. Read the sticker.
+    hsa_override: Not needed on current 10.x.
+
+  - name: AMD Radeon PRO W7700
+    family: Radeon PRO
+    arch: RDNA 3
+    gfx: gfx1101
+    vram_gb: 16
+    support: official
+    rocm_note: gfx1101 workstation.
+    hsa_override: Not needed on current 10.x.
+
+  - name: AMD Radeon PRO W6800
+    family: Radeon PRO
+    arch: RDNA 2
+    gfx: gfx1030
+    vram_gb: 32
+    support: official
+    rocm_note: Older but still listed on the 10.1 matrix.
+    hsa_override: Not needed when the build lists gfx1030.

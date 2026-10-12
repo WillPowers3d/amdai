@@ -2,7 +2,7 @@
 title: Hardware and power
 kicker: Home lab
 description: PSU, cooling, case, noise, and VRAM versus model size for a 32 GB Radeon AI PRO R9700 — no fake benches.
-updated: 2026-09-20
+updated: 2026-10-12
 order: 6
 ---
 
@@ -42,15 +42,15 @@ Weights + KV cache + batch share 32 GB. **Verify per file and context.** These a
 
 | Situation | 32 GB often means |
 | --- | --- |
-| 7B–14B high-quality quant | Easy, long context |
-| ~27B–32B Qwen-class, 4–5 bit | Daily driver if cache is sane |
-| Same at Q8 / long context | Tight; measure |
-| 70B dense | Aggressive quant, short context, or another GPU |
-| MoE with few active experts | File size can surprise you — read the card |
+| Qwen3.6-35B-A3B UD-Q5_K_XL, 262K, f16 KV | Our one-card daily driver — see [stacks](/stacks) |
+| Same at Q8 / even longer cache | Tight; measure. Floor is still Q4. |
+| Qwen 3.8 Flash UD-Q6_K_XL | Publisher file ~169 GB — expect RAM to hold most of it on 32 GB |
+| Dense 70B | Aggressive quant, short context, or another GPU |
+| MoE with few active experts | File size can surprise you — read the card and the [calculator](/calculator) |
 
-A 16 GB RX 9070 XT is the better buy if you live in the 8B–14B bracket. The R9700 is the bracket above, or the same models with less compromise.
+A 16 GB RX 9070 XT is the better buy if you live in smaller Qwen. The R9700 is the 32 GB bracket. Never drop below Q4 to “make it fit.”
 
-Host RAM: 64 GB is comfortable next to a 32 GB GPU. 32 GB host works for inference-only and gets ugly if you also fine-tune.
+Host RAM: our test rig is **256 GB DDR5**. 64 GB is a reasonable home minimum next to one 32 GB GPU. Flash at UD-Q6_K_XL is a ~169 GB publisher file — that box needs a lot of RAM. 32 GB host gets ugly fast.
 
 ## What not to optimize first
 

@@ -2,7 +2,7 @@
 title: FAQ
 kicker: Short answers
 description: Newcomer questions for a home Radeon AI PRO R9700, ROCm, Qwen, and local agents.
-updated: 2026-09-22
+updated: 2026-10-12
 order: 9
 ---
 
@@ -19,16 +19,16 @@ You can. You should **not**, if you want Core SDK 10.0, `gfx1201`, or a current 
 Vulkan (llama.cpp, some UIs) is the honest path. Full ROCm userspace is a Linux product. Limited PyTorch-on-Windows exists; do not expect `rocm-smi` culture.
 
 **Which Qwen should I run first?**  
-**Being reworked.** There is no named 7B or 8B default on this pass. Prove GPU use on whatever official instruct the [weekly card](/) lists, then a coder SKU or [abliterated](/abliterated) if you want that tradeoff.
+**Qwen3.6-35B-A3B** Unsloth **UD-Q5_K_XL** on **one** R9700 via llama.cpp Vulkan, 262K context, f16 KV, no RAM offload. Fast agents: **Qwen 3.8 Flash** UD-Q6_K_XL on Strata v0.1.42. Cards: [stacks](/stacks). Fit check: [calculator](/calculator). [Abliterated](/abliterated) is educational only.
 
-**vLLM 0.27, 0.29, or 0.30?**  
-**0.27 + PyTorch 2.13** is AMD’s **10.0 supported combo** and the **reliability** serve pin this week (gfx1201 listed). Community ROCm Docker try-tag is now **`vllm/vllm-openai-rocm:v0.30.0`** (0.29.0 is the previous pin). Do not mix pins in one venv. Default PyPI vLLM is CUDA.
+**vLLM 0.27, 0.30, or 0.31?**  
+Consumers should not start here. **0.27 + PyTorch 2.13** is still AMD’s **10.0 supported combo**. Community / ROCm **0.31** is this week’s serve try (0.30 is the previous try-tag). Do not mix pins in one venv. Default PyPI vLLM is CUDA.
 
 **Can I fine-tune like a 4090 blog post?**  
 PyTorch ROCm exists. ROCm 10.0 has a known issue: training/fine-tune **GPU resets** on R9700 — try `TORCH_BLAS_PREFER_HIPBLASLT=0`. SGLang AITER may fail on this SKU. Community training writeups often use **ROCm 7.2.1**; keep **inference** on 10.0. The cookbook is thinner than CUDA.
 
 **What is Radeon Stack Lab?**  
-An Ubuntu **companion app** (Origin repo / local install — no public domain here) with a living catalog. Profile **`qwen-reliable`** is a slot **being reworked**. There is no `qwen3-8b-try` profile on this pass. [Stack Lab](/stack-lab).
+An Ubuntu **companion app** (Origin repo / local install — no public domain here) with a living catalog. Profile **`qwen-reliable`** is the daily driver (Qwen3.6-35B-A3B Q5). **`qwen-fast-agent`** is Qwen 3.8 Flash on Strata. [Stack Lab](/stack-lab).
 
 **Do I need a harness?**  
 No. You need tokens on the GPU. Hermes or OpenClaw come after a loopback `/v1` works. Local Hermes can draft the [weekday YAML scrape](/maintain); it does not publish.
@@ -37,4 +37,4 @@ No. You need tokens on the GPU. Hermes or OpenClaw come after a loopback `/v1` w
 No. Hermes is an agent product from Nous. OpenClaw is a multi-channel self-hosted gateway. [Harnesses](/harnesses).
 
 **Will two R9700s double speed?**  
-Not automatically. Expect RCCL and topology work. Measure. Qwen3.5 / 3.6 **27B** and **35B-A3B** are multi-GPU territory — not single-card defaults. A public llama.cpp multi-GPU writeup is not a one-R9700 recipe.
+Not automatically. Expect RCCL and topology work. Measure. Our daily driver is **one** card. The house rule is one LLM per GPU unless you deliberately combine. Use the [calculator](/calculator) split toggle before you buy a second card for capacity.

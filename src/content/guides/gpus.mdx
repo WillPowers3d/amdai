@@ -1,94 +1,58 @@
 ---
-title: AMD GPUs for a home AI box
+title: GPU directory
 kicker: Hardware
-description: Official names, how Radeon vs PRO vs Instinct differ, and which modern AMD cards people actually use with ROCm at home.
-updated: 2026-09-20
+description: Consumer and workstation Radeon cards mapped to gfx IDs, VRAM, official ROCm rows, and HSA_OVERRIDE notes.
+updated: 2026-10-12
 order: 1
 ---
 
-<Callout type="note" title="The name people type">
-If you arrived here searching for an “AMD R9700 Pro,” you almost certainly mean the **AMD Radeon AI PRO R9700**. That is the official product name. There is no consumer **Radeon RX 9700** in AMD’s current public lineup — the gaming sibling is the **Radeon RX 9070** series.
+If you arrived here searching for an “AMD R9700 Pro,” you mean the **AMD Radeon AI PRO R9700**. There is no consumer **Radeon RX 9700**. The gaming sibling is the **Radeon RX 9070** series.
+
+<Callout type="note" title="Official vs unofficial">
+**Official** means the card is on AMD’s [ROCm 10.1.0 compatibility matrix](https://rocm.docs.amd.com/en/docs-10.1.0/compatibility/compatibility-matrix.html) or the [Linux system requirements](https://rocm.docs.amd.com/projects/install-on-linux/en/latest/reference/system-requirements.html) page. It is not a speed promise. **HSA_OVERRIDE_GFX_VERSION** is an unofficial way to boot a binary that did not list your gfx. Current `gfx1201` cards should not need it on ROCm 10.x.
 </Callout>
+
+<GpuDirectory />
 
 ## What the Radeon AI PRO R9700 is
 
-The [AMD Radeon AI PRO R9700](https://www.amd.com/en/products/graphics/workstations/radeon-ai-pro/ai-9000-series/amd-radeon-ai-pro-r9700.html) is a desktop **workstation / local-AI** card on **RDNA 4**. AMD places it in the Radeon AI PRO family, R9000 series — not Instinct, and not the RX gaming stack.
+The [AMD Radeon AI PRO R9700](https://www.amd.com/en/products/graphics/workstations/radeon-ai-pro/ai-9000-series/amd-radeon-ai-pro-r9700.html) is a desktop **workstation / local-AI** card on **RDNA 4**. AMD places it in the Radeon AI PRO family — not Instinct, and not the RX gaming stack.
 
-Public AMD product-page figures (verify there if you are buying or writing a BOM):
+Public AMD product-page figures (verify there if you are buying):
 
 | Item | AMD-published value |
 | --- | --- |
 | Architecture | AMD RDNA 4 |
 | Compute units | 64 |
 | Stream processors | 4096 |
-| AI accelerators | 128 |
 | Dedicated memory | 32 GB GDDR6 |
 | Memory bus | 256-bit |
 | Peak memory bandwidth | 640 GB/s |
-| Infinity Cache | 64 MB |
 | Bus | PCIe 5.0 x16 |
 | Total board power (TBP) | 300 W |
 | Minimum PSU recommendation | 750 W |
 | External power | 12V-2x6 |
-| Board width | Double slot |
 | Memory ECC | Yes, Linux only |
-| OS listed | Windows 10/11 64-bit, Linux x86-64 |
 
-ROCm documents the card as **LLVM target `gfx1201`**. On **Core SDK 10.0.0** (26 Aug 2026 notes) it is a **first-class** RDNA4 row with the RX 9000 series (`gfx1200`/`gfx1201`). That identifier shows up in `rocminfo`, llama.cpp HIP builds, and PyTorch/vLLM wheel selectors. If a tool does not mention `gfx1201` (or a generic gfx120x bucket), treat support as unproven.
+ROCm documents the card as **LLVM target `gfx1201`**. On Core SDK **10.0 / 10.1** it is a first-class RDNA4 row with the RX 9000 series. If a tool does not mention `gfx1201` (or a generic gfx120x bucket), treat support as unproven.
 
-TheRock installs: **`amdrocm-*`**, prefix **`/opt/rocm/core-10.0`**, **one** family package (`amdrocm-core-sdk10.0-gfx1201` for this card — not `-gfx110x`). See [ROCm](/rocm).
-
-Related official names you may see on the same generation:
-
-- **AMD Radeon AI PRO R9700S** — also listed as `gfx1201` in current ROCm / PyTorch matrices.
-- **AMD Radeon AI PRO R9600D** — also listed as `gfx1201` there.
-
-Do not assume two cards with similar marketing numbers share VRAM, cooler design, or the same ROCm footnote. Read the matrix row.
+Our test rig runs **two** of these and 256 GB DDR5. The [daily driver](/stacks) uses **one** card. Estimate a fit on the [calculator](/calculator).
 
 ## How AMD splits the brands
 
-At a home-lab level, three families matter:
+**Radeon RX (consumer).** Gaming cards. RDNA 4: RX 9070 XT / 9070 / 9070 GRE / 9060 XT. RDNA 3 workhorses: RX 7900 XTX / XT / GRE, RX 7800 XT.
 
-**Radeon RX (consumer).** Gaming cards. Recent ones people actually use for local models: **RX 9070 XT / 9070 / 9070 GRE** (RDNA 4, typically 16 GB on the 9070-class parts AMD launched) and the still-common **RX 7900 XTX / XT / GRE** (RDNA 3, the XTX is the 24 GB standout). Cheaper, widely available, often enough if your models fit.
+**Radeon PRO / Radeon AI PRO (workstation).** Drivers aimed at professional apps and local inference. The R9700’s headline difference versus the RX 9070 XT is **capacity**: 32 GB vs 16 GB.
 
-**Radeon PRO / Radeon AI PRO (workstation).** Drivers and firmware aimed at professional apps, certified OEM workstations, and — for the AI PRO line — local inference and development. The R9700’s headline difference versus the RX 9070 XT is **capacity**: 32 GB vs 16 GB on the consumer flagship AMD launched with the same 64-CU / 4096-SP class of silicon. Treat clocks, coolers, and software as different products even when the compute unit count matches.
+**Instinct (data center).** MI-series. Not a home-lab default.
 
-**Instinct (data center).** MI-series accelerators. Different form factors, cooling, software expectations, and usually a rack — not a “stick it in a Fractal or Define and close the side panel” part. ROCm was born here. Home labs almost never buy Instinct unless they already live in that world.
-
-AMD also states that Radeon PRO W6000 / W7000 and Radeon AI PRO R9000 cards (with some series exceptions on the product page) are **not designed or recommended for datacenter usage**. That is the inverse of the home-lab pitch: this card is meant for a workstation under a desk, not a dense GPU node.
-
-## Other modern AMD GPUs that are practical at home
-
-“Practical” here means: people run ROCm or a ROCm-adjacent inference stack on them without needing a cluster team. Official support still has to be checked on the [ROCm Linux system requirements](https://rocm.docs.amd.com/projects/install-on-linux/en/latest/reference/system-requirements.html) page — matrices move.
-
-**RDNA 4 consumer (commonly used):**
-
-- Radeon RX 9070 XT, RX 9070 GRE, RX 9070 — `gfx1201` on current matrices
-- Radeon RX 9060 XT (and listed 9060 / 9050 variants) — `gfx1200` on current matrices
-
-**RDNA 3 consumer (still the workhorse fleet):**
-
-- Radeon RX 7900 XTX, RX 7900 XT, RX 7900 GRE — `gfx1100`
-- Radeon RX 7800 XT, RX 7700 XT, RX 7700 — `gfx1101`
-
-**Workstation cards home builders also use:**
-
-- Radeon PRO W7900 / W7900 Dual Slot, W7800 (including the 48 GB SKU), W7700
-- Older but still listed: Radeon PRO W6800 (`gfx1030`)
-
-If a card is **not** on the matrix, unofficial overrides (`HSA_OVERRIDE_GFX_VERSION` and friends) sometimes boot a binary. That is a research path, not a recommendation. New RDNA 4 parts should not need that trick if you are on a current ROCm that lists `gfx1201`.
-
-## How to read a product name without getting lost
-
-AMD’s recent consumer names look like **RX 9070**, not **RX 7900**’s “7xxx” pattern and not **RX 9700**. The **AI PRO R9700** keeps a four-digit “97xx” style because it is a different brand line. Forums will collapse all of that to “R9700” or “9700 Pro.” When you file a bug or pick a wheel, use the **marketing name plus `gfx1201`**.
+AMD also states that Radeon PRO W6000 / W7000 and Radeon AI PRO R9000 cards (with some series exceptions) are **not designed or recommended for datacenter usage**.
 
 ## Buying notes that are not prices
 
-This site does not list street prices. They move. What does not move as fast:
+- **VRAM is the constraint you feel first.** 8 GB, 16 GB, 24 GB, and 32 GB are different brackets once context grows. Use the [calculator](/calculator).
+- **300 W TBP and a 750 W PSU recommendation** are AMD’s published figures for the R9700.
+- **12V-2x6** is not the same cable culture as dual 8-pin PRO cards from last generation.
+- Install **one** gfx family package (`gfx1201` vs `gfx110x`). Mixing them is how people get a CPU-only llama.cpp.
 
-- **VRAM is the constraint you feel first.** 16 GB, 24 GB, and 32 GB are different model-size brackets once context length and batch size grow.
-- **300 W TBP and a 750 W PSU recommendation** are AMD’s published figures for the R9700. Partner coolers can still be loud in a small case. Plan airflow as if the card were a compact workstation blower or a short dual-slot heater — look at the actual AIB design you are buying.
-- **12V-2x6** is not the same cable culture as dual 8-pin PRO cards from last generation. Use a PSU-native cable or an adapter the PSU vendor documents.
-- **ECC on Linux only** is a product-page fact, not a reason to skip Windows gaming drivers if you dual-boot. It is a reason not to assume parity features across OS.
-
-Next: [what ROCm actually is](/rocm), then [AI software](/software) and [hardware realities](/hardware).
+Next: [ROCm](/rocm), [recommended stacks](/stacks), [AI software](/software).

@@ -1,8 +1,8 @@
 ---
 title: Radeon Stack Lab
 kicker: Companion
-description: The Ubuntu companion app that sits next to these notes — living catalog. Named Qwen profiles are being reworked.
-updated: 2026-10-09
+description: The Ubuntu companion app that sits next to these notes — living catalog aligned with the daily-driver and fast-agent stacks.
+updated: 2026-10-12
 order: 1
 ---
 
@@ -11,44 +11,54 @@ These notes are the **written** weekly tracker. **Radeon Stack Lab** is the **Ub
 It is an **independent** local app (Origin repo / local install). There is no public product domain to click. If you have the repo, run it next to this site. If you do not, this page is still the map of what the profiles mean.
 
 <Callout type="note">
-Named Qwen model slots are **being reworked**. There is no current `qwen3-8b-try` profile and no 7B instruct default on this pass. The [home status card](/) remains the pin if the app’s catalog and this YAML ever disagree — then refresh both.
+Profiles follow the YAML. **`qwen-reliable`** is Qwen3.6-35B-A3B UD-Q5_K_XL on llama.cpp. **`qwen-fast-agent`** is Qwen 3.8 Flash UD-Q6_K_XL on Strata. The [home status card](/) wins if the app catalog and this YAML disagree — then refresh both.
 </Callout>
 
 ## What it is for
 
 | Piece | Job |
 | --- | --- |
-| **Living catalog** | The same weekly ROCm / vLLM / Qwen story as `src/data/what-works.yaml` |
-| **`qwen-reliable`** | Default profile slot — **being reworked**. No named model this pass. |
+| **Living catalog** | The same weekly ROCm / Qwen story as `src/data/what-works.yaml` |
+| **`qwen-reliable`** | Daily driver — Qwen3.6-35B-A3B UD-Q5_K_XL, llama.cpp Vulkan, one R9700, 262K, f16 KV |
+| **`qwen-fast-agent`** | Fast agent — Qwen 3.8 Flash UD-Q6_K_XL, Strata v0.1.42 (llama.cpp Q6 fallback) |
 
-The app does not replace ROCm, llama.cpp, or vLLM. It **selects a profile** and points you at a serve path those tools already understand.
+The app does not replace ROCm, llama.cpp, or Strata. It **selects a profile** and points you at a serve path those tools already understand.
 
 ## Profiles (conceptual)
 
-### `qwen-reliable` — default (being reworked)
+### `qwen-reliable` — daily driver
 
-- **Model:** Being reworked
-- **Quant / weights:** Being reworked
-- **Serve:** ROCm Core SDK **10.0.0** + **vLLM 0.27** (10.0 matrix, `gfx1201` listed), or llama.cpp HIP / Vulkan — engine notes only; pick the model from a later catalog pass
-- **Use when:** first tokens, overnight chat, anything you need to trust tomorrow morning — after a default is named again
+- **Model:** Qwen/Qwen3.6-35B-A3B
+- **Quant / weights:** unsloth/Qwen3.6-35B-A3B-GGUF · UD-Q5_K_XL
+- **Serve:** llama.cpp Vulkan (HIP gfx1201 if it builds)
+- **Use when:** overnight chat, anything you need to trust tomorrow morning
+- **TODO:** exact command line / measured VRAM from rig owner.
 
-Abliterated checkpoints are **not** a Stack Lab default profile. If you experiment, do it after a stock official instruct works — [Abliterated](/abliterated).
+### `qwen-fast-agent` — fast agent
+
+- **Model:** Qwen 3.8 Flash (Qwen/Qwen3.8-Flash-Next)
+- **Quant / weights:** unsloth/Qwen3.8-Flash-Next-GGUF · UD-Q6_K_XL
+- **Serve:** Strata v0.1.42; llama.cpp Q6 fallback
+- **Use when:** agent loops that need the higher tok/s we measured (~32.6 vs ~16)
+- **TODO:** exact command line / measured VRAM+RAM from rig owner.
+
+Abliterated checkpoints are **not** a Stack Lab default profile. If you experiment, do it after the daily driver works — [Abliterated](/abliterated).
 
 ## How it relates to this site
 
 ```text
 Radeon Stack Lab (Ubuntu app, local)
-    → profile: qwen-reliable (model slot being reworked)
+    → profile: qwen-reliable | qwen-fast-agent
         → same pins as src/data/*.yaml
-            → llama.cpp / vLLM on the R9700
+            → llama.cpp / Strata / vLLM-try on the R9700
                 → optional harness on /v1
 ```
 
-Weekday scrape updates the YAML here. The companion catalog should follow. Maintainer steps: [weekday scrape](/maintain).
+Weekday scrape updates the YAML here. The companion catalog should follow. Maintainer steps: [weekday scrape](/maintain). Public cards: [Recommended stacks](/stacks).
 
 ## What to do if you only have these notes
 
 1. Follow [Getting started](/start).
-2. Serve official Qwen ([tutorial](/tutorials/serve-qwen)) once the weekly card names a model.
+2. Serve the daily driver ([tutorial](/tutorials/serve-qwen)).
 3. Attach a [harness](/harnesses) only after `/v1` answers.
-4. If you later clone the Origin repo for Stack Lab, do not assume a withdrawn 7B or 8B profile still exists.
+4. If you later clone the Origin repo for Stack Lab, keep its catalog aligned with this YAML.

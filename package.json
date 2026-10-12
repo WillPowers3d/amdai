@@ -3,7 +3,7 @@
   "type": "module",
   "version": "0.1.0",
   "private": true,
-  "description": "Living home-lab notes for the AMD Radeon AI PRO R9700, ROCm, Qwen, and local agent harnesses.",
+  "description": "Consumer AMD ROCm notes — local Qwen on Radeon, grounded in an R9700 test rig.",
   "engines": {
     "node": ">=22.12.0"
   },

@@ -1,14 +1,14 @@
 ---
 title: Serve Qwen on the R9700
-description: Official Qwen instruct on a loopback /v1 — llama-server first, AMD-validated vLLM 0.27 for reliability, vLLM 0.30 Docker only as a try.
+description: Official Qwen instruct on a loopback /v1 — llama-server daily driver first, Strata for Flash, vLLM 0.31 only as a try.
 minutes: 35
 difficulty: intermediate
-updated: 2026-09-22
+updated: 2026-10-12
 featured: true
 order: 4
 ---
 
-Reliability first: **official Qwen instruct**, one GPU, a loopback `/v1` you can `curl`. [Harnesses](/harnesses) and [abliterated](/abliterated) weights come after. [Stack Lab](/stack-lab) calls this `qwen-reliable`.
+Reliability first: **Qwen3.6-35B-A3B UD-Q5_K_XL**, one GPU, a loopback `/v1` you can `curl`. [Harnesses](/harnesses) and [abliterated](/abliterated) weights come after. [Stack Lab](/stack-lab) calls this `qwen-reliable`.
 
 <QwenPicks />
 
@@ -16,12 +16,17 @@ Reliability first: **official Qwen instruct**, one GPU, a loopback `/v1` you can
 
 ## Path A — llama-server (least pain)
 
-You already built llama.cpp in [Run a local Qwen](/tutorials/run-local-llm). Use an **official** instruct GGUF (Q4_K_M or Q5_K_M on 32 GB — confirm the card’s file size).
+You already built llama.cpp in [Run a local Qwen](/tutorials/run-local-llm). Daily driver: Unsloth **UD-Q5_K_XL** (Q5 family — do not drop to Q3 to “make it fit”).
+
+**TODO:** exact command line / measured VRAM from rig owner.
 
 ```bash
 ./build/bin/llama-server \
-  -m ~/models/YOUR-OFFICIAL-QWEN.gguf \
+  -m ~/models/Qwen3.6-35B-A3B-UD-Q5_K_XL.gguf \
   -ngl 99 \
+  -c 262144 \
+  --cache-type-k f16 \
+  --cache-type-v f16 \
   --jinja \
   --host 127.0.0.1 \
   --port 8080
@@ -43,16 +48,15 @@ If VRAM never moves, stop. Point Hermes or OpenClaw at `http://127.0.0.1:8080/v1
 
 Two pins. Do not mix them in one venv. The [weekly card](/) is the current recommendation.
 
-**Reliability (`qwen-reliable`) — AMD-aligned vLLM 0.27 / ROCm 10**
+**Reliability (`qwen-reliable`) is llama.cpp, not vLLM.** AMD-aligned vLLM **0.27** / ROCm 10 remains the conservative supported combo (docs snapshot: vLLM **0.27** + PyTorch **2.13**). Copy the current image tag from [AMD’s vLLM page](https://rocm.docs.amd.com/projects/ai-ecosystem/en/latest/inference/vllm.html) if you serve HF weights.
 
-Model slot **being reworked**. Copy the current image tag from [AMD’s vLLM page](https://rocm.docs.amd.com/projects/ai-ecosystem/en/latest/inference/vllm.html) (docs snapshot: vLLM **0.27** + PyTorch **2.13**). Do not treat a withdrawn 7B or 8B card as the serve target.
+**Community / ROCm Docker — vLLM 0.31 try**
 
-**Community Docker — vLLM 0.30 ROCm image**
-
-Engine try-tag only. No named Qwen3-8B target. Previous try-tag `v0.29.0` is still valid if 0.30 misbehaves.
+Engine try-tag only. Previous try-tag `v0.30.0` is still valid if 0.31 misbehaves. Do not replace the daily-driver GGUF path with this.
 
 ```bash
 # Community ROCm image — NOT default PyPI
+# TODO: confirm the current 0.31-class tag on Docker Hub / the weekly card
 docker pull vllm/vllm-openai-rocm:v0.30.0
 # previous: vllm/vllm-openai-rocm:v0.29.0
 # previous wheels: pip install vllm --extra-index-url https://wheels.vllm.ai/rocm/0.29.0/rocm723
