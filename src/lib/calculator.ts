@@ -300,9 +300,13 @@ function verdictOf(perGpuGiB: number, vramGb: number): { verdict: Verdict; label
   return { verdict: 'fits', label: 'Fits in VRAM (estimate)' };
 }
 
-function fitsVram(input: CalcInput): boolean {
+export function fitsInVram(input: CalcInput): boolean {
   const { totalGiB } = totalFor(input);
   return overflowOf(input, totalGiB).overflow <= 1e-6;
+}
+
+function fitsVram(input: CalcInput): boolean {
+  return fitsInVram(input);
 }
 
 export function bestQuantThatFits(input: CalcInput): Quant | null {
@@ -407,6 +411,7 @@ const QUERY_KEYS = [
   'ctx',
   'kv',
   'oh',
+  'priority',
 ] as const;
 
 function num(value: string | null, fallback: number): number {
@@ -415,7 +420,7 @@ function num(value: string | null, fallback: number): number {
   return Number.isFinite(n) ? n : fallback;
 }
 
-export function inputToQuery(input: CalcInput): string {
+export function inputToQuery(input: CalcInput, extras?: { priority?: string }): string {
   const params = new URLSearchParams({
     gpu: input.gpuId,
     vram: String(input.vramGb),
@@ -434,6 +439,7 @@ export function inputToQuery(input: CalcInput): string {
     kv: input.kvId,
     oh: String(input.overheadGiB),
   });
+  if (extras?.priority) params.set('priority', extras.priority);
   return params.toString();
 }
 

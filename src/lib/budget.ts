@@ -14,6 +14,13 @@ export type FitRow = {
   note: string;
   calculator: string;
   tested: false | 'daily' | 'fast';
+  /** Omit to show for both priorities. */
+  show?: Array<'size' | 'speed'>;
+};
+
+export type PriorityCopy = {
+  verdict: string;
+  give_up: string;
 };
 
 export type BudgetTier = {
@@ -31,9 +38,19 @@ export type BudgetTier = {
   psu: string;
   backend: string;
   give_up: string;
+  size: PriorityCopy;
+  speed: PriorityCopy;
   tested_rig?: boolean;
   fits: FitRow[];
 };
+
+export function fitsForPriority(tier: BudgetTier, priority: 'size' | 'speed'): FitRow[] {
+  return tier.fits.filter((row) => !row.show || row.show.includes(priority));
+}
+
+export function copyForPriority(tier: BudgetTier, priority: 'size' | 'speed'): PriorityCopy {
+  return tier[priority];
+}
 
 export type UpgradePath = {
   title: string;

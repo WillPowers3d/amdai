@@ -10,7 +10,7 @@ function escapeXml(value: string): string {
 }
 
 export const GET: APIRoute = async ({ site }) => {
-  const origin = site ?? new URL('https://r9700-lab-notes.example');
+  const origin = site ?? new URL('https://amdai.net');
   const updates = (await getCollection('updates')).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
   const items = updates
     .map((note) => {

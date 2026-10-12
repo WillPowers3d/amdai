@@ -1,0 +1,42 @@
+---
+/**
+ * Size vs speed. Shared by /budget and /calculator.
+ * Pages own the URL param and the result text.
+ */
+interface Props {
+  defaultPriority?: 'size' | 'speed';
+}
+
+const { defaultPriority = 'speed' } = Astro.props;
+---
+
+<section
+  id="priority-ask"
+  class="rounded-2xl border border-line bg-raised/40 p-5"
+  data-priority-root
+  data-default={defaultPriority}
+>
+  <p class="font-mono text-[0.72rem] uppercase tracking-[0.18em] text-accent">Ask first</p>
+  <h2 class="mt-2 font-serif text-2xl sm:text-3xl">What do you want first?</h2>
+  <p class="mt-2 text-sm text-muted">
+    Pick before you read the recommendation. This changes the pick, not the math. Tokens per second are
+    estimates unless a “Tested on our rig” number is showing.
+  </p>
+  <div class="mt-4 grid gap-2 sm:grid-cols-2" role="radiogroup" aria-label="Priority">
+    <label
+      class="cursor-pointer rounded-2xl border border-line bg-canvas/70 p-4 has-[:checked]:border-accent has-[:checked]:ring-2 has-[:checked]:ring-accent"
+    >
+      <input class="sr-only" type="radio" name="priority" value="size" checked={defaultPriority === 'size'} />
+      <span class="block font-medium">Max model size</span>
+      <span class="mt-1 block text-sm text-muted">More VRAM, more RAM, Q5/Q6 when they fit. Slower tokens.</span>
+    </label>
+    <label
+      class="cursor-pointer rounded-2xl border border-line bg-canvas/70 p-4 has-[:checked]:border-accent has-[:checked]:ring-2 has-[:checked]:ring-accent"
+    >
+      <input class="sr-only" type="radio" name="priority" value="speed" checked={defaultPriority === 'speed'} />
+      <span class="block font-medium">Speed</span>
+      <span class="mt-1 block text-sm text-muted">One GPU, no offload, MoE, Q4_K_M to Q5.</span>
+    </label>
+  </div>
+  <p class="mt-4 text-sm leading-relaxed text-muted" data-priority-lede></p>
+</section>

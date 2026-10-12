@@ -2,18 +2,23 @@
 import Base from '../layouts/Base.astro';
 import BuyButtons from '../components/BuyButtons.astro';
 import AffiliateDisclosure from '../components/AffiliateDisclosure.astro';
+import PriorityToggle from '../components/PriorityToggle.astro';
 import { bandsReady, budgetFile, budgetTiers } from '../lib/budget';
+import { DEFAULT_PRIORITY, suggestedBudgetTier } from '../lib/priority';
 
 const hasBands = bandsReady();
 const payload = JSON.stringify({
   asOf: budgetFile.as_of,
   hasBands,
+  suggested: { size: suggestedBudgetTier('size'), speed: suggestedBudgetTier('speed') },
   tiers: budgetTiers.map((tier) => ({
     id: tier.id,
     slider: tier.slider,
     usd_low: tier.usd_band.usd_low,
     usd_high: tier.usd_band.usd_high,
     status: tier.usd_band.status,
+    size: tier.size,
+    speed: tier.speed,
   })),
 });
 ---
@@ -26,14 +31,19 @@ const payload = JSON.stringify({
     <p class="font-mono text-[0.72rem] uppercase tracking-[0.18em] text-accent">Buy the box</p>
     <h1 class="mt-3 font-serif text-4xl tracking-tight sm:text-5xl">Setup by budget</h1>
     <p class="mt-4 text-lg leading-relaxed text-muted">
-      Four tiers from a 16 GB card to the two-R9700 test rig. Models and quants are Q4 and up, estimated
-      through the <a class="underline decoration-accent/40 underline-offset-2" href="/calculator">calculator</a>.
+      Four tiers from a 16 GB card to the two-R9700 test rig. Answer size vs speed first — that changes
+      the pick. Models and quants are Q4 and up, estimated through the
+      <a class="underline decoration-accent/40 underline-offset-2" href="/calculator">calculator</a>.
       Backend default is llama.cpp. Buttons say “Check price” — we do not show a live or stale price.
     </p>
     <p class="mt-3 text-sm text-faint">
       Price bands as of {budgetFile.as_of}: {budgetFile.price_label}.
       {hasBands ? 'Bands are filled from a cited source.' : 'Every USD band is still TODO — no cited street price, so the slider is by tier name, not dollars.'}
     </p>
+
+    <div id="ask-row" class="mt-10 space-y-6">
+      <PriorityToggle defaultPriority={DEFAULT_PRIORITY} />
+    </div>
 
     <section class="mt-10 rounded-2xl border border-line bg-raised/40 p-5">
       <label class="font-medium" for="budget-slider">Which tier are you in?</label>
@@ -78,6 +88,9 @@ const payload = JSON.stringify({
             {tier.tested_rig && (
               <span class="rounded-full bg-ok/15 px-2.5 py-0.5 text-xs text-ok">Tested on our rig</span>
             )}
+            <span class="hidden rounded-full border border-accent/40 bg-accent/10 px-2.5 py-0.5 text-xs text-accent-ink" data-suggested>
+              Suggested for this priority
+            </span>
           </div>
           <p class="mt-2 text-sm text-muted">{tier.vram_note}</p>
           <p class="mt-2 text-xs text-faint">
@@ -106,10 +119,16 @@ const payload = JSON.stringify({
             </div>
           </dl>
 
+          <p class="mt-5 text-sm leading-relaxed text-muted" data-copy="verdict">{tier.speed.verdict}</p>
+
           <h3 class="mt-6 font-serif text-xl">What fits (Q4 and up)</h3>
           <ul class="mt-3 space-y-3">
             {tier.fits.map((row) => (
-              <li class="rounded-xl border border-line bg-canvas/60 p-4">
+              <li
+                class="rounded-xl border border-line bg-canvas/60 p-4"
+                data-fit
+                data-show={(row.show ?? ['size', 'speed']).join(',')}
+              >
                 <div class="flex flex-wrap items-center gap-2">
                   <p class="font-medium">{row.model} · {row.quant}</p>
                   {row.tested === 'daily' && (
@@ -121,14 +140,14 @@ const payload = JSON.stringify({
                 </div>
                 <p class="mt-2 text-sm text-muted">{row.note}</p>
                 <p class="mt-2 text-sm">
-                  <a class="text-accent-ink underline decoration-accent/40 underline-offset-2" href={row.calculator}>Open this setup in the calculator</a>
+                  <a class="text-accent-ink underline decoration-accent/40 underline-offset-2" data-calc-link href={row.calculator}>Open this setup in the calculator</a>
                 </p>
               </li>
             ))}
           </ul>
 
           <p class="mt-5 text-sm leading-relaxed text-muted">
-            <span class="font-medium text-ink">What you give up. </span>{tier.give_up}
+            <span class="font-medium text-ink">What you give up. </span><span data-copy="give_up">{tier.speed.give_up}</span>
           </p>
 
           <BuyButtons products={[...tier.gpus, ...tier.parts]} disclose={false} />
@@ -155,6 +174,52 @@ const payload = JSON.stringify({
   const usd = document.getElementById('budget-usd');
   const cards = [...document.querySelectorAll('[data-tier]')];
   const stops = [...document.querySelectorAll('[data-stop]')];
+  const radios = [...document.querySelectorAll('input[name="priority"]')];
+  const lede = document.querySelector('[data-priority-lede]');
+  const COPY = {
+    size: 'Favor more total VRAM — a larger card or a second GPU — and plenty of system RAM so a bigger file can overflow. Pick the largest house model and the highest quant that still makes sense (Q5 or Q6 when they fit, never below Q4). Tokens per second will be lower than an in-VRAM load. Speed numbers are estimates unless a “Tested on our rig” badge is showing.',
+    speed: 'Favor the whole model in one GPU’s VRAM with no RAM offload. Prefer a MoE with few active parameters (Qwen3.6-35B-A3B style), Q4_K_M to Q5, a shorter context, and a single fast card. Offloading weights or KV into system RAM kills speed.',
+  };
+
+  function currentPriority() {
+    const checked = radios.find((el) => el.checked);
+    return checked && checked.value === 'size' ? 'size' : 'speed';
+  }
+
+  function writeUrl(tierId, priority) {
+    const next = new URL(window.location.href);
+    next.searchParams.set('tier', tierId);
+    next.searchParams.set('priority', priority);
+    window.history.replaceState({}, '', next);
+  }
+
+  function applyPriority(priority) {
+    radios.forEach((el) => {
+      el.checked = el.value === priority;
+    });
+    if (lede) lede.textContent = COPY[priority];
+    cards.forEach((card) => {
+      const row = data.tiers.find((tier) => tier.id === card.getAttribute('data-tier'));
+      const copy = row && row[priority];
+      card.querySelectorAll('[data-copy]').forEach((el) => {
+        const key = el.getAttribute('data-copy');
+        if (copy && key && copy[key]) el.textContent = copy[key];
+      });
+      const suggested = card.querySelector('[data-suggested]');
+      if (suggested) suggested.classList.toggle('hidden', data.suggested[priority] !== row?.id);
+      card.querySelectorAll('[data-fit]').forEach((fit) => {
+        const show = (fit.getAttribute('data-show') || 'size,speed').split(',');
+        fit.hidden = !show.includes(priority);
+      });
+      card.querySelectorAll('[data-calc-link]').forEach((link) => {
+        const href = link.getAttribute('href');
+        if (!href) return;
+        const url = new URL(href, window.location.origin);
+        url.searchParams.set('priority', priority);
+        link.setAttribute('href', url.pathname + '?' + url.searchParams.toString());
+      });
+    });
+  }
 
   function highlight(id) {
     cards.forEach((card) => {
@@ -169,23 +234,47 @@ const payload = JSON.stringify({
     });
   }
 
-  function selectSlider(value) {
+  function selectSlider(value, lockTier = true) {
     const tier = data.tiers.find((row) => row.slider === Number(value)) || data.tiers[0];
     if (slider) slider.value = String(tier.slider);
     highlight(tier.id);
-    const next = new URL(window.location.href);
-    next.searchParams.set('tier', tier.id);
-    window.history.replaceState({}, '', next);
+    if (lockTier) writeUrl(tier.id, currentPriority());
   }
+
+  let userPickedTier = new URLSearchParams(window.location.search).has('tier');
 
   function fromQuery() {
-    const id = new URLSearchParams(window.location.search).get('tier');
-    const tier = data.tiers.find((row) => row.id === id);
-    if (tier) selectSlider(tier.slider);
-    else selectSlider(3);
+    const q = new URLSearchParams(window.location.search);
+    const priority = q.get('priority') === 'size' ? 'size' : q.get('priority') === 'speed' ? 'speed' : 'speed';
+    applyPriority(priority);
+    const id = q.get('tier');
+    const picked = data.tiers.find((row) => row.id === id);
+    if (picked) selectSlider(picked.slider);
+    else {
+      const suggested = data.tiers.find((row) => row.id === data.suggested[priority]);
+      selectSlider(suggested ? suggested.slider : 3);
+    }
   }
 
-  slider?.addEventListener('input', () => selectSlider(slider.value));
+  radios.forEach((el) => {
+    el.addEventListener('change', () => {
+      const priority = currentPriority();
+      applyPriority(priority);
+      if (userPickedTier) {
+        const q = new URLSearchParams(window.location.search);
+        const locked = data.tiers.find((row) => row.id === q.get('tier'));
+        writeUrl(locked ? locked.id : data.suggested[priority], priority);
+      } else {
+        const suggested = data.tiers.find((row) => row.id === data.suggested[priority]);
+        selectSlider(suggested ? suggested.slider : 3);
+      }
+    });
+  });
+
+  slider?.addEventListener('input', () => {
+    userPickedTier = true;
+    selectSlider(slider.value);
+  });
   usd?.addEventListener('input', () => {
     if (!data.hasBands) return;
     const n = Number(usd.value);

@@ -4,9 +4,16 @@ import tailwindcss from '@tailwindcss/vite';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 
-// Set `site` to your public URL when you publish. Sitemap and canonical URLs use it.
+// Public URL for sitemap and canonicals. Override with SITE_URL if needed.
+// Accounts / forum stay off (static SSG) until those features ship.
+const accountsOn = process.env.ACCOUNTS_ENABLED === '1' || process.env.ACCOUNTS_ENABLED === 'true';
+const forumOn = process.env.FORUM_ENABLED === '1' || process.env.FORUM_ENABLED === 'true';
+if (accountsOn || forumOn) {
+  throw new Error('ACCOUNTS_ENABLED / FORUM_ENABLED are not implemented yet. Build with both off for the static site.');
+}
+
 export default defineConfig({
-  site: 'https://r9700-lab-notes.example',
+  site: process.env.SITE_URL || 'https://amdai.net',
   prefetch: true,
   server: {
     host: '127.0.0.1',

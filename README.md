@@ -43,7 +43,7 @@ npm run preview
 
 `npm run build` runs Pagefind over `dist/` so `/search` works in preview. For `npm run dev` after a build, `npm run index` copies the index to `public/pagefind`.
 
-When you publish, set `site` in `astro.config.mjs` to your public URL.
+Public site URL is `https://amdai.net` (`site` in `astro.config.mjs`; override with `SITE_URL`). Build with `ACCOUNTS_ENABLED=0` and `FORUM_ENABLED=0` (static SSG). Those flags are not implemented yet — leaving them on fails the build.
 
 ## Information architecture
 
@@ -52,8 +52,8 @@ When you publish, set `site` in `astro.config.mjs` to your public URL.
 | `/` | Home + living status card |
 | `/start` | Getting started (GPU → ROCm → llama.cpp → harness) |
 | `/stacks` | Recommended stack cards from the test rig |
-| `/budget` | Setup by budget — Starter → Pro, no invented prices |
-| `/calculator` | Quant + Hardware Calculator (client-side estimates) |
+| `/budget` | Setup by budget — Starter → Pro, size vs speed toggle, no invented prices |
+| `/calculator` | Quant + Hardware Calculator (client-side estimates, same size/speed toggle) |
 | `/quants` | Q4–Q8, UD dynamic, KV types, why not below Q4 |
 | `/gpus` | GPU directory — gfx IDs, VRAM, official ROCm rows |
 | `/stack-lab` | Radeon Stack Lab companion (Ubuntu app, Origin repo / local) |

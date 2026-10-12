@@ -8,6 +8,9 @@ interface ImportMetaEnv {
   readonly BHPHOTO_LINK_TEMPLATE?: string;
   readonly BHPHOTO_QUERY_PARAM?: string;
   readonly AFFILIATE_CLICK_BEACON?: string;
+  readonly ACCOUNTS_ENABLED?: string;
+  readonly FORUM_ENABLED?: string;
+  readonly SITE_URL?: string;
 }
 
 interface ImportMeta {

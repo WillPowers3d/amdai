@@ -27,17 +27,25 @@ tiers:
     psu: "TODO: no cited PSU wattage for the 16 GB cards on this page. AMD’s R9700 minimum is 750 W (product page). Check the card you buy."
     backend: llama.cpp (Vulkan first; HIP if rocminfo is clean). Not Ollama, not vLLM.
     give_up: Versus Mid — 4–8 GB more VRAM, so Qwen3.6-35B-A3B at Q4 has a chance to sit in GPU memory at a modest context. On 16 GB the house GGUF does not fit in VRAM even at Q4 (formula weights alone are above 16 GB; publisher Q5 is 26.6 GB).
+    size:
+      verdict: 16 GB cannot hold Qwen3.6-35B-A3B at Q4 in VRAM (formula weights already exceed 16 GB). Max-size here means RAM offload at Q4 — tokens per second will be lower. We have no tok/s for this setup. Do not drop below Q4.
+      give_up: Versus Mid — 4–8 GB more VRAM so Q4 has a chance to sit in GPU memory at a modest context (estimate).
+    speed:
+      verdict: Speed wants the whole file in one GPU with no offload. The house Q4+ GGUFs do not fit 16 GB. This tier cannot be a speed pick for those models. Do not drop below Q4 to fake a fit.
+      give_up: Versus Mid — a 20–24 GB card that may hold Q4 at a modest context with no offload (estimate).
     fits:
       - model: Qwen3.6-35B-A3B
         quant: Q4_K_M
         note: Estimate only. Q4 formula weights for 35B already exceed 16 GB, so expect RAM offload (slow). Do not drop below Q4.
         calculator: /calculator?gpu=rx9070xt&vram=16&n=1&split=0&ram=64&model=qwen36&tp=35&ap=3&layers=40&kvl=10&kvh=2&hd=256&quant=q4_k_m&ctx=8192&kv=f16&oh=1
         tested: false
+        show: [size, speed]
       - model: Qwen 3.8 Flash
         quant: UD-Q6_K_XL
-        note: Publisher file ~169 GB. Will overflow 16 GB by a lot. Shown so the calculator can say no.
+        note: Publisher file ~169 GB. Will overflow 16 GB by a lot. Shown so the calculator can say no. Not a speed pick.
         calculator: /calculator?gpu=rx9070xt&vram=16&n=1&split=0&ram=64&model=flash&tp=125&ap=6&layers=48&kvl=12&kvh=2&hd=256&quant=q6_k&ctx=32768&kv=f16&oh=1
         tested: false
+        show: [size]
 
   - id: mid
     name: Mid
@@ -62,17 +70,25 @@ tiers:
     psu: "TODO: no cited PSU wattage for the 7900-class cards on this page. Check the product page for the SKU you buy."
     backend: llama.cpp (HIP gfx1100 / gfx1101, or Vulkan). Still not vLLM.
     give_up: Versus Enthusiast — 32 GB and gfx1201. The daily-driver Q5 at 262K is a one-R9700 stack we actually ran, not a 24 GB guess.
+    size:
+      verdict: On 24 GB, Q4 + a modest context may fit (estimate). Q5 at 262K will not. More RAM only helps if you offload — tokens per second will be lower (estimate). Never below Q4.
+      give_up: Versus Enthusiast — 32 GB and gfx1201. The daily-driver Q5 at 262K is a one-R9700 stack we actually ran, not a 24 GB guess.
+    speed:
+      verdict: One 24 GB card, Q4_K_M, shorter context, no split. Q5 at long context is a size move and likely overflows. Offload kills speed. Tokens per second — estimate only; no first-party number on a 7900.
+      give_up: Versus Enthusiast — a 32 GB R9700 that holds the daily-driver Q5 at 262K with 0% offload (tested on our rig). We have not published tok/s for that run.
     fits:
       - model: Qwen3.6-35B-A3B
         quant: Q4_K_M
         note: On 24 GB, Q4 + a modest context can look like a VRAM fit in the calculator. On 20 GB it is tight or no. Open the share link — do not take this sentence as a bench.
         calculator: /calculator?gpu=rx7900xtx&vram=24&n=1&split=0&ram=64&model=qwen36&tp=35&ap=3&layers=40&kvl=10&kvh=2&hd=256&quant=q4_k_m&ctx=32768&kv=f16&oh=1
         tested: false
+        show: [size, speed]
       - model: Qwen3.6-35B-A3B
         quant: UD-Q5_K_XL
-        note: Publisher 26.6 GB file plus KV will not sit in 24 GB at 262K. Try a shorter context in the calculator before you leave Q5.
+        note: Publisher 26.6 GB file plus KV will not sit in 24 GB at 262K. Try a shorter context in the calculator before you leave Q5. Size path — offload is slow.
         calculator: /calculator?gpu=rx7900xtx&vram=24&n=1&split=0&ram=64&model=qwen36&tp=35&ap=3&layers=40&kvl=10&kvh=2&hd=256&quant=q5_k_m&ctx=32768&kv=f16&oh=1
         tested: false
+        show: [size]
 
   - id: enthusiast
     name: Enthusiast
@@ -96,17 +112,25 @@ tiers:
     psu: AMD product page minimum for the R9700 is 750 W. 1000W-class is search guidance for headroom, not a SKU.
     backend: llama.cpp Vulkan (the daily-driver path on our rig). HIP if you already have a clean /opt/rocm.
     give_up: Versus Pro — a second R9700 and 128–256 GB DDR5, which is what lets the Flash Q6 file live mostly in RAM on our test rig.
+    size:
+      verdict: One 32 GB card holds the daily-driver Q5 at 262K (tested, 0% offload). Flash Q6 (~169 GB publisher listing) is the size step that needs Pro RAM. Tokens per second will be lower once you leave VRAM (estimate). We have not published a 35B tok/s.
+      give_up: Versus Pro — a second R9700 and 128–256 GB DDR5, which is what lets the Flash Q6 file live mostly in RAM on our test rig. First-party Flash tok/s exists only there.
+    speed:
+      verdict: This is the speed tier — Qwen3.6-35B-A3B Q5 on one R9700, no offload (tested on our rig). We have not published tokens per second for that Vulkan run. Flash on one card overflows; it is not a speed pick.
+      give_up: Versus Pro — extra DRAM and a second card help the size path, not this one-card speed shape.
     fits:
       - model: Qwen3.6-35B-A3B
         quant: UD-Q5_K_XL
-        note: Daily driver on our rig — one R9700, 262144 context, f16 KV, 0% RAM offload. Exact flags / measured VRAM still TODO.
+        note: Daily driver on our rig — one R9700, 262144 context, f16 KV, 0% RAM offload. Exact flags / measured VRAM still TODO. No published tok/s for this run.
         calculator: /calculator?gpu=r9700&vram=32&n=1&split=0&ram=64&model=qwen36&tp=35&ap=3&layers=40&kvl=10&kvh=2&hd=256&quant=q5_k_m&ctx=262144&kv=f16&oh=1
         tested: daily
+        show: [size, speed]
       - model: Qwen 3.8 Flash
         quant: UD-Q6_K_XL
-        note: Publisher ~169 GB. One 32 GB card will overflow; the calculator says so. Pro is where we actually ran it (RAM holds most of the file).
+        note: Publisher ~169 GB. One 32 GB card will overflow; the calculator says so. Pro is where we actually ran it (RAM holds most of the file). Not a speed pick.
         calculator: /calculator?gpu=r9700&vram=32&n=1&split=0&ram=64&model=flash&tp=125&ap=6&layers=48&kvl=12&kvh=2&hd=256&quant=q6_k&ctx=262144&kv=f16&oh=1
         tested: false
+        show: [size]
 
   - id: pro
     name: Pro
@@ -131,17 +155,25 @@ tiers:
     backend: llama.cpp Vulkan for the daily driver. Strata v0.1.42 for the Flash agent. vLLM remains a try.
     give_up: Nothing on this page’s ladder. You still run one LLM per GPU unless you deliberately combine.
     tested_rig: true
+    size:
+      verdict: Two cards + 256 GB DDR5 is the size ladder. Flash Q6 is the largest house file. First-party on our rig — Strata v0.1.42 ~32.6 tok/s vs llama.cpp ~16 for that Flash Q6. Still expect lower tok/s than a one-card 35B in VRAM (no 35B tok/s published).
+      give_up: Nothing on this page’s ladder. You still run one LLM per GPU unless you deliberately combine.
+    speed:
+      verdict: Daily driver still uses one of the two cards. Qwen3.6-35B-A3B Q5, 0% offload (tested on our rig). Do not split for speed. Flash is the size pick. We have not published tok/s for the 35B Vulkan run.
+      give_up: Nothing on the speed ladder — this already matches the one-card daily driver. Flash Q6 is the size move.
     fits:
       - model: Qwen3.6-35B-A3B
         quant: UD-Q5_K_XL
-        note: Tested on our rig — one of the two cards, llama.cpp Vulkan, 262K, f16 KV, 0% offload.
+        note: Tested on our rig — one of the two cards, llama.cpp Vulkan, 262K, f16 KV, 0% offload. No published tok/s for this run.
         calculator: /calculator?gpu=r9700&vram=32&n=1&split=0&ram=256&model=qwen36&tp=35&ap=3&layers=40&kvl=10&kvh=2&hd=256&quant=q5_k_m&ctx=262144&kv=f16&oh=1
         tested: daily
+        show: [size, speed]
       - model: Qwen 3.8 Flash
         quant: UD-Q6_K_XL
-        note: Tested on our rig — Strata v0.1.42 ~32.6 tok/s vs llama.cpp ~16. Publisher file ~169 GB; VRAM/RAM figures still TODO.
+        note: Tested on our rig — Strata v0.1.42 ~32.6 tok/s vs llama.cpp ~16. Publisher file ~169 GB; VRAM/RAM figures still TODO. Size pick, not the speed pick.
         calculator: /calculator?gpu=r9700&vram=32&n=1&split=0&ram=256&model=flash&tp=125&ap=6&layers=48&kvl=12&kvh=2&hd=256&quant=q6_k&ctx=262144&kv=f16&oh=1
         tested: fast
+        show: [size]
 
 upgrade:
   title: You already have a PC

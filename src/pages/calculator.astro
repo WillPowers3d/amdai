@@ -2,7 +2,9 @@
 import Base from '../layouts/Base.astro';
 import BuyButtons from '../components/BuyButtons.astro';
 import AffiliateDisclosure from '../components/AffiliateDisclosure.astro';
+import PriorityToggle from '../components/PriorityToggle.astro';
 import { CONTEXT_PRESETS, GPU_PRESETS, KV_TYPES, MODEL_PRESETS, QUANTS } from '../lib/calculator';
+import { DEFAULT_PRIORITY } from '../lib/priority';
 import { gpuProducts } from '../lib/affiliates';
 
 const fitGpus = gpuProducts();
@@ -27,6 +29,10 @@ const fitGpus = gpuProducts();
         <a class="rounded-full border border-line bg-raised px-4 py-2 text-sm" href="/quants">Quant explainer</a>
         <a class="rounded-full border border-line bg-raised px-4 py-2 text-sm" href="/gpus">GPU directory</a>
       </div>
+    </div>
+
+    <div id="ask-row" class="mt-8">
+      <PriorityToggle defaultPriority={DEFAULT_PRIORITY} />
     </div>
 
     <div id="tested-badge" hidden class="mt-6 inline-flex max-w-3xl items-start gap-2 rounded-full border border-ok/40 bg-ok/10 px-4 py-2 text-sm text-ok">
@@ -157,6 +163,11 @@ const fitGpus = gpuProducts();
           <p class="font-mono text-[0.68rem] uppercase tracking-[0.16em] text-accent">Estimate</p>
           <p class="mt-2 font-serif text-3xl" data-verdict-label>Fits in VRAM (estimate)</p>
           <p class="mt-1 text-sm text-faint">Per GPU vs the VRAM you entered. Totals in GiB (1024³).</p>
+          <div class="mt-4 rounded-xl border border-line bg-canvas/60 p-3 text-sm leading-relaxed">
+            <p class="font-medium" data-priority-headline></p>
+            <p class="mt-2 text-muted" data-priority-body></p>
+            <button type="button" id="apply-priority" hidden class="mt-3 rounded-full bg-accent px-3 py-1.5 text-xs text-white"></button>
+          </div>
           <dl class="mt-5 grid grid-cols-2 gap-3 text-sm">
             <div class="rounded-xl border border-line bg-canvas/50 p-3">
               <dt class="text-faint">Weights</dt>
@@ -181,13 +192,11 @@ const fitGpus = gpuProducts();
             <p><span class="text-faint">Per GPU · </span><span class="tabular-nums" data-out="perGpu">—</span> GiB vs <span class="tabular-nums" data-out="vram">—</span> GB</p>
             <p class="mt-1"><span class="text-faint">Available VRAM · </span><span class="tabular-nums" data-out="available">—</span> GB</p>
             <p class="mt-1"><span class="text-faint">Overflow to system RAM · </span><span class="tabular-nums" data-out="overflow">—</span> GiB</p>
-            <p class="mt-2 hidden text-sm text-warn" data-offload-warn>
-              Offloading weights or KV into system RAM is slow. Prefer a smaller context, a higher-efficiency quant at or above Q4, or another GPU — do not drop below Q4.
-            </p>
+            <p class="mt-2 hidden text-sm text-warn" data-offload-warn></p>
           </div>
           <div class="mt-5 grid gap-3 text-sm sm:grid-cols-2">
             <div>
-              <p class="text-faint">Best quant that fits fully in VRAM</p>
+              <p class="text-faint" data-best-quant-label>Best quant that fits fully in VRAM</p>
               <p class="mt-1 font-medium" data-out="bestQuant">—</p>
             </div>
             <div>
@@ -270,10 +279,21 @@ const fitGpus = gpuProducts();
     type ModelId,
     type QuantId,
   } from '../lib/calculator';
+  import {
+    PRIORITY_COPY,
+    bestQuantForPriority,
+    calculatorAdvice,
+    parsePriority,
+    type Priority,
+    type PriorityAdvice,
+  } from '../lib/priority';
 
   const form = document.getElementById('calc-form') as HTMLFormElement;
   const shareBtn = document.getElementById('share-btn');
+  const applyBtn = document.getElementById('apply-priority') as HTMLButtonElement | null;
   let input: CalcInput = queryToInput(window.location.search);
+  let priority: Priority = parsePriority(window.location.search);
+  let pendingApply: CalcInput | null = null;
 
   const field = <T extends HTMLElement>(name: string) => form.querySelector(`[name="${name}"]`) as T;
 
@@ -297,6 +317,9 @@ const fitGpus = gpuProducts();
     field<HTMLInputElement>('overheadGiB').value = String(input.overheadGiB);
     const note = document.querySelector('[data-arch-note]');
     if (note) note.textContent = modelById(input.modelId).archNote;
+    document.querySelectorAll<HTMLInputElement>('input[name="priority"]').forEach((el) => {
+      el.checked = el.value === priority;
+    });
   }
 
   function readForm(): CalcInput {
@@ -327,8 +350,29 @@ const fitGpus = gpuProducts();
     });
   }
 
+  function shareQuery() {
+    return inputToQuery(input, { priority });
+  }
+
+  function renderAdvice(advice: PriorityAdvice) {
+    setText('[data-priority-lede]', PRIORITY_COPY[priority].lede);
+    setText('[data-priority-headline]', advice.headline);
+    setText('[data-priority-body]', advice.body);
+    pendingApply = advice.apply ?? null;
+    if (applyBtn) {
+      if (advice.apply && advice.applyLabel) {
+        applyBtn.hidden = false;
+        applyBtn.textContent = advice.applyLabel;
+      } else {
+        applyBtn.hidden = true;
+      }
+    }
+  }
+
   function render() {
     const result = compute(input);
+    const advice = calculatorAdvice(input, result, priority);
+    const pick = bestQuantForPriority(input, priority);
     const verdictEl = document.querySelector('[data-verdict-label]');
     if (verdictEl) {
       verdictEl.textContent = `${result.verdictLabel} · estimate`;
@@ -345,13 +389,18 @@ const fitGpus = gpuProducts();
     setText('[data-out="overflow"]', formatGiB(result.overflowGiB));
     setText('[data-weights-note]', result.weightsNote);
     setText('[data-kv-note]', result.kvNote);
-    setText('[data-out="bestQuant"]', result.bestQuant ? `${result.bestQuant.label} (estimate)` : 'No Q4+ quant fits fully in VRAM');
+    setText('[data-best-quant-label]', PRIORITY_COPY[priority].bestQuantLabel);
+    setText('[data-out="bestQuant"]', pick ? `${pick.label} (estimate)` : 'No Q4+ quant fits fully in VRAM');
     setText('[data-out="maxBest"]', result.maxContextAtBest != null ? `${formatCtx(result.maxContextAtBest)} (estimate)` : '—');
     setText('[data-out="maxSelected"]', result.maxContextAtSelected != null ? `${formatCtx(result.maxContextAtSelected)} (estimate)` : '—');
     setText('[data-ctx-label]', `${formatCtx(input.context)} tokens`);
+    renderAdvice(advice);
 
     const warn = document.querySelector('[data-offload-warn]');
-    warn?.classList.toggle('hidden', result.overflowGiB <= 0.05);
+    if (warn) {
+      warn.textContent = PRIORITY_COPY[priority].offload;
+      warn.classList.toggle('hidden', result.overflowGiB <= 0.05);
+    }
 
     const badge = document.getElementById('tested-badge');
     const badgeLabel = document.querySelector('[data-tested-label]');
@@ -364,7 +413,7 @@ const fitGpus = gpuProducts();
       }
     }
 
-    const qs = inputToQuery(input);
+    const qs = shareQuery();
     const url = `${window.location.pathname}?${qs}`;
     setText('[data-share-url]', url);
     history.replaceState(null, '', url);
@@ -452,7 +501,7 @@ const fitGpus = gpuProducts();
   });
 
   shareBtn?.addEventListener('click', async () => {
-    const url = `${window.location.origin}${window.location.pathname}?${inputToQuery(input)}`;
+    const url = `${window.location.origin}${window.location.pathname}?${shareQuery()}`;
     try {
       await navigator.clipboard.writeText(url);
     } catch {
@@ -465,8 +514,22 @@ const fitGpus = gpuProducts();
     }
   });
 
+  document.querySelectorAll<HTMLInputElement>('input[name="priority"]').forEach((el) => {
+    el.addEventListener('change', () => {
+      priority = el.value === 'size' ? 'size' : 'speed';
+      writeForm();
+      render();
+    });
+  });
+
+  applyBtn?.addEventListener('click', () => {
+    if (!pendingApply) return;
+    sync(pendingApply);
+  });
+
   if (!window.location.search) {
     input = { ...DEFAULT_INPUT };
+    priority = 'speed';
   }
   writeForm();
   render();
