@@ -14,7 +14,7 @@
     "preview": "astro preview --host 127.0.0.1 --port 43147",
     "astro": "astro",
     "check": "astro check",
-    "test": "tsx --test src/lib/rig-match.test.ts src/lib/rocm-guide.test.ts src/lib/forum.test.ts",
+    "test": "tsx --test src/lib/rig-match.test.ts src/lib/rocm-guide.test.ts src/lib/forum.test.ts src/lib/rocm-problems.test.ts",
     "notify": "tsx src/scripts/notify.ts",
     "og": "node scripts/og.mjs",
     "shots": "node scripts/shots.mjs"

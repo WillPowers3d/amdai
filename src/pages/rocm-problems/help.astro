@@ -1,0 +1,86 @@
+---
+import Base from '../../layouts/Base.astro';
+import ProblemsNav from '../../components/problems/ProblemsNav.astro';
+---
+
+<Base
+  title="How you can help"
+  description="Write a good ROCm bug, add repro data instead of +1, test nightlies, contribute benches and docs."
+>
+  <main id="main" class="mx-auto max-w-3xl px-4 py-10 sm:px-6">
+    <ProblemsNav current="help" />
+    <h1 class="display mt-6 text-4xl sm:text-5xl">How the community can help</h1>
+    <p class="mt-4 text-lg leading-relaxed text-muted">
+      AMD’s ROCm work happens in the open. The useful home-lab contribution is a
+      <strong class="text-ink">reproducible report</strong>, not another “same here.”
+    </p>
+
+    <article class="prose-lab prose mt-10 max-w-none">
+      <h2 id="report">Write a good bug report</h2>
+      <p>
+        Use the <a href="/rocm-problems/report">report template</a> and the
+        <a href="/rocm-problems/collect-rocm-report.sh"><code>collect-rocm-report.sh</code></a>
+        script. GPU, gfx ID, OS, kernel, ROCm prefix, backend, the exact command, and the
+        first error line. Attach a <a href="/account">saved rig</a> when you post on the
+        <a href="/forum">forum</a>.
+      </p>
+
+      <h2 id="upvote">Upvote and add data — do not +1-spam</h2>
+      <p>
+        If the issue already exists, add <em>your</em> rocminfo excerpt, kernel, and whether
+        the published workaround worked. A thumbs-up is fine. A comment that only says
+        “+1” or “any update?” is noise. Link the tracker row so people can find the same
+        thread later.
+      </p>
+
+      <h2 id="nightlies">Test nightlies and RCs</h2>
+      <p>
+        When an AMD engineer asks for a nightly, try it on a spare disk or container — not
+        as a silent overwrite of a working daily driver. Record the artifact date. We do
+        not invent version pins here. TheRock and ROCm releases are the upstream homes:
+      </p>
+      <ul>
+        <li><a href="https://github.com/ROCm/TheRock">ROCm/TheRock</a></li>
+        <li><a href="https://github.com/ROCm/ROCm/releases">ROCm/ROCm releases</a></li>
+        <li><a href="https://github.com/ROCm/TheRock/blob/main/CONTRIBUTING.md">TheRock contributing</a></li>
+      </ul>
+
+      <h2 id="benchmarks">Contribute benchmarks</h2>
+      <p>
+        tok/s without model, quant, context, backend, gfx, and whether KV is f16 is not a
+        benchmark. Post in <a href="/forum/c/benchmarks">Benchmarks</a>. This site’s house
+        rules still apply: llama.cpp first for consumers, Q5 over Q4, never below Q4, no
+        invented numbers. First-party figures stay labeled “Measured on our rig” or they
+        stay TODO.
+      </p>
+
+      <h2 id="docs">Docs and translations</h2>
+      <p>
+        Fix a sentence on this site: <a href="/rocm-problems/contribute">contributor guidelines</a>.
+        ROCm’s own docs take pull requests against
+        <a href="https://github.com/ROCm/ROCm">ROCm/ROCm</a> —
+        read <a href="https://rocm.docs.amd.com/en/latest/contribute/contributing.html">Contributing to ROCm docs</a>.
+      </p>
+
+      <h2 id="works">Report what works</h2>
+      <p>
+        Negative space is useful too. The
+        <a href="/rocm-problems/works">Works on my rig</a> form attaches a saved rig and
+        (when the forum is on) opens a <a href="/forum/c/show-your-rig">Show Your Rig</a>
+        thread. Say the command that ran, not a vibe.
+      </p>
+
+      <h2 id="amd">AMD developer community and GitHub</h2>
+      <ul>
+        <li><a href="https://github.com/ROCm/ROCm/issues">ROCm issues</a></li>
+        <li><a href="https://github.com/ROCm/ROCm/blob/develop/CONTRIBUTING.md">Contribute to ROCm</a></li>
+        <li><a href="https://www.amd.com/en/developer/resources/rocm-hub.html">AMD ROCm Developer Hub</a></li>
+        <li><a href="https://www.amd.com/en/developer/browse-by-resource-type/community.html">AMD Developer Community</a></li>
+        <li><a href="https://github.com/ggml-org/llama.cpp/issues">llama.cpp issues</a></li>
+        <li><a href="https://github.com/vllm-project/vllm/issues">vLLM issues</a></li>
+        <li><a href="https://github.com/ollama/ollama/issues">Ollama issues</a></li>
+        <li><a href="https://github.com/pytorch/pytorch/issues">PyTorch issues</a></li>
+      </ul>
+    </article>
+  </main>
+</Base>

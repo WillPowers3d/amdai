@@ -1,0 +1,164 @@
+---
+import Base from '../../layouts/Base.astro';
+import ProblemsNav from '../../components/problems/ProblemsNav.astro';
+import { accountsEnabled, forumEnabled } from '../../lib/flags';
+import { worksBody } from '../../lib/rocm-problems';
+import { rocmProblem, rocmProblems } from '../../lib/rocm-problems-data';
+
+export const prerender = !accountsEnabled();
+
+const q = Astro.url.searchParams;
+const problemId = q.get('problem') ?? '';
+const problem = rocmProblem(problemId);
+const notes = q.get('notes') ?? '';
+const requestedRig = q.get('rig') ?? '';
+
+type RigOpt = {
+  id: string;
+  name: string;
+  gpu: string;
+  gfx: string | null;
+  os: string | null;
+  rocm_version: string | null;
+  backend: string;
+  backend_version: string | null;
+};
+
+let user = false;
+let csrf = '';
+let rigs: RigOpt[] = [];
+const onForum = forumEnabled();
+
+if (accountsEnabled()) {
+  const { getSessionUser } = await import('../../server/session');
+  const { listRigs } = await import('../../server/rigs');
+  const { ensureCsrf } = await import('../../server/csrf');
+  const session = await getSessionUser(Astro.cookies);
+  user = Boolean(session);
+  csrf = ensureCsrf(Astro.cookies);
+  if (session) {
+    rigs = (await listRigs(session.id)).map((rig) => ({
+      id: rig.id,
+      name: rig.name,
+      gpu: rig.gpu,
+      gfx: rig.gfx,
+      os: rig.os,
+      rocm_version: rig.rocm_version,
+      backend: rig.backend,
+      backend_version: rig.backend_version,
+    }));
+  }
+}
+
+const selected = rigs.find((rig) => rig.id === requestedRig) ?? rigs[0];
+const preview = worksBody({
+  problem,
+  rigName: selected?.name,
+  gpu: selected?.gpu,
+  gfx: selected?.gfx ?? undefined,
+  os: selected?.os ?? undefined,
+  rocm: selected?.rocm_version ?? undefined,
+  backend: selected?.backend,
+  backendVersion: selected?.backend_version ?? undefined,
+  notes,
+});
+const title = selected
+  ? `Works on my rig: ${selected.gpu} / ${selected.backend}`
+  : 'Works on my rig';
+---
+
+<Base
+  title="Works on my rig"
+  description="Report a setup that actually ran — tied to a saved rig and, when the forum is on, a Show Your Rig thread."
+>
+  <main id="main" class="mx-auto max-w-2xl px-4 py-10 sm:px-6">
+    <ProblemsNav current="works" />
+    <h1 class="display mt-6 text-4xl sm:text-5xl">Works on my rig</h1>
+    <p class="mt-4 text-lg leading-relaxed text-muted">
+      Positive reports keep the tracker honest. Attach the same saved rig you use on the
+      forum so GPU / ROCm / backend show as a badge.
+    </p>
+
+    {!accountsEnabled() && (
+      <p class="mt-6 text-muted">
+        Saved rigs ship behind <code class="font-mono text-ink">ACCOUNTS_ENABLED=1</code>.
+        Copy the template below, or <a class="underline decoration-accent/40" href="/account">save a rig</a>
+        when accounts are on.
+      </p>
+    )}
+    {accountsEnabled() && !user && (
+      <p class="mt-6 text-muted">
+        <a class="underline decoration-accent/40" href={`/login?next=${encodeURIComponent(Astro.url.pathname + Astro.url.search)}`}>Sign in</a>
+        to attach a saved rig.
+      </p>
+    )}
+
+    <form class="mt-8 space-y-4" method={onForum && user ? 'post' : 'get'} action={onForum && user ? '/api/forum/thread' : '/rocm-problems/works'}>
+      {onForum && user && <input type="hidden" name="_csrf" value={csrf} />}
+      {onForum && user && <input type="hidden" name="category" value="show-your-rig" />}
+      {onForum && user && <input type="hidden" name="error_pattern_id" value={problem?.id ?? 'works-on-my-rig'} />}
+      {onForum && user && <input type="hidden" name="title" value={title} />}
+      {onForum && user && <label class="hp" aria-hidden="true">Company site<input type="text" name="website" tabindex="-1" autocomplete="off" /></label>}
+
+      <label class="block text-sm">
+        <span class="text-faint">Related tracker item (optional)</span>
+        <select class="field mt-1" name="problem">
+          <option value="">None</option>
+          {rocmProblems().map((row) => (
+            <option value={row.id} selected={row.id === problem?.id}>{row.title}</option>
+          ))}
+        </select>
+      </label>
+
+      {user && rigs.length > 0 && (
+        <label class="block text-sm">
+          <span class="text-faint">Saved rig</span>
+          <select class="field mt-1" name={onForum ? 'rig_id' : 'rig'}>
+            {rigs.map((rig) => (
+              <option value={rig.id} selected={rig.id === selected?.id}>
+                {rig.name} · {rig.gpu} · {rig.backend}
+                {rig.rocm_version ? ` · ROCm ${rig.rocm_version}` : ''}
+              </option>
+            ))}
+          </select>
+        </label>
+      )}
+      {user && rigs.length === 0 && (
+        <p class="text-sm text-faint">
+          No saved rigs. <a class="underline" href="/account">Save one</a> from the calculator.
+        </p>
+      )}
+
+      <label class="block text-sm">
+        <span class="text-faint">What worked</span>
+        <textarea class="field mt-1 min-h-32 font-mono text-sm" name={onForum && user ? 'body' : 'notes'} minlength="8">{onForum && user ? preview : notes}</textarea>
+      </label>
+
+      {onForum && user ? (
+        <button class="btn-primary" type="submit">Post to Show Your Rig</button>
+      ) : (
+        <button class="btn-secondary" type="submit">Preview</button>
+      )}
+    </form>
+
+    {!(onForum && user) && (
+      <section class="mt-10">
+        <h2 class="text-xl tracking-tight">Copy this</h2>
+        <pre class="mt-3 overflow-x-auto rounded-xl border border-line bg-raised p-4 text-sm">{preview}</pre>
+        <p class="mt-3 text-sm text-muted">
+          Paste it on <a class="underline decoration-accent/40" href="/forum/c/show-your-rig">Show Your Rig</a>
+          when the forum is on, or on the matching upstream issue with a new data point.
+        </p>
+      </section>
+    )}
+  </main>
+</Base>
+
+<style>
+  .hp {
+    position: absolute;
+    left: -9999px;
+    height: 0;
+    overflow: hidden;
+  }
+</style>

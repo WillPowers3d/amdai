@@ -1,0 +1,48 @@
+---
+interface Props {
+  current?: string;
+}
+
+const { current = 'tracker' } = Astro.props;
+
+const items = [
+  { href: '/rocm-problems', id: 'tracker', label: 'Tracker' },
+  { href: '/rocm-problems/help', id: 'help', label: 'How you can help' },
+  { href: '/rocm-problems/report', id: 'report', label: 'Bug report' },
+  { href: '/rocm-problems/works', id: 'works', label: 'Works on my rig' },
+  { href: '/rocm-problems/contribute', id: 'contribute', label: 'Contribute' },
+];
+---
+
+<nav class="problems-nav" aria-label="ROCm problems">
+  <p class="kicker"><a href="/rocm">ROCm</a> / Problems</p>
+  <ul>
+    {items.map((item) => (
+      <li>
+        <a href={item.href} aria-current={item.id === current ? 'page' : undefined}>{item.label}</a>
+      </li>
+    ))}
+  </ul>
+</nav>
+
+<style>
+  .problems-nav ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+    margin: 0.75rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .problems-nav a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.95rem;
+  }
+  .problems-nav a[aria-current='page'] {
+    color: var(--ink);
+    text-decoration: underline;
+    text-decoration-color: color-mix(in srgb, var(--accent) 50%, transparent);
+    text-underline-offset: 0.2em;
+  }
+</style>

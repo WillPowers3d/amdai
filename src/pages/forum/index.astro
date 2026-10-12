@@ -39,6 +39,7 @@ if (on) {
           <a class="btn-primary" href="/forum/new">New thread</a>
           <a class="btn-secondary" href="/forum/search">Search</a>
           <a class="btn-ghost" href="/forum/rules">Rules</a>
+          <a class="btn-ghost" href="/rocm-problems">ROCm problems</a>
           {user && <a class="btn-ghost" href="/forum/inbox">Inbox{unread ? ` (${unread})` : ''}</a>}
           {user && (user.role === 'mod' || user.role === 'admin') && <a class="btn-ghost" href="/forum/mod">Moderation</a>}
           {!user && <a class="btn-ghost" href="/login?next=/forum">Sign in</a>}

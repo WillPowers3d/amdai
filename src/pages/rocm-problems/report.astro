@@ -1,0 +1,79 @@
+---
+import Base from '../../layouts/Base.astro';
+import ProblemsNav from '../../components/problems/ProblemsNav.astro';
+---
+
+<Base
+  title="ROCm bug report template"
+  description="Template and collect-rocm-report.sh for filing useful ROCm / llama.cpp / Ollama bugs."
+>
+  <main id="main" class="mx-auto max-w-3xl px-4 py-10 sm:px-6">
+    <ProblemsNav current="report" />
+    <h1 class="display mt-6 text-4xl sm:text-5xl">Write a good bug report</h1>
+    <p class="mt-4 text-lg leading-relaxed text-muted">
+      A useful report is boring: versions, the exact command, the first error, and whether
+      a published workaround changed anything. No tok/s you did not measure.
+    </p>
+
+    <article class="prose-lab prose mt-10 max-w-none">
+      <h2 id="script">Collect versions</h2>
+      <p>
+        Download
+        <a href="/rocm-problems/collect-rocm-report.sh"><code>collect-rocm-report.sh</code></a>
+        and run it on the box that fails:
+      </p>
+      <pre><code>curl -fsSL https://amdai.net/rocm-problems/collect-rocm-report.sh -o collect-rocm-report.sh
+chmod +x collect-rocm-report.sh
+./collect-rocm-report.sh | tee rocm-report.txt</code></pre>
+      <p>
+        The script prints OS (without hostname), amdgpu/kfd, rocminfo lines that are not
+        UUIDs, hipconfig, amd-smi or rocm-smi, optional clinfo, and the env vars people
+        actually set (<code>HSA_OVERRIDE_GFX_VERSION</code>, device isolation). Read the
+        file before you paste. It does not upload anything.
+      </p>
+
+      <h2 id="template">Template</h2>
+      <pre><code>## What I expected
+Tokens on the discrete GPU (gfx ID: ____).
+
+## What happened
+Paste the first error, not a paraphrase.
+
+## Hardware
+- GPU / gfx:
+- OS / distro / kernel:
+- ROCm / HIP prefix:
+- Backend + version (llama.cpp / Strata / vLLM / Ollama):
+- Model / quant / context (Q4 floor):
+
+## Command
+```
+# exact argv
+```
+
+## Already tried
+- [ ] llama.cpp Vulkan on the same GGUF
+- [ ] Unset HSA_OVERRIDE_GFX_VERSION
+- [ ] One GPU visible (HIP_VISIBLE_DEVICES / GGML_VK_VISIBLE_DEVICES)
+- [ ] Matching thread: (amdai tracker URL or GitHub issue)
+
+## Logs
+Attach `rocm-report.txt` and `dmesg | grep -iE 'amdgpu|MODE1|MES'` if it hung.
+</code></pre>
+
+      <h2 id="where">Where to file</h2>
+      <ul>
+        <li>Driver / runtime / HIP: <a href="https://github.com/ROCm/ROCm/issues">ROCm/ROCm issues</a></li>
+        <li>llama.cpp: <a href="https://github.com/ggml-org/llama.cpp/issues">ggml-org/llama.cpp</a></li>
+        <li>vLLM: <a href="https://github.com/vllm-project/vllm/issues">vllm-project/vllm</a></li>
+        <li>Ollama: <a href="https://github.com/ollama/ollama/issues">ollama/ollama</a></li>
+        <li>PyTorch: <a href="https://github.com/pytorch/pytorch/issues">pytorch/pytorch</a></li>
+        <li>Home-lab discussion with a rig badge: <a href="/forum/new?category=install-drivers">Ask the forum</a></li>
+      </ul>
+      <p>
+        Search the <a href="/rocm-problems">tracker</a> and the upstream issue first.
+        If it matches, add repro data there. See <a href="/rocm-problems/help">how you can help</a>.
+      </p>
+    </article>
+  </main>
+</Base>

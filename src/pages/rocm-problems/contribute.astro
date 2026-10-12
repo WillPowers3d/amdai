@@ -1,0 +1,71 @@
+---
+import Base from '../../layouts/Base.astro';
+import ProblemsNav from '../../components/problems/ProblemsNav.astro';
+---
+
+<Base
+  title="Contribute to amdai"
+  description="Guidelines for contributing to R9700 Lab Notes — cite, do not invent numbers, keep the static build green."
+>
+  <main id="main" class="mx-auto max-w-3xl px-4 py-10 sm:px-6">
+    <ProblemsNav current="contribute" />
+    <h1 class="display mt-6 text-4xl sm:text-5xl">Contributor guidelines</h1>
+    <p class="mt-4 text-lg leading-relaxed text-muted">
+      This site is independent living notes for local AI on consumer Radeon. It is not AMD.
+      We would rather ship a TODO than a guessed tok/s.
+    </p>
+
+    <article class="prose-lab prose mt-10 max-w-none">
+      <h2 id="house">House rules</h2>
+      <ul>
+        <li>Prefer llama.cpp over vLLM for consumers. Prefer Q5 over Q4. Never below Q4 — including draft and MTP.</li>
+        <li>Models from NVMe, not HDD. One LLM per GPU unless you deliberately combine.</li>
+        <li>Do not reintroduce Qwen2.5 or Qwen3-8B. Abliterated stays educational.</li>
+        <li>Do not invent flags, VRAM, RAM, or issue numbers. Mark gaps <code>TODO</code>.</li>
+        <li>Official vs works: official means the SKU is on AMD’s current matrix or matching notes.</li>
+        <li><code>HSA_OVERRIDE_GFX_VERSION</code> is unofficial. Never present it as a plan.</li>
+      </ul>
+
+      <h2 id="data">Edit data, not mythology</h2>
+      <p>Most living facts live in YAML under <code>src/data/</code>:</p>
+      <ul>
+        <li><code>rocm-problems.yaml</code> — this tracker. Every row needs a last-checked date and an https source.</li>
+        <li><code>errors.yaml</code> — troubleshooter patterns.</li>
+        <li><code>stack-updates.yaml</code> — alerts matched to saved rigs.</li>
+        <li><code>gpus.yaml</code>, <code>stacks.yaml</code>, <code>what-works.yaml</code>.</li>
+      </ul>
+      <p>
+        Seed only what you verified. If you cannot open the GitHub issue, leave the row out
+        or mark <code>todo: true</code>.
+      </p>
+
+      <h2 id="build">Keep main green</h2>
+      <ul>
+        <li><code>ACCOUNTS_ENABLED=0 FORUM_ENABLED=0 npm run build</code> must stay a static site.</li>
+        <li>Do not import <code>src/server/*</code> from a page that prerenders when flags are off, except behind <code>if (accountsEnabled())</code> / <code>forumEnabled()</code> dynamic import.</li>
+        <li>Add tests next to the lib you changed. <code>npm test</code> should stay green.</li>
+      </ul>
+
+      <h2 id="voice">Voice</h2>
+      <p>
+        Plain English. No lorem. No “welcome to your app.” Cite with a real URL. Affiliate
+        links are Amazon Associates, Rakuten, and B&amp;H only — see
+        <a href="/disclosure">disclosure</a>.
+      </p>
+
+      <h2 id="translations">Translations</h2>
+      <p>
+        A translation is welcome if it does not drift from the English sources and keeps
+        every TODO. Do not translate an invented number into confidence. ROCm’s own
+        documentation translations belong in
+        <a href="https://github.com/ROCm/ROCm">ROCm/ROCm</a>, not here.
+      </p>
+
+      <h2 id="conduct">Conduct</h2>
+      <p>
+        The <a href="/forum/rules">forum code of conduct</a> applies to comments on this
+        site too. Argue the log. Abliterated is educational, not the default stack.
+      </p>
+    </article>
+  </main>
+</Base>

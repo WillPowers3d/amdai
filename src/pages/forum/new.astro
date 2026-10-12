@@ -5,20 +5,25 @@ import { categoryForErrorTags, forumCategories } from '../../lib/forum-categorie
 import { errorPatterns } from '../../lib/errors';
 import { forumEnabled } from '../../lib/flags';
 import { forumErrorCopy } from '../../lib/forum-perms';
+import { discussBody } from '../../lib/rocm-problems';
+import { rocmProblem } from '../../lib/rocm-problems-data';
 
 const on = forumEnabled();
 export const prerender = !forumEnabled();
 
 const q = Astro.url.searchParams;
 const requestedCategory = q.get('category') ?? '';
-const patternId = q.get('pattern') ?? '';
+const patternId = q.get('pattern') ?? q.get('problem') ?? '';
 const pattern = errorPatterns.find((row) => row.id === patternId);
+const problem = rocmProblem(patternId);
 const category = forumCategories.some((c) => c.slug === requestedCategory)
   ? requestedCategory
-  : pattern
-    ? categoryForErrorTags(pattern.tags)
-    : 'getting-started';
-const title = q.get('title') ?? pattern?.title ?? '';
+  : problem
+    ? problem.forum_category
+    : pattern
+      ? categoryForErrorTags(pattern.tags)
+      : 'getting-started';
+const title = q.get('title') ?? problem?.title ?? pattern?.title ?? '';
 const pasted = (q.get('body') ?? q.get('error') ?? '').slice(0, 4000);
 const err = forumErrorCopy(q.get('error'));
 
@@ -36,9 +41,11 @@ if (on) {
   if (session) rigs = await listRigs(session.id);
 }
 
-const defaultBody = pasted
-  ? `\`\`\`\n${pasted}\n\`\`\`\n\n${pattern ? `Matched troubleshooter pattern: ${pattern.title} (${pattern.id}).\n` : ''}`
-  : '';
+const defaultBody = problem
+  ? (pasted || discussBody(problem)).slice(0, 4000)
+  : pasted
+    ? `\`\`\`\n${pasted}\n\`\`\`\n\n${pattern ? `Matched troubleshooter pattern: ${pattern.title} (${pattern.id}).\n` : ''}`
+    : '';
 ---
 
 <Base title="New thread" description="Start a forum thread. Attach a saved rig so helpers see GPU, ROCm, and backend.">

@@ -69,6 +69,12 @@ Public site URL is `https://amdai.net` (`site` in `astro.config.mjs`; override w
 | `/rocm/history` | Cited timeline |
 | `/rocm/glossary` | Terms |
 | `/rocm/faq` | Misconceptions + FAQ |
+| `/rocm-problems` | Cited consumer ROCm problems + how you can help |
+| `/rocm-problems/{id}` | One problem, workaround, upstream, Discuss in forum |
+| `/rocm-problems/help` | Bug reports, nightlies, benches, AMD / GitHub |
+| `/rocm-problems/report` | Report template + collect-rocm-report.sh |
+| `/rocm-problems/works` | Works on my rig (saved-rig form) |
+| `/rocm-problems/contribute` | Contributor guidelines for this site |
 | `/backends` | Backend chooser — llama.cpp default |
 | `/software` | llama.cpp first; vLLM / Strata as tries |
 | `/abliterated` | Abliterated hub — vet files, catalog table, method/variant cards, llama.cpp notes |
@@ -110,6 +116,7 @@ Public site URL is `https://amdai.net` (`site` in `astro.config.mjs`; override w
 | `src/data/products.yaml` | Check-price search URLs (no prices) |
 | `src/data/budget-tiers.yaml` | `/budget` tiers; USD bands stay TODO until cited |
 | `src/data/errors.yaml` | Cited troubleshooter patterns |
+| `src/data/rocm-problems.yaml` | Cited `/rocm-problems` tracker (TODO if unverified) |
 | `src/data/backends.yaml` | Backend chooser rows |
 | `src/data/version-matrix.yaml` | ROCm × engine × card (or “no data”) |
 
