@@ -57,6 +57,7 @@ export const homeLink: NavItem = {
 export const primaryNav: NavItem[] = [
   { href: '/start', label: 'Getting started', description: 'GPU → ROCm → llama.cpp → optional harness', group: 'path' },
   { href: '/stacks', label: 'Stacks', description: 'Daily driver and fast-agent cards from our test rig', group: 'path' },
+  { href: '/budget', label: 'Budget', description: 'Starter → Pro Radeon builds, no invented prices', group: 'path' },
   { href: '/calculator', label: 'Calculator', description: 'Quant + hardware VRAM / RAM fit estimates', group: 'path' },
   { href: '/quants', label: 'Quants', description: 'Q4–Q8, UD dynamic, KV types, why not below Q4', group: 'path' },
   { href: '/gpus', label: 'GPU directory', description: 'Radeon cards, gfx IDs, VRAM, official ROCm rows', group: 'stack' },

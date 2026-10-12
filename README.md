@@ -52,6 +52,7 @@ When you publish, set `site` in `astro.config.mjs` to your public URL.
 | `/` | Home + living status card |
 | `/start` | Getting started (GPU → ROCm → llama.cpp → harness) |
 | `/stacks` | Recommended stack cards from the test rig |
+| `/budget` | Setup by budget — Starter → Pro, no invented prices |
 | `/calculator` | Quant + Hardware Calculator (client-side estimates) |
 | `/quants` | Q4–Q8, UD dynamic, KV types, why not below Q4 |
 | `/gpus` | GPU directory — gfx IDs, VRAM, official ROCm rows |
@@ -86,6 +87,7 @@ When you publish, set `site` in `astro.config.mjs` to your public URL.
 | `src/data/abliterated.yaml` | Abliterated table |
 | `src/data/retailers.yaml` | Storefronts + Amazon default tag `amdainet-20` |
 | `src/data/products.yaml` | Check-price search URLs (no prices) |
+| `src/data/budget-tiers.yaml` | `/budget` tiers; USD bands stay TODO until cited |
 | `src/data/errors.yaml` | Cited troubleshooter patterns |
 | `src/data/backends.yaml` | Backend chooser rows |
 | `src/data/version-matrix.yaml` | ROCm × engine × card (or “no data”) |

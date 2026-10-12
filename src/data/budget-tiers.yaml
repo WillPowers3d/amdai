@@ -1,0 +1,161 @@
+# Setup-by-budget tiers. Price bands stay TODO until a cited street-price
+# source exists. Never invent USD. Buttons say “Check price.”
+as_of: 2026-10-12
+price_label: approximate, check current price — not a live or stale quote
+
+tiers:
+  - id: starter
+    name: Starter
+    order: 1
+    slider: 1
+    tagline: One ~16 GB Radeon
+    vram_note: "~16 GB (RX 9070 XT or RX 7800 XT)"
+    usd_band:
+      status: todo
+      label: "TODO: no cited street-price source as of 2026-10-12"
+      usd_low: null
+      usd_high: null
+    gpus:
+      - rx9070xt
+      - rx7800xt
+    parts:
+      - ddr5-kit
+      - nvme
+      - psu-1000w
+    ram: 64 GB DDR5 is the one-card minimum this site already uses as search guidance — not a measured requirement.
+    nvme: House rule — GGUFs on NVMe, not a spinning disk. Search only, not a SKU.
+    psu: "TODO: no cited PSU wattage for the 16 GB cards on this page. AMD’s R9700 minimum is 750 W (product page). Check the card you buy."
+    backend: llama.cpp (Vulkan first; HIP if rocminfo is clean). Not Ollama, not vLLM.
+    give_up: Versus Mid — 4–8 GB more VRAM, so Qwen3.6-35B-A3B at Q4 has a chance to sit in GPU memory at a modest context. On 16 GB the house GGUF does not fit in VRAM even at Q4 (formula weights alone are above 16 GB; publisher Q5 is 26.6 GB).
+    fits:
+      - model: Qwen3.6-35B-A3B
+        quant: Q4_K_M
+        note: Estimate only. Q4 formula weights for 35B already exceed 16 GB, so expect RAM offload (slow). Do not drop below Q4.
+        calculator: /calculator?gpu=rx9070xt&vram=16&n=1&split=0&ram=64&model=qwen36&tp=35&ap=3&layers=40&kvl=10&kvh=2&hd=256&quant=q4_k_m&ctx=8192&kv=f16&oh=1
+        tested: false
+      - model: Qwen 3.8 Flash
+        quant: UD-Q6_K_XL
+        note: Publisher file ~169 GB. Will overflow 16 GB by a lot. Shown so the calculator can say no.
+        calculator: /calculator?gpu=rx9070xt&vram=16&n=1&split=0&ram=64&model=flash&tp=125&ap=6&layers=48&kvl=12&kvh=2&hd=256&quant=q6_k&ctx=32768&kv=f16&oh=1
+        tested: false
+
+  - id: mid
+    name: Mid
+    order: 2
+    slider: 2
+    tagline: One ~20–24 GB Radeon
+    vram_note: "~20–24 GB (RX 7900 XT or RX 7900 XTX)"
+    usd_band:
+      status: todo
+      label: "TODO: no cited street-price source as of 2026-10-12"
+      usd_low: null
+      usd_high: null
+    gpus:
+      - rx7900xtx
+      - rx7900xt
+    parts:
+      - ddr5-kit
+      - nvme
+      - psu-1000w
+    ram: 64 GB DDR5 search guidance. More RAM only helps if you offload — and offload is slow.
+    nvme: Same house rule — NVMe, not HDD.
+    psu: "TODO: no cited PSU wattage for the 7900-class cards on this page. Check the product page for the SKU you buy."
+    backend: llama.cpp (HIP gfx1100 / gfx1101, or Vulkan). Still not vLLM.
+    give_up: Versus Enthusiast — 32 GB and gfx1201. The daily-driver Q5 at 262K is a one-R9700 stack we actually ran, not a 24 GB guess.
+    fits:
+      - model: Qwen3.6-35B-A3B
+        quant: Q4_K_M
+        note: On 24 GB, Q4 + a modest context can look like a VRAM fit in the calculator. On 20 GB it is tight or no. Open the share link — do not take this sentence as a bench.
+        calculator: /calculator?gpu=rx7900xtx&vram=24&n=1&split=0&ram=64&model=qwen36&tp=35&ap=3&layers=40&kvl=10&kvh=2&hd=256&quant=q4_k_m&ctx=32768&kv=f16&oh=1
+        tested: false
+      - model: Qwen3.6-35B-A3B
+        quant: UD-Q5_K_XL
+        note: Publisher 26.6 GB file plus KV will not sit in 24 GB at 262K. Try a shorter context in the calculator before you leave Q5.
+        calculator: /calculator?gpu=rx7900xtx&vram=24&n=1&split=0&ram=64&model=qwen36&tp=35&ap=3&layers=40&kvl=10&kvh=2&hd=256&quant=q5_k_m&ctx=32768&kv=f16&oh=1
+        tested: false
+
+  - id: enthusiast
+    name: Enthusiast
+    order: 3
+    slider: 3
+    tagline: One 32 GB R9700
+    vram_note: 32 GB (one Radeon AI PRO R9700)
+    usd_band:
+      status: todo
+      label: "TODO: no cited street-price source as of 2026-10-12"
+      usd_low: null
+      usd_high: null
+    gpus:
+      - r9700
+    parts:
+      - ddr5-kit
+      - nvme
+      - psu-1000w
+    ram: 64 GB is the one-card search floor. Our daily driver used 0% RAM offload; extra DRAM is still useful for the OS and for the Flash file if you try it.
+    nvme: NVMe. Daily-driver GGUF is a 26.6 GB listing — do not park it on a spinner.
+    psu: AMD product page minimum for the R9700 is 750 W. 1000W-class is search guidance for headroom, not a SKU.
+    backend: llama.cpp Vulkan (the daily-driver path on our rig). HIP if you already have a clean /opt/rocm.
+    give_up: Versus Pro — a second R9700 and 128–256 GB DDR5, which is what lets the Flash Q6 file live mostly in RAM on our test rig.
+    fits:
+      - model: Qwen3.6-35B-A3B
+        quant: UD-Q5_K_XL
+        note: Daily driver on our rig — one R9700, 262144 context, f16 KV, 0% RAM offload. Exact flags / measured VRAM still TODO.
+        calculator: /calculator?gpu=r9700&vram=32&n=1&split=0&ram=64&model=qwen36&tp=35&ap=3&layers=40&kvl=10&kvh=2&hd=256&quant=q5_k_m&ctx=262144&kv=f16&oh=1
+        tested: daily
+      - model: Qwen 3.8 Flash
+        quant: UD-Q6_K_XL
+        note: Publisher ~169 GB. One 32 GB card will overflow; the calculator says so. Pro is where we actually ran it (RAM holds most of the file).
+        calculator: /calculator?gpu=r9700&vram=32&n=1&split=0&ram=64&model=flash&tp=125&ap=6&layers=48&kvl=12&kvh=2&hd=256&quant=q6_k&ctx=262144&kv=f16&oh=1
+        tested: false
+
+  - id: pro
+    name: Pro
+    order: 4
+    slider: 4
+    tagline: Two R9700 + 128–256 GB DDR5
+    vram_note: 2 × 32 GB (our test rig). Daily driver still uses one card.
+    usd_band:
+      status: todo
+      label: "TODO: no cited street-price source as of 2026-10-12"
+      usd_low: null
+      usd_high: null
+    gpus:
+      - r9700
+    parts:
+      - ddr5-kit
+      - nvme
+      - psu-1000w
+    ram: 128–256 GB DDR5. Our test rig is 256 GB. The Flash UD-Q6_K_XL listing is ~169 GB — that is why Pro has this much DRAM.
+    nvme: Fast NVMe. Two large GGUFs plus the OS.
+    psu: Two 300 W TBP cards (AMD R9700 TBP, product page) plus a 750 W minimum per card is not a PSU math we will invent. 1000W-class is search guidance. TODO — cite a PSU pick once we have one.
+    backend: llama.cpp Vulkan for the daily driver. Strata v0.1.42 for the Flash agent. vLLM remains a try.
+    give_up: Nothing on this page’s ladder. You still run one LLM per GPU unless you deliberately combine.
+    tested_rig: true
+    fits:
+      - model: Qwen3.6-35B-A3B
+        quant: UD-Q5_K_XL
+        note: Tested on our rig — one of the two cards, llama.cpp Vulkan, 262K, f16 KV, 0% offload.
+        calculator: /calculator?gpu=r9700&vram=32&n=1&split=0&ram=256&model=qwen36&tp=35&ap=3&layers=40&kvl=10&kvh=2&hd=256&quant=q5_k_m&ctx=262144&kv=f16&oh=1
+        tested: daily
+      - model: Qwen 3.8 Flash
+        quant: UD-Q6_K_XL
+        note: Tested on our rig — Strata v0.1.42 ~32.6 tok/s vs llama.cpp ~16. Publisher file ~169 GB; VRAM/RAM figures still TODO.
+        calculator: /calculator?gpu=r9700&vram=32&n=1&split=0&ram=256&model=flash&tp=125&ap=6&layers=48&kvl=12&kvh=2&hd=256&quant=q6_k&ctx=262144&kv=f16&oh=1
+        tested: fast
+
+upgrade:
+  title: You already have a PC
+  lede: Add a GPU. Do not rebuild the tower unless the PSU, slot, or case actually blocks the card.
+  steps:
+    - Match the card you can add to a tier above (16 / 20–24 / 32 GB).
+    - Confirm a free PCIe x16 slot and that the card physically fits.
+    - For an R9700, AMD’s published minimum PSU is 750 W and TBP is 300 W (product page). If your PSU is below that, upgrade the PSU — do not guess a wattage.
+    - 64 GB DDR5 is enough to start the daily driver with 0% offload on one 32 GB card. Buy more RAM when you want the Flash file in memory.
+    - Keep GGUFs on NVMe.
+  products:
+    - r9700
+    - rx9070xt
+    - rx7900xtx
+    - psu-1000w
+    - ddr5-kit
+    - nvme

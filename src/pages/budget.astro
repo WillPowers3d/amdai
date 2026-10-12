@@ -1,0 +1,197 @@
+---
+import Base from '../layouts/Base.astro';
+import BuyButtons from '../components/BuyButtons.astro';
+import AffiliateDisclosure from '../components/AffiliateDisclosure.astro';
+import { bandsReady, budgetFile, budgetTiers } from '../lib/budget';
+
+const hasBands = bandsReady();
+const payload = JSON.stringify({
+  asOf: budgetFile.as_of,
+  hasBands,
+  tiers: budgetTiers.map((tier) => ({
+    id: tier.id,
+    slider: tier.slider,
+    usd_low: tier.usd_band.usd_low,
+    usd_high: tier.usd_band.usd_high,
+    status: tier.usd_band.status,
+  })),
+});
+---
+
+<Base
+  title="Setup by budget"
+  description="Starter through Pro local-AI Radeon builds. No invented prices. Calculator share links, llama.cpp first, Q4 and up only."
+>
+  <main id="main" class="mx-auto max-w-3xl px-4 py-10 sm:px-6">
+    <p class="font-mono text-[0.72rem] uppercase tracking-[0.18em] text-accent">Buy the box</p>
+    <h1 class="mt-3 font-serif text-4xl tracking-tight sm:text-5xl">Setup by budget</h1>
+    <p class="mt-4 text-lg leading-relaxed text-muted">
+      Four tiers from a 16 GB card to the two-R9700 test rig. Models and quants are Q4 and up, estimated
+      through the <a class="underline decoration-accent/40 underline-offset-2" href="/calculator">calculator</a>.
+      Backend default is llama.cpp. Buttons say “Check price” — we do not show a live or stale price.
+    </p>
+    <p class="mt-3 text-sm text-faint">
+      Price bands as of {budgetFile.as_of}: {budgetFile.price_label}.
+      {hasBands ? 'Bands are filled from a cited source.' : 'Every USD band is still TODO — no cited street price, so the slider is by tier name, not dollars.'}
+    </p>
+
+    <section class="mt-10 rounded-2xl border border-line bg-raised/40 p-5">
+      <label class="font-medium" for="budget-slider">Which tier are you in?</label>
+      <input
+        id="budget-slider"
+        type="range"
+        min="1"
+        max={budgetTiers.length}
+        step="1"
+        value="3"
+        class="mt-4 w-full accent-[var(--accent)]"
+      />
+      <ol class="mt-2 grid grid-cols-4 gap-1 text-center font-mono text-[0.65rem] uppercase tracking-[0.08em] text-faint sm:text-[0.7rem]">
+        {budgetTiers.map((tier) => (
+          <li data-stop={tier.slider}>{tier.name}</li>
+        ))}
+      </ol>
+      <div class="mt-4">
+        <label class="block text-sm text-muted" for="budget-usd">Optional dollar input</label>
+        <input
+          id="budget-usd"
+          type="number"
+          min="0"
+          step="50"
+          inputmode="numeric"
+          class="mt-1 min-h-11 w-full max-w-xs rounded-full border border-line bg-canvas px-4 text-sm"
+          placeholder={hasBands ? 'USD' : 'Bands are TODO'}
+          disabled={!hasBands}
+        />
+        <p class="mt-2 text-xs text-faint" data-budget-usd-status>
+          {hasBands ? 'Highlights the tier whose cited band contains that number.' : 'No cited USD bands — pick a tier on the slider. Fill usd_low / usd_high in budget-tiers.yaml when you have a source.'}
+        </p>
+      </div>
+    </section>
+
+    <ol class="mt-12 space-y-12">
+      {budgetTiers.map((tier) => (
+        <li id={tier.id} class="scroll-mt-28 rounded-2xl border border-line bg-raised/30 p-5 sm:p-6" data-tier={tier.id} data-slider={tier.slider}>
+          <p class="font-mono text-[0.68rem] uppercase tracking-[0.14em] text-faint">{tier.tagline}</p>
+          <div class="mt-1 flex flex-wrap items-center gap-2">
+            <h2 class="font-serif text-3xl">{tier.name}</h2>
+            {tier.tested_rig && (
+              <span class="rounded-full bg-ok/15 px-2.5 py-0.5 text-xs text-ok">Tested on our rig</span>
+            )}
+          </div>
+          <p class="mt-2 text-sm text-muted">{tier.vram_note}</p>
+          <p class="mt-2 text-xs text-faint">
+            {tier.usd_band.label}
+            {tier.usd_band.usd_low != null && tier.usd_band.usd_high != null && (
+              <span> · ${tier.usd_band.usd_low}–${tier.usd_band.usd_high} ({budgetFile.price_label})</span>
+            )}
+          </p>
+
+          <dl class="mt-5 grid gap-3 text-sm sm:grid-cols-2">
+            <div>
+              <dt class="font-medium text-ink">RAM</dt>
+              <dd class="mt-1 text-muted">{tier.ram}</dd>
+            </div>
+            <div>
+              <dt class="font-medium text-ink">NVMe</dt>
+              <dd class="mt-1 text-muted">{tier.nvme}</dd>
+            </div>
+            <div class="sm:col-span-2">
+              <dt class="font-medium text-ink">PSU</dt>
+              <dd class="mt-1 text-muted">{tier.psu}</dd>
+            </div>
+            <div class="sm:col-span-2">
+              <dt class="font-medium text-ink">Backend</dt>
+              <dd class="mt-1 text-muted">{tier.backend} See the <a class="underline decoration-accent/40 underline-offset-2" href="/backends">chooser</a>.</dd>
+            </div>
+          </dl>
+
+          <h3 class="mt-6 font-serif text-xl">What fits (Q4 and up)</h3>
+          <ul class="mt-3 space-y-3">
+            {tier.fits.map((row) => (
+              <li class="rounded-xl border border-line bg-canvas/60 p-4">
+                <div class="flex flex-wrap items-center gap-2">
+                  <p class="font-medium">{row.model} · {row.quant}</p>
+                  {row.tested === 'daily' && (
+                    <span class="rounded-full bg-ok/15 px-2 py-0.5 text-[0.7rem] text-ok">Tested on our rig — Qwen3.6-35B-A3B Q5</span>
+                  )}
+                  {row.tested === 'fast' && (
+                    <span class="rounded-full bg-ok/15 px-2 py-0.5 text-[0.7rem] text-ok">Tested on our rig — Qwen 3.8 Flash Q6</span>
+                  )}
+                </div>
+                <p class="mt-2 text-sm text-muted">{row.note}</p>
+                <p class="mt-2 text-sm">
+                  <a class="text-accent-ink underline decoration-accent/40 underline-offset-2" href={row.calculator}>Open this setup in the calculator</a>
+                </p>
+              </li>
+            ))}
+          </ul>
+
+          <p class="mt-5 text-sm leading-relaxed text-muted">
+            <span class="font-medium text-ink">What you give up. </span>{tier.give_up}
+          </p>
+
+          <BuyButtons products={[...tier.gpus, ...tier.parts]} disclose={false} />
+        </li>
+      ))}
+    </ol>
+    <AffiliateDisclosure compact />
+
+    <section id="upgrade" class="mt-16 rounded-2xl border border-line bg-raised/40 p-5 sm:p-6">
+      <p class="font-mono text-[0.68rem] uppercase tracking-[0.14em] text-accent">Already built</p>
+      <h2 class="mt-2 font-serif text-3xl">{budgetFile.upgrade.title}</h2>
+      <p class="mt-3 text-muted">{budgetFile.upgrade.lede}</p>
+      <ol class="mt-5 list-decimal space-y-2 pl-5 text-sm leading-relaxed text-muted">
+        {budgetFile.upgrade.steps.map((step) => <li>{step}</li>)}
+      </ol>
+      <BuyButtons products={budgetFile.upgrade.products} />
+    </section>
+  </main>
+</Base>
+
+<script define:vars={{ payload }}>
+  const data = JSON.parse(payload);
+  const slider = document.getElementById('budget-slider');
+  const usd = document.getElementById('budget-usd');
+  const cards = [...document.querySelectorAll('[data-tier]')];
+  const stops = [...document.querySelectorAll('[data-stop]')];
+
+  function highlight(id) {
+    cards.forEach((card) => {
+      const on = card.getAttribute('data-tier') === id;
+      card.classList.toggle('ring-2', on);
+      card.classList.toggle('ring-accent', on);
+      card.classList.toggle('opacity-55', !on);
+    });
+    stops.forEach((stop) => {
+      const tier = data.tiers.find((row) => String(row.slider) === stop.getAttribute('data-stop'));
+      stop.classList.toggle('text-ink', tier && tier.id === id);
+    });
+  }
+
+  function selectSlider(value) {
+    const tier = data.tiers.find((row) => row.slider === Number(value)) || data.tiers[0];
+    if (slider) slider.value = String(tier.slider);
+    highlight(tier.id);
+    const next = new URL(window.location.href);
+    next.searchParams.set('tier', tier.id);
+    window.history.replaceState({}, '', next);
+  }
+
+  function fromQuery() {
+    const id = new URLSearchParams(window.location.search).get('tier');
+    const tier = data.tiers.find((row) => row.id === id);
+    if (tier) selectSlider(tier.slider);
+    else selectSlider(3);
+  }
+
+  slider?.addEventListener('input', () => selectSlider(slider.value));
+  usd?.addEventListener('input', () => {
+    if (!data.hasBands) return;
+    const n = Number(usd.value);
+    const hit = data.tiers.find((row) => row.status === 'cited' && row.usd_low != null && row.usd_high != null && n >= row.usd_low && n <= row.usd_high);
+    if (hit) selectSlider(hit.slider);
+  });
+
+  fromQuery();
+</script>
