@@ -41,6 +41,8 @@ npm run build
 npm run preview
 ```
 
+`npm run build` runs Pagefind over `dist/` so `/search` works in preview. For `npm run dev` after a build, `npm run index` copies the index to `public/pagefind`.
+
 When you publish, set `site` in `astro.config.mjs` to your public URL.
 
 ## Information architecture
@@ -51,15 +53,20 @@ When you publish, set `site` in `astro.config.mjs` to your public URL.
 | `/start` | Getting started (GPU → ROCm → llama.cpp → harness) |
 | `/stacks` | Recommended stack cards from the test rig |
 | `/calculator` | Quant + Hardware Calculator (client-side estimates) |
+| `/quants` | Q4–Q8, UD dynamic, KV types, why not below Q4 |
 | `/gpus` | GPU directory — gfx IDs, VRAM, official ROCm rows |
 | `/stack-lab` | Radeon Stack Lab companion (Ubuntu app, Origin repo / local) |
 | `/rocm` | ROCm explainer + succinct version notes |
+| `/backends` | Backend chooser — llama.cpp default |
 | `/software` | llama.cpp first; vLLM / Strata as tries |
 | `/abliterated` | Refusal removal / Qwen variants (educational only) |
 | `/harnesses` | Hermes Agent and OpenClaw (`/v1` first) |
 | `/hardware` | PSU, cooling, VRAM |
 | `/tutorials` | How-tos |
 | `/troubleshooting` | Common failures |
+| `/troubleshoot/errors` | Paste-a-log matcher, cited patterns |
+| `/updates` | Dated notes + RSS + version matrix |
+| `/search` | Pagefind (index built by `npm run build`) |
 | `/faq` | Short answers |
 | `/blog` | Longer posts + version-note index |
 | `/maintain` | Weekday scrape checklist |
@@ -79,6 +86,9 @@ When you publish, set `site` in `astro.config.mjs` to your public URL.
 | `src/data/abliterated.yaml` | Abliterated table |
 | `src/data/retailers.yaml` | Storefronts + Amazon default tag `amdainet-20` |
 | `src/data/products.yaml` | Check-price search URLs (no prices) |
+| `src/data/errors.yaml` | Cited troubleshooter patterns |
+| `src/data/backends.yaml` | Backend chooser rows |
+| `src/data/version-matrix.yaml` | ROCm × engine × card (or “no data”) |
 
 Add a short dated note under `src/content/updates/` when a **line** changes (new Core SDK, new vLLM extras). Those render on `/rocm#version-notes` and the blog index.
 

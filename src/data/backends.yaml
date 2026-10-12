@@ -1,0 +1,99 @@
+# Consumer backend chooser. llama.cpp is the default.
+# Speed numbers only where our rig measured them. Everything else is qualitative.
+as_of: 2026-10-12
+default_id: llamacpp
+
+backends:
+  - id: llamacpp
+    name: llama.cpp
+    short: Consumer default — GGUF, Vulkan or HIP, one user
+    verdict: default
+    backends: HIP (`GGML_HIP`, `AMDGPU_TARGETS=gfx1201`) and Vulkan (`GGML_VULKAN`)
+    best_for: First Qwen, debugging, a loopback `/v1` for a harness
+    worst_for: Many concurrent clients, continuous batching
+    rocm: HIP needs a gfx1201 userspace. Vulkan needs a working ICD (RADV is the usual Linux path).
+    caveats: >
+      Daily driver on our rig is Vulkan, not HIP. Compile it yourself so you
+      control the target. Do not drop below Q4 to “make it fit.”
+    when: Start here. Always.
+    href: /tutorials/run-local-llm
+
+  - id: llamacpp-vulkan
+    name: llama.cpp Vulkan
+    short: What we actually run for the daily driver
+    verdict: default
+    backends: Vulkan (RADV GFX1201 or AMDVLK)
+    best_for: Tokens tonight when HIP CMake is a mess; Windows; proving the card
+    worst_for: Sharing a stack with PyTorch/vLLM HIP debugging
+    rocm: Does not replace ROCm. You will still want HIP for wheels.
+    caveats: Pick the discrete GFX1201 device, not the iGPU. See /blog/vulkan-is-an-on-ramp.
+    when: HIP configure fails, or you want the stack we measured.
+    href: /blog/vulkan-is-an-on-ramp
+
+  - id: llamacpp-hip
+    name: llama.cpp HIP
+    short: Same GGUF runner, ROCm compiler
+    verdict: ok
+    backends: HIP/ROCm
+    best_for: One tree that matches your ROCm prefix
+    worst_for: A first evening if CMake cannot find `/opt/rocm`
+    rocm: `-DGGML_HIP=ON -DAMDGPU_TARGETS=gfx1201`. Prefix may be `/opt/rocm/core-10.0` — ls first.
+    caveats: Missing gfx1201 binaries show up as hipErrorNoBinaryForGpu. Build for this ISA.
+    when: rocminfo is clean and you want HIP.
+    href: /tutorials/run-local-llm
+
+  - id: strata
+    name: Strata
+    short: Fast-agent try on our rig
+    verdict: try
+    backends: Strata v0.1.42 (OpenAI-shaped serve)
+    best_for: Qwen 3.8 Flash UD-Q6_K_XL at 262K when you want the faster of the two stacks we ran
+    worst_for: Being the first install; undocumented flags
+    rocm: Used on our test rig for the Flash agent. Exact flags TODO.
+    caveats: >
+      Measured on our rig ~32.6 tok/s versus llama.cpp ~16 tok/s on the same
+      Flash Q6. That is first-party, not a vendor slide. Publisher UD-Q6_K_XL
+      listing is ~169 GB — the calculator will show RAM overflow on 32 GB.
+    when: Daily driver already works and you want the fast agent.
+    href: /stacks
+
+  - id: vllm
+    name: vLLM
+    short: Advanced / experimental for consumers
+    verdict: advanced
+    backends: ROCm wheels or `vllm/vllm-openai-rocm`
+    best_for: Several clients, continuous batching, a harness that wants a real server
+    worst_for: A first home box; mixing AMD’s 0.27 pin with community 0.31 in one venv
+    rocm: >
+      AMD 10.0 supported combo is vLLM 0.27 + PyTorch 2.13. Community try is 0.31
+      (0.30 previous). Default `pip install vllm` is CUDA.
+    caveats: Multi-GPU is RCCL. Not the daily driver. Treat 0.31 as a try.
+    when: You already have llama.cpp working and you need batching.
+    href: /tutorials/serve-qwen#advanced-vllm
+
+  - id: ollama
+    name: Ollama
+    short: Convenience wrapper — gfx1201 is still rocky
+    verdict: caution
+    backends: Bundled ROCm, optional Vulkan
+    best_for: Pull-and-run if `rocm-smi` proves GPU use
+    worst_for: gfx1201 as the first backend; Windows ROCm
+    rocm: >
+      #12908 — ROCm Docker looked for gfx1201 tensiles in the wrong directory.
+      #14686 — R9700 Windows ROCm filtered the device and fell back to CPU;
+      Vulkan worked.
+    caveats: If VRAM never moves, you are on CPU. Come back to llama.cpp. Do not spray HSA_OVERRIDE.
+    when: You want the wrapper *and* you will check the backend log.
+    href: /troubleshoot/errors#ollama-gfx1201-linux
+
+  - id: lmstudio
+    name: LM Studio
+    short: Desktop app, Vulkan-shaped on Windows
+    verdict: caution
+    backends: App-bundled; Vulkan is the honest Windows path
+    best_for: A GUI on Windows when you refuse to compile
+    worst_for: Reproducing this site’s HIP/ROCm notes
+    rocm: We do not have a first-party LM Studio run on the test rig.
+    caveats: no data for tok/s or VRAM. If it is slow, assume CPU until a GPU meter moves. Prefer llama.cpp you built.
+    when: Windows-only and you accept a black box.
+    href: /backends

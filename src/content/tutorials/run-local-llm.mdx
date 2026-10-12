@@ -1,6 +1,6 @@
 ---
 title: Run a local Qwen (llama.cpp)
-description: Build llama.cpp for gfx1201, prove GPU use, then run official Qwen instruct — not an abliterated checkpoint first.
+description: Build llama.cpp first — Vulkan is the daily-driver path on our rig, HIP if rocminfo is clean — then run official Qwen instruct.
 minutes: 40
 difficulty: starter
 updated: 2026-10-12
@@ -8,47 +8,39 @@ featured: true
 order: 3
 ---
 
-Goal: **official Qwen instruct** generating on the R9700, with `rocm-smi` showing GPU use. llama.cpp first (you control the backend). Ollama is optional and still rocky on this card. vLLM is the [next tutorial](/tutorials/serve-qwen).
+Goal: **official Qwen instruct** generating on the R9700, with `rocm-smi` (or `amd-smi`) showing GPU use. **llama.cpp first.** Ollama is optional and still rocky on gfx1201. vLLM lives in the [advanced section of Serve Qwen](/tutorials/serve-qwen#advanced-vllm), not here.
 
 <Callout type="check">
-**Default:** Qwen3.6-35B-A3B Unsloth **UD-Q5_K_XL** on **one** R9700, Vulkan, 262144 context, f16 KV, no RAM offload. Do not start with an [abliterated](/abliterated) file. Keep the GGUF on NVMe.
+**Default:** Qwen3.6-35B-A3B Unsloth **UD-Q5_K_XL** on **one** R9700, **Vulkan**, 262144 context, f16 KV, no RAM offload. Do not start with an [abliterated](/abliterated) file. Keep the GGUF on NVMe. Floor is Q4 — prefer Q5. See [quants](/quants) and the [calculator](/calculator).
 </Callout>
 
 ## Do this in order
 
-1. [ROCm installed](/tutorials/install-rocm) and [verified](/tutorials/verify-rocm)
-2. Build llama.cpp (HIP, or Vulkan if HIP is messy)
+1. [ROCm installed](/tutorials/install-rocm) and [verified](/tutorials/verify-rocm) if you want HIP later
+2. Build llama.cpp — **Vulkan first** (what we run), HIP if you already have a clean `/opt/rocm`
 3. Run one official instruct GGUF with `-ngl 99`
-4. Confirm `rocm-smi` moves
+4. Confirm VRAM moves
 5. Optionally expose `llama-server` on `127.0.0.1:8080` — then [attach a harness](/harnesses)
 
 ```bash
-sudo apt install -y build-essential cmake git
+sudo apt install -y build-essential cmake git libvulkan-dev
 ```
 
-Fedora/RHEL: same idea, different package names.
+Fedora/RHEL: same idea, different package names. Backend pick: [chooser](/backends).
 
-## Path A — HIP (ROCm)
+## Path A — Vulkan (daily driver on our rig)
+
+This is not a consolation prize. See [Vulkan is an on-ramp](/blog/vulkan-is-an-on-ramp).
 
 ```bash
 git clone https://github.com/ggml-org/llama.cpp.git
 cd llama.cpp
-cmake -B build \
-  -DGGML_HIP=ON \
-  -DAMDGPU_TARGETS=gfx1201 \
-  -DCMAKE_BUILD_TYPE=Release
-cmake --build build -j"$(nproc)"
+cmake -B build-vk -DGGML_VULKAN=ON -DCMAKE_BUILD_TYPE=Release
+cmake --build build-vk -j"$(nproc)"
+./build-vk/bin/llama-cli --list-devices
 ```
 
-CMake names moved (`GGML_HIP` now; older posts say `LLAMA_HIPBLAS`). If configure fails, read the repo’s HIP docs for the commit you cloned.
-
-```bash
-export HIP_PATH=/opt/rocm
-export PATH="/opt/rocm/bin:$PATH"
-./build/bin/llama-cli --list-devices
-```
-
-You want the Radeon AI PRO R9700, not only an iGPU.
+Pick the **RADV GFX1201** (or AMDVLK) device that is the R9700, not the iGPU. Set `GGML_VK_VISIBLE_DEVICES` / `VK_ICD_FILENAMES` only after `--list-devices` shows the confusion.
 
 ### Official GGUF
 
@@ -64,7 +56,7 @@ mkdir -p ~/models
 **TODO:** exact command line / measured VRAM from rig owner.
 
 ```bash
-./build/bin/llama-cli \
+./build-vk/bin/llama-cli \
   -m ~/models/Qwen3.6-35B-A3B-UD-Q5_K_XL.gguf \
   -ngl 99 \
   -c 262144 \
@@ -78,44 +70,54 @@ mkdir -p ~/models
 
 ```bash
 watch -n1 rocm-smi
+# ROCm 10.1 also points people at amd-smi — either meter moving is the point
 ```
 
-VRAM should rise. If it stays empty, you are on CPU — stop.
+VRAM should rise. If it stays empty, you are on CPU — stop. [Paste the log](/troubleshoot/errors).
 
 ### llama-server (`/v1`)
 
 ```bash
 # TODO: exact command line / measured VRAM from rig owner
-./build/bin/llama-server \
+./build-vk/bin/llama-server \
   -m ~/models/Qwen3.6-35B-A3B-UD-Q5_K_XL.gguf \
   -ngl 99 \
   -c 262144 \
   --cache-type-k f16 \
   --cache-type-v f16 \
+  --jinja \
   --host 127.0.0.1 \
   --port 8080
 ```
 
-Clients use `http://127.0.0.1:8080/v1`. Do not bind `0.0.0.0` unless you mean to.
+Clients use `http://127.0.0.1:8080/v1`. Do not bind `0.0.0.0` unless you mean to. More serve detail: [Serve Qwen](/tutorials/serve-qwen).
 
-## Path B — Vulkan (fallback)
+## Path B — HIP (ROCm)
 
-If HIP configure is a mess and you still want tokens tonight:
+When `rocminfo` already lists gfx1201 and you want the HIP tree:
 
 ```bash
-sudo apt install -y libvulkan-dev
-cmake -B build-vk -DGGML_VULKAN=ON -DCMAKE_BUILD_TYPE=Release
-cmake --build build-vk -j"$(nproc)"
-./build-vk/bin/llama-cli --list-devices
+cmake -B build \
+  -DGGML_HIP=ON \
+  -DAMDGPU_TARGETS=gfx1201 \
+  -DCMAKE_BUILD_TYPE=Release
+cmake --build build -j"$(nproc)"
 ```
 
-Pick the **RADV GFX1201** (or AMDVLK) device that is the R9700, not the iGPU. Set `GGML_VK_VISIBLE_DEVICES` / `VK_ICD_FILENAMES` only after `--list-devices` shows the confusion.
+CMake names moved (`GGML_HIP` now; older posts say `LLAMA_HIPBLAS`). If configure fails, read the repo’s HIP docs for the commit you cloned. `hipErrorNoBinaryForGpu` means this binary was not built for gfx1201 — [troubleshooter](/troubleshoot/errors#no-binary-for-gpu).
 
-Vulkan is a real backend, not a consolation prize.
+```bash
+export HIP_PATH=/opt/rocm
+# or /opt/rocm/core-10.0 — ls first
+export PATH="/opt/rocm/bin:$PATH"
+./build/bin/llama-cli --list-devices
+```
+
+You want the Radeon AI PRO R9700, not only an iGPU. Same GGUF flags as Path A.
 
 ## Path C — Ollama (optional)
 
-Official Ollama ROCm is **still rocky on R9700**. Install from [Ollama’s Linux page](https://ollama.com/download/linux) only if you want the wrapper.
+Official Ollama ROCm is **still rocky on gfx1201**. Linux Docker looked for `TensileLibrary_lazy_gfx1201.dat` in the wrong directory ([#12908](https://github.com/ollama/ollama/issues/12908)). Windows R9700 ROCm filtered the device to CPU; Vulkan worked ([#14686](https://github.com/ollama/ollama/issues/14686)).
 
 ```bash
 ollama --version
@@ -129,7 +131,7 @@ If VRAM never moves, go back to llama.cpp. Do not set random `HSA_OVERRIDE_*` on
 ## What “it works” looks like
 
 - Tokens stream at interactive speed (you will know CPU)
-- `rocm-smi` VRAM moves; daily driver should not be crawling through system RAM
+- `rocm-smi` / `amd-smi` VRAM moves; daily driver should not be crawling through system RAM
 - A second prompt still works
 
 Then: raise `-c`, or [serve `/v1`](/tutorials/serve-qwen) for a harness. Compare HIP vs Vulkan on the **same** GGUF if you like — notes, not leaderboards. Abliterated weights come *after* this pipe is boring.

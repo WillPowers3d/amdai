@@ -32,6 +32,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="canonical" href={canonical} />
     <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="alternate" type="application/rss+xml" title="R9700 Lab Notes updates" href="/updates/rss.xml" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
@@ -50,8 +51,14 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
   <body class="min-h-screen antialiased">
     <a class="skip-link" href="#main">Skip to content</a>
     <ReadingProgress />
-    <Header />
-    <slot />
-    <Footer />
+    <div data-pagefind-ignore>
+      <Header />
+    </div>
+    <div data-pagefind-body>
+      <slot />
+    </div>
+    <div data-pagefind-ignore>
+      <Footer />
+    </div>
   </body>
 </html>

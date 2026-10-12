@@ -1,0 +1,184 @@
+# ROCm × engine × card. Every cell is cited or explicitly "no data".
+# Do not invent tok/s, VRAM, or a ROCm pin we did not record.
+as_of: 2026-10-12
+
+cards:
+  - id: r9700
+    name: Radeon AI PRO R9700
+    gfx: gfx1201
+  - id: rx9070xt
+    name: Radeon RX 9070 XT
+    gfx: gfx1201
+  - id: rx7900xtx
+    name: Radeon RX 7900 XTX
+    gfx: gfx1100
+
+rocm:
+  - version: "10.0.0"
+    notes: https://rocm.docs.amd.com/en/docs-10.0.0/about/release-notes.html
+    notes_label: ROCm 10.0.0 release notes
+  - version: "10.1.0"
+    notes: https://rocm.docs.amd.com/en/docs-10.1.0/about/release-notes.html
+    notes_label: ROCm 10.1.0 release notes
+
+engines:
+  - id: official
+    name: Official ROCm row
+  - id: llamacpp
+    name: llama.cpp
+  - id: vllm031
+    name: vLLM 0.31
+
+cells:
+  - card: r9700
+    rocm: "10.0.0"
+    engine: official
+    status: official
+    text: First-class gfx1201 on the 10.0 device table (same generation as RX 9070 / 9070 XT).
+    source: https://rocm.docs.amd.com/en/docs-10.0.0/about/release-notes.html
+    source_label: ROCm 10.0.0 release notes
+
+  - card: r9700
+    rocm: "10.1.0"
+    engine: official
+    status: official
+    text: Listed under Radeon AI PRO R9000 Series as gfx1201 (RDNA 4) on the 10.1.0 hardware table. Radeon OS rows name Ubuntu 26.04.1, 24.04.5, and 22.04.5.
+    source: https://rocm.docs.amd.com/en/docs-10.1.0/about/release-notes.html
+    source_label: ROCm 10.1.0 hardware + OS tables
+
+  - card: rx9070xt
+    rocm: "10.0.0"
+    engine: official
+    status: official
+    text: RX 9000 / gfx1201 first-class on the 10.0 device table.
+    source: https://rocm.docs.amd.com/en/docs-10.0.0/about/release-notes.html
+    source_label: ROCm 10.0.0 release notes
+
+  - card: rx9070xt
+    rocm: "10.1.0"
+    engine: official
+    status: official
+    text: Listed under Radeon RX 9000 Series as gfx1201 on the 10.1.0 hardware table.
+    source: https://rocm.docs.amd.com/en/docs-10.1.0/about/release-notes.html
+    source_label: ROCm 10.1.0 hardware table
+
+  - card: rx7900xtx
+    rocm: "10.0.0"
+    engine: official
+    status: official
+    text: RX 7900 XTX is gfx1100 (RDNA 3). 10.0 uses a gfx110x family package, not the gfx1201 R9700 package.
+    source: https://rocm.docs.amd.com/en/docs-10.0.0/about/transition-guide-TheRock.html
+    source_label: TheRock transition — install one GPU family
+
+  - card: rx7900xtx
+    rocm: "10.1.0"
+    engine: official
+    status: official
+    text: Listed under Radeon RX 7000 Series as gfx1100 on the 10.1.0 hardware table.
+    source: https://rocm.docs.amd.com/en/docs-10.1.0/about/release-notes.html
+    source_label: ROCm 10.1.0 hardware table
+
+  - card: r9700
+    rocm: "10.0.0"
+    engine: llamacpp
+    status: no_data
+    text: no data — we did not record which ROCm userspace sat under the Vulkan daily driver for a 10.0-only pin.
+    source: ""
+    source_label: ""
+
+  - card: r9700
+    rocm: "10.1.0"
+    engine: llamacpp
+    status: first_party
+    text: >
+      Daily driver on our test rig is llama.cpp Vulkan, Qwen3.6-35B-A3B UD-Q5_K_XL,
+      one R9700, 262144 context, f16 KV, 0% RAM offload. Exact ROCm prefix / HIP
+      vs Vulkan package set on that run is TODO. HIP build is documented; not a
+      second measured stack.
+    source: /stacks
+    source_label: Recommended stacks (first-party)
+
+  - card: rx9070xt
+    rocm: "10.0.0"
+    engine: llamacpp
+    status: no_data
+    text: no data
+    source: ""
+    source_label: ""
+
+  - card: rx9070xt
+    rocm: "10.1.0"
+    engine: llamacpp
+    status: no_data
+    text: no data — same gfx1201 generation as the R9700; we have not published a first-party 9070 XT run.
+    source: ""
+    source_label: ""
+
+  - card: rx7900xtx
+    rocm: "10.0.0"
+    engine: llamacpp
+    status: no_data
+    text: no data
+    source: ""
+    source_label: ""
+
+  - card: rx7900xtx
+    rocm: "10.1.0"
+    engine: llamacpp
+    status: no_data
+    text: no data
+    source: ""
+    source_label: ""
+
+  - card: r9700
+    rocm: "10.0.0"
+    engine: vllm031
+    status: no_data
+    text: >
+      no data for vLLM 0.31 on this card. AMD’s 10.0 supported combo is vLLM 0.27
+      + PyTorch 2.13, not 0.31. 0.31 is a community try on this site.
+    source: https://rocm.docs.amd.com/projects/ai-ecosystem/en/latest/inference/vllm.html
+    source_label: AMD vLLM on ROCm — 10.0 pin is 0.27
+
+  - card: r9700
+    rocm: "10.1.0"
+    engine: vllm031
+    status: cited
+    text: >
+      no first-party numbers. ROCm CLI v0.2.0 (2026-10-07) documents
+      `rocm install vllm` for ROCm 10.1 wheels (torch 2.13.0 path). That is an
+      install claim, not a bench from our rig.
+    source: https://github.com/ROCm/rocm-cli/releases/tag/v0.2.0
+    source_label: ROCm CLI v0.2.0 release notes
+
+  - card: rx9070xt
+    rocm: "10.0.0"
+    engine: vllm031
+    status: no_data
+    text: no data
+    source: ""
+    source_label: ""
+
+  - card: rx9070xt
+    rocm: "10.1.0"
+    engine: vllm031
+    status: no_data
+    text: no data
+    source: ""
+    source_label: ""
+
+  - card: rx7900xtx
+    rocm: "10.0.0"
+    engine: vllm031
+    status: no_data
+    text: no data
+    source: ""
+    source_label: ""
+
+  - card: rx7900xtx
+    rocm: "10.1.0"
+    engine: vllm031
+    status: no_data
+    text: no data
+    source: ""
+    source_label: ""

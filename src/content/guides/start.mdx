@@ -20,9 +20,9 @@ Read the [GPU directory](/gpus) and [Hardware](/hardware) before you buy a PSU. 
 
 Practical Ubuntu path (as of the [weekly card](/)):
 
-1. Use an Ubuntu LTS **named on AMD’s current matrix** (24.04.x is the usual home box).
-2. Add **AMD’s Core SDK 10.0 / 10.1 repo** — or skip host ROCm and run a **vLLM ROCm image** only if serving is all you need.
-3. Install **one** gfx family (`amdrocm-core-sdk10.0-gfx1201` on the R9700 — confirm with `apt-cache search`). Prefix is typically **`/opt/rocm/core-10.0`**.
+1. Use an Ubuntu LTS **named on AMD’s current matrix**. ROCm 10.1.0 Radeon rows: **26.04.1, 24.04.5, 22.04.5**.
+2. Add **AMD’s 10.1 repo** — or use **ROCm CLI v0.2.0** (`rocm install sdk`). Do not mix those with Ubuntu archive `rocm`.
+3. Install **one** gfx family (gfx1201 on the R9700 — confirm with `apt-cache search`). Prefix: `ls /opt/rocm` (10.0 was often `/opt/rocm/core-10.0`).
 4. **Do not** `apt install rocm` from Canonical’s archive.
 
 Walkthrough: [Install ROCm](/tutorials/install-rocm). Prove it: [Verify GPU and ROCm](/tutorials/verify-rocm).

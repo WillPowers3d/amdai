@@ -34,6 +34,7 @@ const updates = (await getCollection('updates')).sort((a, b) => b.data.date.valu
             <a class="rounded-full bg-accent px-5 py-2.5 text-sm font-medium text-white" href="/stacks">Recommended stacks</a>
             <a class="rounded-full border border-line bg-raised px-5 py-2.5 text-sm" href="/calculator">Quant + Hardware Calculator</a>
             <a class="rounded-full border border-line bg-raised px-5 py-2.5 text-sm" href="/start">Getting started</a>
+            <a class="rounded-full border border-line bg-raised px-5 py-2.5 text-sm" href="/backends">Backend chooser</a>
           </div>
         </div>
         <StatusPanel />
@@ -128,7 +129,7 @@ const updates = (await getCollection('updates')).sort((a, b) => b.data.date.valu
           {updates.map((item) => (
             <li class="py-3">
               <p class="font-mono text-[0.68rem] text-faint">{item.data.date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</p>
-              <a class="font-medium hover:text-accent-ink" href="/rocm#version-notes">{item.data.title}</a>
+              <a class="font-medium hover:text-accent-ink" href="/updates">{item.data.title}</a>
               <p class="text-sm text-muted">{item.data.summary}</p>
             </li>
           ))}

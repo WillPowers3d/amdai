@@ -10,7 +10,7 @@ const { note } = Astro.props;
 const { Content } = await render(note);
 ---
 
-<article class="not-prose my-6 rounded-xl border border-line bg-raised/70 p-4">
+<article id={note.id} class="not-prose my-6 scroll-mt-28 rounded-xl border border-line bg-raised/70 p-4">
   <p class="font-mono text-[0.68rem] uppercase tracking-[0.14em] text-faint">
     {note.data.date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
     {note.data.current ? ' · labeled current that week' : ' · archived snapshot'}

@@ -1,0 +1,93 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base title="Search" description="Search Lab Notes — Pagefind index built at `npm run build`.">
+  <main id="main" class="mx-auto max-w-3xl px-4 py-10 sm:px-6" data-pagefind-ignore>
+    <p class="font-mono text-[0.72rem] uppercase tracking-[0.18em] text-accent">Find</p>
+    <h1 class="mt-3 font-serif text-4xl tracking-tight sm:text-5xl">Search</h1>
+    <p class="mt-4 text-lg text-muted">
+      Build-time Pagefind index of the static site. The box in the header lands here.
+    </p>
+
+    <form class="mt-8 flex flex-col gap-3 sm:flex-row" action="/search" method="get" role="search">
+      <label class="sr-only" for="site-search">Search Lab Notes</label>
+      <input
+        id="site-search"
+        name="q"
+        type="search"
+        class="min-h-11 flex-1 rounded-full border border-line bg-raised px-4 text-ink"
+        placeholder="gfx1201, hipErrorNoBinaryForGpu, Q5…"
+        autocomplete="off"
+      />
+      <button type="submit" class="min-h-11 rounded-full bg-accent px-5 text-sm text-white">Search</button>
+    </form>
+
+    <p class="mt-4 hidden text-sm text-warn" data-search-empty-index>
+      No Pagefind index on this server. Run <code class="font-mono text-ink">npm run build</code>
+      (it indexes <code class="font-mono text-ink">dist/</code>). Dev can also serve a copied
+      <code class="font-mono text-ink">public/pagefind</code> from that build.
+    </p>
+    <p class="mt-4 hidden text-sm text-muted" data-search-status></p>
+    <ol class="mt-6 divide-y divide-line" data-search-results></ol>
+  </main>
+</Base>
+
+<script is:inline>
+  const params = new URLSearchParams(window.location.search);
+  const initial = params.get('q') ?? '';
+  const input = document.getElementById('site-search');
+  const resultsEl = document.querySelector('[data-search-results]');
+  const statusEl = document.querySelector('[data-search-status]');
+  const missingEl = document.querySelector('[data-search-empty-index]');
+  if (input && initial) input.value = initial;
+
+  async function runSearch(query) {
+    if (!resultsEl || !statusEl || !missingEl) return;
+    resultsEl.innerHTML = '';
+    statusEl.classList.add('hidden');
+    missingEl.classList.add('hidden');
+    if (!query.trim()) {
+      statusEl.textContent = 'Type a term.';
+      statusEl.classList.remove('hidden');
+      return;
+    }
+    try {
+      const pagefind = await import('/pagefind/pagefind.js');
+      if (pagefind.options) await pagefind.options({ excerptLength: 30 });
+      const search = await pagefind.search(query);
+      const docs = await Promise.all(search.results.slice(0, 20).map((row) => row.data()));
+      if (docs.length === 0) {
+        statusEl.textContent = 'No pages for that query. Try an error string on /troubleshoot/errors.';
+        statusEl.classList.remove('hidden');
+        return;
+      }
+      statusEl.textContent = docs.length + (docs.length === 1 ? ' hit.' : ' hits.');
+      statusEl.classList.remove('hidden');
+      for (const doc of docs) {
+        const li = document.createElement('li');
+        li.className = 'py-4';
+        const title = (doc.meta && doc.meta.title) || doc.url;
+        const excerpt = doc.excerpt || '';
+        li.innerHTML = '<a class="font-medium hover:text-accent-ink" href="' + doc.url + '">' + title + '</a><p class="mt-1 text-sm text-muted">' + excerpt + '</p>';
+        resultsEl.appendChild(li);
+      }
+    } catch {
+      missingEl.classList.remove('hidden');
+    }
+  }
+
+  if (input && input.form) {
+    input.form.addEventListener('submit', function (event) {
+      event.preventDefault();
+      const q = input.value.trim();
+      const next = new URL(window.location.href);
+      if (q) next.searchParams.set('q', q);
+      else next.searchParams.delete('q');
+      window.history.replaceState({}, '', next);
+      runSearch(q);
+    });
+  }
+
+  runSearch(initial);
+</script>

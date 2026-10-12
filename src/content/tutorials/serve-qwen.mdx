@@ -1,6 +1,6 @@
 ---
 title: Serve Qwen on the R9700
-description: Official Qwen instruct on a loopback /v1 — llama-server daily driver first, Strata for Flash, vLLM 0.31 only as a try.
+description: Official Qwen instruct on a loopback /v1 — llama-server first, Strata for Flash, vLLM only in Advanced.
 minutes: 35
 difficulty: intermediate
 updated: 2026-10-12
@@ -14,14 +14,16 @@ Reliability first: **Qwen3.6-35B-A3B UD-Q5_K_XL**, one GPU, a loopback `/v1` you
 
 <SmokeTests />
 
+**llama.cpp first.** You already built it in [Run a local Qwen](/tutorials/run-local-llm). vLLM is not the next step — it is [Advanced](#advanced-vllm). Backend map: [chooser](/backends).
+
 ## Path A — llama-server (least pain)
 
-You already built llama.cpp in [Run a local Qwen](/tutorials/run-local-llm). Daily driver: Unsloth **UD-Q5_K_XL** (Q5 family — do not drop to Q3 to “make it fit”).
+Daily driver: Unsloth **UD-Q5_K_XL** (Q5 family — do not drop to Q3 to “make it fit”). Vulkan binary (`build-vk`) is what we run; HIP (`build`) is fine if that is the tree you compiled.
 
 **TODO:** exact command line / measured VRAM from rig owner.
 
 ```bash
-./build/bin/llama-server \
+./build-vk/bin/llama-server \
   -m ~/models/Qwen3.6-35B-A3B-UD-Q5_K_XL.gguf \
   -ngl 99 \
   -c 262144 \
@@ -44,7 +46,15 @@ curl -s http://127.0.0.1:8080/v1/chat/completions \
 
 If VRAM never moves, stop. Point Hermes or OpenClaw at `http://127.0.0.1:8080/v1` **only after** this returns `READY`.
 
-## Path B — vLLM (when you need a real server)
+## Path B — Strata (fast agent on our rig)
+
+When the daily driver is boring and you want the Flash stack: **Qwen 3.8 Flash** Unsloth **UD-Q6_K_XL** on **Strata v0.1.42** at 262K. Measured on our test rig ~32.6 tok/s versus llama.cpp ~16 tok/s. llama.cpp Q6 is the fallback.
+
+Publisher UD-Q6_K_XL listing is ~169 GB — the [calculator](/calculator) will show RAM overflow on one 32 GB card. **TODO:** exact flags / measured VRAM+RAM from rig owner.
+
+Cards: [stacks](/stacks).
+
+## Advanced — vLLM (not the consumer default)
 
 Two pins. Do not mix them in one venv. The [weekly card](/) is the current recommendation.
 
@@ -76,6 +86,8 @@ docker run --rm -it \
 <Callout type="warn">
 `pip install vllm` with no extra index is **CUDA**. If import looks NVIDIA-shaped, you installed the wrong wheel.
 </Callout>
+
+ROCm CLI v0.2.0 documents `rocm install vllm` for 10.1 wheels — that is an [install claim](https://github.com/ROCm/rocm-cli/releases/tag/v0.2.0), not a first-party bench. [Version matrix](/updates/matrix).
 
 ```bash
 curl -s http://127.0.0.1:8000/v1/models
