@@ -5,7 +5,7 @@ This site uses **three** affiliate programs only:
 | Program | Env var | What it wraps |
 | --- | --- | --- |
 | Amazon Associates | `AMAZON_ASSOCIATE_TAG` (optional override) | amazon.com links (`?tag=`). Public default in YAML: `amdainet-20` |
-| Rakuten Advertising | `RAKUTEN_PUBLISHER_ID` plus a per-merchant MID | Newegg today (`RAKUTEN_MID_NEWEGG`) |
+| Rakuten Advertising | `RAKUTEN_PUBLISHER_ID` (Link Locator token) plus a per-merchant MID | Newegg today (`RAKUTEN_MID_NEWEGG`) |
 | B&H | `BHPHOTO_AFFILIATE_ID` | bhphotovideo.com, via template or query param |
 
 There is **no** `MICROCENTER_AFFILIATE_ID` or `AMD_AFFILIATE_ID`. Micro Center and the AMD Store stay as plain “also available at” links with tracking parameters stripped.
@@ -24,10 +24,31 @@ Never commit IDs. Put them in the environment (or a local `.env` that is gitigno
 
 Newegg is a Rakuten merchant. We do **not** use a Newegg-native affiliate id.
 
-1. Join [Rakuten Advertising](https://rakutenadvertising.com/) and apply to Newegg (and any later merchant).
-2. Set `RAKUTEN_PUBLISHER_ID` to your publisher / site id (the `id=` on a LinkSynergy deep link).
-3. Set `RAKUTEN_MID_NEWEGG` to Newegg’s merchant id from the Rakuten dashboard. Do not guess a MID.
-4. When both are set, destination URLs become:
+Public account values live in `src/data/retailers.yaml` under `rakuten`:
+
+| Field | Value | What it is |
+| --- | --- | --- |
+| `rakuten.site_name` | `amdainet` | Rakuten Advertising account / site name |
+| `rakuten.sid` | `4763021` | Public Site ID (SID) |
+
+Those two are **not** enough to wrap a Newegg URL.
+
+Rakuten deep links look like:
+
+`https://click.linksynergy.com/deeplink?id=…&mid=…&murl=…`
+
+- `id` is an **encrypted publisher token** from the Rakuten Link Locator. It is not the SID. Store that token in `RAKUTEN_PUBLISHER_ID` when you have it. Do not put SID `4763021` in `id=`. The wrapper refuses that swap if someone tries it.
+- `mid` is the advertiser merchant ID. For Newegg that is `RAKUTEN_MID_NEWEGG`, filled only after Newegg approves the site. Do not guess a MID.
+
+Until both env vars are set, Newegg buttons stay plain `newegg.com` links (still labeled “Also at” / “Check price”, not wrapped).
+
+Setup once you have the missing pieces:
+
+1. Join [Rakuten Advertising](https://rakutenadvertising.com/) (account/site name `amdainet`, SID `4763021` is already recorded).
+2. Apply to Newegg. Wait for approval — do not invent a MID.
+3. In Link Locator, copy the encrypted publisher `id` token from a generated deep link. Set `RAKUTEN_PUBLISHER_ID` to that token.
+4. Set `RAKUTEN_MID_NEWEGG` to Newegg’s merchant id from the dashboard.
+5. Rebuild. Destination URLs become:
 
    `https://click.linksynergy.com/deeplink?id={RAKUTEN_PUBLISHER_ID}&mid={RAKUTEN_MID_NEWEGG}&murl={encoded destination}`
 
@@ -35,9 +56,9 @@ The builder in `src/lib/affiliates.ts` (`buildRakutenDeepLink`) is generic. To a
 
 1. Add a retailer row in `src/data/retailers.yaml` with `program: rakuten` and a new `rakuten_mid_env` (for example `RAKUTEN_MID_EXAMPLE`).
 2. Add destination URLs on products.
-3. Set that MID in the environment.
+3. Set that MID in the environment after the merchant approves you.
 
-If the publisher id or the MID is unset, Newegg (or that merchant) falls back to a plain `newegg.com` link.
+If the publisher token or the MID is unset, Newegg (or that merchant) falls back to a plain `newegg.com` link.
 
 ## B&H
 
@@ -59,7 +80,7 @@ B&H has run its own program and has also paid through networks. Keep the wrapper
 
 | File | Role |
 | --- | --- |
-| `src/data/retailers.yaml` | Retailer list + Rakuten deeplink base |
+| `src/data/retailers.yaml` | Retailer list, Amazon default tag, public Rakuten `site_name` / `sid`, deeplink base |
 | `src/data/products.yaml` | Search / official URLs, no prices |
 | `src/lib/affiliates.ts` | Wrappers + `/go` resolver |
 | `src/pages/go/[retailer]/[product].astro` | Static redirect |

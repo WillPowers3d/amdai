@@ -85,7 +85,7 @@ When you publish, set `site` in `astro.config.mjs` to your public URL.
 | `src/data/stacks.yaml` | `/stacks` cards |
 | `src/data/gpus.yaml` | GPU directory |
 | `src/data/abliterated.yaml` | Abliterated table |
-| `src/data/retailers.yaml` | Storefronts + Amazon default tag `amdainet-20` |
+| `src/data/retailers.yaml` | Storefronts + Amazon tag `amdainet-20` + Rakuten site `amdainet` / SID `4763021` |
 | `src/data/products.yaml` | Check-price search URLs (no prices) |
 | `src/data/budget-tiers.yaml` | `/budget` tiers; USD bands stay TODO until cited |
 | `src/data/errors.yaml` | Cited troubleshooter patterns |

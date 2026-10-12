@@ -4,6 +4,11 @@
 as_of: 2026-10-12
 
 rakuten:
+  # Public Rakuten Advertising account (not secrets).
+  site_name: amdainet
+  sid: "4763021"
+  # Deep-link `id=` is an encrypted publisher token from the Rakuten Link Locator.
+  # That is NOT this SID. Leave the env unset until Link Locator gives you the token.
   publisher_id_env: RAKUTEN_PUBLISHER_ID
   deeplink: https://click.linksynergy.com/deeplink
 
@@ -30,7 +35,11 @@ retailers:
     hosts:
       - newegg.com
       - www.newegg.com
-    note: Newegg is a Rakuten Advertising merchant. Deep-link when publisher id and MID are both set.
+    note: >
+      Newegg is a Rakuten Advertising merchant. Deep-link only when the Link Locator
+      publisher token (RAKUTEN_PUBLISHER_ID) and Newegg MID (RAKUTEN_MID_NEWEGG) are
+      both set. Do not guess either. Until then, use a plain newegg.com URL.
+      SID 4763021 is the public site id, not the deeplink id token.
 
   - id: bhphoto
     name: B&H Photo

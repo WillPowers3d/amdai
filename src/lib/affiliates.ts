@@ -23,6 +23,8 @@ export type Retailer = {
 export type RetailersFile = {
   as_of: string;
   rakuten: {
+    site_name: string;
+    sid: string;
     publisher_id_env: string;
     deeplink: string;
   };
@@ -105,9 +107,21 @@ export function stripTracking(raw: string): string {
   return url.toString();
 }
 
-/** Generic Rakuten Advertising deep link. Reuse for any merchant MID. */
-export function buildRakutenDeepLink(destination: string, mid: string, publisherId = readEnv(retailersFile.rakuten.publisher_id_env)): string {
+/** Encrypted Link Locator token. Never the public SID in retailers.yaml. */
+export function rakutenPublisherToken(): string {
+  const token = readEnv(retailersFile.rakuten.publisher_id_env);
+  if (!token || token === retailersFile.rakuten.sid) return '';
+  return token;
+}
+
+/**
+ * Generic Rakuten Advertising deep link. Reuse for any merchant MID.
+ * `id` must be the encrypted publisher token from Link Locator (RAKUTEN_PUBLISHER_ID).
+ * Never pass rakuten.sid — that public Site ID is not the deeplink token.
+ */
+export function buildRakutenDeepLink(destination: string, mid: string, publisherId = rakutenPublisherToken()): string {
   if (!publisherId || !mid) return stripTracking(destination);
+  if (publisherId === retailersFile.rakuten.sid) return stripTracking(destination);
   const deeplink = new URL(retailersFile.rakuten.deeplink);
   deeplink.searchParams.set('id', publisherId);
   deeplink.searchParams.set('mid', mid);
@@ -159,7 +173,7 @@ export function wrapRetailer(destination: string, retailer: Retailer): { href: s
   }
   if (retailer.program === 'rakuten') {
     const mid = rakutenMidFor(retailer);
-    const publisher = readEnv(retailersFile.rakuten.publisher_id_env);
+    const publisher = rakutenPublisherToken();
     if (publisher && mid) {
       return { href: buildRakutenDeepLink(destination, mid, publisher), affiliate: true };
     }
@@ -192,7 +206,7 @@ export function productHasRetailer(product: Product, retailerId: string): boolea
 export function affiliateProgramsActive(): { amazon: boolean; rakuten: boolean; bhphoto: boolean } {
   return {
     amazon: Boolean(amazonTag()),
-    rakuten: Boolean(readEnv(retailersFile.rakuten.publisher_id_env)),
+    rakuten: Boolean(rakutenPublisherToken()),
     bhphoto: Boolean(readEnv('BHPHOTO_AFFILIATE_ID')),
   };
 }
