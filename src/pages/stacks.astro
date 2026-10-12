@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import HouseRules from '../components/HouseRules.astro';
+import BuyButtons from '../components/BuyButtons.astro';
 import { stacksGuide } from '../lib/status';
 ---
 
@@ -70,5 +71,12 @@ import { stacksGuide } from '../lib/status';
         </li>
       ))}
     </ol>
+
+    <section class="mt-12">
+      <p class="font-mono text-[0.7rem] uppercase tracking-[0.16em] text-accent">Hardware for these stacks</p>
+      <h2 class="mt-2 font-serif text-3xl">Check price for the R9700 box</h2>
+      <p class="mt-3 max-w-2xl text-muted">No live prices. As an Amazon Associate I earn from qualifying purchases.</p>
+      <BuyButtons products={['r9700', 'ddr5-kit', 'nvme', 'psu-1000w']} />
+    </section>
   </main>
 </Base>

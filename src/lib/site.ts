@@ -65,6 +65,7 @@ export const primaryNav: NavItem[] = [
   { href: '/troubleshooting', label: 'Troubleshooting', description: 'GPU not seen, wrong wheel, CPU fallback', group: 'practice' },
   { href: '/faq', label: 'FAQ', description: 'Short answers for a first home box', group: 'practice' },
   { href: '/blog', label: 'Blog', description: 'Longer posts and ROCm version notes', group: 'practice' },
+  { href: '/disclosure', label: 'Disclosure', description: 'Amazon Associates, Rakuten, B&H — and what is not affiliate', group: 'practice' },
 ];
 
 export const allNav: NavItem[] = [homeLink, ...primaryNav];

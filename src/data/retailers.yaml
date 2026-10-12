@@ -1,0 +1,67 @@
+# Storefronts we may link. Affiliate programs are only Amazon Associates,
+# Rakuten Advertising, and B&H. Never invent IDs — read them from env.
+# Add another Rakuten advertiser by copying the Newegg row (new mid env + hosts).
+as_of: 2026-10-12
+
+rakuten:
+  publisher_id_env: RAKUTEN_PUBLISHER_ID
+  deeplink: https://click.linksynergy.com/deeplink
+
+retailers:
+  - id: amazon
+    name: Amazon
+    program: amazon_associates
+    affiliate: true
+    id_env: AMAZON_ASSOCIATE_TAG
+    default_id: amdainet-20
+    query_param: tag
+    hosts:
+      - amazon.com
+      - www.amazon.com
+    note: >
+      Amazon Associates. Default public tag is amdainet-20 in this file.
+      AMAZON_ASSOCIATE_TAG overrides it. Appends ?tag=. Never show a live or stale price.
+
+  - id: newegg
+    name: Newegg
+    program: rakuten
+    affiliate: true
+    rakuten_mid_env: RAKUTEN_MID_NEWEGG
+    hosts:
+      - newegg.com
+      - www.newegg.com
+    note: Newegg is a Rakuten Advertising merchant. Deep-link when publisher id and MID are both set.
+
+  - id: bhphoto
+    name: B&H Photo
+    program: bhphoto
+    affiliate: true
+    id_env: BHPHOTO_AFFILIATE_ID
+    template_env: BHPHOTO_LINK_TEMPLATE
+    query_param_env: BHPHOTO_QUERY_PARAM
+    default_query_param: BI
+    hosts:
+      - bhphotovideo.com
+      - www.bhphotovideo.com
+    note: >
+      B&H may run through its own program or a network. Prefer BHPHOTO_LINK_TEMPLATE
+      ({url}, {murl}, {id}) when you have a network wrapper. Otherwise appends
+      BHPHOTO_QUERY_PARAM (default BI) = BHPHOTO_AFFILIATE_ID.
+
+  - id: microcenter
+    name: Micro Center
+    program: none
+    affiliate: false
+    hosts:
+      - microcenter.com
+      - www.microcenter.com
+    note: Also available at — plain link, no tracking params. Not an affiliate program we use.
+
+  - id: amd
+    name: AMD Store
+    program: none
+    affiliate: false
+    hosts:
+      - amd.com
+      - www.amd.com
+    note: Also available at — official product page, no tracking params.

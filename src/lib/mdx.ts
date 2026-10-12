@@ -4,5 +4,16 @@ import QwenPicks from '../components/QwenPicks.astro';
 import SmokeTests from '../components/SmokeTests.astro';
 import HouseRules from '../components/HouseRules.astro';
 import GpuDirectory from '../components/GpuDirectory.astro';
+import BuyButtons from '../components/BuyButtons.astro';
+import AffiliateDisclosure from '../components/AffiliateDisclosure.astro';
 
-export const mdxComponents = { Callout, AbliteratedTable, QwenPicks, SmokeTests, HouseRules, GpuDirectory };
+export const mdxComponents = {
+  Callout,
+  AbliteratedTable,
+  QwenPicks,
+  SmokeTests,
+  HouseRules,
+  GpuDirectory,
+  BuyButtons,
+  AffiliateDisclosure,
+};

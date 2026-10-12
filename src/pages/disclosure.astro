@@ -1,0 +1,86 @@
+---
+import Base from '../layouts/Base.astro';
+import { AMAZON_ASSOCIATE_DISCLOSURE, affiliateProgramsActive, amazonTag, retailersFile } from '../lib/affiliates';
+
+const active = affiliateProgramsActive();
+const tag = amazonTag();
+---
+
+<Base
+  title="Affiliate disclosure"
+  description="Amazon Associates statement, Rakuten Advertising and B&H notes, and which store links are not affiliate."
+>
+  <main id="main" class="mx-auto max-w-3xl px-4 py-10 sm:px-6">
+    <p class="font-mono text-[0.72rem] uppercase tracking-[0.18em] text-accent">Legal</p>
+    <h1 class="mt-3 font-serif text-4xl tracking-tight sm:text-5xl">Affiliate disclosure</h1>
+    <p class="mt-6 font-serif text-2xl text-ink">{AMAZON_ASSOCIATE_DISCLOSURE}</p>
+    <p class="mt-4 text-lg leading-relaxed text-muted">
+      Some outbound store links on this site are affiliate links. If you buy after clicking one, we may earn a commission. That does not change the price you pay. We do not invent SKUs or show live prices — Amazon’s Operating Agreement forbids displaying stale prices — so buttons only say “Check price.”
+    </p>
+
+    <section class="mt-10">
+      <h2 class="font-serif text-3xl">Amazon Associates</h2>
+      <p class="mt-3 leading-relaxed text-muted">
+        {AMAZON_ASSOCIATE_DISCLOSURE}
+      </p>
+      <p class="mt-3 leading-relaxed text-muted">
+        R9700 Lab Notes is a participant in the Amazon Services LLC Associates Program, an affiliate advertising program designed to provide a means for sites to earn advertising fees by advertising and linking to Amazon.com and Amazon sites.
+      </p>
+      <p class="mt-3 leading-relaxed text-muted">
+        Amazon links use <code class="font-mono text-ink">?tag={tag || 'amdainet-20'}</code>.
+        The public default tag is <code class="font-mono text-ink">amdainet-20</code> in <code class="font-mono text-ink">src/data/retailers.yaml</code>.
+        <code class="font-mono text-ink">AMAZON_ASSOCIATE_TAG</code> overrides it at build time.
+        {active.amazon ? 'This build wraps Amazon URLs with that tag.' : 'No Amazon tag is available on this build.'}
+        Affiliate Amazon links use <code class="font-mono text-ink">rel=&quot;sponsored nofollow noopener&quot;</code>.
+      </p>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="font-serif text-3xl">Rakuten Advertising (Newegg)</h2>
+      <p class="mt-3 leading-relaxed text-muted">
+        Newegg is reached through <strong class="font-medium text-ink">Rakuten Advertising</strong> when both
+        <code class="font-mono text-ink">{retailersFile.rakuten.publisher_id_env}</code> and
+        <code class="font-mono text-ink">RAKUTEN_MID_NEWEGG</code> are set. The builder is a generic
+        <code class="font-mono text-ink">click.linksynergy.com/deeplink</code> URL
+        (<code class="font-mono text-ink">id</code>, <code class="font-mono text-ink">mid</code>, <code class="font-mono text-ink">murl</code>)
+        so other Rakuten merchants can be added later in <code class="font-mono text-ink">src/data/retailers.yaml</code>.
+        {active.rakuten ? 'A Rakuten publisher id is configured on this build. Newegg still needs a MID to wrap.' : 'No Rakuten publisher id is configured — Newegg links are plain newegg.com URLs.'}
+      </p>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="font-serif text-3xl">B&amp;H</h2>
+      <p class="mt-3 leading-relaxed text-muted">
+        B&amp;H may pay through its own program or an affiliate network. Links use
+        <code class="font-mono text-ink">BHPHOTO_AFFILIATE_ID</code> plus an optional
+        <code class="font-mono text-ink">BHPHOTO_LINK_TEMPLATE</code> (<code class="font-mono text-ink">{'{url}'}</code>,
+        <code class="font-mono text-ink">{'{murl}'}</code>, <code class="font-mono text-ink">{'{id}'}</code>)
+        or, if no template is set, a configurable query parameter
+        (<code class="font-mono text-ink">BHPHOTO_QUERY_PARAM</code>, default <code class="font-mono text-ink">BI</code>).
+        {active.bhphoto ? 'A B&H id is configured on this build.' : 'No B&H id is configured — B&H links are plain.'}
+      </p>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="font-serif text-3xl">Not affiliate programs</h2>
+      <p class="mt-3 leading-relaxed text-muted">
+        <strong class="font-medium text-ink">Micro Center</strong> and the <strong class="font-medium text-ink">AMD Store</strong>
+        appear as “also available at” links only. We do not append tracking parameters and we do not use
+        <code class="font-mono text-ink">MICROCENTER_AFFILIATE_ID</code> or <code class="font-mono text-ink">AMD_AFFILIATE_ID</code>.
+      </p>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="font-serif text-3xl">FTC</h2>
+      <p class="mt-3 leading-relaxed text-muted">
+        This site contains affiliate links. {AMAZON_ASSOCIATE_DISCLOSURE}
+        We may also receive compensation if you click a configured Rakuten (Newegg) or B&amp;H link and buy something.
+        That relationship does not change our stack recommendations — those come from the test rig notes and the calculator estimates, not from who pays a commission.
+      </p>
+    </section>
+
+    <p class="mt-10 text-sm text-faint">
+      Maintainer setup is in <code class="font-mono">docs/affiliates.md</code>. Clicks go through <code class="font-mono">/go/…</code> and only ping a beacon if <code class="font-mono">AFFILIATE_CLICK_BEACON</code> is set.
+    </p>
+  </main>
+</Base>

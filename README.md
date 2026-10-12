@@ -63,6 +63,8 @@ When you publish, set `site` in `astro.config.mjs` to your public URL.
 | `/faq` | Short answers |
 | `/blog` | Longer posts + version-note index |
 | `/maintain` | Weekday scrape checklist |
+| `/disclosure` | Amazon Associates, Rakuten, B&H |
+| `/go/{retailer}/{product}` | Affiliate / storefront redirect |
 
 `/local-ai` redirects to `/software`.
 
@@ -75,6 +77,8 @@ When you publish, set `site` in `astro.config.mjs` to your public URL.
 | `src/data/stacks.yaml` | `/stacks` cards |
 | `src/data/gpus.yaml` | GPU directory |
 | `src/data/abliterated.yaml` | Abliterated table |
+| `src/data/retailers.yaml` | Storefronts + Amazon default tag `amdainet-20` |
+| `src/data/products.yaml` | Check-price search URLs (no prices) |
 
 Add a short dated note under `src/content/updates/` when a **line** changes (new Core SDK, new vLLM extras). Those render on `/rocm#version-notes` and the blog index.
 
@@ -91,9 +95,9 @@ Weekday procedure: [docs/weekday-scrape.md](docs/weekday-scrape.md) and `/mainta
 | `src/content/blog/` | `/blog/{id}` |
 | `src/content/updates/` | Cards on `/rocm` and `/blog` |
 
-MDX can use `<Callout>`, `<QwenPicks />`, `<HouseRules />`, `<GpuDirectory />`, and `<AbliteratedTable />` without imports.
+MDX can use `<Callout>`, `<QwenPicks />`, `<HouseRules />`, `<GpuDirectory />`, `<BuyButtons />`, and `<AbliteratedTable />` without imports.
 
-Nav lives in `src/lib/site.ts`. Calculator math lives in `src/lib/calculator.ts`.
+Nav lives in `src/lib/site.ts`. Calculator math lives in `src/lib/calculator.ts`. Affiliate wrappers live in `src/lib/affiliates.ts`. Setup: [docs/affiliates.md](docs/affiliates.md).
 
 ## Accuracy
 

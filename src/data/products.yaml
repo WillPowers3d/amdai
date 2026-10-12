@@ -1,0 +1,106 @@
+# Hardware we may show “Check price” buttons for.
+# URLs are retailer search pages or official AMD product pages — not invented SKUs.
+# Never show a live price. Label is always “Check price”.
+as_of: 2026-10-12
+
+products:
+  - id: r9700
+    name: AMD Radeon AI PRO R9700
+    kind: gpu
+    vram_gb: 32
+    calculator_gpu: r9700
+    urls:
+      amazon: https://www.amazon.com/s?k=AMD+Radeon+AI+PRO+R9700
+      newegg: https://www.newegg.com/p/pl?d=AMD+Radeon+AI+PRO+R9700
+      bhphoto: https://www.bhphotovideo.com/c/search?Ntt=AMD+Radeon+AI+PRO+R9700
+      microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=AMD+Radeon+AI+PRO+R9700
+      amd: https://www.amd.com/en/products/graphics/workstations/radeon-ai-pro/ai-9000-series/amd-radeon-ai-pro-r9700.html
+
+  - id: rx9070xt
+    name: AMD Radeon RX 9070 XT
+    kind: gpu
+    vram_gb: 16
+    calculator_gpu: rx9070xt
+    urls:
+      amazon: https://www.amazon.com/s?k=AMD+Radeon+RX+9070+XT
+      newegg: https://www.newegg.com/p/pl?d=AMD+Radeon+RX+9070+XT
+      bhphoto: https://www.bhphotovideo.com/c/search?Ntt=AMD+Radeon+RX+9070+XT
+      microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=AMD+Radeon+RX+9070+XT
+      amd: https://www.amd.com/en/products/graphics/desktops/radeon/9000-series/amd-radeon-rx-9070-xt.html
+
+  - id: rx9070
+    name: AMD Radeon RX 9070
+    kind: gpu
+    vram_gb: 16
+    urls:
+      amazon: https://www.amazon.com/s?k=AMD+Radeon+RX+9070
+      newegg: https://www.newegg.com/p/pl?d=AMD+Radeon+RX+9070
+      bhphoto: https://www.bhphotovideo.com/c/search?Ntt=AMD+Radeon+RX+9070
+      microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=AMD+Radeon+RX+9070
+      amd: https://www.amd.com/en/products/graphics/desktops/radeon/9000-series/amd-radeon-rx-9070.html
+
+  - id: rx7900xtx
+    name: AMD Radeon RX 7900 XTX
+    kind: gpu
+    vram_gb: 24
+    calculator_gpu: rx7900xtx
+    urls:
+      amazon: https://www.amazon.com/s?k=AMD+Radeon+RX+7900+XTX
+      newegg: https://www.newegg.com/p/pl?d=AMD+Radeon+RX+7900+XTX
+      bhphoto: https://www.bhphotovideo.com/c/search?Ntt=AMD+Radeon+RX+7900+XTX
+      microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=AMD+Radeon+RX+7900+XTX
+      amd: https://www.amd.com/en/products/graphics/desktops/radeon/7000-series/amd-radeon-rx-7900xtx.html
+
+  - id: rx7900xt
+    name: AMD Radeon RX 7900 XT
+    kind: gpu
+    vram_gb: 20
+    calculator_gpu: rx7900xt
+    urls:
+      amazon: https://www.amazon.com/s?k=AMD+Radeon+RX+7900+XT
+      newegg: https://www.newegg.com/p/pl?d=AMD+Radeon+RX+7900+XT
+      bhphoto: https://www.bhphotovideo.com/c/search?Ntt=AMD+Radeon+RX+7900+XT
+      microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=AMD+Radeon+RX+7900+XT
+      amd: https://www.amd.com/en/products/graphics/desktops/radeon/7000-series/amd-radeon-rx-7900xt.html
+
+  - id: rx7800xt
+    name: AMD Radeon RX 7800 XT
+    kind: gpu
+    vram_gb: 16
+    calculator_gpu: rx7800xt
+    urls:
+      amazon: https://www.amazon.com/s?k=AMD+Radeon+RX+7800+XT
+      newegg: https://www.newegg.com/p/pl?d=AMD+Radeon+RX+7800+XT
+      bhphoto: https://www.bhphotovideo.com/c/search?Ntt=AMD+Radeon+RX+7800+XT
+      microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=AMD+Radeon+RX+7800+XT
+      amd: https://www.amd.com/en/products/graphics/desktops/radeon/7000-series/amd-radeon-rx-7800-xt.html
+
+  - id: ddr5-kit
+    name: High-capacity DDR5 kit
+    kind: part
+    note: Search only — not a specific SKU. Our test rig is 256 GB DDR5; 64 GB is a reasonable one-card minimum.
+    urls:
+      amazon: https://www.amazon.com/s?k=DDR5+desktop+memory+kit+64GB
+      newegg: https://www.newegg.com/p/pl?d=DDR5+64GB+desktop+kit
+      bhphoto: https://www.bhphotovideo.com/c/search?Ntt=DDR5+64GB
+      microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=DDR5+64GB
+
+  - id: nvme
+    name: Fast NVMe SSD
+    kind: part
+    note: House rule — load GGUFs from NVMe, not a spinning disk. Search only, not a SKU.
+    urls:
+      amazon: https://www.amazon.com/s?k=PCIe+4.0+NVMe+SSD+2TB
+      newegg: https://www.newegg.com/p/pl?d=PCIe+4.0+NVMe+2TB
+      bhphoto: https://www.bhphotovideo.com/c/search?Ntt=NVMe+SSD+2TB
+      microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=NVMe+SSD+2TB
+
+  - id: psu-1000w
+    name: 1000W-class PSU
+    kind: part
+    note: AMD’s R9700 minimum recommendation is 750 W. A 1000W-class unit is search guidance for headroom, not a SKU.
+    urls:
+      amazon: https://www.amazon.com/s?k=1000W+80+Plus+ATX+PSU+12V-2x6
+      newegg: https://www.newegg.com/p/pl?d=1000W+ATX+power+supply+12V-2x6
+      bhphoto: https://www.bhphotovideo.com/c/search?Ntt=1000W+power+supply
+      microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=1000W+power+supply

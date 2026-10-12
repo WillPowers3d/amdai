@@ -1,0 +1,51 @@
+---
+import { products, resolveGo, retailers } from '../../../lib/affiliates';
+
+export function getStaticPaths() {
+  return retailers.flatMap((retailer) =>
+    products
+      .filter((product) => Boolean(product.urls[retailer.id]))
+      .map((product) => ({
+        params: { retailer: retailer.id, product: product.id },
+      })),
+  );
+}
+
+const { retailer, product } = Astro.params;
+const resolved = retailer && product ? resolveGo(retailer, product) : null;
+if (!resolved) {
+  return Astro.redirect('/disclosure');
+}
+
+const beacon = (import.meta.env.AFFILIATE_CLICK_BEACON as string | undefined)?.trim() ?? '';
+const dest = resolved.href;
+const rel = resolved.affiliate ? 'sponsored nofollow noopener' : 'noopener';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex,nofollow" />
+    <meta http-equiv="refresh" content={`0;url=${dest}`} />
+    <title>Continue to {resolved.retailer.name}</title>
+  </head>
+  <body>
+    <p>
+      <a href={dest} rel={rel}>Continue to {resolved.retailer.name}</a>
+    </p>
+    <script is:inline define:vars={{ dest, beacon, retailer, product }}>
+      try {
+        if (beacon) {
+          navigator.sendBeacon?.(
+            beacon,
+            new Blob([JSON.stringify({ retailer, product, t: Date.now() })], { type: 'application/json' }),
+          );
+        }
+      } catch {
+        /* no tracking if the beacon fails */
+      }
+      location.replace(dest);
+    </script>
+  </body>
+</html>

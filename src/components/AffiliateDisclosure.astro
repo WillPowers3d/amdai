@@ -1,0 +1,26 @@
+---
+import { AMAZON_ASSOCIATE_DISCLOSURE } from '../lib/affiliates';
+
+interface Props {
+  compact?: boolean;
+}
+
+const { compact = false } = Astro.props;
+---
+
+{compact ? (
+  <p class="text-xs leading-relaxed text-faint">
+    {AMAZON_ASSOCIATE_DISCLOSURE} Some Newegg links use Rakuten Advertising and some B&H links use B&H’s affiliate program when those IDs are configured. Micro Center and AMD Store links are plain “also available at” links — no tracking. Buttons say “Check price” and never show a live or stale price.
+    <a class="underline decoration-accent/40 underline-offset-2" href="/disclosure">Full disclosure</a>.
+  </p>
+) : (
+  <div class="space-y-3 text-sm leading-relaxed text-muted">
+    <p class="font-medium text-ink">{AMAZON_ASSOCIATE_DISCLOSURE}</p>
+    <p>
+      R9700 Lab Notes is a participant in the Amazon Services LLC Associates Program, an affiliate advertising program designed to provide a means for sites to earn advertising fees by advertising and linking to Amazon.com and Amazon sites.
+      We may also earn a commission from qualifying purchases through Rakuten Advertising (including Newegg) and B&H.
+      Micro Center and AMD Store links are not affiliate links.
+      <a class="underline decoration-accent/40 underline-offset-2" href="/disclosure">Read the full disclosure</a>.
+    </p>
+  </div>
+)}
