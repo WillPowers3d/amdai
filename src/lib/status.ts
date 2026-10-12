@@ -111,6 +111,7 @@ export type AbliteratedFamily = {
   caveats: string;
   best_use: string;
   listed_rows: string[];
+  authors?: AbliteratedSource[];
   sources: AbliteratedSource[];
 };
 

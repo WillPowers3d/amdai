@@ -38,13 +38,18 @@ families:
       crude proof of concept. OrcaRouter publishes paired capability numbers
       on their card (see that variant).
     caveats: >-
-      Early layers may be left unablated. MTP or vision tensors can be
-      dropped or left untouched depending on the editor. Think-loops and
-      broken templates are a known community failure mode. A chat-template
+      Huihui's 27B card leaves layers outside 18–51 unablated and says MTP
+      and visual were not modified. Whether think-loops or broken templates
+      happen on a given file is not documented by uploader. A chat-template
       jailbreak is not this method.
     best_use: >-
       Educational comparison after official instruct already runs on llama.cpp.
       Not a daily-driver family.
+    authors:
+      - title: Arditi et al. (2024)
+        url: https://arxiv.org/abs/2406.11717
+      - title: Maxime Labonne (writeup)
+        url: https://huggingface.co/blog/mlabonne/abliteration
     listed_rows:
       - huihui-qwen38-27b
       - huihui-qwen35-9b
@@ -83,6 +88,11 @@ families:
     best_use: >-
       Local llama.cpp GGUF experiment at Q4_K_M and up after official instruct
       works. Not a tested-on-our-rig pick.
+    authors:
+      - title: Philipp Emanuel Weidmann (Heretic)
+        url: https://heretic-project.org
+      - title: JonathanColetti (listed GGUF)
+        url: https://huggingface.co/JonathanColetti/Qwen3.8-27B-Uncensored-GGUF
     listed_rows:
       - heretic-jonathan-coletti
     sources:
@@ -117,6 +127,9 @@ families:
     best_use: >-
       Contrast experiment against a weight-edit of the same base, on llama.cpp,
       after official instruct works.
+    authors:
+      - title: jenerallee78
+        url: https://huggingface.co/jenerallee78
     listed_rows:
       - sft-jenerallee78
     sources:
@@ -149,6 +162,9 @@ families:
       (jim-plus README).
     best_use: >-
       Read the method articles. Not a catalog pick on this page.
+    authors:
+      - title: Jim Lai (grimjim)
+        url: https://huggingface.co/blog/grimjim/projected-abliteration
     listed_rows: []
     sources:
       - title: Lai, Projected Abliteration
@@ -173,6 +189,9 @@ families:
       Loopback Qwen still has no cloud moderator — the weights can refuse.
       Do not skip this row.
     best_use: Daily local instruct. Always start here.
+    authors:
+      - title: Qwen
+        url: https://huggingface.co/Qwen
     listed_rows:
       - control-qwen36
     sources:
