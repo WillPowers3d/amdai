@@ -35,9 +35,9 @@ const payload = JSON.stringify({
   title="Setup by budget"
   description="Starter through Pro local-AI Radeon builds. No invented prices. Calculator share links, llama.cpp first, Q4 and up only."
 >
-  <main id="main" class="mx-auto max-w-3xl px-4 py-10 sm:px-6">
-    <p class="font-mono text-[0.72rem] uppercase tracking-[0.18em] text-accent">Buy the box</p>
-    <h1 class="mt-3 font-serif text-4xl tracking-tight sm:text-5xl">Setup by budget</h1>
+  <main id="main" class="mx-auto max-w-6xl px-4 py-10 sm:px-6">
+    <p class="kicker">Buy the box</p>
+    <h1 class="display mt-3 text-4xl sm:text-5xl">Setup by budget</h1>
     <p class="mt-4 text-lg leading-relaxed text-muted">
       Four tiers from a 16 GB card to the two-R9700 test rig. Answer size vs speed first — that changes
       the pick. Models and quants are Q4 and up, estimated through the
@@ -93,12 +93,12 @@ const payload = JSON.stringify({
 
     <AbliteratedPicks />
 
-    <ol class="mt-12 space-y-12">
+    <ol class="mt-12 grid gap-4 lg:grid-cols-2">
       {budgetTiers.map((tier) => (
-        <li id={tier.id} class="scroll-mt-28 rounded-2xl border border-line bg-raised/30 p-5 sm:p-6" data-tier={tier.id} data-slider={tier.slider}>
-          <p class="font-mono text-[0.68rem] uppercase tracking-[0.14em] text-faint">{tier.tagline}</p>
+        <li id={tier.id} class="card scroll-mt-28 p-5 sm:p-6" data-tier={tier.id} data-slider={tier.slider}>
+          <p class="kicker">{tier.tagline}</p>
           <div class="mt-1 flex flex-wrap items-center gap-2">
-            <h2 class="font-serif text-3xl">{tier.name}</h2>
+            <h2 class="text-3xl tracking-tight">{tier.name}</h2>
             {tier.tested_rig && (
               <span class="rounded-full bg-ok/15 px-2.5 py-0.5 text-xs text-ok">Tested on our rig</span>
             )}

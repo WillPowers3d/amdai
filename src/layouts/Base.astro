@@ -1,24 +1,20 @@
 ---
-import '@fontsource-variable/source-serif-4/wght.css';
-import '@fontsource/ibm-plex-sans/400.css';
-import '@fontsource/ibm-plex-sans/500.css';
-import '@fontsource/ibm-plex-sans/600.css';
-import '@fontsource/ibm-plex-mono/400.css';
-import '@fontsource/ibm-plex-mono/500.css';
 import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import CommandPalette from '../components/CommandPalette.astro';
 import ReadingProgress from '../components/ReadingProgress.astro';
-import { site } from '../lib/site';
+import { ogSlug, site } from '../lib/site';
 
 interface Props {
   title?: string;
   description?: string;
 }
 
-const title = Astro.props.title ? `${Astro.props.title} · ${site.name}` : site.name;
+const title = Astro.props.title ? `${Astro.props.title} · ${site.wordmark}` : `${site.wordmark} · ${site.name}`;
 const description = Astro.props.description ?? site.description;
 const canonical = new URL(Astro.url.pathname, Astro.site);
+const og = new URL(`/og/${ogSlug(Astro.url.pathname)}.png`, Astro.site);
 ---
 
 <!doctype html>
@@ -28,14 +24,23 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
     <meta name="description" content={description} />
-    <meta name="theme-color" content="#0b0a0a" />
+    <meta name="theme-color" content="#08080b" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="canonical" href={canonical} />
     <link rel="sitemap" href="/sitemap-index.xml" />
     <link rel="alternate" type="application/rss+xml" title="R9700 Lab Notes updates" href="/updates/rss.xml" />
+    <link rel="preload" href="/fonts/geist-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/geist-mono-400.woff2" as="font" type="font/woff2" crossorigin />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={og} />
+    <meta property="og:site_name" content={site.wordmark} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={og} />
     <title>{title}</title>
     <script is:inline>
       (function () {
@@ -59,6 +64,33 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     </div>
     <div data-pagefind-ignore>
       <Footer />
+      <CommandPalette />
     </div>
+    <script>
+      document.querySelectorAll('pre').forEach((pre) => {
+        if (pre.parentElement?.classList.contains('code-wrap')) return;
+        const wrap = document.createElement('div');
+        wrap.className = 'code-wrap';
+        pre.parentNode?.insertBefore(wrap, pre);
+        wrap.appendChild(pre);
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'code-copy';
+        btn.textContent = 'Copy';
+        btn.addEventListener('click', async () => {
+          const text = pre.textContent || '';
+          try {
+            await navigator.clipboard.writeText(text);
+            btn.textContent = 'Copied';
+          } catch {
+            btn.textContent = 'Select';
+          }
+          window.setTimeout(() => {
+            btn.textContent = 'Copy';
+          }, 1600);
+        });
+        wrap.appendChild(btn);
+      });
+    </script>
   </body>
 </html>

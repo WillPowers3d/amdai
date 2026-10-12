@@ -1,0 +1,105 @@
+---
+import { DEFAULT_PRIORITY } from '../lib/priority';
+import { DEFAULT_STYLE, DEFAULT_USAGE } from '../lib/ask';
+
+interface Props {
+  id?: string;
+}
+
+const { id = 'rig-wizard' } = Astro.props;
+---
+
+<form id={id} class="wizard card p-5 sm:p-6" action="/calculator" method="get">
+  <p class="kicker">Three questions</p>
+  <h2 class="mt-2 text-2xl tracking-tight">Size the box before you buy a card</h2>
+  <p class="mt-2 text-sm text-muted">
+    These change the recommendation, not the VRAM math. Tokens per second are estimates unless a “Tested on our rig” badge is showing.
+  </p>
+
+  <fieldset class="mt-5">
+    <legend class="text-sm font-medium">Size or speed?</legend>
+    <div class="mt-2 grid gap-2 sm:grid-cols-2">
+      <label class="choice">
+        <input type="radio" name="priority" value="size" checked={DEFAULT_PRIORITY === 'size'} />
+        <span>
+          <span class="block font-medium">Max model size</span>
+          <span class="mt-0.5 block text-sm text-muted">More VRAM. Q5/Q6 when they fit.</span>
+        </span>
+      </label>
+      <label class="choice">
+        <input type="radio" name="priority" value="speed" checked={DEFAULT_PRIORITY === 'speed'} />
+        <span>
+          <span class="block font-medium">Speed</span>
+          <span class="mt-0.5 block text-sm text-muted">One GPU, no offload, MoE.</span>
+        </span>
+      </label>
+    </div>
+  </fieldset>
+
+  <fieldset class="mt-5">
+    <legend class="text-sm font-medium">Where do the tokens run?</legend>
+    <div class="mt-2 grid gap-2 sm:grid-cols-2">
+      <label class="choice">
+        <input type="radio" name="usage" value="local" checked={DEFAULT_USAGE === 'local'} />
+        <span>
+          <span class="block font-medium">Fully local</span>
+          <span class="mt-0.5 block text-sm text-muted">The box does the whole job.</span>
+        </span>
+      </label>
+      <label class="choice">
+        <input type="radio" name="usage" value="hybrid" checked={DEFAULT_USAGE === 'hybrid'} />
+        <span>
+          <span class="block font-medium">Hybrid</span>
+          <span class="mt-0.5 block text-sm text-muted">Local plus a cloud model for long jobs.</span>
+        </span>
+      </label>
+    </div>
+  </fieldset>
+
+  <fieldset class="mt-5">
+    <legend class="text-sm font-medium">Which weights?</legend>
+    <div class="mt-2 grid gap-2 sm:grid-cols-2">
+      <label class="choice">
+        <input type="radio" name="style" value="standard" checked={DEFAULT_STYLE === 'standard'} />
+        <span>
+          <span class="block font-medium">Standard</span>
+          <span class="mt-0.5 block text-sm text-muted">Official instruct. The default.</span>
+        </span>
+      </label>
+      <label class="choice">
+        <input type="radio" name="style" value="abliterated" checked={DEFAULT_STYLE === 'abliterated'} />
+        <span>
+          <span class="block font-medium">Abliterated</span>
+          <span class="mt-0.5 block text-sm text-muted">Educational. Can hurt quality.</span>
+        </span>
+      </label>
+    </div>
+  </fieldset>
+
+  <div class="mt-6 flex flex-wrap gap-2">
+    <button class="btn-primary" type="submit">Open the calculator</button>
+    <button class="btn-secondary" type="submit" formaction="/budget">Compare budget tiers</button>
+  </div>
+</form>
+
+<style>
+  .choice {
+    display: flex;
+    cursor: pointer;
+    gap: 0.7rem;
+    border: 1px solid var(--line);
+    background: var(--canvas);
+    border-radius: 0.9rem;
+    padding: 0.85rem 0.95rem;
+  }
+
+  .choice:has(:checked) {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 1px var(--accent);
+  }
+
+  .choice input {
+    margin-top: 0.2rem;
+    accent-color: var(--accent);
+  }
+</style>

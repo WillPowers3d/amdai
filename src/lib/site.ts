@@ -1,12 +1,35 @@
 export const site = {
   name: 'R9700 Lab Notes',
-  shortName: 'Lab Notes',
+  wordmark: 'amdai',
+  shortName: 'amdai',
   tagline: 'Local AI on consumer AMD Radeon — ROCm notes from a real R9700 test rig.',
   description:
     'The consumer AMD ROCm notebook: llama.cpp and Qwen on Radeon GPUs, grounded in a two-R9700 test rig. Daily driver, fast agent stack, GPU directory, and a quant + hardware calculator.',
   officialGpu: 'AMD Radeon AI PRO R9700',
   informalGpu: 'R9700 Pro',
 };
+
+const OG_PAGES = new Set([
+  'home',
+  'calculator',
+  'budget',
+  'abliterated',
+  'stacks',
+  'backends',
+  'gpus',
+  'rocm',
+  'forum',
+  'start',
+  'account',
+  'search',
+  'default',
+]);
+
+export function ogSlug(pathname: string) {
+  if (!pathname || pathname === '/') return 'home';
+  const slug = pathname.replace(/^\//, '').replace(/\/+$/, '').replace(/\//g, '-') || 'home';
+  return OG_PAGES.has(slug) ? slug : 'default';
+}
 
 export const officialLinks = {
   product:
@@ -74,6 +97,7 @@ export const primaryNav: NavItem[] = [
   { href: '/updates', label: 'Updates', description: 'RSS + ROCm × llama.cpp × vLLM 0.31 matrix', group: 'practice' },
   { href: '/faq', label: 'FAQ', description: 'Short answers for a first home box', group: 'practice' },
   { href: '/blog', label: 'Blog', description: 'Longer posts and ROCm version notes', group: 'practice' },
+  { href: '/forum', label: 'Forum', description: 'Community threads — off until FORUM_ENABLED', group: 'practice' },
   { href: '/account', label: 'Account', description: 'Optional saved rigs and stack-update alerts', group: 'practice' },
   { href: '/privacy', label: 'Privacy', description: 'What optional accounts store', group: 'practice' },
   { href: '/disclosure', label: 'Disclosure', description: 'Amazon Associates, Rakuten, B&H — and what is not affiliate', group: 'practice' },

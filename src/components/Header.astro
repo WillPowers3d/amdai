@@ -1,5 +1,6 @@
 ---
-import { allNav, primaryNav, site } from '../lib/site';
+import { navGroups, primaryNav, site } from '../lib/site';
+import Logo from './Logo.astro';
 import ThemeToggle from './ThemeToggle.astro';
 
 interface Props {
@@ -12,36 +13,63 @@ const isActive = (href: string) => {
   if (href === '/') return current === '/';
   return current === href || current.startsWith(`${href}/`);
 };
+
+const pinned = primaryNav.filter((item) => ['/calculator', '/budget', '/stacks'].includes(item.href));
 ---
 
-<header class="sticky top-0 z-40 border-b border-line/80 bg-canvas/85 backdrop-blur-md">
-  <div class="mx-auto flex max-w-7xl items-center gap-3 px-4 py-3 sm:px-6">
-    <a href="/" class="group flex min-w-0 items-center gap-2.5">
-      <span class="mark" aria-hidden="true"></span>
-      <span class="min-w-0">
-        <span class="block font-serif text-lg leading-none tracking-tight">{site.name}</span>
-        <span class="hidden text-[0.68rem] uppercase tracking-[0.16em] text-faint sm:block">Living ROCm notes</span>
-      </span>
+<header class="site-header">
+  <div class="mx-auto flex h-16 max-w-7xl items-center gap-3 px-4 sm:px-6">
+    <a href="/" class="shrink-0" aria-label={`${site.wordmark} home`}>
+      <Logo />
     </a>
 
+    <nav class="mega-nav hidden lg:flex" aria-label="Primary">
+      {navGroups.map((group) => (
+        <div class="mega-item">
+          <button type="button" class="mega-trigger" aria-expanded="false">
+            {group.label}
+            <svg width="10" height="10" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 4.2 6 8l4-3.8" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+          </button>
+          <div class="mega-panel" hidden>
+            <p class="kicker">{group.label}</p>
+            <ul>
+              {primaryNav.filter((item) => item.group === group.id).map((item) => (
+                <li>
+                  <a href={item.href} aria-current={isActive(item.href) ? 'page' : undefined}>
+                    <span class="block font-medium">{item.label}</span>
+                    <span class="mt-0.5 block text-sm text-muted">{item.description}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      ))}
+      {pinned.map((item) => (
+        <a
+          href={item.href}
+          class:list={['mega-link', isActive(item.href) && 'is-active']}
+          aria-current={isActive(item.href) ? 'page' : undefined}
+        >
+          {item.label}
+        </a>
+      ))}
+    </nav>
+
     <div class="ml-auto flex items-center gap-2">
-      <form class="hidden sm:block" action="/search" method="get" role="search">
-        <label class="sr-only" for="header-search">Search</label>
-        <input
-          id="header-search"
-          name="q"
-          type="search"
-          class="h-9 w-40 rounded-full border border-line bg-raised px-3 text-sm lg:w-52"
-          placeholder="Search"
-        />
-      </form>
-      <a class="inline-flex h-9 items-center rounded-full border border-line bg-raised px-3 text-sm sm:hidden" href="/search">Search</a>
-      <a class="hidden rounded-full border border-line bg-raised px-3 py-1.5 text-sm sm:inline" href="/calculator">Calculator</a>
-      <a class="hidden rounded-full bg-accent px-3 py-1.5 text-sm text-white sm:inline" href="/start">Start</a>
+      <button type="button" class="cmdk-btn" data-cmdk-open>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.6"></circle>
+          <path d="M20 20l-3.2-3.2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"></path>
+        </svg>
+        <span class="hidden sm:inline">Search</span>
+        <kbd class="hidden md:inline">⌘K</kbd>
+      </button>
       <ThemeToggle />
+      <a class="btn-primary hidden h-10 px-4 text-sm sm:inline-flex" href="/start">Start</a>
       <button
         type="button"
-        class="inline-flex h-9 items-center rounded-full border border-line bg-raised px-3 text-sm xl:hidden"
+        class="inline-flex h-10 items-center rounded-full border border-line bg-raised px-3 text-sm lg:hidden"
         data-menu-toggle
         aria-expanded="false"
         aria-controls="mobile-nav"
@@ -51,31 +79,13 @@ const isActive = (href: string) => {
     </div>
   </div>
 
-  <nav class="mx-auto hidden max-w-7xl flex-wrap gap-0.5 px-4 pb-2 sm:px-6 xl:flex" aria-label="Primary">
-    {allNav.map((item) => (
-      <a
-        href={item.href}
-        class:list={[
-          'rounded-full px-2 py-1 text-[0.8rem] transition-colors',
-          isActive(item.href) ? 'bg-accent-soft text-accent-ink' : 'text-muted hover:text-ink',
-        ]}
-        aria-current={isActive(item.href) ? 'page' : undefined}
-      >
-        {item.label}
-      </a>
-    ))}
-  </nav>
-
-  <nav id="mobile-nav" class="hidden border-t border-line bg-canvas px-4 py-3 xl:hidden" aria-label="Mobile">
+  <nav id="mobile-nav" class="hidden border-t border-line bg-canvas px-4 py-3 lg:hidden" aria-label="Mobile">
     <ul class="grid gap-1 sm:grid-cols-2">
       {primaryNav.map((item) => (
         <li>
           <a
             href={item.href}
-            class:list={[
-              'block rounded-lg px-3 py-2',
-              isActive(item.href) ? 'bg-accent-soft text-accent-ink' : 'text-ink',
-            ]}
+            class:list={['block rounded-lg px-3 py-2', isActive(item.href) ? 'bg-accent-soft text-accent-ink' : 'text-ink']}
           >
             <span class="block font-medium">{item.label}</span>
             <span class="block text-sm text-muted">{item.description}</span>
@@ -87,6 +97,22 @@ const isActive = (href: string) => {
 </header>
 
 <script>
+  document.querySelectorAll('.mega-item').forEach((item) => {
+    const trigger = item.querySelector('.mega-trigger');
+    const panel = item.querySelector('.mega-panel');
+    if (!(trigger instanceof HTMLButtonElement) || !(panel instanceof HTMLElement)) return;
+    const set = (open: boolean) => {
+      trigger.setAttribute('aria-expanded', String(open));
+      panel.hidden = !open;
+    };
+    trigger.addEventListener('click', () => set(panel.hidden));
+    item.addEventListener('mouseenter', () => set(true));
+    item.addEventListener('mouseleave', () => set(false));
+    item.addEventListener('focusout', (event) => {
+      if (!item.contains(event.relatedTarget as Node)) set(false);
+    });
+  });
+
   const toggle = document.querySelector('[data-menu-toggle]');
   const menu = document.getElementById('mobile-nav');
   toggle?.addEventListener('click', () => {
@@ -96,11 +122,93 @@ const isActive = (href: string) => {
 </script>
 
 <style>
-  .mark {
-    width: 1.05rem;
-    height: 1.05rem;
-    background: var(--accent);
-    clip-path: polygon(18% 8%, 92% 8%, 82% 92%, 8% 92%);
-    box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 40%, black);
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    min-height: var(--header-h);
+    border-bottom: 1px solid color-mix(in srgb, var(--line) 80%, transparent);
+    background: color-mix(in srgb, var(--canvas) 86%, transparent);
+    backdrop-filter: blur(14px);
+  }
+
+  .mega-nav {
+    align-items: center;
+    gap: 0.15rem;
+    margin-left: 1rem;
+  }
+
+  .mega-item {
+    position: relative;
+  }
+
+  .mega-trigger,
+  .mega-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    border-radius: 999px;
+    padding: 0.4rem 0.7rem;
+    font-size: 0.88rem;
+    color: var(--muted);
+  }
+
+  .mega-trigger:hover,
+  .mega-link:hover,
+  .mega-link.is-active,
+  .mega-trigger[aria-expanded='true'] {
+    color: var(--ink);
+    background: color-mix(in srgb, var(--raised) 80%, transparent);
+  }
+
+  .mega-panel {
+    position: absolute;
+    top: calc(100% + 0.45rem);
+    left: 0;
+    width: min(38rem, 80vw);
+    border: 1px solid var(--line);
+    background: var(--raised);
+    border-radius: 1rem;
+    padding: 1rem;
+    box-shadow: var(--shadow);
+  }
+
+  .mega-panel ul {
+    display: grid;
+    gap: 0.15rem;
+    margin-top: 0.65rem;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .mega-panel a {
+    display: block;
+    border-radius: 0.7rem;
+    padding: 0.55rem 0.6rem;
+  }
+
+  .mega-panel a:hover,
+  .mega-panel a[aria-current='page'] {
+    background: var(--accent-soft);
+  }
+
+  .cmdk-btn {
+    display: inline-flex;
+    min-height: 2.5rem;
+    align-items: center;
+    gap: 0.45rem;
+    border: 1px solid var(--line);
+    background: var(--raised);
+    border-radius: 999px;
+    padding: 0.35rem 0.75rem;
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+
+  .cmdk-btn kbd {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    border: 1px solid var(--line);
+    border-radius: 0.3rem;
+    padding: 0.05rem 0.3rem;
   }
 </style>

@@ -1,6 +1,10 @@
-# R9700 Lab Notes
+# amdai · R9700 Lab Notes
 
 A static documentation site for **local AI on consumer AMD Radeon** — grounded in a real test rig with two **AMD Radeon AI PRO R9700** cards (32 GB, `gfx1201`) and 256 GB DDR5.
+
+Independent living notes. **Not affiliated with AMD.** The wordmark is `amdai` with a chip we drew; we do not use AMD’s logo as a lockup.
+
+Visual system: [docs/design.md](docs/design.md). Dark-first ember-on-obsidian theme, Geist + Geist Mono (self-hosted in `public/fonts/`), mega-menu, ⌘K search, and per-page OG images.
 
 It is a **living tracker**, not a frozen manual. Version pins are dated snapshots. The home page “what works this week” card is the current recommendation.
 
@@ -61,6 +65,7 @@ Public site URL is `https://amdai.net` (`site` in `astro.config.mjs`; override w
 | `/backends` | Backend chooser — llama.cpp default |
 | `/software` | llama.cpp first; vLLM / Strata as tries |
 | `/abliterated` | Abliterated hub — vet files, catalog table, method/variant cards, llama.cpp notes |
+| `/forum` | Community stub (off unless `FORUM_ENABLED`, which is unimplemented) |
 | `/account` | Optional saved rigs (off unless `ACCOUNTS_ENABLED=1`) |
 | `/privacy` | What optional accounts store |
 | `/harnesses` | Hermes Agent and OpenClaw (`/v1` first) |

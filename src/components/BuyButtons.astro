@@ -27,9 +27,9 @@ const items = ids.map((id) => productById(id)).filter((item): item is NonNullabl
         };
       });
       return (
-        <div class="rounded-2xl border border-line bg-raised/50 p-4 sm:p-5" data-buy={item.id}>
-          <p class="font-mono text-[0.68rem] uppercase tracking-[0.14em] text-faint">Check price · no live or stale prices</p>
-          <h3 class="mt-1 font-serif text-2xl">{heading && items.length === 1 ? heading : item.name}</h3>
+        <div class="card p-4 sm:p-5" data-buy={item.id}>
+          <p class="kicker">Check price · no live or stale prices</p>
+          <h3 class="mt-1 text-2xl tracking-tight">{heading && items.length === 1 ? heading : item.name}</h3>
           {item.note && <p class="mt-1 text-sm text-muted">{item.note}</p>}
           <ul class="mt-4 flex flex-wrap gap-2">
             {links.map(({ retailer, href, affiliate }) => (

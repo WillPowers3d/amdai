@@ -10,8 +10,8 @@ import { stacksGuide } from '../lib/status';
   description="Daily driver and fast-agent Qwen stacks from our R9700 test rig — llama.cpp first, Strata when you need speed."
 >
   <main id="main" class="mx-auto max-w-6xl px-4 py-10 sm:px-6">
-    <p class="font-mono text-[0.72rem] uppercase tracking-[0.18em] text-accent">From the test rig · snapshot {stacksGuide.as_of}</p>
-    <h1 class="mt-3 font-serif text-4xl tracking-tight sm:text-5xl">Recommended stacks</h1>
+    <p class="kicker">From the test rig · snapshot {stacksGuide.as_of}</p>
+    <h1 class="display mt-3 text-4xl sm:text-5xl">Recommended stacks</h1>
     <p class="mt-4 max-w-2xl text-lg leading-relaxed text-muted">
       {stacksGuide.test_rig.label}: {stacksGuide.test_rig.gpus}, {stacksGuide.test_rig.ram}.
       {stacksGuide.test_rig.note}
@@ -27,8 +27,8 @@ import { stacksGuide } from '../lib/status';
 
     <ol class="mt-4 grid gap-5">
       {stacksGuide.stacks.map((stack) => (
-        <li class="rounded-2xl border border-line bg-raised/50 p-5 sm:p-6">
-          <p class="font-mono text-[0.68rem] uppercase tracking-[0.14em] text-faint">{stack.kicker}</p>
+        <li id={stack.id} class="card scroll-mt-28 p-5 sm:p-6">
+          <p class="kicker">{stack.kicker}</p>
           <div class="mt-1 flex flex-wrap items-end justify-between gap-3">
             <h2 class="font-serif text-3xl">{stack.title}</h2>
             <a class="rounded-full border border-line px-3 py-1.5 text-sm" href={stack.calculator}>Open in calculator</a>

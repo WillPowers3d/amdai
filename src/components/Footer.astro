@@ -1,12 +1,14 @@
 ---
 import { AMAZON_ASSOCIATE_DISCLOSURE } from '../lib/affiliates';
 import { navGroups, primaryNav, site } from '../lib/site';
+import Logo from './Logo.astro';
 ---
 
-<footer class="mt-16 border-t border-line bg-raised/40">
-  <div class="mx-auto grid max-w-7xl gap-10 px-4 py-12 sm:px-6 md:grid-cols-4">
+<footer class="mt-20 border-t border-line bg-raised/40">
+  <div class="mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:px-6 md:grid-cols-4">
     <div class="md:col-span-1">
-      <p class="font-serif text-xl">{site.name}</p>
+      <Logo />
+      <p class="mt-3 font-medium">{site.name}</p>
       <p class="mt-2 max-w-sm text-sm leading-relaxed text-muted">
         Independent living notes for hobbyists. Not an AMD publication. Version pins are dated snapshots. Product names belong to their owners.
       </p>
@@ -23,12 +25,12 @@ import { navGroups, primaryNav, site } from '../lib/site';
     ))}
   </div>
   <div class="border-t border-line">
-    <p class="mx-auto max-w-7xl px-4 py-4 text-xs text-faint sm:px-6">
+    <p class="mx-auto max-w-7xl px-4 py-4 text-xs leading-relaxed text-faint sm:px-6">
+      Independent, not affiliated with AMD.
       Refresh <code class="font-mono">src/data/what-works.yaml</code> when the frontier moves.
       <a class="underline decoration-accent/40 underline-offset-2" href="/maintain">Weekday scrape</a>.
       <a class="underline decoration-accent/40 underline-offset-2" href="/disclosure">Affiliate disclosure</a>.
       <a class="underline decoration-accent/40 underline-offset-2" href="/privacy">Privacy</a>.
-      Independent living notes — not affiliated with AMD.
       {AMAZON_ASSOCIATE_DISCLOSURE} Always confirm the live ROCm matrix.
     </p>
   </div>

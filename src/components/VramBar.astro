@@ -1,0 +1,23 @@
+---
+---
+
+<div class="vram mt-5" data-vram-bar hidden>
+  <div class="flex items-center justify-between text-xs text-faint">
+    <span>VRAM stack vs card</span>
+    <span class="tabular-nums" data-vram-used></span>
+  </div>
+  <div class="vram-track" role="img" aria-label="Stacked VRAM estimate">
+    <div class="vram-fill">
+      <span class="vram-seg weights"></span>
+      <span class="vram-seg kv"></span>
+      <span class="vram-seg oh"></span>
+    </div>
+  </div>
+  <p class="vram-overflow">Estimate overflows the card — the extra would land in system RAM.</p>
+  <p class="vram-legend">
+    <span><i class="weights"></i>Weights</span>
+    <span><i class="kv"></i>KV cache</span>
+    <span><i class="oh"></i>Overhead</span>
+    <span><i class="cap"></i>Card capacity</span>
+  </p>
+</div>

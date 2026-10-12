@@ -14,7 +14,7 @@ const rows = abliteratedGuide.rows;
 ---
 
 <section id="methods" class="mt-12">
-  <h2 class="font-serif text-3xl">Method families</h2>
+  <h2 class="text-3xl tracking-tight">Method families</h2>
   <p class="mt-3 text-muted">
     Each family is a way people edit refusals. Claims below are cited from the method writeup or a
     listed model card. If a fact is missing, it says <span class="text-ink">{fieldOrUnknown('')}</span>.
@@ -22,9 +22,9 @@ const rows = abliteratedGuide.rows;
   </p>
   <div class="mt-6 grid gap-4">
     {families.map((family) => (
-      <article id={`family-${family.id}`} class="rounded-2xl border border-line bg-raised/40 p-5">
-        <p class="font-mono text-[0.68rem] uppercase tracking-[0.14em] text-accent">Method</p>
-        <h3 class="mt-2 font-serif text-2xl">{family.name}</h3>
+      <article id={`family-${family.id}`} class="card p-5">
+        <p class="kicker">Method</p>
+        <h3 class="mt-2 text-2xl tracking-tight">{family.name}</h3>
         <p class="mt-3 text-sm text-muted">
           Who:{' '}
           {family.authors && family.authors.length > 0 ? (
@@ -100,7 +100,7 @@ const rows = abliteratedGuide.rows;
 </section>
 
 <section id="cards" class="mt-12">
-  <h2 class="font-serif text-3xl">Variant cards</h2>
+  <h2 class="text-3xl tracking-tight">Variant cards</h2>
   <p class="mt-3 text-muted">
     One card per catalog row. Quants are Q4 and up only. Status is from the YAML — nothing here is a
     tested-on-our-rig abliterated pick ({abliteratedGuide.tested_pick}).
@@ -110,9 +110,9 @@ const rows = abliteratedGuide.rows;
       const family = familyById(row.method_family);
       const sources = row.sources ?? [];
       return (
-        <article id={`card-${row.id ?? row.repo}`} class="rounded-2xl border border-line bg-canvas p-5">
+        <article id={`card-${row.id ?? row.repo}`} class="card p-5">
           <div class="flex flex-wrap items-baseline justify-between gap-2">
-            <p class="font-mono text-[0.68rem] uppercase tracking-[0.14em] text-accent">
+            <p class="kicker">
               {row.kind === 'control' ? 'Control' : 'Variant'}
             </p>
             <p class="text-xs text-faint">
@@ -120,7 +120,7 @@ const rows = abliteratedGuide.rows;
               {row.status_note ? ` · ${row.status_note}` : ''}
             </p>
           </div>
-          <h3 class="mt-2 font-serif text-2xl">{row.name}</h3>
+          <h3 class="mt-2 text-2xl tracking-tight">{row.name}</h3>
           <p class="mt-1 text-sm text-muted">
             {family ? (
               <a class="underline decoration-accent/40 underline-offset-2" href={`#family-${family.id}`}>
