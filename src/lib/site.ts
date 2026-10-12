@@ -29,6 +29,7 @@ export function ogSlug(pathname: string) {
   if (!pathname || pathname === '/') return 'home';
   const slug = pathname.replace(/^\//, '').replace(/\/+$/, '').replace(/\//g, '-') || 'home';
   if (slug === 'rocm' || slug.startsWith('rocm-')) return 'rocm';
+  if (slug === 'forum' || slug.startsWith('forum-')) return 'forum';
   return OG_PAGES.has(slug) ? slug : 'default';
 }
 
