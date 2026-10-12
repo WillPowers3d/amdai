@@ -75,7 +75,8 @@ Public site URL is `https://amdai.net` (`site` in `astro.config.mjs`; override w
 | `/rocm-problems/report` | Report template + collect-rocm-report.sh |
 | `/rocm-problems/works` | Works on my rig (saved-rig form) |
 | `/rocm-problems/contribute` | Contributor guidelines for this site |
-| `/backends` | Backend chooser — llama.cpp default |
+| `/backends` | Inference engines compared — table + flowchart, llama.cpp default |
+| `/backends/{id}` | Deep dive: architecture, ROCm, quants, install, sources |
 | `/software` | llama.cpp first; vLLM / Strata as tries |
 | `/abliterated` | Abliterated hub — vet files, catalog table, method/variant cards, llama.cpp notes |
 | `/forum` | Community forum (off unless `FORUM_ENABLED=1` with accounts) |
@@ -125,7 +126,7 @@ Public site URL is `https://amdai.net` (`site` in `astro.config.mjs`; override w
 | `src/data/errors.yaml` | Cited troubleshooter patterns |
 | `src/data/rocm-problems.yaml` | Cited `/rocm-problems` tracker (TODO if unverified) |
 | `src/data/harnesses.yaml` | Cited `/harnesses` catalog (no invented features) |
-| `src/data/backends.yaml` | Backend chooser rows |
+| `src/data/backends.yaml` | `/backends` comparison + per-engine deep dives |
 | `src/data/version-matrix.yaml` | ROCm × engine × card (or “no data”) |
 
 Add a short dated note under `src/content/updates/` when a **line** changes (new Core SDK, new vLLM extras). Those render on `/rocm/versions` and the blog index.

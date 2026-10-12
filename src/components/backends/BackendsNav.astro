@@ -1,0 +1,46 @@
+---
+import { backends } from '../../lib/backends-data';
+
+interface Props {
+  current?: string;
+}
+
+const { current = 'overview' } = Astro.props;
+const engines = backends();
+---
+
+<nav class="backends-nav" aria-label="Inference engines">
+  <p class="kicker"><a href="/stacks">Stacks</a> / Engines</p>
+  <ul>
+    <li>
+      <a href="/backends" aria-current={current === 'overview' ? 'page' : undefined}>Overview</a>
+    </li>
+    {engines.map((row) => (
+      <li>
+        <a href={`/backends/${row.id}`} aria-current={current === row.id ? 'page' : undefined}>{row.name}</a>
+      </li>
+    ))}
+  </ul>
+</nav>
+
+<style>
+  .backends-nav ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+    margin: 0.75rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .backends-nav a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.95rem;
+  }
+  .backends-nav a[aria-current='page'] {
+    color: var(--ink);
+    text-decoration: underline;
+    text-decoration-color: color-mix(in srgb, var(--accent) 50%, transparent);
+    text-underline-offset: 0.2em;
+  }
+</style>

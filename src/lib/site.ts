@@ -31,6 +31,7 @@ export function ogSlug(pathname: string) {
   if (slug === 'rocm' || slug.startsWith('rocm-')) return 'rocm';
   if (slug === 'forum' || slug.startsWith('forum-')) return 'forum';
   if (slug === 'harnesses' || slug.startsWith('harnesses-')) return 'stacks';
+  if (slug === 'backends' || slug.startsWith('backends-')) return 'backends';
   return OG_PAGES.has(slug) ? slug : 'default';
 }
 
@@ -56,6 +57,7 @@ export const officialLinks = {
   llamaCpp: 'https://github.com/ggml-org/llama.cpp',
   ollama: 'https://ollama.com/',
   tgiAmd: 'https://huggingface.co/docs/text-generation-inference/en/installation_amd',
+  strata: 'https://www.stratat.com/en/releases/v0.1.42',
   hermes: 'https://hermes-agent.nousresearch.com/',
   hermesLocal: 'https://hermes-agent.nousresearch.com/docs/user-guide/local-models',
   openclaw: 'https://docs.openclaw.ai/',
@@ -90,7 +92,7 @@ export const primaryNav: NavItem[] = [
   { href: '/gpus', label: 'GPU directory', description: 'Radeon cards, gfx IDs, VRAM, official ROCm rows', group: 'stack' },
   { href: '/rocm', label: 'ROCm', description: 'What it is — stack, gfx IDs, Vulkan vs HIP, versions', group: 'stack' },
   { href: '/rocm-problems', label: 'ROCm problems', description: "Open problems and how you can help — cited only", group: 'stack' },
-  { href: '/backends', label: 'Backends', description: 'llama.cpp first; Vulkan, HIP, Strata, vLLM, Ollama', group: 'stack' },
+  { href: '/backends', label: 'Backends', description: 'Inference engines compared — llama.cpp first', group: 'stack' },
   { href: '/software', label: 'AI software', description: 'llama.cpp first; vLLM and Strata as tries', group: 'stack' },
   { href: '/abliterated', label: 'Abliterated', description: 'Hub: what it is, how to vet files, catalog — educational only', group: 'stack' },
   { href: '/harnesses', label: 'Harnesses', description: 'What to plug your local model into — agents, chat UIs, ComfyUI', group: 'stack' },

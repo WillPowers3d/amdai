@@ -1,100 +1,600 @@
-# Consumer backend chooser. llama.cpp is the default.
-# Speed numbers only where our rig measured them. Everything else is qualitative.
+# Inference-engine catalog. Speed numbers only where our rig measured them
+# or a cited third-party source. Do not invent tok/s, VRAM, or flags.
+# Exact llama.cpp / Strata flags for our rig stay TODO in stacks.yaml.
 as_of: 2026-10-12
 default_id: llamacpp
 
-backends:
+notes:
+  - Consumer default is llama.cpp. Vulkan is what we run for the 35B daily driver.
+  - First-party speed on this site is Flash Q6: Strata v0.1.42 ~32.6 tok/s vs llama.cpp ~16. 35B tok/s stays unpublished until the owner fills it.
+  - Never go below Q4 (no Q1/Q2/Q3 or IQ1–IQ3, including draft/MTP).
+  - curl /v1 before you debug a harness. Do not let a desktop app download a CUDA llama.cpp on a Radeon.
+
+flowchart_fallback:
+  - Need tokens on one card tonight → llama.cpp (Vulkan if HIP CMake sulks).
+  - Daily driver already works and you want the Flash agent → Strata v0.1.42.
+  - Several clients / continuous batching → vLLM ROCm, advanced. Not default PyPI.
+  - Want a GUI → LM Studio only if a GPU meter moves. Else back to llama.cpp.
+  - Ollama → only if the backend log and a GPU meter agree. gfx1201 is still cited pain.
+  - SGLang, ExLlama/TabbyAPI, MLC-LLM, KTransformers, raw PyTorch → specialized. Not the first home box.
+
+engines:
   - id: llamacpp
     name: llama.cpp
     short: Consumer default — GGUF, Vulkan or HIP, one user
     verdict: default
-    backends: HIP (`GGML_HIP`, `AMDGPU_TARGETS=gfx1201`) and Vulkan (`GGML_VULKAN`)
-    best_for: First Qwen, debugging, a loopback `/v1` for a harness
-    worst_for: Many concurrent clients, continuous batching
-    rocm: HIP needs a gfx1201 userspace. Vulkan needs a working ICD (RADV is the usual Linux path).
-    caveats: >
-      Daily driver on our rig is Vulkan, not HIP. Compile it yourself so you
-      control the target. Do not drop below Q4 to “make it fit.”
+    used_on_our_rig: true
+    version: Docs checked 2026-10-12. Do not invent a release pin.
+    homepage: https://github.com/ggml-org/llama.cpp
+    docs: https://github.com/ggml-org/llama.cpp
+    repo: https://github.com/ggml-org/llama.cpp
+    what: >-
+      C/C++ GGUF runner from ggml-org. You compile a backend (Vulkan or HIP),
+      load a quantised file, and optionally serve an OpenAI-shaped /v1 on
+      llama-server (default 127.0.0.1:8080).
+    architecture: >-
+      ggml graphs: weights stay on the device you chose, KV cache is sized by
+      -c and --cache-type-k/v. llama-server is the same process as the CLI,
+      plus HTTP. It is not a Python serving stack.
+    well: First Qwen, debugging, a loopback /v1 for a harness, tight control of context and KV type.
+    badly: Many concurrent clients, continuous batching, “just pip install.”
+    rocm_level: First-class if you build it. HIP needs a gfx1201 userspace. Vulkan needs a working ICD (RADV is the usual Linux path).
+    vulkan: Yes — GGML_VULKAN. Daily driver on our rig.
+    quants: GGUF Q4–Q8 and UD dynamic. Floor is Q4. Never Q1/Q2/Q3 or IQ1–IQ3.
+    multi_gpu: Possible (split / tensor). We run the daily driver on ONE R9700. Do not assume a split.
+    offload: -ngl / --n-gpu-layers. Daily driver is 0% system RAM offload.
+    moe: MoE GGUF (Qwen3.6-35B-A3B is A3B). Expert placement follows the backend; we do not invent a tok/s for it.
+    context: Our daily driver is 262144, f16 KV — confirmed on the rig. Exact flags TODO.
+    concurrency: One interactive user is the honest home path. llama-server can take more clients; it is not vLLM continuous batching.
+    api: OpenAI /v1 (chat/completions, models). llama.cpp also documents Anthropic /v1/messages and OpenAI /v1/responses.
+    difficulty: Medium — you compile. Vulkan CMake is the on-ramp.
+    best_for: First Qwen, debugging, a harness that just needs /v1.
+    worst_for: A shop that wants continuous batching on day one.
     when: Start here. Always.
-    href: /tutorials/run-local-llm
+    install: |
+      # Vulkan (what we run for the 35B)
+      sudo apt install -y build-essential cmake git libvulkan-dev
+      git clone https://github.com/ggml-org/llama.cpp.git
+      cd llama.cpp
+      cmake -B build-vk -DGGML_VULKAN=ON -DCMAKE_BUILD_TYPE=Release
+      cmake --build build-vk -j"$(nproc)"
+      ./build-vk/bin/llama-cli --list-devices
+      # Pick RADV GFX1201 / the R9700, not the iGPU.
 
-  - id: llamacpp-vulkan
-    name: llama.cpp Vulkan
-    short: What we actually run for the daily driver
-    verdict: default
-    backends: Vulkan (RADV GFX1201 or AMDVLK)
-    best_for: Tokens tonight when HIP CMake is a mess; Windows; proving the card
-    worst_for: Sharing a stack with PyTorch/vLLM HIP debugging
-    rocm: Does not replace ROCm. You will still want HIP for wheels.
-    caveats: Pick the discrete GFX1201 device, not the iGPU. See /blog/vulkan-is-an-on-ramp.
-    when: HIP configure fails, or you want the stack we measured.
-    href: /blog/vulkan-is-an-on-ramp
-
-  - id: llamacpp-hip
-    name: llama.cpp HIP
-    short: Same GGUF runner, ROCm compiler
-    verdict: ok
-    backends: HIP/ROCm
-    best_for: One tree that matches your ROCm prefix
-    worst_for: A first evening if CMake cannot find `/opt/rocm`
-    rocm: >-
-      -DGGML_HIP=ON -DAMDGPU_TARGETS=gfx1201. Prefix may be /opt/rocm/core-10.0 — ls first.
-    caveats: Missing gfx1201 binaries show up as hipErrorNoBinaryForGpu. Build for this ISA.
-    when: rocminfo is clean and you want HIP.
-    href: /tutorials/run-local-llm
+      # HIP sibling (when rocminfo is clean)
+      cmake -B build-hip -DGGML_HIP=ON -DAMDGPU_TARGETS=gfx1201 -DCMAKE_BUILD_TYPE=Release
+      cmake --build build-hip -j"$(nproc)"
+      # Prefix may be /opt/rocm/core-10.0 — ls first.
+    run: |
+      # TODO: exact daily-driver command line / measured VRAM from the rig owner.
+      ./build-vk/bin/llama-cli \
+        -m ~/models/Qwen3.6-35B-A3B-UD-Q5_K_XL.gguf \
+        -ngl 99 \
+        -c 262144 \
+        --cache-type-k f16 \
+        --cache-type-v f16 \
+        -p "Say hello from a Radeon AI PRO R9700." \
+        -n 64
+      # Server (harnesses curl this first):
+      ./build-vk/bin/llama-server -m ~/models/Qwen3.6-35B-A3B-UD-Q5_K_XL.gguf --host 127.0.0.1 --port 8080
+    tuning: >-
+      -ngl 99 means “offload what fits.” Daily driver uses 0% RAM offload.
+      If layers spill, open /calculator before you drop below Q5.
+      GGML_VK_VISIBLE_DEVICES / VK_ICD_FILENAMES only after --list-devices.
+      Missing gfx1201 HIP binaries show up as hipErrorNoBinaryForGpu.
+    choose: Tokens on one card tonight, or a /v1 for Hermes. 35B daily driver lives here (Vulkan).
+    sources:
+      - title: llama.cpp repository
+        href: https://github.com/ggml-org/llama.cpp
+      - title: This site — run a local Qwen
+        href: https://amdai.net/tutorials/run-local-llm
+      - title: llama.cpp server README
+        href: https://github.com/ggml-org/llama.cpp/blob/HEAD/tools/server/README.md
 
   - id: strata
     name: Strata
-    short: Fast-agent try on our rig
+    short: Fast-agent try on our rig — Flash Q6
     verdict: try
-    backends: Strata v0.1.42 (OpenAI-shaped serve)
-    best_for: Qwen 3.8 Flash UD-Q6_K_XL at 262K when you want the faster of the two stacks we ran
-    worst_for: Being the first install; undocumented flags
-    rocm: Used on our test rig for the Flash agent. Exact flags TODO.
-    caveats: >
-      Measured on our rig ~32.6 tok/s versus llama.cpp ~16 tok/s on the same
-      Flash Q6. That is first-party, not a vendor slide. Publisher UD-Q6_K_XL
-      listing is ~169 GB — the calculator will show RAM overflow on 32 GB.
+    used_on_our_rig: true
+    version: v0.1.42 (released 2026-10-10). Changelog lists v0.1.43; we have not remasured it.
+    homepage: https://www.stratat.com/
+    docs: https://www.stratat.com/en/releases/v0.1.42
+    repo: https://github.com/Niko1221/Strata
+    what: >-
+      A compiled MoE inference engine (Niko1221/Strata) with an OpenAI-shaped
+      HTTP front. It is aimed at Qwen 3.8 Flash-class models that do not fit
+      in one GPU: hot experts in VRAM, the rest in RAM, a lookup table on SSD.
+    architecture: >-
+      Resident engine plus serve/server.py. Documented APIs include
+      /v1/chat/completions, Anthropic /v1/messages, and OpenAI /v1/responses.
+      AMD path is a HIP build. Default documented listen is :8080; this site’s
+      convention for the fast-agent stack is :8083 so it does not collide with
+      llama-server.
+    well: Faster Flash Q6 agent loop than llama.cpp on the same rig, once the daily driver is already proven.
+    badly: First install; undocumented flags; being your only engine.
+    rocm_level: HIP download on the v0.1.42 notes. Official notes name RX 7900 / 9070 / AI PRO R9700. gfx12 prompt-path switches default on for gfx1200/gfx1201.
+    vulkan: Not documented as a Vulkan engine. Do not treat it as “Vulkan won.”
+    quants: Publisher Flash file we run is Unsloth UD-Q6_K_XL. Floor is still Q4. Do not use their IQ2/IQ3 examples as a house quant.
+    multi_gpu: Layer split is documented. 0.1.42 notes a two-R9700 checkpoint-save fix. We do not assume a split on the daily driver.
+    offload: Expert cache / RAM / SSD tiers are the point of the product. Publisher UD-Q6_K_XL folder ~169 GB — expect RAM to hold most of it on one 32 GB card.
+    moe: First-class. Flash-Next is a large MoE; routing and expert cache are the architecture.
+    context: We ran 262144. Exact --max-context / KV flags TODO.
+    concurrency: Docs default to one request at a time; --parallel N is documented. Not measured here.
+    api: OpenAI /v1 plus Anthropic Messages. Responses support is documented upstream; we have not measured Codex against Strata (TODO).
+    difficulty: Medium-hard — follow their setup.sh / update.sh. Exact flags for our rig stay TODO.
+    best_for: Qwen 3.8 Flash UD-Q6_K_XL at 262K when you want the faster of the two stacks we ran.
+    worst_for: Being the first install; a box with no proven llama.cpp /v1.
     when: Daily driver already works and you want the fast agent.
-    href: /stacks
+    install: |
+      # Official AMD HIP build is a download on the v0.1.42 notes.
+      # Linux update path they document: ./update.sh (setup replaces the engine).
+      # Exact checkout / pack flags for our rig stay TODO in stacks.yaml.
+    run: |
+      # This site’s convention: listen on 127.0.0.1:8083 so llama-server can keep :8080.
+      # TODO: exact strata command line / measured VRAM+RAM from the rig owner.
+      curl -s http://127.0.0.1:8083/v1/models
+    tuning: >-
+      0.1.42 turns gfx12 prompt switches on for gfx1200/gfx1201
+      (STRATA_GFX12_DEFAULTS=0 disables). Tail-skip and PCIe-share defaults
+      are documented as CUDA-oriented and off on AMD — do not copy NVIDIA
+      env vars onto the R9700 without reading the notes. STRATA_ROUTE_TAIL_SKIP
+      is documented as off on AMD.
+    choose: Flash agent after llama.cpp is boring. First-party ~32.6 tok/s vs llama.cpp ~16 on that Q6.
+    sources:
+      - title: Strata v0.1.42 release notes
+        href: https://www.stratat.com/en/releases/v0.1.42
+      - title: Strata changelog
+        href: https://www.stratat.com/en/changelog
+      - title: Niko1221/Strata
+        href: https://github.com/Niko1221/Strata
 
   - id: vllm
     name: vLLM
     short: Advanced / experimental for consumers
     verdict: advanced
-    backends: ROCm wheels or `vllm/vllm-openai-rocm`
-    best_for: Several clients, continuous batching, a harness that wants a real server
-    worst_for: A first home box; mixing AMD’s 0.27 pin with community 0.31 in one venv
-    rocm: >
-      AMD 10.0 supported combo is vLLM 0.27 + PyTorch 2.13. Community try is 0.31
-      (0.30 previous). Default `pip install vllm` is CUDA.
-    caveats: Multi-GPU is RCCL. Not the daily driver. Treat 0.31 as a try.
+    used_on_our_rig: false
+    version: >-
+      Community try 0.31.x (0.31.0 ROCm wheel documented). AMD 10.0 supported
+      combo remains vLLM 0.27 + PyTorch 2.13. AMD 10.1 AI-ecosystem page
+      currently walks 0.29 — that is a dated snapshot, not our house pin.
+    homepage: https://docs.vllm.ai/
+    docs: https://docs.vllm.ai/en/stable/getting_started/installation/gpu/index.html
+    repo: https://github.com/vllm-project/vllm
+    what: >-
+      Throughput-oriented Python serving engine: PagedAttention, continuous
+      batching, an OpenAI-compatible server. On AMD it is a ROCm build, not
+      the default PyPI wheel.
+    architecture: >-
+      GPU workers, a scheduler, and an HTTP front (default :8000/v1).
+      Multi-GPU uses RCCL. Quant and MoE paths depend on the ROCm / AITER
+      kernels in that pin — do not assume every CUDA feature landed.
+    well: Several clients, continuous batching, a harness that wants a real server.
+    badly: A first home box; mixing AMD’s 0.27 pin with community 0.31 in one venv.
+    rocm_level: >-
+      vLLM’s GPU page lists Radeon RX 9000 (gfx1200/1201) among supported
+      devices. That is not the same as AMD’s 10.0 supported-combo pin
+      (0.27 + PyTorch 2.13). Treat 0.31 as a try on this site.
+    vulkan: No. HIP/ROCm only.
+    quants: Engine/framework quants (FP8, AWQ, GPTQ, …) plus HF weights — still never below Q4-class. GGUF is not the house path here.
+    multi_gpu: Yes, RCCL. Two consumer cards is a different project. Start on one GPU.
+    offload: Not a RAM-offload strategy. Do not treat vLLM as llama.cpp -ngl.
+    moe: Supported on some pins (AITER MoE paths). Completeness on gfx1201 Qwen MoE is not measured here.
+    context: Confirm the engine. Do not assume 262K.
+    concurrency: This is the reason to be here. Continuous batching is the product.
+    api: OpenAI /v1 (vllm serve). Default port 8000.
+    difficulty: Hard — wheel/image hell. Default pip install vllm is CUDA.
+    best_for: Several clients or a harness that needs a real server, after llama.cpp already works.
+    worst_for: Tonight’s first Qwen.
     when: You already have llama.cpp working and you need batching.
-    href: /tutorials/serve-qwen#advanced-vllm
+    install: |
+      # Community / ROCm 0.31 try — confirm the live extra-index before you pin.
+      # pip install vllm --extra-index-url https://wheels.vllm.ai/rocm/0.31.0/rocm723
+      # Docker try-tag (previous try-tag v0.30.0 if 0.31 misbehaves):
+      # docker pull vllm/vllm-openai-rocm:v0.31.0
+      # AMD 10.0 conservative pin remains 0.27 + PyTorch 2.13 (often rocm/vllm images).
+      # Default `pip install vllm` with no extra index is CUDA. Do not do that.
+    run: |
+      # TODO: exact image tag / measured VRAM if 0.31 is pinned on this rig.
+      # Shape only:
+      # vllm serve Qwen/Qwen3.6-35B-A3B --host 127.0.0.1 --port 8000
+      curl -s http://127.0.0.1:8000/v1/models
+    tuning: >-
+      One GPU first. Pin the ROCm extra-index or image. Confirm hip/rocm in
+      the version string. After a kernel upgrade, check firmware before you
+      rebuild the wheel.
+    choose: Batching, not the daily driver.
+    sources:
+      - title: vLLM — GPU / ROCm install
+        href: https://docs.vllm.ai/en/stable/getting_started/installation/gpu/index.html
+      - title: AMD — vLLM on ROCm
+        href: https://rocm.docs.amd.com/projects/ai-ecosystem/en/latest/inference/vllm.html
+      - title: vLLM v0.31.0 notes (ROCm extra-index)
+        href: https://github.com/vllm-project/vllm/releases
 
   - id: ollama
     name: Ollama
     short: Convenience wrapper — gfx1201 is still rocky
     verdict: caution
-    backends: Bundled ROCm, optional Vulkan
-    best_for: Pull-and-run if `rocm-smi` proves GPU use
-    worst_for: gfx1201 as the first backend; Windows ROCm
-    rocm: >
-      #12908 — ROCm Docker looked for gfx1201 tensiles in the wrong directory.
-      #14686 — R9700 Windows ROCm filtered the device and fell back to CPU;
-      Vulkan worked.
-    caveats: If VRAM never moves, you are on CPU. Come back to llama.cpp. Do not spray HSA_OVERRIDE.
-    when: You want the wrapper *and* you will check the backend log.
-    href: /troubleshoot/errors#ollama-gfx1201-linux
+    used_on_our_rig: false
+    version: Docs checked 2026-10-12. Current gpu.mdx lists gfx1201. Do not invent a release pin.
+    homepage: https://ollama.com/
+    docs: https://github.com/ollama/ollama/blob/main/docs/gpu.mdx
+    repo: https://github.com/ollama/ollama
+    what: >-
+      Pull-and-run daemon with model tags and a local API. Under the hood it
+      is a packaged llama.cpp / ROCm (or Vulkan) runtime you do not compile.
+    architecture: >-
+      ollama serve on :11434. Native /api/chat plus an OpenAI-shaped /v1.
+      GPU attach is whatever they bundled. You do not pick GGML_VULKAN vs HIP
+      the way you do in a tree you built.
+    well: Convenience, if a GPU meter moves.
+    badly: gfx1201 as the first backend; Windows ROCm; silent CPU fallback.
+    rocm_level: >-
+      Official gpu.mdx lists gfx1201 (example GPU RX 9070 XT). Cited pain
+      remains: #12908 / #11555 hipBLASLt TensileLibrary_lazy_gfx1201.dat in
+      the wrong directory; Windows ROCm lagged Linux (6.2 vs 7.2 in #14391).
+      Listing gfx1201 ≠ “works on my R9700 tonight.”
+    vulkan: Optional / emerging in their roadmap comments. Prefer a Vulkan llama.cpp you built if ROCm attach fails.
+    quants: Their library tags. Floor is still Q4. Do not pull a Q2 “to make it fit.”
+    multi_gpu: Not the house path. One card first.
+    offload: Their scheduler. If VRAM never moves, you are on CPU.
+    moe: Whatever the bundled runner implements. Not measured here.
+    context: Tag-dependent. Do not assume 262K.
+    concurrency: Daemon can take several clients. Not vLLM batching.
+    api: Native /api plus /v1 on :11434. Do not append /v1 if you want some tool-call paths (OpenClaw notes).
+    difficulty: Easy install, hard debug when gfx1201 tensiles miss.
+    best_for: Pull-and-run after rocm-smi proves GPU use.
+    worst_for: First gfx1201 box; Windows ROCm.
+    when: You want the wrapper and you will read the backend log.
+    install: |
+      # Official Linux install is their documented script — then prove GPU use.
+      # curl -fsSL https://ollama.com/install.sh | sh
+      # Prefer the Vulkan llama.cpp you already built if this sits on CPU.
+    run: |
+      ollama serve
+      # ollama run <tag>   # only after rocm-smi / amd-smi moves
+      curl -s http://127.0.0.1:11434/api/tags
+    tuning: >-
+      Do not spray HSA_OVERRIDE_GFX_VERSION. That variable is unofficial on
+      this site. If the tensile file 404s, come back to llama.cpp.
+    choose: Only if the meter moves. Otherwise llama.cpp.
+    sources:
+      - title: Ollama — GPU / AMD targets
+        href: https://github.com/ollama/ollama/blob/main/docs/gpu.mdx
+      - title: ollama#12908 — gfx1201 tensile path in the container
+        href: https://github.com/ollama/ollama/issues/12908
+      - title: ollama#11555 — TensileLibrary_lazy_gfx1201.dat
+        href: https://github.com/ollama/ollama/issues/11555
+      - title: This site — Ollama gfx1201 tracker
+        href: https://amdai.net/rocm-problems/ollama-gfx1201-tensile
 
   - id: lmstudio
     name: LM Studio
-    short: Desktop app, Vulkan-shaped on Windows
+    short: Desktop app — Vulkan or a bundled ROCm runtime
     verdict: caution
-    backends: App-bundled; Vulkan is the honest Windows path
-    best_for: A GUI on Windows when you refuse to compile
-    worst_for: Reproducing this site’s HIP/ROCm notes
-    rocm: We do not have a first-party LM Studio run on the test rig.
-    caveats: no data for tok/s or VRAM. If it is slow, assume CPU until a GPU meter moves. Prefer llama.cpp you built.
-    when: Windows-only and you accept a black box.
-    href: /backends
+    used_on_our_rig: false
+    version: Docs checked 2026-10-12. No first-party LM Studio run on the test rig. Do not invent a version pin.
+    homepage: https://lmstudio.ai/
+    docs: https://lmstudio.ai/docs/developer/openai-compat
+    repo: https://github.com/lmstudio-ai
+    what: >-
+      Desktop chat app that also serves an OpenAI-compatible API (documented
+      default http://127.0.0.1:1234/v1). Runtimes are bundled llama.cpp
+      engines the app downloads (CPU, Vulkan, CUDA, ROCm).
+    architecture: >-
+      GUI + local server. You pick a runtime in Settings. It is not this
+      site’s Vulkan llama.cpp tree. Pointing other harnesses at :1234 is the
+      documented OpenAI path; pointing LM Studio at our :8080 is a current-UI
+      check.
+    well: A GUI on Windows or a first desktop when you refuse to compile — if a GPU meter moves.
+    badly: Reproducing this site’s HIP/ROCm notes; silent CPU.
+    rocm_level: >-
+      AMD’s LM Studio playbook says the app offers Vulkan and AMD ROCm
+      runtimes. Older 0.2.31 “extension pack” scripts are version-specific —
+      do not run them on a current build. gfx1201 completeness of the
+      bundled ROCm engine is not documented as our daily driver.
+    vulkan: Yes — the honest cross-vendor path. Prefer it over a mystery ROCm blob until the meter moves.
+    quants: GGUF in the app library. Floor is Q4.
+    multi_gpu: Not documented as our path.
+    offload: In-app GPU offload slider. We have no measured VRAM.
+    moe: Depends on the bundled llama.cpp. Not measured.
+    context: Set in the app. Do not assume 262K.
+    concurrency: Local server can take clients. Not vLLM.
+    api: OpenAI-compatible on :1234, including Responses (LM Studio documents Codex that way).
+    difficulty: Easy GUI, opaque engine.
+    best_for: A GUI when you accept a black box and will watch a GPU meter.
+    worst_for: Matching this site’s compile flags or benches.
+    when: Windows-only, or a desktop, and you accept “no data” for tok/s.
+    install: |
+      # Linux AppImage from https://lmstudio.ai/download?os=linux
+      # Settings → Runtime → download Vulkan (or ROCm) llama.cpp engine.
+      # Do not take a CUDA runtime on a Radeon.
+    run: |
+      # Documented server: http://127.0.0.1:1234/v1
+      curl -s http://127.0.0.1:1234/v1/models
+    tuning: >-
+      If it is slow, assume CPU until a meter moves. Prefer the llama.cpp
+      you built and point harnesses at :8080.
+    choose: GUI convenience, not the house stack.
+    sources:
+      - title: LM Studio — OpenAI compatibility
+        href: https://lmstudio.ai/docs/developer/openai-compat
+      - title: AMD — Running LLMs with LM Studio
+        href: https://developer.amd.com/playbooks/lmstudio-rocm-llms/
+      - title: This site — LM Studio as a harness
+        href: https://amdai.net/harnesses/lm-studio
+
+  - id: sglang
+    name: SGLang
+    short: Fast serving — AMD documents a Radeon image; AITER off
+    verdict: advanced
+    used_on_our_rig: false
+    version: AMD AI-ecosystem page checked 2026-10-12 — SGLang 0.5.15 on ROCm 10.0 Docker (rocm/sgl-dev). Not measured on our rig.
+    homepage: https://docs.sglang.io/
+    docs: https://rocm.docs.amd.com/projects/ai-ecosystem/en/latest/inference/sglang.html
+    repo: https://github.com/sgl-project/sglang
+    what: >-
+      Fast, memory-efficient LLM serving (RadixAttention, a structured
+      generation front). AMD publishes ROCm Docker tags and lists the
+      Radeon AI PRO R9700 (gfx1201) on that page.
+    architecture: >-
+      Python serving process, attention backends (AITER on Instinct, Triton
+      workaround on Radeon). OpenAI-shaped HTTP. Not a GGUF daily driver.
+    well: Serving / structured generation when you already live in SGLang.
+    badly: First home box; default AITER on Radeon.
+    rocm_level: >-
+      AMD lists R9700 / RX 9070 XT on the ROCm 10.0 SGLang page. Known issue:
+      default AITER attention may fail on Radeon PRO W7900, AI PRO R9700, and
+      RX 9070 XT. Workaround: SGLANG_USE_AITER=0 / --attention-backend triton.
+      Some MoE models are called out as possibly broken on Radeon.
+    vulkan: No.
+    quants: SGLang/AMD matrix (FP8, AWQ, GPTQ, …). GGUF is documented as not on the AMD quant short-list. Floor is still Q4-class.
+    multi_gpu: Documented for Instinct-class serving. Not measured on two R9700.
+    offload: Not llama.cpp -ngl. Host/HF cache only as documented.
+    moe: Some MoE models (GPT-OSS-20B, MiniMax-M2.7) are listed as possibly failing on Radeon. Do not assume Qwen MoE works.
+    context: Engine default. Do not assume 262K.
+    concurrency: Serving engine — batching is the point. Not measured here.
+    api: OpenAI-compatible server (SGLang runtime).
+    difficulty: Hard — Docker + AITER off + untested on this rig.
+    best_for: You already run SGLang elsewhere and will validate on this card.
+    worst_for: Tonight’s Qwen chat.
+    when: After llama.cpp, if you need SGLang’s serving features and will disable AITER.
+    install: |
+      # AMD ROCm 10.0 image from the AI-ecosystem page (Radeon: disable AITER).
+      docker pull rocm/sgl-dev:v0.5.15.post1-ubuntu24.04-py3.14-rocm10.0.0
+      docker run -it --rm \
+        --device /dev/kfd --device /dev/dri \
+        --network=host --ipc=host --group-add=video \
+        -e SGLANG_USE_AITER=false \
+        -e SGLANG_ROCM_FUSED_DECODE_MLA=false \
+        rocm/sgl-dev:v0.5.15.post1-ubuntu24.04-py3.14-rocm10.0.0 \
+        bash
+    run: |
+      # Launch command for our Qwen GGUF is not documented on that page.
+      # Use their HF/serving examples inside the container. Not measured here.
+    tuning: >-
+      export SGLANG_USE_AITER=0 and SGLANG_USE_AITER_AR=0, or
+      --attention-backend triton, if AITER faults on the R9700.
+    choose: Only if SGLang is already your shop standard.
+    sources:
+      - title: AMD — SGLang on ROCm
+        href: https://rocm.docs.amd.com/projects/ai-ecosystem/en/latest/inference/sglang.html
+      - title: SGLang — AMD GPUs
+        href: https://docs.sglang.io/docs/hardware-platforms/amd_gpu
+
+  - id: exllama
+    name: ExLlama / TabbyAPI
+    short: EXL3/EXL2 server — ROCm is a side path
+    verdict: caution
+    used_on_our_rig: false
+    version: TabbyAPI main is ExLlamaV3 (checked 2026-10-12). EXL2 lives on the exl2-checkpoint branch. No first-party run.
+    homepage: https://github.com/theroyallab/tabbyAPI
+    docs: https://github.com/theroyallab/tabbyAPI/blob/main/docs/01.-Getting-Started.md
+    repo: https://github.com/theroyallab/tabbyAPI
+    what: >-
+      TabbyAPI is a FastAPI OpenAI-compatible server in front of ExLlama
+      (official API for ExLlamaV3). ExLlama is a CUDA-first inference kernel
+      stack for EXL2/EXL3 quants.
+    architecture: >-
+      Python API + compiled ExLlama kernels. Continuous batching / paged
+      attention is documented for NVIDIA Ampere+. ROCm is an install extra,
+      not the center of gravity.
+    well: EXL3/EXL2 on NVIDIA. Fast local OpenAI API if the kernels exist for your GPU.
+    badly: A Radeon-first daily driver. Consumer RDNA FlashAttention/paged-attention is not first-class in their own issues.
+    rocm_level: >-
+      Getting-Started documents pip install -U '.[amd]' against ROCm 6.1
+      (older text says 6.0 / 5.6). That is not ROCm 10.1 / gfx1201.
+      ExLlamaV2 has a community PR to fix gfx1201 compile — do not treat it
+      as merged or as a house path. FA2 on ROCm has been discussed as CDNA-oriented.
+    vulkan: No.
+    quants: EXL3 (recommended on current TabbyAPI), FP16/BF16; EXL2 on the checkpoint branch. Still never below Q4-class.
+    multi_gpu: Documented on NVIDIA. Not documented for two R9700.
+    offload: ExLlama cache / GPU split. Not measured.
+    moe: Not documented as our Qwen MoE path.
+    context: Model/config dependent. Not measured.
+    concurrency: Paged attention / continuous batching documented for Ampere+. ROCm completeness not documented.
+    api: OpenAI-compatible (TabbyAPI).
+    difficulty: Hard on Radeon — custom wheels, old ROCm extra, untested here.
+    best_for: You already have EXL3 files and an NVIDIA box. On Radeon, curiosity only.
+    worst_for: Matching this site’s GGUF daily driver.
+    when: You know you need ExLlama and will build against a ROCm PyTorch that lists gfx1201 — then tell the forum what happened.
+    install: |
+      # Documented extra — ROCm 6.1, not a 10.1 pin:
+      # pip install -U '.[amd]'
+      # Confirm torch.version.hip and gfx1201 before you expect kernels.
+      # We have no working recipe on the R9700. Treat as TODO / not documented.
+    run: |
+      # TabbyAPI start scripts are in their repo. No R9700 command line here.
+    tuning: >-
+      Do not use HSA_OVERRIDE to “make EXL2 see gfx1201.” If it does not
+      compile, use llama.cpp.
+    choose: Almost never, on this site.
+    sources:
+      - title: TabbyAPI README
+        href: https://github.com/theroyallab/tabbyAPI
+      - title: TabbyAPI — getting started (ROCm extra)
+        href: https://github.com/theroyallab/tabbyAPI/blob/main/docs/01.-Getting-Started.md
+      - title: ExLlamaV2 — gfx1201 compile PR (do not assume merged)
+        href: https://github.com/turboderp-org/exllamav2/pull/815
+
+  - id: mlc
+    name: MLC-LLM
+    short: Compile-then-run — official ROCm pin is 6.1/6.2
+    verdict: caution
+    used_on_our_rig: false
+    version: mlc-llm docs (0.1.0 pages) checked 2026-10-12. “Only supports ROCm 6.1/6.2.” No first-party run.
+    homepage: https://llm.mlc.ai/
+    docs: https://llm.mlc.ai/docs/install/gpu.html
+    repo: https://github.com/mlc-ai/mlc-llm
+    what: >-
+      Machine Learning Compilation for LLMs: compile a model into a runtime
+      (CLI / Python / mobile) via TVM. Backends include CUDA, Metal, ROCm, Vulkan.
+    architecture: >-
+      Compile once, run the artifact. Not a drop-in GGUF server. Vulkan is
+      the wide-device path; ROCm is a separate wheel line.
+    well: Shipping a compiled runtime to many devices; research compilation.
+    badly: Tracking this site’s weekly GGUF; ROCm 10.1 / gfx1201 as a documented pin.
+    rocm_level: >-
+      Official GPU page says MLC LLM only supports ROCm 6.1/6.2. Nightly
+      wheels are mlc-llm-nightly-rocm61 / rocm62. That is not the 10.0/10.1
+      userspace on this site. Vulkan is documented as available in Linux
+      packages.
+    vulkan: Yes — documented. A more honest AMD on-ramp here than their ROCm 6.2 wheel on a 10.1 box.
+    quants: MLC’s own compiled quants. Floor is still Q4-class. Do not chase IQ2 artifacts.
+    multi_gpu: Not documented as our path.
+    offload: Compile-time device placement. Not measured.
+    moe: Not documented against Qwen3.6-35B-A3B here.
+    context: Artifact-dependent. Not measured.
+    concurrency: Not a continuous-batching server.
+    api: Python / REST depending on the build. Not our :8080 convention.
+    difficulty: Hard — compile a model, mismatch ROCm.
+    best_for: You already compile MLC artifacts. On this rig, curiosity + Vulkan, not ROCm 6.2.
+    worst_for: The weekly Qwen GGUF.
+    when: You have a reason to compile, not chat.
+    install: |
+      # Official ROCm wheels (6.1 / 6.2) — likely wrong userspace on ROCm 10.1.
+      # pip install --pre -U -f https://mlc.ai/wheels mlc-llm-nightly-rocm62 mlc-ai-nightly-rocm62
+      # Vulkan loader (their Linux note):
+      # conda install -c conda-forge gcc libvulkan-loader
+      # We do not have a gfx1201 recipe. Treat as not documented for this rig.
+    run: |
+      # mlc_llm chat / serve — follow current docs. No R9700 command line here.
+    tuning: >-
+      If you try Vulkan, pick the discrete GFX1201 device, not the iGPU.
+      Do not mix a 6.2 MLC wheel with a 10.1 HIP prefix and call it “ROCm worked.”
+    choose: Rarely.
+    sources:
+      - title: MLC-LLM — GPU drivers (ROCm 6.1/6.2, Vulkan)
+        href: https://llm.mlc.ai/docs/install/gpu.html
+      - title: MLC-LLM — install wheels
+        href: https://github.com/mlc-ai/mlc-llm/blob/main/docs/install/mlc_llm.rst
+
+  - id: ktransformers
+    name: KTransformers / ik_llama.cpp
+    short: CPU-heavy MoE forks — AMD is not the maintained path
+    verdict: caution
+    used_on_our_rig: false
+    version: Docs checked 2026-10-12. KTransformers ROCm is beta (tested on 7900 XTX). ik_llama.cpp README says only CPU and CUDA are fully supported.
+    homepage: https://github.com/kvcache-ai/ktransformers
+    docs: https://github.com/kvcache-ai/ktransformers/blob/main/doc/en/ROCm.md
+    repo: https://github.com/kvcache-ai/ktransformers
+    what: >-
+      Two related “squeeze a giant MoE onto a workstation” projects.
+      KTransformers mixes CPU inference with GPU kernels. ik_llama.cpp is
+      a llama.cpp fork focused on CPU and CUDA IQK kernels.
+    architecture: >-
+      KT: Python local_chat + kt-kernel, GGUF on disk, CPU infer for experts.
+      ik_llama.cpp: ggml fork. Their maintainers tell AMD users to use
+      upstream llama.cpp.
+    well: Huge MoE on a lot of RAM + NVIDIA (ik) or a 7900 XTX beta (KT).
+    badly: gfx1201 daily driver; expecting their IQ1–IQ3 tricks (banned on this site).
+    rocm_level: >-
+      KT ROCm.md is beta, developed on EPYC + Radeon 7900 XTX (gfx1100),
+      PyTorch ROCm 6.2.4 in the doc. Marlin is unsupported. Multi-GPU HIP
+      graph capture has reported crashes. gfx1201 is not a listed test row.
+      ik_llama.cpp: ROCm/Vulkan are explicitly unmaintained; issues will not
+      be resolved unless you do the work.
+    vulkan: ik_llama.cpp can compile Vulkan; maintainers say it is not the focus and to use upstream llama.cpp on AMD.
+    quants: GGUF. Their docs mention IQ2/IQ3-class kernels — this site still refuses anything below Q4, including draft/MTP.
+    multi_gpu: KT multi-GPU HIP has reported segfaults. Not our path.
+    offload: CPU/RAM is the product. That fights this site’s “0% RAM offload” daily driver.
+    moe: Yes — that is why people show up. Not a replacement for our 35B Vulkan Q5.
+    context: Not measured.
+    concurrency: Local chat / one user.
+    api: KT local_chat; ik is llama.cpp-shaped. Not our harness convention.
+    difficulty: Hard, and off-mission.
+    best_for: A 7900 XTX + lots of RAM experiment you will not confuse with the house stack.
+    worst_for: The R9700 daily driver.
+    when: Almost never. Use llama.cpp (or Strata for Flash).
+    install: |
+      # KTransformers ROCm.md (7900 XTX / ROCm 6.2.4 — not a 10.1 gfx1201 pin):
+      # export CPUINFER_USE_ROCM=1
+      # pip3 install torch --index-url https://download.pytorch.org/whl/rocm6.2.4
+      # ik_llama.cpp: build CPU or CUDA. For AMD, use upstream llama.cpp instead.
+    run: |
+      # python ktransformers/local_chat.py ...  (their DeepSeek example)
+      # We have no R9700 command line. Not documented for gfx1201.
+    tuning: >-
+      Do not import their below-Q4 quants. If HIP graphs crash on two cards,
+      that is a known KT limitation, not a reason to HSA_OVERRIDE.
+    choose: Not the house path.
+    sources:
+      - title: KTransformers — ROCm (beta)
+        href: https://github.com/kvcache-ai/ktransformers/blob/main/doc/en/ROCm.md
+      - title: ik_llama.cpp README (CPU + CUDA only)
+        href: https://github.com/ikawrakow/ik_llama.cpp
+      - title: ik_llama.cpp — AMD Vulkan/ROCm discussion
+        href: https://github.com/ikawrakow/ik_llama.cpp/discussions/562
+
+  - id: pytorch
+    name: PyTorch / Transformers
+    short: Framework loop — not a chat server
+    verdict: ok
+    used_on_our_rig: false
+    version: AMD AI-ecosystem PyTorch page checked 2026-10-12. Use a gfx1201 (or documented gfx12) wheel. Do not invent a torch pin.
+    homepage: https://rocm.docs.amd.com/projects/ai-ecosystem/en/latest/frameworks/pytorch/install.html
+    docs: https://rocm.docs.amd.com/projects/ai-ecosystem/en/latest/frameworks/pytorch/install.html
+    repo: https://github.com/huggingface/transformers
+    what: >-
+      Raw torch + Hugging Face Transformers. generate() in a notebook, a
+      training loop, or a custom pipeline. This is the layer vLLM/SGLang sit
+      on — not a replacement for llama-server.
+    architecture: >-
+      Eager or compiled PyTorch on HIP. Weights are usually HF safetensors,
+      not GGUF. You own the loop, the tokenizer, and the OOM.
+    well: Fine-tune, custom heads, debugging a ROCm wheel.
+    badly: Daily chat; long 262K context as a first script.
+    rocm_level: >-
+      Install from AMD’s PyTorch-for-ROCm page with a gfx1201 selector.
+      Confirm torch.version.hip before from_pretrained. Fine-tune on Radeon
+      is possible and still a thinner cookbook than CUDA. ROCm 10.0 KI —
+      training GPU resets; try TORCH_BLAS_PREFER_HIPBLASLT=0.
+    vulkan: No (this is HIP). Use llama.cpp Vulkan for chat.
+    quants: bitsandbytes / AWQ / GPTQ / native dtypes — still never below Q4-class for anything we would serve.
+    multi_gpu: DDP / device_map. RCCL tax. Not the house chat path.
+    offload: device_map="auto" / CPU offload — a research tool, not the daily driver.
+    moe: If the HF model implements it. Not our Flash stack.
+    context: Whatever you code. Easy to OOM. Not 262K-as-a-flag.
+    concurrency: One script.
+    api: None unless you wrap it. Prefer llama-server or vLLM for /v1.
+    difficulty: Medium if the wheel matches; hard if it does not.
+    best_for: Fine-tune, custom pipelines, proving torch.cuda (HIP) sees gfx1201.
+    worst_for: Replacing llama.cpp for chat.
+    when: You need a training loop or a wheel check, not a harness.
+    install: |
+      # Follow the live AMD PyTorch-for-ROCm page — pick the gfx1201 / gfx12 index.
+      # python -c "import torch; print(torch.version.hip); print(torch.cuda.get_device_name(0))"
+    run: |
+      # from transformers import AutoModelForCausalLM
+      # This is not llama-server. Do not publish a one-liner as a measured stack.
+    tuning: >-
+      TORCH_BLAS_PREFER_HIPBLASLT=0 if fine-tune resets (ROCm 10.0 KI).
+      One GPU first. Confirm the device is the R9700, not the iGPU.
+    choose: Framework work. Chat stays on llama.cpp.
+    sources:
+      - title: AMD — PyTorch for ROCm
+        href: https://rocm.docs.amd.com/projects/ai-ecosystem/en/latest/frameworks/pytorch/install.html
+      - title: Hugging Face Transformers
+        href: https://huggingface.co/docs/transformers
+      - title: This site — ROCm problems (fine-tune reset)
+        href: https://amdai.net/rocm-problems

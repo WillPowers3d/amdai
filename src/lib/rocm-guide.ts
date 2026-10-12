@@ -274,7 +274,7 @@ export const rocmRelated = [
   { href: '/troubleshoot/errors', label: 'Error paste', blurb: 'Match a log against cited ROCm / Ollama patterns.' },
   { href: '/troubleshooting', label: 'Troubleshooting', blurb: 'GPU not seen, wrong wheel, CPU fallback.' },
   { href: '/calculator', label: 'Calculator', blurb: 'Quant + hardware VRAM / RAM fit estimates.' },
-  { href: '/backends', label: 'Backend chooser', blurb: 'llama.cpp first; Vulkan, HIP, Strata, vLLM.' },
+  { href: '/backends', label: 'Inference engines', blurb: 'llama.cpp first; Vulkan, HIP, Strata, vLLM.' },
   { href: '/gpus', label: 'GPU directory', blurb: 'Radeon cards, gfx IDs, official vs unofficial rows.' },
 ] as const;
 
