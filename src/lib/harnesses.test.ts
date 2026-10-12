@@ -12,8 +12,12 @@ import {
   hybridLabel,
   parseHarnesses,
   parseQuizAnswers,
+  parseQuizCombo,
   pickHarness,
+  quizCombo,
+  quizCombos,
   quizHasAnswers,
+  quizResultPath,
   usedOnOurRig,
   type Harness,
 } from './harnesses';
@@ -78,6 +82,16 @@ describe('pick a harness quiz', () => {
     assert.deepEqual(answers, { job: 'agent', usage: 'local', surface: 'cli', tools: 'yes' });
     assert.equal(quizHasAnswers(parseQuizAnswers('')), false);
     assert.equal(parseQuizAnswers('?job=nope').job, undefined);
+    assert.deepEqual(parseQuizCombo('chat-hybrid-desktop-no'), {
+      job: 'chat',
+      usage: 'hybrid',
+      surface: 'desktop',
+      tools: 'no',
+    });
+    assert.equal(quizCombo({ job: 'agent' }), 'agent-local-cli-yes');
+    assert.equal(quizCombos().length, 48);
+    assert.ok(quizCombos().includes('image-local-web-no'));
+    assert.equal(quizResultPath({ job: 'image' }), '/harnesses/quiz/image-local-cli-yes');
   });
 
   it('routes image, chat, and agent surfaces to cited primaries', () => {

@@ -204,19 +204,72 @@ function present(list: Harness[], ids: string[]): Harness[] {
   return ids.map((id) => list.find((row) => row.id === id)).filter((row): row is Harness => Boolean(row));
 }
 
+const QUIZ_JOBS: QuizJob[] = ['agent', 'chat', 'image'];
+const QUIZ_USAGES: QuizUsage[] = ['local', 'hybrid'];
+const QUIZ_SURFACES: QuizSurface[] = ['cli', 'ide', 'desktop', 'web'];
+const QUIZ_TOOLS: QuizTools[] = ['yes', 'no'];
+
+function asJob(value: string | null | undefined): QuizJob | undefined {
+  return value === 'agent' || value === 'chat' || value === 'image' ? value : undefined;
+}
+
+function asUsage(value: string | null | undefined): QuizUsage | undefined {
+  return value === 'local' || value === 'hybrid' ? value : undefined;
+}
+
+function asSurface(value: string | null | undefined): QuizSurface | undefined {
+  return value === 'cli' || value === 'ide' || value === 'desktop' || value === 'web' ? value : undefined;
+}
+
+function asTools(value: string | null | undefined): QuizTools | undefined {
+  return value === 'yes' || value === 'no' ? value : undefined;
+}
+
 export function parseQuizAnswers(search: string): QuizAnswers {
   const q = new URLSearchParams(search.startsWith('?') ? search.slice(1) : search);
-  const job = q.get('job');
-  const usage = q.get('usage');
-  const surface = q.get('surface');
-  const tools = q.get('tools');
   return {
-    job: job === 'agent' || job === 'chat' || job === 'image' ? job : undefined,
-    usage: usage === 'local' || usage === 'hybrid' ? usage : undefined,
-    surface:
-      surface === 'cli' || surface === 'ide' || surface === 'desktop' || surface === 'web' ? surface : undefined,
-    tools: tools === 'yes' || tools === 'no' ? tools : undefined,
+    job: asJob(q.get('job')),
+    usage: asUsage(q.get('usage')),
+    surface: asSurface(q.get('surface')),
+    tools: asTools(q.get('tools')),
   };
+}
+
+export function parseQuizCombo(combo: string): QuizAnswers {
+  const [job, usage, surface, tools] = combo.split('-');
+  return {
+    job: asJob(job),
+    usage: asUsage(usage),
+    surface: asSurface(surface),
+    tools: asTools(tools),
+  };
+}
+
+export function quizCombo(answers: QuizAnswers): string {
+  return [
+    answers.job ?? 'agent',
+    answers.usage ?? 'local',
+    answers.surface ?? 'cli',
+    answers.tools ?? 'yes',
+  ].join('-');
+}
+
+export function quizCombos(): string[] {
+  const out: string[] = [];
+  for (const job of QUIZ_JOBS) {
+    for (const usage of QUIZ_USAGES) {
+      for (const surface of QUIZ_SURFACES) {
+        for (const tools of QUIZ_TOOLS) {
+          out.push(`${job}-${usage}-${surface}-${tools}`);
+        }
+      }
+    }
+  }
+  return out;
+}
+
+export function quizResultPath(answers: QuizAnswers): string {
+  return `/harnesses/quiz/${quizCombo(answers)}`;
 }
 
 export function quizHasAnswers(answers: QuizAnswers): boolean {
