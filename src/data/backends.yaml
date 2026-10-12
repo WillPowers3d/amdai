@@ -37,7 +37,8 @@ backends:
     backends: HIP/ROCm
     best_for: One tree that matches your ROCm prefix
     worst_for: A first evening if CMake cannot find `/opt/rocm`
-    rocm: `-DGGML_HIP=ON -DAMDGPU_TARGETS=gfx1201`. Prefix may be `/opt/rocm/core-10.0` — ls first.
+    rocm: >-
+      -DGGML_HIP=ON -DAMDGPU_TARGETS=gfx1201. Prefix may be /opt/rocm/core-10.0 — ls first.
     caveats: Missing gfx1201 binaries show up as hipErrorNoBinaryForGpu. Build for this ISA.
     when: rocminfo is clean and you want HIP.
     href: /tutorials/run-local-llm
