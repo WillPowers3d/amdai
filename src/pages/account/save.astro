@@ -1,0 +1,56 @@
+---
+import Base from '../../layouts/Base.astro';
+import { accountsEnabled } from '../../lib/flags';
+
+const on = accountsEnabled();
+---
+
+<Base title="Save this setup" description="Turn a calculator or budget share link into a saved rig.">
+  <main id="main" class="mx-auto max-w-lg px-4 py-10 sm:px-6">
+    <p class="font-mono text-[0.72rem] uppercase tracking-[0.18em] text-accent">Account</p>
+    <h1 class="mt-3 font-serif text-4xl tracking-tight">Save this setup</h1>
+    {
+      on ? (
+        <p id="save-status" class="mt-4 text-muted">Saving the share-link state…</p>
+      ) : (
+        <p class="mt-4 text-muted">
+          Accounts are off. Enable <code class="font-mono text-ink">ACCOUNTS_ENABLED=1</code> to store a rig.
+          Keep the share URL — it reopens the same estimate without a database.
+        </p>
+      )
+    }
+  </main>
+</Base>
+
+{
+  on && (
+    <script>
+      async function save() {
+        const status = document.getElementById('save-status');
+        const csrfRes = await fetch('/api/csrf');
+        if (!csrfRes.ok) {
+          if (status) status.textContent = 'Accounts API is not running.';
+          return;
+        }
+        const csrf = await csrfRes.json();
+        const me = await fetch('/api/me');
+        if (me.status === 401) {
+          location.href = '/login';
+          return;
+        }
+        const from = new URLSearchParams(location.search).get('from') === 'budget' ? 'budget' : 'calculator';
+        const res = await fetch('/api/rigs/from-share', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json', 'x-csrf-token': csrf.csrf },
+          body: JSON.stringify({ search: location.search, from }),
+        });
+        if (res.ok) location.href = '/account';
+        else if (status) {
+          const err = await res.json().catch(() => ({}));
+          status.textContent = err.error || 'Could not save.';
+        }
+      }
+      save();
+    </script>
+  )
+}

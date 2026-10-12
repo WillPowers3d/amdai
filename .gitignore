@@ -18,6 +18,11 @@ pnpm-debug.log*
 .env
 .env.production
 
+# local SQLite (accounts). Never commit. Root-only so src/data/ YAML stays tracked.
+/data/
+*.sqlite
+*.sqlite-journal
+
 # macOS-specific files
 .DS_Store
 

@@ -43,7 +43,7 @@ npm run preview
 
 `npm run build` runs Pagefind over `dist/` so `/search` works in preview. For `npm run dev` after a build, `npm run index` copies the index to `public/pagefind`.
 
-Public site URL is `https://amdai.net` (`site` in `astro.config.mjs`; override with `SITE_URL`). Build with `ACCOUNTS_ENABLED=0` and `FORUM_ENABLED=0` (static SSG). Those flags are not implemented yet — leaving them on fails the build.
+Public site URL is `https://amdai.net` (`site` in `astro.config.mjs`; override with `SITE_URL`). Default build is `ACCOUNTS_ENABLED=0` `FORUM_ENABLED=0` (static SSG, no database). Set `ACCOUNTS_ENABLED=1` for optional login, saved rigs, and `npm run notify`. `FORUM_ENABLED` is still unimplemented and fails the build.
 
 ## Information architecture
 
@@ -61,6 +61,8 @@ Public site URL is `https://amdai.net` (`site` in `astro.config.mjs`; override w
 | `/backends` | Backend chooser — llama.cpp default |
 | `/software` | llama.cpp first; vLLM / Strata as tries |
 | `/abliterated` | Abliterated hub — vet files, catalog table, method/variant cards, llama.cpp notes |
+| `/account` | Optional saved rigs (off unless `ACCOUNTS_ENABLED=1`) |
+| `/privacy` | What optional accounts store |
 | `/harnesses` | Hermes Agent and OpenClaw (`/v1` first) |
 | `/hardware` | PSU, cooling, VRAM |
 | `/tutorials` | How-tos |
@@ -85,6 +87,7 @@ Public site URL is `https://amdai.net` (`site` in `astro.config.mjs`; override w
 | `src/data/stacks.yaml` | `/stacks` cards |
 | `src/data/gpus.yaml` | GPU directory |
 | `src/data/abliterated.yaml` | Abliterated table + method/variant cards |
+| `src/data/stack-updates.yaml` | Cited stack updates matched to saved rigs |
 | `src/data/retailers.yaml` | Storefronts + Amazon tag `amdainet-20` + Rakuten site `amdainet` / SID `4763021` |
 | `src/data/products.yaml` | Check-price search URLs (no prices) |
 | `src/data/budget-tiers.yaml` | `/budget` tiers; USD bands stay TODO until cited |

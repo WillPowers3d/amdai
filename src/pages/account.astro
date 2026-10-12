@@ -1,0 +1,113 @@
+---
+import Base from '../layouts/Base.astro';
+import { accountsEnabled } from '../lib/flags';
+import { stackUpdatesFile } from '../lib/stack-updates';
+
+const on = accountsEnabled();
+---
+
+<Base title="My rig" description="Saved computer configs and stack updates that match them.">
+  <main id="main" class="mx-auto max-w-3xl px-4 py-10 sm:px-6">
+    <p class="font-mono text-[0.72rem] uppercase tracking-[0.18em] text-accent">Account</p>
+    <h1 class="mt-3 font-serif text-4xl tracking-tight sm:text-5xl">My rig</h1>
+    {
+      on ? (
+        <div id="account-app" class="mt-6 text-muted">Loading…</div>
+      ) : (
+        <div class="mt-4 space-y-4 text-muted">
+          <p>
+            Saved rigs and email alerts ship behind <code class="font-mono text-ink">ACCOUNTS_ENABLED=1</code> with
+            SQLite. This public build stays static and does not open a database.
+          </p>
+          <p>
+            Catalog of cited stack updates (as of {stackUpdatesFile.as_of}) still lives in
+            <code class="font-mono text-ink">src/data/stack-updates.yaml</code>. Matching tests run without a login.
+          </p>
+          <p>
+            <a class="underline decoration-accent/40 underline-offset-2" href="/privacy">Privacy</a>
+            ·
+            <a class="underline decoration-accent/40 underline-offset-2" href="/login">Sign in</a>
+          </p>
+        </div>
+      )
+    }
+  </main>
+</Base>
+
+{
+  on && (
+    <script>
+      async function boot() {
+        const root = document.getElementById('account-app');
+        if (!root) return;
+        const csrf = await fetch('/api/csrf').then((r) => r.json());
+        const me = await fetch('/api/me');
+        if (me.status === 401) {
+          root.innerHTML = '<p>Sign in to save rigs. <a class="underline" href="/login">Login</a></p>';
+          return;
+        }
+        const data = await me.json();
+        const rows = (data.rigs as Array<Record<string, unknown>>)
+          .map((rig) => {
+            const updates = (rig.updates as Array<{ id: string; summary: string; source_url: string; todo?: boolean; severity: string }>)
+              .map(
+                (u) =>
+                  `<li class="mt-1 text-sm"><a class="underline decoration-accent/40" href="${u.source_url}">${u.id}</a> · ${u.severity}${u.todo ? ' · TODO' : ''}<span class="block text-faint">${u.summary}</span></li>`,
+              )
+              .join('');
+            return `<article class="mt-4 rounded-2xl border border-line p-4">
+              <h2 class="font-serif text-2xl">${rig.name}</h2>
+              <p class="text-sm text-muted">${rig.gpu} × ${rig.gpuCount} · ${rig.vramGb} GB · ${rig.backend} · ${rig.priority}/${rig.usage}/${rig.style}</p>
+              <p class="mt-2 text-xs"><a href="/account/rss/${rig.rssToken}">Per-rig RSS</a></p>
+              <ul class="mt-3">${updates || '<li class="text-sm text-faint">No matching updates.</li>'}</ul>
+              <div class="mt-3 flex gap-2">
+                <button class="rounded-full border border-line px-3 py-1 text-sm" data-del="${rig.id}">Delete</button>
+              </div>
+            </article>`;
+          })
+          .join('');
+        root.innerHTML = `
+          <p class="text-sm">Signed in as ${data.user.email}. <button id="logout" class="underline">Log out</button>
+          <button id="export" class="ml-2 underline">Export JSON</button></p>
+          <form id="prefs" class="mt-4 flex flex-wrap gap-4 text-sm">
+            <label><input type="checkbox" name="instant" ${data.user.notifyInstant ? 'checked' : ''}/> Instant email</label>
+            <label><input type="checkbox" name="weekly" ${data.user.notifyWeekly ? 'checked' : ''}/> Weekly digest</label>
+            <button class="rounded-full border border-line px-3 py-1" type="submit">Save alerts</button>
+          </form>
+          <h2 class="mt-8 font-serif text-3xl">Updates for your rig</h2>
+          ${rows || '<p class="mt-3">No saved rigs yet. Use Save this setup on the calculator.</p>'}
+        `;
+        document.getElementById('logout')?.addEventListener('click', async () => {
+          await fetch('/api/auth/logout', { method: 'POST', headers: { 'x-csrf-token': csrf.csrf } });
+          location.href = '/';
+        });
+        document.getElementById('export')?.addEventListener('click', () => {
+          const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+          const a = document.createElement('a');
+          a.href = URL.createObjectURL(blob);
+          a.download = 'amdai-rigs.json';
+          a.click();
+        });
+        document.getElementById('prefs')?.addEventListener('submit', async (event) => {
+          event.preventDefault();
+          const form = event.target as HTMLFormElement;
+          await fetch('/api/notify', {
+            method: 'POST',
+            headers: { 'content-type': 'application/json', 'x-csrf-token': csrf.csrf },
+            body: JSON.stringify({
+              instant: form.instant.checked,
+              weekly: form.weekly.checked,
+            }),
+          });
+        });
+        root.querySelectorAll<HTMLButtonElement>('[data-del]').forEach((btn) => {
+          btn.addEventListener('click', async () => {
+            await fetch(`/api/rigs/${btn.dataset.del}`, { method: 'DELETE', headers: { 'x-csrf-token': csrf.csrf } });
+            location.reload();
+          });
+        });
+      }
+      boot();
+    </script>
+  )
+}

@@ -1,0 +1,35 @@
+---
+import Base from '../layouts/Base.astro';
+import { accountsEnabled } from '../lib/flags';
+
+const on = accountsEnabled();
+---
+
+<Base title="Unsubscribe" description="Stop stack-update emails.">
+  <main id="main" class="mx-auto max-w-lg px-4 py-10 sm:px-6">
+    <h1 class="font-serif text-4xl tracking-tight">Unsubscribe</h1>
+    {
+      on ? (
+        <p id="unsub-status" class="mt-4 text-muted">Updating preferences…</p>
+      ) : (
+        <p class="mt-4 text-muted">Email alerts are not active on this static build.</p>
+      )
+    }
+  </main>
+</Base>
+
+{
+  on && (
+    <script>
+      const token = new URLSearchParams(location.search).get('token');
+      fetch('/api/unsubscribe', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ token }),
+      }).then(async (res) => {
+        const el = document.getElementById('unsub-status');
+        if (el) el.textContent = res.ok ? 'You will not get alert emails.' : 'That unsubscribe link is invalid.';
+      });
+    </script>
+  )
+}

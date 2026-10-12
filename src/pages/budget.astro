@@ -4,6 +4,7 @@ import BuyButtons from '../components/BuyButtons.astro';
 import AffiliateDisclosure from '../components/AffiliateDisclosure.astro';
 import AskToggles from '../components/AskToggles.astro';
 import AbliteratedPicks from '../components/AbliteratedPicks.astro';
+import SaveSetupButton from '../components/SaveSetupButton.astro';
 import { bandsReady, budgetFile, budgetTiers } from '../lib/budget';
 import { DEFAULT_PRIORITY } from '../lib/priority';
 import { DEFAULT_STYLE, DEFAULT_USAGE, suggestedBudgetTier } from '../lib/ask';
@@ -85,6 +86,10 @@ const payload = JSON.stringify({
         </p>
       </div>
     </section>
+
+    <p class="mt-6">
+      <SaveSetupButton from="budget" />
+    </p>
 
     <AbliteratedPicks />
 
@@ -219,6 +224,11 @@ const payload = JSON.stringify({
     next.searchParams.set('usage', ask.usage);
     next.searchParams.set('style', ask.style);
     window.history.replaceState({}, '', next);
+    document.querySelectorAll('[data-save-setup]').forEach((link) => {
+      const base = link.getAttribute('href')?.split('?')[0] ?? '/account/save';
+      if (base === '/account') return;
+      link.setAttribute('href', `${base}?from=budget&${next.searchParams.toString()}`);
+    });
   }
 
   function applyAsk(ask) {

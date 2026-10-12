@@ -4,6 +4,7 @@ import BuyButtons from '../components/BuyButtons.astro';
 import AffiliateDisclosure from '../components/AffiliateDisclosure.astro';
 import AskToggles from '../components/AskToggles.astro';
 import AbliteratedPicks from '../components/AbliteratedPicks.astro';
+import SaveSetupButton from '../components/SaveSetupButton.astro';
 import { CONTEXT_PRESETS, GPU_PRESETS, KV_TYPES, MODEL_PRESETS, QUANTS } from '../lib/calculator';
 import { DEFAULT_PRIORITY } from '../lib/priority';
 import { DEFAULT_STYLE, DEFAULT_USAGE } from '../lib/ask';
@@ -216,6 +217,7 @@ const fitGpus = gpuProducts();
 
         <div class="flex flex-wrap gap-2">
           <button type="button" id="share-btn" class="rounded-full bg-accent px-4 py-2 text-sm text-white">Copy share link</button>
+          <SaveSetupButton from="calculator" />
           <span class="self-center text-sm text-ok" data-share-status hidden>Copied</span>
         </div>
         <p class="break-all font-mono text-[0.7rem] text-faint" data-share-url></p>
@@ -436,6 +438,11 @@ const fitGpus = gpuProducts();
     const url = `${window.location.pathname}?${qs}`;
     setText('[data-share-url]', url);
     history.replaceState(null, '', url);
+    document.querySelectorAll<HTMLAnchorElement>('[data-save-setup]').forEach((link) => {
+      const base = link.getAttribute('href')?.split('?')[0] ?? '/account/save';
+      if (base === '/account') return;
+      link.href = `${base}?from=calculator&${qs}`;
+    });
 
     const needed = result.perGpuGiB;
     let anyFit = false;

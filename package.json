@@ -13,13 +13,19 @@
     "index": "pagefind --site dist --output-path public/pagefind",
     "preview": "astro preview --host 127.0.0.1 --port 43147",
     "astro": "astro",
-    "check": "astro check"
+    "check": "astro check",
+    "test": "tsx --test src/lib/rig-match.test.ts",
+    "notify": "tsx src/scripts/notify.ts"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.6",
     "@astrojs/markdown-satteri": "^0.4.1",
     "@astrojs/mdx": "^8.0.1",
+    "@astrojs/node": "^11.1.7",
     "@astrojs/sitemap": "^3.7.4",
+    "arctic": "^3.7.0",
+    "drizzle-orm": "^0.44.5",
+    "nodemailer": "^7.0.6",
     "@fontsource-variable/source-serif-4": "^5.2.9",
     "@fontsource/ibm-plex-mono": "^5.2.7",
     "@fontsource/ibm-plex-sans": "^5.2.8",
@@ -34,6 +40,8 @@
     "esbuild": true
   },
   "devDependencies": {
-    "pagefind": "^1.5.2"
+    "@types/nodemailer": "^7.0.2",
+    "pagefind": "^1.5.2",
+    "tsx": "^4.20.6"
   }
 }

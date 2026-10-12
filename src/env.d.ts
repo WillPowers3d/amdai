@@ -11,6 +11,17 @@ interface ImportMetaEnv {
   readonly ACCOUNTS_ENABLED?: string;
   readonly FORUM_ENABLED?: string;
   readonly SITE_URL?: string;
+  readonly AUTH_SECRET?: string;
+  readonly AUTH_URL?: string;
+  readonly DATABASE_URL?: string;
+  readonly SMTP_HOST?: string;
+  readonly SMTP_PORT?: string;
+  readonly SMTP_USER?: string;
+  readonly SMTP_PASS?: string;
+  readonly SMTP_FROM?: string;
+  readonly SMTP_SECURE?: string;
+  readonly GITHUB_ID?: string;
+  readonly GITHUB_SECRET?: string;
 }
 
 interface ImportMeta {

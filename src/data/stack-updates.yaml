@@ -1,0 +1,133 @@
+# Stack updates matched against saved rigs.
+# Seed only with cited entries we already publish. Uncertain rows stay todo: true
+# and are shown labeled TODO — the notify script will not email them.
+as_of: 2026-10-12
+
+updates:
+  - id: rocm-10-1-0-r9700
+    date: 2026-10-12
+    component: rocm
+    affected_versions:
+      - "10.1"
+      - "10.1.0"
+    affected_gpus:
+      - R9700
+      - RX 9070 XT
+    affected_gfx:
+      - gfx1201
+    affected_backends: []
+    affected_models: []
+    affected_os: []
+    severity: info
+    summary: >-
+      ROCm 10.1.0 lists the Radeon AI PRO R9700 and RX 9070 XT as gfx1201 on
+      the live compatibility matrix. Official support for that ISA is on this
+      line, not a guessed 1.0 CLI tag.
+    source_url: https://rocm.docs.amd.com/en/docs-10.1.0/about/release-notes.html
+    source_title: ROCm 10.1.0 release notes
+
+  - id: ollama-hsa-override-r9700-windows
+    date: 2026-10-12
+    component: ollama
+    affected_versions: []
+    affected_gpus:
+      - R9700
+    affected_gfx:
+      - gfx1201
+    affected_backends:
+      - ollama
+    affected_models: []
+    affected_os:
+      - Windows
+    severity: warn
+    summary: >-
+      Ollama on Windows + R9700 still failed to initialize ROCm after
+      HSA_OVERRIDE_GFX_VERSION was tried. Do not treat that override as a
+      gfx1201 fix. llama.cpp Vulkan remains the consumer default.
+    source_url: https://github.com/ollama/ollama/issues/14686
+    source_title: Ollama #14686 — HSA_OVERRIDE on R9700 Windows
+
+  - id: ollama-gfx1201-tensile-linux
+    date: 2026-10-12
+    component: ollama
+    affected_versions: []
+    affected_gpus:
+      - RX 9070 XT
+      - R9700
+    affected_gfx:
+      - gfx1201
+    affected_backends:
+      - ollama
+    affected_models: []
+    affected_os:
+      - Linux
+    severity: warn
+    summary: >-
+      Official ollama:rocm looked for TensileLibrary_lazy_gfx1201.dat under
+      hipblaslt/library/ while the file lived under rocblas/library/
+      (reported on RX 9070 XT). Bundled Ollama ROCm is not the daily driver
+      on gfx1201.
+    source_url: https://github.com/ollama/ollama/issues/12908
+    source_title: Ollama #12908 — gfx1201 tensile path
+
+  - id: hip-no-binary-for-gpu
+    date: 2026-10-12
+    component: backend
+    affected_versions: []
+    affected_gpus: []
+    affected_gfx:
+      - gfx1201
+    affected_backends:
+      - llama.cpp
+      - vllm
+    affected_models: []
+    affected_os: []
+    severity: warn
+    summary: >-
+      hipErrorNoBinaryForGpu means the HIP build has no kernel image for this
+      ISA. Rebuild with AMDGPU_TARGETS=gfx1201, or use llama.cpp Vulkan.
+      Do not invent a random HSA_OVERRIDE on a card current ROCm already lists.
+    source_url: https://github.com/ROCm/HIP/blob/develop/docs/reference/error_codes.rst
+    source_title: HIP error codes — hipErrorNoBinaryForGpu (209)
+
+  - id: amdgpu-mode1-reset-gfx12
+    date: 2026-07-01
+    component: kernel
+    affected_versions: []
+    affected_gpus: []
+    affected_gfx:
+      - gfx1201
+      - gfx1200
+    affected_backends: []
+    affected_models: []
+    affected_os:
+      - Linux
+    severity: warn
+    summary: >-
+      amd-gfx (July 2026) documented MODE1 / SMU resets on gfx12 after MES
+      failed to suspend compute gangs during HSA selftests. VRAM is lost
+      across the reset. Check dmesg before reinstalling userspace.
+    source_url: https://lists.freedesktop.org/archives/amd-gfx/2026-July/148055.html
+    source_title: amd-gfx — GPU reset / MODE1 on gfx12 HSA tests (Jul 2026)
+
+  - id: rocm-10-0-finetune-reset-r9700
+    date: 2026-10-12
+    component: rocm
+    affected_versions:
+      - "10.0"
+    affected_gpus:
+      - R9700
+    affected_gfx:
+      - gfx1201
+    affected_backends: []
+    affected_models: []
+    affected_os: []
+    severity: warn
+    todo: true
+    summary: >-
+      TODO: living notes mention a ROCm 10.0 fine-tune GPU-reset KI on the
+      R9700 and suggest TORCH_BLAS_PREFER_HIPBLASLT=0. We do not yet have a
+      first-party AMD KI URL copied here — do not treat this as a measured
+      fix until that source is cited.
+    source_url: https://rocm.docs.amd.com/en/docs-10.0.0/about/release-notes.html
+    source_title: ROCm 10.0.0 release notes (KI URL still TODO)

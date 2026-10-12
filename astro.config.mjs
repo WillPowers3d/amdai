@@ -3,18 +3,18 @@ import { defineConfig } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
+import node from '@astrojs/node';
 
-// Public URL for sitemap and canonicals. Override with SITE_URL if needed.
-// Accounts / forum stay off (static SSG) until those features ship.
 const accountsOn = process.env.ACCOUNTS_ENABLED === '1' || process.env.ACCOUNTS_ENABLED === 'true';
 const forumOn = process.env.FORUM_ENABLED === '1' || process.env.FORUM_ENABLED === 'true';
-if (accountsOn || forumOn) {
-  throw new Error('ACCOUNTS_ENABLED / FORUM_ENABLED are not implemented yet. Build with both off for the static site.');
+if (forumOn) {
+  throw new Error('FORUM_ENABLED is not implemented yet. It will require ACCOUNTS_ENABLED.');
 }
 
 export default defineConfig({
   site: process.env.SITE_URL || 'https://amdai.net',
   prefetch: true,
+  adapter: accountsOn ? node({ mode: 'standalone' }) : undefined,
   server: {
     host: '127.0.0.1',
     port: 43147,
