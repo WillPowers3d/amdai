@@ -22,7 +22,7 @@ export const USAGE_COPY: Record<Usage, { label: string; short: string; lede: str
       'Fully local: size the box so the local model can carry long context and the full file. More VRAM and RAM help. We do not quote a cloud price because there is no cloud in this path.',
   },
   hybrid: {
-    label: 'Hybrid',
+    label: 'Hybrid (local plus a cloud model like Claude, Grok or ChatGPT for token-heavy work)',
     short: 'Hybrid',
     lede:
       'Local plus a cloud model (Claude, Grok, ChatGPT, or similar) for token-heavy work. The local box handles privacy-sensitive, repetitive, or always-on tasks. The cloud can take long reasoning jobs. This page does not quote cloud prices or claim a savings figure.',
