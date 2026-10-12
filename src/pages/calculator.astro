@@ -2,9 +2,11 @@
 import Base from '../layouts/Base.astro';
 import BuyButtons from '../components/BuyButtons.astro';
 import AffiliateDisclosure from '../components/AffiliateDisclosure.astro';
-import PriorityToggle from '../components/PriorityToggle.astro';
+import AskToggles from '../components/AskToggles.astro';
+import AbliteratedPicks from '../components/AbliteratedPicks.astro';
 import { CONTEXT_PRESETS, GPU_PRESETS, KV_TYPES, MODEL_PRESETS, QUANTS } from '../lib/calculator';
 import { DEFAULT_PRIORITY } from '../lib/priority';
+import { DEFAULT_STYLE, DEFAULT_USAGE } from '../lib/ask';
 import { gpuProducts } from '../lib/affiliates';
 
 const fitGpus = gpuProducts();
@@ -32,7 +34,7 @@ const fitGpus = gpuProducts();
     </div>
 
     <div id="ask-row" class="mt-8">
-      <PriorityToggle defaultPriority={DEFAULT_PRIORITY} />
+      <AskToggles defaultPriority={DEFAULT_PRIORITY} defaultUsage={DEFAULT_USAGE} defaultStyle={DEFAULT_STYLE} />
     </div>
 
     <div id="tested-badge" hidden class="mt-6 inline-flex max-w-3xl items-start gap-2 rounded-full border border-ok/40 bg-ok/10 px-4 py-2 text-sm text-ok">
@@ -166,8 +168,10 @@ const fitGpus = gpuProducts();
           <div class="mt-4 rounded-xl border border-line bg-canvas/60 p-3 text-sm leading-relaxed">
             <p class="font-medium" data-priority-headline></p>
             <p class="mt-2 text-muted" data-priority-body></p>
+            <p class="mt-2 text-muted" data-usage-verdict></p>
             <button type="button" id="apply-priority" hidden class="mt-3 rounded-full bg-accent px-3 py-1.5 text-xs text-white"></button>
           </div>
+          <AbliteratedPicks />
           <dl class="mt-5 grid grid-cols-2 gap-3 text-sm">
             <div class="rounded-xl border border-line bg-canvas/50 p-3">
               <dt class="text-faint">Weights</dt>
@@ -283,16 +287,17 @@ const fitGpus = gpuProducts();
     PRIORITY_COPY,
     bestQuantForPriority,
     calculatorAdvice,
-    parsePriority,
     type Priority,
     type PriorityAdvice,
   } from '../lib/priority';
+  import { USAGE_COPY, parseAsk, type AskState } from '../lib/ask';
 
   const form = document.getElementById('calc-form') as HTMLFormElement;
   const shareBtn = document.getElementById('share-btn');
   const applyBtn = document.getElementById('apply-priority') as HTMLButtonElement | null;
   let input: CalcInput = queryToInput(window.location.search);
-  let priority: Priority = parsePriority(window.location.search);
+  let ask: AskState = parseAsk(window.location.search);
+  let priority: Priority = ask.priority;
   let pendingApply: CalcInput | null = null;
 
   const field = <T extends HTMLElement>(name: string) => form.querySelector(`[name="${name}"]`) as T;
@@ -318,7 +323,13 @@ const fitGpus = gpuProducts();
     const note = document.querySelector('[data-arch-note]');
     if (note) note.textContent = modelById(input.modelId).archNote;
     document.querySelectorAll<HTMLInputElement>('input[name="priority"]').forEach((el) => {
-      el.checked = el.value === priority;
+      el.checked = el.value === ask.priority;
+    });
+    document.querySelectorAll<HTMLInputElement>('input[name="usage"]').forEach((el) => {
+      el.checked = el.value === ask.usage;
+    });
+    document.querySelectorAll<HTMLInputElement>('input[name="style"]').forEach((el) => {
+      el.checked = el.value === ask.style;
     });
   }
 
@@ -351,13 +362,21 @@ const fitGpus = gpuProducts();
   }
 
   function shareQuery() {
-    return inputToQuery(input, { priority });
+    return inputToQuery(input, { priority: ask.priority, usage: ask.usage, style: ask.style });
   }
 
   function renderAdvice(advice: PriorityAdvice) {
-    setText('[data-priority-lede]', PRIORITY_COPY[priority].lede);
+    setText('[data-priority-lede]', PRIORITY_COPY[ask.priority].lede);
+    setText('[data-usage-lede]', USAGE_COPY[ask.usage].lede);
+    setText('[data-style-lede]', ask.style === 'abliterated'
+      ? 'Abliteration edits refusals in the weights. It can hurt quality. Verify the uploader and the file. You are responsible for what you run. Floor is still Q4. Tested pick: being reworked.'
+      : 'Official instruct weights. This is the default and the reliability baseline. Prove Qwen3.6-35B-A3B before you swap.');
     setText('[data-priority-headline]', advice.headline);
     setText('[data-priority-body]', advice.body);
+    setText('[data-usage-verdict]', USAGE_COPY[ask.usage].verdict);
+    document.querySelectorAll<HTMLElement>('[data-abliterated-panel]').forEach((el) => {
+      el.hidden = ask.style !== 'abliterated';
+    });
     pendingApply = advice.apply ?? null;
     if (applyBtn) {
       if (advice.apply && advice.applyLabel) {
@@ -371,8 +390,8 @@ const fitGpus = gpuProducts();
 
   function render() {
     const result = compute(input);
-    const advice = calculatorAdvice(input, result, priority);
-    const pick = bestQuantForPriority(input, priority);
+    const advice = calculatorAdvice(input, result, ask.priority);
+    const pick = bestQuantForPriority(input, ask.priority);
     const verdictEl = document.querySelector('[data-verdict-label]');
     if (verdictEl) {
       verdictEl.textContent = `${result.verdictLabel} · estimate`;
@@ -389,7 +408,7 @@ const fitGpus = gpuProducts();
     setText('[data-out="overflow"]', formatGiB(result.overflowGiB));
     setText('[data-weights-note]', result.weightsNote);
     setText('[data-kv-note]', result.kvNote);
-    setText('[data-best-quant-label]', PRIORITY_COPY[priority].bestQuantLabel);
+    setText('[data-best-quant-label]', PRIORITY_COPY[ask.priority].bestQuantLabel);
     setText('[data-out="bestQuant"]', pick ? `${pick.label} (estimate)` : 'No Q4+ quant fits fully in VRAM');
     setText('[data-out="maxBest"]', result.maxContextAtBest != null ? `${formatCtx(result.maxContextAtBest)} (estimate)` : '—');
     setText('[data-out="maxSelected"]', result.maxContextAtSelected != null ? `${formatCtx(result.maxContextAtSelected)} (estimate)` : '—');
@@ -398,7 +417,7 @@ const fitGpus = gpuProducts();
 
     const warn = document.querySelector('[data-offload-warn]');
     if (warn) {
-      warn.textContent = PRIORITY_COPY[priority].offload;
+      warn.textContent = PRIORITY_COPY[ask.priority].offload;
       warn.classList.toggle('hidden', result.overflowGiB <= 0.05);
     }
 
@@ -514,9 +533,21 @@ const fitGpus = gpuProducts();
     }
   });
 
-  document.querySelectorAll<HTMLInputElement>('input[name="priority"]').forEach((el) => {
+  function readAsk(): AskState {
+    const p = document.querySelector<HTMLInputElement>('input[name="priority"]:checked')?.value;
+    const u = document.querySelector<HTMLInputElement>('input[name="usage"]:checked')?.value;
+    const s = document.querySelector<HTMLInputElement>('input[name="style"]:checked')?.value;
+    return {
+      priority: p === 'size' ? 'size' : 'speed',
+      usage: u === 'hybrid' ? 'hybrid' : 'local',
+      style: s === 'abliterated' ? 'abliterated' : 'standard',
+    };
+  }
+
+  document.querySelectorAll<HTMLInputElement>('input[name="priority"], input[name="usage"], input[name="style"]').forEach((el) => {
     el.addEventListener('change', () => {
-      priority = el.value === 'size' ? 'size' : 'speed';
+      ask = readAsk();
+      priority = ask.priority;
       writeForm();
       render();
     });
@@ -529,7 +560,8 @@ const fitGpus = gpuProducts();
 
   if (!window.location.search) {
     input = { ...DEFAULT_INPUT };
-    priority = 'speed';
+    ask = { priority: 'speed', usage: 'local', style: 'standard' };
+    priority = ask.priority;
   }
   writeForm();
   render();

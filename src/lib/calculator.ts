@@ -420,7 +420,7 @@ function num(value: string | null, fallback: number): number {
   return Number.isFinite(n) ? n : fallback;
 }
 
-export function inputToQuery(input: CalcInput, extras?: { priority?: string }): string {
+export function inputToQuery(input: CalcInput, extras?: { priority?: string; usage?: string; style?: string }): string {
   const params = new URLSearchParams({
     gpu: input.gpuId,
     vram: String(input.vramGb),
@@ -440,6 +440,8 @@ export function inputToQuery(input: CalcInput, extras?: { priority?: string }): 
     oh: String(input.overheadGiB),
   });
   if (extras?.priority) params.set('priority', extras.priority);
+  if (extras?.usage) params.set('usage', extras.usage);
+  if (extras?.style) params.set('style', extras.style);
   return params.toString();
 }
 

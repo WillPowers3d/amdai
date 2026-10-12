@@ -52,7 +52,7 @@ Public site URL is `https://amdai.net` (`site` in `astro.config.mjs`; override w
 | `/` | Home + living status card |
 | `/start` | Getting started (GPU → ROCm → llama.cpp → harness) |
 | `/stacks` | Recommended stack cards from the test rig |
-| `/budget` | Setup by budget — Starter → Pro, size vs speed toggle, no invented prices |
+| `/budget` | Setup by budget — size/speed, local/hybrid, standard/abliterated |
 | `/calculator` | Quant + Hardware Calculator (client-side estimates, same size/speed toggle) |
 | `/quants` | Q4–Q8, UD dynamic, KV types, why not below Q4 |
 | `/gpus` | GPU directory — gfx IDs, VRAM, official ROCm rows |

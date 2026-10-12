@@ -2,15 +2,22 @@
 import Base from '../layouts/Base.astro';
 import BuyButtons from '../components/BuyButtons.astro';
 import AffiliateDisclosure from '../components/AffiliateDisclosure.astro';
-import PriorityToggle from '../components/PriorityToggle.astro';
+import AskToggles from '../components/AskToggles.astro';
+import AbliteratedPicks from '../components/AbliteratedPicks.astro';
 import { bandsReady, budgetFile, budgetTiers } from '../lib/budget';
-import { DEFAULT_PRIORITY, suggestedBudgetTier } from '../lib/priority';
+import { DEFAULT_PRIORITY } from '../lib/priority';
+import { DEFAULT_STYLE, DEFAULT_USAGE, suggestedBudgetTier } from '../lib/ask';
 
 const hasBands = bandsReady();
 const payload = JSON.stringify({
   asOf: budgetFile.as_of,
   hasBands,
-  suggested: { size: suggestedBudgetTier('size'), speed: suggestedBudgetTier('speed') },
+  suggested: {
+    'size-local': suggestedBudgetTier('size', 'local'),
+    'speed-local': suggestedBudgetTier('speed', 'local'),
+    'size-hybrid': suggestedBudgetTier('size', 'hybrid'),
+    'speed-hybrid': suggestedBudgetTier('speed', 'hybrid'),
+  },
   tiers: budgetTiers.map((tier) => ({
     id: tier.id,
     slider: tier.slider,
@@ -42,7 +49,7 @@ const payload = JSON.stringify({
     </p>
 
     <div id="ask-row" class="mt-10 space-y-6">
-      <PriorityToggle defaultPriority={DEFAULT_PRIORITY} />
+      <AskToggles defaultPriority={DEFAULT_PRIORITY} defaultUsage={DEFAULT_USAGE} defaultStyle={DEFAULT_STYLE} />
     </div>
 
     <section class="mt-10 rounded-2xl border border-line bg-raised/40 p-5">
@@ -78,6 +85,8 @@ const payload = JSON.stringify({
         </p>
       </div>
     </section>
+
+    <AbliteratedPicks />
 
     <ol class="mt-12 space-y-12">
       {budgetTiers.map((tier) => (
@@ -175,47 +184,83 @@ const payload = JSON.stringify({
   const cards = [...document.querySelectorAll('[data-tier]')];
   const stops = [...document.querySelectorAll('[data-stop]')];
   const radios = [...document.querySelectorAll('input[name="priority"]')];
-  const lede = document.querySelector('[data-priority-lede]');
+  const usageRadios = [...document.querySelectorAll('input[name="usage"]')];
+  const styleRadios = [...document.querySelectorAll('input[name="style"]')];
   const COPY = {
     size: 'Favor more total VRAM — a larger card or a second GPU — and plenty of system RAM so a bigger file can overflow. Pick the largest house model and the highest quant that still makes sense (Q5 or Q6 when they fit, never below Q4). Tokens per second will be lower than an in-VRAM load. Speed numbers are estimates unless a “Tested on our rig” badge is showing.',
     speed: 'Favor the whole model in one GPU’s VRAM with no RAM offload. Prefer a MoE with few active parameters (Qwen3.6-35B-A3B style), Q4_K_M to Q5, a shorter context, and a single fast card. Offloading weights or KV into system RAM kills speed.',
+    local: 'The local model does the whole job. That pushes toward more VRAM, more system RAM, and a long context so you are not shipping tokens off-box. No cloud pricing is involved.',
+    hybrid: 'Local plus a cloud model (Claude, Grok, ChatGPT, or similar) for token-heavy work. The local box handles privacy-sensitive, repetitive, or always-on tasks. The cloud can take long reasoning jobs. This page does not quote cloud prices or claim a savings figure.',
+    standard: 'Official instruct weights. This is the default and the reliability baseline. Prove Qwen3.6-35B-A3B before you swap.',
+    abliterated: 'Abliteration edits refusals in the weights. It can hurt quality. Verify the uploader and the file. You are responsible for what you run. Floor is still Q4. There is no tested-on-our-rig abliterated pick — being reworked.',
   };
 
-  function currentPriority() {
-    const checked = radios.find((el) => el.checked);
-    return checked && checked.value === 'size' ? 'size' : 'speed';
+  function radioValue(list, fallback) {
+    const checked = list.find((el) => el.checked);
+    return checked ? checked.value : fallback;
   }
 
-  function writeUrl(tierId, priority) {
+  function currentAsk() {
+    return {
+      priority: radioValue(radios, 'speed') === 'size' ? 'size' : 'speed',
+      usage: radioValue(usageRadios, 'local') === 'hybrid' ? 'hybrid' : 'local',
+      style: radioValue(styleRadios, 'standard') === 'abliterated' ? 'abliterated' : 'standard',
+    };
+  }
+
+  function suggestedId(ask) {
+    return data.suggested[ask.priority + '-' + ask.usage];
+  }
+
+  function writeUrl(tierId, ask) {
     const next = new URL(window.location.href);
     next.searchParams.set('tier', tierId);
-    next.searchParams.set('priority', priority);
+    next.searchParams.set('priority', ask.priority);
+    next.searchParams.set('usage', ask.usage);
+    next.searchParams.set('style', ask.style);
     window.history.replaceState({}, '', next);
   }
 
-  function applyPriority(priority) {
-    radios.forEach((el) => {
-      el.checked = el.value === priority;
+  function applyAsk(ask) {
+    radios.forEach((el) => { el.checked = el.value === ask.priority; });
+    usageRadios.forEach((el) => { el.checked = el.value === ask.usage; });
+    styleRadios.forEach((el) => { el.checked = el.value === ask.style; });
+    const pLede = document.querySelector('[data-priority-lede]');
+    const uLede = document.querySelector('[data-usage-lede]');
+    const sLede = document.querySelector('[data-style-lede]');
+    if (pLede) pLede.textContent = COPY[ask.priority];
+    if (uLede) uLede.textContent = COPY[ask.usage];
+    if (sLede) sLede.textContent = COPY[ask.style];
+    document.querySelectorAll('[data-abliterated-panel]').forEach((el) => {
+      el.hidden = ask.style !== 'abliterated';
     });
-    if (lede) lede.textContent = COPY[priority];
     cards.forEach((card) => {
       const row = data.tiers.find((tier) => tier.id === card.getAttribute('data-tier'));
-      const copy = row && row[priority];
+      const copy = row && row[ask.priority];
       card.querySelectorAll('[data-copy]').forEach((el) => {
         const key = el.getAttribute('data-copy');
         if (copy && key && copy[key]) el.textContent = copy[key];
       });
+      const verdict = card.querySelector('[data-copy="verdict"]');
+      if (verdict && copy) {
+        const extra = ask.usage === 'hybrid'
+          ? ' Hybrid: a cheaper local tier can be enough — keep private or always-on work on the card; send token-heavy reasoning to a cloud model you already use. No cloud pricing claims.'
+          : ' Fully local: size the box so the local model can carry long context and the full file.';
+        verdict.textContent = copy.verdict + extra;
+      }
       const suggested = card.querySelector('[data-suggested]');
-      if (suggested) suggested.classList.toggle('hidden', data.suggested[priority] !== row?.id);
+      if (suggested) suggested.classList.toggle('hidden', suggestedId(ask) !== row?.id);
       card.querySelectorAll('[data-fit]').forEach((fit) => {
         const show = (fit.getAttribute('data-show') || 'size,speed').split(',');
-        fit.hidden = !show.includes(priority);
+        fit.hidden = !show.includes(ask.priority);
       });
       card.querySelectorAll('[data-calc-link]').forEach((link) => {
         const href = link.getAttribute('href');
         if (!href) return;
         const url = new URL(href, window.location.origin);
-        url.searchParams.set('priority', priority);
+        url.searchParams.set('priority', ask.priority);
+        url.searchParams.set('usage', ask.usage);
+        url.searchParams.set('style', ask.style);
         link.setAttribute('href', url.pathname + '?' + url.searchParams.toString());
       });
     });
@@ -238,37 +283,43 @@ const payload = JSON.stringify({
     const tier = data.tiers.find((row) => row.slider === Number(value)) || data.tiers[0];
     if (slider) slider.value = String(tier.slider);
     highlight(tier.id);
-    if (lockTier) writeUrl(tier.id, currentPriority());
+    if (lockTier) writeUrl(tier.id, currentAsk());
   }
 
   let userPickedTier = new URLSearchParams(window.location.search).has('tier');
 
   function fromQuery() {
     const q = new URLSearchParams(window.location.search);
-    const priority = q.get('priority') === 'size' ? 'size' : q.get('priority') === 'speed' ? 'speed' : 'speed';
-    applyPriority(priority);
+    const ask = {
+      priority: q.get('priority') === 'size' ? 'size' : 'speed',
+      usage: q.get('usage') === 'hybrid' ? 'hybrid' : 'local',
+      style: q.get('style') === 'abliterated' ? 'abliterated' : 'standard',
+    };
+    applyAsk(ask);
     const id = q.get('tier');
     const picked = data.tiers.find((row) => row.id === id);
     if (picked) selectSlider(picked.slider);
     else {
-      const suggested = data.tiers.find((row) => row.id === data.suggested[priority]);
+      const suggested = data.tiers.find((row) => row.id === suggestedId(ask));
       selectSlider(suggested ? suggested.slider : 3);
     }
   }
 
-  radios.forEach((el) => {
-    el.addEventListener('change', () => {
-      const priority = currentPriority();
-      applyPriority(priority);
-      if (userPickedTier) {
-        const q = new URLSearchParams(window.location.search);
-        const locked = data.tiers.find((row) => row.id === q.get('tier'));
-        writeUrl(locked ? locked.id : data.suggested[priority], priority);
-      } else {
-        const suggested = data.tiers.find((row) => row.id === data.suggested[priority]);
-        selectSlider(suggested ? suggested.slider : 3);
-      }
-    });
+  function onAskChange() {
+    const ask = currentAsk();
+    applyAsk(ask);
+    if (userPickedTier) {
+      const q = new URLSearchParams(window.location.search);
+      const locked = data.tiers.find((row) => row.id === q.get('tier'));
+      writeUrl(locked ? locked.id : suggestedId(ask), ask);
+    } else {
+      const suggested = data.tiers.find((row) => row.id === suggestedId(ask));
+      selectSlider(suggested ? suggested.slider : 3);
+    }
+  }
+
+  [...radios, ...usageRadios, ...styleRadios].forEach((el) => {
+    el.addEventListener('change', onAskChange);
   });
 
   slider?.addEventListener('input', () => {

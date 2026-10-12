@@ -1,0 +1,80 @@
+---
+import type { Priority } from '../lib/priority';
+import type { Style, Usage } from '../lib/ask';
+import { DEFAULT_PRIORITY } from '../lib/priority';
+import { DEFAULT_STYLE, DEFAULT_USAGE } from '../lib/ask';
+
+interface Props {
+  defaultPriority?: Priority;
+  defaultUsage?: Usage;
+  defaultStyle?: Style;
+}
+
+const {
+  defaultPriority = DEFAULT_PRIORITY,
+  defaultUsage = DEFAULT_USAGE,
+  defaultStyle = DEFAULT_STYLE,
+} = Astro.props;
+---
+
+<section id="ask-first" class="space-y-6" data-ask-root>
+  <div>
+    <p class="font-mono text-[0.72rem] uppercase tracking-[0.18em] text-accent">Ask first</p>
+    <h2 class="mt-2 font-serif text-2xl sm:text-3xl">What do you want first?</h2>
+    <p class="mt-2 text-sm text-muted">
+      Three questions before the recommendation. They change the pick, not the VRAM math. Tokens per
+      second are estimates unless a “Tested on our rig” number is showing. No cloud prices.
+    </p>
+  </div>
+
+  <fieldset class="rounded-2xl border border-line bg-raised/40 p-5">
+    <legend class="px-1 font-medium">Priority</legend>
+    <div class="mt-3 grid gap-2 sm:grid-cols-2" role="radiogroup" aria-label="Priority">
+      <label class="cursor-pointer rounded-2xl border border-line bg-canvas/70 p-4 has-[:checked]:border-accent has-[:checked]:ring-2 has-[:checked]:ring-accent">
+        <input class="sr-only" type="radio" name="priority" value="size" checked={defaultPriority === 'size'} />
+        <span class="block font-medium">Max model size</span>
+        <span class="mt-1 block text-sm text-muted">More VRAM, more RAM, Q5/Q6 when they fit. Slower tokens.</span>
+      </label>
+      <label class="cursor-pointer rounded-2xl border border-line bg-canvas/70 p-4 has-[:checked]:border-accent has-[:checked]:ring-2 has-[:checked]:ring-accent">
+        <input class="sr-only" type="radio" name="priority" value="speed" checked={defaultPriority === 'speed'} />
+        <span class="block font-medium">Speed</span>
+        <span class="mt-1 block text-sm text-muted">One GPU, no offload, MoE, Q4_K_M to Q5.</span>
+      </label>
+    </div>
+    <p class="mt-4 text-sm leading-relaxed text-muted" data-priority-lede></p>
+  </fieldset>
+
+  <fieldset class="rounded-2xl border border-line bg-raised/40 p-5">
+    <legend class="px-1 font-medium">Usage</legend>
+    <div class="mt-3 grid gap-2 sm:grid-cols-2" role="radiogroup" aria-label="Usage">
+      <label class="cursor-pointer rounded-2xl border border-line bg-canvas/70 p-4 has-[:checked]:border-accent has-[:checked]:ring-2 has-[:checked]:ring-accent">
+        <input class="sr-only" type="radio" name="usage" value="local" checked={defaultUsage === 'local'} />
+        <span class="block font-medium">Fully local</span>
+        <span class="mt-1 block text-sm text-muted">Bigger VRAM/RAM and long context. The local model does everything.</span>
+      </label>
+      <label class="cursor-pointer rounded-2xl border border-line bg-canvas/70 p-4 has-[:checked]:border-accent has-[:checked]:ring-2 has-[:checked]:ring-accent">
+        <input class="sr-only" type="radio" name="usage" value="hybrid" checked={defaultUsage === 'hybrid'} />
+        <span class="block font-medium">Hybrid</span>
+        <span class="mt-1 block text-sm text-muted">Local plus a cloud model (Claude, Grok, ChatGPT) for token-heavy work.</span>
+      </label>
+    </div>
+    <p class="mt-4 text-sm leading-relaxed text-muted" data-usage-lede></p>
+  </fieldset>
+
+  <fieldset class="rounded-2xl border border-line bg-raised/40 p-5">
+    <legend class="px-1 font-medium">Model style</legend>
+    <div class="mt-3 grid gap-2 sm:grid-cols-2" role="radiogroup" aria-label="Model style">
+      <label class="cursor-pointer rounded-2xl border border-line bg-canvas/70 p-4 has-[:checked]:border-accent has-[:checked]:ring-2 has-[:checked]:ring-accent">
+        <input class="sr-only" type="radio" name="style" value="standard" checked={defaultStyle === 'standard'} />
+        <span class="block font-medium">Standard (original)</span>
+        <span class="mt-1 block text-sm text-muted">Official instruct. The default.</span>
+      </label>
+      <label class="cursor-pointer rounded-2xl border border-line bg-canvas/70 p-4 has-[:checked]:border-accent has-[:checked]:ring-2 has-[:checked]:ring-accent">
+        <input class="sr-only" type="radio" name="style" value="abliterated" checked={defaultStyle === 'abliterated'} />
+        <span class="block font-medium">Abliterated / uncensored</span>
+        <span class="mt-1 block text-sm text-muted">Educational. Can hurt quality. You are responsible for use.</span>
+      </label>
+    </div>
+    <p class="mt-4 text-sm leading-relaxed text-muted" data-style-lede></p>
+  </fieldset>
+</section>
