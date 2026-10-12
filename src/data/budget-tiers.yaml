@@ -75,7 +75,7 @@ tiers:
       give_up: Versus Enthusiast — 32 GB and gfx1201. The daily-driver Q5 at 262K is a one-R9700 stack we actually ran, not a 24 GB guess.
     speed:
       verdict: One 24 GB card, Q4_K_M, shorter context, no split. Q5 at long context is a size move and likely overflows. Offload kills speed. Tokens per second — estimate only; no first-party number on a 7900.
-      give_up: Versus Enthusiast — a 32 GB R9700 that holds the daily-driver Q5 at 262K with 0% offload (tested on our rig). We have not published tok/s for that run.
+      give_up: Versus Enthusiast — a 32 GB R9700 that holds the daily-driver Q5 at 262K with 0% offload (tested on our rig). Measured on our rig, 2026-10 — UD-Q5_K_XL ~50 tok/s at 256K (100.8 short, ~88 at 32K).
     fits:
       - model: Qwen3.6-35B-A3B
         quant: Q4_K_M
@@ -113,15 +113,15 @@ tiers:
     backend: llama.cpp Vulkan (the daily-driver path on our rig). HIP if you already have a clean /opt/rocm.
     give_up: Versus Pro — a second R9700 and 128–256 GB DDR5, which is what lets the Flash Q6 file live mostly in RAM on our test rig.
     size:
-      verdict: One 32 GB card holds the daily-driver Q5 at 262K (tested, 0% offload). Flash Q6 (~169 GB publisher listing) is the size step that needs Pro RAM. Tokens per second will be lower once you leave VRAM (estimate). We have not published a 35B tok/s.
+      verdict: One 32 GB card holds the daily-driver Q5 at 262K (tested, 0% offload). Flash Q6 (~169 GB publisher listing) is the size step that needs Pro RAM. Tokens per second will be lower once you leave VRAM (estimate). Measured on our rig, 2026-10 — UD-Q5_K_XL 100.8 / ~88 / ~50 tok/s.
       give_up: Versus Pro — a second R9700 and 128–256 GB DDR5, which is what lets the Flash Q6 file live mostly in RAM on our test rig. First-party Flash tok/s exists only there.
     speed:
-      verdict: This is the speed tier — Qwen3.6-35B-A3B Q5 on one R9700, no offload (tested on our rig). We have not published tokens per second for that Vulkan run. Flash on one card overflows; it is not a speed pick.
+      verdict: This is the speed tier — Qwen3.6-35B-A3B Q5 on one R9700, no offload (tested on our rig). Measured on our rig, 2026-10 — UD-Q5_K_XL 100.8 tok/s short, ~88 at 32K, ~50 at 256K. Flash on one card overflows; it is not a speed pick.
       give_up: Versus Pro — extra DRAM and a second card help the size path, not this one-card speed shape.
     fits:
       - model: Qwen3.6-35B-A3B
         quant: UD-Q5_K_XL
-        note: Daily driver on our rig — one R9700, 262144 context, f16 KV, 0% RAM offload. Exact flags / measured VRAM still TODO. No published tok/s for this run.
+        note: Daily driver on our rig — one R9700, 262144 context, f16 KV, 0% RAM offload. Measured on our rig, 2026-10 — UD-Q5_K_XL ~50 tok/s at 256K (100.8 short, ~88 at 32K). Exact flags / UD-Q5_K_XL VRAM still TODO.
         calculator: /calculator?gpu=r9700&vram=32&n=1&split=0&ram=64&model=qwen36&tp=35&ap=3&layers=40&kvl=10&kvh=2&hd=256&quant=q5_k_m&ctx=262144&kv=f16&oh=1
         tested: daily
         show: [size, speed]
@@ -156,15 +156,15 @@ tiers:
     give_up: Nothing on this page’s ladder. You still run one LLM per GPU unless you deliberately combine.
     tested_rig: true
     size:
-      verdict: Two cards + 256 GB DDR5 is the size ladder. Flash Q6 is the largest house file. First-party on our rig — Strata v0.1.42 ~32.6 tok/s vs llama.cpp ~16 for that Flash Q6. Still expect lower tok/s than a one-card 35B in VRAM (no 35B tok/s published).
+      verdict: Two cards + 256 GB DDR5 is the size ladder. Flash Q6 is the largest house file. First-party on our rig — Strata v0.1.42 ~32.6 tok/s vs llama.cpp ~16 for that Flash Q6. A one-card 35B in VRAM is faster (Measured on our rig, 2026-10 — UD-Q5_K_XL 100.8 / ~88 / ~50 tok/s).
       give_up: Nothing on this page’s ladder. You still run one LLM per GPU unless you deliberately combine.
     speed:
-      verdict: Daily driver still uses one of the two cards. Qwen3.6-35B-A3B Q5, 0% offload (tested on our rig). Do not split for speed. Flash is the size pick. We have not published tok/s for the 35B Vulkan run.
+      verdict: Daily driver still uses one of the two cards. Qwen3.6-35B-A3B Q5, 0% offload (tested on our rig). Do not split for speed. Flash is the size pick. Measured on our rig, 2026-10 — UD-Q5_K_XL 100.8 / ~88 / ~50 tok/s.
       give_up: Nothing on the speed ladder — this already matches the one-card daily driver. Flash Q6 is the size move.
     fits:
       - model: Qwen3.6-35B-A3B
         quant: UD-Q5_K_XL
-        note: Tested on our rig — one of the two cards, llama.cpp Vulkan, 262K, f16 KV, 0% offload. No published tok/s for this run.
+        note: Tested on our rig — one of the two cards, llama.cpp Vulkan, 262K, f16 KV, 0% offload. Measured on our rig, 2026-10 — UD-Q5_K_XL ~50 tok/s at 256K (100.8 short, ~88 at 32K).
         calculator: /calculator?gpu=r9700&vram=32&n=1&split=0&ram=256&model=qwen36&tp=35&ap=3&layers=40&kvl=10&kvh=2&hd=256&quant=q5_k_m&ctx=262144&kv=f16&oh=1
         tested: daily
         show: [size, speed]

@@ -25,10 +25,11 @@ const fitGpus = gpuProducts();
         <h1 class="display text-4xl sm:text-5xl">Quant + Hardware Calculator</h1>
         <p class="mt-4 text-lg leading-relaxed text-muted">
           Pick a Radeon, a Qwen (or custom params), a quant at Q4 or above, and a context length.
-          Every total is an <strong class="font-medium text-ink">estimate</strong> — publisher file listings when we have them, otherwise bits-per-weight math. Not measured VRAM from our rig.
+          Every total is an <strong class="font-medium text-ink">estimate</strong> — publisher file listings when we have them, otherwise bits-per-weight math. A matching tested badge shows first-party decode tok/s (and the one measured VRAM point: Q5_K_M 28.5 GB). Measured on our rig, 2026-10.
         </p>
       </div>
       <div class="flex flex-wrap gap-2">
+        <a class="btn-secondary" href="/stacks#benchmarks">35B benches</a>
         <a class="btn-secondary" href="/stacks">Recommended stacks</a>
         <a class="btn-secondary" href="/quants">Quant explainer</a>
         <a class="btn-secondary" href="/gpus">GPU directory</a>
@@ -39,7 +40,7 @@ const fitGpus = gpuProducts();
       <AskToggles defaultPriority={DEFAULT_PRIORITY} defaultUsage={DEFAULT_USAGE} defaultStyle={DEFAULT_STYLE} />
     </div>
 
-    <div id="tested-badge" hidden class="mt-6 inline-flex max-w-3xl items-start gap-2 rounded-full border border-ok/40 bg-ok/10 px-4 py-2 text-sm text-ok">
+    <div id="tested-badge" hidden class="mt-6 inline-flex max-w-3xl items-start gap-2 rounded-2xl border border-ok/40 bg-ok/10 px-4 py-2 text-sm text-ok">
       <span aria-hidden="true">●</span>
       <span data-tested-label></span>
     </div>

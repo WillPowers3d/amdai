@@ -64,8 +64,9 @@ const headings = [
     <li>
       <strong>This site’s daily driver.</strong> Qwen3.6-35B-A3B Unsloth UD-Q5_K_XL on
       <strong>one</strong> R9700, llama.cpp Vulkan, 262K context, f16 KV, 0% RAM offload. That is
-      first-party, from our test rig. Exact tok/s and measured VRAM stay TODO until the owner
-      fills them — we do not invent benches.
+      first-party, from our test rig. Measured on our rig, 2026-10 — UD-Q5_K_XL decode
+      <strong>100.8 tok/s</strong> short context, <strong>~88</strong> at 32K,
+      <strong>~50</strong> at 256K. UD-Q5_K_XL VRAM stays TODO.
     </li>
   </ul>
 
@@ -129,7 +130,7 @@ const headings = [
         <tr>
           <td>Daily driver · 35B Q5</td>
           <td>llama.cpp <strong>Vulkan</strong></td>
-          <td>What actually serves the 35B on one R9700 today.</td>
+          <td>What actually serves the 35B on one R9700 today. 100.8 / ~88 / ~50 tok/s (Measured on our rig, 2026-10).</td>
         </tr>
         <tr>
           <td>Fast agent · Flash Q6</td>

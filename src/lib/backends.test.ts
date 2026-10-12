@@ -52,15 +52,26 @@ describe('inference engine catalog', () => {
     }
   });
 
-  it('keeps the Flash figure first-party and does not invent 35B tok/s', () => {
+  it('keeps Flash and 35B figures first-party and labeled', () => {
     const strata = list.find((row) => row.id === 'strata')!;
+    const llama = list.find((row) => row.id === 'llamacpp')!;
     const blob = `${strata.choose} ${strata.well} ${strata.short}`;
     assert.match(blob, /32\.6/);
     assert.match(blob, /16/);
-    const joined = list.map((row) => `${row.what} ${row.run} ${row.choose}`).join('\n');
-    assert.doesNotMatch(joined, /100\.8/);
-    assert.doesNotMatch(joined, /108\.3/);
-    assert.doesNotMatch(joined, /116\.5/);
+    const llamaBlob = `${llama.moe} ${llama.choose} ${llama.context}`;
+    assert.match(llamaBlob, /100\.8/);
+    assert.match(llamaBlob, /108\.3/);
+    assert.match(llamaBlob, /116\.5/);
+    assert.match(llamaBlob, /1814/);
+    assert.match(llamaBlob, /28\.5 GB/);
+    assert.match(llamaBlob, /Measured on our rig, 2026-10/);
+    const others = list
+      .filter((row) => row.id !== 'llamacpp')
+      .map((row) => `${row.what} ${row.run} ${row.choose}`)
+      .join('\n');
+    assert.doesNotMatch(others, /100\.8/);
+    assert.doesNotMatch(others, /108\.3/);
+    assert.doesNotMatch(others, /116\.5/);
   });
 
   it('states the Q4 floor and keeps the flowchart on llama.cpp', () => {

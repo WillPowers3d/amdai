@@ -11,6 +11,7 @@ import {
   verdictLabel,
 } from '../../lib/backends';
 import { backends, backendsFile } from '../../lib/backends-data';
+import Qwen36Benches from '../../components/Qwen36Benches.astro';
 
 const list = backends();
 const onRig = usedOnOurRig(list);
@@ -87,11 +88,14 @@ const tone: Record<string, string> = {
       <code>curl</code> <code>/v1</code> before you attach <a href="/harnesses">Hermes</a>.
     </Callout>
 
+    <Qwen36Benches heading="35B on llama.cpp, measured" />
+
     <section class="mt-12" id="compare" aria-labelledby="table-heading">
       <h2 id="table-heading" class="text-2xl tracking-tight">Comparison</h2>
       <p class="mt-2 text-sm text-muted">
         Cells are paraphrases of cited docs plus this site’s house rules. “Not documented”
-        and TODO stay labeled. First-party speed is only the Flash Q6 pair.
+        and TODO stay labeled. First-party speed is the 35B llama.cpp set
+        (Measured on our rig, 2026-10) plus the Flash Q6 pair.
       </p>
       <div class="card mt-6 overflow-x-auto">
         <table class="table-lab min-w-[80rem]">

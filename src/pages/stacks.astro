@@ -2,6 +2,7 @@
 import Base from '../layouts/Base.astro';
 import HouseRules from '../components/HouseRules.astro';
 import BuyButtons from '../components/BuyButtons.astro';
+import Qwen36Benches from '../components/Qwen36Benches.astro';
 import { stacksGuide } from '../lib/status';
 ---
 
@@ -15,7 +16,9 @@ import { stacksGuide } from '../lib/status';
     <p class="mt-4 max-w-2xl text-lg leading-relaxed text-muted">
       {stacksGuide.test_rig.label}: {stacksGuide.test_rig.gpus}, {stacksGuide.test_rig.ram}.
       {stacksGuide.test_rig.note}
-      Command lines and measured VRAM stay marked TODO until the rig owner fills them. We do not invent flags.
+      Command lines and UD-Q5_K_XL VRAM stay marked TODO. Decode tok/s for the 35B is filled — see
+      <a class="underline decoration-accent/40" href="#benchmarks">the benchmarks</a>.
+      We do not invent flags.
     </p>
     <div class="mt-6 flex flex-wrap gap-3">
       <a class="btn-primary" href="/calculator">Quant + Hardware Calculator</a>
@@ -25,6 +28,8 @@ import { stacksGuide } from '../lib/status';
     </div>
 
     <HouseRules />
+
+    <Qwen36Benches />
 
     <ol class="mt-4 grid gap-5">
       {stacksGuide.stacks.map((stack) => (

@@ -57,9 +57,9 @@ A **harness** is the agent loop *above* the model. It does not replace ROCm.
 
 ## 5. Qwen
 
-Default: **Qwen3.6-35B-A3B** Unsloth **UD-Q5_K_XL** on **one** R9700, llama.cpp Vulkan, 262144 context, f16 KV, no RAM offload. Fast agents: **Qwen 3.8 Flash** UD-Q6_K_XL on Strata. Abliterated weights come after that pipe is boring.
+Default: **Qwen3.6-35B-A3B** Unsloth **UD-Q5_K_XL** on **one** R9700, llama.cpp Vulkan, 262144 context, f16 KV, no RAM offload. Measured on our rig, 2026-10: **100.8 tok/s** short context, **~88** at 32K, **~50** at 256K. Fast agents: **Qwen 3.8 Flash** UD-Q6_K_XL on Strata. Abliterated weights come after that pipe is boring.
 
-**TODO:** exact command line / measured VRAM from rig owner.
+**TODO:** exact command line / UD-Q5_K_XL VRAM from rig owner.
 
 <QwenPicks />
 

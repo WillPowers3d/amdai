@@ -19,7 +19,7 @@ You can. You should **not**, if you want Core SDK 10.0/10.1, `gfx1201`, or a cur
 Vulkan (llama.cpp, some UIs) is the honest path. Full ROCm userspace is a Linux product. Limited PyTorch-on-Windows exists; do not expect `rocm-smi` culture.
 
 **Which Qwen should I run first?**  
-**Qwen3.6-35B-A3B** Unsloth **UD-Q5_K_XL** on **one** R9700 via llama.cpp Vulkan, 262K context, f16 KV, no RAM offload. Fast agents: **Qwen 3.8 Flash** UD-Q6_K_XL on Strata v0.1.42. Cards: [stacks](/stacks). Fit check: [calculator](/calculator). [Abliterated](/abliterated) is educational only.
+**Qwen3.6-35B-A3B** Unsloth **UD-Q5_K_XL** on **one** R9700 via llama.cpp Vulkan, 262K context, f16 KV, no RAM offload. Measured on our rig, 2026-10: **100.8 tok/s** short, **~88** at 32K, **~50** at 256K. Fast agents: **Qwen 3.8 Flash** UD-Q6_K_XL on Strata v0.1.42. Cards: [stacks](/stacks#benchmarks). Fit check: [calculator](/calculator). [Abliterated](/abliterated) is educational only.
 
 **vLLM 0.27, 0.30, or 0.31?**  
 Consumers should not start here. **0.27 + PyTorch 2.13** is still AMD’s **10.0 supported combo**. Community / ROCm **0.31** is this week’s serve try (0.30 is the previous try-tag). Do not mix pins in one venv. Default PyPI vLLM is CUDA.

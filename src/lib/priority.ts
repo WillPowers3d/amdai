@@ -163,7 +163,13 @@ export function calculatorAdvice(input: CalcInput, result: CalcResult, priority:
       if (result.tested?.id === 'daily') {
         return {
           headline: 'Speed: in-VRAM MoE on one card (tested on our rig)',
-          body: 'Daily driver shape: Qwen3.6-35B-A3B Q5, one R9700, 0% RAM offload, 262K, f16 KV. We have not published tokens per second for that Vulkan run — do not treat this as a tok/s claim.',
+          body: 'Daily driver shape: Qwen3.6-35B-A3B Q5, one R9700, 0% RAM offload, f16 KV. Measured on our rig, 2026-10 — UD-Q5_K_XL decode 100.8 tok/s at short context, ~88 at 32K, ~50 at 256K. Q5_K_M sibling 108.3 tok/s (28.5 GB VRAM).',
+        };
+      }
+      if (result.tested?.id === 'q4') {
+        return {
+          headline: 'Speed: in-VRAM MoE on one card (tested on our rig)',
+          body: 'Q4_K_M on one R9700, llama.cpp, f16 KV. Measured on our rig, 2026-10 — 116.5 tok/s decode; 1814 tok/s prefill at 32K. Prefer Q5 when it fits.',
         };
       }
       return {
@@ -180,7 +186,7 @@ export function calculatorAdvice(input: CalcInput, result: CalcResult, priority:
   if (result.tested?.id === 'fast') {
     return {
       headline: 'Max size: Flash Q6 on the Pro RAM path (tested on our rig)',
-      body: 'Publisher file ~169 GB. First-party: Strata v0.1.42 ~32.6 tok/s vs llama.cpp ~16 on our rig for this Flash Q6. Tokens per second are still lower than a one-card 35B in VRAM — we have not published a 35B tok/s to compare.',
+      body: 'Publisher file ~169 GB. First-party: Strata v0.1.42 ~32.6 tok/s vs llama.cpp ~16 on our rig for this Flash Q6. A one-card 35B in VRAM is faster — Measured on our rig, 2026-10: UD-Q5_K_XL 100.8 tok/s short / ~88 at 32K / ~50 at 256K.',
     };
   }
   if (input.modelId !== 'flash' && input.ramGb >= 128) {
@@ -208,7 +214,7 @@ export function calculatorAdvice(input: CalcInput, result: CalcResult, priority:
   if (oneGpu && !input.split) {
     return {
       headline: 'Max size: one card is the speed shape',
-      body: 'More total VRAM (a second card, or a 32 GB card if you are below that) and 128–256 GB DDR5 is the size ladder. Tokens per second will be lower once you offload. First-party tok/s exists only for Flash Q6 on our Pro rig.',
+      body: 'More total VRAM (a second card, or a 32 GB card if you are below that) and 128–256 GB DDR5 is the size ladder. Tokens per second will be lower once you offload. First-party 35B tok/s (Measured on our rig, 2026-10) is the in-VRAM llama.cpp set; Flash Q6 on our Pro rig is ~32.6 vs ~16.',
       applyLabel: 'Apply size defaults (Flash Q6, 2× GPU split, ≥128 GB RAM)',
       apply: sizeDefaults(input),
     };

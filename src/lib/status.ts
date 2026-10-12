@@ -142,6 +142,24 @@ export type StackCard = {
   calculator: string;
 };
 
+export type Qwen36MeasuredRow = {
+  quant: string;
+  decode_short: string;
+  decode_32k: string;
+  decode_256k: string;
+  prefill_32k: string;
+  vram_gb: string;
+};
+
+export type Qwen36Measured = {
+  label: string;
+  engine: string;
+  gpu: string;
+  kv: string;
+  notes: string[];
+  rows: Qwen36MeasuredRow[];
+};
+
 export type StacksGuide = {
   as_of: string;
   test_rig: {
@@ -150,6 +168,7 @@ export type StacksGuide = {
     ram: string;
     note: string;
   };
+  qwen36_measured: Qwen36Measured;
   stacks: StackCard[];
 };
 

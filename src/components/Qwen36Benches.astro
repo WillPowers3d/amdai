@@ -1,0 +1,50 @@
+---
+import { stacksGuide } from '../lib/status';
+
+const benches = stacksGuide.qwen36_measured;
+
+type Props = {
+  heading?: string;
+};
+
+const { heading = '35B decode, measured' } = Astro.props;
+---
+
+<section id="benchmarks" class="mt-10" aria-labelledby="benches-heading">
+  <p class="kicker">{benches.label}</p>
+  <h2 id="benches-heading" class="mt-2 font-serif text-3xl">{heading}</h2>
+  <p class="mt-3 max-w-2xl text-muted">
+    Qwen3.6-35B-A3B on {benches.gpu}, {benches.engine}, {benches.kv} KV.
+    Cells that we still do not have stay <strong class="text-ink">not measured</strong>.
+    Units match the hardware labels (GB).
+  </p>
+  <div class="card mt-6 overflow-x-auto">
+    <table class="table-lab min-w-[40rem]">
+      <thead>
+        <tr>
+          <th>Quant</th>
+          <th>Decode · short</th>
+          <th>Decode · 32K</th>
+          <th>Decode · 256K</th>
+          <th>Prefill · 32K</th>
+          <th>VRAM</th>
+        </tr>
+      </thead>
+      <tbody>
+        {benches.rows.map((row) => (
+          <tr>
+            <td class="font-medium">{row.quant}</td>
+            <td>{row.decode_short}</td>
+            <td>{row.decode_32k}</td>
+            <td>{row.decode_256k}</td>
+            <td>{row.prefill_32k}</td>
+            <td>{row.vram_gb}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+  <ul class="mt-4 space-y-1.5 text-sm text-muted">
+    {benches.notes.map((note) => <li>{note}</li>)}
+  </ul>
+</section>

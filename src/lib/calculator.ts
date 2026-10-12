@@ -58,6 +58,12 @@ export type ModelPreset = {
   publisherFiles: Partial<Record<QuantId, { decimalGb: number; label: string }>>;
 };
 
+export const MEASURED_ON_OUR_RIG = 'Measured on our rig, 2026-10';
+
+export type TestedId = 'daily' | 'fast' | 'q4';
+
+export type TestedBadge = { id: TestedId; label: string };
+
 export type CalcInput = {
   gpuId: GpuId;
   vramGb: number;
@@ -95,7 +101,7 @@ export type CalcResult = {
   bestQuant: Quant | null;
   maxContextAtBest: number | null;
   maxContextAtSelected: number | null;
-  tested: { id: 'daily' | 'fast'; label: string } | null;
+  tested: TestedBadge | null;
 };
 
 /** llama.cpp-family nominal bits-per-weight. Q1–Q3 / IQ1–IQ3 are intentionally absent. */
@@ -335,15 +341,44 @@ export function maxContextThatFits(input: CalcInput, cap = 262144): number | nul
   return best;
 }
 
-export function testedBadge(input: CalcInput): { id: 'daily' | 'fast'; label: string } | null {
+export function testedBadge(input: CalcInput): TestedBadge | null {
   const r9700 = input.gpuId === 'r9700' && input.vramGb === 32;
-  if (!r9700 || input.context !== 262144 || input.kvId !== 'f16') return null;
-  if (input.modelId === 'qwen36' && input.quantId === 'q5_k_m' && input.gpuCount === 1 && !input.split) {
-    return { id: 'daily', label: 'Tested on our rig — daily driver (1× R9700, Vulkan llama.cpp, 262K, f16 KV)' };
+  if (!r9700 || input.kvId !== 'f16') return null;
+
+  if (input.modelId === 'flash' && input.quantId === 'q6_k' && input.context === 262144) {
+    return {
+      id: 'fast',
+      label: `${MEASURED_ON_OUR_RIG} — fast agent (Strata v0.1.42, 262K; ~32.6 tok/s vs llama.cpp ~16; VRAM not measured)`,
+    };
   }
-  if (input.modelId === 'flash' && input.quantId === 'q6_k') {
-    return { id: 'fast', label: 'Tested on our rig — fast agent (Strata v0.1.42, 262K; tok/s measured, VRAM not)' };
+
+  if (input.modelId !== 'qwen36' || input.gpuCount !== 1 || input.split) return null;
+
+  if (input.quantId === 'q5_k_m') {
+    let focus: string;
+    if (input.context === 262144) {
+      focus = 'UD-Q5_K_XL decode ~50 tok/s at 256K (also 100.8 at short context, ~88 at 32K)';
+    } else if (input.context === 32768) {
+      focus = 'UD-Q5_K_XL decode ~88 tok/s at 32K (also 100.8 at short context, ~50 at 256K)';
+    } else if (input.context <= 8192) {
+      focus = 'UD-Q5_K_XL decode 100.8 tok/s at short context (also ~88 at 32K, ~50 at 256K)';
+    } else {
+      focus =
+        'UD-Q5_K_XL decode 100.8 tok/s short / ~88 at 32K / ~50 at 256K (this exact context was not a bench point)';
+    }
+    return {
+      id: 'daily',
+      label: `${MEASURED_ON_OUR_RIG} — ${focus}. Q5_K_M sibling 108.3 tok/s (28.5 GB VRAM). One R9700, llama.cpp, f16 KV.`,
+    };
   }
+
+  if (input.quantId === 'q4_k_m') {
+    return {
+      id: 'q4',
+      label: `${MEASURED_ON_OUR_RIG} — Q4_K_M decode 116.5 tok/s; prefill 1814 tok/s at 32K. One R9700, llama.cpp, f16 KV.`,
+    };
+  }
+
   return null;
 }
 

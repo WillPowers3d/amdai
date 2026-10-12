@@ -14,10 +14,10 @@ Audience: home-lab and enthusiast users. Not enterprise Instinct marketing.
 
 | Role | Model | Quant | Engine | Notes |
 | --- | --- | --- | --- | --- |
-| Daily driver | Qwen3.6-35B-A3B | Unsloth UD-Q5_K_XL | llama.cpp Vulkan | One R9700, 262K, f16 KV, 0% RAM offload |
-| Fast agent | Qwen 3.8 Flash | Unsloth UD-Q6_K_XL | Strata v0.1.42 | ~32.6 tok/s vs llama.cpp ~16 on our rig |
+| Daily driver | Qwen3.6-35B-A3B | Unsloth UD-Q5_K_XL | llama.cpp Vulkan | One R9700, 262K, f16 KV, 0% RAM offload. Measured on our rig, 2026-10: 100.8 tok/s short / ~88 at 32K / ~50 at 256K |
+| Fast agent | Qwen 3.8 Flash | Unsloth UD-Q6_K_XL | Strata v0.1.42 | ~32.6 tok/s vs llama.cpp ~16 — Measured on our rig, 2026-10 |
 
-Exact command lines and measured VRAM stay `<!-- TODO: exact command line / measured VRAM from rig owner -->` until they are filled. Do not invent them.
+Exact command lines and UD-Q5_K_XL VRAM stay `<!-- TODO: exact command line / measured VRAM from rig owner -->` until they are filled. Do not invent them. Sibling 35B points: Q5_K_M 108.3 tok/s (28.5 GB VRAM); Q4_K_M 116.5 tok/s decode, 1814 tok/s prefill at 32K.
 
 House rules: prefer llama.cpp over vLLM; prefer Q5 over Q4; never below Q4; fast NVMe only; one LLM per GPU unless you deliberately combine.
 
