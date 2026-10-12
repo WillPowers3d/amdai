@@ -6,13 +6,18 @@ import { publicOrigin } from './config';
 const COOKIE = 'lab_session';
 const WEEK = 7 * 24 * 60 * 60 * 1000;
 
+import type { ForumRole } from '../lib/forum-perms';
+
 export type SessionUser = {
   id: string;
   email: string;
   name: string | null;
   notifyInstant: boolean;
   notifyWeekly: boolean;
+  notifyReplies: boolean;
   unsubToken: string;
+  role: ForumRole;
+  createdAt: number;
 };
 
 type SessionRow = { user_id: string; expires_at: number };
@@ -22,7 +27,10 @@ type UserRow = {
   name: string | null;
   notify_instant: number;
   notify_weekly: number;
+  notify_replies: number;
   unsub_token: string;
+  role: ForumRole;
+  created_at: number;
 };
 
 export async function createSession(userId: string, cookies: APIContext['cookies']): Promise<void> {
@@ -54,7 +62,7 @@ export async function getSessionUser(cookies: APIContext['cookies']): Promise<Se
   const session = sqlGet<SessionRow>('SELECT user_id, expires_at FROM sessions WHERE token_hash = ?', [sha256(token)]);
   if (!session || session.expires_at < Date.now()) return null;
   const user = sqlGet<UserRow>(
-    'SELECT id, email, name, notify_instant, notify_weekly, unsub_token FROM users WHERE id = ?',
+    'SELECT id, email, name, notify_instant, notify_weekly, notify_replies, unsub_token, role, created_at FROM users WHERE id = ?',
     [session.user_id],
   );
   if (!user) return null;
@@ -64,6 +72,9 @@ export async function getSessionUser(cookies: APIContext['cookies']): Promise<Se
     name: user.name,
     notifyInstant: Boolean(user.notify_instant),
     notifyWeekly: Boolean(user.notify_weekly),
+    notifyReplies: Boolean(user.notify_replies),
     unsubToken: user.unsub_token,
+    role: user.role || 'user',
+    createdAt: user.created_at,
   };
 }

@@ -1,0 +1,61 @@
+---
+import Base from '../../layouts/Base.astro';
+---
+
+<Base
+  title="Forum rules"
+  description="Code of conduct for the amdai Radeon / ROCm forum — be precise, cite, no spam."
+>
+  <main id="main" class="mx-auto max-w-3xl px-4 py-10 sm:px-6">
+    <p class="kicker">Community</p>
+    <h1 class="display mt-3 text-4xl sm:text-5xl">Code of conduct</h1>
+    <p class="mt-4 text-lg leading-relaxed text-muted">
+      This is a troubleshooting room for home-lab AMD GPUs, not a dump. The forum may be off on the
+      static public build; these rules still apply when it is on.
+    </p>
+
+    <article class="prose-lab prose mt-10 max-w-none">
+      <h2>Be useful</h2>
+      <ul>
+        <li>Say the GPU, gfx ID, ROCm version, backend, OS, and the exact command. Attach a saved rig when you have one.</li>
+        <li>Paste errors, do not paraphrase them. Link the <a href="/troubleshoot/errors">troubleshooter</a> pattern if it matched.</li>
+        <li>Mark the thread <strong>Solved</strong> when an answer worked. Future readers will thank you.</li>
+        <li>Do not invent tok/s, VRAM, or AMD support. If you did not measure it, say so.</li>
+      </ul>
+
+      <h2>Be decent</h2>
+      <ul>
+        <li>No harassment, slurs, or dogpiling. Argue the log, not the person.</li>
+        <li>Abliterated models stay educational. Do not treat them as the default stack.</li>
+        <li>No malware, credential phishing, or “free CUDA keygen” junk. Those posts are hidden and the account may be locked out.</li>
+        <li>Do not post other people’s private logs with serials, emails, or IPs if you can strip them.</li>
+      </ul>
+
+      <h2>Spam and new accounts</h2>
+      <ul>
+        <li>New accounts wait 10 minutes, then 3 threads / 10 replies in the first day.</li>
+        <li>Accounts younger than 7 days may include at most two links.</li>
+        <li>A hidden website field is a honeypot. Bots that fill it do not get a thread.</li>
+        <li>Rate limits apply to posts, replies, votes, and reports.</li>
+      </ul>
+
+      <h2>Moderation</h2>
+      <p>
+        Admins are the addresses in <code>ADMIN_EMAILS</code>. Mods can hide, lock, pin, and move
+        threads, and they write an audit log. Use Report on a post if something breaks the rules.
+        We would rather hide one post than delete history when the content is merely wrong.
+      </p>
+
+      <h2>Accounts and mail</h2>
+      <p>
+        The forum uses the same login as saved rigs. Reply mail is <strong>opt-in</strong> on
+        <a href="/account">your account</a>. Reading threads does not require JavaScript.
+        See <a href="/privacy">privacy</a>.
+      </p>
+    </article>
+
+    <p class="mt-10 text-sm">
+      <a class="btn-secondary" href="/forum">Back to the forum</a>
+    </p>
+  </main>
+</Base>

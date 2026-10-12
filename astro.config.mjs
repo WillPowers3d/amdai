@@ -7,8 +7,8 @@ import node from '@astrojs/node';
 
 const accountsOn = process.env.ACCOUNTS_ENABLED === '1' || process.env.ACCOUNTS_ENABLED === 'true';
 const forumOn = process.env.FORUM_ENABLED === '1' || process.env.FORUM_ENABLED === 'true';
-if (forumOn) {
-  throw new Error('FORUM_ENABLED is not implemented yet. It will require ACCOUNTS_ENABLED.');
+if (forumOn && !accountsOn) {
+  throw new Error('FORUM_ENABLED requires ACCOUNTS_ENABLED=1 (same SQLite, same session).');
 }
 
 export default defineConfig({

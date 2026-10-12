@@ -1,0 +1,179 @@
+---
+import Base from '../../../layouts/Base.astro';
+import RigBadge from '../../../components/forum/RigBadge.astro';
+import { forumCategories, threadPath } from '../../../lib/forum-categories';
+import { forumEnabled } from '../../../lib/flags';
+import { forumHtml } from '../../../lib/forum-sanitize';
+import { canEdit, canModerate, canSolve, canVote, forumErrorCopy } from '../../../lib/forum-perms';
+import type { RigSnapshot } from '../../../lib/forum-types';
+
+export const prerender = !forumEnabled();
+
+export function getStaticPaths() {
+  return [];
+}
+
+const on = forumEnabled();
+if (!on) {
+  return Astro.redirect('/forum');
+}
+
+const { getSessionUser } = await import('../../../server/session');
+const { ensureCsrf } = await import('../../../server/csrf');
+const {
+  asActor,
+  displayName,
+  getThreadBySlug,
+  listPosts,
+  parseRigSnapshot,
+} = await import('../../../server/forum');
+
+const session = await getSessionUser(Astro.cookies);
+const actor = session ? asActor(session) : null;
+const thread = getThreadBySlug(Astro.params.slug ?? '');
+if (!thread || (thread.hidden && !canModerate(actor))) {
+  return new Response('Not found', { status: 404 });
+}
+const posts = listPosts(thread.id, actor);
+const csrf = ensureCsrf(Astro.cookies);
+const rig = parseRigSnapshot(thread.rig_snapshot) as RigSnapshot | null;
+const err = forumErrorCopy(Astro.url.searchParams.get('error'));
+const reported = Astro.url.searchParams.has('reported');
+---
+
+<Base title={thread.title} description={`Forum thread in ${thread.category}: ${thread.title}`}>
+  <main id="main" class="mx-auto max-w-3xl px-4 py-10 sm:px-6">
+    <p class="text-sm text-faint">
+      <a href="/forum">Forum</a>
+      {' / '}
+      <a href={`/forum/c/${thread.category}`}>{forumCategories.find((c) => c.slug === thread.category)?.title ?? thread.category}</a>
+    </p>
+    <h1 class="display mt-3 text-4xl sm:text-5xl">{thread.title}</h1>
+    <p class="mt-3 flex flex-wrap gap-2 text-sm">
+      {thread.pinned ? <span class="badge">Pinned</span> : null}
+      {thread.solved ? <span class="badge-tested">Solved</span> : null}
+      {thread.locked ? <span class="badge">Locked</span> : null}
+      {thread.hidden ? <span class="badge">Hidden</span> : null}
+    </p>
+    {err && <p class="mt-4 text-sm text-warn">{err}</p>}
+    {reported && <p class="mt-4 text-sm text-ok">Report received. Mods will see it.</p>}
+
+    {canSolve(actor, { authorId: thread.author_id }) && (
+      <form class="mt-5" method="post" action="/api/forum/solved">
+        <input type="hidden" name="_csrf" value={csrf} />
+        <input type="hidden" name="thread_id" value={thread.id} />
+        <input type="hidden" name="solved" value={thread.solved ? '0' : '1'} />
+        <button class="btn-secondary" type="submit">{thread.solved ? 'Reopen' : 'Mark solved'}</button>
+      </form>
+    )}
+
+    {canModerate(actor) && (
+      <form class="mt-4 flex flex-wrap gap-2 text-sm" method="post" action="/api/forum/mod">
+        <input type="hidden" name="_csrf" value={csrf} />
+        <input type="hidden" name="thread_id" value={thread.id} />
+        <button class="rounded-full border border-line px-3 py-1" name="action" value={thread.hidden ? 'unhide' : 'hide'} type="submit">{thread.hidden ? 'Unhide' : 'Hide'}</button>
+        <button class="rounded-full border border-line px-3 py-1" name="action" value={thread.locked ? 'unlock' : 'lock'} type="submit">{thread.locked ? 'Unlock' : 'Lock'}</button>
+        <button class="rounded-full border border-line px-3 py-1" name="action" value={thread.pinned ? 'unpin' : 'pin'} type="submit">{thread.pinned ? 'Unpin' : 'Pin'}</button>
+        <label class="flex items-center gap-2">
+          Move
+          <select class="rounded-lg border border-line bg-raised px-2 py-1" name="category">
+            {forumCategories.map((cat) => (
+              <option value={cat.slug} selected={cat.slug === thread.category}>{cat.title}</option>
+            ))}
+          </select>
+        </label>
+        <button class="rounded-full border border-line px-3 py-1" name="action" value="move" type="submit">Move</button>
+      </form>
+    )}
+
+    <ol class="mt-10 space-y-8">
+      {posts.map((post) => {
+        const author = displayName(post.author_name, post.author_email);
+        const mine = actor ? canEdit(actor, { authorId: post.author_id, hidden: Boolean(post.hidden) }, { locked: Boolean(thread.locked) }) : false;
+        const votable = canVote(actor, { authorId: post.author_id });
+        return (
+          <li id={post.id} class="scroll-mt-28 border-t border-line pt-6">
+            <p class="text-sm text-faint">
+              <strong class="text-ink">{author}</strong>
+              {post.is_op ? ' · original' : ''}
+              {post.hidden ? ' · hidden' : ''}
+              {' · '}
+              {new Date(post.created_at).toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+              {post.updated_at !== post.created_at ? ' · edited' : ''}
+            </p>
+            {post.is_op && rig && <RigBadge rig={rig} />}
+            <div class="prose-lab prose mt-4 max-w-none" set:html={forumHtml(post.body)} />
+            <p class="mt-4 flex flex-wrap items-center gap-3 text-sm">
+              <span class="text-faint">{post.votes ?? 0} vote{(post.votes ?? 0) === 1 ? '' : 's'}</span>
+              {votable && (
+                <form method="post" action="/api/forum/vote">
+                  <input type="hidden" name="_csrf" value={csrf} />
+                  <input type="hidden" name="post_id" value={post.id} />
+                  <button class="underline decoration-accent/40 underline-offset-2" type="submit">Upvote</button>
+                </form>
+              )}
+              {session && (
+                <details>
+                  <summary class="cursor-pointer text-faint">Report</summary>
+                  <form class="mt-2 space-y-2" method="post" action="/api/forum/report">
+                    <input type="hidden" name="_csrf" value={csrf} />
+                    <input type="hidden" name="post_id" value={post.id} />
+                    <input class="w-full rounded-lg border border-line bg-raised px-2 py-1" name="reason" required minlength="4" placeholder="Why?" />
+                    <button class="text-sm underline" type="submit">Send report</button>
+                  </form>
+                </details>
+              )}
+              {canModerate(actor) && (
+                <form method="post" action="/api/forum/mod">
+                  <input type="hidden" name="_csrf" value={csrf} />
+                  <input type="hidden" name="post_id" value={post.id} />
+                  <input type="hidden" name="action" value={post.hidden ? 'unhide' : 'hide'} />
+                  <button class="text-sm underline" type="submit">{post.hidden ? 'Unhide post' : 'Hide post'}</button>
+                </form>
+              )}
+            </p>
+            {mine && (
+              <details class="mt-4">
+                <summary class="cursor-pointer text-sm">Edit</summary>
+                <form class="mt-3" method="post" action="/api/forum/edit">
+                  <input type="hidden" name="_csrf" value={csrf} />
+                  <input type="hidden" name="post_id" value={post.id} />
+                  <textarea class="min-h-32 w-full rounded-xl border border-line bg-raised p-3 font-mono text-sm" name="body" required minlength="8">{post.body}</textarea>
+                  <button class="btn-secondary mt-2" type="submit">Save edit</button>
+                </form>
+              </details>
+            )}
+          </li>
+        );
+      })}
+    </ol>
+
+    <section class="mt-12 border-t border-line pt-8">
+      <h2 class="text-2xl tracking-tight">Reply</h2>
+      {thread.locked && !canModerate(actor) ? (
+        <p class="mt-3 text-muted">Locked. Replies are closed.</p>
+      ) : session ? (
+        <form class="mt-4 space-y-3" method="post" action="/api/forum/reply">
+          <input type="hidden" name="_csrf" value={csrf} />
+          <input type="hidden" name="thread_id" value={thread.id} />
+          <label class="hp" aria-hidden="true">Leave blank<input type="text" name="website" tabindex="-1" autocomplete="off" /></label>
+          <textarea class="min-h-36 w-full rounded-xl border border-line bg-raised p-3 font-mono text-sm" name="body" required minlength="8" placeholder="Markdown. Code fences welcome."></textarea>
+          <button class="btn-primary" type="submit">Post reply</button>
+        </form>
+      ) : (
+        <p class="mt-3 text-muted">
+          <a class="underline decoration-accent/40" href={`/login?next=${encodeURIComponent(threadPath(thread.slug))}`}>Sign in</a> to reply.
+        </p>
+      )}
+    </section>
+  </main>
+</Base>
+
+<style>
+  .hp {
+    position: absolute;
+    left: -9999px;
+    height: 0;
+    overflow: hidden;
+  }
+</style>

@@ -19,6 +19,11 @@ export function getSqlite(): DatabaseSync {
   sqlite.exec('PRAGMA journal_mode = WAL;');
   sqlite.exec('PRAGMA foreign_keys = ON;');
   sqlite.exec(readFileSync(new URL('./migrations/0001_init.sql', import.meta.url), 'utf8'));
+  const cols = sqlite.prepare('PRAGMA table_info(users)').all() as { name: string }[];
+  const names = new Set(cols.map((col) => col.name));
+  if (!names.has('role')) sqlite.exec("ALTER TABLE users ADD COLUMN role TEXT NOT NULL DEFAULT 'user'");
+  if (!names.has('notify_replies')) sqlite.exec('ALTER TABLE users ADD COLUMN notify_replies INTEGER NOT NULL DEFAULT 0');
+  sqlite.exec(readFileSync(new URL('./migrations/0002_forum.sql', import.meta.url), 'utf8'));
   return sqlite;
 }
 

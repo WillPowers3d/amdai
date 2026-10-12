@@ -3,6 +3,7 @@ import Base from '../layouts/Base.astro';
 import { accountsEnabled } from '../lib/flags';
 
 const on = accountsEnabled();
+const next = Astro.url.searchParams.get('next') ?? '';
 ---
 
 <Base title="Sign in" description="Optional login for saved rigs and stack-update alerts.">
@@ -22,7 +23,7 @@ const on = accountsEnabled();
             <p class="text-sm text-ok" data-status hidden></p>
           </form>
           <p class="text-sm">
-            <a class="underline decoration-accent/40 underline-offset-2" href="/api/auth/github/start">Continue with GitHub</a>
+            <a class="underline decoration-accent/40 underline-offset-2" href={`/api/auth/github/start${next ? `?next=${encodeURIComponent(next)}` : ''}`}>Continue with GitHub</a>
           </p>
         </div>
       ) : (
@@ -43,10 +44,11 @@ const on = accountsEnabled();
         event.preventDefault();
         const csrf = await fetch('/api/csrf').then((r) => r.json());
         const email = new FormData(form).get('email');
+        const next = new URLSearchParams(location.search).get('next');
         const res = await fetch('/api/auth/magic', {
           method: 'POST',
           headers: { 'content-type': 'application/json', 'x-csrf-token': csrf.csrf },
-          body: JSON.stringify({ email }),
+          body: JSON.stringify({ email, next }),
         });
         const status = document.querySelector('[data-status]');
         if (status) {

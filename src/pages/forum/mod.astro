@@ -1,0 +1,73 @@
+---
+import Base from '../../layouts/Base.astro';
+import ForumOff from '../../components/forum/ForumOff.astro';
+import { forumEnabled } from '../../lib/flags';
+import { isMod } from '../../lib/forum-perms';
+
+const on = forumEnabled();
+export const prerender = !forumEnabled();
+
+let allowed = false;
+let reports: Array<{ id: string; reason: string; created_at: number; title: string; slug: string; body: string }> = [];
+let audit: Array<{ id: string; actor_id: string; action: string; target_type: string; target_id: string; created_at: number }> = [];
+let csrf = '';
+
+if (on) {
+  const { getSessionUser } = await import('../../server/session');
+  const { ensureCsrf } = await import('../../server/csrf');
+  const { asActor, listAudit, listReports } = await import('../../server/forum');
+  const session = await getSessionUser(Astro.cookies);
+  allowed = isMod(session ? asActor(session) : null);
+  csrf = ensureCsrf(Astro.cookies);
+  if (allowed) {
+    reports = listReports();
+    audit = listAudit();
+  }
+}
+---
+
+<Base title="Forum moderation" description="Reports and audit log. Mods and admins only.">
+  <main id="main" class="mx-auto max-w-3xl px-4 py-10 sm:px-6">
+    {!on ? (
+      <ForumOff title="Moderation" />
+    ) : !allowed ? (
+      <>
+        <h1 class="display text-4xl">Moderation</h1>
+        <p class="mt-4 text-muted">Admins are set with <code>ADMIN_EMAILS</code>. You are not on the list.</p>
+      </>
+    ) : (
+      <>
+        <p class="text-sm text-faint"><a href="/forum">Forum</a> / Moderation</p>
+        <h1 class="display mt-3 text-4xl">Moderation</h1>
+        <h2 class="mt-8 text-2xl">Open reports</h2>
+        {reports.length === 0 ? <p class="mt-3 text-muted">Queue is empty.</p> : (
+          <ul class="mt-4 space-y-4">
+            {reports.map((row) => (
+              <li class="card p-4">
+                <p class="text-sm text-faint">{new Date(row.created_at).toLocaleString()}</p>
+                <p class="mt-1 font-medium"><a href={`/forum/t/${row.slug}`}>{row.title}</a></p>
+                <p class="mt-2 text-sm text-muted">{row.reason}</p>
+                <p class="mt-2 font-mono text-xs text-faint">{row.body.slice(0, 240)}</p>
+                <form class="mt-3" method="post" action="/api/forum/mod">
+                  <input type="hidden" name="_csrf" value={csrf} />
+                  <input type="hidden" name="report_id" value={row.id} />
+                  <button class="text-sm underline" type="submit">Close report</button>
+                </form>
+              </li>
+            ))}
+          </ul>
+        )}
+        <h2 class="mt-10 text-2xl">Audit log</h2>
+        <ol class="mt-4 space-y-2 text-sm text-muted">
+          {audit.map((row) => (
+            <li>
+              <span class="font-mono text-xs">{new Date(row.created_at).toISOString()}</span>
+              {' · '}
+              {row.action} {row.target_type} {row.target_id.slice(0, 12)}
+            </li>
+          ))}
+        </ol>
+      </>
+    )}
+  </main>
+</Base>

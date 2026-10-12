@@ -15,7 +15,14 @@ export const GET: APIRoute = async ({ cookies }) => {
   const rows = await listRigs(user.id);
   const catalog = stackUpdates();
   return Response.json({
-    user: { email: user.email, name: user.name, notifyInstant: user.notifyInstant, notifyWeekly: user.notifyWeekly },
+    user: {
+      email: user.email,
+      name: user.name,
+      notifyInstant: user.notifyInstant,
+      notifyWeekly: user.notifyWeekly,
+      notifyReplies: user.notifyReplies,
+      role: user.role,
+    },
     rigs: rows.map((row) => ({
       ...toPublic(row),
       updates: updatesForRig(toMatch(row), catalog),

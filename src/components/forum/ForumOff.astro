@@ -1,0 +1,22 @@
+---
+interface Props {
+  title?: string;
+}
+
+const { title = 'Forum' } = Astro.props;
+---
+
+<p class="kicker">Community</p>
+<h1 class="display mt-3 text-4xl sm:text-5xl">{title}</h1>
+<p class="mt-4 text-lg leading-relaxed text-muted">
+  Threads, solved marks, and rig badges ship behind <code class="font-mono text-ink">FORUM_ENABLED=1</code>,
+  which also needs <code class="font-mono text-ink">ACCOUNTS_ENABLED=1</code>. This public build stays static so a
+  crawler never hits a database.
+</p>
+<p class="mt-4 text-sm">
+  <a class="underline decoration-accent/40 underline-offset-2" href="/forum/rules">Code of conduct</a>
+  ·
+  <a class="underline decoration-accent/40 underline-offset-2" href="/account">Saved rigs first</a>
+  ·
+  <a class="underline decoration-accent/40 underline-offset-2" href="/troubleshoot/errors">Paste an error</a>
+</p>

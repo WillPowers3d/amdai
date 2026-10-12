@@ -30,7 +30,8 @@ export const GET: APIRoute = async ({ url, cookies, redirect }) => {
   const email = emails.find((e) => e.primary && e.verified)?.email || emails.find((e) => e.verified)?.email;
   if (!email) return redirect('/login?error=github_email');
   const user = await findOrCreateUser(email, { name: profile.name || profile.login, githubId: String(profile.id) });
+  const { takeNext } = await import('../../../../server/next-path');
   await createSession(user.id, cookies);
   cookies.delete('lab_oauth', { path: '/' });
-  return redirect('/account');
+  return redirect(takeNext(cookies));
 };

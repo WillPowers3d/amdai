@@ -99,7 +99,7 @@ export const primaryNav: NavItem[] = [
   { href: '/updates', label: 'Updates', description: 'RSS + ROCm × llama.cpp × vLLM 0.31 matrix', group: 'practice' },
   { href: '/faq', label: 'FAQ', description: 'Short answers for a first home box', group: 'practice' },
   { href: '/blog', label: 'Blog', description: 'Longer posts and ROCm version notes', group: 'practice' },
-  { href: '/forum', label: 'Forum', description: 'Community threads — off until FORUM_ENABLED', group: 'practice' },
+  { href: '/forum', label: 'Forum', description: 'Threads, rig badges, solved marks — off unless FORUM_ENABLED', group: 'practice' },
   { href: '/account', label: 'Account', description: 'Optional saved rigs and stack-update alerts', group: 'practice' },
   { href: '/privacy', label: 'Privacy', description: 'What optional accounts store', group: 'practice' },
   { href: '/disclosure', label: 'Disclosure', description: 'Amazon Associates, Rakuten, B&H — and what is not affiliate', group: 'practice' },

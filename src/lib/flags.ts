@@ -8,6 +8,11 @@ export function accountsEnabled(): boolean {
   return flagOn(process.env.ACCOUNTS_ENABLED);
 }
 
-export function forumEnabled(): boolean {
+export function forumRequested(): boolean {
   return flagOn(process.env.FORUM_ENABLED);
+}
+
+/** Forum needs accounts (same SQLite, same session). Off unless both flags are on. */
+export function forumEnabled(): boolean {
+  return forumRequested() && accountsEnabled();
 }

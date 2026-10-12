@@ -72,6 +72,7 @@ const on = accountsEnabled();
           <form id="prefs" class="mt-4 flex flex-wrap gap-4 text-sm">
             <label><input type="checkbox" name="instant" ${data.user.notifyInstant ? 'checked' : ''}/> Instant email</label>
             <label><input type="checkbox" name="weekly" ${data.user.notifyWeekly ? 'checked' : ''}/> Weekly digest</label>
+            <label><input type="checkbox" name="replies" ${data.user.notifyReplies ? 'checked' : ''}/> Forum reply email</label>
             <button class="rounded-full border border-line px-3 py-1" type="submit">Save alerts</button>
           </form>
           <h2 class="mt-8 font-serif text-3xl">Updates for your rig</h2>
@@ -97,6 +98,7 @@ const on = accountsEnabled();
             body: JSON.stringify({
               instant: form.instant.checked,
               weekly: form.weekly.checked,
+              replies: form.replies.checked,
             }),
           });
         });

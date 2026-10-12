@@ -1,6 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
-import { errorPatterns, errorsFile } from '../../lib/errors';
+import { errorPatterns, errorsFile, forumAskPath, forumSearchPath } from '../../lib/errors';
 
 const json = JSON.stringify(
   errorPatterns.map((row) => ({
@@ -12,6 +12,7 @@ const json = JSON.stringify(
     source: row.source,
     source_label: row.source_label,
     tags: row.tags,
+    ask: forumAskPath(row),
   })),
 );
 ---
@@ -56,6 +57,10 @@ const json = JSON.stringify(
               ) : (
                 <a class="text-accent-ink underline decoration-accent/40 underline-offset-2" href={row.source || '/calculator'}>{row.source_label}</a>
               )}
+              {' · '}
+              <a class="text-accent-ink underline decoration-accent/40 underline-offset-2" href={forumSearchPath(row)}>Matching threads</a>
+              {' · '}
+              <a class="text-accent-ink underline decoration-accent/40 underline-offset-2" data-forum-ask={row.id} href={forumAskPath(row)}>Ask the forum</a>
             </p>
           </li>
         ))}
@@ -65,6 +70,7 @@ const json = JSON.stringify(
     <p class="mt-10 text-sm text-muted">
       Broader order-of-operations: <a class="underline decoration-accent/40 underline-offset-2" href="/troubleshooting">Troubleshooting</a>.
       Backend pick: <a class="underline decoration-accent/40 underline-offset-2" href="/backends">chooser</a>.
+      Community: <a class="underline decoration-accent/40 underline-offset-2" href="/forum">forum</a>.
     </p>
   </main>
 </Base>
@@ -114,9 +120,19 @@ const json = JSON.stringify(
     status.textContent = `${found.length} match${found.length === 1 ? '' : 'es'}.`;
     for (const row of found) {
       const li = document.createElement('li');
-      li.innerHTML = `<a class="text-sm text-accent-ink underline decoration-accent/40 underline-offset-2" href="#${row.pattern.id}">${row.pattern.title}</a> <span class="text-faint">· hit ${row.hits.slice(0, 2).join(', ')}</span>`;
+      const ask = new URL(row.pattern.ask, location.origin);
+      if (query.trim()) ask.searchParams.set('body', query.trim().slice(0, 3500));
+      li.innerHTML = `<a class="text-sm text-accent-ink underline decoration-accent/40 underline-offset-2" href="#${row.pattern.id}">${row.pattern.title}</a> <span class="text-faint">· hit ${row.hits.slice(0, 2).join(', ')}</span> · <a class="text-sm underline" href="${ask.pathname + ask.search}">Ask the forum</a>`;
       hitsEl.appendChild(li);
     }
+    document.querySelectorAll('[data-forum-ask]').forEach((link) => {
+      const id = link.getAttribute('data-forum-ask');
+      const pattern = patterns.find((row) => row.id === id);
+      if (!pattern) return;
+      const ask = new URL(pattern.ask, location.origin);
+      if (query.trim()) ask.searchParams.set('body', query.trim().slice(0, 3500));
+      link.setAttribute('href', ask.pathname + ask.search);
+    });
   }
 
   document.getElementById('error-run')?.addEventListener('click', render);

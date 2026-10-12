@@ -18,7 +18,8 @@ export const GET: APIRoute = async ({ url, cookies, redirect }) => {
   );
   if (!row || row.expires_at < Date.now()) return redirect('/login?error=expired');
   sqlRun('DELETE FROM magic_links WHERE id = ?', [row.id]);
+  const { takeNext } = await import('../../../server/next-path');
   const user = await findOrCreateUser(row.email);
   await createSession(user.id, cookies);
-  return redirect('/account');
+  return redirect(takeNext(cookies));
 };

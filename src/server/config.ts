@@ -1,9 +1,24 @@
-import { accountsEnabled } from '../lib/flags';
+import { accountsEnabled, forumEnabled } from '../lib/flags';
+import { parseAdminEmails } from '../lib/forum-perms';
 
 export function requireAccounts(): void {
   if (!accountsEnabled()) {
     throw new Error('Accounts are disabled. Set ACCOUNTS_ENABLED=1.');
   }
+}
+
+export function requireForum(): void {
+  if (!forumEnabled()) {
+    throw new Error('Forum is disabled. Set FORUM_ENABLED=1 and ACCOUNTS_ENABLED=1.');
+  }
+}
+
+export function adminEmails(): string[] {
+  return parseAdminEmails(process.env.ADMIN_EMAILS);
+}
+
+export function modEmails(): string[] {
+  return parseAdminEmails(process.env.MOD_EMAILS);
 }
 
 export function authSecret(): string {

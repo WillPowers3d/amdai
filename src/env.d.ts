@@ -10,6 +10,8 @@ interface ImportMetaEnv {
   readonly AFFILIATE_CLICK_BEACON?: string;
   readonly ACCOUNTS_ENABLED?: string;
   readonly FORUM_ENABLED?: string;
+  readonly ADMIN_EMAILS?: string;
+  readonly MOD_EMAILS?: string;
   readonly SITE_URL?: string;
   readonly AUTH_SECRET?: string;
   readonly AUTH_URL?: string;

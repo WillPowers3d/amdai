@@ -1,0 +1,32 @@
+---
+import type { RigSnapshot } from '../../lib/forum-types';
+
+interface Props {
+  rig: RigSnapshot;
+}
+
+const { rig } = Astro.props;
+const bits = [rig.gpu, rig.gfx, rig.rocmVersion && `ROCm ${rig.rocmVersion}`, [rig.backend, rig.backendVersion].filter(Boolean).join(' '), rig.distro || rig.os].filter(Boolean);
+---
+
+<p class="rig-badge" title={rig.name ?? 'Saved rig'}>
+  <span class="kicker">Rig</span>
+  {bits.join(' · ')}
+</p>
+
+<style>
+  .rig-badge {
+    display: inline-block;
+    margin: 0.6rem 0 0;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--accent-soft);
+    color: var(--accent-ink);
+    font-size: 0.8rem;
+    padding: 0.25rem 0.7rem;
+  }
+  .rig-badge .kicker {
+    display: inline;
+    margin-right: 0.4rem;
+  }
+</style>

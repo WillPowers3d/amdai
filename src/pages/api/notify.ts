@@ -12,10 +12,11 @@ export const POST: APIRoute = async ({ request, cookies }) => {
   if (!checkCsrf(request, cookies)) return Response.json({ error: 'csrf' }, { status: 403 });
   const user = await getSessionUser(cookies);
   if (!user) return Response.json({ error: 'auth' }, { status: 401 });
-  const body = (await request.json().catch(() => ({}))) as { instant?: boolean; weekly?: boolean };
-  sqlRun('UPDATE users SET notify_instant = ?, notify_weekly = ? WHERE id = ?', [
+  const body = (await request.json().catch(() => ({}))) as { instant?: boolean; weekly?: boolean; replies?: boolean };
+  sqlRun('UPDATE users SET notify_instant = ?, notify_weekly = ?, notify_replies = ? WHERE id = ?', [
     body.instant ? 1 : 0,
     body.weekly ? 1 : 0,
+    body.replies ? 1 : 0,
     user.id,
   ]);
   return Response.json({ ok: true });

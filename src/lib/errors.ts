@@ -1,5 +1,6 @@
 import { parse } from 'yaml';
 import errorsRaw from '../data/errors.yaml?raw';
+import { categoryForErrorTags } from './forum-categories';
 
 export type ErrorPattern = {
   id: string;
@@ -28,6 +29,21 @@ export type ErrorMatch = {
 
 function normalize(text: string): string {
   return text.toLowerCase().replace(/\s+/g, ' ').trim();
+}
+
+export function forumAskPath(pattern: ErrorPattern, pasted = ''): string {
+  const params = new URLSearchParams({
+    category: categoryForErrorTags(pattern.tags),
+    pattern: pattern.id,
+    title: pattern.title.slice(0, 140),
+  });
+  if (pasted.trim()) params.set('body', pasted.trim().slice(0, 3500));
+  return `/forum/new?${params.toString()}`;
+}
+
+export function forumSearchPath(pattern: ErrorPattern): string {
+  const params = new URLSearchParams({ q: pattern.title, pattern: pattern.id });
+  return `/forum/search?${params.toString()}`;
 }
 
 export function matchErrors(query: string): ErrorMatch[] {

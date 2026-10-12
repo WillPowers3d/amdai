@@ -12,12 +12,12 @@ export function ensureCsrf(cookies: APIContext['cookies']): string {
   return token;
 }
 
-export function checkCsrf(request: Request, cookies: APIContext['cookies']): boolean {
+export function checkCsrf(request: Request, cookies: APIContext['cookies'], bodyToken?: string | null): boolean {
   const origin = request.headers.get('origin');
   const expectedOrigin = publicOrigin();
   if (origin && origin !== expectedOrigin) return false;
   const cookie = cookies.get(COOKIE)?.value;
-  const header = request.headers.get('x-csrf-token');
-  if (!cookie || !header) return false;
-  return safeEqual(cookie, header);
+  const offered = request.headers.get('x-csrf-token') || bodyToken || '';
+  if (!cookie || !offered) return false;
+  return safeEqual(cookie, offered);
 }

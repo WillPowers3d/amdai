@@ -8,6 +8,8 @@ export const users = sqliteTable('users', {
   createdAt: integer('created_at', { mode: 'timestamp' }).notNull(),
   notifyInstant: integer('notify_instant', { mode: 'boolean' }).notNull().default(false),
   notifyWeekly: integer('notify_weekly', { mode: 'boolean' }).notNull().default(false),
+  notifyReplies: integer('notify_replies', { mode: 'boolean' }).notNull().default(false),
+  role: text('role').notNull().default('user'),
   unsubToken: text('unsub_token').notNull(),
 });
 

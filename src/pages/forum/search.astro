@@ -1,0 +1,60 @@
+---
+import Base from '../../layouts/Base.astro';
+import ForumOff from '../../components/forum/ForumOff.astro';
+import { forumCategories, threadPath } from '../../lib/forum-categories';
+import { forumEnabled } from '../../lib/flags';
+
+const on = forumEnabled();
+export const prerender = !forumEnabled();
+
+const q = (Astro.url.searchParams.get('q') ?? '').trim();
+const pattern = Astro.url.searchParams.get('pattern') ?? '';
+let results: Array<{ slug: string; title: string; category: string; solved: number; last_reply_at: number }> = [];
+
+if (on && (q || pattern)) {
+  const { getSessionUser } = await import('../../server/session');
+  const { asActor, listThreads } = await import('../../server/forum');
+  const session = await getSessionUser(Astro.cookies);
+  results = listThreads({
+    q: q || undefined,
+    errorPatternId: pattern || undefined,
+    actor: session ? asActor(session) : null,
+    limit: 40,
+  });
+}
+---
+
+<Base title="Search the forum" description="Find threads by title, body, or a troubleshooter pattern.">
+  <main id="main" class="mx-auto max-w-3xl px-4 py-10 sm:px-6">
+    {!on ? (
+      <ForumOff title="Search" />
+    ) : (
+      <>
+        <p class="text-sm text-faint"><a href="/forum">Forum</a> / Search</p>
+        <h1 class="display mt-3 text-4xl">Search</h1>
+        <form class="mt-6 flex flex-wrap gap-2" method="get" action="/forum/search">
+          <input class="min-w-[12rem] flex-1 rounded-xl border border-line bg-raised px-3 py-2" type="search" name="q" value={q} placeholder="gfx1201, MODE1, hipError…" />
+          {pattern && <input type="hidden" name="pattern" value={pattern} />}
+          <button class="btn-primary" type="submit">Search</button>
+        </form>
+        {pattern && <p class="mt-3 text-sm text-faint">Also matching troubleshooter pattern <code>{pattern}</code>.</p>}
+        {!q && !pattern ? (
+          <p class="mt-8 text-muted">Type an error string or a gfx ID.</p>
+        ) : results.length === 0 ? (
+          <p class="mt-8 text-muted">
+            No threads. <a class="underline decoration-accent/40" href={`/forum/new?title=${encodeURIComponent(q)}&body=${encodeURIComponent(q)}&pattern=${encodeURIComponent(pattern)}`}>Ask the forum</a>.
+          </p>
+        ) : (
+          <ul class="mt-8 space-y-3">
+            {results.map((row) => (
+              <li class="card p-4">
+                <p class="text-xs text-faint">{forumCategories.find((c) => c.slug === row.category)?.title}{row.solved ? ' · Solved' : ''}</p>
+                <h2 class="mt-1 text-xl"><a href={threadPath(row.slug)}>{row.title}</a></h2>
+              </li>
+            ))}
+          </ul>
+        )}
+      </>
+    )}
+  </main>
+</Base>

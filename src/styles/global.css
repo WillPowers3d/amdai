@@ -796,6 +796,14 @@ html[data-theme="light"] .astro-code span {
   display: none;
 }
 
+.hp {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+}
+
 @media (min-width: 1024px) {
   .rocm-guide-nav {
     display: block;

@@ -1,0 +1,88 @@
+---
+import Base from '../../../layouts/Base.astro';
+import ForumOff from '../../../components/forum/ForumOff.astro';
+import { forumCategory, forumCategories, threadPath } from '../../../lib/forum-categories';
+import { forumEnabled } from '../../../lib/flags';
+
+export const prerender = !forumEnabled();
+
+export function getStaticPaths() {
+  return forumCategories.map((cat) => ({ params: { slug: cat.slug } }));
+}
+
+const on = forumEnabled();
+const category = forumCategory(Astro.params.slug ?? '');
+if (!category) {
+  return Astro.redirect('/forum');
+}
+
+let threads: Array<{
+  slug: string;
+  title: string;
+  solved: number;
+  pinned: number;
+  locked: number;
+  hidden: number;
+  reply_count?: number;
+  last_reply_at: number;
+  author_name?: string | null;
+  author_email?: string;
+}> = [];
+let userEmail: string | null = null;
+
+if (on) {
+  const { getSessionUser } = await import('../../../server/session');
+  const { asActor, displayName, listThreads } = await import('../../../server/forum');
+  const session = await getSessionUser(Astro.cookies);
+  userEmail = session?.email ?? null;
+  threads = listThreads({ category: category.slug, actor: session ? asActor(session) : null });
+  for (const row of threads) {
+    (row as { author?: string }).author = displayName(row.author_name, row.author_email);
+  }
+}
+---
+
+<Base title={category.title} description={`${category.title} — ${category.blurb}`}>
+  <main id="main" class="mx-auto max-w-3xl px-4 py-10 sm:px-6">
+    {!on ? (
+      <ForumOff title={category.title} />
+    ) : (
+      <>
+        <p class="text-sm text-faint"><a href="/forum">Forum</a> / {category.title}</p>
+        <h1 class="display mt-3 text-4xl sm:text-5xl">{category.title}</h1>
+        <p class="mt-3 text-lg text-muted">{category.blurb}</p>
+        <p class="mt-5 flex flex-wrap gap-3 text-sm">
+          <a class="btn-primary" href={`/forum/new?category=${category.slug}`}>New thread</a>
+          <a class="btn-ghost" href="/forum/search">Search</a>
+          {!userEmail && <a class="btn-ghost" href={`/login?next=/forum/c/${category.slug}`}>Sign in</a>}
+        </p>
+        {threads.length === 0 ? (
+          <p class="mt-10 text-muted">No threads yet. Ask with a rig attached if you have one.</p>
+        ) : (
+          <ul class="mt-10 space-y-3">
+            {threads.map((row) => (
+              <li class="card p-4">
+                <p class="flex flex-wrap gap-2 text-xs">
+                  {row.pinned ? <span class="badge">Pinned</span> : null}
+                  {row.solved ? <span class="badge-tested">Solved</span> : null}
+                  {row.locked ? <span class="badge">Locked</span> : null}
+                  {row.hidden ? <span class="badge">Hidden</span> : null}
+                </p>
+                <h2 class="mt-1 text-xl tracking-tight">
+                  <a href={threadPath(row.slug)}>{row.title}</a>
+                </h2>
+                <p class="mt-1 text-sm text-faint">
+                  {(row as { author?: string }).author}
+                  {' · '}
+                  {(row.reply_count ?? 1) - 1} repl{(row.reply_count ?? 1) === 2 ? 'y' : 'ies'}
+                  {' · '}
+                  {new Date(row.last_reply_at).toLocaleString('en-US', { month: 'short', day: 'numeric' })}
+                </p>
+              </li>
+            ))}
+          </ul>
+        )}
+      </>
+    )}
+  </main>
+</Base>

@@ -47,7 +47,7 @@ npm run preview
 
 `npm run build` runs Pagefind over `dist/` so `/search` works in preview. For `npm run dev` after a build, `npm run index` copies the index to `public/pagefind`.
 
-Public site URL is `https://amdai.net` (`site` in `astro.config.mjs`; override with `SITE_URL`). Default build is `ACCOUNTS_ENABLED=0` `FORUM_ENABLED=0` (static SSG, no database). Set `ACCOUNTS_ENABLED=1` for optional login, saved rigs, and `npm run notify`. `FORUM_ENABLED` is still unimplemented and fails the build.
+Public site URL is `https://amdai.net` (`site` in `astro.config.mjs`; override with `SITE_URL`). Default build is `ACCOUNTS_ENABLED=0` `FORUM_ENABLED=0` (static SSG, no database). Set `ACCOUNTS_ENABLED=1` for optional login, saved rigs, and `npm run notify`. `FORUM_ENABLED=1` also requires accounts (same SQLite) and turns on `/forum`. Admins are the comma-separated list in `ADMIN_EMAILS`. Optional `MOD_EMAILS` promotes moderators.
 
 ## Information architecture
 
@@ -72,7 +72,13 @@ Public site URL is `https://amdai.net` (`site` in `astro.config.mjs`; override w
 | `/backends` | Backend chooser — llama.cpp default |
 | `/software` | llama.cpp first; vLLM / Strata as tries |
 | `/abliterated` | Abliterated hub — vet files, catalog table, method/variant cards, llama.cpp notes |
-| `/forum` | Community stub (off unless `FORUM_ENABLED`, which is unimplemented) |
+| `/forum` | Community forum (off unless `FORUM_ENABLED=1` with accounts) |
+| `/forum/rules` | Code of conduct (always static) |
+| `/forum/c/{slug}` | Category listing |
+| `/forum/t/{slug}` | Thread (SSR when the forum is on; no JS to read) |
+| `/forum/new` | New thread, optional saved-rig badge |
+| `/forum/search` | Title/body search |
+| `/forum/mod` | Reports + audit log (mods/admins) |
 | `/account` | Optional saved rigs (off unless `ACCOUNTS_ENABLED=1`) |
 | `/privacy` | What optional accounts store |
 | `/harnesses` | Hermes Agent and OpenClaw (`/v1` first) |

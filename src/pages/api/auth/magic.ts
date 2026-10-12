@@ -16,7 +16,9 @@ export const POST: APIRoute = async ({ request, cookies }) => {
   const ip = clientIp(request);
   const limited = rateLimit(`magic:${ip}`, 8, 10 * 60 * 1000);
   if (!limited.ok) return Response.json({ error: 'rate_limited', retryAfter: limited.retryAfter }, { status: 429 });
-  const body = (await request.json().catch(() => ({}))) as { email?: string };
+  const { stashNext } = await import('../../../server/next-path');
+  const body = (await request.json().catch(() => ({}))) as { email?: string; next?: string };
+  stashNext(cookies, body.next);
   const email = (body.email ?? '').trim().toLowerCase();
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return Response.json({ error: 'invalid_email' }, { status: 400 });
   const emailLimit = rateLimit(`magic-email:${email}`, 4, 60 * 60 * 1000);
