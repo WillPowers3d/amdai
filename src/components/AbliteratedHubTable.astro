@@ -1,0 +1,100 @@
+---
+import { abliteratedGuide } from '../lib/status';
+import { TIER_KEYS, TIER_LABEL, q4PlusQuants, statusLabel, testedPickLabel } from '../lib/abliterated';
+---
+
+<div class="not-prose my-6 overflow-x-auto rounded-xl border border-line">
+  <table class="min-w-[72rem] w-full text-left text-sm">
+    <caption class="sr-only">Abliterated and uncensored catalog from abliterated.yaml</caption>
+    <thead class="bg-raised">
+      <tr>
+        <th class="px-3 py-2 font-medium">Model</th>
+        <th class="px-3 py-2 font-medium">Base</th>
+        <th class="px-3 py-2 font-medium">Uploader</th>
+        <th class="px-3 py-2 font-medium">Quants (Q4+)</th>
+        <th class="px-3 py-2 font-medium">Fit by tier</th>
+        <th class="px-3 py-2 font-medium">Backend</th>
+        <th class="px-3 py-2 font-medium">Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      {abliteratedGuide.rows.map((row) => (
+        <tr class="border-t border-line align-top">
+          <td class="px-3 py-3">
+            <span class="font-medium">{row.name}</span>
+            {row.repo_url ? (
+              <a class="mt-0.5 block text-xs text-accent-ink underline decoration-accent/40 underline-offset-2" href={row.repo_url} rel="noopener">
+                {row.repo}
+              </a>
+            ) : (
+              <span class="mt-0.5 block text-xs text-faint">{row.repo}</span>
+            )}
+            <span class="mt-1 block text-xs text-faint">{row.size} · {row.method}</span>
+          </td>
+          <td class="px-3 py-3 text-muted">
+            {row.base_model_url ? (
+              <a class="underline decoration-accent/40 underline-offset-2" href={row.base_model_url} rel="noopener">
+                {row.base_model}
+              </a>
+            ) : (
+              <span>
+                {row.base_model ?? 'not documented by uploader'}
+                {!row.base_model_url && row.base_model && (
+                  <span class="mt-1 block text-xs text-faint">No cited official card URL in this catalog</span>
+                )}
+              </span>
+            )}
+          </td>
+          <td class="px-3 py-3">
+            {row.uploader_url ? (
+              <a class="underline decoration-accent/40 underline-offset-2" href={row.uploader_url} rel="noopener">
+                {row.uploader}
+              </a>
+            ) : (
+              <span class="text-muted">{row.uploader ?? '—'}</span>
+            )}
+          </td>
+          <td class="px-3 py-3 text-muted">
+            <ul class="space-y-1">
+              {q4PlusQuants(row).map((q) => (
+                <li>
+                  <span class="font-medium text-ink">{q.label}</span>
+                  <span class="block text-xs text-faint">{q.note}</span>
+                </li>
+              ))}
+            </ul>
+          </td>
+          <td class="px-3 py-3 text-muted">
+            {row.calculator ? (
+              <ul class="space-y-1">
+                {TIER_KEYS.map((tier) => {
+                  const href = row.calculator ? `${row.calculator[tier]}&style=${row.kind === 'control' ? 'standard' : 'abliterated'}` : '#';
+                  return (
+                    <li>
+                      <a class="underline decoration-accent/40 underline-offset-2" href={href}>
+                        {TIER_LABEL[tier]}
+                      </a>
+                    </li>
+                  );
+                })}
+              </ul>
+            ) : (
+              <p class="text-xs">
+                {row.vram_32gb} No calculator share — cited KV dims are not in this catalog.
+              </p>
+            )}
+          </td>
+          <td class="px-3 py-3 text-muted">{row.backend ?? row.backends}</td>
+          <td class="px-3 py-3">
+            <span class="font-medium">{statusLabel(row.status)}</span>
+            <span class="mt-1 block text-xs text-faint">{row.status_note}</span>
+          </td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+  <p class="px-3 py-2 text-xs text-faint">
+    Table from <code>src/data/abliterated.yaml</code> · {abliteratedGuide.as_of}. Tested abliterated pick: {testedPickLabel()}.
+    No download stats. Confirm the live model card.
+  </p>
+</div>

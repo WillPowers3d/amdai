@@ -1,63 +1,9 @@
 ---
 title: Abliterated models
 kicker: Weights
-description: What “abliterated” means, how people reduce refusals on local open weights, and which Qwen variants show up on a 32 GB R9700.
+description: Folded into the /abliterated hub. This file is not routed.
 updated: 2026-10-12
 order: 4
 ---
 
-**Abliterated** means *the refusals were edited in the weights* so a local open model is more likely to do the task you asked — on **your** machine, with no hosted safety API in the middle.
-
-This page is technical and adult. Educational context only. You are responsible for what you run. We do not host weights.
-
-<Callout type="note">
-**Default stays official instruct** — Qwen3.6-35B-A3B on llama.cpp. An abliterated checkpoint is a *second* model after that path is proven. Primary educational row this pass: **Huihui-Qwen3.8-27B-abliterated**. Not a profile. Not a default.
-</Callout>
-
-## What people are editing
-
-Base chat models are trained to **refuse** some requests. A Hugging Face title that says “uncensored” can mean a system-prompt jailbreak, a small SFT, or a real weight edit. Read the card.
-
-## Approaches (not a how-to)
-
-| Approach | What it actually is | Limit |
-| --- | --- | --- |
-| **Abliteration** | Subtract / orthogonalize a refusal direction in activations (community “remove-refusals-with-transformers”, **Heretic**-style). No full retrain. | Think-loops, broken templates, dropped MTP/vision tensors |
-| **Orthogonalization** | Same family: make residual streams less able to express “I can’t help.” | Quality is editor-dependent |
-| **Uncensor SFT / LoRA** | Train on completions that fulfill where the base refused | Harness or system prompts can **restore** refusals |
-| **Prompt jailbreaks** | A long persona in the chat template | Not a weight edit. Easy to undo. Easy to mistake for ablation |
-| **No hosted safety layer** | Stock Qwen + llama.cpp on loopback already has no cloud moderator | Weights can still refuse |
-
-## How to find them
-
-Search Hugging Face for: `abliterated`, `uncensored`, `heretic`, `Huihui-Qwen`, `Huihui-Qwen3.5-9B-abliterated`, `Qwen3.8-27B-Uncensored`.
-
-Prefer the **publisher’s** card over a random re-quant. A published GGUF: `mradermacher/Huihui-Qwen3.5-9B-abliterated-GGUF` — pin a revision. No download stats.
-
-**Trust**
-
-- SHA-256 or `huggingface-cli` revision pins, not “latest”
-- Read **LICENSE** (Qwen base is often Apache-2.0; derivatives differ)
-- If the card advertises MTP or vision, confirm those tensors survived
-- Gated repos exist for a reason — read the note they make you click
-
-The table is `src/data/abliterated.yaml`. VRAM is approximate. Unknowns stay unknown.
-
-<AbliteratedTable />
-
-## Reliability on this stack
-
-| Observation | What to do |
-| --- | --- |
-| llama.cpp + GGUF is the common path | HIP `gfx1201` or Vulkan — [tutorial](/tutorials/run-local-llm) |
-| vLLM on edited / hybrid graphs | Prove official instruct on vLLM first. Abliterated vLLM is unproven unless the card says otherwise |
-| Thinking models + ablation | Watch for never-finishes-thinking |
-| Agent harnesses | Some SFT-class edits **re-refuse** inside a tool frame. Test in the harness you actually use |
-
-## Official Qwen first, then a second checkpoint
-
-<QwenPicks />
-
-<SmokeTests />
-
-Refresh the YAML when a new Qwen.x drops. The [weekly card](/) should still recommend official instruct as the default.
+The dedicated hub is [/abliterated](/abliterated). This MDX file is kept so weekday scrape notes still mention the topic; it is **not** a public route. Edit `src/data/abliterated.yaml` and `src/pages/abliterated.astro`.

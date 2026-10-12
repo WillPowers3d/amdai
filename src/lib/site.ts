@@ -64,7 +64,7 @@ export const primaryNav: NavItem[] = [
   { href: '/rocm', label: 'ROCm', description: 'What it is, plus short version notes', group: 'stack' },
   { href: '/backends', label: 'Backends', description: 'llama.cpp first; Vulkan, HIP, Strata, vLLM, Ollama', group: 'stack' },
   { href: '/software', label: 'AI software', description: 'llama.cpp first; vLLM and Strata as tries', group: 'stack' },
-  { href: '/abliterated', label: 'Abliterated', description: 'Refusal removal — educational, never the default', group: 'stack' },
+  { href: '/abliterated', label: 'Abliterated', description: 'Hub: what it is, how to vet files, catalog — educational only', group: 'stack' },
   { href: '/harnesses', label: 'Harnesses', description: 'Hermes Agent and OpenClaw above the model', group: 'stack' },
   { href: '/hardware', label: 'Hardware', description: 'PSU, cooling, noise, VRAM vs model size', group: 'stack' },
   { href: '/stack-lab', label: 'Stack Lab', description: 'Ubuntu companion — same catalog as the YAML', group: 'path' },

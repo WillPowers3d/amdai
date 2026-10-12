@@ -96,7 +96,7 @@ export function suggestedBudgetTier(priority: Priority, usage: Usage): 'starter'
 }
 
 export function educationalAbliteratedRows(): AbliteratedRow[] {
-  return abliteratedGuide.rows.filter((row) => !row.method.startsWith('none'));
+  return abliteratedGuide.rows.filter((row) => row.kind !== 'control' && !row.method.startsWith('none'));
 }
 
 export function testedAbliteratedStatus(): 'being reworked' {

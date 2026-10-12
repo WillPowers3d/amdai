@@ -1,7 +1,9 @@
 # Notable public Qwen abliterated / uncensored variants people run locally.
-# No download stats. VRAM is approximate from published GGUF sizes. Verify the model card.
+# No download stats. Never invent a row, a quant, a base-model URL, or KV dims.
 # Educational local open-weight context only — not a default recommend.
+# Q4 and up only. No Qwen2.5. No Qwen3-8B.
 as_of: 2026-10-12
+tested_pick: being reworked
 
 search_patterns:
   - abliterated
@@ -13,65 +15,157 @@ search_patterns:
   - Qwen3.8-27B-Uncensored
 
 rows:
-  - name: Official instruct (control)
-    repo: Qwen/Qwen3.6-35B-A3B — the daily-driver control, not an abliterated card
+  - id: control-qwen36
+    name: Official instruct (control)
+    kind: control
+    base_model: Qwen/Qwen3.6-35B-A3B
+    base_model_url: https://huggingface.co/Qwen/Qwen3.6-35B-A3B
+    uploader: Qwen
+    uploader_url: https://huggingface.co/Qwen
+    repo: Qwen/Qwen3.6-35B-A3B
+    repo_url: https://huggingface.co/Qwen/Qwen3.6-35B-A3B
     method: none (stock refusals)
     size: 35B total / 3B active
     quant_example: Unsloth UD-Q5_K_XL (publisher listing 26.6 GB)
+    quants:
+      - label: UD-Q5_K_XL
+        note: Hugging Face listing 26.6 GB (Unsloth GGUF)
     vram_32gb: Daily driver on one R9700 at 262K f16 KV. See /stacks.
     backends: llama.cpp Vulkan first. Not an abliterated experiment.
+    backend: llama.cpp Vulkan first
+    status: tested
+    status_note: Daily driver on our rig — the control, not an abliterated card.
     reliability: This is the reliability baseline. Prove it before you swap weights.
     notes: Abliterated rows below are educational. They are not a replacement for this control.
+    calculator:
+      starter: /calculator?gpu=rx9070xt&vram=16&n=1&split=0&ram=64&model=qwen36&tp=35&ap=3&layers=40&kvl=10&kvh=2&hd=256&quant=q5_k_m&ctx=8192&kv=f16&oh=1
+      mid: /calculator?gpu=rx7900xtx&vram=24&n=1&split=0&ram=64&model=qwen36&tp=35&ap=3&layers=40&kvl=10&kvh=2&hd=256&quant=q5_k_m&ctx=32768&kv=f16&oh=1
+      enthusiast: /calculator?gpu=r9700&vram=32&n=1&split=0&ram=64&model=qwen36&tp=35&ap=3&layers=40&kvl=10&kvh=2&hd=256&quant=q5_k_m&ctx=262144&kv=f16&oh=1
+      pro: /calculator?gpu=r9700&vram=32&n=1&split=0&ram=256&model=qwen36&tp=35&ap=3&layers=40&kvl=10&kvh=2&hd=256&quant=q5_k_m&ctx=262144&kv=f16&oh=1
 
-  - name: Huihui Qwen3.8-27B abliterated
+  - id: huihui-qwen38-27b
+    name: Huihui Qwen3.8-27B abliterated
+    kind: abliterated
+    base_model: Qwen3.8-27B
+    base_model_url: null
+    uploader: huihui-ai
+    uploader_url: https://huggingface.co/huihui-ai
     repo: huihui-ai/Huihui-Qwen3.8-27B-abliterated
+    repo_url: https://huggingface.co/huihui-ai/Huihui-Qwen3.8-27B-abliterated
     method: Classic abliteration (remove-refusals-with-transformers style)
     size: 27B
     quant_example: Community GGUF / Ollama tags exist — confirm the exact file
+    quants:
+      - label: Q4 and up (confirm file)
+        note: Community GGUF / Ollama tags exist. No publisher GB listing in this catalog. Floor is still Q4.
     vram_32gb: Same 27B envelope if you pick a 4–5 bit quant. Confirm the file. Floor is still Q4.
     backends: llama.cpp first. vLLM unstated here.
+    backend: llama.cpp first
+    status: untested
+    status_note: Primary educational row this pass. Not tested on our rig.
     reliability: Primary educational row this pass. Publisher frames it as experimental. Some builds keep early layers unablated. Test think-loops.
     notes: MTP/vision "not modified" on the card. Pin a revision. Not a Stack Lab profile. Not the daily driver.
+    calculator: null
 
-  - name: Huihui Qwen3.5-9B abliterated
+  - id: huihui-qwen35-9b
+    name: Huihui Qwen3.5-9B abliterated
+    kind: abliterated
+    base_model: Qwen/Qwen3.5-9B
+    base_model_url: https://huggingface.co/Qwen/Qwen3.5-9B
+    uploader: huihui-ai
+    uploader_url: https://huggingface.co/huihui-ai
     repo: huihui-ai/Huihui-Qwen3.5-9B-abliterated
+    repo_url: https://huggingface.co/huihui-ai/Huihui-Qwen3.5-9B-abliterated
     method: Classic abliteration (remove-refusals-with-transformers) of Qwen/Qwen3.5-9B
     size: 9B-class (publisher 9B; card also lists ~10B params)
     quant_example: llama.cpp GGUF via mradermacher/Huihui-Qwen3.5-9B-abliterated-GGUF (Q4_K_M ~5.7 GB, Q8_0 ~9.6 GB, f16 ~18.0 GB on that card)
+    quants:
+      - label: Q4_K_M
+        note: mradermacher GGUF card ~5.7 GB
+      - label: Q8_0
+        note: mradermacher GGUF card ~9.6 GB
+      - label: f16
+        note: mradermacher GGUF card ~18.0 GB
     vram_32gb: 4–8 bit GGUF should leave room on 32 GB if the file matches. f16 is tighter once cache grows. Confirm.
     backends: llama.cpp first. Publisher Ollama tag `huihui_ai/qwen3.5-abliterated:9b` — prefer HIP/Vulkan llama.cpp on gfx1201. vLLM unstated.
+    backend: llama.cpp first
+    status: untested
+    status_note: Unverified on our rig. Qwen3.5 may need a current llama.cpp.
     reliability: Smaller educational row. Unverified on our rig. Qwen3.5 may need a current llama.cpp.
-    notes: Publisher research / experimental framing. mmproj files exist on the GGUF card — confirm whether you want vision tensors.
+    notes: Publisher research / experimental framing. mmproj files exist on the GGUF card — confirm whether you want vision tensors. GGUF sibling mradermacher/Huihui-Qwen3.5-9B-abliterated-GGUF.
+    calculator: null
 
-  - name: orcarouter Qwen3.8-27B Uncensored
-    repo: orcarouter/Qwen3.8-27B-Uncensored (GGUF sibling published)
+  - id: orcarouter-qwen38-27b
+    name: orcarouter Qwen3.8-27B Uncensored
+    kind: abliterated
+    base_model: Qwen3.8-27B
+    base_model_url: null
+    uploader: orcarouter
+    uploader_url: https://huggingface.co/orcarouter
+    repo: orcarouter/Qwen3.8-27B-Uncensored
+    repo_url: https://huggingface.co/orcarouter/Qwen3.8-27B-Uncensored
     method: Abliteration / refusal-direction work on Qwen3.8-27B
     size: 27B
     quant_example: Q4_K_M ~16.8 GB (publisher figure)
+    quants:
+      - label: Q4_K_M
+        note: Publisher figure ~16.8 GB
     vram_32gb: Fits with context room if the card is honest. Still never below Q4.
     backends: llama.cpp first; check card for vLLM
+    backend: llama.cpp first
+    status: community
+    status_note: Community writeups exist. Not tested on our rig.
     reliability: Community writeups exist; still verify MTP/vision claims on your build
-    notes: Some GGUF repos are gated. Read the license and safety note on the card.
+    notes: Some GGUF repos are gated. Read the license and safety note on the card. GGUF sibling published — confirm which file.
+    calculator: null
 
-  - name: Heretic-style uncensored GGUF (e.g. JonathanColetti)
+  - id: heretic-jonathan-coletti
+    name: Heretic-style uncensored GGUF (e.g. JonathanColetti)
+    kind: abliterated
+    base_model: Qwen3.8-27B
+    base_model_url: null
+    uploader: JonathanColetti
+    uploader_url: https://huggingface.co/JonathanColetti
     repo: JonathanColetti/Qwen3.8-27B-Uncensored-GGUF
+    repo_url: https://huggingface.co/JonathanColetti/Qwen3.8-27B-Uncensored-GGUF
     method: Heretic refusal-direction minimization + MTP graft notes on the card
     size: 27B
     quant_example: Q4_K_M and others listed on the card
+    quants:
+      - label: Q4_K_M
+        note: Listed on the card. Other Q4+ files may exist — confirm. Nothing below Q4.
     vram_32gb: Treat Q4 as the 32 GB daily quant until you measure cache
     backends: llama.cpp (GGUF). vLLM is a different checkpoint format.
+    backend: llama.cpp first
+    status: community
+    status_note: Card is unusually explicit about quantization vs the refusal boundary. Not tested on our rig.
     reliability: Card is unusually explicit about what quantization does to the refusal boundary
     notes: Lower bits can change refusals again. Evaluate behavior on a high quant first.
+    calculator: null
 
-  - name: SFT-class refusal removal (e.g. Abliterated-SFT)
+  - id: sft-jenerallee78
+    name: SFT-class refusal removal (e.g. Abliterated-SFT)
+    kind: abliterated
+    base_model: Qwen3.8-27B
+    base_model_url: null
+    uploader: jenerallee78
+    uploader_url: https://huggingface.co/jenerallee78
     repo: jenerallee78/Qwen3.8-27B-Abliterated-SFT
+    repo_url: https://huggingface.co/jenerallee78/Qwen3.8-27B-Abliterated-SFT
     method: Small SFT / LoRA on refusal, not only direction ablation
     size: 27B
     quant_example: Publisher GGUF notes exist — read GGUFs.md
+    quants:
+      - label: Q4 and up (confirm file)
+        note: Publisher GGUF notes exist (GGUFs.md). No GB listing copied here. Do not invent a fit.
     vram_32gb: Unknown until you pick a quant. Do not invent a fit.
     backends: llama.cpp tested by publisher; vLLM "compatible-by-registry, not load-tested"
+    backend: llama.cpp first
+    status: untested
+    status_note: Publisher tested llama.cpp. Not tested on our rig.
     reliability: Different failure mode (harness/system-prompt can restore refusals)
     notes: Finicky with agent frames. Useful as a contrast, not the default.
+    calculator: null
 
 trust:
   - Prefer SHA-256 or `huggingface-cli` revision pins over a random mirror

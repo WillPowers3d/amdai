@@ -1,0 +1,123 @@
+---
+import Base from '../layouts/Base.astro';
+import AbliteratedHubTable from '../components/AbliteratedHubTable.astro';
+import { abliteratedGuide } from '../lib/status';
+import { testedPickLabel } from '../lib/abliterated';
+
+const testedPick = testedPickLabel();
+---
+
+<Base
+  title="Abliterated models"
+  description="What abliteration is versus uncensored fine-tunes, how to vet files, and the catalog we actually list — educational only. Q4 and up. Test the official instruct first."
+>
+  <main id="main" class="mx-auto max-w-3xl px-4 py-10 sm:px-6">
+    <p class="font-mono text-[0.72rem] uppercase tracking-[0.18em] text-accent">Weights · educational</p>
+    <h1 class="mt-3 font-serif text-4xl tracking-tight sm:text-5xl">Abliterated models</h1>
+    <p class="mt-4 text-lg leading-relaxed text-muted">
+      <strong class="font-medium text-ink">Abliterated</strong> means the refusals were edited in the weights so a local
+      open model is more likely to do the task you asked — on your machine, with no hosted safety API in the middle.
+      This hub is technical and adult. We do not host weights. You are responsible for what you run.
+    </p>
+    <p class="mt-3 rounded-2xl border border-ok/40 bg-ok/10 px-4 py-3 text-sm text-ok">
+      Default stays official instruct — Qwen3.6-35B-A3B on llama.cpp. An abliterated checkpoint is a second model after
+      that path is proven. Tested abliterated pick on our rig: <strong>{testedPick}</strong>.
+    </p>
+    <p class="mt-4 flex flex-wrap gap-2 text-sm">
+      <a class="rounded-full border border-line bg-raised px-4 py-2" href="/tutorials/run-local-llm">Run official instruct first</a>
+      <a class="rounded-full border border-line bg-raised px-4 py-2" href="/calculator?style=abliterated">Open in the calculator</a>
+      <a class="rounded-full border border-line bg-raised px-4 py-2" href="/budget?style=abliterated">Setup by budget</a>
+    </p>
+
+    <section class="mt-12">
+      <h2 class="font-serif text-3xl">Abliteration vs “uncensored”</h2>
+      <p class="mt-3 leading-relaxed text-muted">
+        A Hugging Face title that says “uncensored” can mean a system-prompt jailbreak, a small SFT, or a real weight
+        edit. Read the card. Abliteration (community “remove-refusals-with-transformers”, Heretic-style) subtracts or
+        orthogonalizes a refusal direction in activations. There is no full retrain. An uncensored fine-tune / LoRA
+        trains on completions that fulfill where the base refused. A jailbreak in the chat template is not a weight
+        edit and is easy to undo.
+      </p>
+      <p class="mt-3 leading-relaxed text-muted">
+        Quality tradeoffs are real. Abliteration can cause think-loops, broken chat templates, and dropped MTP or
+        vision tensors. SFT-class edits can re-refuse inside an agent harness. Lower quants can change the refusal
+        boundary again — stay at Q4 and up; prefer a higher quant when you evaluate behavior. Editor quality varies.
+        None of that is a reason to skip the original.
+      </p>
+      <p class="mt-3 leading-relaxed text-muted">
+        Test official Qwen3.6-35B-A3B on llama.cpp first. If the official instruct cannot finish a prompt, an edited
+        checkpoint will not debug your ROCm, Vulkan, or template problem. Stock Qwen on loopback already has no cloud
+        moderator — the weights can still refuse.
+      </p>
+    </section>
+
+    <section class="mt-12">
+      <h2 class="font-serif text-3xl">Vet the uploader and the file</h2>
+      <ul class="mt-4 list-disc space-y-2 pl-5 text-muted">
+        {abliteratedGuide.trust.map((item) => <li>{item}</li>)}
+        <li>Prefer the publisher’s card over a random re-quant. Pin a revision with <code class="font-mono text-ink">huggingface-cli</code> or a SHA-256, not “latest”.</li>
+        <li>Read LICENSE. Qwen bases are often Apache-2.0; derivatives differ. Gated repos exist for a reason.</li>
+        <li>If the card advertises MTP or vision, confirm those tensors are actually in the file you downloaded.</li>
+      </ul>
+      <p class="mt-3 text-sm text-faint">
+        Search terms we already list: {abliteratedGuide.search_patterns.join(', ')}. No download stats.
+      </p>
+    </section>
+
+    <section class="mt-12">
+      <h2 class="font-serif text-3xl">Catalog</h2>
+      <p class="mt-3 text-muted">
+        Driven by <code class="font-mono text-ink">src/data/abliterated.yaml</code> as of {abliteratedGuide.as_of}.
+        Never invent a row. Quants are Q4 and up only. Calculator share links exist only for the official control —
+        we have cited architecture for that stack. Other rows have no cited KV dims in this catalog, so there is no
+        share link (do not invent one). Tested abliterated pick: <strong class="text-ink">{testedPick}</strong>.
+      </p>
+      <AbliteratedHubTable />
+    </section>
+
+    <section class="mt-12">
+      <h2 class="font-serif text-3xl">Run on an R9700 (llama.cpp)</h2>
+      <p class="mt-3 leading-relaxed text-muted">
+        llama.cpp first. Vulkan is the daily-driver path on our rig. HIP is fine if <code class="font-mono text-ink">rocminfo</code> is clean
+        and the device is gfx1201. Exact flags and measured VRAM for any abliterated file are
+        <strong class="text-ink">TODO</strong> — we have not published a command line for those checkpoints. Use the
+        official instruct tutorial, then swap only the <code class="font-mono text-ink">-m</code> path after the control works.
+      </p>
+      <ol class="mt-4 list-decimal space-y-2 pl-5 text-muted">
+        <li>Prove <a class="underline decoration-accent/40 underline-offset-2" href="/tutorials/run-local-llm">official Qwen on llama.cpp</a> (Vulkan first).</li>
+        <li>Keep GGUFs on NVMe. One LLM per GPU. Floor is Q4 — prefer Q5 when the file exists.</li>
+        <li>Download the publisher file. Pin a revision. Do not take a random mirror.</li>
+        <li>Swap <code class="font-mono text-ink">-m</code> to that GGUF. Leave <code class="font-mono text-ink">-ngl 99</code> as “offload what fits.” If layers spill to RAM, stop — offload kills speed.</li>
+        <li>Watch termination and think-loops. Compare the same prompt on official instruct.</li>
+      </ol>
+      <pre class="mt-5 overflow-x-auto rounded-2xl border border-line bg-raised/40 p-4 font-mono text-[0.8rem] leading-relaxed text-muted"><code>{`# Vulkan build — same as the official tutorial
+cmake -B build-vk -DGGML_VULKAN=ON -DCMAKE_BUILD_TYPE=Release
+cmake --build build-vk -j"$(nproc)"
+
+# HIP only if rocminfo is clean (gfx1201). Flags: see /backends — do not invent extra HIP switches.
+
+# After official instruct works, swap the file. Exact abliterated flags: TODO.
+./build-vk/bin/llama-cli \\
+  -m /path/to/pinned.gguf \\
+  -ngl 99 \\
+  -c 8192 \\
+  -p "A short smoke prompt you already ran on official instruct." \\
+  -n 64`}</code></pre>
+      <p class="mt-3 text-sm text-faint">
+        Context 8192 here is a conservative smoke, not a claim. The daily-driver 262K path is for official Qwen3.6-35B-A3B
+        Q5 on one R9700. Open the <a class="underline decoration-accent/40 underline-offset-2" href="/calculator">calculator</a> before you copy that context onto an untested file.
+      </p>
+    </section>
+
+    <section class="mt-12">
+      <h2 class="font-serif text-3xl">Responsible use</h2>
+      <p class="mt-3 leading-relaxed text-muted">
+        Educational local open-weight context only. These files are not a Stack Lab profile and not the weekly default.
+        Abliteration and “uncensored” fine-tunes can remove refusals that the original model had. You are responsible
+        for what you generate and for following the law and the model license. We do not host weights, we do not
+        provide a how-to for harm, and we do not recommend these as a daily driver. If you do not need an edited
+        checkpoint, stay on official instruct.
+      </p>
+    </section>
+  </main>
+</Base>

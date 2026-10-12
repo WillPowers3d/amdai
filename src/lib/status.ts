@@ -53,20 +53,47 @@ export type QwenGuide = {
   smoke_tests: { name: string; prompt: string; expect: string }[];
 };
 
+export type AbliteratedStatus = 'tested' | 'community' | 'untested';
+
+export type AbliteratedQuant = {
+  label: string;
+  note: string;
+};
+
+export type AbliteratedCalculator = {
+  starter: string;
+  mid: string;
+  enthusiast: string;
+  pro: string;
+} | null;
+
 export type AbliteratedRow = {
+  id?: string;
   name: string;
+  kind?: 'control' | 'abliterated';
+  base_model?: string;
+  base_model_url?: string | null;
+  uploader?: string;
+  uploader_url?: string | null;
   repo: string;
+  repo_url?: string | null;
   method: string;
   size: string;
   quant_example: string;
+  quants?: AbliteratedQuant[];
   vram_32gb: string;
   backends: string;
+  backend?: string;
+  status?: AbliteratedStatus;
+  status_note?: string;
   reliability: string;
   notes: string;
+  calculator?: AbliteratedCalculator;
 };
 
 export type AbliteratedGuide = {
   as_of: string;
+  tested_pick?: string;
   search_patterns: string[];
   rows: AbliteratedRow[];
   trust: string[];

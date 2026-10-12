@@ -60,7 +60,7 @@ Public site URL is `https://amdai.net` (`site` in `astro.config.mjs`; override w
 | `/rocm` | ROCm explainer + succinct version notes |
 | `/backends` | Backend chooser — llama.cpp default |
 | `/software` | llama.cpp first; vLLM / Strata as tries |
-| `/abliterated` | Refusal removal / Qwen variants (educational only) |
+| `/abliterated` | Abliterated hub — vet files, catalog table, llama.cpp notes |
 | `/harnesses` | Hermes Agent and OpenClaw (`/v1` first) |
 | `/hardware` | PSU, cooling, VRAM |
 | `/tutorials` | How-tos |
