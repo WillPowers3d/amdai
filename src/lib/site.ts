@@ -28,6 +28,7 @@ const OG_PAGES = new Set([
 export function ogSlug(pathname: string) {
   if (!pathname || pathname === '/') return 'home';
   const slug = pathname.replace(/^\//, '').replace(/\/+$/, '').replace(/\//g, '-') || 'home';
+  if (slug === 'rocm' || slug.startsWith('rocm-')) return 'rocm';
   return OG_PAGES.has(slug) ? slug : 'default';
 }
 
@@ -35,6 +36,7 @@ export const officialLinks = {
   product:
     'https://www.amd.com/en/products/graphics/workstations/radeon-ai-pro/ai-9000-series/amd-radeon-ai-pro-r9700.html',
   rocm: 'https://rocm.docs.amd.com/en/latest/',
+  rocmVersions: 'https://rocm.docs.amd.com/en/latest/release/versions.html',
   rocmInstall: 'https://rocm.docs.amd.com/en/latest/install/rocm.html',
   rocm10Notes: 'https://rocm.docs.amd.com/en/docs-10.0.0/about/release-notes.html',
   rocm101Notes: 'https://rocm.docs.amd.com/en/docs-10.1.0/about/release-notes.html',
@@ -84,7 +86,7 @@ export const primaryNav: NavItem[] = [
   { href: '/calculator', label: 'Calculator', description: 'Quant + hardware VRAM / RAM fit estimates', group: 'path' },
   { href: '/quants', label: 'Quants', description: 'Q4–Q8, UD dynamic, KV types, why not below Q4', group: 'path' },
   { href: '/gpus', label: 'GPU directory', description: 'Radeon cards, gfx IDs, VRAM, official ROCm rows', group: 'stack' },
-  { href: '/rocm', label: 'ROCm', description: 'What it is, plus short version notes', group: 'stack' },
+  { href: '/rocm', label: 'ROCm', description: 'What it is — stack, gfx IDs, Vulkan vs HIP, versions', group: 'stack' },
   { href: '/backends', label: 'Backends', description: 'llama.cpp first; Vulkan, HIP, Strata, vLLM, Ollama', group: 'stack' },
   { href: '/software', label: 'AI software', description: 'llama.cpp first; vLLM and Strata as tries', group: 'stack' },
   { href: '/abliterated', label: 'Abliterated', description: 'Hub: what it is, how to vet files, catalog — educational only', group: 'stack' },

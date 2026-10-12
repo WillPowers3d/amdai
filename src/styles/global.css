@@ -580,3 +580,224 @@ html[data-theme="light"] .astro-code span {
   transform: scaleX(var(--progress, 0));
   will-change: transform;
 }
+
+.rocm-cite {
+  font-family: var(--font-mono);
+  font-size: 0.7em;
+  font-weight: 500;
+  letter-spacing: 0;
+}
+
+.rocm-cite a {
+  color: var(--accent-ink);
+  text-decoration: none;
+  margin-inline: 0.08em;
+}
+
+.rocm-cite a:hover,
+.rocm-cite a:focus-visible {
+  text-decoration: underline;
+  text-underline-offset: 0.12em;
+}
+
+.go-deeper {
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--accent);
+  background: var(--raised);
+  border-radius: 0.75rem;
+  padding: 0.2rem 1.05rem 0.2rem;
+  margin: 1.4rem 0;
+}
+
+.go-deeper > summary {
+  cursor: pointer;
+  list-style: none;
+  padding: 0.85rem 0;
+}
+
+.go-deeper > summary::-webkit-details-marker {
+  display: none;
+}
+
+.go-deeper > summary .kicker {
+  display: block;
+  margin-bottom: 0.2rem;
+}
+
+.go-deeper > summary .go-title {
+  font-weight: 560;
+}
+
+.go-deeper[open] {
+  padding-bottom: 1.05rem;
+}
+
+.go-body > :first-child {
+  margin-top: 0.2rem;
+}
+
+.go-body > :last-child {
+  margin-bottom: 0;
+}
+
+.rocm-chapters ol {
+  list-style: none;
+  margin: 0.75rem 0 0;
+  padding: 0;
+}
+
+.rocm-chapter {
+  display: flex;
+  gap: 0.65rem;
+  align-items: baseline;
+  border-radius: 0.5rem;
+  padding: 0.4rem 0.55rem;
+  color: var(--muted);
+}
+
+.rocm-chapter .n {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--faint);
+}
+
+.rocm-chapter.is-current {
+  background: var(--accent-soft);
+  color: var(--accent-ink);
+}
+
+.rocm-chapter:hover {
+  color: var(--ink);
+}
+
+.rocm-pager {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.rocm-page-link {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  border: 1px solid var(--line);
+  border-radius: 0.85rem;
+  background: var(--raised);
+  padding: 0.9rem 1rem;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.rocm-page-link:hover {
+  border-color: color-mix(in srgb, var(--accent) 40%, var(--line));
+}
+
+.rocm-page-link.is-empty {
+  border-style: dashed;
+  background: transparent;
+}
+
+.rocm-page-link:nth-child(2) {
+  text-align: right;
+}
+
+.rocm-related {
+  margin-top: 2.5rem;
+}
+
+.rocm-related ul {
+  list-style: none;
+  margin: 1rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.6rem;
+}
+
+@media (min-width: 640px) {
+  .rocm-related ul {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.rocm-related a {
+  display: block;
+  border: 1px solid var(--line);
+  border-radius: 0.85rem;
+  background: var(--raised);
+  padding: 0.85rem 1rem;
+  text-decoration: none;
+  color: inherit;
+}
+
+.rocm-related a:hover {
+  border-color: color-mix(in srgb, var(--accent) 40%, var(--line));
+}
+
+.rocm-related .rel-label {
+  display: block;
+  font-weight: 560;
+}
+
+.rocm-related .rel-blurb {
+  display: block;
+  margin-top: 0.25rem;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.rocm-sources {
+  margin-top: 2.75rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--line);
+}
+
+.rocm-sources ol {
+  margin: 1rem 0 0;
+  padding-left: 1.25rem;
+}
+
+.rocm-sources li {
+  margin: 0.45rem 0;
+  scroll-margin-top: 6rem;
+}
+
+.rocm-sources .src-meta {
+  color: var(--muted);
+}
+
+.rocm-mermaid {
+  margin: 1.6rem 0;
+  border: 1px solid var(--line);
+  border-radius: 0.85rem;
+  background: var(--raised);
+  padding: 1rem 1rem 0.75rem;
+  overflow-x: auto;
+}
+
+.rocm-mermaid figcaption {
+  margin-bottom: 0.75rem;
+}
+
+.rocm-mermaid .mermaid {
+  margin: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  padding: 0;
+}
+
+.rocm-mermaid .mermaid-fallback {
+  margin: 0.75rem 0 0;
+  font-size: 0.85rem;
+  color: var(--faint);
+}
+
+.rocm-guide-nav {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .rocm-guide-nav {
+    display: block;
+  }
+}

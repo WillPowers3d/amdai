@@ -1,0 +1,152 @@
+---
+import RocmGuide from '../../layouts/RocmGuide.astro';
+import Callout from '../../components/Callout.astro';
+import Cite from '../../components/rocm/Cite.astro';
+import GoDeeper from '../../components/rocm/GoDeeper.astro';
+import Sources from '../../components/rocm/Sources.astro';
+import type { CiteKey } from '../../lib/rocm-guide';
+
+const used = [
+  'sc16Press',
+  'sc16PressIr',
+  'rocmVersions',
+  'theRock',
+  'rocm10Notes',
+  'rocm101Notes',
+  'rocm101Blog',
+  'hipWhat',
+] as const satisfies readonly CiteKey[];
+
+const headings = [
+  { depth: 2, slug: 'how-to-read', text: 'How to read this timeline' },
+  { depth: 2, slug: '2016', text: '2016 — the name ROCm' },
+  { depth: 2, slug: 'table', text: 'Official version table (5.0 → 10.1)' },
+  { depth: 2, slug: 'therock', text: 'TheRock and the 10.x line' },
+  { depth: 2, slug: 'open', text: 'What we are not filling in' },
+];
+---
+
+<RocmGuide page="history" headings={headings}>
+  <h2 id="how-to-read">How to read this timeline</h2>
+  <p>
+    Only dated claims with a primary source go in the table. Marketing slides, wiki reconstructions,
+    and “I think 1.0 shipped in April” stay out unless AMD (or a contemporaneous AMD press page)
+    says so. Gaps are marked TODO, not guessed.
+  </p>
+
+  <h2 id="2016">2016 — the name ROCm</h2>
+  <p>
+    On <strong>14 November 2016</strong>, at SC16 in Salt Lake City, AMD announced a new release
+    of the <strong>Radeon Open Compute Platform (ROCm)</strong>: software support for then-new
+    Radeon GPU hardware, new math libraries, and a foundation of programming languages for
+    heterogeneous compute. The same release discussed planned OpenCL support and future CPU
+    targets (including then-upcoming Zen).<Cite id="sc16Press" used={used} /><Cite id="sc16PressIr" used={used} />
+  </p>
+  <p>
+    That press release is the clean public naming event. HIP — the C++ API still in the stack —
+    is documented today as part of ROCm and as a way to port CUDA-like code, not as a drop-in
+    CUDA clone.<Cite id="hipWhat" used={used} />
+    We do not attach a HIP 0.x tag date here without an AMD primary source.
+  </p>
+
+  <Callout type="note" title="TODO: first public 1.0 tag">
+    Secondary reporting often says an earlier ROCm 1.0 shipped in 2016 before the SC16 1.3
+    announcement. We have not attached an AMD primary URL for that 1.0 date. Until we do, the
+    first <em>cited</em> public milestone on this page is the 14 November 2016 press release.
+  </Callout>
+
+  <h2 id="table">Official version table (5.0 → 10.1)</h2>
+  <p>
+    Current AMD docs publish a <a href="https://rocm.docs.amd.com/en/latest/release/versions.html">release history</a>
+    that starts at <strong>5.0.0 — 9 February 2022</strong> and runs through
+    <strong>10.1.0 — 5 October 2026</strong>.<Cite id="rocmVersions" used={used} />
+    Earlier 1.x–4.x numbers are not on that table. Selected rows (full table is at the source):
+  </p>
+  <div class="card overflow-x-auto">
+    <table class="table-lab min-w-[28rem]">
+      <thead>
+        <tr>
+          <th>Version</th>
+          <th>Date (AMD table)</th>
+          <th>Why it is on this page</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>5.0.0</td>
+          <td>9 Feb 2022</td>
+          <td>Oldest row on the current official history table.</td>
+        </tr>
+        <tr>
+          <td>6.0.0</td>
+          <td>15 Dec 2023</td>
+          <td>6.x line opens.</td>
+        </tr>
+        <tr>
+          <td>7.0.0</td>
+          <td>16 Sep 2025</td>
+          <td>7.x line opens.</td>
+        </tr>
+        <tr>
+          <td>7.14.0</td>
+          <td>15 Jul 2026</td>
+          <td>TheRock becomes the build/release system from 7.14.<Cite id="rocm101Notes" used={used} /></td>
+        </tr>
+        <tr>
+          <td>7.14.1</td>
+          <td>2 Sep 2026</td>
+          <td>7.14 patch line (dated after 10.0.0 on the same table).</td>
+        </tr>
+        <tr>
+          <td>10.0.0</td>
+          <td>26 Aug 2026</td>
+          <td>Production 10.0. R9700 / RX 9000 on the device table.<Cite id="rocm10Notes" used={used} /></td>
+        </tr>
+        <tr>
+          <td>10.1.0</td>
+          <td>5 Oct 2026</td>
+          <td>Current notes this guide cites. CLI v0.2.0 in the blog.<Cite id="rocm101Notes" used={used} /><Cite id="rocm101Blog" used={used} /></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <GoDeeper title="Why 7.14.1 is dated after 10.0.0">
+    <p>
+      The official table lists 10.0.0 on 26 August 2026 and 7.14.1 on 2 September 2026.<Cite id="rocmVersions" used={used} />
+      Parallel lines exist. A 7.14.x wheel or image is not “older than 10.0” just because the
+      major number is smaller — check the date and the gfx list on the artifact you actually
+      installed.
+    </p>
+  </GoDeeper>
+
+  <h2 id="therock">TheRock and the 10.x line</h2>
+  <p>
+    ROCm 10.0 and 10.1 notes both state that <strong>since ROCm 7.14</strong>, ROCm uses
+    <strong>TheRock</strong> as its build and release system.<Cite id="rocm10Notes" used={used} /><Cite id="rocm101Notes" used={used} />
+    The 10.0 docs include a <a href="https://rocm.docs.amd.com/en/docs-10.0.0/about/transition-guide-TheRock.html">transition guide</a>.<Cite id="theRock" used={used} />
+    For home users that is the packaging plot twist: <code>amdrocm-*</code> names, scoped
+    prefixes under <code>/opt/rocm</code>, and “do not mix archive <code>rocm</code>” as a
+    first-week failure mode. Walkthrough: <a href="/tutorials/install-rocm">install</a>. Policy:
+    <a href="/rocm/versions">versions</a>.
+  </p>
+  <p>
+    10.1’s public narrative (Infinity Storage / hipFILE, NUMA-aware HIP alloc, LLVM 24,
+    <code>amd-smi</code>, WSL2 preview, ROCm CLI v0.2.0) is the
+    <a href="https://rocm.blogs.amd.com/ecosystems-and-partners/rocm-10.1-blog/README.html">5 October 2026 blog</a>.<Cite id="rocm101Blog" used={used} />
+  </p>
+
+  <h2 id="open">What we are not filling in</h2>
+  <ul>
+    <li>TODO: AMD primary source for the first ROCm 1.0 tag date (often claimed as April 2016).</li>
+    <li>TODO: AMD primary source for the SC15 “Boltzmann Initiative” announcement, if we add a 2015 row.</li>
+    <li>TODO: first HIP public tag (community cites early 2016 HIP releases; not attached here).</li>
+    <li>We do not reconstruct 2.x–4.x from blogs or Wikipedia.</li>
+  </ul>
+  <p>
+    If you have an AMD newsroom or docs URL for those rows, they belong in
+    <code>src/lib/rocm-guide.ts</code> and then here — not in a footnote we invent.
+  </p>
+
+  <Sources used={used} />
+</RocmGuide>

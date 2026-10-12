@@ -1,0 +1,153 @@
+---
+import RocmGuide from '../../layouts/RocmGuide.astro';
+import Callout from '../../components/Callout.astro';
+import Cite from '../../components/rocm/Cite.astro';
+import Sources from '../../components/rocm/Sources.astro';
+import type { CiteKey } from '../../lib/rocm-guide';
+
+const used = [
+  'rocmHome',
+  'hipWhat',
+  'rocm101Notes',
+  'rocm10Notes',
+  'rocm101Blog',
+  'rocmCli',
+  'hsaOverride2353',
+  'productR9700',
+  'llamaCpp',
+] as const satisfies readonly CiteKey[];
+
+const headings = [
+  { depth: 2, slug: 'misconceptions', text: 'Common misconceptions' },
+  { depth: 2, slug: 'faq', text: 'FAQ' },
+];
+---
+
+<RocmGuide page="faq" headings={headings}>
+  <p>
+    Site-wide newcomer FAQ: <a href="/faq">/faq</a>. This page is ROCm-specific — what people
+    get wrong, then short answers with cites.
+  </p>
+
+  <h2 id="misconceptions">Common misconceptions</h2>
+
+  <h3 id="rocm-is-cuda">“ROCm is just CUDA for AMD.”</h3>
+  <p>
+    ROCm is AMD’s own open platform.<Cite id="rocmHome" used={used} />
+    HIP is deliberately CUDA-<em>like</em> and can port a lot of code, but AMD says it is not a
+    drop-in CUDA replacement.<Cite id="hipWhat" used={used} />
+    Wheels, gfx targets, and tools are a different world. Budget time for matching versions, not
+    for a one-line extra on a CUDA tutorial.
+  </p>
+
+  <h3 id="doesnt-work">“ROCm doesn’t work on consumer cards.”</h3>
+  <p>
+    Out of date as a blanket claim. ROCm 10.1.0’s hardware table lists Radeon AI PRO R9700 and
+    the RX 9070 series as <code>gfx1201</code> (RDNA 4), plus a long RDNA 3 / RDNA 2 PRO list.<Cite id="rocm101Notes" used={used} />
+    What is still fair: it is not CUDA, packaging is the pain, and “official” is a table.
+    Single-GPU local inference on a listed Ubuntu is the path this site writes.
+  </p>
+
+  <h3 id="vulkan-means-failed">“If you use Vulkan, ROCm failed.”</h3>
+  <p>
+    llama.cpp has a Vulkan backend and a HIP backend.<Cite id="llamaCpp" used={used} />
+    Our 35B daily driver is Vulkan on purpose. HIP/ROCm is what you need for PyTorch, vLLM, and
+    the AMD-documented AI ecosystem. <a href="/rocm/vulkan-hip">When each wins</a>.
+  </p>
+
+  <h3 id="override-is-fine">“Set HSA_OVERRIDE_GFX_VERSION and move on.”</h3>
+  <p>
+    That variable is a community workaround (classic case: gfx1031 pretending to be gfx1030).<Cite id="hsaOverride2353" used={used} />
+    It is unofficial, process-wide, and can fault. Current gfx1201 cards on ROCm 10.x should not
+    need it. <a href="/rocm/gfx">gfx page</a>.
+  </p>
+
+  <h3 id="two-cards">“Two R9700s will double tok/s.”</h3>
+  <p>
+    Not automatically. Multi-GPU is RCCL, topology, and a backend that knows how to split. Our
+    daily driver is <strong>one</strong> card. House rule: one LLM per GPU unless you deliberately
+    combine. Use the <a href="/calculator">calculator</a> split toggle before you buy a second
+    card for capacity.
+  </p>
+
+  <h3 id="apt-rocm">“<code>apt install rocm</code> from Ubuntu is the install.”</h3>
+  <p>
+    Archive packages lag the 10.x / TheRock line. Use AMD’s
+    <a href="https://rocm.docs.amd.com/en/docs-10.1.0/install/rocm.html">10.1.0 install docs</a>
+    or the <a href="https://rocm.docs.amd.com/projects/rocm-cli/en/latest/getting-started.html">ROCm CLI</a>,
+    not a mix of archive + leftover runfile + CLI.<Cite id="rocmCli" used={used} />
+    <a href="/tutorials/install-rocm">Walkthrough</a>.
+  </p>
+
+  <h3 id="cli-is-1">“The new CLI is ROCm 1.0 / CLI v1.0.”</h3>
+  <p>
+    The 10.1 blog names <strong>ROCm CLI v0.2.0</strong>.<Cite id="rocm101Blog" used={used} />
+    Check <a href="https://github.com/ROCm/rocm-cli/releases">releases</a> for tags. Do not write
+    v1.0.0 from memory.
+  </p>
+
+  <h3 id="rx9700">“I have an RX 9700.”</h3>
+  <p>
+    You don’t, in AMD’s current lineup. The 32&nbsp;GB workstation card is the
+    <strong>Radeon AI PRO R9700</strong>.<Cite id="productR9700" used={used} />
+    The gaming sibling is the RX 9070 series (also <code>gfx1201</code>, less VRAM).
+    <a href="/gpus">Directory</a>.
+  </p>
+
+  <h2 id="faq">FAQ</h2>
+
+  <h3 id="windows">Can I stay on Windows?</h3>
+  <p>
+    AMD documents ROCm as Linux and Windows.<Cite id="rocmHome" used={used} />
+    10.1 adds a <strong>WSL2 technical preview</strong> (standard Linux packages in the guest;
+    profiling / KFD-dependent tooling not supported at that launch, per the notes).<Cite id="rocm101Notes" used={used} /><Cite id="rocm101Blog" used={used} />
+    For a first weekend of tokens, llama.cpp Vulkan is the honest Windows path. A full HIP +
+    PyTorch home lab is still the listed-Ubuntu story we write in
+    <a href="/tutorials/install-rocm">Install ROCm</a>.
+  </p>
+
+  <h3 id="pins">Which PyTorch / vLLM numbers are “the” numbers?</h3>
+  <p>
+    Dated snapshots, not eternal law. <strong>10.1.0 notes:</strong> PyTorch 2.14.0, vLLM 0.29.0
+    (notes say this replaces 2.11.0 / 0.27.0).<Cite id="rocm101Notes" used={used} />
+    <strong>10.0.0 notes:</strong> PyTorch 2.13.0, vLLM 0.27.0.<Cite id="rocm10Notes" used={used} />
+    Community try tags move faster. The <a href="/">home card</a> is this week. Do not mix pins
+    in one venv. Default PyPI vLLM is CUDA.
+  </p>
+
+  <h3 id="need-rocm">Do I need ROCm to run Qwen locally?</h3>
+  <p>
+    No, if llama.cpp Vulkan sees the discrete GPU and VRAM moves. Yes, if you want PyTorch, vLLM,
+    or HIP llama.cpp against <code>/opt/rocm</code>. <a href="/backends">Chooser</a>.
+  </p>
+
+  <h3 id="fine-tune">Can I fine-tune like a 4090 blog post?</h3>
+  <p>
+    PyTorch ROCm exists. Fine-tune cookbooks are thinner than CUDA. This site has a dated note
+    about training/fine-tune GPU resets on R9700 in the 10.0 era and a
+    <code>TORCH_BLAS_PREFER_HIPBLASLT=0</code> suggestion — treat that as a snapshot, not a
+    current KI we have re-verified today.
+  </p>
+  <p>
+    <!-- TODO: confirm the live ROCm 10.0 R9700 fine-tune known-issue URL before promoting that flag as current. -->
+    Prefer inference on the pin you already trust. Ask the
+    <a href="/troubleshoot/errors">error paste</a> if a train run dies.
+  </p>
+
+  <h3 id="smi">rocm-smi or amd-smi?</h3>
+  <p>
+    The 10.1 blog says the <code>rocm-smi</code> deprecation period is complete and
+    <code>amd-smi</code> is the successor.<Cite id="rocm101Blog" used={used} />
+    New scripts should call <code>amd-smi</code>. Old blog posts will still say
+    <code>rocm-smi</code>.
+  </p>
+
+  <Callout type="check">
+    Unsure whether a claim is official? Check the
+    <a href="https://rocm.docs.amd.com/en/docs-10.1.0/about/release-notes.html">10.1.0 notes</a>
+    and the <a href="/gpus">GPU directory</a>. If we do not have a source, we write TODO — we do
+    not invent a version.
+  </Callout>
+
+  <Sources used={used} />
+</RocmGuide>

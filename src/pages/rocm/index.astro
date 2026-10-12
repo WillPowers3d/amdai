@@ -1,0 +1,144 @@
+---
+import RocmGuide from '../../layouts/RocmGuide.astro';
+import Callout from '../../components/Callout.astro';
+import Cite from '../../components/rocm/Cite.astro';
+import GoDeeper from '../../components/rocm/GoDeeper.astro';
+import Sources from '../../components/rocm/Sources.astro';
+import type { CiteKey } from '../../lib/rocm-guide';
+
+const used = [
+  'rocmHome',
+  'hipWhat',
+  'sc16Press',
+  'rocm101Notes',
+  'radeonRocm',
+  'productR9700',
+] as const satisfies readonly CiteKey[];
+
+const headings = [
+  { depth: 2, slug: 'in-one-paragraph', text: 'In one paragraph' },
+  { depth: 2, slug: 'why-it-exists', text: 'Why it exists (CUDA vs ROCm)' },
+  { depth: 2, slug: 'what-it-means-at-home', text: 'What it means for home users' },
+  { depth: 2, slug: 'what-this-guide-covers', text: 'What this guide covers' },
+];
+---
+
+<RocmGuide page="overview" headings={headings}>
+  <h2 id="in-one-paragraph">In one paragraph</h2>
+  <p>
+    <strong>ROCm</strong> is AMD’s open-source GPU computing platform: compilers, runtimes, and
+    libraries for AI and other compute work, aimed at Instinct, Radeon, and Ryzen AI hardware, on
+    Linux and Windows.<Cite id="rocmHome" used={used} />
+    You do not install “ROCm” the way you install a chat app. You install a
+    <em>matched set</em>: a kernel driver the GPU will talk to, a userspace that knows your
+    <a href="/rocm/gfx">gfx ID</a>, and (if you use them) framework wheels that were built for that
+    userspace.
+  </p>
+  <p>
+    This site’s daily driver does not wait on that full stack. On our test rig the
+    Qwen3.6-35B-A3B Unsloth UD-Q5_K_XL run is <a href="/rocm/vulkan-hip">llama.cpp Vulkan</a> on
+    <strong>one</strong> <a href="/gpus">Radeon AI PRO R9700</a> (<code>gfx1201</code>, 32&nbsp;GB).
+    ROCm is still the reason the rest of the AMD AI ecosystem exists.
+  </p>
+
+  <Callout type="linux">
+    Linux is the home-lab path we write for. AMD documents ROCm on Linux and Windows.<Cite id="rocmHome" used={used} />
+    A full HIP + PyTorch + <code>amd-smi</code> box is still a listed Ubuntu (or other matrix) install.
+    See <a href="/tutorials/install-rocm">Install ROCm</a>.
+  </Callout>
+
+  <h2 id="why-it-exists">Why it exists (CUDA vs ROCm)</h2>
+  <p>
+    Most machine-learning software was written against <strong>CUDA</strong>, NVIDIA’s GPU compute
+    stack. If you buy a Radeon, that stack is not on the card. AMD’s answer is ROCm: an open
+    platform with its own runtime, compiler, and libraries, plus <strong>HIP</strong> — a C++ API
+    and kernel language that looks familiar to CUDA programmers and can be used to port CUDA code,
+    without being a drop-in replacement.<Cite id="hipWhat" used={used} />
+  </p>
+  <p>
+    The name is literal. AMD’s November 2016 Supercomputing announcement called it the
+    <strong>Radeon Open Compute Platform</strong>.<Cite id="sc16Press" used={used} />
+    The pitch then was the same shape as now: an open GPU compute stack so you are not locked to
+    one vendor’s closed toolchain. The distance from that press release to a working home LLM is
+    the rest of this guide.
+  </p>
+
+  <GoDeeper title="HIP is not “CUDA but orange”">
+    <p>
+      AMD’s own HIP page is explicit: GPU programmers with CUDA experience will find HIP
+      straightforward, and HIPify can rewrite many CUDA calls, but HIP is
+      <strong>not intended as a drop-in CUDA replacement</strong>. Expect manual work and
+      performance tuning.<Cite id="hipWhat" used={used} />
+    </p>
+    <p>
+      For a home user that means: a PyTorch ROCm wheel is not “the CUDA wheel with a different
+      pip extra.” It is a different build, with a different gfx target list, and it will refuse
+      to load kernels your card’s ISA is not in. That is why this site’s
+      <a href="/gpus">GPU directory</a> leads with gfx IDs, not marketing names.
+    </p>
+  </GoDeeper>
+
+  <h2 id="what-it-means-at-home">What it means for home users</h2>
+  <p>Three practical facts, in the order they usually hit you:</p>
+  <ol>
+    <li>
+      <strong>Your card has an ISA name.</strong> The Radeon AI PRO R9700 and the RX 9070 XT are
+      both <code>gfx1201</code> on AMD’s ROCm 10.1.0 hardware table (RDNA 4).<Cite id="rocm101Notes" used={used} />
+      Wheels and llama.cpp HIP builds must list that target. The product page is the SKU; the gfx
+      ID is what the compiler cares about.<Cite id="productR9700" used={used} />
+    </li>
+    <li>
+      <strong>Official support is a table, not a vibe.</strong> “Official” on this site means the
+      card or OS appears on AMD’s current compatibility matrix or the matching release notes.
+      “Works” means a community or first-party run that is not on that table. We keep those
+      words apart on the <a href="/rocm/versions">versions page</a> and in the
+      <a href="/gpus">directory</a>.
+    </li>
+    <li>
+      <strong>You can generate tokens without finishing ROCm.</strong> llama.cpp’s Vulkan backend
+      talks to the desktop GPU driver (RADV on Linux, the vendor ICD on Windows). That is how
+      this site’s 35B daily driver runs. HIP/ROCm is what you need for PyTorch, vLLM, and the
+      AMD-documented AI ecosystem.<Cite id="radeonRocm" used={used} />
+      The <a href="/backends">backend chooser</a> starts at llama.cpp either way.
+    </li>
+  </ol>
+
+  <Callout type="note" title="We do not invent benches">
+    Exact command lines and measured VRAM for the daily driver stay TODO until the rig owner
+    fills them. The 35B path is Vulkan on one R9700, 262K context, f16 KV, 0% RAM offload. Do
+    not treat a missing number as a small number.
+  </Callout>
+
+  <h2 id="what-this-guide-covers">What this guide covers</h2>
+  <p>Eight pages, written for a person who bought one Radeon and wants local Qwen:</p>
+  <ol>
+    <li>This overview.</li>
+    <li>
+      <a href="/rocm/stack">The stack</a> — amdgpu and KFD, ROCr, HIP, LLVM/clang and comgr,
+      libraries, frameworks.
+    </li>
+    <li>
+      <a href="/rocm/gfx">Architectures and gfx IDs</a> — RDNA vs CDNA, why the target matters,
+      <code>HSA_OVERRIDE_GFX_VERSION</code>.
+    </li>
+    <li>
+      <a href="/rocm/vulkan-hip">Vulkan vs HIP</a> — when llama.cpp Vulkan wins, when HIP/ROCm
+      wins.
+    </li>
+    <li>
+      <a href="/rocm/versions">Versions and support</a> — cadence, official vs works, distros,
+      10.1 and the R9700, the ROCm CLI.
+    </li>
+    <li><a href="/rocm/history">History</a> — a cited timeline.</li>
+    <li><a href="/rocm/glossary">Glossary</a>.</li>
+    <li><a href="/rocm/faq">Misconceptions and FAQ</a>.</li>
+  </ol>
+  <p>
+    Install steps live in the <a href="/tutorials/install-rocm">install tutorial</a>, not here.
+    When something breaks, use the <a href="/troubleshoot/errors">error paste</a> and
+    <a href="/troubleshooting">troubleshooting</a> pages. Fit a model with the
+    <a href="/calculator">calculator</a> before you buy a second card.
+  </p>
+
+  <Sources used={used} />
+</RocmGuide>

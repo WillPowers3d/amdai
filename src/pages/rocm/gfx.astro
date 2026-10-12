@@ -1,0 +1,189 @@
+---
+import RocmGuide from '../../layouts/RocmGuide.astro';
+import Callout from '../../components/Callout.astro';
+import Cite from '../../components/rocm/Cite.astro';
+import GoDeeper from '../../components/rocm/GoDeeper.astro';
+import Sources from '../../components/rocm/Sources.astro';
+import type { CiteKey } from '../../lib/rocm-guide';
+
+const used = [
+  'rocm101Notes',
+  'rocm10Matrix',
+  'linuxReqs',
+  'productR9700',
+  'hsaOverride2353',
+  'rocr',
+] as const satisfies readonly CiteKey[];
+
+const headings = [
+  { depth: 2, slug: 'rdna-vs-cdna', text: 'RDNA vs CDNA' },
+  { depth: 2, slug: 'ids', text: 'gfx IDs you will actually type' },
+  { depth: 2, slug: 'why', text: 'Why the gfx target matters' },
+  { depth: 2, slug: 'override', text: 'HSA_OVERRIDE_GFX_VERSION' },
+];
+---
+
+<RocmGuide page="gfx" headings={headings}>
+  <p>
+    Every AMD GPU this site talks about has two names. The sticker name is for buying
+    (<a href="https://www.amd.com/en/products/graphics/workstations/radeon-ai-pro/ai-9000-series/amd-radeon-ai-pro-r9700.html">Radeon AI PRO R9700</a>).<Cite id="productR9700" used={used} />
+    The <strong>gfx ID</strong> is the LLVM target the compiler and the wheels care about. On
+    ROCm 10.1.0’s hardware table the R9700 is <code>gfx1201</code>, architecture <strong>RDNA 4</strong>.<Cite id="rocm101Notes" used={used} />
+  </p>
+  <p>
+    The living card list — VRAM, official vs unofficial, and per-SKU override notes — is the
+    <a href="/gpus">GPU directory</a>. This page explains the IDs.
+  </p>
+
+  <h2 id="rdna-vs-cdna">RDNA vs CDNA</h2>
+  <p>
+    AMD ships two compute-relevant GPU families in current ROCm notes:
+  </p>
+  <ul>
+    <li>
+      <strong>RDNA</strong> — the Radeon (and Ryzen iGPU) line. Consumer and workstation cards you
+      can actually buy for a home lab. The 10.1.0 table labels R9700 / RX 9070-class as RDNA 4
+      (<code>gfx1201</code>), RX 7900-class as RDNA 3 (<code>gfx1100</code> / <code>1101</code> /
+      <code>1102</code>), and older PRO parts such as W6800 as RDNA 2 (<code>gfx1030</code>).<Cite id="rocm101Notes" used={used} />
+    </li>
+    <li>
+      <strong>CDNA</strong> — the Instinct datacenter line. Same ROCm docs, different SKUs, often
+      different OS/kernel footnotes. Do not copy an Instinct install row onto a Radeon and assume
+      the kernels match.
+    </li>
+  </ul>
+  <p>
+    Wavefront width and matrix-core details differ across those families. The 10.1.0 notes even
+    call out rocSPARSE work that is wave32-aware on RDNA 4 (<code>gfx1201</code>) and leaves
+    wave64 (CDNA) behavior unchanged.<Cite id="rocm101Notes" used={used} />
+    You do not need to memorize wave sizes. You do need to install the package suffix that matches
+    your family — <code>gfx1201</code> for an R9700, <code>gfx110x</code> for a 7900 — as the
+    <a href="/tutorials/install-rocm">install tutorial</a> describes.
+  </p>
+
+  <h2 id="ids">gfx IDs you will actually type</h2>
+  <p>
+    From the ROCm 10.1.0 device table (Radeon rows), plus this site’s directory. Re-read the
+    <a href="https://rocm.docs.amd.com/en/docs-10.1.0/about/release-notes.html">10.1.0 notes</a>
+    and the <a href="https://rocm.docs.amd.com/en/docs-10.1.0/compatibility/compatibility-matrix.html">compatibility matrix</a>
+    on install day.<Cite id="rocm101Notes" used={used} /><Cite id="rocm10Matrix" used={used} />
+  </p>
+  <div class="card overflow-x-auto">
+    <table class="table-lab min-w-[36rem]">
+      <thead>
+        <tr>
+          <th>gfx</th>
+          <th>Arch</th>
+          <th>Example SKUs on the 10.1 table</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>gfx1201</code></td>
+          <td>RDNA 4</td>
+          <td>Radeon AI PRO R9700 / R9700S / R9600D / R9600; RX 9070 XT / GRE / 9070</td>
+        </tr>
+        <tr>
+          <td><code>gfx1200</code></td>
+          <td>RDNA 4</td>
+          <td>RX 9060 XT (and XT LP), RX 9060, RX 9050</td>
+        </tr>
+        <tr>
+          <td><code>gfx1100</code></td>
+          <td>RDNA 3</td>
+          <td>RX 7900 XTX / XT / GRE; W7900; W7800</td>
+        </tr>
+        <tr>
+          <td><code>gfx1101</code></td>
+          <td>RDNA 3</td>
+          <td>RX 7800 XT / 7700 XT / 7700; W7700; PRO V710</td>
+        </tr>
+        <tr>
+          <td><code>gfx1102</code></td>
+          <td>RDNA 3</td>
+          <td>RX 7600</td>
+        </tr>
+        <tr>
+          <td><code>gfx1030</code></td>
+          <td>RDNA 2</td>
+          <td>PRO W6800; PRO V620. Consumer 6950 XT is <em>not</em> the same official row — see the directory.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p>
+    Ryzen AI iGPUs have their own gfx IDs (<code>gfx1150</code>, <code>gfx1151</code>,
+    <code>gfx1103</code>, …) on the same 10.1.0 table.<Cite id="rocm101Notes" used={used} />
+    If <code>llama-cli --list-devices</code> shows an iGPU next to a discrete R9700, pick the
+    discrete device. The directory does not list every APU; it lists the cards a home lab actually
+    shops.
+  </p>
+
+  <h2 id="why">Why the gfx target matters</h2>
+  <p>
+    A HIP binary, a PyTorch wheel, and a vLLM image each ship GPU code objects for a
+    <em>list</em> of targets. If your card’s gfx is not on that list, the runtime has no kernel
+    to launch. Typical symptoms: <code>hipErrorNoBinaryForGpu</code>, a library looking for
+    tensiles in the wrong directory, or a silent CPU fallback (VRAM meter never moves).
+  </p>
+  <p>
+    That is why this site’s llama.cpp HIP configure line sets <code>AMDGPU_TARGETS=gfx1201</code>
+    on an R9700, and why “I installed ROCm” is not the same as “this wheel lists my ISA.” Official
+    support is the matrix / notes row.<Cite id="rocm10Matrix" used={used} /><Cite id="linuxReqs" used={used} />
+    Community “it ran” is something else. We label them separately.
+  </p>
+
+  <h2 id="override">HSA_OVERRIDE_GFX_VERSION</h2>
+  <p>
+    <code>HSA_OVERRIDE_GFX_VERSION</code> is an unofficial environment variable some people set so
+    a process will load code objects built for a <em>nearby</em> gfx. The usual example in ROCm
+    issue threads is <code>10.3.0</code> so a <code>gfx1031</code> card (RX 6700-class) uses
+    <code>gfx1030</code> objects.<Cite id="hsaOverride2353" used={used} />
+  </p>
+  <p>
+    Format in that community usage is <code>MAJOR.MINOR.PATCH</code> (for example
+    <code>10.3.0</code> ↔ gfx1030). It applies to the process — it is not a per-GPU switch on a
+    mixed machine.
+  </p>
+
+  <Callout type="warn" title="When it helps, and the risks">
+    <p>
+      <strong>When people try it:</strong> a build or wheel lists a close relative (gfx1030) and
+      not your exact ID (gfx1031), and Vulkan is not an option for that app.
+    </p>
+    <p>
+      <strong>Risks:</strong> you are running ISA that was not validated on your chip. Wrong
+      instruction selection, memory faults, and “it works until it does not” are all on the table.
+      The GitHub thread is a community workaround, not an AMD how-to.<Cite id="hsaOverride2353" used={used} />
+    </p>
+    <p>
+      <strong>On current gfx1201 + ROCm 10.x:</strong> you should not need it. The R9700 and RX
+      9070 XT are first-class <code>gfx1201</code> rows. If HIP fails there, fix the target list
+      or use Vulkan llama.cpp — do not spray an override. That is this site’s directory note, not
+      an AMD quote.
+    </p>
+  </Callout>
+
+  <GoDeeper title="Is this in the official environment-variable list?">
+    <p>
+      AMD’s ROCR docs have an environment-variables reference.<Cite id="rocr" used={used} />
+      The specific path we tried
+      (<code>…/ROCR-Runtime/en/latest/reference/environment-variables.html</code>) returned 404
+      on 2026-10-12. We do <strong>not</strong> claim HSA_OVERRIDE is an official, documented
+      ROCr knob. Until an official page lists it, treat it as community-only.
+    </p>
+    <p>
+      <!-- TODO: record the live official env-var URL if/when it lists HSA_OVERRIDE_GFX_VERSION. -->
+      Other <code>HSA_*</code> names exist for WSL2 detection in the 10.1.0 notes
+      (<code>HSA_ENABLE_DXG_DETECTION</code>).<Cite id="rocm101Notes" used={used} />
+      That is a different variable.
+    </p>
+  </GoDeeper>
+
+  <p>
+    Card-by-card override notes: <a href="/gpus">GPU directory</a>. If a log looks like a gfx
+    mismatch, paste it in the <a href="/troubleshoot/errors">error matcher</a>.
+  </p>
+
+  <Sources used={used} />
+</RocmGuide>

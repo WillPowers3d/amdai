@@ -1,0 +1,16 @@
+---
+import { citations, citeNumber, type CiteKey } from '../../lib/rocm-guide';
+
+interface Props {
+  id: CiteKey;
+  used: readonly CiteKey[];
+}
+
+const { id, used } = Astro.props;
+const n = citeNumber(used, id);
+const src = citations[id];
+---
+
+<sup class="rocm-cite"
+  ><a href={`#cite-${id}`} aria-label={`Source ${n}: ${src.title}`}>[{n}]</a></sup
+>

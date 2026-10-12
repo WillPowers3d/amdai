@@ -61,7 +61,14 @@ Public site URL is `https://amdai.net` (`site` in `astro.config.mjs`; override w
 | `/quants` | Q4–Q8, UD dynamic, KV types, why not below Q4 |
 | `/gpus` | GPU directory — gfx IDs, VRAM, official ROCm rows |
 | `/stack-lab` | Radeon Stack Lab companion (Ubuntu app, Origin repo / local) |
-| `/rocm` | ROCm explainer + succinct version notes |
+| `/rocm` | What is ROCm — multi-page consumer deep dive |
+| `/rocm/stack` | Layer-by-layer stack + mermaid diagram |
+| `/rocm/gfx` | GPU architectures, gfx IDs, HSA_OVERRIDE |
+| `/rocm/vulkan-hip` | ROCm vs Vulkan vs HIP for local LLMs |
+| `/rocm/versions` | Cadence, official vs works, 10.1, ROCm CLI |
+| `/rocm/history` | Cited timeline |
+| `/rocm/glossary` | Terms |
+| `/rocm/faq` | Misconceptions + FAQ |
 | `/backends` | Backend chooser — llama.cpp default |
 | `/software` | llama.cpp first; vLLM / Strata as tries |
 | `/abliterated` | Abliterated hub — vet files, catalog table, method/variant cards, llama.cpp notes |
@@ -100,7 +107,7 @@ Public site URL is `https://amdai.net` (`site` in `astro.config.mjs`; override w
 | `src/data/backends.yaml` | Backend chooser rows |
 | `src/data/version-matrix.yaml` | ROCm × engine × card (or “no data”) |
 
-Add a short dated note under `src/content/updates/` when a **line** changes (new Core SDK, new vLLM extras). Those render on `/rocm#version-notes` and the blog index.
+Add a short dated note under `src/content/updates/` when a **line** changes (new Core SDK, new vLLM extras). Those render on `/rocm/versions` and the blog index.
 
 Weekday procedure: [docs/weekday-scrape.md](docs/weekday-scrape.md) and `/maintain`.
 
@@ -110,10 +117,10 @@ Weekday procedure: [docs/weekday-scrape.md](docs/weekday-scrape.md) and `/mainta
 
 | Folder | Routes |
 | --- | --- |
-| `src/content/guides/` | `/{id}` (`rocm.mdx` is rendered by `src/pages/rocm.astro`) |
+| `src/content/guides/` | `/{id}` (`rocm.mdx` and `abliterated.mdx` are excluded; live ROCm guide is `src/pages/rocm/`) |
 | `src/content/tutorials/` | `/tutorials/{id}` |
 | `src/content/blog/` | `/blog/{id}` |
-| `src/content/updates/` | Cards on `/rocm` and `/blog` |
+| `src/content/updates/` | Cards on `/rocm/versions` and `/blog` |
 
 MDX can use `<Callout>`, `<QwenPicks />`, `<HouseRules />`, `<GpuDirectory />`, `<BuyButtons />`, and `<AbliteratedTable />` without imports.
 

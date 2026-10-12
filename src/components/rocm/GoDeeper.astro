@@ -1,0 +1,17 @@
+---
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<details class="go-deeper">
+  <summary>
+    <span class="kicker">Go deeper</span>
+    <span class="go-title">{title}</span>
+  </summary>
+  <div class="go-body">
+    <slot />
+  </div>
+</details>

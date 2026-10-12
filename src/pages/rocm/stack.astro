@@ -1,0 +1,228 @@
+---
+import RocmGuide from '../../layouts/RocmGuide.astro';
+import Callout from '../../components/Callout.astro';
+import Cite from '../../components/rocm/Cite.astro';
+import GoDeeper from '../../components/rocm/GoDeeper.astro';
+import Mermaid from '../../components/rocm/Mermaid.astro';
+import Sources from '../../components/rocm/Sources.astro';
+import type { CiteKey } from '../../lib/rocm-guide';
+
+const used = [
+  'rocmHome',
+  'amdgpuKernel',
+  'rocr',
+  'hipWhat',
+  'hipRtc',
+  'rocm101Blog',
+  'rocblas',
+  'hipblaslt',
+  'miopen',
+  'rccl',
+  'rocwmma',
+  'ck',
+  'pytorchRocm',
+  'vllmAmd',
+  'llamaCpp',
+] as const satisfies readonly CiteKey[];
+
+const headings = [
+  { depth: 2, slug: 'picture', text: 'The picture' },
+  { depth: 2, slug: 'kernel', text: 'Kernel driver: amdgpu and KFD' },
+  { depth: 2, slug: 'rocr', text: 'ROCr runtime' },
+  { depth: 2, slug: 'hip', text: 'HIP' },
+  { depth: 2, slug: 'compiler', text: 'Compiler: LLVM/clang and comgr' },
+  { depth: 2, slug: 'libraries', text: 'Libraries' },
+  { depth: 2, slug: 'frameworks', text: 'Frameworks' },
+];
+---
+
+<RocmGuide page="stack" headings={headings}>
+  <h2 id="picture">The picture</h2>
+  <p>
+    ROCm is an ecosystem of compilers, runtimes, and libraries — not a single binary.<Cite id="rocmHome" used={used} />
+    For a home box, the useful mental model is six layers. Each one can be “fine” while the layer
+    above it is the thing that is broken.
+  </p>
+
+  <Mermaid title="ROCm, layer by layer">
+{`flowchart TB
+  subgraph frameworks [Frameworks]
+    PT[PyTorch ROCm]
+    LC[llama.cpp HIP]
+    VL[vLLM]
+  end
+  subgraph libraries [Libraries]
+    BL[rocBLAS / hipBLASLt]
+    MI[MIOpen]
+    RC[RCCL]
+    WM[rocWMMA]
+    CK[Composable Kernel]
+  end
+  subgraph language [Language and compiler]
+    HIP[HIP]
+    LLVM[LLVM / clang]
+    COMGR[comgr]
+  end
+  subgraph runtime [Runtime]
+    ROCR[ROCr HSA runtime]
+  end
+  subgraph kernel [Kernel]
+    AMDGPU[amdgpu]
+    KFD[KFD]
+  end
+  PT --> BL
+  PT --> MI
+  VL --> RC
+  LC --> HIP
+  PT --> HIP
+  VL --> HIP
+  BL --> HIP
+  MI --> HIP
+  RC --> HIP
+  WM --> HIP
+  CK --> HIP
+  HIP --> LLVM
+  LLVM --> COMGR
+  HIP --> ROCR
+  ROCR --> KFD
+  ROCR --> AMDGPU
+  KFD --- AMDGPU`}
+  </Mermaid>
+
+  <ol>
+    <li><strong>Kernel</strong> — <code>amdgpu</code> plus the compute side (KFD).</li>
+    <li><strong>Runtime</strong> — ROCr, AMD’s user-mode HSA runtime.</li>
+    <li><strong>Language</strong> — HIP on top of ROCr.</li>
+    <li><strong>Compiler</strong> — LLVM/clang, plus comgr (code-object manager).</li>
+    <li><strong>Libraries</strong> — rocBLAS, hipBLASLt, MIOpen, RCCL, rocWMMA, Composable Kernel.</li>
+    <li><strong>Frameworks</strong> — PyTorch ROCm, llama.cpp HIP, vLLM.</li>
+  </ol>
+
+  <h2 id="kernel">Kernel driver: amdgpu and KFD</h2>
+  <p>
+    The in-tree Linux driver for modern AMD GPUs is <code>amdgpu</code>. It covers GCN, RDNA, and
+    CDNA devices.<Cite id="amdgpuKernel" used={used} />
+    That is the same driver that puts pixels on a monitor <em>and</em> the driver ROCm compute
+    sits on. Mixing a leftover DKMS tree, a distro module, and an old runfile is how people get a
+    black screen. One source of <code>amdgpu</code>. Confirm with <code>lsmod</code> and
+    <code>dmesg</code> before you blame userspace. The
+    <a href="/troubleshooting">troubleshooting</a> page starts there.
+  </p>
+  <p>
+    <strong>KFD</strong> (Kernel Fusion Driver) is the kernel-side compute interface. AMD’s ROCR
+    docs describe ROCr as talking to graphics hardware driven by the AMDGPU driver set and the
+    <strong>ROCK kernel driver</strong>.<Cite id="rocr" used={used} />
+    On a current Linux tree that compute path lives as <code>amdkfd</code> next to
+    <code>amdgpu</code>. User-mode code opens <code>/dev/kfd</code>, learns the topology, and
+    submits queues. If <code>/dev/kfd</code> is missing, no amount of pip will save you.
+  </p>
+
+  <GoDeeper title="Why containers do not replace the host KFD">
+    <p>
+      A vLLM or PyTorch ROCm image still needs a host kernel the image’s ROCr understands. The
+      container brings userspace and wheels. It does not bring a different KFD. If
+      <code>rocminfo</code> is empty on the host, the image will not invent a GPU.
+    </p>
+  </GoDeeper>
+
+  <h2 id="rocr">ROCr runtime</h2>
+  <p>
+    <strong>ROCr</strong> is AMD’s implementation of the HSA runtime: a thin user-mode API that
+    exposes the GPU to programs above it.<Cite id="rocr" used={used} />
+    HIP sits on this layer. Tools like <code>rocminfo</code> are how you ask ROCr what agents it
+    can see. “Agent” here means a compute device ROCr enumerated — usually your discrete GPU, and
+    sometimes an iGPU you did not mean to use.
+  </p>
+
+  <h2 id="hip">HIP</h2>
+  <p>
+    <strong>HIP</strong> is a C++ runtime API and kernel language for AMD GPUs. Host code allocates
+    buffers, copies data, launches kernels, and synchronizes. Device code is the kernel that runs
+    on the GPU.<Cite id="hipWhat" used={used} />
+    HIP is the layer llama.cpp’s HIP backend, PyTorch ROCm, and vLLM all share. It is also the
+    layer Vulkan llama.cpp <em>does not</em> share — Vulkan talks to a graphics ICD instead. That
+    split is the whole <a href="/rocm/vulkan-hip">Vulkan vs HIP</a> page.
+  </p>
+
+  <h2 id="compiler">Compiler: LLVM/clang and comgr</h2>
+  <p>
+    ROCm compiles GPU code with an LLVM/clang toolchain (you will see <code>amdclang++</code> /
+    <code>hipcc</code>). ROCm 10.1 moves that compiler onto <strong>LLVM 24</strong>.<Cite id="rocm101Blog" used={used} />
+    The ISA name in the binary — <code>gfx1201</code>, <code>gfx1100</code>, and so on — is an
+    LLVM target. A binary built for the wrong target is the
+    <code>hipErrorNoBinaryForGpu</code> class of failure. See <a href="/rocm/gfx">gfx IDs</a>.
+  </p>
+  <p>
+    <strong>comgr</strong> (Code Object Manager) is the library that compiles, links, and inspects
+    GPU code objects. HIP’s runtime compiler (HIPRTC) uses comgr internally; AMD describes it as
+    the API for linking, compiling, and inspecting those objects.<Cite id="hipRtc" used={used} />
+    You rarely invoke comgr by name. You meet it when a JIT or a wheel’s embedded kernels do not
+    match the ROCm you installed.
+  </p>
+
+  <h2 id="libraries">Libraries</h2>
+  <p>
+    Frameworks do not implement every GEMM themselves. They call into ROCm libraries. The ones
+    that show up in home-lab LLM logs:
+  </p>
+  <ul>
+    <li>
+      <strong>rocBLAS</strong> — ROCm’s BLAS, implemented in HIP and optimized for AMD GPUs.<Cite id="rocblas" used={used} />
+    </li>
+    <li>
+      <strong>hipBLASLt</strong> — GEMM with a more flexible API than classical BLAS.<Cite id="hipblaslt" used={used} />
+      Fine-tune writeups sometimes set <code>TORCH_BLAS_PREFER_HIPBLASLT=0</code> when this path
+      misbehaves; treat that as a dated workaround, not a default. <!-- TODO: confirm the 10.0 R9700 fine-tune KI URL before citing it as current. -->
+    </li>
+    <li>
+      <strong>MIOpen</strong> — AMD’s open-source deep-learning primitives library (convolutions,
+      fusion, autotune).<Cite id="miopen" used={used} />
+    </li>
+    <li>
+      <strong>RCCL</strong> — multi-GPU / multi-node collectives over PCIe and xGMI.<Cite id="rccl" used={used} />
+      Two cards do not “just” double tokens. RCCL is the layer that has to work first. Our daily
+      driver stays on <strong>one</strong> GPU.
+    </li>
+    <li>
+      <strong>rocWMMA</strong> — C++ headers for mixed-precision matrix multiply-accumulate on
+      specialized GPU matrix cores.<Cite id="rocwmma" used={used} />
+    </li>
+    <li>
+      <strong>Composable Kernel (CK)</strong> — a programming model for performance-critical ML
+      kernels in HIP C++. The 10.1 blog notes CK work on attention on Radeon and more quantized
+      matmul types.<Cite id="ck" used={used} /><Cite id="rocm101Blog" used={used} />
+    </li>
+  </ul>
+
+  <Callout type="note">
+    You do not pick these libraries off a menu for llama.cpp Vulkan. You meet them when you install
+    PyTorch ROCm or vLLM, or when a HIP build links them. Missing tensiles for your gfx usually
+    show up as a library error, not a polite “wrong GPU” dialog.
+  </Callout>
+
+  <h2 id="frameworks">Frameworks</h2>
+  <ul>
+    <li>
+      <strong>PyTorch ROCm</strong> — AMD documents a ROCm-enabled PyTorch install. Use that page
+      (or the ROCm CLI managed env), not default CUDA PyPI.<Cite id="pytorchRocm" used={used} />
+    </li>
+    <li>
+      <strong>llama.cpp HIP</strong> — same GGUF runner as Vulkan, compiled with
+      <code>GGML_HIP</code> against a ROCm prefix. The project lives at ggml-org/llama.cpp.<Cite id="llamaCpp" used={used} />
+      <!-- TODO: llama.cpp HIP.md blob URL was 404 when last checked; cite the repo + /tutorials/run-local-llm until a stable doc path is verified. -->
+      Walkthrough: <a href="/tutorials/run-local-llm">run a local LLM</a>.
+    </li>
+    <li>
+      <strong>vLLM</strong> — AMD documents a ROCm vLLM path. It is a serve stack (batching, many
+      clients), not this site’s consumer default.<Cite id="vllmAmd" used={used} />
+      Pins move: see <a href="/rocm/versions">versions</a>.
+    </li>
+  </ul>
+
+  <p>
+    Fit a quant before you climb this stack: <a href="/calculator">calculator</a>. Pick an engine
+    on the <a href="/backends">backend chooser</a>.
+  </p>
+
+  <Sources used={used} />
+</RocmGuide>

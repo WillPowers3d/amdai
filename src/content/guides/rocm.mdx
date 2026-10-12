@@ -1,75 +1,20 @@
 ---
 title: ROCm at home
 kicker: Software
-description: What ROCm is, why Linux is the path, the 10.0 / TheRock packaging story, and how to read version pins.
+description: Canonical “What is ROCm” guide lives at /rocm (multi-page). This collection entry is not routed.
 updated: 2026-10-12
 order: 2
 ---
 
-**ROCm** is AMD’s GPU compute stack: kernel driver plus versioned userspace (HIP, `rocminfo`, `rocm-smi`, math libraries) plus **framework wheels that must match**. On the Radeon AI PRO R9700 the ISA name is **`gfx1201`**.
+The live consumer guide is the multi-page section:
 
-It is no longer fair to say “ROCm doesn’t work” for **single-GPU** local LLM inference on Ubuntu. It is still fair to say **it is not CUDA**, and the **packaging/version mess** is the pain.
+- [Overview](/rocm)
+- [The stack](/rocm/stack)
+- [gfx IDs](/rocm/gfx)
+- [Vulkan vs HIP](/rocm/vulkan-hip)
+- [Versions](/rocm/versions)
+- [History](/rocm/history)
+- [Glossary](/rocm/glossary)
+- [FAQ](/rocm/faq)
 
-<Callout type="linux">
-Linux is the real platform. Windows can do Vulkan inference and a thin PyTorch slice. Home labs that want HIP and server tools should plan on a listed Ubuntu (or other matrix) install.
-</Callout>
-
-## Two official AMD lines — and the archive trap
-
-AMD’s current production story is **TheRock**, starting at **7.14**:
-
-| Line | Date (public notes) | What it is |
-| --- | --- | --- |
-| **ROCm 10.1.0 matrix** | Live compatibility line | R9700 / RX 9070 XT still `gfx1201`. Re-read the matrix on install day. |
-| **ROCm Core SDK 10.0.0** | 26 Aug 2026 | Production 10.0 line. R9700 / RX 9000 first-class (`gfx1200`/`gfx1201`). |
-| **7.14.1** patch line | 2 Sep 2026 | Last 7.14 production patch. Valid if your wheel/image was built against it. |
-
-**Canonical / Ubuntu archive** is not those lines. People have pulled **7.1** via `apt install rocm` on new Ubuntu (including **26.04** reports). That will not give you 10.0, `amdrocm-*` packages, `/opt/rocm/core-10.0`, or a vLLM 0.29 extras wheel.
-
-<Callout type="warn">
-If you care about ROCm 10.0 or current vLLM ROCm builds, **do not** treat archive `apt install rocm` as the install. Add AMD’s 10.0 repo (or use their container/runfile) as the [install tutorial](/tutorials/install-rocm) describes.
-</Callout>
-
-## TheRock packaging you will actually type
-
-Official 10.0 transition notes:
-
-- Packages are named **`amdrocm-*`** so they do not collide with leftover `rocm` packages.
-- Install prefix: **`/opt/rocm/core-10.0`** (TheRock scoped prefixes; confirm with `ls /opt/rocm`).
-- Install **one GPU family**, not every SKU:
-  - all-GPU: `amdrocm-core-sdk10.0`
-  - RDNA3 (7900-class): `amdrocm-core-sdk10.0-gfx110x`
-  - RDNA4 / RX 9000 / **Radeon AI PRO R9700**: `amdrocm-core-sdk10.0-gfx1201` (AMD’s 10.0 table also lists a combined `-gfx1200-gfx1201` suffix — `apt-cache search amdrocm-core-sdk10.0` on the day you install).
-
-R9700 is **first-class** on the 10.0 device table (`gfx1201`), same row as RX 9070 / 9070 XT.
-
-## Framework pins vs “what people run”
-
-AMD’s **10.0.0 release notes** listed, among others:
-
-- PyTorch **2.13.0**
-- vLLM **0.27** (explicitly including gfx1200/gfx1201)
-- SGLang **0.5.15**
-
-That is the **AMD-supported combo**. Upstream vLLM has already moved (0.29 extras, then community Docker `v0.30.0`). The home card tells you which pair we would try **this week**. These [version notes](#version-notes) stay as history.
-
-## Mental model
-
-1. **`amdgpu` kernel module** — one source. Mixing DKMS + distro + a leftover runfile is a black screen.
-2. **ROCm userspace** — the `amdrocm` / `/opt/rocm` tree.
-3. **Wheels / containers** — PyTorch, vLLM, TGI. They ship their own ROCm-flavored builds.
-
-Containers do not replace a host KFD that the image understands.
-
-## Useful official links
-
-- [Install ROCm 10.1.0](https://rocm.docs.amd.com/en/docs-10.1.0/install/rocm.html)
-- [10.1.0 release notes](https://rocm.docs.amd.com/en/docs-10.1.0/about/release-notes.html) — R9700 gfx1201; Radeon Ubuntu 26.04.1 / 24.04.5 / 22.04.5
-- [10.1 blog](https://rocm.blogs.amd.com/ecosystems-and-partners/rocm-10.1-blog/README.html) — ROCm CLI **v0.2.0** (not a 1.0.0 tag as of 2026-10-12)
-- [ROCm CLI getting started](https://rocm.docs.amd.com/projects/rocm-cli/en/latest/getting-started.html)
-- [10.0.0 release notes](https://rocm.docs.amd.com/en/docs-10.0.0/about/release-notes.html)
-- [TheRock transition guide](https://rocm.docs.amd.com/en/docs-10.0.0/about/transition-guide-TheRock.html)
-- [Linux system requirements](https://rocm.docs.amd.com/projects/install-on-linux/en/latest/reference/system-requirements.html)
-- [vLLM on ROCm (AMD)](https://rocm.docs.amd.com/projects/ai-ecosystem/en/latest/inference/vllm.html)
-- [Version matrix](/updates/matrix) — cited or “no data”
-- [Install tutorial](/tutorials/install-rocm)
+This MDX file is excluded from `[slug].astro` so it does not collide with `src/pages/rocm/`. Edit those Astro pages, not this file.

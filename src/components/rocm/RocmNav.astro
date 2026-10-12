@@ -1,0 +1,52 @@
+---
+import { rocmNeighbors, rocmPages, type RocmPageId } from '../../lib/rocm-guide';
+
+interface Props {
+  current: RocmPageId;
+  variant?: 'toc' | 'pager';
+}
+
+const { current, variant = 'toc' } = Astro.props;
+const { prev, next, index } = rocmNeighbors(current);
+---
+
+{variant === 'toc' && (
+  <nav class="rocm-chapters" aria-label="ROCm guide chapters">
+    <p class="kicker">What is ROCm · {index + 1} / {rocmPages.length}</p>
+    <ol>
+      {rocmPages.map((page, i) => (
+        <li>
+          <a
+            href={page.href}
+            aria-current={page.id === current ? 'page' : undefined}
+            class:list={['rocm-chapter', page.id === current && 'is-current']}
+          >
+            <span class="n">{String(i + 1).padStart(2, '0')}</span>
+            <span>{page.nav}</span>
+          </a>
+        </li>
+      ))}
+    </ol>
+  </nav>
+)}
+
+{variant === 'pager' && (
+  <nav class="rocm-pager" aria-label="Guide pager">
+    {prev ? (
+      <a class="rocm-page-link" href={prev.href}>
+        <span class="kicker">Previous</span>
+        <span>{prev.nav}</span>
+      </a>
+    ) : (
+      <span class="rocm-page-link is-empty"></span>
+    )}
+    {next ? (
+      <a class="rocm-page-link" href={next.href}>
+        <span class="kicker">Next</span>
+        <span>{next.nav}</span>
+      </a>
+    ) : (
+      <span class="rocm-page-link is-empty"></span>
+    )}
+  </nav>
+)}

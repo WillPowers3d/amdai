@@ -1,0 +1,17 @@
+---
+import { rocmRelated } from '../../lib/rocm-guide';
+---
+
+<section class="rocm-related" aria-labelledby="related-heading">
+  <h2 id="related-heading">Also on this site</h2>
+  <ul>
+    {rocmRelated.map((item) => (
+      <li>
+        <a href={item.href}>
+          <span class="rel-label">{item.label}</span>
+          <span class="rel-blurb">{item.blurb}</span>
+        </a>
+      </li>
+    ))}
+  </ul>
+</section>

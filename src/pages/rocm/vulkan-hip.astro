@@ -1,0 +1,169 @@
+---
+import RocmGuide from '../../layouts/RocmGuide.astro';
+import Callout from '../../components/Callout.astro';
+import Cite from '../../components/rocm/Cite.astro';
+import GoDeeper from '../../components/rocm/GoDeeper.astro';
+import Sources from '../../components/rocm/Sources.astro';
+import type { CiteKey } from '../../lib/rocm-guide';
+
+const used = [
+  'llamaCpp',
+  'hipWhat',
+  'pytorchRocm',
+  'vllmAmd',
+  'rocm101Blog',
+  'radeonRocm',
+] as const satisfies readonly CiteKey[];
+
+const headings = [
+  { depth: 2, slug: 'three-words', text: 'Three words that get mixed up' },
+  { depth: 2, slug: 'vulkan-wins', text: 'When llama.cpp Vulkan wins' },
+  { depth: 2, slug: 'hip-wins', text: 'When HIP / ROCm wins' },
+  { depth: 2, slug: 'our-rig', text: 'What we run on the test rig' },
+  { depth: 2, slug: 'keep-both', text: 'Keep both builds' },
+];
+---
+
+<RocmGuide page="vulkan-hip" headings={headings}>
+  <h2 id="three-words">Three words that get mixed up</h2>
+  <p>
+    <strong>ROCm</strong> is the platform: driver, runtime, compiler, libraries, wheels.
+    <strong>HIP</strong> is the C++ API and kernel language inside that platform.<Cite id="hipWhat" used={used} />
+    <strong>Vulkan</strong> is a Khronos graphics-and-compute API. llama.cpp can speak HIP
+    <em>or</em> Vulkan. They are different compilers pointing at the same VRAM.
+  </p>
+  <p>
+    llama.cpp lives at ggml-org/llama.cpp and can be built with a HIP backend
+    (<code>GGML_HIP</code>) or a Vulkan backend (<code>GGML_VULKAN</code>).<Cite id="llamaCpp" used={used} />
+    <!-- TODO: stable upstream HIP.md / Vulkan.md URLs — the HIP.md GitHub blob 404'd when last fetched. -->
+    The consumer default on this site is llama.cpp. The
+    <a href="/backends">backend chooser</a> is the short version of this page.
+  </p>
+
+  <h2 id="vulkan-wins">When llama.cpp Vulkan wins</h2>
+  <p>
+    Vulkan talks to the <em>desktop</em> GPU stack you already needed for a picture on the
+    monitor — RADV on typical Linux, or the vendor ICD on Windows. You do not need a matching
+    <code>/opt/rocm</code> tree to get the first tokens.
+  </p>
+  <ul>
+    <li>
+      <strong>Tokens tonight.</strong> HIP CMake cannot find a ROCm that <code>rocminfo</code>
+      insists is fine. Vulkan configure is the weekend path.
+    </li>
+    <li>
+      <strong>Windows.</strong> A full HIP userspace may not be what you have. Adrenalin + Vulkan
+      often is. ROCm 10.1 adds a WSL2 tech preview; that is still not “just install the Linux
+      tutorial on Windows.”<Cite id="rocm101Blog" used={used} />
+    </li>
+    <li>
+      <strong>iGPU vs dGPU.</strong> <code>llama-cli --list-devices</code> showing
+      <code>RADV GFX1201</code> next to an iGPU is easier to read than a HIP agent list you have
+      not learned yet. Pick the discrete card.
+    </li>
+    <li>
+      <strong>This site’s daily driver.</strong> Qwen3.6-35B-A3B Unsloth UD-Q5_K_XL on
+      <strong>one</strong> R9700, llama.cpp Vulkan, 262K context, f16 KV, 0% RAM offload. That is
+      first-party, from our test rig. Exact tok/s and measured VRAM stay TODO until the owner
+      fills them — we do not invent benches.
+    </li>
+  </ul>
+
+  <Callout type="note" title="Vulkan is an on-ramp, not a consolation prize">
+    Longer argument: <a href="/blog/vulkan-is-an-on-ramp">Vulkan is an on-ramp</a>. Community
+    R9700 threads spend real time on RADV vs AMDVLK and P-states. That work is not a substitute
+    for AMD’s published bandwidth figures, and it is not “ROCm failed.”
+  </Callout>
+
+  <h2 id="hip-wins">When HIP / ROCm wins</h2>
+  <p>Install and use HIP/ROCm when you:</p>
+  <ul>
+    <li>
+      Want <strong>PyTorch</strong> the way AMD documents it.<Cite id="pytorchRocm" used={used} />
+    </li>
+    <li>
+      Want <strong>vLLM</strong> (or another ROCm serve stack) with matching wheels — batching,
+      several clients, a harness that expects a real server.<Cite id="vllmAmd" used={used} />
+    </li>
+    <li>
+      Care about <code>amd-smi</code> (successor to <code>rocm-smi</code> as of the 10.1 blog)
+      the way a CUDA user cares about <code>nvidia-smi</code>.<Cite id="rocm101Blog" used={used} />
+    </li>
+    <li>
+      Need to debug library-level issues (rocBLAS / hipBLASLt kernels, missing
+      <code>gfx1201</code> tensiles) instead of a Vulkan shader path. See
+      <a href="/rocm/stack">the stack</a>.
+    </li>
+    <li>
+      Are compiling llama.cpp HIP so one tree matches the ROCm prefix you already maintain
+      (<code>-DGGML_HIP=ON -DAMDGPU_TARGETS=gfx1201</code>). Prefix may be
+      <code>/opt/rocm/core-10.0</code> — <code>ls</code> first.
+    </li>
+  </ul>
+  <p>
+    AMD’s Radeon/Ryzen ROCm docs are the consumer-facing door for that ecosystem.<Cite id="radeonRocm" used={used} />
+    vLLM is still <em>advanced</em> on this site — not the first home box. Pins live on
+    <a href="/rocm/versions">versions</a>.
+  </p>
+
+  <GoDeeper title="Strata is neither Vulkan nor “ROCm won”">
+    <p>
+      Our fast-agent stack is Qwen 3.8 Flash Unsloth UD-Q6_K_XL on <strong>Strata v0.1.42</strong>
+      at 262K. First-party on the same rig: about <strong>32.6 tok/s</strong> versus llama.cpp
+      about <strong>16 tok/s</strong> on that Flash Q6. That is a different engine, not a HIP-vs-Vulkan
+      verdict. Exact Strata flags stay TODO. Cards: <a href="/stacks">stacks</a>.
+    </p>
+  </GoDeeper>
+
+  <h2 id="our-rig">What we run on the test rig</h2>
+  <div class="card overflow-x-auto">
+    <table class="table-lab min-w-[32rem]">
+      <thead>
+        <tr>
+          <th>Role</th>
+          <th>Engine</th>
+          <th>Why</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Daily driver · 35B Q5</td>
+          <td>llama.cpp <strong>Vulkan</strong></td>
+          <td>What actually serves the 35B on one R9700 today.</td>
+        </tr>
+        <tr>
+          <td>Fast agent · Flash Q6</td>
+          <td>Strata v0.1.42</td>
+          <td>Measured faster than llama.cpp on that model. First-party.</td>
+        </tr>
+        <tr>
+          <td>HIP sibling</td>
+          <td>llama.cpp HIP</td>
+          <td>Keep a <code>build-hip</code> when <code>rocminfo</code> is clean.</td>
+        </tr>
+        <tr>
+          <td>Serve try</td>
+          <td>vLLM (ROCm)</td>
+          <td>Advanced. Not the house path. See versions for pins.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2 id="keep-both">Keep both builds</h2>
+  <p>On Linux it is reasonable to have:</p>
+  <ol>
+    <li>A distro or AMD graphics stack with a working <strong>RADV</strong> ICD.</li>
+    <li>One <strong>ROCm</strong> userspace for HIP apps.</li>
+    <li>Two llama.cpp build directories: <code>build-hip</code> and <code>build-vk</code>.</li>
+  </ol>
+  <p>
+    Do not declare a winner across different models, different <code>-c</code>, and different days.
+    Measure to learn which layer you broke. Walkthrough:
+    <a href="/tutorials/run-local-llm">run a local LLM</a>. Fit:
+    <a href="/calculator">calculator</a>. Logs:
+    <a href="/troubleshoot/errors">error paste</a>.
+  </p>
+
+  <Sources used={used} />
+</RocmGuide>

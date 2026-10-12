@@ -1,0 +1,225 @@
+---
+import { getCollection } from 'astro:content';
+import RocmGuide from '../../layouts/RocmGuide.astro';
+import Callout from '../../components/Callout.astro';
+import Cite from '../../components/rocm/Cite.astro';
+import GoDeeper from '../../components/rocm/GoDeeper.astro';
+import Sources from '../../components/rocm/Sources.astro';
+import UpdateCard from '../../components/UpdateCard.astro';
+import type { CiteKey } from '../../lib/rocm-guide';
+
+const used = [
+  'rocmVersions',
+  'rocm101Notes',
+  'rocm10Notes',
+  'rocm101Blog',
+  'theRock',
+  'rocm10Matrix',
+  'linuxReqs',
+  'rocmCli',
+  'rocmCliReleases',
+  'rocm101Install',
+] as const satisfies readonly CiteKey[];
+
+const headings = [
+  { depth: 2, slug: 'cadence', text: 'Release cadence' },
+  { depth: 2, slug: 'official-vs-works', text: 'Official vs “works”' },
+  { depth: 2, slug: 'distro', text: 'Distro support' },
+  { depth: 2, slug: 'r9700', text: 'ROCm 10.1 and the R9700' },
+  { depth: 2, slug: 'cli', text: 'The ROCm CLI' },
+  { depth: 2, slug: 'notes', text: 'Version notes on this site' },
+];
+
+const updates = (await getCollection('updates')).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+---
+
+<RocmGuide page="versions" headings={headings}>
+  <p>
+    Version pins on this site are <strong>dated snapshots</strong>. The
+    <a href="/">home status card</a> is the only “what we would try this week.” If a note
+    disagrees with the YAML behind that card, the YAML wins.
+  </p>
+
+  <h2 id="cadence">Release cadence</h2>
+  <p>
+    AMD publishes a <a href="https://rocm.docs.amd.com/en/latest/release/versions.html">release history table</a>
+    with version and date.<Cite id="rocmVersions" used={used} />
+    Recent production lines from that table:
+  </p>
+  <div class="card overflow-x-auto">
+    <table class="table-lab min-w-[28rem]">
+      <thead>
+        <tr>
+          <th>Version</th>
+          <th>Date on AMD’s table</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>10.1.0</td>
+          <td>5 October 2026</td>
+        </tr>
+        <tr>
+          <td>10.0.0</td>
+          <td>26 August 2026</td>
+        </tr>
+        <tr>
+          <td>7.14.1</td>
+          <td>2 September 2026</td>
+        </tr>
+        <tr>
+          <td>7.14.0</td>
+          <td>15 July 2026</td>
+        </tr>
+        <tr>
+          <td>7.2.4</td>
+          <td>29 May 2026</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p>
+    The same table continues back through the 6.x and 5.x lines to <strong>5.0.0 on 9 February 2022</strong>.<Cite id="rocmVersions" used={used} />
+    We do not invent a “every N weeks” promise from that list. Spacing is uneven (7.0.0 and 7.0.1
+    are consecutive days; 6.1.5 is dated after several 6.2.x and 6.3.x rows). Read the table, not
+    a slogan.
+  </p>
+  <p>
+    Since <strong>ROCm 7.14</strong>, AMD uses <strong>TheRock</strong> as the build and release
+    system.<Cite id="rocm101Notes" used={used} /><Cite id="theRock" used={used} />
+    That is why 10.x packages and prefixes do not look like the old <code>apt install rocm</code>
+    archive story. See the <a href="/tutorials/install-rocm">install tutorial</a>.
+  </p>
+
+  <h2 id="official-vs-works">Official vs “works”</h2>
+  <ul>
+    <li>
+      <strong>Official</strong> — the GPU, OS, or framework version appears on AMD’s
+      <a href="https://rocm.docs.amd.com/en/docs-10.1.0/compatibility/compatibility-matrix.html">10.1.0 compatibility matrix</a>,
+      the matching <a href="https://rocm.docs.amd.com/en/docs-10.1.0/about/release-notes.html">release notes</a>,
+      or the <a href="https://rocm.docs.amd.com/projects/install-on-linux/en/latest/reference/system-requirements.html">Linux system-requirements</a>
+      page.<Cite id="rocm10Matrix" used={used} /><Cite id="rocm101Notes" used={used} /><Cite id="linuxReqs" used={used} />
+      It is not a tok/s promise.
+    </li>
+    <li>
+      <strong>Works</strong> — a community or first-party run that is not on that table, or that
+      uses a newer upstream (for example a vLLM tag past AMD’s AI-ecosystem pin). We label those
+      as tries. The <a href="/updates/matrix">version matrix</a> says <strong>no data</strong>
+      when we have not measured.
+    </li>
+  </ul>
+  <p>
+    Nightly TheRock builds may list GPUs the production notes do not. The 10.1.0 notes say a
+    GPU that is not listed might be community-enabled through TheRock nightlies.<Cite id="rocm101Notes" used={used} />
+    That is still not “official.”
+  </p>
+
+  <h2 id="distro">Distro support</h2>
+  <p>
+    Copy the <em>Radeon</em> row, not the Instinct row. From the 10.1.0 notes, Radeon Ubuntu
+    support is:
+  </p>
+  <ul>
+    <li>Ubuntu <strong>26.04.1</strong> — kernel GA 7.0</li>
+    <li>Ubuntu <strong>24.04.5</strong> — kernel HWE 7.0</li>
+    <li>Ubuntu <strong>22.04.5</strong> — kernel HWE 6.8</li>
+  </ul>
+  <p>
+    Those footnotes are in the 10.1.0 OS tables.<Cite id="rocm101Notes" used={used} />
+    Instinct lists different kernels for the same Ubuntu numbers (for example 24.04.5 GA 6.8).
+    Do not mix them. Other distros appear on Instinct or virtualization rows — we do not promote
+    them for a first home Radeon without a cite.
+  </p>
+
+  <Callout type="warn">
+    Canonical / Ubuntu archive <code>apt install rocm</code> is not the 10.1 line. People have
+    pulled old archive packages (including 7.1 reports on new Ubuntu). That will not give you
+    current <code>amdrocm-*</code> packages or a matching vLLM extras wheel. Add AMD’s repo, use
+    the documented installer, or use the ROCm CLI — do not mix all three plus archive
+    <code>rocm</code>. Exact package lines:
+    <a href="https://rocm.docs.amd.com/en/docs-10.1.0/install/rocm.html">Install ROCm 10.1.0</a>.<Cite id="rocm101Install" used={used} />
+  </Callout>
+
+  <h2 id="r9700">ROCm 10.1 and the R9700</h2>
+  <p>From the 10.1.0 release notes (5 October 2026) and the 10.1 blog:</p>
+  <ul>
+    <li>
+      The Radeon AI PRO <strong>R9700</strong> (and R9700S / R9600D / R9600) is on the hardware
+      table as <code>gfx1201</code>, RDNA 4, with the RX 9070 XT / GRE / 9070.<Cite id="rocm101Notes" used={used} />
+    </li>
+    <li>
+      10.1.0 <strong>adds</strong> Radeon AI PRO <strong>R9600</strong>. The R9700 was already on
+      the 10.0 device table (R9600 was not in that 10.0 R9000 row the same way).<Cite id="rocm101Notes" used={used} /><Cite id="rocm10Notes" used={used} />
+    </li>
+    <li>
+      AI ecosystem pins in <strong>10.1.0</strong>: PyTorch <strong>2.14.0</strong>, vLLM
+      <strong>0.29.0</strong>. The notes say this replaces previous PyTorch 2.11.0 and vLLM
+      0.27.0 support.<Cite id="rocm101Notes" used={used} />
+    </li>
+    <li>
+      AI ecosystem pins in <strong>10.0.0</strong> notes: PyTorch <strong>2.13.0</strong>, vLLM
+      <strong>0.27.0</strong>.<Cite id="rocm10Notes" used={used} />
+      Those two snapshots disagree on the “previous” PyTorch number (10.1 says it replaced 2.11.0;
+      10.0 listed 2.13.0). We report both dated pages and do not pick a silent winner.
+    </li>
+    <li>
+      LLVM <strong>24</strong>, WSL2 <strong>technical preview</strong>, <code>amd-smi</code> as
+      successor to <code>rocm-smi</code> (deprecation period complete, per the blog).<Cite id="rocm101Blog" used={used} /><Cite id="rocm101Notes" used={used} />
+    </li>
+  </ul>
+
+  <GoDeeper title="TheRock packaging you will type (10.0 transition notes)">
+    <p>
+      Official 10.0 TheRock notes: packages named <code>amdrocm-*</code> so they do not collide
+      with leftover <code>rocm</code> packages; install prefix
+      <code>/opt/rocm/core-10.0</code> (confirm with <code>ls /opt/rocm</code>); install
+      <strong>one GPU family</strong>, not every SKU.<Cite id="theRock" used={used} />
+      RDNA 4 / R9700-shaped suffix is <code>gfx1201</code> (AMD’s 10.0 table also mentions a
+      combined <code>gfx1200-gfx1201</code> suffix — <code>apt-cache search</code> on the day
+      you install).
+    </p>
+    <p>
+      10.1 package names may differ. Copy from
+      <a href="https://rocm.docs.amd.com/en/docs-10.1.0/install/rocm.html">the 10.1.0 install page</a>,
+      not from memory.<Cite id="rocm101Install" used={used} />
+    </p>
+  </GoDeeper>
+
+  <h2 id="cli">The ROCm CLI</h2>
+  <p>
+    The 10.1 blog introduces <strong>ROCm CLI v0.2.0</strong> as a single-binary tool for
+    installing, configuring, and running local AI on AMD GPUs, on Linux, Windows, and WSL2.<Cite id="rocm101Blog" used={used} />
+    As of 2026-10-12 this site has not seen a <code>v1.0.0</code> tag — check
+    <a href="https://github.com/ROCm/rocm-cli/releases">GitHub releases</a> rather than assuming
+    a 1.0.<Cite id="rocmCliReleases" used={used} />
+  </p>
+  <p>
+    Official getting-started commands:<Cite id="rocmCli" used={used} />
+  </p>
+  <ul>
+    <li><code>rocm</code> — launcher (setup, serve, diagnose, chat, dashboard) on a TTY; status summary if piped.</li>
+    <li><code>rocm install sdk</code> — TheRock ROCm wheels and a matching PyTorch stack in a <em>managed</em> env.</li>
+    <li><code>rocm serve qwen</code> — built-in alias for a small assistant model. Not this site’s 35B daily driver.</li>
+    <li><code>rocm examine</code> / <code>rocm diagnose</code> / <code>rocm fix</code> — inspect and apply reported fixes.</li>
+    <li><code>rocm version</code> — CLI version plus the SDK and driver in use.</li>
+  </ul>
+  <p>
+    <code>rocm install sdk</code> next to an existing install shows up as
+    <code>legacy_rocm_status: detected_unmanaged</code>. The managed env is separate.<Cite id="rocmCli" used={used} />
+    Do not assume the CLI replaced <code>amd-smi</code> or your llama.cpp build.
+  </p>
+
+  <h2 id="notes">Version notes on this site</h2>
+  <p>
+    Historical snapshots — including ROCm 10.0 and a given vLLM tag as
+    <strong>examples of a week</strong>, not permanent law.
+  </p>
+  {updates.map((note) => <UpdateCard note={note} />)}
+
+  <p>
+    Living matrix (cited or “no data”): <a href="/updates/matrix">/updates/matrix</a>. RSS:
+    <a href="/updates/rss.xml">/updates/rss.xml</a>.
+  </p>
+
+  <Sources used={used} />
+</RocmGuide>
