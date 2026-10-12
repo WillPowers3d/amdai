@@ -60,7 +60,7 @@ Public site URL is `https://amdai.net` (`site` in `astro.config.mjs`; override w
 | `/rocm` | ROCm explainer + succinct version notes |
 | `/backends` | Backend chooser — llama.cpp default |
 | `/software` | llama.cpp first; vLLM / Strata as tries |
-| `/abliterated` | Abliterated hub — vet files, catalog table, llama.cpp notes |
+| `/abliterated` | Abliterated hub — vet files, catalog table, method/variant cards, llama.cpp notes |
 | `/harnesses` | Hermes Agent and OpenClaw (`/v1` first) |
 | `/hardware` | PSU, cooling, VRAM |
 | `/tutorials` | How-tos |
@@ -84,7 +84,7 @@ Public site URL is `https://amdai.net` (`site` in `astro.config.mjs`; override w
 | `src/data/qwen-recommendations.yaml` | Getting started / software / serve-Qwen |
 | `src/data/stacks.yaml` | `/stacks` cards |
 | `src/data/gpus.yaml` | GPU directory |
-| `src/data/abliterated.yaml` | Abliterated table |
+| `src/data/abliterated.yaml` | Abliterated table + method/variant cards |
 | `src/data/retailers.yaml` | Storefronts + Amazon tag `amdainet-20` + Rakuten site `amdainet` / SID `4763021` |
 | `src/data/products.yaml` | Check-price search URLs (no prices) |
 | `src/data/budget-tiers.yaml` | `/budget` tiers; USD bands stay TODO until cited |

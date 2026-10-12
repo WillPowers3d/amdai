@@ -1,0 +1,190 @@
+---
+import { abliteratedGuide } from '../lib/status';
+import {
+  catalogFamilies,
+  familyById,
+  fieldOrUnknown,
+  q4PlusQuants,
+  rowById,
+  statusLabel,
+} from '../lib/abliterated';
+
+const families = catalogFamilies();
+const rows = abliteratedGuide.rows;
+---
+
+<section id="methods" class="mt-12">
+  <h2 class="font-serif text-3xl">Method families</h2>
+  <p class="mt-3 text-muted">
+    Each family is a way people edit refusals. Claims below are cited from the method writeup or a
+    listed model card. If a fact is missing, it says <span class="text-ink">{fieldOrUnknown('')}</span>.
+    Projected / norm-preserving has no catalog row.
+  </p>
+  <div class="mt-6 grid gap-4">
+    {families.map((family) => (
+      <article id={`family-${family.id}`} class="rounded-2xl border border-line bg-raised/40 p-5">
+        <p class="font-mono text-[0.68rem] uppercase tracking-[0.14em] text-accent">Method</p>
+        <h3 class="mt-2 font-serif text-2xl">{family.name}</h3>
+        <dl class="mt-4 space-y-3 text-sm">
+          <div>
+            <dt class="font-medium text-ink">What it is</dt>
+            <dd class="mt-1 text-muted">{family.method}</dd>
+          </div>
+          <div>
+            <dt class="font-medium text-ink">What changes in the weights</dt>
+            <dd class="mt-1 text-muted">{family.changes}</dd>
+          </div>
+          <div>
+            <dt class="font-medium text-ink">In practice</dt>
+            <dd class="mt-1 text-muted">{family.behavior}</dd>
+          </div>
+          <div>
+            <dt class="font-medium text-ink">Caveats</dt>
+            <dd class="mt-1 text-muted">{family.caveats}</dd>
+          </div>
+          <div>
+            <dt class="font-medium text-ink">Best use</dt>
+            <dd class="mt-1 text-muted">{family.best_use}</dd>
+          </div>
+        </dl>
+        <p class="mt-4 text-sm text-muted">
+          Listed variants:{' '}
+          {family.listed_rows.length === 0 ? (
+            <span>none in this catalog</span>
+          ) : (
+            family.listed_rows.map((id, i) => {
+              const row = rowById(id);
+              return (
+                <>
+                  {i > 0 && <span>, </span>}
+                  <a class="underline decoration-accent/40 underline-offset-2" href={`#card-${id}`}>
+                    {row?.name ?? id}
+                  </a>
+                </>
+              );
+            })
+          )}
+        </p>
+        {family.sources.length > 0 && (
+          <ul class="mt-3 space-y-1 text-xs">
+            {family.sources.map((source) => (
+              <li>
+                <a class="text-accent-ink underline decoration-accent/40 underline-offset-2" href={source.url} rel="noopener">
+                  {source.title}
+                </a>
+              </li>
+            ))}
+          </ul>
+        )}
+      </article>
+    ))}
+  </div>
+</section>
+
+<section id="cards" class="mt-12">
+  <h2 class="font-serif text-3xl">Variant cards</h2>
+  <p class="mt-3 text-muted">
+    One card per catalog row. Quants are Q4 and up only. Status is from the YAML — nothing here is a
+    tested-on-our-rig abliterated pick ({abliteratedGuide.tested_pick}).
+  </p>
+  <div class="mt-6 grid gap-4">
+    {rows.map((row) => {
+      const family = familyById(row.method_family);
+      const sources = row.sources ?? [];
+      return (
+        <article id={`card-${row.id ?? row.repo}`} class="rounded-2xl border border-line bg-canvas p-5">
+          <div class="flex flex-wrap items-baseline justify-between gap-2">
+            <p class="font-mono text-[0.68rem] uppercase tracking-[0.14em] text-accent">
+              {row.kind === 'control' ? 'Control' : 'Variant'}
+            </p>
+            <p class="text-xs text-faint">
+              {statusLabel(row.status)}
+              {row.status_note ? ` · ${row.status_note}` : ''}
+            </p>
+          </div>
+          <h3 class="mt-2 font-serif text-2xl">{row.name}</h3>
+          <p class="mt-1 text-sm text-muted">
+            {family ? (
+              <a class="underline decoration-accent/40 underline-offset-2" href={`#family-${family.id}`}>
+                {family.name}
+              </a>
+            ) : (
+              <span>{row.method}</span>
+            )}
+          </p>
+          <p class="mt-3 text-sm">
+            {row.uploader_url ? (
+              <a class="font-medium underline decoration-accent/40 underline-offset-2" href={row.uploader_url} rel="noopener">
+                {row.uploader}
+              </a>
+            ) : (
+              <span class="font-medium">{row.uploader ?? fieldOrUnknown(null)}</span>
+            )}
+            <span class="text-muted"> · base </span>
+            {row.base_model_url ? (
+              <a class="underline decoration-accent/40 underline-offset-2" href={row.base_model_url} rel="noopener">
+                {row.base_model}
+              </a>
+            ) : (
+              <span class="text-muted">
+                {row.base_model ?? fieldOrUnknown(null)}
+                {row.base_model && !row.base_model_url ? ' — official card URL not documented by uploader' : ''}
+              </span>
+            )}
+          </p>
+          {row.repo_url && (
+            <p class="mt-1 text-xs">
+              <a class="text-accent-ink underline decoration-accent/40 underline-offset-2" href={row.repo_url} rel="noopener">
+                {row.repo}
+              </a>
+            </p>
+          )}
+          <dl class="mt-4 space-y-3 text-sm">
+            <div>
+              <dt class="font-medium text-ink">Quants (Q4+)</dt>
+              <dd class="mt-1 text-muted">
+                <ul class="space-y-1">
+                  {q4PlusQuants(row).map((q) => (
+                    <li>
+                      <span class="font-medium text-ink">{q.label}</span>
+                      <span class="text-faint"> — {q.note}</span>
+                    </li>
+                  ))}
+                </ul>
+              </dd>
+            </div>
+            <div>
+              <dt class="font-medium text-ink">What changed</dt>
+              <dd class="mt-1 text-muted">{fieldOrUnknown(row.changes)}</dd>
+            </div>
+            <div>
+              <dt class="font-medium text-ink">In practice</dt>
+              <dd class="mt-1 text-muted">{fieldOrUnknown(row.behavior)}</dd>
+            </div>
+            <div>
+              <dt class="font-medium text-ink">Caveats</dt>
+              <dd class="mt-1 text-muted">{fieldOrUnknown(row.caveats)}</dd>
+            </div>
+            <div>
+              <dt class="font-medium text-ink">Best use</dt>
+              <dd class="mt-1 text-muted">{fieldOrUnknown(row.best_use)}</dd>
+            </div>
+          </dl>
+          {sources.length > 0 ? (
+            <ul class="mt-4 space-y-1 text-xs">
+              {sources.map((source) => (
+                <li>
+                  <a class="text-accent-ink underline decoration-accent/40 underline-offset-2" href={source.url} rel="noopener">
+                    {source.title}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p class="mt-4 text-xs text-faint">{fieldOrUnknown(null)} — no source links in the YAML for this row.</p>
+          )}
+        </article>
+      );
+    })}
+  </div>
+</section>

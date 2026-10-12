@@ -2,6 +2,9 @@
 # No download stats. Never invent a row, a quant, a base-model URL, or KV dims.
 # Educational local open-weight context only — not a default recommend.
 # Q4 and up only. No Qwen2.5. No Qwen3-8B.
+# Description fields (method, changes, behavior, caveats, best_use, sources)
+# must come from the model card or the author's docs. If a fact is missing,
+# write "not documented by uploader" — do not guess.
 as_of: 2026-10-12
 tested_pick: being reworked
 
@@ -14,10 +17,173 @@ search_patterns:
   - Huihui-Qwen
   - Qwen3.8-27B-Uncensored
 
+families:
+  - id: classic-refusal-direction
+    name: Classic refusal-direction abliteration
+    method: >-
+      Weight-level directional ablation. Estimate a refusal direction as the
+      mean difference of last-token residuals on harmful vs harmless prompts,
+      then orthogonalize residual-writing matrices so the model cannot write
+      that direction. No full retrain. Community implementations include
+      FailSpy / remove-refusals-with-transformers (without TransformerLens)
+      and Labonne's writeup of Arditi et al. (2024).
+    changes: >-
+      Residual-writing weights (typically attention out-projection and MLP
+      down-projection) are edited. Inference-time ablation is also described
+      in the Labonne article; the listed Huihui and OrcaRouter files are
+      permanent weight edits.
+    behavior: >-
+      Refusals drop without a new SFT run. Labonne notes that unprincipled
+      intervention can degrade performance. Huihui frames their builds as a
+      crude proof of concept. OrcaRouter publishes paired capability numbers
+      on their card (see that variant).
+    caveats: >-
+      Early layers may be left unablated. MTP or vision tensors can be
+      dropped or left untouched depending on the editor. Think-loops and
+      broken templates are a known community failure mode. A chat-template
+      jailbreak is not this method.
+    best_use: >-
+      Educational comparison after official instruct already runs on llama.cpp.
+      Not a daily-driver family.
+    listed_rows:
+      - huihui-qwen38-27b
+      - huihui-qwen35-9b
+      - orcarouter-qwen38-27b
+    sources:
+      - title: Arditi et al., Refusal in Language Models Is Mediated by a Single Direction (2024)
+        url: https://arxiv.org/abs/2406.11717
+      - title: Labonne, Uncensor any LLM with abliteration
+        url: https://huggingface.co/blog/mlabonne/abliteration
+      - title: Huihui Qwen3.8-27B abliterated (cites remove-refusals-with-transformers)
+        url: https://huggingface.co/huihui-ai/Huihui-Qwen3.8-27B-abliterated
+
+  - id: heretic
+    name: Heretic-style automated abliteration
+    method: >-
+      Heretic (p-e-w) runs a parametrized directional ablation and uses Optuna
+      TPE to co-minimize refusal count against KL divergence from the original
+      model. The project describes this as fully automatic — no handwritten
+      refusal-removal recipe per model.
+    changes: >-
+      Per the Heretic docs, attention out-projection and MLP down-projection
+      are orthogonalized against a refusal direction. Direction index and
+      per-component layer-weight kernels are search parameters. JonathanColetti's
+      card says the run is at bf16, the LoRA is merged into the bf16 base, and
+      mtp.* tensors are copied verbatim after the merge.
+    behavior: >-
+      Heretic's own writeup claims automatic decensoring at lower KL than some
+      hand abliterations. JonathanColetti publishes a Pareto front (refusals vs
+      first-token KL) and picks one point. Capability deltas on that card sit
+      inside the reported standard error.
+    caveats: >-
+      Refusals are reduced, not eliminated. The refusal boundary is less stable
+      than the base. Lower quants compound that — JonathanColetti says evaluate
+      on Q6_K or Q8_0, not IQ2 or IQ4_XS. Thinking-mode refusal may differ;
+      that card measured non-thinking. We still never list files below Q4.
+    best_use: >-
+      Local llama.cpp GGUF experiment at Q4_K_M and up after official instruct
+      works. Not a tested-on-our-rig pick.
+    listed_rows:
+      - heretic-jonathan-coletti
+    sources:
+      - title: Heretic project
+        url: https://heretic-project.org
+      - title: heretic-llm on PyPI
+        url: https://pypi.org/project/heretic-llm/
+      - title: JonathanColetti Qwen3.8-27B-Uncensored-GGUF
+        url: https://huggingface.co/JonathanColetti/Qwen3.8-27B-Uncensored-GGUF
+
+  - id: sft-uncensored
+    name: Uncensored fine-tune / SFT
+    method: >-
+      Refusal removal by supervised fine-tune (LoRA or full), not only a
+      direction ablation. The listed row is jenerallee78's OBLITERATUS SFT
+      arm — LoRA trained on teacher completions, then merged.
+    changes: >-
+      Weights are trained on completions that fulfill where the base refused.
+      jenerallee78 documents LoRA rank 8 on o_proj/out_proj, two epochs, then
+      a merge. MTP and vision tensors on that card are grafted bit-identical
+      from the base, not trained in the LoRA.
+    behavior: >-
+      The uploader's claim is that SFT trains the termination pathway from
+      EOS-ended answers, while the weight-edit abliterations they re-measured
+      ramble to the cap. A harness or system prompt can restore refusals —
+      their card measures that flip. Thinking-off is the measured configuration.
+    caveats: >-
+      This is a different failure mode from classic abliteration. Decode
+      settings move the refusal boundary. vLLM on that card is
+      compatible-by-registry, not load-tested. Vision-path refusal is
+      unmeasured. Do not treat their competitor board as our catalog.
+    best_use: >-
+      Contrast experiment against a weight-edit of the same base, on llama.cpp,
+      after official instruct works.
+    listed_rows:
+      - sft-jenerallee78
+    sources:
+      - title: jenerallee78 Qwen3.8-27B-Abliterated-SFT
+        url: https://huggingface.co/jenerallee78/Qwen3.8-27B-Abliterated-SFT
+
+  - id: projected-norm-preserving
+    name: Projected / norm-preserving abliteration
+    method: >-
+      Jim Lai (grimjim) refinements of classic abliteration. Projected
+      abliteration removes the component of the refusal direction that
+      parallels the harmless mean, keeping the orthogonal part. Norm-preserving
+      biprojected abliteration also preserves weight-row norms after the
+      rank-1 update. Heretic's acknowledgments point at the same articles.
+    changes: >-
+      Same residual-writing matrices as classic abliteration, with a different
+      geometry for the direction and an optional row-norm restore. The
+      jim-plus/llm-abliteration README says --projected and --normpreserve
+      are independent flags; default without them is conventional abliteration.
+    behavior: >-
+      Lai's norm-preserving article claims less incidental damage to reasoning
+      than naive subtraction and reports their NatInt / UGI figures on that
+      page. The same article says biprojection can bring some safety refusal
+      back. We have not re-measured those figures.
+    caveats: >-
+      No variant in this catalog is a documented projected or norm-preserving
+      file. jenerallee78's competitor board names PocketAiHub as a
+      "norm-preserved edit" — that repo is not a row here. Do not invent a
+      download. Some models "may not respond well to norm preservation"
+      (jim-plus README).
+    best_use: >-
+      Read the method articles. Not a catalog pick on this page.
+    listed_rows: []
+    sources:
+      - title: Lai, Projected Abliteration
+        url: https://huggingface.co/blog/grimjim/projected-abliteration
+      - title: Lai, Norm-Preserving Biprojected Abliteration
+        url: https://huggingface.co/blog/grimjim/norm-preserving-biprojected-abliteration
+      - title: jim-plus/llm-abliteration
+        url: https://github.com/jim-plus/llm-abliteration/
+
+  - id: control
+    name: Official instruct (no edit)
+    method: >-
+      Stock Qwen post-training. No refusal-direction edit and no uncensored
+      SFT. This is the control, not an abliterated family.
+    changes: >-
+      None from us. Official Qwen3.6-35B-A3B is a 35B-total / 3B-active MoE
+      with a vision encoder, MTP, and 262,144 native context (Qwen model card).
+    behavior: >-
+      Stock refusals. Daily driver on our rig. If this checkpoint cannot
+      finish a prompt, an edited file will not debug your backend.
+    caveats: >-
+      Loopback Qwen still has no cloud moderator — the weights can refuse.
+      Do not skip this row.
+    best_use: Daily local instruct. Always start here.
+    listed_rows:
+      - control-qwen36
+    sources:
+      - title: Qwen/Qwen3.6-35B-A3B
+        url: https://huggingface.co/Qwen/Qwen3.6-35B-A3B
+
 rows:
   - id: control-qwen36
     name: Official instruct (control)
     kind: control
+    method_family: control
     base_model: Qwen/Qwen3.6-35B-A3B
     base_model_url: https://huggingface.co/Qwen/Qwen3.6-35B-A3B
     uploader: Qwen
@@ -37,6 +203,23 @@ rows:
     status_note: Daily driver on our rig — the control, not an abliterated card.
     reliability: This is the reliability baseline. Prove it before you swap weights.
     notes: Abliterated rows below are educational. They are not a replacement for this control.
+    changes: >-
+      No refusal-direction edit. Official post-trained instruct with a vision
+      encoder. Qwen's card lists 35B total / 3B activated, 40 layers, 10 full
+      attention blocks (2 KV heads, head dim 256), MTP, and 262,144 native
+      context.
+    behavior: >-
+      Stock refusals and the coding / agent numbers on the Qwen card. On our
+      rig this is the daily driver — Unsloth UD-Q5_K_XL on llama.cpp Vulkan,
+      one R9700, 262K, f16 KV, 0% RAM offload. Exact flags and measured VRAM
+      for that stack remain TODO on /stacks.
+    caveats: >-
+      This is not an abliterated model. If official instruct fails, fix the
+      backend before you swap weights.
+    best_use: Daily local instruct. The only tested-on-our-rig row in this table.
+    sources:
+      - title: Qwen/Qwen3.6-35B-A3B model card
+        url: https://huggingface.co/Qwen/Qwen3.6-35B-A3B
     calculator:
       starter: /calculator?gpu=rx9070xt&vram=16&n=1&split=0&ram=64&model=qwen36&tp=35&ap=3&layers=40&kvl=10&kvh=2&hd=256&quant=q5_k_m&ctx=8192&kv=f16&oh=1
       mid: /calculator?gpu=rx7900xtx&vram=24&n=1&split=0&ram=64&model=qwen36&tp=35&ap=3&layers=40&kvl=10&kvh=2&hd=256&quant=q5_k_m&ctx=32768&kv=f16&oh=1
@@ -46,8 +229,9 @@ rows:
   - id: huihui-qwen38-27b
     name: Huihui Qwen3.8-27B abliterated
     kind: abliterated
+    method_family: classic-refusal-direction
     base_model: Qwen3.8-27B
-    base_model_url: null
+    base_model_url: https://huggingface.co/Qwen/Qwen3.8-27B
     uploader: huihui-ai
     uploader_url: https://huggingface.co/huihui-ai
     repo: huihui-ai/Huihui-Qwen3.8-27B-abliterated
@@ -65,11 +249,37 @@ rows:
     status_note: Primary educational row this pass. Not tested on our rig.
     reliability: Primary educational row this pass. Publisher frames it as experimental. Some builds keep early layers unablated. Test think-loops.
     notes: MTP/vision "not modified" on the card. Pin a revision. Not a Stack Lab profile. Not the daily driver.
+    changes: >-
+      Card: uncensored version of Qwen/Qwen3.8-27B created with abliteration
+      (remove-refusals-with-transformers), described as a crude proof of
+      concept without TransformerLens. Latest update ablates only layers 18
+      to 51; other layers stay unablated. MTP and visual "has not been
+      modified." A previous revision is pinned as d42ca89. Hugging Face lists
+      the safetensors as ~28B params, BF16.
+    behavior: >-
+      Uploader says safety filtering is significantly reduced. Their
+      transformers sample exposes enable_thinking (default false in that
+      script). Capability scores vs official instruct — not documented by
+      uploader. Think-loop notes are community caution, not a figure on this
+      card.
+    caveats: >-
+      Card usage warnings: research / experimental; not suitable for all
+      audiences; users are responsible for legal and ethical use; no default
+      safety guarantees; huihui.ai bears no responsibility. Pin a revision.
+      Ollama tag huihui_ai/Qwen3.8-abliterated is on the card — we still
+      prefer llama.cpp HIP/Vulkan on gfx1201.
+    best_use: >-
+      Educational 27B-class classic abliteration after official instruct works.
+      Not tested on our rig. Tested abliterated pick remains being reworked.
+    sources:
+      - title: huihui-ai/Huihui-Qwen3.8-27B-abliterated
+        url: https://huggingface.co/huihui-ai/Huihui-Qwen3.8-27B-abliterated
     calculator: null
 
   - id: huihui-qwen35-9b
     name: Huihui Qwen3.5-9B abliterated
     kind: abliterated
+    method_family: classic-refusal-direction
     base_model: Qwen/Qwen3.5-9B
     base_model_url: https://huggingface.co/Qwen/Qwen3.5-9B
     uploader: huihui-ai
@@ -82,6 +292,10 @@ rows:
     quants:
       - label: Q4_K_M
         note: mradermacher GGUF card ~5.7 GB
+      - label: Q5_K_M
+        note: mradermacher GGUF card ~6.6 GB
+      - label: Q6_K
+        note: mradermacher GGUF card ~7.5 GB
       - label: Q8_0
         note: mradermacher GGUF card ~9.6 GB
       - label: f16
@@ -93,13 +307,37 @@ rows:
     status_note: Unverified on our rig. Qwen3.5 may need a current llama.cpp.
     reliability: Smaller educational row. Unverified on our rig. Qwen3.5 may need a current llama.cpp.
     notes: Publisher research / experimental framing. mmproj files exist on the GGUF card — confirm whether you want vision tensors. GGUF sibling mradermacher/Huihui-Qwen3.5-9B-abliterated-GGUF.
+    changes: >-
+      Card: uncensored version of Qwen/Qwen3.5-9B created with the same
+      classic abliteration recipe (remove-refusals-with-transformers), crude
+      PoC without TransformerLens. Which layers were ablated — not documented
+      by uploader on this card (the 27B sibling lists 18–51; this card does
+      not). Hugging Face lists ~10B params. GGUF sibling is
+      mradermacher/Huihui-Qwen3.5-9B-abliterated-GGUF; that card also ships
+      mmproj-Q8_0 and mmproj-f16.
+    behavior: >-
+      Same usage-warning block as the 27B Huihui card (reduced filtering,
+      research/experimental). Capability scores vs Qwen3.5-9B — not
+      documented by uploader. Ollama tag on the card requires ollama v0.17.7
+      or newer.
+    caveats: >-
+      Unverified on our rig. Qwen3.5 may need a current llama.cpp. Confirm
+      whether you want the vision mmproj. Files below Q4 exist on the
+      mradermacher card (Q2_K, Q3_K_*); we do not list them. Floor is Q4.
+    best_use: Smaller educational file after official instruct works. Not tested on our rig.
+    sources:
+      - title: huihui-ai/Huihui-Qwen3.5-9B-abliterated
+        url: https://huggingface.co/huihui-ai/Huihui-Qwen3.5-9B-abliterated
+      - title: mradermacher/Huihui-Qwen3.5-9B-abliterated-GGUF
+        url: https://huggingface.co/mradermacher/Huihui-Qwen3.5-9B-abliterated-GGUF
     calculator: null
 
   - id: orcarouter-qwen38-27b
     name: orcarouter Qwen3.8-27B Uncensored
     kind: abliterated
-    base_model: Qwen3.8-27B
-    base_model_url: null
+    method_family: classic-refusal-direction
+    base_model: Qwen/Qwen3.8-27B
+    base_model_url: https://huggingface.co/Qwen/Qwen3.8-27B
     uploader: orcarouter
     uploader_url: https://huggingface.co/orcarouter
     repo: orcarouter/Qwen3.8-27B-Uncensored
@@ -117,13 +355,49 @@ rows:
     status_note: Community writeups exist. Not tested on our rig.
     reliability: Community writeups exist; still verify MTP/vision claims on your build
     notes: Some GGUF repos are gated. Read the license and safety note on the card. GGUF sibling published — confirm which file.
+    changes: >-
+      Card: full-precision BF16 abliteration of Qwen/Qwen3.8-27B following
+      Arditi et al. (2024). A single refusal direction (k = 1) is estimated
+      at layer 38 (round(0.6 × 64)) on AdvBench vs Alpaca, then orthogonalized
+      out of residual-writing matrices (self_attn.o_proj, linear_attn.out_proj,
+      mlp.down_proj, embed_tokens; 131 matrices). Vision tower is untouched
+      (333 visual.* tensors). MTP head is abliterated consistently with the
+      main model (15 mtp.* tensors). 18 BF16 shards, 55.6 GB, 1199 tensors,
+      64-layer hybrid Gated DeltaNet architecture as stated on that card.
+    behavior: >-
+      Uploader's paired eval vs official Qwen3.8-27B (same scripts): MMLU
+      84.3 → 84.7, MMLU-Pro 77.6 → 76.8, GSM8K 90.0 → 88.7, CMMLU 81.4 → 80.8
+      (within ±1.3 pts). WikiText-2-raw perplexity 6.96. They also publish
+      harmful-prompt refusal rates (thinking on and off) on the card — read
+      those tables there. Fine-tuning on refusal-heavy data can re-introduce
+      refusals; the card says to avoid that if you want the edit to stick.
+      They list derived FP8 / GGUF / MLX releases. GGUF is described as
+      2-bit through 16-bit — we only treat Q4 and up.
+    caveats: >-
+      Card disclaimer: safety alignment substantially removed; research use;
+      you are liable; Apache-2.0 from the base. Refusal metric is a
+      rule-based heuristic. jenerallee78 later reported defects on an
+      orcarouter FP8 serving path (missing scales / NaNs) — that is a
+      third-party note about a derived quant, not a measurement we ran, and
+      not a claim about this BF16 card. Official Qwen3.8-27B URL is the
+      uploader's cited base.
+    best_use: >-
+      Read as a documented classic-abliteration BF16 source (fine-tune /
+      re-quant / interpretability, per their intended-use list). Local GGUF
+      still needs a confirmed Q4+ file. Not tested on our rig.
+    sources:
+      - title: orcarouter/Qwen3.8-27B-Uncensored
+        url: https://huggingface.co/orcarouter/Qwen3.8-27B-Uncensored
+      - title: Arditi et al. 2024 (cited on that card)
+        url: https://arxiv.org/abs/2406.11717
     calculator: null
 
   - id: heretic-jonathan-coletti
     name: Heretic-style uncensored GGUF (e.g. JonathanColetti)
     kind: abliterated
-    base_model: Qwen3.8-27B
-    base_model_url: null
+    method_family: heretic
+    base_model: Qwen/Qwen3.8-27B
+    base_model_url: https://huggingface.co/Qwen/Qwen3.8-27B
     uploader: JonathanColetti
     uploader_url: https://huggingface.co/JonathanColetti
     repo: JonathanColetti/Qwen3.8-27B-Uncensored-GGUF
@@ -133,7 +407,13 @@ rows:
     quant_example: Q4_K_M and others listed on the card
     quants:
       - label: Q4_K_M
-        note: Listed on the card. Other Q4+ files may exist — confirm. Nothing below Q4.
+        note: Card 16.8 GB (fused, MTP inline). WikiText-2 PPL 7.1814 ± 0.25227
+      - label: Q5_K_M
+        note: Card 19.5 GB. WikiText-2 PPL 7.1573 ± 0.25055
+      - label: Q6_K
+        note: Card 22.4 GB. WikiText-2 PPL 7.1689 ± 0.25149
+      - label: Q8_0
+        note: Card 29.0 GB. WikiText-2 PPL 7.1764 ± 0.25195
     vram_32gb: Treat Q4 as the 32 GB daily quant until you measure cache
     backends: llama.cpp (GGUF). vLLM is a different checkpoint format.
     backend: llama.cpp first
@@ -141,13 +421,51 @@ rows:
     status_note: Card is unusually explicit about quantization vs the refusal boundary. Not tested on our rig.
     reliability: Card is unusually explicit about what quantization does to the refusal boundary
     notes: Lower bits can change refusals again. Evaluate behavior on a high quant first.
+    changes: >-
+      Card: refusal directions removed with Heretic (co-minimizes refusal
+      count vs KL from the base). No handwritten removal code, no finetune,
+      no extra training data. Abliteration at bf16; LoRA merged into the
+      bf16 base. Edits attn.o_proj and mlp.down_proj. mtp.* copied verbatim
+      from the base after the merge. Architecture listed as
+      Qwen3_5ForConditionalGeneration, 64 layers, vocab 248320, native
+      context 262144, vision yes. Converted with llama.cpp a94d563ed.
+      IQ2_M and IQ4_XS exist on the card; we do not list IQ2 (below Q4) and
+      we skip IQ4_XS because the uploader says not to evaluate behavior there.
+    behavior: >-
+      Card, vs unmodified base, same session: MMLU 83.4 → 83.3, ARC-Challenge
+      58.9 → 57.7, HellaSwag 82.8 → 82.9, Winogrande 76.1 → 75.3 (mean −0.5;
+      deltas inside or near reported SE). Held-out harmful-prompt refusals
+      98/100 → 12/100; first-token KL 0.1191 (the published Heretic point
+      after 200 trials). Weight-edit WikiText-2 PPL cost +0.0434 vs base
+      bf16. Among shipped K-quants, only IQ2_M is resolved as worse PPL;
+      Q4_K_M through Q8_0 sit inside the error bars of each other. MTP
+      speculative-decode tables are on the card (measured on that author's
+      hardware, not our rig).
+    caveats: >-
+      Refusals reduced, not eliminated. Boundary is less stable than base.
+      Measurements were taken on the bf16 merge; downloaded files are
+      quantized. Thinking-mode refusal "may differ, in either direction."
+      No generative / math / code / multilingual / vision eval on that card.
+      MTP needs llama.cpp PR #22673 or newer or the tensors are ignored.
+      Third-party YMQ quants are linked "not as an endorsement." Apache-2.0
+      from the base still applies.
+    best_use: >-
+      Local llama.cpp GGUF at Q4_K_M or higher after official instruct works.
+      Prefer Q6_K or Q8_0 when judging the refusal boundary (uploader).
+      Not tested on our rig.
+    sources:
+      - title: JonathanColetti/Qwen3.8-27B-Uncensored-GGUF
+        url: https://huggingface.co/JonathanColetti/Qwen3.8-27B-Uncensored-GGUF
+      - title: Heretic project
+        url: https://heretic-project.org
     calculator: null
 
   - id: sft-jenerallee78
     name: SFT-class refusal removal (e.g. Abliterated-SFT)
     kind: abliterated
-    base_model: Qwen3.8-27B
-    base_model_url: null
+    method_family: sft-uncensored
+    base_model: Qwen/Qwen3.8-27B
+    base_model_url: https://huggingface.co/Qwen/Qwen3.8-27B
     uploader: jenerallee78
     uploader_url: https://huggingface.co/jenerallee78
     repo: jenerallee78/Qwen3.8-27B-Abliterated-SFT
@@ -156,8 +474,12 @@ rows:
     size: 27B
     quant_example: Publisher GGUF notes exist — read GGUFs.md
     quants:
+      - label: Q8_0
+        note: Publisher "behavior-validated" quant (GGUFs.md / serve-l40.sh). No GB listing copied here.
+      - label: Q5_K_M
+        note: Publisher smaller/faster option; parity check is "same-direction only."
       - label: Q4 and up (confirm file)
-        note: Publisher GGUF notes exist (GGUFs.md). No GB listing copied here. Do not invent a fit.
+        note: Other GGUF notes live in GGUFs.md. Do not invent a GB figure.
     vram_32gb: Unknown until you pick a quant. Do not invent a fit.
     backends: llama.cpp tested by publisher; vLLM "compatible-by-registry, not load-tested"
     backend: llama.cpp first
@@ -165,6 +487,40 @@ rows:
     status_note: Publisher tested llama.cpp. Not tested on our rig.
     reliability: Different failure mode (harness/system-prompt can restore refusals)
     notes: Finicky with agent frames. Useful as a contrast, not the default.
+    changes: >-
+      Card: SFT LoRA, rank 8, o_proj/out_proj, 2 epochs on 84 Zen-filtered
+      teacher completions from an abliterated Qwen3.6, merged onto
+      Qwen/Qwen3.8-27B rev 1d4bf0f2. 64-layer hybrid (48 Gated-DeltaNet +
+      16 full-attention). 15 mtp.* tensors and the 333-tensor vision tower
+      are grafted bit-identical from the base. Shipped generation defaults
+      on the card: greedy, thinking off.
+    behavior: >-
+      Uploader's mechanism claim: weight-edit abliterations they re-measured
+      keep teacher-forced P(EOS) but collapse free-running clean stops on
+      the harmful panel; this SFT is trained from EOS-terminated answers
+      and they report clean-stop rates near the base on that panel. Held-out
+      HarmBench-400 (thinking off, greedy): 83.25% valid fulfillment on their
+      semantic judge, 73.25% on the official HarmBench classifier. Canonical
+      full-vocab KL vs base 0.128. Operator battery: MMLU-1k 0.821 → 0.799
+      (−2.2 pp, largest regression they measured); ARC-C and Winogrande
+      within noise; 24/24 tool calls. A coding-agent frame or a bare
+      "answer in fewer than 4 lines" mandate can flip fulfill → refuse.
+      Thinking-on at a 2048 cap scored 61/100 invalid (truncated) on their
+      100-prompt panel.
+    caveats: >-
+      Vision-path refusal is unmeasured (caption smoke test only). vLLM is
+      compatible-by-registry, not load-tested; llama.cpp GGUF and
+      transformers were tested by the publisher on 2× L40, not on an R9700.
+      Their competitor numbers are their pipeline, not ours — we do not
+      promote those other files into this catalog. Residual refusals remain
+      (the card lists categories). You are responsible for use. Decode
+      settings move the boundary.
+    best_use: >-
+      Contrast vs a weight-edit of the same base, on llama.cpp, Q8_0 first
+      if you follow the publisher. Not tested on our rig.
+    sources:
+      - title: jenerallee78/Qwen3.8-27B-Abliterated-SFT
+        url: https://huggingface.co/jenerallee78/Qwen3.8-27B-Abliterated-SFT
     calculator: null
 
 trust:

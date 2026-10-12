@@ -67,10 +67,16 @@ export type AbliteratedCalculator = {
   pro: string;
 } | null;
 
+export type AbliteratedSource = {
+  title: string;
+  url: string;
+};
+
 export type AbliteratedRow = {
   id?: string;
   name: string;
   kind?: 'control' | 'abliterated';
+  method_family?: string;
   base_model?: string;
   base_model_url?: string | null;
   uploader?: string;
@@ -88,13 +94,31 @@ export type AbliteratedRow = {
   status_note?: string;
   reliability: string;
   notes: string;
+  changes?: string;
+  behavior?: string;
+  caveats?: string;
+  best_use?: string;
+  sources?: AbliteratedSource[];
   calculator?: AbliteratedCalculator;
+};
+
+export type AbliteratedFamily = {
+  id: string;
+  name: string;
+  method: string;
+  changes: string;
+  behavior: string;
+  caveats: string;
+  best_use: string;
+  listed_rows: string[];
+  sources: AbliteratedSource[];
 };
 
 export type AbliteratedGuide = {
   as_of: string;
   tested_pick?: string;
   search_patterns: string[];
+  families?: AbliteratedFamily[];
   rows: AbliteratedRow[];
   trust: string[];
 };

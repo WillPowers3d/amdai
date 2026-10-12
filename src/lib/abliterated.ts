@@ -1,4 +1,11 @@
-import { abliteratedGuide, type AbliteratedRow, type AbliteratedStatus } from './status';
+import {
+  abliteratedGuide,
+  type AbliteratedFamily,
+  type AbliteratedRow,
+  type AbliteratedStatus,
+} from './status';
+
+export const NOT_DOCUMENTED = 'not documented by uploader';
 
 export const TIER_KEYS = ['starter', 'mid', 'enthusiast', 'pro'] as const;
 export type TierKey = (typeof TIER_KEYS)[number];
@@ -28,4 +35,22 @@ export function catalogRows(): AbliteratedRow[] {
 export function q4PlusQuants(row: AbliteratedRow): { label: string; note: string }[] {
   if (row.quants && row.quants.length) return row.quants;
   return [{ label: row.quant_example, note: 'From catalog quant_example. Floor is Q4.' }];
+}
+
+export function fieldOrUnknown(value?: string | null): string {
+  const text = value?.trim();
+  return text ? text : NOT_DOCUMENTED;
+}
+
+export function catalogFamilies(): AbliteratedFamily[] {
+  return abliteratedGuide.families ?? [];
+}
+
+export function familyById(id: string | undefined): AbliteratedFamily | undefined {
+  if (!id) return undefined;
+  return catalogFamilies().find((family) => family.id === id);
+}
+
+export function rowById(id: string): AbliteratedRow | undefined {
+  return catalogRows().find((row) => row.id === id);
 }

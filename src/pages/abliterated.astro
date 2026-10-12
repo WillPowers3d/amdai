@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import AbliteratedHubTable from '../components/AbliteratedHubTable.astro';
+import AbliteratedCards from '../components/AbliteratedCards.astro';
 import { abliteratedGuide } from '../lib/status';
 import { testedPickLabel } from '../lib/abliterated';
 
@@ -74,6 +75,8 @@ const testedPick = testedPickLabel();
       </p>
       <AbliteratedHubTable />
     </section>
+
+    <AbliteratedCards />
 
     <section class="mt-12">
       <h2 class="font-serif text-3xl">Run on an R9700 (llama.cpp)</h2>
