@@ -40,6 +40,7 @@ export function ogSlug(pathname: string) {
   if (slug === 'backends' || slug.startsWith('backends-')) return 'backends';
   if (slug === 'benchmarks' || slug === 'results') return 'stacks';
   if (slug === 'bios' || slug === 'credits' || slug === 'contribute' || slug === 'wanted') return 'default';
+  if (slug === 'qwen36-dual' || slug === 'flash-daily') return 'stacks';
   if (slug === 'models' || slug.startsWith('models-') || slug.startsWith('gpus-') || slug.startsWith('recipes-')) return 'gpus';
   return OG_PAGES.has(slug) ? slug : 'default';
 }
@@ -95,6 +96,8 @@ export const homeLink: NavItem = {
 export const primaryNav: NavItem[] = [
   { href: '/start', label: 'Getting started', description: 'GPU → ROCm → llama.cpp → optional harness', group: 'path' },
   { href: '/stacks', label: 'Stacks', description: 'Daily driver and fast-agent cards from our test rig', group: 'path' },
+  { href: '/qwen36-dual', label: '35B on two cards', description: 'Split vs two copies of UD-Q5_K_XL on two R9700s — measured on local-desktop', group: 'path' },
+  { href: '/flash-daily', label: 'Flash daily driver', description: 'Qwen 3.8 Flash VRAM + DDR5 offload at Q3–Q6, full 262K', group: 'path' },
   { href: '/benchmarks', label: 'Benchmarks', description: 'First-party tok/s from the R9700 rig — no leaderboard spam', group: 'path' },
   { href: '/results', label: 'Results', description: 'amdai-bench v1 comparable rows — verified local-desktop 35B, submitted stays empty', group: 'path' },
   { href: '/budget', label: 'Budget', description: 'Starter → Pro Radeon builds, no invented prices', group: 'path' },

@@ -1,0 +1,96 @@
+# /backends/strata deep dive. Cited numbers only. Q1/Q2 stay off as house quants.
+as_of: 2026-10-13
+pin: v0.1.42
+pin_date: 2026-10-10
+homepage: https://www.stratat.com/
+release: https://www.stratat.com/en/releases/v0.1.42
+repo: https://github.com/Niko1221/Strata
+x_search: Searched X / Twitter for dated Strata × Flash tok/s posts on 2026-10-13. No post we can cite. Web sources below.
+
+what: >-
+  Strata is a compiled MoE inference engine (Niko1221/Strata) aimed at Qwen 3.8
+  Flash-Next-class models that do not fit in one GPU. Hot routed experts stay in
+  VRAM. The rest live in system RAM. The per-layer n-gram / PLE table can sit on
+  SSD. Serve exposes an OpenAI-shaped /v1. This site’s fast-agent convention is
+  127.0.0.1:8083 so llama-server can keep :8080. AMD path is a HIP build.
+  Official v0.1.42 notes name RX 7900 / 9070 / AI PRO R9700 and turn gfx12 prompt
+  switches on for gfx1200/gfx1201.
+
+why_faster: >-
+  Flash is a large MoE (125B total / 6B active, plus a ~51B n-gram table).
+  llama.cpp will run it, but decode pays for experts that miss VRAM on every
+  token. Strata’s expert cache keeps the hot experts on the card and streams
+  the misses from DDR5. That is the decode win we measured. First-party on
+  this rig, Flash UD-Q6_K_XL: Strata about 32.6 tok/s versus llama.cpp about
+  16 (Measured on our rig, 2026-10). Two-card Q6 at 262K, same kit: Strata
+  32.8 tok/s at 8K and 32K, 31.8 at 100K, versus llama.cpp 18.5 / 18.2 / 17.9
+  at DDR5-5200. We do not invent a third number.
+
+limits:
+  - title: Prefill can regress
+    body: >-
+      On local-desktop, Strata prefill drops 9–20% at DDR5-5200 versus 3600. Unexplained.
+      Upstream issue #1910 (dual RTX 2080 Ti, IQ3_S, cold ~27K prefix) reported
+      v0.1.42 prefill about 790 tok/s against v0.1.41 about 1150–1280 — 35–55%
+      slower — and later traced extra PLE-shard mmap reads. Official v0.1.43.1
+      notes a related PLE mmap / SATA-SSD fix. We have not remasured 0.1.43 on
+      this rig.
+  - title: MTP draft head is Q2 — we do not use it
+    body: >-
+      PR #1381 states the MTP draft layer’s 512 routed experts were Q2_0 only
+      and that Q2_0 remains the default (Q8_0 and BF16 are opt-in arms). This
+      site refuses Q1/Q2, including draft / MTP. We do not turn the head on.
+      The PR’s own 4-GPU measurement (IQ3_S) is Q2_0 49.5–49.9 tok/s against
+      Q8_0 48.9 — cited so you can see why they kept Q2_0, not as a house speed.
+
+first_party:
+  - { label: Flash Q6, one prior run, strata: 32.6, llamacpp: 16, note: Measured on our rig, 2026-10 }
+  - { label: Flash Q6 two cards at 262K, strata_8k_32k: 32.8, strata_100k: 31.8, llamacpp_5200: [18.5, 18.2, 17.9], note: Measured on our rig, 2026-10 }
+
+community:
+  - title: Strata v0.1.42 release notes
+    href: https://www.stratat.com/en/releases/v0.1.42
+    date: 2026-10-10
+    figures: >-
+      R9700, IQ3_S (two boxes), 0.1.42 vs 0.1.41 relative decode +0.03% / +0.1%
+      (story), +0.01% / +0.15% (code). Relative only — not an absolute house tok/s.
+      gfx12 prompt switches on for gfx1200/gfx1201. Two-R9700 checkpoint-save fix.
+  - title: "PR #1638 — one R9700 IQ3_S (frozen 0.1.40.3)"
+    href: https://www.stratat.com/en/pulls/1638
+    date: 2026-10-08
+    figures: >-
+      Decode 101.9 tok/s at 1K, 96.4 at 4K, 95.6 at 32K, 87.6 at 128K. Official
+      Strata report, not local-desktop. IQ3_S, not a house Q3.
+  - title: lcchan0525sg — R9700 IQ3_S tuned rates
+    href: https://github.com/lcchan0525sg/Qwen-Flash-Next-Strata-for-AMD-R9700
+    date: 2026-10-09
+    figures: Tuned output 46.54–57.22 tok/s on one R9700. Not measured on local-desktop.
+  - title: "Issue #1910 — prefill 35–55% slower on 0.1.42 vs 0.1.41"
+    href: https://github.com/Niko1221/Strata/issues/1910
+    date: retrieved 2026-10-13
+    figures: Dual 2080 Ti, IQ3_S, cold 40K prefix. v0.1.41 ~1150–1280 tok/s prefill; v0.1.42 defaults ~790.
+  - title: "Issue #1910 (Strata site mirror)"
+    href: https://www.stratat.com/en/issues/1910
+    date: retrieved 2026-10-13
+    figures: Same report as the GitHub issue.
+  - title: "PR #1381 — MTP draft experts default Q2_0"
+    href: https://www.stratat.com/en/pulls/1381
+    date: retrieved 2026-10-13
+    figures: Q2_0 remains default. Their 4-GPU IQ3_S run Q2_0 49.5–49.9 vs Q8_0 48.9 tok/s. We do not use MTP.
+  - title: Strata v0.1.43.1 — PLE mmap / SATA-SSD prefill fix
+    href: https://www.stratat.com/en/releases/v0.1.43.1
+    date: retrieved 2026-10-13
+    figures: >-
+      Notes a 0.1.42 mmap switch that made a 77.8K-token prompt about 7× slower
+      on SATA SSD (884 tok/s direct against 76–154 mapped). Not remasured here.
+  - title: Niko1221/Strata paper (Q2 tables — we do not use Q2)
+    href: https://raw.githubusercontent.com/Niko1221/Strata/master/docs/paper/Strata-Paper.pdf
+    date: retrieved 2026-10-13
+    figures: >-
+      Architecture paper for Flash-Next on a 12 GB card. Absolute Q2_0 / IQ2
+      tables are upstream, not house numbers. Q1/Q2 stay off on this site.
+
+we_dont_use_q2: >-
+  Upstream README and paper publish Q2_0 / IQ2 write speeds. We do not use those
+  as a house recommendation. Q1/Q2 and IQ1/IQ2 stay off, including the MTP draft
+  head.

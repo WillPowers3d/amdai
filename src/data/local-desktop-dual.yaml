@@ -1,0 +1,67 @@
+# Qwen 3.6 35B on two R9700s. First-party numbers only, plus cited vLLM image.
+# Do not invent tok/s, VRAM, or soak figures.
+as_of: 2026-10-13
+host: local-desktop
+label: Measured on our rig, 2026-10
+engine: llama.cpp Vulkan
+quant: Unsloth UD-Q5_K_XL
+ddr5: DDR5-5200
+gpus: two AMD Radeon AI PRO R9700 32 GB (gfx1201)
+recommendation: Two single-card copies behind a least-connections balancer beat one server split across both cards.
+
+kit:
+  dimm_gb: 256
+  usable_gb: 249
+  usable_note: Linux GiB labeled GB on a 256 GB kit.
+
+overnight_results_json_rows: []
+overnight_note: Space for overnight results.json rows. Empty until that file lands.
+
+single_card:
+  - { quant: UD-Q5_K_XL, tok_s: 100.8, context: short, note: One R9700, llama.cpp Vulkan, f16 KV }
+  - { quant: UD-Q5_K_XL, tok_s: 88, context: 32K, note: about 88 }
+  - { quant: UD-Q5_K_XL, tok_s: 50, context: 256K, note: about 50 }
+  - { quant: Q5_K_M, tok_s: 108.3, context: short, note: Sibling quant }
+  - { quant: Q4_K_M, tok_s: 116.5, context: short, note: Sibling quant }
+
+split:
+  title: One server split across both cards
+  single_request_tok_s: 57
+  max_total_tok_s: 79
+  note: About 57 tok/s for a single request. At most 79 tok/s total.
+
+copies:
+  title: Two copies (one per card) behind a least-connections balancer
+  per_request_tok_s: 100
+  total_at_2_tok_s: 172
+  total_at_4_to_8_tok_s: 177
+  soak_requests: 423
+  soak_minutes: 20.6
+  soak_errors: 0
+  peak_vram_gb: [27.7, 29.7]
+  ddr5_gb: 13
+  note: About 100 tok/s per request. Peak VRAM is Linux GiB labeled GB. DDR5 about 13 GB.
+
+vllm:
+  used_on_our_rig_catalog: false
+  image: stilldeadcode/vllm-radiance:0.5.8
+  quant: INT4-W4A16
+  cards: 1
+  tok_s_low: 50
+  tok_s_high: 61
+  vs_llamacpp: Better for concurrency and prefill, worse for single-user decode than llama.cpp.
+  community_table_note: r/LocalLLaMA 1viq0pq (retrieved 2026-10-13) posted 61.4 tok/s at 4K down to 49.5 at 150K on one R9700. That table is community. The 50–61 band on this page is first-party.
+
+sources:
+  - title: stilldeadcode/vllm-radiance on Docker Hub
+    href: https://hub.docker.com/r/stilldeadcode/vllm-radiance
+    date: retrieved 2026-10-13
+  - title: StillDeadcode/vllm-radiance on Codeberg
+    href: https://codeberg.org/StillDeadcode/vllm-radiance
+    date: retrieved 2026-10-13
+  - title: Qwen3.6 27B + 35B on vLLM, single R9700 (gfx1201)
+    href: https://www.reddit.com/r/LocalLLaMA/comments/1viq0pq/qwen36_27b_35b_on_vllm_single_r9700_gfx1201/
+    date: retrieved 2026-10-13
+  - title: Qwen3.6-35B-A3B GGUF
+    href: https://huggingface.co/unsloth/Qwen3.6-35B-A3B-GGUF
+    date: retrieved 2026-10-13

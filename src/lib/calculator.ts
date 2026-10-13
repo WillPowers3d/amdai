@@ -210,6 +210,8 @@ export const RAM_HEADROOM_GIB = 16;
 
 /** local-desktop ships this kit. Measured process RSS is TODO until Local AI numbers arrive. */
 export const local-desktop_DDR5_GB = 256;
+/** Linux-visible GiB on that 256 GB kit, labeled GB on this site. */
+export const local-desktop_USABLE_RAM_GB = 249;
 export const local-desktop_MEASURED_RAM_GIB: number | null = null;
 
 export type SystemRamBreakdown = {
@@ -434,6 +436,14 @@ export const MODEL_PRESETS: ModelPreset[] = [
       iq3: {
         decimalGb: 81.96,
         label: 'Hugging Face LFS sizes for UD-IQ3_XXS (81.96 GB across 3 shards). Estimate / community — not measured on local-desktop',
+      },
+      q4_k_m: {
+        decimalGb: 111,
+        label: 'Hugging Face folder listing for UD-Q4_K_XL (~111 GB across 4 shards). Unsloth docs list 111.3 GB (retrieved 2026-10-13)',
+      },
+      q5_k_m: {
+        decimalGb: 158.3,
+        label: 'Unsloth docs listing for UD-Q5_K_XL (158.3 GB). Hugging Face folder lists 158 GB across 6 shards (retrieved 2026-10-13)',
       },
       q6_k: { decimalGb: 169, label: 'Hugging Face folder listing for UD-Q6_K_XL (~169 GB across 6 shards)' },
     },

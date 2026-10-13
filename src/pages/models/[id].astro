@@ -29,6 +29,9 @@ const rows = recipesForModel(recipes, model.id);
       <a class="btn-secondary" href="/models">All models</a>
       <a class="btn-primary" href={`/calculator?model=${model.id}`}>Open in calculator</a>
       <a class="btn-ghost" href={model.hf}>Hugging Face card</a>
+      {model.id === 'qwen36' && <a class="btn-ghost" href="/qwen36-dual">Two-card 35B</a>}
+      {model.id === 'flash' && <a class="btn-ghost" href="/flash-daily">Flash daily driver</a>}
+      {model.id === 'flash' && <a class="btn-ghost" href="/backends/strata">Strata deep dive</a>}
     </div>
     <section class="mt-12">
       <h2 class="font-serif text-3xl">Recipes</h2>

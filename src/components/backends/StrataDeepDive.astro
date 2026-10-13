@@ -1,0 +1,47 @@
+---
+import Callout from '../Callout.astro';
+import { strataDeep as file } from '../../lib/strata-deep-data';
+---
+
+<section id="deep-dive" class="mt-12 scroll-mt-28" aria-labelledby="deep-heading">
+  <p class="kicker">Deep dive · pin {file.pin} · {file.pin_date}</p>
+  <h2 id="deep-heading" class="mt-2 font-serif text-3xl">Why Strata for Flash offload</h2>
+  <p class="mt-4 leading-relaxed text-muted">{file.what}</p>
+  <h3 class="mt-8 font-serif text-2xl">Why decode beats llama.cpp here</h3>
+  <p class="mt-3 leading-relaxed text-muted">{file.why_faster}</p>
+  <p class="mt-4 text-sm">
+    <a class="underline decoration-accent/40" href="/flash-daily">Flash daily-driver numbers</a>
+    {' · '}
+    <a class="underline decoration-accent/40" href={file.release}>v0.1.42 notes</a>
+    {' · '}
+    <a class="underline decoration-accent/40" href={file.repo}>Niko1221/Strata</a>
+  </p>
+
+  <h3 class="mt-10 font-serif text-2xl">Limits</h3>
+  <div class="mt-4 grid gap-4">
+    {file.limits.map((row) => (
+      <div class="card p-5">
+        <h4 class="text-lg tracking-tight">{row.title}</h4>
+        <p class="mt-2 text-sm leading-relaxed text-muted">{row.body}</p>
+      </div>
+    ))}
+  </div>
+
+  <Callout type="warn" title="Q2 stays off">
+    <p>{file.we_dont_use_q2}</p>
+  </Callout>
+
+  <h3 class="mt-10 font-serif text-2xl">Numbers other people posted</h3>
+  <p class="mt-3 text-sm text-muted">{file.x_search}</p>
+  <ul class="mt-6 space-y-4">
+    {file.community.map((row) => (
+      <li class="card p-5">
+        <p class="kicker">{row.date}</p>
+        <p class="mt-1">
+          <a class="font-medium underline decoration-accent/40" href={row.href}>{row.title}</a>
+        </p>
+        <p class="mt-2 text-sm leading-relaxed text-muted">{row.figures}</p>
+      </li>
+    ))}
+  </ul>
+</section>

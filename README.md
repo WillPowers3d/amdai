@@ -15,7 +15,7 @@ Audience: home-lab and enthusiast users. Not enterprise Instinct marketing.
 | Role | Model | Quant | Engine | Notes |
 | --- | --- | --- | --- | --- |
 | Daily driver | Qwen3.6-35B-A3B | Unsloth UD-Q5_K_XL | llama.cpp Vulkan | One R9700, 262K, f16 KV, 0% RAM offload. Measured on our rig, 2026-10: 100.8 tok/s short / ~88 at 32K / ~50 at 256K |
-| Fast agent | Qwen 3.8 Flash | Unsloth UD-Q6_K_XL | Strata v0.1.42 | ~32.6 tok/s vs llama.cpp ~16 — Measured on our rig, 2026-10 |
+| Fast agent | Qwen 3.8 Flash | Unsloth UD-Q6_K_XL | Strata v0.1.42 | Two-card 262K: 32.8 tok/s at 8K/32K, 31.8 at 100K. Prior first-party ~32.6 vs llama.cpp ~16 — Measured on our rig, 2026-10 |
 
 Exact command lines and UD-Q5_K_XL VRAM stay `<!-- TODO: exact command line / measured VRAM from rig owner -->` until they are filled. Do not invent them. Sibling 35B points: Q5_K_M 108.3 tok/s (28.5 GB VRAM); Q4_K_M 116.5 tok/s decode, 1814 tok/s prefill at 32K.
 
@@ -56,6 +56,9 @@ Public site URL is `https://amdai.net` (`site` in `astro.config.mjs`; override w
 | `/` | Home + living status card |
 | `/start` | Getting started (GPU → ROCm → llama.cpp → harness) |
 | `/stacks` | Recommended stack cards from the test rig |
+| `/qwen36-dual` | 35B on two R9700s — split vs two copies, measured soak |
+| `/flash-daily` | Flash daily driver — Q3–Q6 VRAM + DDR5 offload at 262K |
+| `/backends/strata` | Strata deep dive — expert cache, prefill limits, MTP is Q2 |
 | `/budget` | Setup by budget — size/speed, local/hybrid, standard/abliterated |
 | `/calculator` | Quant + Hardware Calculator — size a model, ask what a Radeon can run, or read a speed floor (Q3 through BF16, client-side) |
 | `/quants` | Q3–Q8, UD dynamic, KV types, why Q1/Q2 stay off |
@@ -140,6 +143,9 @@ Public site URL is `https://amdai.net` (`site` in `astro.config.mjs`; override w
 | `src/data/rocm-problems.yaml` | Cited `/rocm-problems` tracker (TODO if unverified) |
 | `src/data/harnesses.yaml` | Cited `/harnesses` catalog (no invented features) |
 | `src/data/backends.yaml` | `/backends` comparison + per-engine deep dives |
+| `src/data/local-desktop-dual.yaml` | `/qwen36-dual` two-card 35B soak |
+| `src/data/flash-daily.yaml` | `/flash-daily` Q3–Q6 RAM + measured Q6 |
+| `src/data/strata-deep.yaml` | `/backends/strata` deep dive + dated community cites |
 | `src/data/benchmarks.yaml` | `/benchmarks` first-party tok/s |
 | `src/data/amdai-bench.v1.json` | `/results` comparable catalog (35B seed only) |
 | `src/data/bios.yaml` | `/bios` chipset notes + community board table |

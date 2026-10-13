@@ -2,6 +2,7 @@
 import Base from '../../layouts/Base.astro';
 import Callout from '../../components/Callout.astro';
 import BackendsNav from '../../components/backends/BackendsNav.astro';
+import StrataDeepDive from '../../components/backends/StrataDeepDive.astro';
 import { backendPath, verdictLabel } from '../../lib/backends';
 import { backend, backends } from '../../lib/backends-data';
 
@@ -97,6 +98,11 @@ const next = index >= 0 && index < neighbors.length - 1 ? neighbors[index + 1] :
       <h2 id="when">When to choose it</h2>
       <p>{row.choose}</p>
       <p>{row.when}</p>
+    </article>
+
+    {row.id === 'strata' && <StrataDeepDive />}
+
+    <article class="prose-lab prose mt-10 max-w-none">
       <h2 id="links">Official links</h2>
       <ul>
         <li><a href={row.homepage}>Home</a></li>

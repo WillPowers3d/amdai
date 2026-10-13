@@ -1,0 +1,91 @@
+# Qwen 3.8 Flash as a daily driver. Measured local-desktop speeds plus file-size + KV estimates.
+# Q3 and Q5 speeds from cited community posts only. Never invent tok/s.
+as_of: 2026-10-13
+host: local-desktop
+label: Measured on our rig, 2026-10
+model: Qwen 3.8 Flash
+gguf: unsloth/Qwen3.8-Flash-Next-GGUF
+official: Qwen/Qwen3.8-Flash-Next
+full_context: 262144
+gpus_two: two AMD Radeon AI PRO R9700 32 GB (64 GB VRAM)
+gpus_one: one AMD Radeon AI PRO R9700 32 GB
+
+kit:
+  dimm_gb: 256
+  usable_gb: 249
+  usable_note: Linux GiB labeled GB on a 256 GB kit.
+
+overnight_results_json_rows: []
+overnight_note: Space for overnight results.json rows. Empty until that file lands.
+
+files:
+  - { quant: UD-Q3_K_XL, short: Q3, file_gb: 90, source: Hugging Face folder / LFS sum 89.99 GB, measured_speed: false }
+  - { quant: UD-Q4_K_XL, short: Q4, file_gb: 111, source: Hugging Face folder ~111 GB (Unsloth docs 111.3 GB, retrieved 2026-10-13), measured_speed: false }
+  - { quant: UD-Q5_K_XL, short: Q5, file_gb: 158.3, source: Unsloth docs 158.3 GB; Hugging Face folder 158 GB (retrieved 2026-10-13), measured_speed: false }
+  - { quant: UD-Q6_K_XL, short: Q6, file_gb: 169, source: Hugging Face folder ~169 GB across 6 shards, measured_speed: true }
+
+# Two-card Q6 at 262K. Strata decode at 8K/32K/100K. llama.cpp at the same three contexts.
+measured_q6_two_cards:
+  quant: UD-Q6_K_XL
+  cards: 2
+  context: 262144
+  strata_8k_tok_s: 32.8
+  strata_32k_tok_s: 32.8
+  strata_100k_tok_s: 31.8
+  llamacpp_ddr5_5200: [18.5, 18.2, 17.9]
+  llamacpp_ddr5_3600: [15.9, 15.6, 15.3]
+  strata_prefill_drop_pct_at_5200: [9, 20]
+  strata_prefill_note: Strata prefill drops 9–20% at DDR5-5200 versus 3600. Unexplained.
+  prior_first_party: Strata ~32.6 tok/s vs llama.cpp ~16 on Flash Q6 (Measured on our rig, 2026-10). A different run from the 32.8 / 31.8 two-card points.
+
+community_speeds:
+  - quant: Q3
+    label: not measured on local-desktop
+    note: "IQ3_S, not UD-Q3_K_XL. Official Strata PR #1638 on one 32 GB R9700, frozen 0.1.40.3, 2026-10-08."
+    figures: decode 101.9 tok/s at 1K, 96.4 at 4K, 95.6 at 32K, 87.6 at 128K
+    href: https://www.stratat.com/en/pulls/1638
+    date: 2026-10-08
+  - quant: Q3
+    label: not measured on local-desktop
+    note: IQ3_S tuned port on one R9700, Ryzen 9 5900X, 128 GiB RAM, 2026-10-09.
+    figures: tuned output 46.54–57.22 tok/s across the posted workloads
+    href: https://github.com/lcchan0525sg/Qwen-Flash-Next-Strata-for-AMD-R9700
+    date: 2026-10-09
+  - quant: Q4
+    label: not measured on local-desktop
+    note: UD-Q4_K_XL on NVIDIA RTX PRO 6000 96 GB, Strata, INT8 KV, 256K, MTP-4. Not an R9700.
+    figures: 185.8 tok/s prose decode
+    href: https://prismix.dev/news/8cbc2ee684a1
+    date: 2026-10-10
+  - quant: Q5
+    label: not measured on local-desktop
+    note: No cited community decode for Flash UD-Q5_K_XL as of 2026-10-13.
+    figures: ''
+    href: https://huggingface.co/unsloth/Qwen3.8-Flash-Next-GGUF/tree/main/UD-Q5_K_XL
+    date: retrieved 2026-10-13
+
+sources:
+  - title: Unsloth — Qwen3.8-Flash-Next (UD-Q4_K_XL 111.3 GB, UD-Q5_K_XL 158.3 GB)
+    href: https://unsloth.ai/docs/models/qwen3.8-next
+    date: retrieved 2026-10-13
+  - title: Hugging Face — UD-Q4_K_XL folder (111 GB)
+    href: https://huggingface.co/unsloth/Qwen3.8-Flash-Next-GGUF/tree/main/UD-Q4_K_XL
+    date: retrieved 2026-10-13
+  - title: Hugging Face — UD-Q5_K_XL folder (158 GB)
+    href: https://huggingface.co/unsloth/Qwen3.8-Flash-Next-GGUF/tree/main/UD-Q5_K_XL
+    date: retrieved 2026-10-13
+  - title: Hugging Face — Qwen3.8-Flash-Next-GGUF
+    href: https://huggingface.co/unsloth/Qwen3.8-Flash-Next-GGUF
+    date: retrieved 2026-10-13
+  - title: llmhardware.io — UD-Q4_K_XL shard sum 111.33 GB
+    href: https://llmhardware.io/guides/qwen3-8-flash-next-hardware-requirements
+    date: 2026-10-09
+  - title: "Strata PR #1638 — one R9700 IQ3_S"
+    href: https://www.stratat.com/en/pulls/1638
+    date: 2026-10-08
+  - title: lcchan0525sg — R9700 IQ3_S tuned rates
+    href: https://github.com/lcchan0525sg/Qwen-Flash-Next-Strata-for-AMD-R9700
+    date: 2026-10-09
+  - title: r/LocalLLaMA mirror — Strata UD-Q4_K_XL on RTX PRO 6000
+    href: https://prismix.dev/news/8cbc2ee684a1
+    date: 2026-10-10

@@ -12,6 +12,7 @@ import {
   MODEL_PRESETS,
   QUANTS,
   local-desktop_DDR5_GB,
+  local-desktop_USABLE_RAM_GB,
   roundUpToDimmKitGb,
   systemRamNeed,
   applyModelPreset,
@@ -103,6 +104,8 @@ describe('calculator catalog guards', () => {
     const flash = MODEL_PRESETS.find((m) => m.id === 'flash');
     assert.equal(flash?.publisherFiles.q3_k_xl?.decimalGb, 90);
     assert.equal(flash?.publisherFiles.iq3?.decimalGb, 81.96);
+    assert.equal(flash?.publisherFiles.q4_k_m?.decimalGb, 111);
+    assert.equal(flash?.publisherFiles.q5_k_m?.decimalGb, 158.3);
     const qwen36 = MODEL_PRESETS.find((m) => m.id === 'qwen36');
     assert.equal(qwen36?.publisherFiles.q3_k_s?.decimalGb, 15.4);
     assert.equal(qwen36?.publisherFiles.q3_k_m?.decimalGb, 16.6);
@@ -250,6 +253,7 @@ describe('calculator math and modes', () => {
     assert.ok((DIMM_KIT_GB as readonly number[]).includes(ram.atFullContext.kitGb));
     assert.ok(ram.atSelected.rawGiB < ram.atSelected.kitGb + 1e-9);
     assert.equal(local-desktop_DDR5_GB, 256);
+    assert.equal(local-desktop_USABLE_RAM_GB, 249);
   });
 
   it('rounds host RAM up to a real DIMM kit', () => {
