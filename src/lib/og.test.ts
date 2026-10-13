@@ -41,6 +41,7 @@ describe('OG catalog', () => {
     assert.equal(ogSlug('/gpus/rx-7900-gre'), 'gpus-rx-7900-gre');
     assert.equal(ogSlug('/gpus/rx-7700-xt'), 'gpus-rx-7700-xt');
     assert.equal(ogSlug('/gpus/rx-7600-xt'), 'gpus-rx-7600-xt');
+    assert.equal(ogSlug('/gpus/rx-7600'), 'gpus-rx-7600');
     assert.equal(ogSlug('/benchmarks'), 'benchmarks');
     assert.equal(ogSlug('/compare'), 'compare');
     assert.equal(ogSlug('/compare/radeon-vs-nvidia'), 'compare-radeon-vs-nvidia');

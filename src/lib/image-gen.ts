@@ -180,6 +180,13 @@ export const IMAGE_GEN_FIT_ROWS: ImageGenFitRow[] = [
     speed: IMAGE_GEN_SPEED_LABEL,
   },
   {
+    id: '8gb',
+    vramClass: '8 GB discrete',
+    cards: [{ href: '/gpus/rx-7600', label: 'RX 7600' }],
+    fit: 'Estimate. 8 GB is tighter than the 12 / 16 GB sheets. SD 1.5 is the more likely family. Confirm the 8 GB sticker — this is not the 16 GB RX 7600 XT.',
+    speed: IMAGE_GEN_SPEED_LABEL,
+  },
+  {
     id: 'strix-halo',
     vramClass: 'Shared memory (Strix Halo)',
     cards: [{ href: '/gpus/strix-halo', label: 'Ryzen AI Max+ 395 / Radeon 8060S' }],
@@ -342,6 +349,7 @@ export const REQUIRED_IMAGE_GEN_HREFS = [
   '/gpus/rx-7900-gre',
   '/gpus/rx-7700-xt',
   '/gpus/rx-7600-xt',
+  '/gpus/rx-7600',
   '/multi-gpu',
   '/calculator',
   '/troubleshoot',
@@ -454,6 +462,7 @@ export function assertImageGenValid(): string[] {
     '/gpus/rx-7900-gre',
     '/gpus/rx-7700-xt',
     '/gpus/rx-7600-xt',
+    '/gpus/rx-7600',
     '/gpus/strix-halo',
   ]) {
     if (!fitHrefs.includes(href)) errors.push(`fit table missing ${href}`);
