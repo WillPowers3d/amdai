@@ -191,6 +191,14 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
     { href: '/setup', label: 'First-run setup' },
     { href: '/stack-lab', label: 'Stack Lab' },
   ],
+  '/gpus/rx-7900-gre': [
+    { href: '/calculator', label: 'Calculator' },
+    { href: '/gpus/rx7900xt', label: 'RX 7900 XT sheet' },
+    { href: '/gpus/rx7800xt', label: 'RX 7800 XT sheet' },
+    { href: '/gpus/r9700', label: 'R9700 measured page' },
+    { href: '/compare/radeon-vs-nvidia', label: 'Radeon vs NVIDIA' },
+    { href: '/setup', label: 'First-run setup' },
+  ],
   '/multi-gpu': [
     { href: '/gpus/r9700', label: 'R9700 measured page' },
     { href: '/qwen36-dual', label: '35B on two cards' },

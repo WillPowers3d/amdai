@@ -50,6 +50,8 @@ export default defineConfig({
     '/gpus/rx9070-xt': '/gpus/rx-9070-xt',
     '/gpus/rx9060xt': '/gpus/rx-9060-xt',
     '/gpus/rx9060-xt': '/gpus/rx-9060-xt',
+    '/gpus/rx7900gre': '/gpus/rx-7900-gre',
+    '/gpus/rx7900-gre': '/gpus/rx-7900-gre',
   },
   markdown: {
     shikiConfig: {

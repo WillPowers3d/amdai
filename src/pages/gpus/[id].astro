@@ -20,7 +20,7 @@ import { gpuDirectory } from '../../lib/status';
 
 export function getStaticPaths() {
   return gpuPages(recipes)
-    .filter((page) => page.id !== 'r9700' && page.id !== 'strix-halo' && page.id !== 'rx9070xt' && page.id !== 'rx9060xt')
+    .filter((page) => page.id !== 'r9700' && page.id !== 'strix-halo' && page.id !== 'rx9070xt' && page.id !== 'rx9060xt' && page.id !== 'rx7900gre')
     .map((page) => ({ params: { id: page.id }, props: { id: page.id } }));
 }
 
