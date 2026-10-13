@@ -15,18 +15,19 @@ import { officialAmdaiRuns, runsForGpu, verifiedMeasured } from '../../lib/run-c
 import { runs } from '../../lib/run-card-data';
 import { measuredRamHits } from '../../lib/measured-ram-data';
 import HowWeTest from '../../components/HowWeTest.astro';
-import { consumerRecipePage, isConsumerRecipeGpu } from '../../lib/consumer-gpu';
+import { consumerRecipeIdFromPage, consumerRecipePage } from '../../lib/consumer-gpu';
 import { gpuDirectory } from '../../lib/status';
 
 export function getStaticPaths() {
   return gpuPages(recipes)
-    .filter((page) => page.id !== 'r9700' && page.id !== 'strix-halo')
+    .filter((page) => page.id !== 'r9700' && page.id !== 'strix-halo' && page.id !== 'rx9070xt')
     .map((page) => ({ params: { id: page.id }, props: { id: page.id } }));
 }
 
 const page = gpuPageById(recipes, Astro.props.id);
 if (!page) throw new Error(`unknown GPU page ${Astro.props.id}`);
-const sheet = isConsumerRecipeGpu(page.id) ? consumerRecipePage(page.id) : null;
+const recipeId = consumerRecipeIdFromPage(page.id);
+const sheet = recipeId ? consumerRecipePage(recipeId) : null;
 const llamaFirst = [...page.recipes].sort((a, b) => {
   if (a.backend === b.backend) return b.ctx - a.ctx;
   return a.backend === 'llamacpp' ? -1 : 1;

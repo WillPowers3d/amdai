@@ -46,6 +46,8 @@ export default defineConfig({
   redirects: {
     '/local-ai': '/software',
     '/two-r9700': '/qwen36-dual',
+    '/gpus/rx9070xt': '/gpus/rx-9070-xt',
+    '/gpus/rx9070-xt': '/gpus/rx-9070-xt',
   },
   markdown: {
     shikiConfig: {
