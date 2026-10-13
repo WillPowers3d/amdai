@@ -87,6 +87,18 @@ products:
       microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=AMD+Radeon+RX+7900+XT
       amd: https://www.amd.com/en/products/graphics/desktops/radeon/7000-series/amd-radeon-rx-7900xt.html
 
+  - id: rx7900gre
+    name: AMD Radeon RX 7900 GRE
+    kind: gpu
+    vram_gb: 16
+    calculator_gpu: rx7900gre
+    urls:
+      amazon: https://www.amazon.com/s?k=AMD+Radeon+RX+7900+GRE
+      newegg: https://www.newegg.com/p/pl?d=AMD+Radeon+RX+7900+GRE
+      bhphoto: https://www.bhphotovideo.com/c/search?Ntt=AMD+Radeon+RX+7900+GRE
+      microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=AMD+Radeon+RX+7900+GRE
+      amd: https://www.amd.com/en/products/graphics/desktops/radeon/7000-series/amd-radeon-rx-7900gre.html
+
   - id: rx7800xt
     name: AMD Radeon RX 7800 XT
     kind: gpu
