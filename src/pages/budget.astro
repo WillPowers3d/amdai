@@ -80,7 +80,7 @@ const payload = JSON.stringify({
           min="0"
           step="50"
           inputmode="numeric"
-          class="mt-1 min-h-11 w-full max-w-xs rounded-full border border-line bg-canvas px-4 text-sm"
+          class="field mt-1 max-w-xs rounded-full"
           placeholder={hasBands ? 'USD' : 'Bands are not recorded'}
           disabled={!hasBands}
         />
@@ -289,7 +289,7 @@ const payload = JSON.stringify({
       const on = card.getAttribute('data-tier') === id;
       card.classList.toggle('ring-2', on);
       card.classList.toggle('ring-accent', on);
-      card.classList.toggle('opacity-55', !on);
+      card.classList.toggle('border-accent', on);
     });
     stops.forEach((stop) => {
       const tier = data.tiers.find((row) => String(row.slider) === stop.getAttribute('data-stop'));

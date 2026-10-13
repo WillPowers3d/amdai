@@ -147,11 +147,12 @@ const quantOrder = [...COMPARE_QUANTS, COMPARE_Q3];
           <h2 class="font-serif text-2xl">{row.gpuCount === 1 ? 'One R9700' : 'Split'} · {row.contextLabel}</h2>
           <div class="mt-4 overflow-x-auto">
             <table class="table-lab compare-sticky min-w-[64rem]">
+              <caption>Q6, Q5, and Q4 on the same 35B file, plus a labeled Q3 estimate. Figures from local-desktop run cards.</caption>
               <thead>
                 <tr>
-                  <th>Metric</th>
+                  <th scope="col">Metric</th>
                   {row.columns.map((col) => (
-                    <th data-compare-col data-quant={col.quant}>
+                    <th scope="col" data-compare-col data-quant={col.quant}>
                       {col.quant}
                       <span class="block text-[0.65rem] font-normal normal-case tracking-normal text-faint">
                         {col.kind === 'estimate' ? 'estimate' : 'measured'}

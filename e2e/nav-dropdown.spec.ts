@@ -37,3 +37,29 @@ test('Path dropdown stays open on a diagonal mouse path into the panel', async (
   await expect(panel).toBeHidden();
   await expect(trigger).toBeFocused();
 });
+
+test('Path dropdown opens from the keyboard and moves between groups', async ({ page }) => {
+  await page.setViewportSize({ width: 1400, height: 900 });
+  await page.goto('/');
+
+  const path = page.locator('.mega-item').filter({ hasText: 'Path' }).first();
+  const stack = page.locator('.mega-item').filter({ hasText: 'Stack' }).first();
+  const pathTrigger = path.locator('.mega-trigger');
+  const stackTrigger = stack.locator('.mega-trigger');
+  const pathPanel = path.locator('.mega-panel');
+  const stackPanel = stack.locator('.mega-panel');
+
+  await pathTrigger.focus();
+  await page.keyboard.press('ArrowDown');
+  await expect(pathPanel).toBeVisible();
+  await expect(pathTrigger).toHaveAttribute('aria-expanded', 'true');
+  await expect(pathPanel.locator('a').first()).toBeFocused();
+
+  await page.keyboard.press('ArrowRight');
+  await expect(stackPanel).toBeVisible();
+  await expect(stackPanel.locator('a').first()).toBeFocused();
+
+  await page.keyboard.press('Escape');
+  await expect(stackPanel).toBeHidden();
+  await expect(stackTrigger).toBeFocused();
+});

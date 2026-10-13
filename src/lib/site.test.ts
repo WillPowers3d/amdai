@@ -1,6 +1,6 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
-import { BRAND, HERO_HEADLINE, OG_SITE_NAME, primaryNav, site } from './site';
+import { BRAND, HERO_HEADLINE, OG_SITE_NAME, ogSlug, primaryNav, site } from './site';
 import { AMDAI_BENCH_SCHEMA } from './results';
 
 describe('AMDai brand and hero', () => {
@@ -31,5 +31,22 @@ describe('AMDai brand and hero', () => {
     assert.ok(glossary);
     assert.match(glossary?.description ?? '', /Q3/);
     assert.doesNotMatch(glossary?.description ?? '', /below Q4|Q4 floor/i);
+  });
+});
+
+describe('accessibility statement', () => {
+  it('is a real page and is linked from the footer', async () => {
+    const { readFileSync } = await import('node:fs');
+    const { fileURLToPath } = await import('node:url');
+    const { dirname, join } = await import('node:path');
+    const here = dirname(fileURLToPath(import.meta.url));
+    const footer = readFileSync(join(here, '../components/Footer.astro'), 'utf8');
+    const page = readFileSync(join(here, '../pages/accessibility.astro'), 'utf8');
+    assert.match(footer, /href="\/accessibility"/);
+    assert.match(page, /13 October 2026/);
+    assert.match(page, /\/forum/);
+    assert.match(page, /\/contribute/);
+    assert.doesNotMatch(page, /@amdai\.|mailto:/i);
+    assert.equal(ogSlug('/accessibility'), 'default');
   });
 });

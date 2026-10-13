@@ -149,13 +149,14 @@ const payload = rows.map((row) => ({
 
     <div class="compare-table mt-8 hidden overflow-x-auto lg:block" id="compare-table">
       <table class="table-lab compare-sticky min-w-[72rem]">
+        <caption>One R9700 versus a split across both cards. Decode, prefill, VRAM, and system RAM from local-desktop run cards.</caption>
         <thead>
           <tr>
-            <th rowspan="2">Quant</th>
-            <th rowspan="2">Context</th>
-            <th rowspan="2">Who wins decode</th>
-            <th colspan="5" data-side="1">One R9700</th>
-            <th colspan="5" data-side="2">Both R9700s (split)</th>
+            <th scope="col" rowspan="2">Quant</th>
+            <th scope="col" rowspan="2">Context</th>
+            <th scope="col" rowspan="2">Who wins decode</th>
+            <th scope="colgroup" colspan="5" data-side="1">One R9700</th>
+            <th scope="colgroup" colspan="5" data-side="2">Both R9700s (split)</th>
           </tr>
           <tr>
             <th data-side="1">Prefill</th>

@@ -71,7 +71,7 @@ const index = GLOSSARY.map((entry) => ({
             <li>
               {used ? (
                 <a
-                  class="inline-flex min-h-10 min-w-10 items-center justify-center rounded-md px-2 font-mono text-sm text-ink hover:bg-accent-soft hover:text-accent-ink"
+                  class="inline-flex min-h-11 min-w-11 items-center justify-center rounded-md px-2 font-mono text-sm text-ink hover:bg-accent-soft hover:text-accent-ink"
                   href={`#letter-${letter.toLowerCase()}`}
                   data-letter-link={letter}
                 >
@@ -79,7 +79,7 @@ const index = GLOSSARY.map((entry) => ({
                 </a>
               ) : (
                 <span
-                  class="inline-flex min-h-10 min-w-10 items-center justify-center rounded-md px-2 font-mono text-sm text-faint"
+                  class="inline-flex min-h-11 min-w-11 items-center justify-center rounded-md px-2 font-mono text-sm text-faint"
                   aria-disabled="true"
                   data-letter-link={letter}
                 >

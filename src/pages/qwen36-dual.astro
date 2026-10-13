@@ -135,15 +135,16 @@ const split = file.split;
       </div>
       <div class="card mt-6 overflow-x-auto">
         <table class="table-lab min-w-[36rem]">
+          <caption>35B on two R9700s — measured decode, prefill, VRAM, and system RAM from local-desktop.</caption>
           <thead>
             <tr>
-              <th>Context</th>
-              <th>Decode</th>
-              <th>Prefill</th>
-              <th>VRAM / card</th>
-              <th>VRAM total</th>
-              <th>System RAM</th>
-              <th>Card</th>
+              <th scope="col">Context</th>
+              <th scope="col">Decode</th>
+              <th scope="col">Prefill</th>
+              <th scope="col">VRAM / card</th>
+              <th scope="col">VRAM total</th>
+              <th scope="col">System RAM</th>
+              <th scope="col">Card</th>
             </tr>
           </thead>
           <tbody>
@@ -183,12 +184,13 @@ const split = file.split;
       </p>
       <div class="card mt-6 overflow-x-auto">
         <table class="table-lab min-w-[36rem]">
+          <caption>Single-card 35B decode on one R9700. Measured on our rig.</caption>
           <thead>
             <tr>
-              <th>Quant</th>
-              <th>Context</th>
-              <th>Decode</th>
-              <th>Note</th>
+              <th scope="col">Quant</th>
+              <th scope="col">Context</th>
+              <th scope="col">Decode</th>
+              <th scope="col">Note</th>
             </tr>
           </thead>
           <tbody>

@@ -134,16 +134,16 @@ const payload = rows.map((row) => ({
             The URL is shareable. Without JavaScript the full table stays visible.
           </p>
         </div>
-        <p id="qwen-count" class="text-sm text-muted">{rows.length} rows</p>
+        <p id="qwen-count" class="text-sm text-muted" aria-live="polite">{rows.length} rows</p>
       </div>
 
       <form id="qwen-filters" class="mt-6 space-y-4" aria-controls="qwen-table">
         <div>
           <p class="font-mono text-[0.68rem] uppercase tracking-[0.12em] text-faint">GPU count</p>
           <div class="mt-2 flex flex-wrap gap-2" role="group" aria-label="GPU count">
-            <button type="button" class="chip is-on" data-filter="gpuCount" data-value="">Any</button>
-            <button type="button" class="chip" data-filter="gpuCount" data-value="1">1× R9700</button>
-            <button type="button" class="chip" data-filter="gpuCount" data-value="2">2× R9700</button>
+            <button type="button" class="chip is-on" data-filter="gpuCount" data-value="" aria-pressed="true">Any</button>
+            <button type="button" class="chip" data-filter="gpuCount" data-value="1" aria-pressed="false">1× R9700</button>
+            <button type="button" class="chip" data-filter="gpuCount" data-value="2" aria-pressed="false">2× R9700</button>
           </div>
         </div>
         <div>
@@ -247,10 +247,11 @@ const payload = rows.map((row) => ({
 
       <div class="qwen-table-wrap mt-6 hidden overflow-auto lg:block">
         <table class="table-lab qwen-table min-w-[84rem]" id="qwen-table">
+          <caption>Qwen 3.6 and 3.8 model × quant comparison. Measured tok/s from local-desktop run cards; VRAM and fit are calculator estimates unless a card recorded a peak.</caption>
           <thead>
             <tr>
               {QWEN_ALL_COLS.map((col) => (
-                <th scope="col" data-col={col}>
+                <th scope="col" data-col={col} aria-sort="none">
                   <button type="button" class="qwen-sort" data-sort={col}>
                     {QWEN_COL_LABEL[col as QwenColId]}
                   </button>
@@ -473,6 +474,12 @@ const payload = rows.map((row) => ({
       if (key === 'family') on = state.family === value;
       if (key === 'edition') on = state.edition === value;
       btn.classList.toggle('is-on', on);
+      btn.setAttribute('aria-pressed', String(on));
+    });
+    document.querySelectorAll('#qwen-table thead th[data-col]').forEach((th) => {
+      const col = th.getAttribute('data-col');
+      if (!col) return;
+      th.setAttribute('aria-sort', state.sort === col ? (state.dir === 'asc' ? 'ascending' : 'descending') : 'none');
     });
   }
 
@@ -598,6 +605,7 @@ const payload = rows.map((row) => ({
   }
   .qwen-sort {
     display: inline-flex;
+    min-height: 2.75rem;
     align-items: center;
     gap: 0.25rem;
     text-align: left;
@@ -607,7 +615,7 @@ const payload = rows.map((row) => ({
     color: inherit;
     background: none;
     border: 0;
-    padding: 0;
+    padding: 0.2rem 0.15rem;
     cursor: pointer;
   }
   .qwen-sort:hover,
@@ -616,18 +624,5 @@ const payload = rows.map((row) => ({
   }
   .is-hidden-col {
     display: none;
-  }
-  .chip {
-    border-radius: 999px;
-    border: 1px solid var(--line);
-    background: var(--raised);
-    color: var(--muted);
-    padding: 0.4rem 0.85rem;
-    font-size: 0.875rem;
-  }
-  .chip.is-on {
-    border-color: color-mix(in srgb, var(--accent) 55%, var(--line));
-    background: color-mix(in srgb, var(--accent) 16%, var(--raised));
-    color: var(--ink);
   }
 </style>

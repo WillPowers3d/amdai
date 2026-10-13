@@ -85,7 +85,7 @@ const rows = abliteratedGuide.rows;
           <ul class="mt-1 space-y-1 text-xs">
             {family.sources.map((source) => (
               <li>
-                <a class="text-accent-ink underline decoration-accent/40 underline-offset-2" href={source.url} rel="noopener">
+                <a class="inline-flex min-h-11 items-center text-accent-ink underline decoration-accent/40 underline-offset-2" href={source.url} rel="noopener">
                   {source.title}
                 </a>
               </li>
@@ -153,7 +153,7 @@ const rows = abliteratedGuide.rows;
           </p>
           {row.repo_url && (
             <p class="mt-1 text-xs">
-              <a class="text-accent-ink underline decoration-accent/40 underline-offset-2" href={row.repo_url} rel="noopener">
+              <a class="inline-flex min-h-11 items-center text-accent-ink underline decoration-accent/40 underline-offset-2" href={row.repo_url} rel="noopener">
                 {row.repo}
               </a>
             </p>
@@ -194,7 +194,7 @@ const rows = abliteratedGuide.rows;
             <ul class="mt-1 space-y-1 text-xs">
               {sources.map((source) => (
                 <li>
-                  <a class="text-accent-ink underline decoration-accent/40 underline-offset-2" href={source.url} rel="noopener">
+                  <a class="inline-flex min-h-11 items-center text-accent-ink underline decoration-accent/40 underline-offset-2" href={source.url} rel="noopener">
                     {source.title}
                   </a>
                 </li>

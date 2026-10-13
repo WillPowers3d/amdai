@@ -16,9 +16,10 @@ const { recipes, empty } = Astro.props;
 ) : (
   <div class="overflow-x-auto rounded-xl border border-line">
     <table class="min-w-[52rem] w-full text-left text-sm">
-      <thead class="bg-raised text-[0.72rem] uppercase tracking-[0.08em] text-faint">
+      <caption class="sr-only">Launch recipes for this card. Decode cells stay empty until a sourced run exists.</caption>
+      <thead class="bg-raised text-[0.72rem] uppercase tracking-[0.08em] text-muted">
         <tr>
-          <th class="px-3 py-2 font-medium">Model</th>
+          <th scope="col" class="px-3 py-2 font-medium">Model</th>
           <th class="px-3 py-2 font-medium">Setup</th>
           <th class="px-3 py-2 font-medium">Backend</th>
           <th class="px-3 py-2 font-medium">Quant</th>

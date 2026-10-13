@@ -69,10 +69,11 @@ const pinned = primaryNav.filter((item) => ['/qwen', '/calculator', '/budget', '
       <a class="btn-primary hidden h-10 px-4 text-sm sm:inline-flex" href="/start">Get started</a>
       <button
         type="button"
-        class="inline-flex h-10 items-center rounded-full border border-line bg-raised px-3 text-sm lg:hidden"
+        class="inline-flex min-h-11 items-center rounded-full border border-line bg-raised px-4 text-sm lg:hidden"
         data-menu-toggle
         aria-expanded="false"
         aria-controls="mobile-nav"
+        aria-label="Open site menu"
       >
         Menu
       </button>
@@ -85,7 +86,7 @@ const pinned = primaryNav.filter((item) => ['/qwen', '/calculator', '/budget', '
         <li>
           <a
             href={item.href}
-            class:list={['block rounded-lg px-3 py-2', isActive(item.href) ? 'bg-accent-soft text-accent-ink' : 'text-ink']}
+            class:list={['flex min-h-11 flex-col justify-center rounded-lg px-3 py-2', isActive(item.href) ? 'bg-accent-soft text-accent-ink' : 'text-ink']}
           >
             <span class="block font-medium">{item.label}</span>
             <span class="block text-sm text-muted">{item.description}</span>
@@ -100,11 +101,22 @@ const pinned = primaryNav.filter((item) => ['/qwen', '/calculator', '/budget', '
   import { bindMegaNav } from '../lib/mega-nav';
   bindMegaNav(document);
 
-  const toggle = document.querySelector('[data-menu-toggle]');
+  const toggle = document.querySelector<HTMLButtonElement>('[data-menu-toggle]');
   const menu = document.getElementById('mobile-nav');
+  const setMenu = (open: boolean) => {
+    menu?.classList.toggle('hidden', !open);
+    toggle?.setAttribute('aria-expanded', String(open));
+    toggle?.setAttribute('aria-label', open ? 'Close site menu' : 'Open site menu');
+  };
   toggle?.addEventListener('click', () => {
-    const open = menu?.classList.toggle('hidden') === false;
-    toggle.setAttribute('aria-expanded', String(open));
+    setMenu(menu?.classList.contains('hidden') === true);
+    if (toggle.getAttribute('aria-expanded') === 'true') menu?.querySelector('a')?.focus();
+  });
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && toggle?.getAttribute('aria-expanded') === 'true') {
+      setMenu(false);
+      toggle.focus();
+    }
   });
 </script>
 
@@ -134,10 +146,11 @@ const pinned = primaryNav.filter((item) => ['/qwen', '/calculator', '/budget', '
   .mega-trigger,
   .mega-link {
     display: inline-flex;
+    min-height: 2.75rem;
     align-items: center;
     gap: 0.3rem;
     border-radius: 999px;
-    padding: 0.4rem 0.7rem;
+    padding: 0.45rem 0.75rem;
     font-size: 0.88rem;
     color: var(--muted);
   }
@@ -179,7 +192,10 @@ const pinned = primaryNav.filter((item) => ['/qwen', '/calculator', '/budget', '
   }
 
   .mega-panel a {
-    display: block;
+    display: flex;
+    min-height: 2.75rem;
+    flex-direction: column;
+    justify-content: center;
     border-radius: 0.7rem;
     padding: 0.55rem 0.6rem;
   }
@@ -191,7 +207,7 @@ const pinned = primaryNav.filter((item) => ['/qwen', '/calculator', '/budget', '
 
   .cmdk-btn {
     display: inline-flex;
-    min-height: 2.5rem;
+    min-height: 2.75rem;
     align-items: center;
     gap: 0.45rem;
     border: 1px solid var(--line);
@@ -199,7 +215,7 @@ const pinned = primaryNav.filter((item) => ['/qwen', '/calculator', '/budget', '
     border-radius: 999px;
     padding: 0.35rem 0.75rem;
     font-size: 0.85rem;
-    color: var(--muted);
+    color: var(--ink);
   }
 
   .cmdk-btn kbd {

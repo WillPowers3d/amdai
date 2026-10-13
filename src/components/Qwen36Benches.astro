@@ -23,25 +23,26 @@ const { heading = '35B decode, measured' } = Astro.props;
     Filterable cards: <a class="underline decoration-accent/40" href="/results">comparable results</a>.
   </p>
   <div class="card mt-6 overflow-x-auto">
-    <table class="table-lab min-w-[72rem]">
+        <table class="table-lab min-w-[72rem]">
+      <caption>Qwen3.6-35B-A3B llama.cpp decode, prefill, VRAM, and system RAM from local-desktop run cards — one R9700 versus a split.</caption>
       <thead>
         <tr>
-          <th rowspan="2">Quant</th>
-          <th rowspan="2">Context</th>
-          <th colspan="5">One R9700</th>
-          <th colspan="5">Both R9700s (split)</th>
+          <th scope="col" rowspan="2">Quant</th>
+          <th scope="col" rowspan="2">Context</th>
+          <th scope="colgroup" colspan="5">One R9700</th>
+          <th scope="colgroup" colspan="5">Both R9700s (split)</th>
         </tr>
         <tr>
-          <th>Prefill</th>
-          <th>Decode</th>
-          <th>VRAM / card</th>
-          <th>VRAM total</th>
-          <th>System RAM</th>
-          <th>Prefill</th>
-          <th>Decode</th>
-          <th>VRAM / card</th>
-          <th>VRAM total</th>
-          <th>System RAM</th>
+          <th scope="col">Prefill</th>
+          <th scope="col">Decode</th>
+          <th scope="col">VRAM / card</th>
+          <th scope="col">VRAM total</th>
+          <th scope="col">System RAM</th>
+          <th scope="col">Prefill</th>
+          <th scope="col">Decode</th>
+          <th scope="col">VRAM / card</th>
+          <th scope="col">VRAM total</th>
+          <th scope="col">System RAM</th>
         </tr>
       </thead>
       <tbody>
@@ -138,11 +139,12 @@ const { heading = '35B decode, measured' } = Astro.props;
   </p>
   <div class="card mt-4 overflow-x-auto">
     <table class="table-lab min-w-[28rem]">
+      <caption>Q3 35B file sizes from the Unsloth listing. Decode and VRAM are not measured on local-desktop.</caption>
       <thead>
         <tr>
-          <th>Quant</th>
-          <th>Publisher listing</th>
-          <th>Decode / VRAM</th>
+          <th scope="col">Quant</th>
+          <th scope="col">Publisher listing</th>
+          <th scope="col">Decode / VRAM</th>
         </tr>
       </thead>
       <tbody>

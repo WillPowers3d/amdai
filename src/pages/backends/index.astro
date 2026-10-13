@@ -103,10 +103,11 @@ const tone: Record<string, string> = {
       </p>
       <div class="card mt-6 overflow-x-auto">
         <table class="table-lab min-w-[80rem]">
+          <caption>Inference backends compared. Cells are paraphrases of cited docs plus house rules. First-party speed is the 35B llama.cpp set plus the Flash Q6 pair.</caption>
           <thead>
             <tr>
-              <th>Engine</th>
-              {COMPARE_COLUMNS.map((col) => <th>{col.label}</th>)}
+              <th scope="col">Engine</th>
+              {COMPARE_COLUMNS.map((col) => <th scope="col">{col.label}</th>)}
             </tr>
           </thead>
           <tbody>

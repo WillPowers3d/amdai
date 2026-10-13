@@ -15,10 +15,10 @@ import Logo from './Logo.astro';
     </div>
     {navGroups.map((group) => (
       <div>
-        <p class="font-mono text-[0.7rem] uppercase tracking-[0.16em] text-faint">{group.label}</p>
+        <p class="kicker">{group.label}</p>
         <ul class="mt-3 grid gap-1.5 text-sm">
           {primaryNav.filter((item) => item.group === group.id).map((item) => (
-            <li><a class="text-muted hover:text-ink" href={item.href}>{item.label}</a></li>
+            <li><a class="inline-flex min-h-11 items-center text-muted hover:text-ink" href={item.href}>{item.label}</a></li>
           ))}
         </ul>
       </div>
@@ -32,6 +32,7 @@ import Logo from './Logo.astro';
       <a class="underline decoration-accent/40 underline-offset-2" href="/disclosure">Affiliate disclosure</a>.
       <a class="underline decoration-accent/40 underline-offset-2" href="/credits">Credits</a>.
       <a class="underline decoration-accent/40 underline-offset-2" href="/privacy">Privacy</a>.
+      <a class="underline decoration-accent/40 underline-offset-2" href="/accessibility">Accessibility</a>.
       {AMAZON_ASSOCIATE_DISCLOSURE} Always confirm the live ROCm matrix.
     </p>
   </div>

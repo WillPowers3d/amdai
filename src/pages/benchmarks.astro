@@ -122,13 +122,14 @@ const flash = file.runs.filter((run) => run.model.includes('Flash'));
       </p>
       <div class="card mt-4 overflow-x-auto">
         <table class="table-lab min-w-[36rem]">
+          <caption>Qwen3.6-35B-A3B llama.cpp Vulkan decode on one R9700. Measured on our rig.</caption>
           <thead>
             <tr>
-              <th>Quant</th>
-              <th>Context</th>
-              <th>{metricLabel('tg')}</th>
-              <th>Evidence</th>
-              <th>Fit</th>
+              <th scope="col">Quant</th>
+              <th scope="col">Context</th>
+              <th scope="col">{metricLabel('tg')}</th>
+              <th scope="col">Evidence</th>
+              <th scope="col">Fit</th>
             </tr>
           </thead>
           <tbody>
@@ -158,13 +159,14 @@ const flash = file.runs.filter((run) => run.model.includes('Flash'));
       </p>
       <div class="card mt-4 overflow-x-auto">
         <table class="table-lab min-w-[36rem]">
+          <caption>Qwen 3.8 Flash UD-Q6_K_XL decode on Strata and llama.cpp. Measured on our rig.</caption>
           <thead>
             <tr>
-              <th>Engine</th>
-              <th>Context</th>
-              <th>{metricLabel('tg')}</th>
-              <th>Evidence</th>
-              <th>Fit</th>
+              <th scope="col">Engine</th>
+              <th scope="col">Context</th>
+              <th scope="col">{metricLabel('tg')}</th>
+              <th scope="col">Evidence</th>
+              <th scope="col">Fit</th>
             </tr>
           </thead>
           <tbody>
@@ -201,14 +203,15 @@ const flash = file.runs.filter((run) => run.model.includes('Flash'));
       </p>
       <div class="card mt-6 overflow-x-auto">
         <table class="table-lab min-w-[44rem]">
+          <caption>Engine × quant × context from the first-party runs on this page. Empty cells stay not measured.</caption>
           <thead>
             <tr>
-              <th>Engine</th>
-              <th>Quant</th>
-              <th>Context</th>
-              <th>Metric</th>
-              <th>tok/s</th>
-              <th>Calculator</th>
+              <th scope="col">Engine</th>
+              <th scope="col">Quant</th>
+              <th scope="col">Context</th>
+              <th scope="col">Metric</th>
+              <th scope="col">tok/s</th>
+              <th scope="col">Calculator</th>
             </tr>
           </thead>
           <tbody>

@@ -8,6 +8,11 @@ export type MegaNavHandle = {
   destroy: () => void;
 };
 
+export function wrapIndex(index: number, length: number, delta: number): number {
+  if (length <= 0) return 0;
+  return (index + delta + length) % length;
+}
+
 export function bindMegaItem(item: HTMLElement): MegaNavHandle | null {
   const trigger = item.querySelector<HTMLButtonElement>('.mega-trigger');
   const panel = item.querySelector<HTMLElement>('.mega-panel');
@@ -54,6 +59,13 @@ export function bindMegaItem(item: HTMLElement): MegaNavHandle | null {
       cancelClose();
       setOpen(true);
       panel.querySelector<HTMLElement>('a')?.focus();
+    }
+    if (event.key === 'ArrowUp') {
+      event.preventDefault();
+      cancelClose();
+      setOpen(true);
+      const links = panel.querySelectorAll<HTMLElement>('a');
+      links[links.length - 1]?.focus();
     }
   };
 
@@ -124,7 +136,56 @@ export function bindMegaItem(item: HTMLElement): MegaNavHandle | null {
 }
 
 export function bindMegaNav(root: ParentNode = document): MegaNavHandle[] {
-  return [...root.querySelectorAll<HTMLElement>('.mega-item')]
+  const items = [...root.querySelectorAll<HTMLElement>('.mega-item')];
+  const handles = items
     .map((item) => bindMegaItem(item))
     .filter((handle): handle is MegaNavHandle => handle != null);
+
+  items.forEach((item, index) => {
+    const trigger = item.querySelector<HTMLButtonElement>('.mega-trigger');
+    const panel = item.querySelector<HTMLElement>('.mega-panel');
+    if (!trigger || !panel) return;
+
+    const linksOf = (el: HTMLElement) => [...el.querySelectorAll<HTMLElement>('.mega-panel a')];
+
+    trigger.addEventListener('keydown', (event) => {
+      if (event.key === 'ArrowRight' || event.key === 'ArrowLeft') {
+        event.preventDefault();
+        handles[index]?.close();
+        const next = wrapIndex(index, items.length, event.key === 'ArrowRight' ? 1 : -1);
+        items[next]?.querySelector<HTMLButtonElement>('.mega-trigger')?.focus();
+      }
+    });
+
+    panel.addEventListener('keydown', (event) => {
+      const links = linksOf(item);
+      const current = links.indexOf(document.activeElement as HTMLElement);
+      if (event.key === 'ArrowDown') {
+        event.preventDefault();
+        links[wrapIndex(Math.max(current, 0), links.length, 1)]?.focus();
+      }
+      if (event.key === 'ArrowUp') {
+        event.preventDefault();
+        if (current <= 0) trigger.focus();
+        else links[current - 1]?.focus();
+      }
+      if (event.key === 'Home') {
+        event.preventDefault();
+        links[0]?.focus();
+      }
+      if (event.key === 'End') {
+        event.preventDefault();
+        links[links.length - 1]?.focus();
+      }
+      if (event.key === 'ArrowRight' || event.key === 'ArrowLeft') {
+        event.preventDefault();
+        handles[index]?.close();
+        const next = wrapIndex(index, items.length, event.key === 'ArrowRight' ? 1 : -1);
+        handles[next]?.open();
+        items[next]?.querySelector<HTMLElement>('.mega-panel a')?.focus();
+      }
+    });
+  });
+
+  return handles;
 }

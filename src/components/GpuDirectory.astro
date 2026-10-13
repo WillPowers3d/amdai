@@ -24,15 +24,16 @@ const families = [...new Set(gpuDirectory.cards.map((card) => card.family))];
       <h3 class="font-serif text-2xl">{family}</h3>
       <div class="mt-3 overflow-x-auto rounded-xl border border-line">
         <table class="min-w-[52rem] w-full text-left text-sm">
-          <thead class="bg-raised text-[0.72rem] uppercase tracking-[0.08em] text-faint">
+          <caption>Radeon cards in the {family} family. Support follows the cited ROCm matrix.</caption>
+          <thead class="bg-raised text-[0.72rem] uppercase tracking-[0.08em] text-muted">
             <tr>
-              <th class="px-3 py-2 font-medium">Card</th>
-              <th class="px-3 py-2 font-medium">Arch</th>
-              <th class="px-3 py-2 font-medium">gfx</th>
-              <th class="px-3 py-2 font-medium">VRAM</th>
-              <th class="px-3 py-2 font-medium">ROCm</th>
-              <th class="px-3 py-2 font-medium">Recipes</th>
-              <th class="px-3 py-2 font-medium">HSA_OVERRIDE</th>
+              <th scope="col" class="px-3 py-2 font-medium">Card</th>
+              <th scope="col" class="px-3 py-2 font-medium">Arch</th>
+              <th scope="col" class="px-3 py-2 font-medium">gfx</th>
+              <th scope="col" class="px-3 py-2 font-medium">VRAM</th>
+              <th scope="col" class="px-3 py-2 font-medium">ROCm</th>
+              <th scope="col" class="px-3 py-2 font-medium">Recipes</th>
+              <th scope="col" class="px-3 py-2 font-medium">HSA_OVERRIDE</th>
             </tr>
           </thead>
           <tbody>

@@ -17,14 +17,14 @@ const isActive = (href: string) => current === href || current.startsWith(`${hre
   <nav class="sticky top-28 space-y-7 text-sm" aria-label="Section map">
     {navGroups.map((group) => (
       <div>
-        <p class="mb-2 font-mono text-[0.68rem] uppercase tracking-[0.16em] text-faint">{group.label}</p>
+        <p class="kicker mb-2">{group.label}</p>
         <ul class="space-y-1">
           {primaryNav.filter((item) => item.group === group.id).map((item) => (
             <li>
               <a
                 href={item.href}
                 class:list={[
-                  'block rounded-md px-2 py-1.5',
+                  'flex min-h-11 items-center rounded-md px-2 py-1.5',
                   isActive(item.href) ? 'bg-accent-soft text-accent-ink' : 'text-muted hover:text-ink',
                 ]}
               >
@@ -36,10 +36,10 @@ const isActive = (href: string) => current === href || current.startsWith(`${hre
       </div>
     ))}
     <div>
-      <p class="mb-2 font-mono text-[0.68rem] uppercase tracking-[0.16em] text-faint">How-tos</p>
+      <p class="kicker mb-2">How-tos</p>
       <ul class="space-y-1">
         <li>
-          <a href="/glossary" class:list={['block rounded-md px-2 py-1.5', isActive('/glossary') ? 'bg-accent-soft text-accent-ink' : 'text-muted hover:text-ink']}>
+          <a href="/glossary" class:list={['flex min-h-11 items-center rounded-md px-2 py-1.5', isActive('/glossary') ? 'bg-accent-soft text-accent-ink' : 'text-muted hover:text-ink']}>
             Glossary
           </a>
         </li>
@@ -47,7 +47,7 @@ const isActive = (href: string) => current === href || current.startsWith(`${hre
           const href = `/tutorials/${item.id}`;
           return (
             <li>
-              <a href={href} class:list={['block rounded-md px-2 py-1.5', current === href ? 'bg-accent-soft text-accent-ink' : 'text-muted hover:text-ink']}>
+              <a href={href} class:list={['flex min-h-11 items-center rounded-md px-2 py-1.5', current === href ? 'bg-accent-soft text-accent-ink' : 'text-muted hover:text-ink']}>
                 {item.data.title}
               </a>
             </li>
@@ -56,11 +56,11 @@ const isActive = (href: string) => current === href || current.startsWith(`${hre
       </ul>
     </div>
     <div>
-      <p class="mb-2 font-mono text-[0.68rem] uppercase tracking-[0.16em] text-faint">ROCm notes</p>
+      <p class="kicker mb-2">ROCm notes</p>
       <ul class="space-y-1">
         {updates.map((item) => (
           <li>
-            <a href="/updates" class="block rounded-md px-2 py-1.5 text-muted hover:text-ink">
+            <a href="/updates" class="flex min-h-11 items-center rounded-md px-2 py-1.5 text-muted hover:text-ink">
               {item.data.title}
             </a>
           </li>

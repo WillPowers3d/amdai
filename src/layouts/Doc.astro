@@ -24,7 +24,7 @@ const { title, description, kicker, updated, headings = [] } = Astro.props;
   <div class="mx-auto grid max-w-6xl gap-10 px-4 py-10 sm:px-6 lg:grid-cols-[1fr_16rem] xl:grid-cols-[15rem_1fr_15rem]">
     <Sidebar />
     <main id="main" class="min-w-0">
-      <p class="font-mono text-[0.7rem] uppercase tracking-[0.16em] text-accent">{kicker ?? 'Guide'}</p>
+      <p class="kicker">{kicker ?? 'Guide'}</p>
       <h1 class="mt-2 font-serif text-4xl tracking-tight text-balance sm:text-5xl">{title}</h1>
       <p class="mt-4 max-w-2xl text-lg text-muted">{description}</p>
       {updated && (

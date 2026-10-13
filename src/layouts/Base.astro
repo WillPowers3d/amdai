@@ -68,6 +68,7 @@ const og = new URL(`/og/${ogSlug(Astro.url.pathname)}.png`, Astro.site);
     </div>
     <script>
       document.querySelectorAll('pre').forEach((pre) => {
+        if (!pre.hasAttribute('tabindex')) pre.setAttribute('tabindex', '0');
         if (pre.parentElement?.classList.contains('code-wrap')) return;
         const wrap = document.createElement('div');
         wrap.className = 'code-wrap';
@@ -76,6 +77,7 @@ const og = new URL(`/og/${ogSlug(Astro.url.pathname)}.png`, Astro.site);
         const btn = document.createElement('button');
         btn.type = 'button';
         btn.className = 'code-copy';
+        btn.setAttribute('aria-label', 'Copy code');
         btn.textContent = 'Copy';
         btn.addEventListener('click', async () => {
           const text = pre.textContent || '';
@@ -90,6 +92,28 @@ const og = new URL(`/og/${ogSlug(Astro.url.pathname)}.png`, Astro.site);
           }, 1600);
         });
         wrap.appendChild(btn);
+      });
+
+      document.querySelectorAll('table').forEach((table) => {
+        if (!table.querySelector(':scope > caption')) {
+          const caption = document.createElement('caption');
+          caption.className = 'sr-only';
+          const heading = table.closest('section, article, figure')?.querySelector('h1, h2, h3, h4');
+          caption.textContent = heading?.textContent?.trim() || 'Data table';
+          table.prepend(caption);
+        }
+        table.querySelectorAll('thead th').forEach((th) => {
+          if (!th.hasAttribute('scope')) {
+            th.setAttribute('scope', th.colSpan > 1 ? 'colgroup' : 'col');
+          }
+        });
+        table.querySelectorAll('tbody th').forEach((th) => {
+          if (!th.hasAttribute('scope')) th.setAttribute('scope', 'row');
+        });
+        const parent = table.parentElement;
+        if (parent && !parent.classList.contains('table-scroll') && !parent.classList.contains('overflow-x-auto') && !parent.classList.contains('qwen-table-wrap') && !parent.classList.contains('compare-table')) {
+          parent.classList.add('table-scroll');
+        }
       });
     </script>
   </body>
