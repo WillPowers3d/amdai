@@ -1,0 +1,98 @@
+---
+import Base from '../layouts/Base.astro';
+import NextSteps from '../components/NextSteps.astro';
+import PrimaryPath from '../components/PrimaryPath.astro';
+import { measuredOgHeadline } from '../lib/og';
+import { runs } from '../lib/run-card-data';
+import { oneVsTwoRows } from '../lib/local-desktop-compare';
+
+const headline = measuredOgHeadline(runs);
+const ud4k = oneVsTwoRows(runs).find((row) => row.quant === 'UD-Q5_K_XL' && row.context === 4096);
+const runHref = ud4k?.one.runIds[0] ? `/results/${ud4k.one.runIds[0]}` : '/results';
+
+const hubs = [
+  { href: '/setup', label: 'First-run setup', body: 'Ubuntu 24.04+ is the measured path to the first token.' },
+  { href: '/setup#windows', label: 'Windows (estimate)', body: 'Honest limits. Vulkan llama.cpp for tokens. No Windows tok/s card.' },
+  { href: '/calculator', label: 'Check my rig', body: 'Weights, KV, and overhead vs card VRAM. No invented prices.' },
+  { href: '/budget', label: 'Pick a budget', body: 'Starter through the two-R9700 Pro rig. Check-price only.' },
+  { href: '/gpus/r9700', label: 'R9700 measured page', body: '32 GB 35B llama.cpp sheet — one GPU vs two, cited cards.' },
+  { href: '/recipes/qwen36-35b.llamacpp-vulkan.262k', label: 'Daily-driver recipe', body: 'qwen36-35b.llamacpp-vulkan.262k on one R9700.' },
+  { href: '/flash-daily', label: 'Flash daily', body: 'Qwen 3.8 Flash VRAM + DDR5 offload at full 262K.' },
+  { href: '/qwen36-dual', label: '35B on two cards', body: 'Split vs two copies. Two copies win on this rig.' },
+  { href: '/qwen', label: 'Qwen compare', body: 'Every current 3.6 / 3.8 file × quant. Measured cells from cards.' },
+  { href: '/benchmarks', label: 'Benchmarks', body: '33-card 35B llama.cpp matrix. Empty stays not measured.' },
+  { href: '/results', label: 'Run cards', body: 'Official amdai-bench/run@1. Exact launch command.' },
+  { href: '/stack-lab', label: 'Stack Lab', body: 'Ubuntu companion. Packages are not published yet.' },
+  { href: '/models', label: 'Recipe catalog', body: 'House models with reverse recipe tables. No /recipes index.' },
+  { href: '/faq', label: 'FAQ', body: 'First-time Radeon questions. Q3 stays a labeled estimate.' },
+  { href: '/glossary', label: 'Glossary', body: 'ROCm, GGUF, Q5, KV cache, run cards.' },
+  { href: '/compare', label: 'Compare 35B', body: 'One GPU vs split, and Q6 / Q5 / Q4 plus a labeled Q3 estimate.' },
+  { href: '/newsletter', label: 'Lab Notes digest', body: 'Email-only. Run cards, guides, ROCm problems, Stack Lab.' },
+];
+---
+
+<Base
+  title="Getting started"
+  description="Check a rig or budget, first-run Ubuntu setup, then a measured 35B recipe — llama.cpp first, then benchmarks and optional Stack Lab."
+>
+  <main id="main" class="mx-auto max-w-3xl px-4 py-10 sm:px-6">
+    <p class="kicker">One path · llama.cpp first</p>
+    <h1 class="mt-3 font-serif text-4xl tracking-tight sm:text-5xl">Getting started</h1>
+    <p class="mt-4 text-lg leading-relaxed text-muted">
+      Check the box, set up Ubuntu, load a measured recipe, then read the cards.
+      Do not skip to a harness. We do not invent tok/s or prices.
+    </p>
+    {headline ? (
+      <p class="mt-4 rounded-2xl border border-line bg-raised/50 p-4 text-sm leading-relaxed">
+        Cited local-desktop headline:
+        <strong class="text-ink">{headline}</strong>
+        {' — '}
+        <a class="underline decoration-accent/40" href={runHref}>run card</a>.
+        llama.cpp Vulkan, UD-Q5_K_XL, one R9700, 4K. Empty stays not measured.
+      </p>
+    ) : (
+      <p class="mt-4 text-sm text-muted">
+        No cited UD-Q5 1× 4K card in this build — we will not invent a tok/s.
+        Read <a class="underline decoration-accent/40" href="/results">/results</a>.
+      </p>
+    )}
+
+    <p class="mt-5 flex flex-wrap gap-3">
+      <a class="btn-primary" href="/setup">Ubuntu setup</a>
+      <a class="btn-ghost" href="/setup#windows">Windows (estimate)</a>
+      <a class="btn-ghost" href="/gpus/r9700">R9700 recipe</a>
+      <a class="btn-ghost" href="/benchmarks">Benchmarks</a>
+    </p>
+
+    <PrimaryPath compact />
+
+    <section class="mt-12" aria-labelledby="hub-heading">
+      <h2 id="hub-heading" class="font-serif text-3xl tracking-tight">Live pages</h2>
+      <p class="mt-3 text-sm leading-relaxed text-muted">
+        Ubuntu first. Windows is an estimate pointer into setup. Stack Lab packages are not published yet.
+      </p>
+      <ul class="mt-8 grid gap-3 sm:grid-cols-2">
+        {hubs.map((hub) => (
+          <li>
+            <a class="block rounded-2xl border border-line bg-raised/40 p-4 hover:border-accent/40" href={hub.href}>
+              <h3 class="text-lg tracking-tight">{hub.label}</h3>
+              <p class="mt-2 text-sm leading-relaxed text-muted">{hub.body}</p>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section class="mt-12" aria-labelledby="stop-heading">
+      <h2 id="stop-heading" class="font-serif text-3xl tracking-tight">Stop conditions</h2>
+      <ul class="mt-4 list-disc space-y-2 pl-5 text-muted">
+        <li><code class="text-ink">rocminfo</code> has no <code class="text-ink">gfx1201</code> → do not download 20 GB.</li>
+        <li><code class="text-ink">rocm-smi</code> idle while you “generate” → you are on CPU.</li>
+        <li>File is on a spinning disk → move it to NVMe before you tune flags.</li>
+        <li>Harness is slow → check the backend, not the card’s reputation.</li>
+      </ul>
+    </section>
+
+    <NextSteps path="/start" />
+  </main>
+</Base>

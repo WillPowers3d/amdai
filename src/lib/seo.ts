@@ -261,6 +261,7 @@ setMeta(
   'Getting started',
   'Check a rig or budget, first-run Ubuntu setup, then a measured 35B recipe — llama.cpp first, then benchmarks and optional Stack Lab.',
 );
+setDate('/start', '2026-10-13');
 setMeta(
   '/setup',
   'First-run setup',

@@ -70,6 +70,8 @@ export const NAV_SURFACED = [
   '/stack-lab',
   '/calculator',
   '/budget',
+  '/newsletter',
+  '/models',
 ] as const;
 
 export const REQUIRED_HOME_START_HREFS = [
@@ -91,18 +93,18 @@ export const REQUIRED_HOME_START_HREFS = [
 
 const NEXT_STEPS: Record<string, PathLink[]> = {
   '/': [
+    { href: '/start', label: 'Getting started' },
     { href: '/setup', label: 'First-run setup' },
     { href: '/gpus/r9700', label: 'R9700 measured page' },
     { href: '/benchmarks', label: 'Benchmarks' },
-    { href: '/stack-lab', label: 'Stack Lab' },
     { href: '/faq', label: 'FAQ' },
   ],
   '/start': [
     { href: '/setup', label: 'First-run setup' },
+    { href: '/recipes/qwen36-35b.llamacpp-vulkan.262k', label: 'Daily-driver recipe' },
     { href: '/gpus/r9700', label: 'R9700 measured page' },
-    { href: '/compare', label: 'Compare 35B' },
     { href: '/benchmarks', label: 'Benchmarks' },
-    { href: '/faq', label: 'FAQ' },
+    { href: '/newsletter', label: 'Digest' },
   ],
   '/setup': [
     { href: '/gpus/r9700', label: 'R9700 measured page' },

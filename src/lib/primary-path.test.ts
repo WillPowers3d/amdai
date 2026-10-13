@@ -41,18 +41,24 @@ describe('primary path and nav IA', () => {
 
   it('puts the required hrefs on home and /start', () => {
     const home = read('../pages/index.astro');
-    const start = read('../content/guides/start.mdx');
+    const start = read('../pages/start.astro');
     const blob = `${home}\n${start}`;
     for (const href of REQUIRED_HOME_START_HREFS) {
       assert.ok(blob.includes(`href="${href}"`) || blob.includes(`href: '${href}'`) || blob.includes(`](${href})`) || blob.includes(`"${href}"`), href);
     }
+    assert.match(home, /href="\/start"/);
+    assert.match(home, /href="\/setup"/);
+    assert.match(home, /href="\/benchmarks"/);
     assert.match(home, /PrimaryPath/);
     assert.match(start, /PrimaryPath/);
     assert.match(home, /NextSteps/);
     assert.match(start, /NextSteps/);
+    assert.match(start, /measuredOgHeadline/);
     assert.match(start, /Ubuntu 24\.04\+/);
+    assert.match(start, /setup#windows/);
+    assert.doesNotMatch(start, /The longer map/);
     assert.doesNotMatch(blob, /\/two-r9700/);
-    assert.doesNotMatch(blob, /upcoming/i);
+    assert.doesNotMatch(blob, /upcoming|coming soon/i);
   });
 
   it('surfaces Path / Tools / Learn routes in nav, not only the footer', () => {
@@ -83,7 +89,7 @@ describe('primary path and nav IA', () => {
   it('gives each high-traffic page a Next steps block to real routes', () => {
     const files: Record<string, string> = {
       '/': '../pages/index.astro',
-      '/start': '../content/guides/start.mdx',
+      '/start': '../pages/start.astro',
       '/setup': '../pages/setup.astro',
       '/faq': '../pages/faq.astro',
       '/gpus/r9700': '../pages/gpus/r9700.astro',
