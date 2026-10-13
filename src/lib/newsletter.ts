@@ -35,7 +35,7 @@ export const NEWSLETTER_TOPICS = [
     id: 'stack-lab',
     label: 'Stack Lab releases',
     href: '/stack-lab',
-    description: 'Radeon Stack Lab companion notes — local app, no public download URL.',
+    description: 'Radeon Stack Lab companion notes — Ubuntu 24.04+, packages not published yet.',
   },
 ] as const;
 

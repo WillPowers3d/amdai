@@ -168,6 +168,12 @@ export function requiredFieldsFor(type: string, node: Record<string, unknown>): 
       need('datePublished');
       need('dateModified');
       break;
+    case 'SoftwareApplication':
+      need('name');
+      need('url');
+      need('applicationCategory');
+      need('operatingSystem');
+      break;
     case 'HowTo':
       need('name');
       if (!Array.isArray(node.step) || node.step.length < 1) missing.push('step');

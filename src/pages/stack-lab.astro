@@ -1,0 +1,233 @@
+---
+import Base from '../layouts/Base.astro';
+import Callout from '../components/Callout.astro';
+import NewsletterSignup from '../components/NewsletterSignup.astro';
+import {
+  STACK_LAB_CLI,
+  STACK_LAB_HANDOFFS,
+  STACK_LAB_INSTALL,
+  STACK_LAB_INTRO_LINKS,
+  STACK_LAB_JOBS,
+  STACK_LAB_NAME,
+  STACK_LAB_PROFILES,
+  STACK_LAB_SECTIONS,
+} from '../lib/stack-lab';
+---
+
+<Base
+  title="Radeon Stack Lab"
+  description="Ubuntu 24.04+ companion for AMDai: check a rig, apply recipes, record amdai-bench cards. Packages are not published yet."
+>
+  <main id="main" class="mx-auto max-w-3xl px-4 py-10 sm:px-6">
+    <a class="skip-link skip-to-stack-lab-nav" href="#stack-lab-sections">Skip to section nav</a>
+    <p class="kicker">Companion app</p>
+    <h1 class="mt-3 font-serif text-4xl tracking-tight sm:text-5xl">{STACK_LAB_NAME}</h1>
+    <p class="mt-4 text-lg leading-relaxed text-muted">
+      AMDai Lab Notes is the written weekly tracker.
+      <strong class="text-ink">Radeon Stack Lab</strong> is the Ubuntu companion that sits next to it
+      on the box that has the Radeon: check the rig, apply a recipe from amdai.net, start a profile,
+      watch the run, and record an <code class="font-mono text-ink">amdai-bench/run@1</code> card.
+    </p>
+    <p class="mt-3 leading-relaxed text-muted">
+      Linux / Ubuntu 24.04+ is the measured path — native <code class="font-mono text-ink">.deb</code>
+      and AppImage once packages exist. Windows is later, same as
+      <a class="underline decoration-accent/40" href="/setup">first-run setup</a>.
+      Packages are not published yet. There is no public download URL.
+    </p>
+    <ul class="mt-4 flex flex-wrap gap-2">
+      {STACK_LAB_INTRO_LINKS.map((link) => (
+        <li>
+          <a
+            class="inline-flex min-h-9 items-center rounded-full border border-line bg-canvas px-3 text-sm text-ink hover:border-accent/50 hover:text-accent-ink"
+            href={link.href}
+          >
+            {link.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+
+    <nav
+      id="stack-lab-sections"
+      class="stack-lab-sections sticky z-20 -mx-4 mt-8 border-y border-line bg-canvas/95 px-4 py-2 backdrop-blur-md sm:-mx-6 sm:px-6"
+      aria-label="Stack Lab sections"
+    >
+      <p class="mb-2 font-mono text-[0.68rem] uppercase tracking-[0.16em] text-faint">Jump to section</p>
+      <ol class="flex flex-wrap gap-2">
+        {STACK_LAB_SECTIONS.map((section) => (
+          <li>
+            <a
+              class="inline-flex min-h-11 items-center rounded-full border border-line bg-raised px-3 text-sm text-ink hover:border-accent/50 hover:text-accent-ink"
+              href={`#${section.id}`}
+            >
+              {section.label}
+            </a>
+          </li>
+        ))}
+      </ol>
+    </nav>
+
+    <section id="what-it-does" class="mt-10 scroll-mt-36" aria-labelledby="what-it-does-heading">
+      <h2 id="what-it-does-heading" class="font-serif text-3xl tracking-tight">What it does</h2>
+      <p class="mt-3 leading-relaxed text-muted">
+        Lab Notes tells you which GGUF and which engine we measured.
+        Stack Lab is the local app that is meant to run that catalog on your machine:
+        doctor the setup, pick a profile, and write a comparable run card instead of
+        hand-wiring every flag.
+      </p>
+      <Callout type="linux" title="Ubuntu first">
+        <p>
+          Official 10.1 Radeon OS rows include Ubuntu 24.04.5. The companion follows that path.
+          It does not replace ROCm, llama.cpp, or Strata — it selects a profile those tools already understand.
+        </p>
+      </Callout>
+    </section>
+
+    <section id="jobs" class="mt-12 scroll-mt-36" aria-labelledby="jobs-heading">
+      <h2 id="jobs-heading" class="font-serif text-3xl tracking-tight">Jobs on the box</h2>
+      <p class="mt-3 leading-relaxed text-muted">
+        These are the companion jobs. Until packages publish, they are the map — not a download.
+      </p>
+      <ol class="mt-8 space-y-6">
+        {STACK_LAB_JOBS.map((job, index) => (
+          <li id={job.id} class="scroll-mt-36 rounded-2xl border border-line bg-raised/50 p-5">
+            <p class="kicker">Job {index + 1}</p>
+            <h3 class="mt-2 font-serif text-2xl tracking-tight">{job.title}</h3>
+            <p class="mt-3 leading-relaxed text-ink">{job.body}</p>
+            <ul class="mt-4 flex flex-wrap gap-2">
+              {job.links.map((link) => (
+                <li>
+                  <a
+                    class="inline-flex min-h-9 items-center rounded-full border border-line bg-canvas px-3 text-sm text-ink hover:border-accent/50 hover:text-accent-ink"
+                    href={link.href}
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <section id="install" class="mt-12 scroll-mt-36" aria-labelledby="install-heading">
+      <h2 id="install-heading" class="font-serif text-3xl tracking-tight">Install</h2>
+      <div class="mt-6 rounded-2xl border border-line bg-raised/50 p-5">
+        <p class="kicker">Honest state</p>
+        <h3 class="mt-2 font-serif text-2xl tracking-tight">{STACK_LAB_INSTALL.title}</h3>
+        <p class="mt-3 leading-relaxed text-ink">{STACK_LAB_INSTALL.lead}</p>
+      </div>
+      <div class="mt-6 grid gap-4 sm:grid-cols-2">
+        <article class="rounded-2xl border border-line bg-raised/50 p-5" aria-labelledby="linux-install-heading">
+          <p class="kicker">Recommended</p>
+          <h3 id="linux-install-heading" class="mt-2 text-xl tracking-tight">{STACK_LAB_INSTALL.linux.label}</h3>
+          <p class="mt-3 text-sm leading-relaxed text-muted">{STACK_LAB_INSTALL.linux.summary}</p>
+        </article>
+        <article class="rounded-2xl border border-line bg-raised/50 p-5" aria-labelledby="windows-install-heading">
+          <p class="kicker">Secondary</p>
+          <h3 id="windows-install-heading" class="mt-2 text-xl tracking-tight">{STACK_LAB_INSTALL.windows.label}</h3>
+          <p class="mt-3 text-sm leading-relaxed text-muted">{STACK_LAB_INSTALL.windows.summary}</p>
+        </article>
+      </div>
+      <h3 class="mt-8 font-serif text-2xl tracking-tight">Once packages exist</h3>
+      <ol class="mt-4 list-decimal space-y-2 pl-5 text-sm leading-relaxed text-muted">
+        {STACK_LAB_INSTALL.oncePublished.map((step) => (
+          <li>{step}</li>
+        ))}
+      </ol>
+      <p class="mt-4 text-sm text-faint">
+        This page sells the free local stack, not a store SKU. Site-wide affiliate links stay on
+        <a class="underline decoration-accent/40" href="/disclosure">disclosure</a>.
+      </p>
+    </section>
+
+    <section id="handoffs" class="mt-12 scroll-mt-36" aria-labelledby="handoffs-heading">
+      <h2 id="handoffs-heading" class="font-serif text-3xl tracking-tight">amdai.net → Stack Lab</h2>
+      <p class="mt-3 leading-relaxed text-muted">
+        Real pages on this site that hand off to the companion. We do not invent a
+        custom URI or query scheme.
+      </p>
+      <ul class="mt-8 space-y-4">
+        {STACK_LAB_HANDOFFS.map((row) => (
+          <li class="rounded-2xl border border-line bg-raised/50 p-5">
+            <h3 class="font-serif text-2xl tracking-tight">
+              <a class="hover:text-accent-ink" href={row.href}>{row.label}</a>
+            </h3>
+            <p class="mt-3 leading-relaxed text-muted">{row.body}</p>
+            <p class="mt-3">
+              <a
+                class="inline-flex min-h-9 items-center rounded-full border border-line bg-canvas px-3 text-sm text-ink hover:border-accent/50 hover:text-accent-ink"
+                href={row.href}
+              >
+                {row.label}
+              </a>
+            </p>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section id="amdai-bench" class="mt-12 scroll-mt-36" aria-labelledby="amdai-bench-heading">
+      <h2 id="amdai-bench-heading" class="font-serif text-3xl tracking-tight">amdai-bench CLI</h2>
+      <p class="mt-3 leading-relaxed text-muted">
+        The in-repo tool Stack Lab’s emitter uses. Schema id
+        <code class="font-mono text-ink">{STACK_LAB_CLI.schemaId}</code>, published at
+        <a class="underline decoration-accent/40" href={STACK_LAB_CLI.schemaHref}>
+          {STACK_LAB_CLI.schemaHref}
+        </a>.
+        Required fields: submitter, hardware, software including the exact launch command, model,
+        config layout, results, and <code class="font-mono text-ink">measured</code>.
+      </p>
+      <pre class="mt-6 overflow-x-auto rounded-2xl border border-line bg-raised p-4 text-sm leading-relaxed"><code>{STACK_LAB_CLI.commands.join('\n')}</code></pre>
+      <p class="mt-4 text-sm text-muted">
+        Cards render on
+        <a class="underline decoration-accent/40" href="/results">official results</a>.
+        The 35B matrix on
+        <a class="underline decoration-accent/40" href="/benchmarks">/benchmarks</a>
+        is built only from those cards.
+      </p>
+    </section>
+
+    <section id="profiles" class="mt-12 scroll-mt-36" aria-labelledby="profiles-heading">
+      <h2 id="profiles-heading" class="font-serif text-3xl tracking-tight">Profiles</h2>
+      <p class="mt-3 leading-relaxed text-muted">
+        Profiles follow the YAML. Abliterated checkpoints stay off the default list.
+      </p>
+      <div class="mt-8 space-y-6">
+        {STACK_LAB_PROFILES.map((profile) => (
+          <article id={profile.id} class="scroll-mt-36 rounded-2xl border border-line bg-raised/50 p-5">
+            <h3 class="font-serif text-2xl tracking-tight">{profile.title}</h3>
+            <p class="mt-3 leading-relaxed text-ink">{profile.body}</p>
+            <ul class="mt-4 flex flex-wrap gap-2">
+              {profile.links.map((link) => (
+                <li>
+                  <a
+                    class="inline-flex min-h-9 items-center rounded-full border border-line bg-canvas px-3 text-sm text-ink hover:border-accent/50 hover:text-accent-ink"
+                    href={link.href}
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <div class="not-prose mt-12">
+      <NewsletterSignup variant="article" />
+    </div>
+  </main>
+</Base>
+
+<style>
+  .skip-to-stack-lab-nav:focus {
+    top: 3.5rem;
+  }
+
+  .stack-lab-sections {
+    top: var(--header-h);
+  }
+</style>

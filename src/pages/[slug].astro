@@ -6,7 +6,7 @@ import { mdxComponents } from '../lib/mdx';
 export async function getStaticPaths() {
   const guides = await getCollection('guides');
   return guides
-    .filter((entry) => entry.id !== 'rocm' && entry.id !== 'abliterated' && entry.id !== 'harnesses' && entry.id !== 'faq')
+    .filter((entry) => entry.id !== 'rocm' && entry.id !== 'abliterated' && entry.id !== 'harnesses' && entry.id !== 'faq' && entry.id !== 'stack-lab')
     .map((entry) => ({
       params: { slug: entry.id },
       props: { entry },

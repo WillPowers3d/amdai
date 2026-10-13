@@ -81,7 +81,7 @@ Public site URL is `https://amdai.net` (`site` in `astro.config.mjs`; override w
 | `/api/v1/catalog.json` | Static recipe catalog |
 | `/api/v1/gpus/<id>.json` | Per-card JSON |
 | `/api/v1/pick.json` | Static pick table (query strings are not evaluated here) |
-| `/stack-lab` | Radeon Stack Lab companion (Ubuntu app, Origin repo / local) |
+| `/stack-lab` | Radeon Stack Lab — Ubuntu 24.04+ companion (packages not published yet) |
 | `/rocm` | What is ROCm — multi-page consumer deep dive |
 | `/rocm/stack` | Layer-by-layer stack + mermaid diagram |
 | `/rocm/gfx` | GPU architectures, gfx IDs, HSA_OVERRIDE |

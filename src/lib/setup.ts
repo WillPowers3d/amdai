@@ -194,7 +194,7 @@ export const SETUP_PATHS: SetupPath[] = [
 export const SETUP_STACK_LAB = {
   title: 'When to use Radeon Stack Lab',
   body:
-    'Stack Lab is the Ubuntu companion that records amdai-bench/run@1 cards instead of hand-wiring every flag. Use it after the first token if you have the Origin / local repo. There is no public download URL — do not invent a release. Profiles follow the YAML: qwen-reliable is the 35B daily driver; qwen-fast-agent is Flash on Strata. Lab Notes ingests those cards onto /results.',
+    'Open Stack Lab after the first token if you have the Origin / local repo. It is the Ubuntu companion that records amdai-bench/run@1 cards instead of hand-wiring every flag. There is no public download URL — packages are not published yet. Do not invent a release. Profiles follow the YAML: qwen-reliable is the 35B daily driver; qwen-fast-agent is Flash on Strata. Lab Notes ingests those cards onto /results.',
   links: [
     { href: '/stack-lab', label: 'Stack Lab' },
     { href: '/results', label: 'Run cards' },

@@ -136,7 +136,7 @@ export const primaryNav: NavItem[] = [
   { href: '/harnesses', label: 'Harnesses', description: 'What to plug your local model into — agents, chat UIs, ComfyUI', group: 'stack' },
   { href: '/hardware', label: 'Hardware', description: 'PSU, cooling, noise, VRAM vs model size', group: 'stack' },
   { href: '/bios', label: 'BIOS', description: 'Above 4G, ReBAR/SAM, CSM, x8/x8 vs x16/x4 — cited chipset notes', group: 'stack' },
-  { href: '/stack-lab', label: 'Stack Lab', description: 'Ubuntu companion — same catalog as the YAML', group: 'path' },
+  { href: '/stack-lab', label: 'Stack Lab', description: 'Ubuntu 24.04+ companion — check a rig, apply recipes, record amdai-bench cards', group: 'path' },
   { href: '/tutorials', label: 'Tutorials', description: 'Practical how-tos for this stack', group: 'practice' },
   { href: '/troubleshooting', label: 'Troubleshooting', description: 'GPU not seen, wrong wheel, CPU fallback', group: 'practice' },
   { href: '/troubleshoot/errors', label: 'Error paste', description: 'Match a log against cited ROCm / Ollama patterns', group: 'practice' },

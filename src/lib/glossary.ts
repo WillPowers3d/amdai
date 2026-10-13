@@ -532,10 +532,10 @@ export const GLOSSARY: GlossaryEntry[] = [
     aliases: ['Radeon Stack Lab', 'qwen-reliable', 'companion app'],
     letter: 'S',
     definition:
-      'The Ubuntu companion app that ships the same catalog as this site (Origin repo / local install — no public domain here). Profile qwen-reliable is the daily driver; qwen-fast-agent is Flash on Strata.',
-    why: 'Use it when you want the YAML catalog on the box, not as a replacement for reading /start. It does not invent tok/s; it reads the same pins AMDai publishes.',
+      'The Ubuntu 24.04+ companion that ships the same catalog as this site (Origin repo / local install — packages not published yet, no public download URL). Profile qwen-reliable is the daily driver; qwen-fast-agent is Flash on Strata.',
+    why: 'Use it when you want the YAML catalog on the box, not as a replacement for reading /setup. It does not invent tok/s; it records amdai-bench cards AMDai publishes.',
     deeper:
-      'Profiles qwen-reliable (35B Q5 llama.cpp) and qwen-fast-agent (Flash on Strata) match /stacks. Origin repo / local install — no public domain here. It reads the same YAML catalog; it does not invent tok/s.',
+      'Jobs: check my rig, setup doctor, model manager, apply recipes, start a profile, live dashboard, amdai-bench, share cards. Profiles qwen-reliable (35B Q5 llama.cpp) and qwen-fast-agent (Flash on Strata) match /stacks. Packages are not published yet.',
     links: [
       { href: '/stack-lab', label: 'Stack Lab' },
       { href: '/stacks', label: 'Stacks' },

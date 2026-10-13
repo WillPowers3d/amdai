@@ -176,6 +176,7 @@ export const CRUMB_LABELS: Record<string, string> = {
   '/flash-ram-offload': 'Flash RAM offload',
   '/start': 'Getting started',
   '/setup': 'First-run setup',
+  '/stack-lab': 'Stack Lab',
   '/stacks': 'Stacks',
   '/calculator': 'Calculator',
   '/budget': 'Budget',
@@ -388,8 +389,9 @@ setMeta(
 setMeta(
   '/stack-lab',
   'Radeon Stack Lab',
-  'Ubuntu companion app with the same catalog as the YAML — qwen-reliable and qwen-fast-agent profiles.',
+  'Ubuntu 24.04+ companion for AMDai: check a rig, apply recipes, record amdai-bench cards. Packages are not published yet.',
 );
+setDate('/stack-lab', '2026-10-13');
 setMeta(
   '/tutorials',
   'Tutorials',
@@ -688,7 +690,7 @@ function loadContentDates() {
     let path = '';
     if (rel.startsWith('guides/')) {
       const id = rel.slice('guides/'.length).replace(/\.(md|mdx)$/, '');
-      if (id === 'rocm' || id === 'abliterated' || id === 'harnesses' || id === 'gpus') continue;
+      if (id === 'rocm' || id === 'abliterated' || id === 'harnesses' || id === 'gpus' || id === 'stack-lab') continue;
       path = `/${id}`;
     } else if (rel.startsWith('tutorials/')) {
       path = `/tutorials/${rel.slice('tutorials/'.length).replace(/\.(md|mdx)$/, '')}`;

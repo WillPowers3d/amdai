@@ -8,6 +8,7 @@ import { join } from 'node:path';
 import { parse } from 'yaml';
 import { dayKey, type DigestSourceItem } from './newsletter-digest';
 import type { NewsletterTopicId } from './newsletter';
+import { STACK_LAB_DIGEST, STACK_LAB_NAME, STACK_LAB_PUBLISHED } from './stack-lab';
 
 function walk(dir: string, out: string[] = []): string[] {
   try {
@@ -45,11 +46,13 @@ export function collectDigestItems(root = process.cwd()): DigestSourceItem[] {
   for (const file of walk(join(content, 'guides'))) {
     const fm = frontmatter(readFileSync(file, 'utf8'));
     const id = file.split('/').pop()?.replace(/\.mdx?$/, '') ?? '';
-    const href = id === 'stack-lab' ? '/stack-lab' : id === 'start' ? '/start' : `/${id}`;
-    const topic: NewsletterTopicId = id === 'stack-lab' ? 'stack-lab' : 'guides';
-    const row = item(topic, String(fm.title ?? ''), href, String(fm.updated ?? ''), String(fm.description ?? ''));
+    if (id === 'stack-lab') continue;
+    const href = id === 'start' ? '/start' : `/${id}`;
+    const row = item('guides', String(fm.title ?? ''), href, String(fm.updated ?? ''), String(fm.description ?? ''));
     if (row) items.push(row);
   }
+  const stackLab = item('stack-lab', STACK_LAB_NAME, '/stack-lab', STACK_LAB_PUBLISHED, STACK_LAB_DIGEST);
+  if (stackLab) items.push(stackLab);
   for (const file of walk(join(content, 'tutorials'))) {
     const fm = frontmatter(readFileSync(file, 'utf8'));
     const id = file.split('/').pop()?.replace(/\.mdx?$/, '') ?? '';

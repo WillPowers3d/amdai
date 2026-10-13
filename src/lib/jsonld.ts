@@ -144,6 +144,24 @@ export function techArticleJsonLd(input: {
   };
 }
 
+export function softwareApplicationJsonLd(input: {
+  name: string;
+  description: string;
+  url: string;
+  applicationCategory: string;
+  operatingSystem: string;
+}): JsonLd {
+  return {
+    '@type': 'SoftwareApplication',
+    name: input.name,
+    description: input.description,
+    url: input.url,
+    applicationCategory: input.applicationCategory,
+    operatingSystem: input.operatingSystem,
+    author: { '@id': `${SITE_ORIGIN}/#organization` },
+  };
+}
+
 export function howToJsonLd(input: {
   name: string;
   description: string;
@@ -296,6 +314,18 @@ export function pageJsonLd(input: {
   }
 
   const dates = articleDates(path);
+  if (path === '/stack-lab') {
+    nodes.push(
+      softwareApplicationJsonLd({
+        name: 'Radeon Stack Lab',
+        description: input.description,
+        url,
+        applicationCategory: 'DeveloperApplication',
+        operatingSystem: 'Linux',
+      }),
+    );
+    return nodes;
+  }
   if (path === '/setup') {
     nodes.push(
       howToJsonLd({
@@ -347,7 +377,6 @@ export function pageJsonLd(input: {
     path === '/software' ||
     path === '/troubleshooting' ||
     path === '/maintain' ||
-    path === '/stack-lab' ||
     path === '/quants';
   if (article && dates) {
     nodes.push(

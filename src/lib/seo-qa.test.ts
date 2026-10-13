@@ -61,6 +61,11 @@ describe('SEO helpers', () => {
       'measurementTechnique',
       'temporalCoverage',
     ]);
+    assert.deepEqual(requiredFieldsFor('SoftwareApplication', { name: 'x' }), [
+      'url',
+      'applicationCategory',
+      'operatingSystem',
+    ]);
   });
 });
 
