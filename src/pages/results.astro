@@ -2,7 +2,7 @@
 import Base from '../layouts/Base.astro';
 import Callout from '../components/Callout.astro';
 import RunCard from '../components/RunCard.astro';
-import { FLASH_RERUN_NOTE, RUN_SCHEMA, officialAmdaiRuns, uniqueRunFilters } from '../lib/run-card';
+import { FLASH_RERUN_NOTE, RUN_SCHEMA, SWEEP_REVERIFY, officialAmdaiRuns, uniqueRunFilters } from '../lib/run-card';
 import { runs } from '../lib/run-card-data';
 import { AMDAI_BENCH_SCHEMA, AMDAI_BENCH_VERSION } from '../lib/results';
 
@@ -33,6 +33,13 @@ const submittedCount = cards.filter((card) => !card.submitted_by.verified).lengt
 
     <Callout type="warn" title="Flash / Strata / Q3 pending">
       <p>{FLASH_RERUN_NOTE} This drop is 35B llama.cpp only. No Flash rows were added.</p>
+    </Callout>
+
+    <Callout type="warn" title="Overnight sweep, 2026-10-12">
+      <p>
+        {SWEEP_REVERIFY}
+        Q6_K single-GPU 4K has two cards (82.62 and 103.23 tok/s). Both stay up; neither is averaged.
+      </p>
     </Callout>
 
     <Callout type="check" title="Verified vs submitted">

@@ -14,36 +14,114 @@ const { heading = '35B decode, measured' } = Astro.props;
 <section id="benchmarks" class="mt-10" aria-labelledby="benches-heading">
   <p class="kicker">{benches.label}</p>
   <h2 id="benches-heading" class="mt-2 font-serif text-3xl">{heading}</h2>
-  <p class="mt-3 max-w-2xl text-muted">
+  <p class="mt-3 max-w-3xl text-muted">
     Qwen3.6-35B-A3B on {benches.gpu}, {benches.engine}, {benches.kv} KV.
+    One R9700 versus a split across both cards, per context.
     Cells that we still do not have stay <strong class="text-ink">not measured</strong>.
-    Units match the hardware labels (GB).
+    Units match the hardware labels (GB = Linux GiB).
     Full hub: <a class="underline decoration-accent/40" href="/benchmarks">benchmarks</a>.
-    Filterable JSON: <a class="underline decoration-accent/40" href="/results">comparable results</a>.
+    Filterable cards: <a class="underline decoration-accent/40" href="/results">comparable results</a>.
   </p>
   <div class="card mt-6 overflow-x-auto">
-    <table class="table-lab min-w-[40rem]">
+    <table class="table-lab min-w-[72rem]">
       <thead>
         <tr>
-          <th>Quant</th>
-          <th>Decode · short</th>
-          <th>Decode · 32K</th>
-          <th>Decode · 128K</th>
-          <th>Decode · 256K</th>
-          <th>Prefill · 32K</th>
-          <th>VRAM</th>
+          <th rowspan="2">Quant</th>
+          <th rowspan="2">Context</th>
+          <th colspan="5">One R9700</th>
+          <th colspan="5">Both R9700s (split)</th>
+        </tr>
+        <tr>
+          <th>Prefill</th>
+          <th>Decode</th>
+          <th>VRAM / card</th>
+          <th>VRAM total</th>
+          <th>System RAM</th>
+          <th>Prefill</th>
+          <th>Decode</th>
+          <th>VRAM / card</th>
+          <th>VRAM total</th>
+          <th>System RAM</th>
         </tr>
       </thead>
       <tbody>
-        {benches.rows.map((row) => (
+        {benches.compare.map((row) => (
           <tr>
-            <td class="font-medium">{row.quant}</td>
-            <td>{row.decode_short}</td>
-            <td>{row.decode_32k}{row.quant === 'Q6_K' ? ' · DDR5' : ''}</td>
-            <td>{row.decode_128k}{row.quant === 'Q6_K' ? ' · DDR5' : ''}</td>
-            <td>{row.decode_256k}{row.quant === 'Q6_K' ? ' · DDR5' : ''}</td>
-            <td>{row.prefill_32k}</td>
-            <td>{row.vram_gb}</td>
+            <td class="font-medium">
+              {row.quant}
+              {row.flag ? <span class="block text-xs font-normal text-faint">{row.flag}</span> : null}
+            </td>
+            <td>{row.contextLabel}</td>
+            <td class="tabular-nums">
+              {row.one.runIds.length ? (
+                <a class="underline decoration-accent/40" href={row.one.href}>{row.one.prefill}</a>
+              ) : (
+                row.one.prefill
+              )}
+            </td>
+            <td class="tabular-nums">
+              {row.one.runIds.length ? (
+                <a class="underline decoration-accent/40" href={row.one.href}>{row.one.decode}</a>
+              ) : (
+                row.one.decode
+              )}
+            </td>
+            <td class="tabular-nums">
+              {row.one.runIds.length ? (
+                <a class="underline decoration-accent/40" href={row.one.href}>{row.one.vramPerGpu}</a>
+              ) : (
+                row.one.vramPerGpu
+              )}
+            </td>
+            <td class="tabular-nums">
+              {row.one.runIds.length ? (
+                <a class="underline decoration-accent/40" href={row.one.href}>{row.one.vramTotal}</a>
+              ) : (
+                row.one.vramTotal
+              )}
+            </td>
+            <td class="tabular-nums">
+              {row.one.runIds.length ? (
+                <a class="underline decoration-accent/40" href={row.one.href}>{row.one.systemRam}</a>
+              ) : (
+                row.one.systemRam
+              )}
+            </td>
+            <td class="tabular-nums">
+              {row.both.runIds.length ? (
+                <a class="underline decoration-accent/40" href={row.both.href}>{row.both.prefill}</a>
+              ) : (
+                row.both.prefill
+              )}
+            </td>
+            <td class="tabular-nums">
+              {row.both.runIds.length ? (
+                <a class="underline decoration-accent/40" href={row.both.href}>{row.both.decode}</a>
+              ) : (
+                row.both.decode
+              )}
+            </td>
+            <td class="tabular-nums">
+              {row.both.runIds.length ? (
+                <a class="underline decoration-accent/40" href={row.both.href}>{row.both.vramPerGpu}</a>
+              ) : (
+                row.both.vramPerGpu
+              )}
+            </td>
+            <td class="tabular-nums">
+              {row.both.runIds.length ? (
+                <a class="underline decoration-accent/40" href={row.both.href}>{row.both.vramTotal}</a>
+              ) : (
+                row.both.vramTotal
+              )}
+            </td>
+            <td class="tabular-nums">
+              {row.both.runIds.length ? (
+                <a class="underline decoration-accent/40" href={row.both.href}>{row.both.systemRam}</a>
+              ) : (
+                row.both.systemRam
+              )}
+            </td>
           </tr>
         ))}
       </tbody>

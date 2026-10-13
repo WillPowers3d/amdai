@@ -60,6 +60,9 @@ const when = card.started_at ?? card.finished_at ?? '2026-10 (date not recorded)
         <span class="badge">Estimate</span>
       )}
       {who.verified ? <span class="badge-tested">Verified</span> : <span class="badge">Submitted</span>}
+      {/pending re-verify after RAM fix/i.test(card.notes ?? '') ? (
+        <span class="badge">pending re-verify after RAM fix</span>
+      ) : null}
     </div>
   </div>
 

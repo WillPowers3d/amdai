@@ -11,12 +11,18 @@ import {
 import { amdaiBenchFile } from './results-data';
 import {
   FLASH_Q3_EXCEPTION,
+  Q6_4K_VARIANCE_NOTE,
   RUN_SCHEMA,
+  SWEEP_REVERIFY,
+  amdai,
   amdai,
   assertRunSetValid,
   deriveV1Catalog,
   flashQ3FromRuns,
+  houseHandle,
   isFlashQ3,
+  isSweep35bCard,
+  measuredRamHitsFromRuns,
   officialAmdaiRuns,
   parseRunCard,
   qwen36TableFromRuns,
@@ -49,14 +55,24 @@ describe('amdai-bench/run@1', () => {
     assert.deepEqual(assertRunSetValid(runs), []);
   });
 
-  it('credits every seeded card to verified amdai on local-desktop and keeps Flash Q3 empty', () => {
+  it('credits every seeded card to verified amdai / amdai on local-desktop and keeps Flash Q3 empty', () => {
     assert.ok(runs.length >= 22);
     assert.equal(officialAmdaiRuns(runs).length, runs.length);
     assert.ok(runs.every((card) => card.schema === RUN_SCHEMA));
-    assert.ok(runs.every((card) => card.submitted_by.handle === amdai.handle));
-    assert.ok(runs.every((card) => card.submitted_by.display === amdai.display));
+    assert.ok(runs.every((card) => houseHandle(card.submitted_by.handle)));
     assert.ok(runs.every((card) => card.submitted_by.rig === amdai.rig));
     assert.ok(runs.every((card) => card.submitted_by.verified));
+    const sweep = runs.filter(isSweep35bCard);
+    assert.equal(sweep.length, 33);
+    assert.ok(sweep.every((card) => card.submitted_by.handle === amdai.handle));
+    assert.ok(sweep.every((card) => card.submitted_by.display === amdai.display));
+    assert.ok(sweep.every((card) => (card.notes ?? '').includes(SWEEP_REVERIFY)));
+    const q6pair = sweep.filter(
+      (card) => card.model.quant === 'Q6_K' && card.config.context_tokens === 4096 && card.hardware.gpu_count_used === 1,
+    );
+    assert.equal(q6pair.length, 2);
+    assert.ok(q6pair.every((card) => (card.notes ?? '').includes(Q6_4K_VARIANCE_NOTE)));
+    assert.ok(!sweep.some((card) => /flash/i.test(card.model.name)));
     assert.ok(runs.every((card) => card.software.launch_command.trim().length > 0));
     assert.equal(flashQ3FromRuns(runs), null);
     assert.ok(!runs.some((card) => isFlashQ3(card)));
@@ -87,6 +103,23 @@ describe('amdai-bench/run@1', () => {
     assert.equal(table.rows[3]?.decode_short, '82.62 / 103.23 tok/s');
     assert.match(table.rows[3]?.flag ?? '', /DDR5/);
     assert.ok(table.notes.some((note) => /pending a rerun/i.test(note)));
+    assert.ok(table.notes.some((note) => /pending re-verify after RAM fix/i.test(note)));
+    assert.equal(table.compare.length, 16);
+    const ud4k = table.compare.find((row) => row.quant === 'UD-Q5_K_XL' && row.context === 4096);
+    assert.equal(ud4k?.one.decode, '102.39 tok/s');
+    assert.equal(ud4k?.both.decode, '82.78 tok/s');
+    assert.equal(ud4k?.one.prefill, '2761.6 tok/s');
+    assert.equal(ud4k?.one.vramPerGpu, '25.45 GB');
+    assert.equal(ud4k?.one.vramTotal, '25.97 GB');
+    assert.equal(ud4k?.one.systemRam, '37.32 GB');
+    assert.equal(ud4k?.both.vramPerGpu, '13.28 / 13.11 GB');
+    assert.ok(ud4k?.one.runIds.length);
+    const q6short = table.compare.find((row) => row.quant === 'Q6_K' && row.context === 4096);
+    assert.equal(q6short?.one.decode, '82.62 / 103.23 tok/s');
+    assert.equal(q6short?.one.systemRam, '40.91 / 40.15 GB');
+    const ramHits = measuredRamHitsFromRuns(runs);
+    assert.ok(ramHits.length >= 33);
+    assert.ok(ramHits.every((hit) => hit.peakGb > 0 && hit.runId));
 
     const derived = deriveV1Catalog(runs);
     assert.deepEqual(assertAmdaiBenchValid(derived), []);

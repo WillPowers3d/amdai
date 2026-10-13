@@ -17,7 +17,7 @@ Audience: home-lab and enthusiast users. Not enterprise Instinct marketing.
 | Daily driver | Qwen3.6-35B-A3B | Unsloth UD-Q5_K_XL | llama.cpp Vulkan | One R9700, 262K, f16 KV, 0% RAM offload. Measured on our rig, 2026-10: 102.39 tok/s short / 90.52 at 32K / 66.43 at 128K / 44.4 at 256K |
 | Fast agent | Qwen 3.8 Flash | Unsloth UD-Q6_K_XL | Strata v0.1.42 | Two-card 262K: 32.8 tok/s at 8K/32K, 31.8 at 100K. Prior first-party ~32.6 vs llama.cpp ~16 — Measured on our rig, 2026-10 |
 
-Official llama-bench cards (c060ca974 Vulkan, f16 KV, 2026-10-12/13) live in `data/runs/`. UD-Q5_K_XL peak VRAM is 25.97 GB at 4K / 29.34 GB at 256K. Sibling 35B points: Q5_K_M 109.73 tok/s (24.68 GB VRAM); Q4_K_M 117.69 tok/s decode, 1902.1 tok/s prefill at 32K. Q6_K 1-GPU 4K keeps both repeats (82.62 and 103.23). Flash / Strata / Q3 are pending a DDR5 rerun.
+Official llama-bench cards (c060ca974 Vulkan, f16 KV, overnight sweep 2026-10-12) live in `data/runs/`. Credited to amdai / local-desktop. UD-Q5_K_XL peak VRAM is 25.97 GB at 4K / 29.34 GB at 256K. Sibling 35B points: Q5_K_M 109.73 tok/s (24.68 GB VRAM); Q4_K_M 117.69 tok/s decode, 1902.1 tok/s prefill at 32K. Q6_K 1-GPU 4K keeps both repeats (82.62 and 103.23). The whole sweep is measured, pending re-verify after the DDR5-5200 RAM fix. Flash / Strata / Q3 are pending a DDR5 rerun.
 
 House rules: prefer llama.cpp over vLLM; prefer Q5 over Q4; Q3 is listed as estimate/community unless measured; Q1/Q2 stay off; fast NVMe only; one LLM per GPU unless you deliberately combine.
 

@@ -2,7 +2,7 @@
 import Base from '../layouts/Base.astro';
 import Callout from '../components/Callout.astro';
 import OvernightRows from '../components/OvernightRows.astro';
-import { FLASH_RERUN_NOTE, contextLabel, matchRuns, verifiedMeasured } from '../lib/run-card';
+import { FLASH_RERUN_NOTE, SWEEP_REVERIFY, contextLabel, matchRuns, runPath, verifiedMeasured } from '../lib/run-card';
 import { runs } from '../lib/run-card-data';
 import { MEASURED_ON_OUR_RIG } from '../lib/local-desktop-dual';
 import { local-desktopDual as file } from '../lib/local-desktop-dual-data';
@@ -21,7 +21,11 @@ const splitOfficial = [4096, 32768, 131072, 262144].map((ctx) => {
     label: contextLabel(ctx),
     decode: card?.results.decode_tps ?? null,
     prefill: card?.results.prefill_tps ?? null,
+    vramPerGpu: card?.results.peak_vram_gb_per_gpu ?? [],
     vram: card?.results.peak_vram_gb_total ?? null,
+    ram: card?.results.peak_system_ram_gb ?? null,
+    href: card ? runPath(card.run_id) : '/results',
+    runId: card?.run_id ?? null,
   };
 });
 
@@ -49,6 +53,10 @@ const split = file.split;
 
     <Callout type="warn" title="Flash / Strata / Q3 pending">
       <p>{FLASH_RERUN_NOTE} This page is 35B llama.cpp only.</p>
+    </Callout>
+
+    <Callout type="warn" title="Overnight sweep, 2026-10-12">
+      <p>{SWEEP_REVERIFY}</p>
     </Callout>
 
     <Callout type="check" title="Recommendation">
@@ -131,7 +139,10 @@ const split = file.split;
               <th>Context</th>
               <th>Decode</th>
               <th>Prefill</th>
-              <th>VRAM</th>
+              <th>VRAM / card</th>
+              <th>VRAM total</th>
+              <th>System RAM</th>
+              <th>Card</th>
             </tr>
           </thead>
           <tbody>
@@ -140,7 +151,16 @@ const split = file.split;
                 <td class="font-medium">{row.label}</td>
                 <td class="tabular-nums">{row.decode != null ? `${row.decode} tok/s` : 'not measured'}</td>
                 <td class="tabular-nums">{row.prefill != null ? `${row.prefill} tok/s` : 'not measured'}</td>
+                <td class="tabular-nums">{row.vramPerGpu.length ? `${row.vramPerGpu.join(' / ')} GB` : 'not measured'}</td>
                 <td class="tabular-nums">{row.vram != null ? `${row.vram} GB` : 'not measured'}</td>
+                <td class="tabular-nums">{row.ram != null ? `${row.ram} GB` : 'not measured'}</td>
+                <td>
+                  {row.runId ? (
+                    <a class="underline decoration-accent/40" href={row.href}>{row.runId}</a>
+                  ) : (
+                    'not measured'
+                  )}
+                </td>
               </tr>
             ))}
           </tbody>

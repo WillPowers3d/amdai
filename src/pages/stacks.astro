@@ -9,6 +9,7 @@ import EvidenceBadge from '../components/EvidenceBadge.astro';
 import { stacksGuide } from '../lib/status';
 import { systemRamNeedFromQuery } from '../lib/calculator';
 import { recipes } from '../lib/recipes-data';
+import { measuredRamHits } from '../lib/measured-ram-data';
 
 const stackRecipe = (id: string) =>
   id === 'daily-driver'
@@ -85,7 +86,7 @@ const stackRecipe = (id: string) =>
           </dl>
           {stack.calculator.includes('?') && (
             <div class="mt-4">
-              <SystemRamNeed need={systemRamNeedFromQuery(stack.calculator)} />
+              <SystemRamNeed need={systemRamNeedFromQuery(stack.calculator, measuredRamHits)} />
             </div>
           )}
           {stackRecipe(stack.id) && (

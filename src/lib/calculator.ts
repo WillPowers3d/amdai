@@ -124,8 +124,21 @@ export type BackendPreset = {
 
 export const MEASURED_ON_OUR_RIG = 'Measured on our rig, 2026-10';
 
-export type TestedId = 'daily' | 'fast' | 'q4';
+export type TestedId = 'daily' | 'fast' | 'q4' | 'q6';
 export type TestedBadge = { id: TestedId; label: string };
+
+/** First-party peak system RAM from an official 35B run card (Linux GiB labeled GB). */
+export type MeasuredRamHit = {
+  modelId: ModelId;
+  quant: string;
+  quantId: QuantId;
+  context: number;
+  gpuCount: number;
+  split: boolean;
+  backendId: BackendId;
+  peakGb: number;
+  runId: string;
+};
 
 export type CalcInput = {
   view: CalcView;
@@ -231,6 +244,8 @@ export type SystemRamLine = {
   label: 'estimate' | 'measured';
   note: string;
   breakdown: SystemRamBreakdown;
+  peakGbs?: number[];
+  runIds?: string[];
 };
 
 export type SystemRamNeed = {
@@ -1247,11 +1262,61 @@ function systemRamLine(input: CalcInput): SystemRamLine {
   };
 }
 
-export function systemRamNeed(input: CalcInput): SystemRamNeed {
-  const fullContext = modelFullContext(input);
+const CALC_QUANT_TO_RUN: Partial<Record<QuantId, string[]>> = {
+  q5_k_m: ['UD-Q5_K_XL', 'Q5_K_M'],
+  q4_k_m: ['Q4_K_M'],
+  q6_k: ['Q6_K'],
+};
+
+export function matchMeasuredRam(input: CalcInput, hits: MeasuredRamHit[]): MeasuredRamHit[] {
+  if (input.modelId !== 'qwen36') return [];
+  if (input.backendId !== 'llamacpp') return [];
+  if (input.kvId !== 'f16') return [];
+  if (input.gpuId !== 'r9700') return [];
+  if (input.pathId !== 'vulkan') return [];
+  if (input.gpuCount > 1 && !input.split) return [];
+  const split = Boolean(input.split && input.gpuCount > 1);
+  const gpuCount = split ? Math.min(4, Math.max(1, Math.round(input.gpuCount))) : 1;
+  const quants = CALC_QUANT_TO_RUN[input.quantId] ?? [];
+  const pool = hits.filter(
+    (hit) =>
+      hit.context === input.context &&
+      hit.gpuCount === gpuCount &&
+      hit.split === split &&
+      hit.backendId === input.backendId &&
+      quants.includes(hit.quant),
+  );
+  for (const quant of quants) {
+    const found = pool.filter((hit) => hit.quant === quant);
+    if (found.length) return found;
+  }
+  return [];
+}
+
+export function applyMeasuredRamLine(line: SystemRamLine, hits: MeasuredRamHit[]): SystemRamLine {
+  if (!hits.length) return line;
+  const peakGbs = hits.map((hit) => hit.peakGb);
+  const runIds = hits.map((hit) => hit.runId);
+  const shown = [...new Set(peakGbs)].join(' / ');
   return {
-    atSelected: systemRamLine(input),
-    atFullContext: systemRamLine({ ...input, context: fullContext }),
+    ...line,
+    measured: true,
+    label: 'measured',
+    rawGiB: peakGbs[0]!,
+    kitGb: roundUpToDimmKitGb(Math.max(...peakGbs)),
+    peakGbs,
+    runIds,
+    note: `Measured peak system RAM on local-desktop: ${shown} GB (Linux GiB labeled GB). Measured, pending re-verify after RAM fix.`,
+  };
+}
+
+export function systemRamNeed(input: CalcInput, hits: MeasuredRamHit[] = []): SystemRamNeed {
+  const fullContext = modelFullContext(input);
+  const selectedInput = input;
+  const fullInput = { ...input, context: fullContext };
+  return {
+    atSelected: applyMeasuredRamLine(systemRamLine(selectedInput), matchMeasuredRam(selectedInput, hits)),
+    atFullContext: applyMeasuredRamLine(systemRamLine(fullInput), matchMeasuredRam(fullInput, hits)),
     fullContext,
   };
 }
@@ -1341,6 +1406,13 @@ export function testedBadge(input: CalcInput): TestedBadge | null {
     return {
       id: 'q4',
       label: `${MEASURED_ON_OUR_RIG} — Q4_K_M decode 117.69 tok/s; prefill 1902.1 tok/s at 32K. One R9700, llama.cpp, f16 KV.`,
+    };
+  }
+
+  if (input.quantId === 'q6_k') {
+    return {
+      id: 'q6',
+      label: `${MEASURED_ON_OUR_RIG} — Q6_K 4K decode 82.62 / 103.23 tok/s (two repeats, flagged for re-run). 32K+ is partly offloaded to DDR5. One R9700, llama.cpp, f16 KV.`,
     };
   }
 
@@ -1470,6 +1542,10 @@ export function compute(input: CalcInput): CalcResult {
     speed: speedFloor(input, overflow, tested),
     systemRam: systemRamNeed(input),
   };
+}
+
+export function applyMeasuredSystemRam(result: CalcResult, hits: MeasuredRamHit[], input: CalcInput): CalcResult {
+  return { ...result, systemRam: systemRamNeed(input, hits) };
 }
 
 export function formatGiB(n: number): string {
@@ -1702,6 +1778,6 @@ export function catalogGuardErrors(): string[] {
   return errors;
 }
 
-export function systemRamNeedFromQuery(search: string): SystemRamNeed {
-  return systemRamNeed(queryToInput(search.startsWith('/calculator') ? search.replace(/^\/calculator/, '') : search));
+export function systemRamNeedFromQuery(search: string, hits: MeasuredRamHit[] = []): SystemRamNeed {
+  return systemRamNeed(queryToInput(search.startsWith('/calculator') ? search.replace(/^\/calculator/, '') : search), hits);
 }

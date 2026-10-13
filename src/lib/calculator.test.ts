@@ -266,6 +266,26 @@ describe('calculator math and modes', () => {
     assert.ok(daily.atSelected.kitGb <= 64);
     assert.equal(daily.atSelected.label, 'estimate');
   });
+
+  it('overlays official 35B peak system RAM and keeps uncovered lines as estimates', async () => {
+    const { measuredRamHitsFromRuns } = await import('./run-card');
+    const { runs } = await import('./run-card-data');
+    const hits = measuredRamHitsFromRuns(runs);
+    const daily = systemRamNeed(DEFAULT_INPUT, hits);
+    assert.equal(daily.atSelected.label, 'measured');
+    assert.deepEqual(daily.atSelected.peakGbs, [42.9]);
+    assert.ok(daily.atSelected.runIds?.[0]);
+    assert.match(daily.atSelected.note, /pending re-verify after RAM fix/);
+    const short = systemRamNeed({ ...DEFAULT_INPUT, context: 4096 }, hits);
+    assert.deepEqual(short.atSelected.peakGbs, [37.32]);
+    const split = systemRamNeed({ ...DEFAULT_INPUT, context: 4096, gpuCount: 2, split: true }, hits);
+    assert.deepEqual(split.atSelected.peakGbs, [37.6]);
+    const q6 = systemRamNeed({ ...DEFAULT_INPUT, quantId: 'q6_k', context: 4096 }, hits);
+    assert.deepEqual(q6.atSelected.peakGbs, [40.91, 40.15]);
+    const missed = systemRamNeed({ ...DEFAULT_INPUT, context: 8192 }, hits);
+    assert.equal(missed.atSelected.label, 'estimate');
+    assert.equal(missed.atSelected.peakGbs, undefined);
+  });
 });
 
 describe('GGUF header reader', () => {

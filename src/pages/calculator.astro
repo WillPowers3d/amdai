@@ -7,6 +7,7 @@ import AbliteratedPicks from '../components/AbliteratedPicks.astro';
 import SaveSetupButton from '../components/SaveSetupButton.astro';
 import VramBar from '../components/VramBar.astro';
 import { BACKENDS, CONTEXT_PRESETS, GPU_PRESETS, KV_TYPES, MODEL_PRESETS, QUANTS } from '../lib/calculator';
+import { measuredRamHits } from '../lib/measured-ram-data';
 import { DEFAULT_PRIORITY } from '../lib/priority';
 import { DEFAULT_STYLE, DEFAULT_USAGE } from '../lib/ask';
 import { gpuProducts } from '../lib/affiliates';
@@ -56,6 +57,7 @@ const groups = [...new Set(MODEL_PRESETS.map((m) => m.group))];
       <p class="mt-2 text-sm text-faint" data-detect-status></p>
     </details>
     <script type="application/json" id="recipe-catalog" set:html={JSON.stringify(recipes)} />
+    <script type="application/json" id="measured-ram" set:html={JSON.stringify(measuredRamHits)} />
 
     <div class="tabs mt-8" role="tablist" aria-label="Calculator view">
       <button type="button" class="tab is-on" data-view="model">Size this model</button>
@@ -311,11 +313,13 @@ const groups = [...new Set(MODEL_PRESETS.map((m) => m.group))];
                 <p class="text-faint">Minimum system RAM needed</p>
                 <p class="mt-1 font-serif text-2xl tabular-nums" data-out="ramMinKit">—</p>
                 <p class="mt-1 text-xs text-faint" data-out="ramMinMeta"></p>
+                <p class="mt-1 text-xs" data-out="ramMinLinks"></p>
               </div>
               <div>
                 <p class="text-faint">RAM needed at full context</p>
                 <p class="mt-1 font-serif text-2xl tabular-nums" data-out="ramFullKit">—</p>
                 <p class="mt-1 text-xs text-faint" data-out="ramFullMeta"></p>
+                <p class="mt-1 text-xs" data-out="ramFullLinks"></p>
               </div>
             </div>
             <p class="mt-3 text-xs leading-relaxed text-faint" data-out="ramNote"></p>
@@ -438,6 +442,7 @@ const groups = [...new Set(MODEL_PRESETS.map((m) => m.group))];
     DEFAULT_INPUT,
     applyGpuPreset,
     applyModelPreset,
+    applyMeasuredSystemRam,
     compute,
     decimalGbToGiB,
     exportEstimate,
@@ -455,6 +460,7 @@ const groups = [...new Set(MODEL_PRESETS.map((m) => m.group))];
     type KvId,
     type KvKind,
     type ModelId,
+    type MeasuredRamHit,
     type PathId,
     type QuantId,
   } from '../lib/calculator';
@@ -644,8 +650,30 @@ const groups = [...new Set(MODEL_PRESETS.map((m) => m.group))];
     }
   }
 
+  const measuredRam = JSON.parse(document.getElementById('measured-ram')?.textContent || '[]') as MeasuredRamHit[];
+
+  function ramHeadline(line: { label: string; kitGb: number; peakGbs?: number[] }): string {
+    if (line.label === 'measured' && line.peakGbs?.length) {
+      return `${[...new Set(line.peakGbs)].join(' / ')} GB`;
+    }
+    return `${line.kitGb} GB kit`;
+  }
+
+  function setRamLinks(selector: string, ids: string[] | undefined) {
+    const el = document.querySelector(selector);
+    if (!el) return;
+    el.replaceChildren();
+    for (const id of ids ?? []) {
+      const link = document.createElement('a');
+      link.href = `/results/${id}`;
+      link.className = 'mr-2 underline decoration-accent/40';
+      link.textContent = id;
+      el.append(link);
+    }
+  }
+
   function render() {
-    const result = compute(input);
+    const result = applyMeasuredSystemRam(compute(input), measuredRam, input);
     const advice = calculatorAdvice(input, result, ask.priority);
     const pick = bestQuantForPriority(input, ask.priority);
     const verdictEl = document.querySelector('[data-verdict-label]');
@@ -664,8 +692,10 @@ const groups = [...new Set(MODEL_PRESETS.map((m) => m.group))];
     setText('[data-out="overflow"]', formatGiB(result.overflowGiB));
     setText('[data-out="ramPct"]', result.overflowRamPct == null ? '—' : result.overflowRamPct.toFixed(1));
     const ram = result.systemRam;
-    setText('[data-out="ramMinKit"]', `${ram.atSelected.kitGb} GB kit`);
-    setText('[data-out="ramFullKit"]', `${ram.atFullContext.kitGb} GB kit`);
+    setText('[data-out="ramMinKit"]', ramHeadline(ram.atSelected));
+    setText('[data-out="ramFullKit"]', ramHeadline(ram.atFullContext));
+    setRamLinks('[data-out="ramMinLinks"]', ram.atSelected.runIds);
+    setRamLinks('[data-out="ramFullLinks"]', ram.atFullContext.runIds);
     setText(
       '[data-out="ramMinMeta"]',
       `${ram.atSelected.label === 'measured' ? 'Measured' : 'Estimate'} · ${formatGiB(ram.atSelected.rawGiB)} GiB raw · ${formatCtx(ram.atSelected.context)} context`,
@@ -910,7 +940,7 @@ const groups = [...new Set(MODEL_PRESETS.map((m) => m.group))];
   });
 
   exportBtn?.addEventListener('click', () => {
-    const blob = new Blob([exportEstimate(input, compute(input))], { type: 'application/json' });
+    const blob = new Blob([exportEstimate(input, applyMeasuredSystemRam(compute(input), measuredRam, input))], { type: 'application/json' });
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
     a.download = 'amdai-calculator-estimate.json';

@@ -8,7 +8,7 @@
 import { z } from 'astro/zod';
 import { assertQuantAllowed, isQ3Quant } from './quant-guard';
 import { ALLOWED_TOK_S as BENCH_TOK } from './benchmarks';
-import { systemRamNeedFromQuery, type CalcInput, type SystemRamNeed } from './calculator';
+import { systemRamNeedFromQuery, type CalcInput, type MeasuredRamHit, type SystemRamNeed } from './calculator';
 import type { StackUpdate } from './rig-match';
 import { FLASH_Q3_EXCEPTION, matchRuns, verifiedMeasured, type RunCard } from './run-card';
 
@@ -133,9 +133,9 @@ export type Recipe = z.infer<typeof recipeSchema>;
 
 export type ParseRecipeOpts = { extraProofNumbers?: Iterable<number> };
 
-export function recipeSystemRam(recipe: Recipe): SystemRamNeed | null {
+export function recipeSystemRam(recipe: Recipe, hits: MeasuredRamHit[] = []): SystemRamNeed | null {
   if (!recipe.calculator.includes('?')) return null;
-  return systemRamNeedFromQuery(recipe.calculator);
+  return systemRamNeedFromQuery(recipe.calculator, hits);
 }
 
 export function parseRecipe(raw: unknown, file = 'recipe', opts: ParseRecipeOpts = {}): Recipe {

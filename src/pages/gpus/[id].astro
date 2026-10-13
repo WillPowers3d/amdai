@@ -10,6 +10,7 @@ import { gpuPageById, gpuPages } from '../../lib/gpu-pages';
 import RunCard from '../../components/RunCard.astro';
 import { officialAmdaiRuns, runsForGpu, verifiedMeasured } from '../../lib/run-card';
 import { runs } from '../../lib/run-card-data';
+import { measuredRamHits } from '../../lib/measured-ram-data';
 
 export function getStaticPaths() {
   return gpuPages(recipes).map((page) => ({ params: { id: page.id }, props: { id: page.id } }));
@@ -92,9 +93,9 @@ const gpuRuns = officialAmdaiRuns(verifiedMeasured(runsForGpu(runs, page.id)));
         <div class="mt-5">
           <LaunchCommand recipe={recipe} />
         </div>
-        {recipeSystemRam(recipe) && (
+        {recipeSystemRam(recipe, measuredRamHits) && (
           <div class="mt-5">
-            <SystemRamNeed need={recipeSystemRam(recipe)!} />
+            <SystemRamNeed need={recipeSystemRam(recipe, measuredRamHits)!} />
           </div>
         )}
         <p class="mt-4 text-sm">

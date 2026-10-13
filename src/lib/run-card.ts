@@ -9,6 +9,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import type { AmdaiBenchFile } from './results';
 import { AMDAI_BENCH_SCHEMA, AMDAI_BENCH_VERSION, MEASURED_LABEL, hardwareFingerprint } from './results';
+import type { BackendId, MeasuredRamHit, QuantId } from './calculator';
 
 export const RUN_SCHEMA = 'amdai-bench/run@1' as const;
 export const FLASH_Q3_EXCEPTION = 'flash-q3-measured-approved';
@@ -19,9 +20,28 @@ export const amdai = {
   verified: true,
 } as const;
 
+export const amdai = {
+  handle: 'amdai',
+  display: 'AMDai',
+  rig: 'local-desktop',
+  verified: true,
+} as const;
+
 /** Flash / Strata / Q3 were excluded from the 2026-10-13 35B drop after a RAM crash. */
 export const FLASH_RERUN_NOTE =
   'Flash, Strata, and Q3 runs are pending a rerun after amdai stabilizes the DDR5.';
+
+/** Whole 2026-10-12/13 35B llama.cpp sweep. All 33 cards predate the 00:14 CT oops. */
+export const SWEEP_REVERIFY =
+  'Measured, pending re-verify after RAM fix. DDR5-5200 later proved unstable; a kernel oops at 00:14 CT aborted the sweep. All 33 cards predate the oops. Each card already notes one transient bad read in earlier sha256 passes.';
+
+export const Q6_4K_VARIANCE_NOTE =
+  'Q6_K single-GPU 4K has two runs that disagree (23:26 = 82.62 tok/s decode, 23:55 = 103.23 tok/s). Both are shown; neither is averaged or dropped. Flagged for re-run.';
+
+export const Q6_DDR5_NOTE =
+  'Partly offloaded to DDR5 on one GPU (llama.cpp --fit-target 1024). Decode is not an in-VRAM figure.';
+
+export const SWEEP_UPDATE_TITLE = 'Overnight sweep, 2026-10-12';
 
 export const LAYOUTS = ['single', 'split', 'dual-instance', 'tensor-parallel'] as const;
 export type RunLayout = (typeof LAYOUTS)[number];
@@ -175,6 +195,34 @@ function asInt(value: unknown): number | null {
   return n != null && Number.isInteger(n) ? n : null;
 }
 
+function notesFromUnknown(value: unknown): string | undefined {
+  if (typeof value === 'string' && value.trim()) return value;
+  if (Array.isArray(value)) {
+    const joined = value.filter((item): item is string => typeof item === 'string' && item.trim().length > 0).join(' · ');
+    return joined || undefined;
+  }
+  return undefined;
+}
+
+export function houseHandle(handle: string): boolean {
+  const normalized = handle.toLowerCase().replace(/[^a-z]/g, '');
+  return normalized === amdai.handle || normalized === 'amdai';
+}
+
+export function isSweep35bCard(card: RunCard): boolean {
+  return (
+    card.submitted_by.rig === amdai.rig &&
+    /35B/i.test(card.model.name) &&
+    !/flash/i.test(card.model.name) &&
+    card.software.backend.toLowerCase().includes('llama.cpp') &&
+    /2026101[23]/.test(card.run_id)
+  );
+}
+
+export function cardPendingReverify(card: RunCard): boolean {
+  return /pending re-verify after RAM fix/i.test(card.notes ?? '');
+}
+
 export function parseRunCard(raw: unknown, file = 'run'): RunCard {
   if (!raw || typeof raw !== 'object') throw new Error(`${file}: not an object`);
   const rec = raw as Record<string, unknown>;
@@ -257,7 +305,7 @@ export function parseRunCard(raw: unknown, file = 'run'): RunCard {
       duration_s: asNumber(res.duration_s),
     },
     measured: Boolean(rec.measured),
-    notes: typeof rec.notes === 'string' ? rec.notes : undefined,
+    notes: notesFromUnknown(rec.notes),
     exceptions: Array.isArray(rec.exceptions)
       ? rec.exceptions.filter((item): item is string => typeof item === 'string')
       : undefined,
@@ -381,11 +429,9 @@ export function verifiedMeasured(cards: RunCard[]): RunCard[] {
 }
 
 export function officialAmdaiRuns(cards: RunCard[]): RunCard[] {
-  return verifiedMeasured(cards).filter((card) => {
-    const handle = card.submitted_by.handle.toLowerCase().replace(/[^a-z]/g, '');
-    const house = handle === amdai.handle || handle === 'amdai';
-    return house && card.submitted_by.rig === amdai.rig;
-  });
+  return verifiedMeasured(cards).filter(
+    (card) => houseHandle(card.submitted_by.handle) && card.submitted_by.rig === amdai.rig,
+  );
 }
 
 export type RunMatch = {
@@ -451,6 +497,93 @@ export type Qwen36Row = {
   flag?: string;
 };
 
+export type Qwen36SideCell = {
+  prefill: string;
+  decode: string;
+  vramPerGpu: string;
+  vramTotal: string;
+  systemRam: string;
+  runIds: string[];
+  href: string;
+};
+
+export type Qwen36CompareRow = {
+  quant: string;
+  context: number;
+  contextLabel: string;
+  one: Qwen36SideCell;
+  both: Qwen36SideCell;
+  flag?: string;
+};
+
+const QWEN36_TABLE_CONTEXTS = [4096, 32768, 131072, 262144] as const;
+const QWEN36_TABLE_QUANTS = ['UD-Q5_K_XL', 'Q5_K_M', 'Q4_K_M', 'Q6_K'] as const;
+
+function joinMeasured(values: Array<number | null | undefined>, unit: 'tok/s' | 'GB'): string {
+  const nums = values.filter((n): n is number => n != null);
+  if (!nums.length) return 'not measured';
+  const unique = [...new Set(nums)];
+  return `${unique.join(' / ')} ${unit}`;
+}
+
+function sideCell(hits: RunCard[]): Qwen36SideCell {
+  const ids = hits.map((card) => card.run_id);
+  return {
+    prefill: joinMeasured(
+      hits.map((card) => card.results.prefill_tps),
+      'tok/s',
+    ),
+    decode: joinMeasured(
+      hits.map((card) => card.results.decode_tps),
+      'tok/s',
+    ),
+    vramPerGpu: joinMeasured(
+      hits.flatMap((card) => card.results.peak_vram_gb_per_gpu),
+      'GB',
+    ),
+    vramTotal: joinMeasured(
+      hits.map((card) => card.results.peak_vram_gb_total),
+      'GB',
+    ),
+    systemRam: joinMeasured(
+      hits.map((card) => card.results.peak_system_ram_gb),
+      'GB',
+    ),
+    runIds: ids,
+    href: ids.length === 1 ? runPath(ids[0]!) : ids.length ? `/results?quant=${encodeURIComponent(hits[0]!.model.quant)}` : '/results',
+  };
+}
+
+const CALC_QUANT_FOR_RUN: Record<string, QuantId> = {
+  'UD-Q5_K_XL': 'q5_k_m',
+  Q5_K_M: 'q5_k_m',
+  Q4_K_M: 'q4_k_m',
+  Q6_K: 'q6_k',
+};
+
+export function measuredRamHitsFromRuns(cards: RunCard[]): MeasuredRamHit[] {
+  const hits: MeasuredRamHit[] = [];
+  for (const card of officialAmdaiRuns(cards)) {
+    if (!isSweep35bCard(card)) continue;
+    if (card.results.peak_system_ram_gb == null) continue;
+    if (!card.software.backend.toLowerCase().includes('llama.cpp')) continue;
+    const quantId = CALC_QUANT_FOR_RUN[card.model.quant];
+    if (!quantId) continue;
+    hits.push({
+      modelId: 'qwen36',
+      quant: card.model.quant,
+      quantId,
+      context: card.config.context_tokens,
+      gpuCount: card.hardware.gpu_count_used,
+      split: card.config.layout === 'split',
+      backendId: 'llamacpp' as BackendId,
+      peakGb: card.results.peak_system_ram_gb,
+      runId: card.run_id,
+    });
+  }
+  return hits;
+}
+
 export function q6OneGpu4kPair(cards: RunCard[]): { low: number; high: number } | null {
   const hits = matchRuns(verifiedMeasured(cards), {
     model: 'qwen36',
@@ -474,19 +607,20 @@ export function qwen36TableFromRuns(cards: RunCard[]): {
   kv: string;
   notes: string[];
   rows: Qwen36Row[];
+  compare: Qwen36CompareRow[];
 } {
   const pool = verifiedMeasured(cards);
-  const hitsFor = (quant: string, context: number) =>
+  const hitsFor = (quant: string, context: number, layout: RunLayout, gpus: number) =>
     matchRuns(pool, {
       model: 'qwen36',
       quant,
       backend: 'llama.cpp',
       context,
-      layout: 'single',
-      gpus: 1,
+      layout,
+      gpus,
     });
   const cell = (quant: string, context: number, kind: 'decode' | 'prefill' | 'vram'): string => {
-    const hits = hitsFor(quant, context);
+    const hits = hitsFor(quant, context, 'single', 1);
     if (kind === 'decode') {
       const values = hits.map((c) => c.results.decode_tps).filter((n): n is number => n != null);
       if (values.length > 1) return `${values.sort((a, b) => a - b).join(' / ')} tok/s`;
@@ -499,15 +633,32 @@ export function qwen36TableFromRuns(cards: RunCard[]): {
   };
   const q6off = (context: number) =>
     context >= 32768 ? 'Partly offloaded to DDR5 on 1 GPU' : undefined;
+  const compare: Qwen36CompareRow[] = [];
+  for (const quant of QWEN36_TABLE_QUANTS) {
+    for (const context of QWEN36_TABLE_CONTEXTS) {
+      const oneHits = hitsFor(quant, context, 'single', 1);
+      const bothHits = hitsFor(quant, context, 'split', 2);
+      compare.push({
+        quant,
+        context,
+        contextLabel: contextLabel(context),
+        one: sideCell(oneHits),
+        both: sideCell(bothHits),
+        flag: quant === 'Q6_K' && context >= 32768 ? q6off(context) : quant === 'Q6_K' && context === 4096 ? 'two 4K repeats' : undefined,
+      });
+    }
+  }
   return {
     label: MEASURED_LABEL,
     engine: 'llama.cpp',
-    gpu: 'one R9700',
+    gpu: 'one R9700 vs both R9700s',
     kv: 'f16',
     notes: [
-      'Cells come from verified amdai-bench/run@1 cards on local-desktop (2026-10-12/13, llama.cpp c060ca974 Vulkan). Empty stays not measured.',
-      'One R9700, llama.cpp Vulkan, f16 KV, layout single. Dual-instance and split cards live on /results and /qwen36-dual.',
-      'Q6_K 4K keeps both repeats (82.62 and 103.23 tok/s) to show variance. Q6_K at 32K and up partly offloaded to DDR5.',
+      'Cells come from verified amdai-bench/run@1 cards on local-desktop (overnight sweep 2026-10-12, llama.cpp c060ca974 Vulkan). A blank stays not measured. GB is the Linux GiB value.',
+      'Side by side: prefill, decode, VRAM per card, VRAM total, and peak system RAM. At short context one R9700 decodes faster than splitting the same 35B across both cards (UD-Q5_K_XL 102.39 vs 82.78 tok/s at 4K).',
+      SWEEP_REVERIFY,
+      Q6_4K_VARIANCE_NOTE,
+      'Q6_K at 32K and up on one GPU is partly offloaded to DDR5.',
       FLASH_RERUN_NOTE,
     ],
     rows: [
@@ -549,6 +700,7 @@ export function qwen36TableFromRuns(cards: RunCard[]): {
         flag: q6off(32768),
       },
     ],
+    compare,
   };
 }
 

@@ -8,6 +8,7 @@ import SaveSetupButton from '../components/SaveSetupButton.astro';
 import SystemRamNeed from '../components/SystemRamNeed.astro';
 import { bandsReady, budgetFile, budgetTiers } from '../lib/budget';
 import { systemRamNeedFromQuery } from '../lib/calculator';
+import { measuredRamHits } from '../lib/measured-ram-data';
 import { DEFAULT_PRIORITY } from '../lib/priority';
 import { DEFAULT_STYLE, DEFAULT_USAGE, suggestedBudgetTier } from '../lib/ask';
 
@@ -157,7 +158,7 @@ const payload = JSON.stringify({
                 <p class="mt-2 text-sm text-muted">{row.note}</p>
                 {row.calculator.includes('?') && (
                   <div class="mt-3">
-                    <SystemRamNeed need={systemRamNeedFromQuery(row.calculator)} compact />
+                    <SystemRamNeed need={systemRamNeedFromQuery(row.calculator, measuredRamHits)} compact />
                   </div>
                 )}
                 <p class="mt-2 text-sm">

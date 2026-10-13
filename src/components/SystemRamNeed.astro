@@ -1,5 +1,6 @@
 ---
 import { formatCtx, formatGiB, type SystemRamNeed } from '../lib/calculator';
+import { runPath } from '../lib/run-card';
 
 interface Props {
   need: SystemRamNeed;
@@ -12,23 +13,44 @@ const selected = need.atSelected;
 const full = need.atFullContext;
 const b = selected.breakdown;
 const fb = full.breakdown;
+
+function headline(line: typeof selected): string {
+  if (line.label === 'measured' && line.peakGbs?.length) {
+    return `${[...new Set(line.peakGbs)].join(' / ')} GB`;
+  }
+  return `${line.kitGb} GB kit`;
+}
 ---
 
 <div class:list={['rounded-xl border border-line bg-canvas/60 p-3 text-sm', compact && 'text-[0.9rem]']}>
   <div class="grid gap-3 sm:grid-cols-2">
     <div>
       <p class="text-faint">Minimum system RAM needed</p>
-      <p class="mt-1 font-serif text-2xl tabular-nums">{selected.kitGb} GB kit</p>
+      <p class="mt-1 font-serif text-2xl tabular-nums">{headline(selected)}</p>
       <p class="mt-1 text-xs text-faint">
         {selected.label === 'measured' ? 'Measured' : 'Estimate'} · {formatGiB(selected.rawGiB)} GiB raw · {formatCtx(selected.context)} context
       </p>
+      {selected.runIds?.length ? (
+        <p class="mt-1 text-xs">
+          {selected.runIds.map((id) => (
+            <a class="mr-2 underline decoration-accent/40" href={runPath(id)}>{id}</a>
+          ))}
+        </p>
+      ) : null}
     </div>
     <div>
       <p class="text-faint">RAM needed at full context</p>
-      <p class="mt-1 font-serif text-2xl tabular-nums">{full.kitGb} GB kit</p>
+      <p class="mt-1 font-serif text-2xl tabular-nums">{headline(full)}</p>
       <p class="mt-1 text-xs text-faint">
         {full.label === 'measured' ? 'Measured' : 'Estimate'} · {formatGiB(full.rawGiB)} GiB raw · {formatCtx(need.fullContext)} full context
       </p>
+      {full.runIds?.length ? (
+        <p class="mt-1 text-xs">
+          {full.runIds.map((id) => (
+            <a class="mr-2 underline decoration-accent/40" href={runPath(id)}>{id}</a>
+          ))}
+        </p>
+      ) : null}
     </div>
   </div>
   <p class="mt-3 text-xs leading-relaxed text-faint">{selected.note}</p>

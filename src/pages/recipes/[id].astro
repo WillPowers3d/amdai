@@ -6,13 +6,14 @@ import LaunchCommand from '../../components/LaunchCommand.astro';
 import SystemRamNeed from '../../components/SystemRamNeed.astro';
 import { recipeSystemRam } from '../../lib/recipes';
 import { recipes } from '../../lib/recipes-data';
+import { measuredRamHits } from '../../lib/measured-ram-data';
 
 export function getStaticPaths() {
   return recipes.map((recipe) => ({ params: { id: recipe.id }, props: { recipe } }));
 }
 
 const { recipe } = Astro.props;
-const ram = recipeSystemRam(recipe);
+const ram = recipeSystemRam(recipe, measuredRamHits);
 const proof = recipe.proof[0];
 ---
 

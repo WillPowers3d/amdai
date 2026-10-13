@@ -16,7 +16,8 @@ import {
   type QwenColId,
 } from '../lib/qwen-compare';
 import { officialLinks } from '../lib/site';
-import { FLASH_RERUN_NOTE } from '../lib/run-card';
+import { FLASH_RERUN_NOTE, SWEEP_REVERIFY } from '../lib/run-card';
+import Qwen36Benches from '../components/Qwen36Benches.astro';
 
 const rows = qwenCompareRows(runs);
 const measuredCount = rows.filter((row) =>
@@ -101,8 +102,14 @@ const payload = rows.map((row) => ({
     </div>
 
     <Callout type="warn" title="Flash / Strata / Q3 pending">
-      <p>{FLASH_RERUN_NOTE} 35B llama.cpp cells on this table use the 2026-10-13 official cards.</p>
+      <p>{FLASH_RERUN_NOTE} 35B llama.cpp cells on this table use the 2026-10-12 overnight sweep cards.</p>
     </Callout>
+
+    <Callout type="warn" title="Overnight sweep, 2026-10-12">
+      <p>{SWEEP_REVERIFY} Q6_K single-GPU 4K keeps both 82.62 and 103.23 tok/s cards. Flagged for re-run.</p>
+    </Callout>
+
+    <Qwen36Benches heading="35B decode, measured" />
 
     <Callout type="note" title="Measured cells stay empty until a card lands">
       <p>
