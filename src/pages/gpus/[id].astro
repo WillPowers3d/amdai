@@ -42,6 +42,7 @@ const gpuRuns = officialAmdaiRuns(verifiedMeasured(runsForGpu(runs, page.id)));
     </p>
     <div class="mt-6 flex flex-wrap gap-3">
       <a class="btn-secondary" href="/gpus">All cards</a>
+      {page.id === 'r9700' && <a class="btn-secondary" href="/compare">Compare 35B</a>}
       {page.calcId && <a class="btn-primary" href={`/calculator?gpu=${page.calcId}`}>Open in calculator</a>}
       <a class="btn-ghost" href="/contribute">Contribute a recipe</a>
     </div>

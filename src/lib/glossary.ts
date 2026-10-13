@@ -166,7 +166,7 @@ export const GLOSSARY: GlossaryEntry[] = [
       'Layouts on amdai-bench cards: single, split, dual-instance. Two copies: about 100 tok/s per request, 172 at two concurrent, 177 at 4–8, 423 soak requests, 0 errors. Split 4K max total 82.78 versus 102.39 on one card.',
     links: [
       { href: '/qwen36-dual', label: '35B on two cards' },
-      { href: '/qwen', label: 'Qwen compare' },
+      { href: '/compare/one-vs-two-gpu', label: 'One vs split' },
       { href: '/calculator', label: 'Calculator' },
     ],
     seeAlso: ['r9700', 'offload', 'run-card'],
@@ -419,7 +419,7 @@ export const GLOSSARY: GlossaryEntry[] = [
       'Nominal llama.cpp-family bits in the calculator: Q3_K_S 3.50, Q3_K_M / UD-Q3_K_XL 3.91, Q4_K_M 4.85, Q5 family 5.69, Q6 family 6.56, Q8_0 8.5, BF16 16. Q3 file sizes are Unsloth listings, not local-desktop quality scores. Q1/Q2 stay off.',
     links: [
       { href: '/quants', label: 'Quant explainer' },
-      { href: '/calculator', label: 'Calculator' },
+      { href: '/compare/q4-q5-q6', label: 'Q6 vs Q5 vs Q4' },
       { href: '/budget', label: 'Budget' },
     ],
     seeAlso: ['gguf', 'unsloth-ud', 'kv-cache'],

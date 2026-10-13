@@ -23,6 +23,8 @@ const ALLOWED_HREFS = new Set([
   '/benchmarks',
   '/bios',
   '/budget',
+  '/compare/one-vs-two-gpu',
+  '/compare/q4-q5-q6',
   '/calculator',
   '/credits',
   '/faq',

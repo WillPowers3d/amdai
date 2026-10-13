@@ -1,0 +1,328 @@
+---
+import Base from '../../layouts/Base.astro';
+import Callout from '../../components/Callout.astro';
+import { FLASH_RERUN_NOTE } from '../../lib/run-card';
+import { runs } from '../../lib/run-card-data';
+import {
+  COMPARE_CONTEXTS,
+  COMPARE_ENGINE,
+  COMPARE_MODEL,
+  COMPARE_Q3,
+  COMPARE_Q3_CITE,
+  COMPARE_QUANTS,
+  SWEEP_REVERIFY,
+  quantCompareRows,
+} from '../../lib/local-desktop-compare';
+
+const rows = quantCompareRows(runs);
+const quantOrder = [...COMPARE_QUANTS, COMPARE_Q3];
+---
+
+<Base
+  title="Q6 vs Q5 vs Q4 (Q3 estimate)"
+  description="Qwen3.6-35B-A3B on local-desktop: Q6_K, UD-Q5_K_XL, Q5_K_M, and Q4_K_M from official llama.cpp cards, plus a labeled UD-Q3_K_XL estimate. 1-GPU or split."
+>
+  <main id="main" class="mx-auto max-w-6xl px-4 py-10 sm:px-6">
+    <p class="kicker">
+      <a class="underline decoration-accent/40" href="/compare">Compare</a>
+      · {COMPARE_MODEL} · {COMPARE_ENGINE}
+    </p>
+    <h1 class="display mt-3 text-4xl sm:text-5xl">Which quant on this 35B?</h1>
+    <p class="mt-4 max-w-3xl text-lg leading-relaxed text-muted">
+      Quality vs speed vs VRAM for the house 35B on llama.cpp Vulkan.
+      Q6 / UD-Q5 / Q5_K_M / Q4 are measured on local-desktop.
+      <strong class="text-ink">{COMPARE_Q3}</strong> is a labeled estimate ({COMPARE_Q3_CITE}) — not a local-desktop run.
+      Prefer Q5 over Q4 when the file still fits. Q1/Q2 stay off.
+    </p>
+    <p class="mt-3 text-sm text-faint">
+      “Minimum system RAM needed” and “RAM needed at full context” use a measured peak when a card recorded one,
+      otherwise a calculator estimate rounded up to a real DIMM kit (64 / 128 / 192 / 256 GB).
+    </p>
+
+    <Callout type="warn" title="Overnight sweep, 2026-10-12">
+      <p>{SWEEP_REVERIFY}</p>
+    </Callout>
+    <Callout type="warn" title="Q3 is estimate-only">
+      <p>
+        No official 35B Q3 card landed on this sweep. The Q3 column stays estimate.
+        {FLASH_RERUN_NOTE}
+      </p>
+    </Callout>
+
+    <form id="compare-filters" class="mt-8 space-y-4" aria-controls="quant-table">
+      <div>
+        <p class="font-mono text-[0.68rem] uppercase tracking-[0.12em] text-faint">GPU count</p>
+        <div class="mt-2 flex flex-wrap gap-2" role="group" aria-label="GPU count">
+          <button type="button" class="chip is-on" data-filter="gpuCount" data-value="">1× and split</button>
+          <button type="button" class="chip" data-filter="gpuCount" data-value="1">1× R9700</button>
+          <button type="button" class="chip" data-filter="gpuCount" data-value="2">2× split</button>
+        </div>
+      </div>
+      <div>
+        <p class="font-mono text-[0.68rem] uppercase tracking-[0.12em] text-faint">Context</p>
+        <div class="mt-2 flex flex-wrap gap-2" role="group" aria-label="Context">
+          <button type="button" class="chip is-on" data-filter="context" data-value="">All</button>
+          {COMPARE_CONTEXTS.map((ctx) => (
+            <button type="button" class="chip" data-filter="context" data-value={String(ctx)}>
+              {ctx === 4096 ? '4K' : ctx === 32768 ? '32K' : ctx === 131072 ? '128K' : '256K'}
+            </button>
+          ))}
+        </div>
+      </div>
+      <div>
+        <p class="font-mono text-[0.68rem] uppercase tracking-[0.12em] text-faint">Quant</p>
+        <div class="mt-2 flex flex-wrap gap-2" role="group" aria-label="Quant">
+          <button type="button" class="chip is-on" data-filter="quant" data-value="">All</button>
+          {quantOrder.map((quant) => (
+            <button type="button" class="chip" data-filter="quant" data-value={quant}>
+              {quant === COMPARE_Q3 ? 'Q3 estimate' : quant}
+            </button>
+          ))}
+        </div>
+      </div>
+      <p class="text-sm text-muted" data-compare-status>{rows.length} layouts. Share this URL.</p>
+    </form>
+
+    <div class="mt-6 hidden rounded-2xl border border-line bg-raised/50 p-5" data-compare-empty role="status">
+      <p class="kicker">Empty</p>
+      <h2 class="mt-2 text-xl">Nothing matches that filter</h2>
+      <p class="mt-2 text-sm text-muted">We will not invent a Q3 tok/s or a missing card. Clear a chip.</p>
+    </div>
+
+    <div class="mt-8 grid gap-4 lg:hidden">
+      {rows.map((row) => (
+        <section
+          class="space-y-3"
+          data-compare-group
+          data-context={String(row.context)}
+          data-gpu={String(row.gpuCount)}
+        >
+          <h2 class="font-serif text-2xl">{row.gpuCount === 1 ? 'One R9700' : 'Split'} · {row.contextLabel}</h2>
+          {row.columns.map((col) => (
+            <article class="rounded-2xl border border-line bg-raised/50 p-5" data-compare-col data-quant={col.quant}>
+              <p class="kicker">{col.kind === 'estimate' ? 'Estimate' : 'Measured'}</p>
+              <h3 class="mt-1 text-xl tracking-tight">{col.quant}</h3>
+              <dl class="mt-4 grid grid-cols-2 gap-3 text-sm">
+                <div>
+                  <dt class="text-faint">Decode</dt>
+                  <dd class="tabular-nums">
+                    {col.runIds.length ? <a class="underline decoration-accent/40" href={col.href}>{col.decode}</a> : col.decode}
+                  </dd>
+                </div>
+                <div>
+                  <dt class="text-faint">Prefill</dt>
+                  <dd class="tabular-nums">{col.prefill}</dd>
+                </div>
+                <div>
+                  <dt class="text-faint">VRAM / card</dt>
+                  <dd class="tabular-nums">{col.vramPerGpu}</dd>
+                </div>
+                <div>
+                  <dt class="text-faint">VRAM total</dt>
+                  <dd class="tabular-nums">{col.vramTotal}</dd>
+                </div>
+                <div>
+                  <dt class="text-faint">Minimum system RAM</dt>
+                  <dd class="tabular-nums">{col.ramMin.text}</dd>
+                </div>
+                <div>
+                  <dt class="text-faint">RAM at full context</dt>
+                  <dd class="tabular-nums">{col.ramFull.text}</dd>
+                </div>
+              </dl>
+              {col.note ? <p class="mt-3 text-xs leading-relaxed text-faint">{col.note}</p> : null}
+            </article>
+          ))}
+        </section>
+      ))}
+    </div>
+
+    <div class="mt-8 hidden space-y-10 lg:block" id="quant-table">
+      {rows.map((row) => (
+        <section
+          data-compare-group
+          data-context={String(row.context)}
+          data-gpu={String(row.gpuCount)}
+        >
+          <h2 class="font-serif text-2xl">{row.gpuCount === 1 ? 'One R9700' : 'Split'} · {row.contextLabel}</h2>
+          <div class="mt-4 overflow-x-auto">
+            <table class="table-lab compare-sticky min-w-[64rem]">
+              <thead>
+                <tr>
+                  <th>Metric</th>
+                  {row.columns.map((col) => (
+                    <th data-compare-col data-quant={col.quant}>
+                      {col.quant}
+                      <span class="block text-[0.65rem] font-normal normal-case tracking-normal text-faint">
+                        {col.kind === 'estimate' ? 'estimate' : 'measured'}
+                      </span>
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Decode</td>
+                  {row.columns.map((col) => (
+                    <td class="tabular-nums" data-compare-col data-quant={col.quant}>
+                      {col.runIds.length ? <a class="underline decoration-accent/40" href={col.href}>{col.decode}</a> : col.decode}
+                    </td>
+                  ))}
+                </tr>
+                <tr>
+                  <td>Prefill</td>
+                  {row.columns.map((col) => (
+                    <td class="tabular-nums" data-compare-col data-quant={col.quant}>{col.prefill}</td>
+                  ))}
+                </tr>
+                <tr>
+                  <td>VRAM / card</td>
+                  {row.columns.map((col) => (
+                    <td class="tabular-nums" data-compare-col data-quant={col.quant}>{col.vramPerGpu}</td>
+                  ))}
+                </tr>
+                <tr>
+                  <td>VRAM total</td>
+                  {row.columns.map((col) => (
+                    <td class="tabular-nums" data-compare-col data-quant={col.quant}>{col.vramTotal}</td>
+                  ))}
+                </tr>
+                <tr>
+                  <td>Peak system RAM</td>
+                  {row.columns.map((col) => (
+                    <td class="tabular-nums" data-compare-col data-quant={col.quant}>{col.systemRam}</td>
+                  ))}
+                </tr>
+                <tr>
+                  <td>Minimum system RAM needed</td>
+                  {row.columns.map((col) => (
+                    <td class="tabular-nums" data-compare-col data-quant={col.quant}>{col.ramMin.text}</td>
+                  ))}
+                </tr>
+                <tr>
+                  <td>RAM needed at full context</td>
+                  {row.columns.map((col) => (
+                    <td class="tabular-nums" data-compare-col data-quant={col.quant}>{col.ramFull.text}</td>
+                  ))}
+                </tr>
+                <tr>
+                  <td>Notes</td>
+                  {row.columns.map((col) => (
+                    <td class="text-sm text-muted" data-compare-col data-quant={col.quant}>{col.note ?? 'none'}</td>
+                  ))}
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      ))}
+    </div>
+
+    <p class="mt-10 text-sm text-muted">
+      Layout picker:
+      <a class="underline decoration-accent/40" href="/compare/one-vs-two-gpu">one vs two GPU</a>
+      ·
+      <a class="underline decoration-accent/40" href="/quants">quant explainer</a>
+      ·
+      <a class="underline decoration-accent/40" href="/calculator">calculator</a>
+    </p>
+  </main>
+</Base>
+
+<script is:inline>
+  const QUANT_KEY = { 'Q6_K': 'q6', 'UD-Q5_K_XL': 'q5xl', 'Q5_K_M': 'q5', 'Q4_K_M': 'q4', 'UD-Q3_K_XL': 'q3' };
+  const CTX_KEY = { '4096': '4k', '32768': '32k', '131072': '128k', '262144': '256k' };
+  const state = { quant: '', context: '', gpuCount: '' };
+  const form = document.getElementById('compare-filters');
+  const status = document.querySelector('[data-compare-status]');
+  const empty = document.querySelector('[data-compare-empty]');
+
+  function readUrl() {
+    const q = new URLSearchParams(location.search);
+    const n = q.get('n');
+    state.gpuCount = n === '1' || n === '2' ? n : '';
+    const rawQ = (q.get('q') || '').split(',')[0];
+    const quant = Object.entries(QUANT_KEY).find(([, key]) => key === rawQ);
+    state.quant = quant ? quant[0] : '';
+    const rawC = (q.get('c') || '').split(',')[0];
+    const ctx = Object.entries(CTX_KEY).find(([, key]) => key === rawC);
+    state.context = ctx ? ctx[0] : '';
+  }
+
+  function writeUrl() {
+    const q = new URLSearchParams();
+    if (state.gpuCount) q.set('n', state.gpuCount);
+    if (state.quant && QUANT_KEY[state.quant]) q.set('q', QUANT_KEY[state.quant]);
+    if (state.context && CTX_KEY[state.context]) q.set('c', CTX_KEY[state.context]);
+    const next = q.toString();
+    const url = next ? location.pathname + '?' + next : location.pathname;
+    if (url !== location.pathname + location.search) history.replaceState({}, '', url);
+  }
+
+  function paintChips() {
+    if (!form) return;
+    form.querySelectorAll('[data-filter]').forEach((btn) => {
+      const key = btn.getAttribute('data-filter');
+      const value = btn.getAttribute('data-value') || '';
+      const on = key === 'quant' ? state.quant === value : key === 'context' ? state.context === value : state.gpuCount === value;
+      btn.classList.toggle('is-on', on);
+    });
+  }
+
+  function apply() {
+    writeUrl();
+    paintChips();
+    let groups = 0;
+    document.querySelectorAll('[data-compare-group]').forEach((node) => {
+      const ctx = node.getAttribute('data-context') || '';
+      const gpu = node.getAttribute('data-gpu') || '';
+      const match = (!state.context || ctx === state.context) && (!state.gpuCount || gpu === state.gpuCount);
+      node.hidden = !match;
+      if (match) groups += 1;
+    });
+    document.querySelectorAll('[data-compare-col]').forEach((node) => {
+      const quant = node.getAttribute('data-quant') || '';
+      node.hidden = !!(state.quant && quant !== state.quant);
+    });
+    if (status) status.textContent = Math.round(groups / 2) + ' layouts visible. Share this URL.';
+    const any = document.querySelectorAll('[data-compare-group]:not([hidden])').length;
+    if (empty) empty.classList.toggle('hidden', any > 0);
+  }
+
+  readUrl();
+  if (form) {
+    form.addEventListener('click', (event) => {
+      const btn = event.target.closest('[data-filter]');
+      if (!btn) return;
+      const key = btn.getAttribute('data-filter');
+      const value = btn.getAttribute('data-value') || '';
+      if (key === 'quant') state.quant = value;
+      if (key === 'context') state.context = value;
+      if (key === 'gpuCount') state.gpuCount = value;
+      apply();
+    });
+  }
+  apply();
+</script>
+
+<style>
+  .chip {
+    min-height: 2.25rem;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: var(--raised);
+    padding: 0.35rem 0.85rem;
+    font-size: 0.85rem;
+  }
+  .chip.is-on {
+    border-color: color-mix(in srgb, var(--accent) 50%, var(--line));
+    background: var(--accent-soft);
+    color: var(--accent-ink);
+  }
+  .compare-sticky thead th {
+    position: sticky;
+    top: var(--header-h);
+    z-index: 2;
+    background: var(--raised);
+  }
+</style>

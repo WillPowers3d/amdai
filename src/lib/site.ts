@@ -44,6 +44,7 @@ export function ogSlug(pathname: string) {
   if (slug === 'benchmarks' || slug === 'results') return 'stacks';
   if (slug === 'bios' || slug === 'credits' || slug === 'contribute' || slug === 'wanted') return 'default';
   if (slug === 'qwen' || slug === 'qwen36-dual' || slug === 'flash-daily' || slug === 'flash-ram-offload') return 'stacks';
+  if (slug === 'compare' || slug.startsWith('compare-')) return 'stacks';
   if (slug === 'models' || slug.startsWith('models-') || slug.startsWith('gpus-') || slug.startsWith('recipes-')) return 'gpus';
   return OG_PAGES.has(slug) ? slug : 'default';
 }
@@ -104,6 +105,7 @@ export const primaryNav: NavItem[] = [
   { href: '/start', label: 'Getting started', description: 'GPU → ROCm → llama.cpp → optional harness', group: 'path' },
   { href: '/stacks', label: 'Stacks', description: 'Daily driver and fast-agent cards from our test rig', group: 'path' },
   { href: '/qwen', label: 'Qwen compare', description: 'Every current 3.6 / 3.8 model × quant — sortable, filterable, measured cells from run cards', group: 'path' },
+  { href: '/compare', label: 'Compare 35B', description: 'One GPU vs split, and Q6 / Q5 / Q4 plus a labeled Q3 estimate — from local-desktop run cards', group: 'path' },
   { href: '/qwen36-dual', label: '35B on two cards', description: 'Split vs two copies of UD-Q5_K_XL on two R9700s — measured on local-desktop', group: 'path' },
   { href: '/flash-daily', label: 'Flash daily driver', description: 'Qwen 3.8 Flash VRAM + DDR5 offload at Q3–Q6, full 262K', group: 'path' },
   { href: '/flash-ram-offload', label: 'Flash RAM offload', description: 'Run Flash with experts on DDR5 — kits, measured DIMM speed, launch shape', group: 'path' },

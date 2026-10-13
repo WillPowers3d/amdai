@@ -137,5 +137,6 @@ describe('nav for the new pages', () => {
     assert.ok(primaryNav.some((item) => item.href === '/flash-daily'));
     assert.ok(primaryNav.some((item) => item.href === '/flash-ram-offload'));
     assert.ok(primaryNav.some((item) => item.href === '/glossary'));
+    assert.ok(primaryNav.some((item) => item.href === '/compare'));
   });
 });
