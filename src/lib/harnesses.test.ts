@@ -128,7 +128,7 @@ describe('copy-paste snippets', () => {
     const hermesStrata = harnessSnippet(list.find((row) => row.id === 'hermes')!, strata);
     assert.match(hermesLlama.code, /127\.0\.0\.1:8080\/v1/);
     assert.match(hermesStrata.code, /127\.0\.0\.1:8083\/v1/);
-    assert.match(hermesLlama.note ?? '', /TODO/);
+    assert.match(hermesLlama.note ?? '', /not recorded/);
 
     const goose = harnessSnippet(list.find((row) => row.id === 'goose')!, llama);
     assert.match(goose.code, /OPENAI_HOST=http:\/\/127\.0\.0\.1:8080$/m);

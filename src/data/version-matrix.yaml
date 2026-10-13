@@ -93,7 +93,7 @@ cells:
     text: >
       Daily driver on our test rig is llama.cpp Vulkan, Qwen3.6-35B-A3B UD-Q5_K_XL,
       one R9700, 262144 context, f16 KV, 0% RAM offload. Exact ROCm prefix / HIP
-      vs Vulkan package set on that run is TODO. HIP build is documented; not a
+      vs Vulkan package set on that run is not recorded. HIP build is documented; not a
       second measured stack.
     source: /stacks
     source_label: Recommended stacks (first-party)

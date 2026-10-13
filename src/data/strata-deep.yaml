@@ -37,11 +37,11 @@ limits:
       this rig.
   - title: MTP draft head is Q2 — we do not use it
     body: >-
-      PR #1381 states the MTP draft layer’s 512 routed experts were Q2_0 only
-      and that Q2_0 remains the default (Q8_0 and BF16 are opt-in arms). This
+      PR #1381 states the MTP draft layer’s 512 routed experts shipped only as a
+      2-bit default (Q8_0 and BF16 are opt-in arms). This
       site refuses Q1/Q2, including draft / MTP. We do not turn the head on.
-      The PR’s own 4-GPU measurement (IQ3_S) is Q2_0 49.5–49.9 tok/s against
-      Q8_0 48.9 — cited so you can see why they kept Q2_0, not as a house speed.
+      The PR’s own 4-GPU measurement (IQ3_S) is that default at 49.5–49.9 tok/s against
+      Q8_0 48.9 — cited so you can see why they kept the default, not as a house speed.
 
 first_party:
   - { label: Flash Q6, one prior run, strata: 32.6, llamacpp: 16, note: Measured on our rig, 2026-10 }
@@ -73,10 +73,10 @@ community:
     href: https://www.stratat.com/en/issues/1910
     date: retrieved 2026-10-13
     figures: Same report as the GitHub issue.
-  - title: "PR #1381 — MTP draft experts default Q2_0"
+  - title: "PR #1381 — MTP draft experts default 2-bit"
     href: https://www.stratat.com/en/pulls/1381
     date: retrieved 2026-10-13
-    figures: Q2_0 remains default. Their 4-GPU IQ3_S run Q2_0 49.5–49.9 vs Q8_0 48.9 tok/s. We do not use MTP.
+    figures: That 2-bit draft remains default. Their 4-GPU IQ3_S run 49.5–49.9 vs Q8_0 48.9 tok/s. We do not use MTP.
   - title: Strata v0.1.43.1 — PLE mmap / SATA-SSD prefill fix
     href: https://www.stratat.com/en/releases/v0.1.43.1
     date: retrieved 2026-10-13
@@ -87,10 +87,10 @@ community:
     href: https://raw.githubusercontent.com/Niko1221/Strata/master/docs/paper/Strata-Paper.pdf
     date: retrieved 2026-10-13
     figures: >-
-      Architecture paper for Flash-Next on a 12 GB card. Absolute Q2_0 / IQ2
+      Architecture paper for Flash-Next on a 12 GB card. Absolute low-bit
       tables are upstream, not house numbers. Q1/Q2 stay off on this site.
 
 we_dont_use_q2: >-
-  Upstream README and paper publish Q2_0 / IQ2 write speeds. We do not use those
+  Upstream README and paper publish low-bit write speeds. We do not use those
   as a house recommendation. Q1/Q2 and IQ1/IQ2 stay off, including the MTP draft
   head.

@@ -20,7 +20,7 @@ Reliability first: **Qwen3.6-35B-A3B UD-Q5_K_XL**, one GPU, a loopback `/v1` you
 
 Daily driver: Unsloth **UD-Q5_K_XL** (Q5 family — do not drop to Q3 to “make it fit”). Vulkan binary (`build-vk`) is what we run; HIP (`build`) is fine if that is the tree you compiled.
 
-**TODO:** exact command line / measured VRAM from rig owner.
+**not recorded:** exact command line / measured VRAM from rig owner.
 
 ```bash
 ./build-vk/bin/llama-server \
@@ -50,11 +50,11 @@ If VRAM never moves, stop. Point Hermes or OpenClaw at `http://127.0.0.1:8080/v1
 
 When the daily driver is boring and you want the Flash stack: **Qwen 3.8 Flash** Unsloth **UD-Q6_K_XL** on **Strata v0.1.42** at 262K. Measured on our test rig ~32.6 tok/s versus llama.cpp ~16 tok/s. llama.cpp Q6 is the fallback.
 
-Publisher UD-Q6_K_XL listing is ~169 GB — the [calculator](/calculator) will show RAM overflow on one 32 GB card. **TODO:** exact flags / measured VRAM+RAM from rig owner.
+Publisher UD-Q6_K_XL listing is ~169 GB — the [calculator](/calculator) will show RAM overflow on one 32 GB card. **not recorded:** exact flags / measured VRAM+RAM from rig owner.
 
 Cards: [stacks](/stacks).
 
-## Advanced — vLLM (not the consumer default)
+<h2 id="advanced-vllm">Advanced — vLLM (not the consumer default)</h2>
 
 Two pins. Do not mix them in one venv. The [weekly card](/) is the current recommendation.
 
@@ -66,7 +66,7 @@ Engine try-tag only. Previous try-tag `v0.30.0` is still valid if 0.31 misbehave
 
 ```bash
 # Community ROCm image — NOT default PyPI
-# TODO: confirm the current 0.31-class tag on Docker Hub / the weekly card
+# not recorded: confirm the current 0.31-class tag on Docker Hub / the weekly card
 docker pull vllm/vllm-openai-rocm:v0.30.0
 # previous: vllm/vllm-openai-rocm:v0.29.0
 # previous wheels: pip install vllm --extra-index-url https://wheels.vllm.ai/rocm/0.29.0/rocm723

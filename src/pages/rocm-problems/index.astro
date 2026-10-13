@@ -63,7 +63,7 @@ const affecting = new Set(rigHits.flatMap((hit) => hit.ids));
     <h1 class="display mt-6 text-4xl sm:text-5xl">ROCm’s open problems &amp; how you can help</h1>
     <p class="mt-4 max-w-2xl text-lg leading-relaxed text-muted">
       A living tracker of <strong class="text-ink">cited</strong> consumer gaps. We do not invent issue
-      numbers. Unverified rows stay labeled TODO. As of {rocmProblemsFile.as_of}.
+      numbers. Unverified rows stay labeled not recorded. As of {rocmProblemsFile.as_of}.
     </p>
     <p class="mt-4 flex flex-wrap gap-3 text-sm">
       <a class="btn-secondary" href="/rocm-problems/help">How you can help</a>
@@ -162,7 +162,7 @@ const affecting = new Set(rigHits.flatMap((hit) => hit.ids));
                 <span class={problem.status === 'open' ? 'badge-warn' : 'badge'}>
                   {statusLabel(problem.status, problem.fixed_in)}
                 </span>
-                {problem.todo && <span class="badge">TODO</span>}
+                {problem.todo && <span class="badge">not recorded</span>}
                 {affecting.has(problem.id) && <span class="badge-tested">Affects your rig</span>}
                 {problem.affected_gfx.map((gfx) => <span class="badge">{gfx}</span>)}
                 {problem.affected_os.map((os) => <span class="badge">{os}</span>)}

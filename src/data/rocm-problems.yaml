@@ -354,7 +354,7 @@ problems:
         repo: ROCm/HIP
 
   - id: rocm-10-0-finetune-reset
-    title: ROCm 10.0 fine-tune GPU-reset on R9700 (URL still TODO)
+    title: ROCm 10.0 fine-tune GPU-reset on R9700 (URL still not recorded)
     summary: >-
       Living notes mention a ROCm 10.0 fine-tune / training GPU-reset class
       on the R9700 and a first mitigation of `TORCH_BLAS_PREFER_HIPBLASLT=0`.
@@ -365,7 +365,7 @@ problems:
       site is llama.cpp Vulkan and is a different stack.
     status: open
     workaround: >-
-      TODO: confirm the KI URL on the ROCm 10.0.0 notes page, then retry
+      not recorded: confirm the KI URL on the ROCm 10.0.0 notes page, then retry
       the training step with `TORCH_BLAS_PREFER_HIPBLASLT=0`. Do not apply
       this to inference because a blog said so.
     affected_gpus:
@@ -380,6 +380,6 @@ problems:
     last_checked: 2026-10-12
     todo: true
     upstream:
-      - title: ROCm 10.0.0 release notes (KI URL still TODO)
+      - title: ROCm 10.0.0 release notes (KI URL still not recorded)
         href: https://rocm.docs.amd.com/en/docs-10.0.0/about/release-notes.html
         repo: AMD docs

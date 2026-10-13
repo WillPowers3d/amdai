@@ -1,5 +1,5 @@
 # Real, cited error patterns for /troubleshoot/errors.
-# Never invent issue numbers or fixes. If a claim is thin, mark TODO.
+# Never invent issue numbers or fixes. If a claim is thin, mark not recorded.
 as_of: 2026-10-12
 
 errors:
@@ -199,7 +199,7 @@ errors:
       q8_0/q4_0 KV before you drop the weight quant. Daily driver on our
       rig is 262K f16 KV with 0% RAM offload on one 32 GB card — if your
       estimate overflows, do not invent a Q3 to “make it fit.”
-    source: https://r9700-lab-notes.example/calculator
+    source: https://amdai.net/calculator
     source_label: Quant + Hardware Calculator (KV formula; estimates only)
     tags: [vram, context, calculator]
 

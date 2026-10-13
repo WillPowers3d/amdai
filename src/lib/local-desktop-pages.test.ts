@@ -118,7 +118,7 @@ describe('Strata deep dive', () => {
     assert.match(strata.why_faster, /32\.8/);
     assert.match(strata.x_search, /X \/ Twitter/);
     assert.match(strata.x_search, /No post we can cite/);
-    assert.ok(strata.limits.some((row) => /MTP/i.test(row.title) && /Q2_0/.test(row.body)));
+    assert.ok(strata.limits.some((row) => /MTP/i.test(row.title) && /49\.5/.test(row.body)));
     assert.match(strata.we_dont_use_q2, /stay off/);
     assert.ok(strata.community.some((row) => row.href.includes('issues/1910') && row.title.includes('#1910')));
     assert.ok(strata.community.some((row) => row.href.includes('pulls/1381') && row.title.includes('#1381')));

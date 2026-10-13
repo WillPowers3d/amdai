@@ -30,7 +30,7 @@ export const GET: APIRoute = async ({ params }) => {
       <link>${escapeXml(item.source_url)}</link>
       <guid>${escapeXml(item.id)}</guid>
       <pubDate>${new Date(item.date).toUTCString()}</pubDate>
-      <description>${escapeXml(item.summary)}${item.todo ? ' TODO' : ''}</description>
+      <description>${escapeXml(item.summary)}${item.todo ? ' not recorded' : ''}</description>
     </item>`,
       )
       .join('\n')}

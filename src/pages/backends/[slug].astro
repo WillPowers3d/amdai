@@ -53,14 +53,14 @@ const next = index >= 0 && index < neighbors.length - 1 ? neighbors[index + 1] :
         at short context, <strong>~88</strong> at 32K, <strong>~50</strong> at 256K; Q5_K_M
         <strong>108.3 tok/s</strong> (28.5 GB VRAM); Q4_K_M <strong>116.5 tok/s</strong> decode,
         <strong>1814 tok/s</strong> prefill at 32K. Exact command line / UD-Q5_K_XL VRAM stay
-        TODO on <a href="/stacks">stacks</a>. Table: <a href="/benchmarks">benchmarks</a>.
+        not recorded on <a href="/stacks">stacks</a>. Table: <a href="/benchmarks">benchmarks</a>.
       </Callout>
     )}
     {row.used_on_our_rig && row.id === 'strata' && (
       <Callout type="check" title="Used on our rig">
         Fast agent: Qwen 3.8 Flash Unsloth UD-Q6_K_XL on Strata <strong>v0.1.42</strong> at
         262K. First-party on this rig: about <strong>32.6 tok/s</strong> versus llama.cpp
-        about <strong>16 tok/s</strong> on that Flash Q6. Exact flags / VRAM+RAM stay TODO.
+        about <strong>16 tok/s</strong> on that Flash Q6. Exact flags / VRAM+RAM stay not recorded.
         RAM-offload page: <a href="/flash-ram-offload">/flash-ram-offload</a>.
       </Callout>
     )}

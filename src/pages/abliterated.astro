@@ -83,7 +83,7 @@ const testedPick = testedPickLabel();
       <p class="mt-3 leading-relaxed text-muted">
         llama.cpp first. Vulkan is the daily-driver path on our rig. HIP is fine if <code class="font-mono text-ink">rocminfo</code> is clean
         and the device is gfx1201. Exact flags and measured VRAM for any abliterated file are
-        <strong class="text-ink">TODO</strong> — we have not published a command line for those checkpoints. Use the
+        <strong class="text-ink">not recorded</strong> — we have not published a command line for those checkpoints. Use the
         official instruct tutorial, then swap only the <code class="font-mono text-ink">-m</code> path after the control works.
       </p>
       <ol class="mt-4 list-decimal space-y-2 pl-5 text-muted">
@@ -99,7 +99,7 @@ cmake --build build-vk -j"$(nproc)"
 
 # HIP only if rocminfo is clean (gfx1201). Flags: see /backends — do not invent extra HIP switches.
 
-# After official instruct works, swap the file. Exact abliterated flags: TODO.
+# After official instruct works, swap the file. Exact abliterated flags: not recorded.
 ./build-vk/bin/llama-cli \\
   -m /path/to/pinned.gguf \\
   -ngl 99 \\

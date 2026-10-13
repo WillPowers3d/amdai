@@ -109,7 +109,7 @@ function hasAnyTarget(update: StackUpdate): boolean {
 
 /**
  * Does this update apply to this saved rig?
- * TODO rows still match (shown labeled TODO). The notify script skips emailing them.
+ * not recorded rows still match (shown labeled not recorded). The notify script skips emailing them.
  */
 export function updateMatchesRig(update: StackUpdate, rig: SavedRigMatch): MatchReason {
   const reasons: string[] = [];

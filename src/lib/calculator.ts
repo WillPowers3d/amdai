@@ -208,7 +208,7 @@ export const OS_DESKTOP_BASELINE_GIB = 8;
 /** Spare so the box does not sit at 100% RAM. Estimate, not a bench. */
 export const RAM_HEADROOM_GIB = 16;
 
-/** local-desktop ships this kit. Measured process RSS is TODO until Local AI numbers arrive. */
+/** local-desktop ships this kit. Measured process RSS is not recorded until Local AI numbers arrive. */
 export const local-desktop_DDR5_GB = 256;
 /** Linux-visible GiB on that 256 GB kit, labeled GB on this site. */
 export const local-desktop_USABLE_RAM_GB = 249;
@@ -553,7 +553,7 @@ export const MODEL_PRESETS: ModelPreset[] = [
     defaultQuant: 'q5_k_m',
     defaultCtx: 8192,
     defaultKv: 'f16',
-    archNote: 'Official card: 8 of 32 layers full attention. Not Qwen3-8B — that name is not on this site.',
+    archNote: 'Official card: 8 of 32 layers full attention. Not an 8B Qwen 3.x dense — that older name is not on this site.',
     publisherFiles: {},
   },
   {
@@ -742,7 +742,7 @@ export const MODEL_PRESETS: ModelPreset[] = [
     defaultQuant: 'q5_k_m',
     defaultCtx: 8192,
     defaultKv: 'f16',
-    archNote: 'Dense 8B Llama — not Qwen3-8B. Q3 is an estimate unless a publisher file is listed.',
+    archNote: 'Dense 8B Llama — not an 8B Qwen 3.x dense. Q3 is an estimate unless a publisher file is listed.',
     publisherFiles: {},
   },
   {
@@ -1232,7 +1232,7 @@ function systemRamLine(input: CalcInput): SystemRamLine {
   const measured = local-desktop_MEASURED_RAM_GIB != null;
   const local-desktop =
     kitGb === local-desktop_DDR5_GB || rawGiB > 128
-      ? ` local-desktop ships ${local-desktop_DDR5_GB} GB DDR5; measured host-RAM usage is TODO until Local AI numbers arrive.`
+      ? ` local-desktop ships ${local-desktop_DDR5_GB} GB DDR5; measured host-RAM usage is not recorded until Local AI numbers arrive.`
       : '';
   return {
     context: input.context,

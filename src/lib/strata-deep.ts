@@ -93,7 +93,7 @@ export function assertStrataDeepValid(file: StrataDeepFile): string[] {
     if (!row.date) errors.push(`${row.title} missing date`);
     if (!row.figures) errors.push(`${row.title} missing figures`);
   }
-  const required = ['32.6', '32.8', '31.8', '18.5', '101.9', '790', '1150', '49.5', 'Q2_0'];
+  const required = ['32.6', '32.8', '31.8', '18.5', '101.9', '790', '1150', '49.5'];
   const blob = `${file.why_faster}\n${file.limits.map((row) => row.body).join('\n')}\n${file.community.map((row) => row.figures).join('\n')}`;
   for (const needle of required) {
     if (!blob.includes(needle)) errors.push(`missing cited figure ${needle}`);

@@ -33,21 +33,21 @@ export const FLASH_OFFLOAD_KITS = [128, 192, 256] as const;
 export const FLASH_OFFLOAD_QUANTS = ['UD-Q3_K_XL', 'UD-Q4_K_XL', 'UD-Q5_K_XL', 'UD-Q6_K_XL'] as const;
 
 export const LLAMA_EXPERT_OFFLOAD_LAUNCH = [
-  '# Shape only — exact -ot tensor regex and --n-cpu-moe N are TODO from the rig owner.',
+  '# Shape only — exact -ot tensor regex and --n-cpu-moe N are not recorded from the rig owner.',
   '# After --list-devices, exclude the iGPU if two Vulkan devices appear.',
   './build-vk/bin/llama-server \\',
   '  -m ~/models/UD-Q6_K_XL \\',
   '  -ngl 99 \\',
   '  -c 262144 \\',
-  '  --n-cpu-moe TODO \\',
-  '  -ot TODO \\',
+  '  --n-cpu-moe not recorded \\',
+  '  -ot not recorded \\',
   '  --cache-type-k f16 \\',
   '  --cache-type-v f16 \\',
   '  --host 127.0.0.1 --port 8080',
 ].join('\n');
 
 export const STRATA_EXPERT_OFFLOAD_LAUNCH = [
-  '# Shape only — exact expert-cache / RAM / SSD-tier flags TODO. No MTP.',
+  '# Shape only — exact expert-cache / RAM / SSD-tier flags not recorded. No MTP.',
   '# After rocminfo, exclude the iGPU if a second HIP device appears.',
   '# This site’s convention: 127.0.0.1:8083 so llama-server can keep :8080.',
   'curl -s http://127.0.0.1:8083/v1/models',

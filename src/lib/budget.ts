@@ -77,7 +77,7 @@ export function tierById(id: string): BudgetTier | undefined {
   return budgetTiers.find((tier) => tier.id === id);
 }
 
-/** Only matches when both band ends are real numbers. TODO bands never match a dollar input. */
+/** Only matches when both band ends are real numbers. Unset bands never match a dollar input. */
 export function tierForUsd(usd: number): BudgetTier | undefined {
   if (!Number.isFinite(usd) || usd <= 0) return undefined;
   return budgetTiers.find((tier) => {

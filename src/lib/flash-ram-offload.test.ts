@@ -93,8 +93,8 @@ describe('Flash RAM-offload page', () => {
   });
 
   it('publishes expert-offload launch shapes without inventing flag values or a Q1/Q2', () => {
-    assert.match(LLAMA_EXPERT_OFFLOAD_LAUNCH, /--n-cpu-moe TODO/);
-    assert.match(LLAMA_EXPERT_OFFLOAD_LAUNCH, /-ot TODO/);
+    assert.match(LLAMA_EXPERT_OFFLOAD_LAUNCH, /--n-cpu-moe not recorded/);
+    assert.match(LLAMA_EXPERT_OFFLOAD_LAUNCH, /-ot not recorded/);
     assert.match(STRATA_EXPERT_OFFLOAD_LAUNCH, /expert-cache/);
     assert.doesNotMatch(LLAMA_EXPERT_OFFLOAD_LAUNCH, /GGML_VK_VISIBLE_DEVICES=/);
     assert.doesNotMatch(STRATA_EXPERT_OFFLOAD_LAUNCH, /HIP_VISIBLE_DEVICES=/);

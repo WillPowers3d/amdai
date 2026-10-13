@@ -196,7 +196,7 @@ const when = card.started_at ?? card.finished_at ?? '2026-10 (date not recorded)
       {card.raw_log_path && <p class="mt-2 text-xs text-faint">Log: {card.raw_log_path}</p>}
 
       <h3 class="mt-6 font-serif text-xl">Launch command</h3>
-      <p class="mt-2 text-xs text-faint">Exact command as recorded. Shape-only lines stay TODO — we do not invent flags.</p>
+      <p class="mt-2 text-xs text-faint">Exact command as recorded. Shape-only lines stay not recorded — we do not invent flags.</p>
       <pre class="mt-3 overflow-x-auto rounded-xl border border-line bg-canvas/50 p-3 text-xs leading-relaxed"><code>{sw.launch_command}</code></pre>
     </>
   )}

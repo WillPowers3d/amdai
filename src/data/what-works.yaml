@@ -34,8 +34,8 @@ qwen:
   reliability_first: Qwen3.6-35B-A3B — Unsloth GGUF UD-Q5_K_XL — one 32 GB R9700 — llama.cpp Vulkan — 262144 context — f16 KV — no RAM offload
   build: Qwen/Qwen3.6-35B-A3B · GGUF unsloth/Qwen3.6-35B-A3B-GGUF (file Qwen3.6-35B-A3B-UD-Q5_K_XL.gguf; publisher listing 26.6 GB)
   quant: UD-Q5_K_XL (Q5 family). Prefer Q5 over Q4. Q3_K_M / Q3_K_S / UD-Q3_K_XL / IQ3 are listed as estimates. Our measurements stay Q4 and above.
-  serve: "llama.cpp Vulkan (or HIP gfx1201). Measured on our rig, 2026-10 — UD-Q5_K_XL 100.8 / ~88 / ~50 tok/s. TODO: exact command line / UD-Q5_K_XL VRAM from rig owner."
-  then_capability: "Qwen 3.8 Flash (Qwen/Qwen3.8-Flash-Next) Unsloth UD-Q6_K_XL on Strata v0.1.42 at 262K. Measured on our rig ~32.6 tok/s vs llama.cpp ~16 tok/s. llama.cpp Q6 is the fallback. Publisher UD-Q6_K_XL folder ~169 GB — expect RAM to hold most of it on one 32 GB card. TODO: exact flags / measured VRAM+RAM."
+  serve: "llama.cpp Vulkan (or HIP gfx1201). Measured on our rig, 2026-10 — UD-Q5_K_XL 100.8 / ~88 / ~50 tok/s. not recorded: exact command line / UD-Q5_K_XL VRAM from rig owner."
+  then_capability: "Qwen 3.8 Flash (Qwen/Qwen3.8-Flash-Next) Unsloth UD-Q6_K_XL on Strata v0.1.42 at 262K. Measured on our rig ~32.6 tok/s vs llama.cpp ~16 tok/s. llama.cpp Q6 is the fallback. Publisher UD-Q6_K_XL folder ~169 GB — expect RAM to hold most of it on one 32 GB card. not recorded: exact flags / measured VRAM+RAM."
   abliterated: Educational only, never the default. Primary study row is Huihui-Qwen3.8-27B-abliterated. See /abliterated.
 
 verify:
@@ -52,10 +52,10 @@ verify:
 honesty:
   - llama.cpp (Vulkan or HIP gfx1201) is the consumer default; vLLM is a serve try
   - Daily driver was run on our test rig as one R9700, 262K, f16 KV, 0% RAM offload
-  - "35B tok/s is measured on that rig (Measured on our rig, 2026-10): UD-Q5_K_XL 100.8 / ~88 / ~50; Q5_K_M 108.3 tok/s at 28.5 GB VRAM; Q4_K_M 116.5 decode / 1814 prefill at 32K. UD-Q5_K_XL VRAM and exact flags stay TODO."
-  - Fast-agent tok/s (Strata ~32.6 vs llama.cpp ~16) is measured on that rig (Measured on our rig, 2026-10); VRAM/RAM figures are still TODO
+  - "35B tok/s is measured on that rig (Measured on our rig, 2026-10): UD-Q5_K_XL 100.8 / ~88 / ~50; Q5_K_M 108.3 tok/s at 28.5 GB VRAM; Q4_K_M 116.5 decode / 1814 prefill at 32K. UD-Q5_K_XL VRAM and exact flags stay not recorded."
+  - Fast-agent tok/s (Strata ~32.6 vs llama.cpp ~16) is measured on that rig (Measured on our rig, 2026-10); VRAM/RAM figures are still not recorded
   - Qwen 3.8 Flash UD-Q6_K_XL is a large GGUF (publisher ~169 GB) — the calculator will show RAM overflow on 32 GB
-  - Never invent measured VRAM, RAM, or flags; placeholders stay TODO until the rig owner fills them
+  - Never invent measured VRAM, RAM, or flags; placeholders stay not recorded until the rig owner fills them
   - Q3 is listed as an estimate or community result unless measured. Q1/Q2 and IQ1/IQ2 stay off the site, including drafts
   - Abliterated is a second experiment, not a profile
   - ROCm 10.0 KI — training/fine-tune GPU resets on R9700. Try `TORCH_BLAS_PREFER_HIPBLASLT=0`

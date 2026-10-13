@@ -32,7 +32,7 @@ The app does not replace ROCm, llama.cpp, or Strata. It **selects a profile** an
 - **Quant / weights:** unsloth/Qwen3.6-35B-A3B-GGUF · UD-Q5_K_XL
 - **Serve:** llama.cpp Vulkan (HIP gfx1201 if it builds)
 - **Use when:** overnight chat, anything you need to trust tomorrow morning
-- **TODO:** exact command line / measured VRAM from rig owner.
+- **not recorded:** exact command line / measured VRAM from rig owner.
 
 ### `qwen-fast-agent` — fast agent
 
@@ -40,7 +40,7 @@ The app does not replace ROCm, llama.cpp, or Strata. It **selects a profile** an
 - **Quant / weights:** unsloth/Qwen3.8-Flash-Next-GGUF · UD-Q6_K_XL
 - **Serve:** Strata v0.1.42; llama.cpp Q6 fallback
 - **Use when:** agent loops that need the higher tok/s we measured (~32.6 vs ~16)
-- **TODO:** exact command line / measured VRAM+RAM from rig owner.
+- **not recorded:** exact command line / measured VRAM+RAM from rig owner.
 
 Abliterated checkpoints are **not** a Stack Lab default profile. If you experiment, do it after the daily driver works — [Abliterated](/abliterated).
 

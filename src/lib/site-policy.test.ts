@@ -8,7 +8,7 @@ import { QUANTS } from './calculator';
 const ROOT = new URL('../..', import.meta.url);
 const SITE_DIRS = ['src/pages', 'src/components', 'src/data', 'src/content', 'src/lib'];
 const SITE_EXTS = new Set(['.ts', '.astro', '.yaml', '.yml', '.md', '.mdx', '.mjs']);
-const SKIP = new Set(['site-policy.test.ts']);
+const SKIP = new Set(['site-policy.test.ts', 'site-qa.ts', 'site-qa.test.ts']);
 
 const FORBIDDEN = [
   /floor is q4/i,

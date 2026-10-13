@@ -27,7 +27,7 @@ const headings = [
   { depth: 2, slug: 'distro', text: 'Distro support' },
   { depth: 2, slug: 'r9700', text: 'ROCm 10.1 and the R9700' },
   { depth: 2, slug: 'cli', text: 'The ROCm CLI' },
-  { depth: 2, slug: 'notes', text: 'Version notes on this site' },
+  { depth: 2, slug: 'version-notes', text: 'Version notes on this site' },
 ];
 
 const updates = (await getCollection('updates')).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
@@ -209,7 +209,7 @@ const updates = (await getCollection('updates')).sort((a, b) => b.data.date.valu
     Do not assume the CLI replaced <code>amd-smi</code> or your llama.cpp build.
   </p>
 
-  <h2 id="notes">Version notes on this site</h2>
+  <h2 id="version-notes">Version notes on this site</h2>
   <p>
     Historical snapshots — including ROCm 10.0 and a given vLLM tag as
     <strong>examples of a week</strong>, not permanent law.

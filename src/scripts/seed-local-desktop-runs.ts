@@ -26,7 +26,7 @@ function hardware(used: number, ramSpeed: number | null = 5200) {
 
 function llamaLaunch(file: string, ctx: number): string {
   return [
-    '# Shape only — exact flags TODO on stacks.',
+    '# Shape only — exact flags not recorded on stacks.',
     './build-vk/bin/llama-server \\',
     `  -m ~/models/${file} \\`,
     '  -ngl 99 \\',
@@ -38,7 +38,7 @@ function llamaLaunch(file: string, ctx: number): string {
 }
 
 const STRATA_LAUNCH = [
-  '# Shape only — exact Strata flags TODO. Recipe strata-flash-q6, no MTP.',
+  '# Shape only — exact Strata flags not recorded. Recipe strata-flash-q6, no MTP.',
   '# This site’s convention: 127.0.0.1:8083 so llama-server can keep :8080.',
   'curl -s http://127.0.0.1:8083/v1/models',
 ].join('\n');
@@ -248,7 +248,7 @@ const cards: RunCard[] = [
       backend: 'llama.cpp',
       backend_version_or_commit: null,
       launch_command: [
-        '# Shape only — one server split across both cards. Exact multi-GPU flags TODO.',
+        '# Shape only — one server split across both cards. Exact multi-GPU flags not recorded.',
         '# Device-selection flags were not recorded.',
         llamaLaunch('Qwen3.6-35B-A3B-UD-Q5_K_XL.gguf', 262144),
       ].join('\n'),

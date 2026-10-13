@@ -411,8 +411,8 @@ export function harnessSnippet(row: Harness, ep: EndpointSet): HarnessSnippet {
   const { v1, host, port, model, key, target, label } = ep;
   const strataTodo =
     target === 'strata'
-      ? 'Exact Strata flags for our rig stay TODO in stacks.yaml. This is the port only.'
-      : 'Exact llama-server flags for our daily driver stay TODO in stacks.yaml. This is the port only.';
+      ? 'Exact Strata flags for our rig stay not recorded in stacks.yaml. This is the port only.'
+      : 'Exact llama-server flags for our daily driver stay not recorded in stacks.yaml. This is the port only.';
 
   switch (row.snippet) {
     case 'hermes-yaml':
@@ -599,7 +599,7 @@ env_key = "LOCAL_NOT_A_SECRET"
           filename: '~/.codex/config.toml',
           note:
             target === 'strata'
-              ? 'Current official wire_api is responses only. llama.cpp documents POST /v1/responses. Strata Responses support is not documented — treat as TODO.'
+              ? 'Current official wire_api is responses only. llama.cpp documents POST /v1/responses. Strata Responses support is not documented — treat as not recorded.'
               : 'Current official wire_api is responses only. Reserved provider ids: openai, ollama, lmstudio. llama.cpp documents POST /v1/responses.',
         },
       );
@@ -772,7 +772,7 @@ GENERIC_OPEN_AI_API_KEY=sk-123abc
 # Disable with: llama-server --no-webui
 # Bind 127.0.0.1 unless you mean to share.
 `,
-        { note: 'Daily-driver context is 262144; exact flags TODO in stacks.yaml.' },
+        { note: 'Daily-driver context is 262144; exact flags not recorded in stacks.yaml.' },
       );
 
     case 'comfyui':
@@ -819,8 +819,8 @@ curl -s ${ep.v1}/chat/completions \\
     {
       note:
         target === 'strata'
-          ? 'Strata port 8083 is this site’s convention for the fast-agent stack. Exact serve flags stay TODO.'
-          : 'llama-server default in llama.cpp docs is 8080. Exact daily-driver flags stay TODO.',
+          ? 'Strata port 8083 is this site’s convention for the fast-agent stack. Exact serve flags stay not recorded.'
+          : 'llama-server default in llama.cpp docs is 8080. Exact daily-driver flags stay not recorded.',
     },
   );
 }

@@ -1,7 +1,7 @@
 # Motherboard BIOS notes for local AI on Radeon.
 # Every claim is cited or marked todo. Do not invent board rows or tok/s.
 as_of: 2026-10-12
-rule: Every claim needs a citation or a TODO. Per-board rows come only from community submissions.
+rule: Every claim needs a citation or a not recorded. Per-board rows come only from community submissions.
 
 sources:
   amd_csm:

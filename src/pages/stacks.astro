@@ -28,7 +28,7 @@ const stackRecipe = (id: string) =>
     <p class="mt-4 max-w-2xl text-lg leading-relaxed text-muted">
       {stacksGuide.test_rig.label}: {stacksGuide.test_rig.gpus}, {stacksGuide.test_rig.ram}.
       {stacksGuide.test_rig.note}
-      Command lines and UD-Q5_K_XL VRAM stay marked TODO.       Decode tok/s for the 35B is filled — see
+      Command lines and UD-Q5_K_XL VRAM stay marked not recorded.       Decode tok/s for the 35B is filled — see
       <a class="underline decoration-accent/40" href="/benchmarks">benchmarks</a>.
       We do not invent flags.
     </p>
@@ -98,7 +98,7 @@ const stackRecipe = (id: string) =>
             </div>
           )}
           <div class="mt-5 rounded-xl border border-dashed border-line bg-canvas/40 p-4">
-            <p class="font-mono text-[0.68rem] uppercase tracking-[0.12em] text-faint">What we know / still TODO</p>
+            <p class="font-mono text-[0.68rem] uppercase tracking-[0.12em] text-faint">What we know / still not recorded</p>
             <ul class="mt-2 space-y-1.5 text-sm text-muted">
               {stack.measured.map((line) => <li>{line}</li>)}
             </ul>

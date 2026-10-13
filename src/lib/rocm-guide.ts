@@ -73,7 +73,7 @@ export const rocmPages: RocmPage[] = [
     href: '/rocm/faq',
     title: 'Misconceptions and FAQ',
     nav: 'FAQ',
-    description: 'What people get wrong about ROCm at home, answered with citations and TODOs where we do not have a source.',
+    description: 'What people get wrong about ROCm at home, answered with citations and gaps where we do not have a source.',
   },
 ];
 

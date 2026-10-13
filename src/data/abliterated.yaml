@@ -231,7 +231,7 @@ rows:
       Stock refusals and the coding / agent numbers on the Qwen card. On our
       rig this is the daily driver — Unsloth UD-Q5_K_XL on llama.cpp Vulkan,
       one R9700, 262K, f16 KV, 0% RAM offload. Exact flags and measured VRAM
-      for that stack remain TODO on /stacks.
+      for that stack remain not recorded on /stacks.
     caveats: >-
       This is not an abliterated model. If official instruct fails, fix the
       backend before you swap weights.
@@ -341,8 +341,8 @@ rows:
       or newer.
     caveats: >-
       Unverified on our rig. Qwen3.5 may need a current llama.cpp. Confirm
-      whether you want the vision mmproj. Q1/Q2 files exist on the
-      mradermacher card (Q2_K); we do not list Q1/Q2. Q3_K_* is listed as estimate/community unless measured.
+      whether you want the vision mmproj. Low-bit publisher files exist on the
+      mradermacher card; we do not list Q1/Q2. Q3_K_* is listed as estimate/community unless measured.
     best_use: Smaller educational file after official instruct works. Not tested on our rig.
     sources:
       - title: huihui-ai/Huihui-Qwen3.5-9B-abliterated
@@ -448,15 +448,15 @@ rows:
       from the base after the merge. Architecture listed as
       Qwen3_5ForConditionalGeneration, 64 layers, vocab 248320, native
       context 262144, vision yes. Converted with llama.cpp a94d563ed.
-      IQ2_M and IQ4_XS exist on the card; we do not list IQ2 (Q1/Q2 stay off) and
-      we skip IQ4_XS because the uploader says not to evaluate behavior there.
+      Extra-low and IQ4_XS files exist on the card; we do not list the 1/2-bit
+      ones (Q1/Q2 stay off) and we skip IQ4_XS because the uploader says not to evaluate behavior there.
     behavior: >-
       Card, vs unmodified base, same session: MMLU 83.4 → 83.3, ARC-Challenge
       58.9 → 57.7, HellaSwag 82.8 → 82.9, Winogrande 76.1 → 75.3 (mean −0.5;
       deltas inside or near reported SE). Held-out harmful-prompt refusals
       98/100 → 12/100; first-token KL 0.1191 (the published Heretic point
       after 200 trials). Weight-edit WikiText-2 PPL cost +0.0434 vs base
-      bf16. Among shipped K-quants, only IQ2_M is resolved as worse PPL;
+      bf16. Among shipped K-quants, only the extra-low 2-bit file is resolved as worse PPL;
       Q4_K_M through Q8_0 sit inside the error bars of each other. MTP
       speculative-decode tables are on the card (measured on that author's
       hardware, not our rig).

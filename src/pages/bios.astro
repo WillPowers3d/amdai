@@ -37,7 +37,7 @@ const emptyBoards = file.boards.length === 0;
     <p class="mt-4 max-w-2xl text-lg leading-relaxed text-muted">
       What the firmware must get right before ROCm or llama.cpp sees a 32&nbsp;GB card.
       Organized by chipset. Every sentence here is cited or marked
-      <strong class="text-ink">TODO</strong>. We do not invent a motherboard for
+      <strong class="text-ink">not recorded</strong>. We do not invent a motherboard for
       {emptyBoards ? 'local-desktop' : 'the test rig'}.
     </p>
     <div class="mt-6 flex flex-wrap gap-3">
@@ -49,7 +49,7 @@ const emptyBoards = file.boards.length === 0;
 
     <Callout type="note" title={file.rule}>
       As of {file.as_of}. Menu names move between vendors. If a string is not on an official
-      AMD, Intel, or ROCm page, it belongs in the board table with a citation — or it stays TODO.
+      AMD, Intel, or ROCm page, it belongs in the board table with a citation — or it stays not recorded.
     </Callout>
 
     <section id="settings" class="mt-12 scroll-mt-28" aria-labelledby="settings-heading">
@@ -74,7 +74,7 @@ const emptyBoards = file.boards.length === 0;
                         <a href={`#cite-${claim.cite}`} aria-label={`Source ${num}`}>[{num}]</a>
                       </sup>
                     ) : null}
-                    {claim.todo ? <span class="badge-warn ml-2">TODO</span> : null}
+                    {claim.todo ? <span class="badge-warn ml-2">not recorded</span> : null}
                   </li>
                 );
               })}
@@ -137,7 +137,7 @@ const emptyBoards = file.boards.length === 0;
                           <a href={`#cite-${note.cite}`} aria-label={`Source ${num}`}>[{num}]</a>
                         </sup>
                       ) : null}
-                      {note.todo ? <span class="badge-warn ml-2">TODO</span> : null}
+                      {note.todo ? <span class="badge-warn ml-2">not recorded</span> : null}
                     </li>
                   );
                 })}
@@ -194,7 +194,7 @@ const emptyBoards = file.boards.length === 0;
                   <td>{board.bios_version}</td>
                   <td>{board.notes}</td>
                   <td>
-                    {board.todo ? <span class="badge-warn">TODO</span> : board.cite ?? '—'}
+                    {board.todo ? <span class="badge-warn">not recorded</span> : board.cite ?? '—'}
                   </td>
                 </tr>
               ))}

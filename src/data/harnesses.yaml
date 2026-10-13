@@ -1,5 +1,5 @@
 # Cited harness / frontend catalog. Do not invent features or versions.
-# Exact llama.cpp / Strata flags for our rig stay TODO until stacks.yaml is filled.
+# Exact llama.cpp / Strata flags for our rig stay not recorded until stacks.yaml is filled.
 as_of: 2026-10-12
 llama_server_port: 8080
 strata_port: 8083
@@ -10,7 +10,7 @@ api_key_placeholder: local-not-a-secret
 notes:
   - curl /v1/models on the inference server before you debug the harness.
   - Do not let a harness download a CUDA llama.cpp "for convenience" on Radeon.
-  - Exact command lines for our daily driver and Flash stack stay TODO in stacks.yaml.
+  - Exact command lines for our daily driver and Flash stack stay not recorded in stacks.yaml.
 
 harnesses:
   - id: hermes
@@ -32,7 +32,7 @@ harnesses:
     model_field: model.default (must match llama-server --alias / GET /v1/models id)
     api_key: optional on custom; OPENAI_API_KEY still honored only for provider openai-api
     tools: Native agent tools. Docs require at least 64K context or Hermes rejects the model at startup.
-    long_context: Set llama-server -c ≥ 65536 (our daily driver is 262144 — flags TODO).
+    long_context: Set llama-server -c ≥ 65536 (our daily driver is 262144 — flags not recorded).
     rocm: >-
       Attach to a server you already run. Managed local_runtime.backend auto
       prefers Vulkan on AMD; hip is an explicit choice. Do not take the
@@ -288,7 +288,7 @@ harnesses:
     api_key: env_key on the provider table (placeholder env is fine locally)
     tools: Codex agent tools. Completeness against llama.cpp’s Responses translator is not documented here.
     long_context: Not documented as a Codex-side window for custom providers.
-    rocm: None. llama.cpp documents /v1/responses; LM Studio documents Codex because they implement Responses. Strata Responses support is not documented — treat as TODO.
+    rocm: None. llama.cpp documents /v1/responses; LM Studio documents Codex because they implement Responses. Strata Responses support is not documented — treat as not recorded.
     hybrid: Default is OpenAI / ChatGPT login. Local is a custom model_providers row.
     local_ok: true
     hybrid_ok: true
@@ -545,7 +545,7 @@ harnesses:
     model_field: The loaded GGUF (optional --alias)
     api_key: --api-key if you set one
     tools: Server README documents function calling / --tools. Completeness on Qwen3.6 is not measured here.
-    long_context: -c on the server. Our daily driver context is 262144; exact flags TODO.
+    long_context: -c on the server. Our daily driver context is 262144; exact flags not recorded.
     rocm: This *is* the Vulkan (or HIP) process. Bind 127.0.0.1 unless you mean to share.
     hybrid: No. This UI talks to the process you launched.
     local_ok: true

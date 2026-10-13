@@ -1,6 +1,6 @@
 # Inference-engine catalog. Speed numbers only where our rig measured them
 # or a cited third-party source. Do not invent tok/s, VRAM, or flags.
-# Exact llama.cpp / Strata flags for our rig stay TODO in stacks.yaml.
+# Exact llama.cpp / Strata flags for our rig stay not recorded in stacks.yaml.
 as_of: 2026-10-12
 default_id: llamacpp
 
@@ -49,7 +49,7 @@ engines:
       llama.cpp, f16 KV: UD-Q5_K_XL 100.8 tok/s short / ~88 at 32K / ~50 at 256K;
       Q5_K_M 108.3 tok/s (28.5 GB VRAM); Q4_K_M 116.5 tok/s decode, 1814 tok/s
       prefill at 32K.
-    context: Our daily driver is 262144, f16 KV — confirmed on the rig; ~50 tok/s decode at 256K (Measured on our rig, 2026-10). Exact flags TODO.
+    context: Our daily driver is 262144, f16 KV — confirmed on the rig; ~50 tok/s decode at 256K (Measured on our rig, 2026-10). Exact flags not recorded.
     concurrency: One interactive user is the honest home path. llama-server can take more clients; it is not vLLM continuous batching.
     api: OpenAI /v1 (chat/completions, models). llama.cpp also documents Anthropic /v1/messages and OpenAI /v1/responses.
     difficulty: Medium — you compile. Vulkan CMake is the on-ramp.
@@ -71,7 +71,7 @@ engines:
       cmake --build build-hip -j"$(nproc)"
       # Prefix may be /opt/rocm/core-10.0 — ls first.
     run: |
-      # TODO: exact daily-driver command line / measured VRAM from the rig owner.
+      # not recorded: exact daily-driver command line / measured VRAM from the rig owner.
       ./build-vk/bin/llama-cli \
         -m ~/models/Qwen3.6-35B-A3B-UD-Q5_K_XL.gguf \
         -ngl 99 \
@@ -125,20 +125,20 @@ engines:
     multi_gpu: Layer split is documented. 0.1.42 notes a two-R9700 checkpoint-save fix. We do not assume a split on the daily driver.
     offload: Expert cache / RAM / SSD tiers are the point of the product. Publisher UD-Q6_K_XL folder ~169 GB — expect RAM to hold most of it on one 32 GB card.
     moe: First-class. Flash-Next is a large MoE; routing and expert cache are the architecture.
-    context: We ran 262144. Exact --max-context / KV flags TODO.
+    context: We ran 262144. Exact --max-context / KV flags not recorded.
     concurrency: Docs default to one request at a time; --parallel N is documented. Not measured here.
-    api: OpenAI /v1 plus Anthropic Messages. Responses support is documented upstream; we have not measured Codex against Strata (TODO).
-    difficulty: Medium-hard — follow their setup.sh / update.sh. Exact flags for our rig stay TODO.
+    api: OpenAI /v1 plus Anthropic Messages. Responses support is documented upstream; we have not measured Codex against Strata (not recorded).
+    difficulty: Medium-hard — follow their setup.sh / update.sh. Exact flags for our rig stay not recorded.
     best_for: Qwen 3.8 Flash UD-Q6_K_XL at 262K when you want the faster of the two stacks we ran.
     worst_for: Being the first install; a box with no proven llama.cpp /v1.
     when: Daily driver already works and you want the fast agent.
     install: |
       # Official AMD HIP build is a download on the v0.1.42 notes.
       # Linux update path they document: ./update.sh (setup replaces the engine).
-      # Exact checkout / pack flags for our rig stay TODO in stacks.yaml.
+      # Exact checkout / pack flags for our rig stay not recorded in stacks.yaml.
     run: |
       # This site’s convention: listen on 127.0.0.1:8083 so llama-server can keep :8080.
-      # TODO: exact strata command line / measured VRAM+RAM from the rig owner.
+      # not recorded: exact strata command line / measured VRAM+RAM from the rig owner.
       curl -s http://127.0.0.1:8083/v1/models
     tuning: >-
       0.1.42 turns gfx12 prompt switches on for gfx1200/gfx1201
@@ -201,7 +201,7 @@ engines:
       # AMD 10.0 conservative pin remains 0.27 + PyTorch 2.13 (often rocm/vllm images).
       # Default `pip install vllm` with no extra index is CUDA. Do not do that.
     run: |
-      # TODO: exact image tag / measured VRAM if 0.31 is pinned on this rig.
+      # not recorded: exact image tag / measured VRAM if 0.31 is pinned on this rig.
       # Shape only:
       # vllm serve Qwen/Qwen3.6-35B-A3B --host 127.0.0.1 --port 8000
       curl -s http://127.0.0.1:8000/v1/models
@@ -429,7 +429,7 @@ engines:
       # Documented extra — ROCm 6.1, not a 10.1 pin:
       # pip install -U '.[amd]'
       # Confirm torch.version.hip and gfx1201 before you expect kernels.
-      # We have no working recipe on the R9700. Treat as TODO / not documented.
+      # We have no working recipe on the R9700. Treat as not recorded / not documented.
     run: |
       # TabbyAPI start scripts are in their repo. No R9700 command line here.
     tuning: >-

@@ -24,7 +24,7 @@ describe('bios catalog', () => {
     for (const id of REQUIRED_SETTING_IDS) {
       assert.ok(file.settings.some((setting) => setting.id === id), id);
     }
-    assert.match(file.rule, /citation|TODO/i);
+    assert.match(file.rule, /citation|not recorded/i);
   });
 
   it('grounds every claim and uses https sources only', () => {

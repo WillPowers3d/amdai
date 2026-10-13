@@ -110,7 +110,7 @@ const flash = file.runs.filter((run) => run.model.includes('Flash'));
         {file.test_rig.gpus}. {file.test_rig.ram}. {file.test_rig.note}
       </p>
       <Callout type="check" title={MEASURED_LABEL}>
-        {file.source}. As of {file.as_of}. Exact serve flags stay TODO on
+        {file.source}. As of {file.as_of}. Exact serve flags stay not recorded on
         <a href="/stacks">stacks</a>.
       </Callout>
 
@@ -250,7 +250,7 @@ const flash = file.runs.filter((run) => run.model.includes('Flash'));
           Daily-driver shape is Vulkan, UD-Q5_K_XL, 262144, f16 KV, 0% offload.
           Compile and serve notes:
           <a class="underline decoration-accent/40" href="/backends/llamacpp">llama.cpp</a>.
-          Exact flags stay TODO on <a class="underline decoration-accent/40" href="/stacks">stacks</a>.
+          Exact flags stay not recorded on <a class="underline decoration-accent/40" href="/stacks">stacks</a>.
         </li>
         <li>
           <strong class="text-ink">Strata for Flash Q6.</strong>

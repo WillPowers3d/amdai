@@ -52,7 +52,7 @@ const on = accountsEnabled();
             const updates = (rig.updates as Array<{ id: string; summary: string; source_url: string; todo?: boolean; severity: string }>)
               .map(
                 (u) =>
-                  `<li class="mt-1 text-sm"><a class="underline decoration-accent/40" href="${u.source_url}">${u.id}</a> · ${u.severity}${u.todo ? ' · TODO' : ''}<span class="block text-faint">${u.summary}</span></li>`,
+                  `<li class="mt-1 text-sm"><a class="underline decoration-accent/40" href="${u.source_url}">${u.id}</a> · ${u.severity}${u.todo ? ' · not recorded' : ''}<span class="block text-faint">${u.summary}</span></li>`,
               )
               .join('');
             return `<article class="mt-4 rounded-2xl border border-line p-4">

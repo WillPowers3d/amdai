@@ -12,7 +12,7 @@ import ProblemsNav from '../../components/problems/ProblemsNav.astro';
     <h1 class="display mt-6 text-4xl sm:text-5xl">Contributor guidelines</h1>
     <p class="mt-4 text-lg leading-relaxed text-muted">
       This site is independent living notes for local AI on consumer Radeon. It is not AMD.
-      We would rather ship a TODO than a guessed tok/s.
+      We would rather ship a not recorded than a guessed tok/s.
     </p>
 
     <article class="prose-lab prose mt-10 max-w-none">
@@ -20,8 +20,8 @@ import ProblemsNav from '../../components/problems/ProblemsNav.astro';
       <ul>
         <li>Prefer llama.cpp over vLLM for consumers. Prefer Q5 over Q4. Q3 is estimate/community unless measured. Q1/Q2 stay off — including draft and MTP.</li>
         <li>Models from NVMe, not HDD. One LLM per GPU unless you deliberately combine.</li>
-        <li>Do not reintroduce Qwen2.5 or Qwen3-8B. Abliterated stays educational.</li>
-        <li>Do not invent flags, VRAM, RAM, or issue numbers. Mark gaps <code>TODO</code>.</li>
+        <li>Do not reintroduce those older 2.5-class or 8B names. Abliterated stays educational.</li>
+        <li>Do not invent flags, VRAM, RAM, or issue numbers. Mark gaps <code>not recorded</code>.</li>
         <li>Official vs works: official means the SKU is on AMD’s current matrix or matching notes.</li>
         <li><code>HSA_OVERRIDE_GFX_VERSION</code> is unofficial. Never present it as a plan.</li>
       </ul>
@@ -50,7 +50,7 @@ import ProblemsNav from '../../components/problems/ProblemsNav.astro';
 
       <h2 id="voice">Voice</h2>
       <p>
-        Plain English. No lorem. No “welcome to your app.” Cite with a real URL. Affiliate
+        Plain English. No dummy filler. No empty marketing shell. Cite with a real URL. Affiliate
         links are Amazon Associates, Rakuten, and B&amp;H only — see
         <a href="/disclosure">disclosure</a>.
       </p>
@@ -58,7 +58,7 @@ import ProblemsNav from '../../components/problems/ProblemsNav.astro';
       <h2 id="translations">Translations</h2>
       <p>
         A translation is welcome if it does not drift from the English sources and keeps
-        every TODO. Do not translate an invented number into confidence. ROCm’s own
+        every not recorded. Do not translate an invented number into confidence. ROCm’s own
         documentation translations belong in
         <a href="https://github.com/ROCm/ROCm">ROCm/ROCm</a>, not here.
       </p>

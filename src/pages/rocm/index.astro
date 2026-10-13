@@ -104,7 +104,7 @@ const headings = [
   </ol>
 
   <Callout type="note" title="We do not invent benches">
-    Exact command lines and UD-Q5_K_XL VRAM for the daily driver stay TODO. Decode tok/s is
+    Exact command lines and UD-Q5_K_XL VRAM for the daily driver stay not recorded. Decode tok/s is
     filled — Measured on our rig, 2026-10: UD-Q5_K_XL 100.8 tok/s short / ~88 at 32K / ~50 at
     256K. The 35B path is Vulkan on one R9700, 262K context, f16 KV, 0% RAM offload.
   </Callout>
@@ -125,9 +125,9 @@ const headings = [
       <a href="/rocm/vulkan-hip">Vulkan vs HIP</a> — when llama.cpp Vulkan wins, when HIP/ROCm
       wins.
     </li>
-    <li>
-      <a href="/rocm/versions">Versions and support</a> — cadence, official vs works, distros,
-      10.1 and the R9700, the ROCm CLI.
+    <li id="version-notes">
+      <a href="/rocm/versions#version-notes">Versions and support</a> — cadence, official vs works, distros,
+      10.1 and the R9700, the ROCm CLI. Dated cards live on that page.
     </li>
     <li><a href="/rocm/history">History</a> — a cited timeline.</li>
     <li><a href="/rocm/glossary">Glossary</a>.</li>

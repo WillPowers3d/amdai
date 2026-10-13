@@ -66,7 +66,7 @@ describe('ROCm problems tracker', () => {
     }
     const todo = problems.find((row) => row.id === 'rocm-10-0-finetune-reset');
     assert.equal(todo?.todo, true);
-    assert.match(todo?.workaround ?? '', /TODO/);
+    assert.match(todo?.workaround ?? '', /not recorded/);
   });
 
   it('filters by GPU, OS, and status without inventing rows', () => {

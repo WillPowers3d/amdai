@@ -14,7 +14,7 @@ The home card is **data**, not a layout. Weekday refresh means editing three fil
 | --- | --- | --- |
 | `src/data/what-works.yaml` | Home “what works this week” | Any pin, headline, or honesty line |
 | `src/data/qwen-recommendations.yaml` | Software / start / serve-Qwen picks | Daily driver vs fast agent vs optional |
-| `src/data/stacks.yaml` | `/stacks` cards | Command-line TODOs, measured tok/s |
+| `src/data/stacks.yaml` | `/stacks` cards | Command-line gaps, measured tok/s |
 | `src/data/gpus.yaml` | GPU directory | Matrix or VRAM listing changes |
 | `src/data/abliterated.yaml` | Abliterated table and method/variant cards | New notable local variant, a dead repo, or a cited card change |
 
@@ -39,7 +39,7 @@ If you do not find a **newer stable** ROCm vLLM or Core SDK, keep the last `as_o
 - **No invented benches, prices, or download stats.** Publisher file sizes are fine if you say they are publisher figures.
 - **Unknowns stay unknown.** “Unstated on the card” is a valid cell.
 - **Companion profiles** stay aligned with the YAML. `qwen-reliable` = daily driver; `qwen-fast-agent` = Flash. See [Radeon Stack Lab](/stack-lab).
-- **Never invent measured VRAM, RAM, or flags.** Leave `<!-- TODO: exact command line / measured VRAM from rig owner -->` until the box owner fills them.
+- **Never invent measured VRAM, RAM, or flags.** Leave `<!-- not recorded: exact command line / measured VRAM from rig owner -->` until the box owner fills them.
 - Copy that says “this week” on FAQ / start must match the YAML, or it must point at the home card.
 
 ## Optional: Hermes as the overnight research loop

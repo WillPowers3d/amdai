@@ -62,7 +62,7 @@ if (accountsEnabled()) {
       <span class={problem.status === 'open' ? 'badge-warn' : 'badge'}>
         {statusLabel(problem.status, problem.fixed_in)}
       </span>
-      {problem.todo && <span class="badge">TODO — unverified KI</span>}
+      {problem.todo && <span class="badge">not recorded — unverified KI</span>}
       {problem.affected_gfx.map((gfx) => <span class="badge">{gfx}</span>)}
       {problem.affected_gpus.map((gpu) => <span class="badge">{gpu}</span>)}
       {problem.affected_os.map((os) => <span class="badge">{os}</span>)}

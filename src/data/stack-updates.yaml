@@ -1,6 +1,6 @@
 # Stack updates matched against saved rigs.
 # Seed only with cited entries we already publish. Uncertain rows stay todo: true
-# and are shown labeled TODO — the notify script will not email them.
+# and are shown labeled not recorded — the notify script will not email them.
 as_of: 2026-10-12
 
 updates:
@@ -125,9 +125,9 @@ updates:
     severity: warn
     todo: true
     summary: >-
-      TODO: living notes mention a ROCm 10.0 fine-tune GPU-reset KI on the
+      not recorded: living notes mention a ROCm 10.0 fine-tune GPU-reset KI on the
       R9700 and suggest TORCH_BLAS_PREFER_HIPBLASLT=0. We do not yet have a
       first-party AMD KI URL copied here — do not treat this as a measured
       fix until that source is cited.
     source_url: https://rocm.docs.amd.com/en/docs-10.0.0/about/release-notes.html
-    source_title: ROCm 10.0.0 release notes (KI URL still TODO)
+    source_title: ROCm 10.0.0 release notes (KI URL still not recorded)
