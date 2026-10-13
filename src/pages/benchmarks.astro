@@ -1,70 +1,83 @@
 ---
 import Base from '../layouts/Base.astro';
 import Callout from '../components/Callout.astro';
-import EvidenceBadge from '../components/EvidenceBadge.astro';
-import { compareRows, MEASURED_LABEL, metricLabel } from '../lib/benchmarks';
+import { MEASURED_LABEL } from '../lib/benchmarks';
 import { benchmarksFile } from '../lib/benchmarks-data';
+import { runs } from '../lib/run-card-data';
+import { COMPARE_Q3, COMPARE_Q3_CITE } from '../lib/local-desktop-compare';
+import {
+  COMPARE_CONTEXTS,
+  COMPARE_QUANTS,
+  FLASH_RERUN_NOTE,
+  MATRIX_BACKEND,
+  MATRIX_ENGINE,
+  MATRIX_KV,
+  MATRIX_MODEL,
+  SWEEP_REVERIFY,
+  citedDailyLaunch,
+  flashCitedPair,
+  flashCiteRows,
+  flashExtraRows,
+  matrixRows,
+} from '../lib/benchmarks-matrix';
 
 const file = benchmarksFile;
-const rows = compareRows(file);
-const thirtyFive = file.runs.filter((run) => run.model.includes('35B'));
-const flash = file.runs.filter((run) => run.model.includes('Flash'));
+const rows = matrixRows(runs);
+const flash = flashCiteRows(runs);
+const flashPair = flashCitedPair(flash);
+const flashExtra = flashExtraRows(flash);
+const launch = citedDailyLaunch(runs);
 ---
 
 <Base
-  title="Benchmarks"
-  description="First-party Qwen decode speeds on a Radeon AI PRO R9700 — llama.cpp and Strata, measured on our test rig. No leaderboard spam."
+  title="35B llama.cpp matrix"
+  description="Qwen3.6-35B-A3B on llama.cpp Vulkan: UD-Q5, Q5, Q4, and Q6 at 4K–256K, one GPU and split. Decode, prefill, VRAM, and RAM from official local-desktop run cards."
 >
   <main id="main" class="mx-auto max-w-6xl px-4 py-10 sm:px-6">
-    <p class="kicker">{file.label}</p>
+    <p class="kicker">{MEASURED_LABEL} · {file.test_rig.host}</p>
     <h1 class="display mt-3 text-4xl sm:text-5xl">Benchmarks</h1>
     <p class="mt-4 max-w-2xl text-lg leading-relaxed text-muted">
-      How to read a local-AI speed number on Radeon, then the handful of figures we
-      actually ran on {file.test_rig.host}. Nothing here is a scraped leaderboard.
-      If a cell is empty we write <strong class="text-ink">not measured</strong>.
+      How to read a local-AI speed number, then the official {MATRIX_MODEL} llama.cpp
+      matrix from <code>amdai-bench/run@1</code> cards on {file.test_rig.host}.
+      Empty stays <strong class="text-ink">not measured</strong>. Nothing here is a scraped leaderboard.
     </p>
     <div class="mt-6 flex flex-wrap gap-3">
-      <a class="btn-primary" href="#our-rig">Our test rig</a>
-      <a class="btn-secondary" href="#compare">Comparison table</a>
-          <a class="btn-ghost" href="/compare">Compare 35B</a>
-          <a class="btn-ghost" href="/results">Comparable results</a>
+      <a class="btn-primary" href="#matrix">35B matrix</a>
+      <a class="btn-secondary" href="#flash">Flash vs llama.cpp</a>
+      <a class="btn-ghost" href="/compare">Compare 35B</a>
+      <a class="btn-ghost" href="/results">Run cards</a>
       <a class="btn-ghost" href="/benchmarks/methodology">Gates / methodology</a>
+      <a class="btn-ghost" href="/stack-lab">Stack Lab</a>
       <a class="btn-ghost" href="/calculator">Calculator</a>
-      <a class="btn-ghost" href="/backends">Engines</a>
     </div>
 
     <section class="mt-12" aria-labelledby="method-heading">
-      <h2 id="method-heading" class="font-serif text-3xl">How to read a bench</h2>
+      <h2 id="method-heading" class="font-serif text-3xl">How to read a number</h2>
       <div class="mt-6 grid gap-4 md:grid-cols-2">
         <article class="card p-5">
           <p class="kicker">pp vs tg</p>
           <h3 class="mt-2 text-xl tracking-tight">Prefill and decode</h3>
           <p class="mt-3 text-sm leading-relaxed text-muted">
-            llama.cpp’s <code>llama-bench</code> prints <strong class="text-ink">pp</strong>
-            (prompt processing / prefill) and <strong class="text-ink">tg</strong>
-            (token generation / decode). Prefill is how fast the prompt is ingested.
-            Decode is how fast new tokens appear — the number people mean by “tok/s”
-            in chat. Every first-party figure on this page is <strong class="text-ink">tg</strong>
-            unless a column says otherwise.
+            llama.cpp <code>llama-bench</code> prints <strong class="text-ink">pp</strong>
+            (prefill) and <strong class="text-ink">tg</strong> (decode). Prefill is prompt ingest.
+            Decode is new tokens — the chat “tok/s”. This matrix prints both.
           </p>
         </article>
         <article class="card p-5">
           <p class="kicker">Short vs long</p>
           <h3 class="mt-2 text-xl tracking-tight">Context length changes the number</h3>
           <p class="mt-3 text-sm leading-relaxed text-muted">
-            Short context is a small prompt — the happy path. At 32K and 256K the KV
-            cache is larger, the card works harder, and decode drops. Comparing a
-            4K blog number to a 262K daily driver is a category error.
+            At 32K, 128K, and 256K the KV cache grows and decode drops. A 4K blog
+            figure is not a 256K daily-driver figure.
           </p>
         </article>
         <article class="card p-5">
           <p class="kicker">Where the weights live</p>
           <h3 class="mt-2 text-xl tracking-tight">VRAM, RAM, and offload</h3>
           <p class="mt-3 text-sm leading-relaxed text-muted">
-            Tokens stay fast when the whole file and its KV sit in one GPU.
-            Spill into system RAM and decode falls off a cliff. Our 35B daily
-            driver is 0% RAM offload on one 32 GB card. Flash Q6 is a much larger
-            file — expect RAM to hold most of it. Fit check:
+            Tokens stay fast when the file and KV sit on the GPU. Spill into system RAM
+            and decode falls. Q6 on one card at 32K and up is partly on DDR5 — that row
+            says so. Fit check:
             <a class="underline decoration-accent/40" href="/calculator">calculator</a>.
           </p>
         </article>
@@ -72,33 +85,10 @@ const flash = file.runs.filter((run) => run.model.includes('Flash'));
           <p class="kicker">The runtime</p>
           <h3 class="mt-2 text-xl tracking-tight">Engine is not optional</h3>
           <p class="mt-3 text-sm leading-relaxed text-muted">
-            The same GGUF on llama.cpp and Strata is two different programs.
-            Consumer default is <a class="underline decoration-accent/40" href="/backends/llamacpp">llama.cpp</a>
-            (Vulkan on this 35B). Strata is the Flash try we measured. A score
-            without engine, quant, context, KV type, and gfx is not a score.
-          </p>
-        </article>
-      </div>
-    </section>
-
-    <section class="mt-12" aria-labelledby="split-heading">
-      <h2 id="split-heading" class="font-serif text-3xl">Measured here vs cited elsewhere</h2>
-      <div class="mt-6 grid gap-4 md:grid-cols-2">
-        <article class="rounded-2xl border border-ok/40 bg-ok/10 p-5">
-          <p class="kicker text-ok">{MEASURED_LABEL}</p>
-          <h3 class="mt-2 text-xl tracking-tight">Our test rig</h3>
-          <p class="mt-3 text-sm leading-relaxed text-muted">
-            Green numbers on this site come from {file.test_rig.host}. Source note:
-            {file.source}. If we did not run it, we do not print a tok/s.
-          </p>
-        </article>
-        <article class="card p-5">
-          <p class="kicker">Cited from elsewhere</p>
-          <h3 class="mt-2 text-xl tracking-tight">None on this page</h3>
-          <p class="mt-3 text-sm leading-relaxed text-muted">
-            We would rather omit a third-party table than paste an unverified
-            leaderboard. Official docs below are for words (pp/tg, model cards,
-            the SKU) — not for someone else’s tok/s.
+            The same GGUF on llama.cpp and Strata is two programs. Consumer default is
+            <a class="underline decoration-accent/40" href="/backends/llamacpp">llama.cpp</a>
+            Vulkan on this 35B. A score without engine, quant, context, KV type, and gfx
+            is not a score.
           </p>
         </article>
       </div>
@@ -111,154 +101,281 @@ const flash = file.runs.filter((run) => run.model.includes('Flash'));
         {file.test_rig.gpus}. {file.test_rig.ram}. {file.test_rig.note}
       </p>
       <Callout type="check" title={MEASURED_LABEL}>
-        {file.source}. As of {file.as_of}. Exact serve flags stay not recorded on
-        <a href="/stacks">stacks</a>.
+        Official {MATRIX_ENGINE} {MATRIX_BACKEND} sweep, {MATRIX_KV} KV, same cards as
+        <a href="/results">/results</a> and <a href="/compare">/compare</a>.
+        GB is the Linux GiB value.
       </Callout>
-
-      <h3 class="mt-8 text-xl tracking-tight">Qwen3.6-35B-A3B · llama.cpp Vulkan</h3>
-      <p class="mt-2 max-w-2xl text-sm text-muted">
-        Unsloth GGUF, f16 KV, one R9700, 0% offload. Full 262144 context is available
-        for the daily driver. Long-context decode is only published for UD-Q5_K_XL.
-      </p>
-      <div class="card mt-4 overflow-x-auto">
-        <table class="table-lab min-w-[36rem]">
-          <caption>Qwen3.6-35B-A3B llama.cpp Vulkan decode on one R9700. Measured on our rig.</caption>
-          <thead>
-            <tr>
-              <th scope="col">Quant</th>
-              <th scope="col">Context</th>
-              <th scope="col">{metricLabel('tg')}</th>
-              <th scope="col">Evidence</th>
-              <th scope="col">Fit</th>
-            </tr>
-          </thead>
-          <tbody>
-            {thirtyFive.map((run) => (
-              <tr>
-                <td class="font-medium">{run.quant}</td>
-                <td>{run.context_label}</td>
-                <td>{run.tok_s == null ? 'not measured' : `~${run.tok_s} tok/s`}</td>
-                <td><EvidenceBadge tier="tested-our-rig" compact /></td>
-                <td>
-                  {run.calculator ? (
-                    <a class="underline decoration-accent/40" href={run.calculator}>Calculator</a>
-                  ) : (
-                    '—'
-                  )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-      <h3 class="mt-10 text-xl tracking-tight">Qwen 3.8 Flash · UD-Q6_K_XL · no MTP</h3>
-      <p class="mt-2 max-w-2xl text-sm text-muted">
-        Same file, two engines, 262K. Strata v0.1.42 via <code>strata-flash-q6</code>
-        versus llama.cpp Q6 with 8 threads.
-      </p>
-      <div class="card mt-4 overflow-x-auto">
-        <table class="table-lab min-w-[36rem]">
-          <caption>Qwen 3.8 Flash UD-Q6_K_XL decode on Strata and llama.cpp. Measured on our rig.</caption>
-          <thead>
-            <tr>
-              <th scope="col">Engine</th>
-              <th scope="col">Context</th>
-              <th scope="col">{metricLabel('tg')}</th>
-              <th scope="col">Evidence</th>
-              <th scope="col">Fit</th>
-            </tr>
-          </thead>
-          <tbody>
-            {flash.map((run) => (
-              <tr>
-                <td class="font-medium">
-                  {run.engine}
-                  {run.threads != null ? ` · ${run.threads} threads` : ''}
-                  {run.recipe ? ` · ${run.recipe}` : ''}
-                </td>
-                <td>{run.context_label}</td>
-                <td>{run.tok_s == null ? 'not measured' : `~${run.tok_s} tok/s`}</td>
-                <td><EvidenceBadge tier="tested-our-rig" compact /></td>
-                <td>
-                  {run.calculator ? (
-                    <a class="underline decoration-accent/40" href={run.calculator}>Calculator</a>
-                  ) : (
-                    '—'
-                  )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
     </section>
 
-    <section id="compare" class="mt-12 scroll-mt-28" aria-labelledby="compare-heading">
-      <h2 id="compare-heading" class="font-serif text-3xl">Engine × quant × context</h2>
-      <p class="mt-3 max-w-2xl text-muted">
-        Built only from the runs above. Share links open the matching
-        <a class="underline decoration-accent/40" href="/calculator">calculator</a>
-        preset — VRAM totals there stay estimates.
+    <section id="matrix" class="mt-12 scroll-mt-28" aria-labelledby="matrix-heading">
+      <h2 id="matrix-heading" class="font-serif text-3xl">{MATRIX_MODEL} · {MATRIX_ENGINE} {MATRIX_BACKEND}</h2>
+      <p class="mt-3 max-w-3xl text-muted">
+        UD-Q5_K_XL, Q5_K_M, Q4_K_M, and Q6_K at 4K / 32K / 128K / 256K.
+        One R9700 and a two-card split where the cards exist. Each row links to its
+        run page and the matching
+        <a class="underline decoration-accent/40" href="/compare/q4-q5-q6">quant</a>
+        and
+        <a class="underline decoration-accent/40" href="/compare/one-vs-two-gpu">layout</a>
+        views. {COMPARE_Q3} is a labeled estimate on compare — not a measured row here
+        ({COMPARE_Q3_CITE}).
       </p>
-      <div class="card mt-6 overflow-x-auto">
-        <table class="table-lab min-w-[44rem]">
-          <caption>Engine × quant × context from the first-party runs on this page. Empty cells stay not measured.</caption>
+
+      <Callout type="warn" title="Overnight sweep, 2026-10-12">
+        <p>{SWEEP_REVERIFY}</p>
+      </Callout>
+
+      <form id="bench-filters" class="mt-8 space-y-4" aria-controls="matrix-table">
+        <div>
+          <p class="font-mono text-[0.68rem] uppercase tracking-[0.12em] text-faint">Quant</p>
+          <div class="mt-2 flex flex-wrap gap-2" role="group" aria-label="Quant">
+            <button type="button" class="chip is-on" data-filter="quant" data-value="">All</button>
+            {COMPARE_QUANTS.map((quant) => (
+              <button type="button" class="chip" data-filter="quant" data-value={quant}>{quant}</button>
+            ))}
+          </div>
+        </div>
+        <div>
+          <p class="font-mono text-[0.68rem] uppercase tracking-[0.12em] text-faint">GPU count</p>
+          <div class="mt-2 flex flex-wrap gap-2" role="group" aria-label="GPU count">
+            <button type="button" class="chip is-on" data-filter="gpuCount" data-value="">1× and split</button>
+            <button type="button" class="chip" data-filter="gpuCount" data-value="1">1× R9700</button>
+            <button type="button" class="chip" data-filter="gpuCount" data-value="2">2× split</button>
+          </div>
+        </div>
+        <div>
+          <p class="font-mono text-[0.68rem] uppercase tracking-[0.12em] text-faint">Context</p>
+          <div class="mt-2 flex flex-wrap gap-2" role="group" aria-label="Context">
+            <button type="button" class="chip is-on" data-filter="context" data-value="">All</button>
+            {COMPARE_CONTEXTS.map((ctx) => (
+              <button type="button" class="chip" data-filter="context" data-value={String(ctx)}>
+                {ctx === 4096 ? '4K' : ctx === 32768 ? '32K' : ctx === 131072 ? '128K' : '256K'}
+              </button>
+            ))}
+          </div>
+        </div>
+        <p class="text-sm text-muted" data-bench-status>{rows.length} cells. Share this URL.</p>
+      </form>
+
+      <div class="mt-6 hidden rounded-2xl border border-line bg-raised/50 p-5" data-bench-empty role="status">
+        <p class="kicker">Empty</p>
+        <h3 class="mt-2 text-xl">Nothing matches that filter</h3>
+        <p class="mt-2 text-sm text-muted">We will not invent a missing card or a Q3 tok/s. Clear a chip.</p>
+      </div>
+
+      <div class="mt-8 grid gap-4 lg:hidden">
+        {rows.map((row) => (
+          <article
+            class="rounded-2xl border border-line bg-raised/50 p-5"
+            data-bench-row
+            data-quant={row.quant}
+            data-context={String(row.context)}
+            data-gpu={String(row.gpuCount)}
+          >
+            <p class="kicker">
+              {row.gpuCount === 1 ? 'One R9700' : 'Split'} · {row.contextLabel}
+              {row.pendingReverify ? ' · pending re-verify' : ''}
+            </p>
+            <h3 class="mt-1 text-xl tracking-tight">{row.quant}</h3>
+            <dl class="mt-4 grid grid-cols-2 gap-3 text-sm">
+              <div>
+                <dt class="text-faint">Decode</dt>
+                <dd class="tabular-nums">
+                  <a class="underline decoration-accent/40" href={row.runHref}>{row.decode}</a>
+                </dd>
+              </div>
+              <div>
+                <dt class="text-faint">Prefill</dt>
+                <dd class="tabular-nums">{row.prefill}</dd>
+              </div>
+              <div>
+                <dt class="text-faint">VRAM / card</dt>
+                <dd class="tabular-nums">{row.vramPerGpu}</dd>
+              </div>
+              <div>
+                <dt class="text-faint">VRAM total</dt>
+                <dd class="tabular-nums">{row.vramTotal}</dd>
+              </div>
+              <div>
+                <dt class="text-faint">Peak system RAM</dt>
+                <dd class="tabular-nums">{row.systemRam}</dd>
+              </div>
+              <div>
+                <dt class="text-faint">Compare</dt>
+                <dd>
+                  <a class="underline decoration-accent/40" href={row.compareQuantHref}>quants</a>
+                  {' · '}
+                  <a class="underline decoration-accent/40" href={row.compareLayoutHref}>layout</a>
+                </dd>
+              </div>
+            </dl>
+            {row.note ? <p class="mt-3 text-xs leading-relaxed text-faint">{row.note}</p> : null}
+          </article>
+        ))}
+      </div>
+
+      <div class="card mt-8 hidden overflow-x-auto lg:block" id="matrix-table">
+        <table class="table-lab compare-sticky min-w-[72rem]">
+          <caption>
+            {MATRIX_MODEL} on {MATRIX_ENGINE} {MATRIX_BACKEND}, {MATRIX_KV} KV. Decode, prefill, peak VRAM, and peak system RAM from official local-desktop run cards.
+          </caption>
           <thead>
             <tr>
-              <th scope="col">Engine</th>
               <th scope="col">Quant</th>
+              <th scope="col">GPUs</th>
               <th scope="col">Context</th>
-              <th scope="col">Metric</th>
-              <th scope="col">tok/s</th>
-              <th scope="col">Calculator</th>
+              <th scope="col">Decode</th>
+              <th scope="col">Prefill</th>
+              <th scope="col">VRAM / card</th>
+              <th scope="col">VRAM total</th>
+              <th scope="col">Peak RAM</th>
+              <th scope="col">Status</th>
+              <th scope="col">Links</th>
             </tr>
           </thead>
           <tbody>
             {rows.map((row) => (
-              <tr>
-                <td class="font-medium">{row.engine}</td>
-                <td>{row.quant}</td>
-                <td>{row.context}</td>
-                <td>{row.metric}</td>
-                <td>{row.tok_s}</td>
+              <tr data-bench-row data-quant={row.quant} data-context={String(row.context)} data-gpu={String(row.gpuCount)}>
+                <th scope="row">{row.quant}</th>
+                <td>{row.gpuCount === 1 ? '1×' : '2× split'}</td>
+                <td>{row.contextLabel}</td>
+                <td class="tabular-nums">
+                  <a class="underline decoration-accent/40" href={row.runHref}>{row.decode}</a>
+                </td>
+                <td class="tabular-nums">{row.prefill}</td>
+                <td class="tabular-nums">{row.vramPerGpu}</td>
+                <td class="tabular-nums">{row.vramTotal}</td>
+                <td class="tabular-nums">{row.systemRam}</td>
+                <td>{row.pendingReverify ? 'Pending re-verify' : 'Measured'}</td>
                 <td>
-                  {row.calculator ? (
-                    <a class="underline decoration-accent/40" href={row.calculator}>Open</a>
-                  ) : (
-                    '—'
-                  )}
+                  <a class="underline decoration-accent/40" href={row.compareQuantHref}>quants</a>
+                  {' · '}
+                  <a class="underline decoration-accent/40" href={row.compareLayoutHref}>layout</a>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
-      <p class="mt-3 text-xs text-faint">{file.label}. Source: {file.source}.</p>
+      <p class="mt-3 text-xs text-faint">
+        {MEASURED_LABEL}. Source: official local-desktop run cards ({MATRIX_ENGINE} c060ca974 {MATRIX_BACKEND}).
+      </p>
+    </section>
+
+    <section id="flash" class="mt-12 scroll-mt-28" aria-labelledby="flash-heading">
+      <h2 id="flash-heading" class="font-serif text-3xl">Flash Strata vs llama.cpp Q6</h2>
+      <p class="mt-3 max-w-2xl text-muted">
+        Same Qwen 3.8 Flash UD-Q6_K_XL file. The cited pair is the prior first-party
+        262K points: Strata ~32.6 tok/s versus llama.cpp ~16 tok/s. Extra rows below
+        are later cards on the same host — not new invented speeds. VRAM and RAM stay
+        not measured when the card omitted them. {FLASH_RERUN_NOTE}
+      </p>
+
+      <div class="card mt-6 overflow-x-auto">
+        <table class="table-lab min-w-[36rem]">
+          <caption>Cited prior Flash Q6 pair on local-desktop. Same file, two engines, 262K.</caption>
+          <thead>
+            <tr>
+              <th scope="col">Engine</th>
+              <th scope="col">Context</th>
+              <th scope="col">Decode</th>
+              <th scope="col">Prefill</th>
+              <th scope="col">VRAM</th>
+              <th scope="col">Card</th>
+            </tr>
+          </thead>
+          <tbody>
+            {flashPair.map((row) => (
+              <tr>
+                <td class="font-medium">{row.engine}</td>
+                <td>{row.contextLabel}</td>
+                <td class="tabular-nums">
+                  <a class="underline decoration-accent/40" href={row.runHref}>{row.decode}</a>
+                </td>
+                <td class="tabular-nums">{row.prefill}</td>
+                <td class="tabular-nums">{row.vram}</td>
+                <td><a class="underline decoration-accent/40" href={row.runHref}>{row.id}</a></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p class="mt-3 text-xs text-faint">
+        {flashPair[0]?.note ?? 'Prior first-party Flash Q6 on local-desktop.'}
+      </p>
+
+      {flashExtra.length ? (
+        <div class="card mt-8 overflow-x-auto">
+          <table class="table-lab min-w-[44rem]">
+            <caption>Additional Flash Q6 cards already on file — 8K / 32K / 100K, labeled pending rerun.</caption>
+            <thead>
+              <tr>
+                <th scope="col">Engine</th>
+                <th scope="col">Context</th>
+                <th scope="col">DIMM</th>
+                <th scope="col">Decode</th>
+                <th scope="col">Prefill</th>
+                <th scope="col">VRAM</th>
+                <th scope="col">Card</th>
+              </tr>
+            </thead>
+            <tbody>
+              {flashExtra.map((row) => (
+                <tr>
+                  <td class="font-medium">{row.engine}</td>
+                  <td>{row.contextLabel}</td>
+                  <td>{row.dimm}</td>
+                  <td class="tabular-nums">
+                    <a class="underline decoration-accent/40" href={row.runHref}>{row.decode}</a>
+                  </td>
+                  <td class="tabular-nums">{row.prefill}</td>
+                  <td class="tabular-nums">{row.vram}</td>
+                  <td><a class="underline decoration-accent/40" href={row.runHref}>{row.id}</a></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      ) : null}
     </section>
 
     <section id="reproduce" class="mt-12 scroll-mt-28" aria-labelledby="repro-heading">
       <h2 id="repro-heading" class="font-serif text-3xl">How to reproduce</h2>
       <ol class="mt-6 space-y-4 text-sm leading-relaxed text-muted">
         <li>
-          <strong class="text-ink">Stack Lab — Benchmark my rig (upcoming).</strong>
-          The Ubuntu companion will grow a flow that records model, quant, context,
-          engine, gfx, and tok/s without inventing a number. The comparable catalog
-          is already on <a class="underline decoration-accent/40" href="/results">/results</a>
-          as <code>amdai-bench/run@1</code> cards. Stack Lab’s amdai-bench must emit that schema.
+          <strong class="text-ink">Radeon Stack Lab records <code>amdai-bench/run@1</code>.</strong>
+          The Ubuntu companion emits one official card per run from the UI, the CLI,
+          and the overnight scheduler. Lab Notes ingests those cards onto
+          <a class="underline decoration-accent/40" href="/results">/results</a>.
+          There is no public download URL — the app is a local Origin / repo install.
           Map of the profiles:
           <a class="underline decoration-accent/40" href="/stack-lab">Radeon Stack Lab</a>.
         </li>
         <li>
           <strong class="text-ink">llama.cpp on one R9700.</strong>
           Daily-driver shape is Vulkan, UD-Q5_K_XL, 262144, f16 KV, 0% offload.
-          Compile and serve notes:
+          {launch ? (
+            <>
+              {' '}Overnight cards recorded <code>llama-bench</code>, not llama-server.
+              Peak VRAM total {launch.vram4k} at 4K and {launch.vram256k} at 256K;
+              peak system RAM {launch.ram4k} and {launch.ram256k}. {launch.note}
+              {' '}Full launch on
+              <a class="underline decoration-accent/40" href={launch.href}>{launch.runId}</a>.
+            </>
+          ) : (
+            <> llama-server flags are not on the card.</>
+          )}
+          {' '}Compile notes:
           <a class="underline decoration-accent/40" href="/backends/llamacpp">llama.cpp</a>.
-          Exact flags stay not recorded on <a class="underline decoration-accent/40" href="/stacks">stacks</a>.
         </li>
+        {launch ? (
+          <li>
+            <pre class="mt-2 overflow-x-auto rounded-xl border border-line bg-raised/40 p-3 text-xs leading-relaxed" tabindex="0"><code>{launch.command}</code></pre>
+          </li>
+        ) : null}
         <li>
           <strong class="text-ink">Strata for Flash Q6.</strong>
-          v0.1.42, recipe <code>strata-flash-q6</code>, no MTP, 262K.
+          v0.1.42, recipe <code>strata-flash-q6</code>, no MTP, 262K cited pair above.
+          Exact Strata serve flags are not on the card.
           <a class="underline decoration-accent/40" href="/backends/strata">Strata</a>.
           Do not treat this as a HIP-versus-Vulkan verdict.
         </li>
@@ -288,3 +405,101 @@ const flash = file.runs.filter((run) => run.model.includes('Flash'));
     </section>
   </main>
 </Base>
+
+<script is:inline>
+  const QUANT_KEY = { 'Q6_K': 'q6', 'UD-Q5_K_XL': 'q5xl', 'Q5_K_M': 'q5', 'Q4_K_M': 'q4' };
+  const CTX_KEY = { '4096': '4k', '32768': '32k', '131072': '128k', '262144': '256k' };
+  const state = { quant: '', context: '', gpuCount: '' };
+  const form = document.getElementById('bench-filters');
+  const status = document.querySelector('[data-bench-status]');
+  const empty = document.querySelector('[data-bench-empty]');
+
+  function readUrl() {
+    const q = new URLSearchParams(location.search);
+    const n = q.get('n');
+    state.gpuCount = n === '1' || n === '2' ? n : '';
+    const rawQ = (q.get('q') || '').split(',')[0];
+    const quant = Object.entries(QUANT_KEY).find(([, key]) => key === rawQ);
+    state.quant = quant ? quant[0] : '';
+    const rawC = (q.get('c') || '').split(',')[0];
+    const ctx = Object.entries(CTX_KEY).find(([, key]) => key === rawC);
+    state.context = ctx ? ctx[0] : '';
+  }
+
+  function writeUrl() {
+    const q = new URLSearchParams();
+    if (state.gpuCount) q.set('n', state.gpuCount);
+    if (state.quant && QUANT_KEY[state.quant]) q.set('q', QUANT_KEY[state.quant]);
+    if (state.context && CTX_KEY[state.context]) q.set('c', CTX_KEY[state.context]);
+    const next = q.toString();
+    const url = next ? location.pathname + '?' + next : location.pathname;
+    if (url !== location.pathname + location.search) history.replaceState({}, '', url);
+  }
+
+  function paintChips() {
+    if (!form) return;
+    form.querySelectorAll('[data-filter]').forEach((btn) => {
+      const key = btn.getAttribute('data-filter');
+      const value = btn.getAttribute('data-value') || '';
+      const on = key === 'quant' ? state.quant === value : key === 'context' ? state.context === value : state.gpuCount === value;
+      btn.classList.toggle('is-on', on);
+    });
+  }
+
+  function apply() {
+    writeUrl();
+    paintChips();
+    let visible = 0;
+    document.querySelectorAll('[data-bench-row]').forEach((node) => {
+      const quant = node.getAttribute('data-quant') || '';
+      const ctx = node.getAttribute('data-context') || '';
+      const gpu = node.getAttribute('data-gpu') || '';
+      const match =
+        (!state.quant || quant === state.quant) &&
+        (!state.context || ctx === state.context) &&
+        (!state.gpuCount || gpu === state.gpuCount);
+      node.hidden = !match;
+      if (match) visible += 1;
+    });
+    const cells = Math.round(visible / 2);
+    if (status) status.textContent = cells + ' cells visible. Share this URL.';
+    if (empty) empty.classList.toggle('hidden', cells > 0);
+  }
+
+  readUrl();
+  if (form) {
+    form.addEventListener('click', (event) => {
+      const btn = event.target.closest('[data-filter]');
+      if (!btn) return;
+      const key = btn.getAttribute('data-filter');
+      const value = btn.getAttribute('data-value') || '';
+      if (key === 'quant') state.quant = value;
+      if (key === 'context') state.context = value;
+      if (key === 'gpuCount') state.gpuCount = value;
+      apply();
+    });
+  }
+  apply();
+</script>
+
+<style>
+  .chip {
+    min-height: 2.25rem;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: var(--raised);
+    padding: 0.35rem 0.85rem;
+    font-size: 0.85rem;
+  }
+  .chip.is-on {
+    border-color: color-mix(in srgb, var(--accent) 50%, var(--line));
+    background: var(--accent-soft);
+    color: var(--accent-ink);
+  }
+  .compare-sticky thead th {
+    position: sticky;
+    top: var(--header-h);
+    z-index: 2;
+    background: var(--raised);
+  }
+</style>

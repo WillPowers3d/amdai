@@ -59,7 +59,7 @@ A **harness** is the agent loop *above* the model. It does not replace ROCm.
 
 Default: **Qwen3.6-35B-A3B** Unsloth **UD-Q5_K_XL** on **one** R9700, llama.cpp Vulkan, 262144 context, f16 KV, no RAM offload. Measured on our rig, 2026-10: **102.39 tok/s** short context, **90.52** at 32K, **66.43** at 128K, **44.4** at 256K. Fast agents: **Qwen 3.8 Flash** UD-Q6_K_XL on Strata. Abliterated weights come after that pipe is boring.
 
-**not recorded:** exact command line / UD-Q5_K_XL VRAM from rig owner.
+Overnight UD-Q5_K_XL cards recorded **llama-bench** (not llama-server): `-dev Vulkan1 -sm layer -ngl 99 -fitt 1024 -fa 1 -ctk f16 -ctv f16`. Peak VRAM total **25.97 GB** at 4K and **29.34 GB** at 256K on one R9700; peak system RAM **37.32 GB** and **42.9 GB**. llama-server flags are not on the card. Full launch: [run card](/results/local-desktop-20261012-2311-35b-udq5kxl-1gpu-4k-llamacpp-f16).
 
 <QwenPicks />
 

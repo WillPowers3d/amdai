@@ -528,5 +528,3 @@ export function formatExternalReport(rows: ExternalLinkRow[], asOf: string): str
   }
   return `${lines.join('\n')}\n`;
 }
-
-export { posix };

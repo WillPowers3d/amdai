@@ -297,8 +297,8 @@ setMeta(
 );
 setMeta(
   '/benchmarks',
-  'R9700 benchmarks',
-  'First-party Qwen decode on a Radeon AI PRO R9700 — llama.cpp and Strata, measured on the lab rig. Empty cells stay empty.',
+  '35B llama.cpp matrix',
+  'Qwen3.6-35B-A3B on llama.cpp Vulkan: UD-Q5, Q5, Q4, and Q6 at 4K–256K, one GPU and split. Decode, prefill, VRAM, and RAM from official local-desktop run cards.',
 );
 setMeta(
   '/benchmarks/methodology',

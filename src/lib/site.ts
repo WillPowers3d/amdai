@@ -120,7 +120,7 @@ export const primaryNav: NavItem[] = [
   { href: '/qwen36-dual', label: '35B on two cards', description: 'Split vs two copies of UD-Q5_K_XL on two R9700s — measured on local-desktop', group: 'path' },
   { href: '/flash-daily', label: 'Flash daily driver', description: 'Qwen 3.8 Flash VRAM + DDR5 offload at Q3–Q6, full 262K', group: 'path' },
   { href: '/flash-ram-offload', label: 'Flash RAM offload', description: 'Run Flash with experts on DDR5 — kits, measured DIMM speed, launch shape', group: 'path' },
-  { href: '/benchmarks', label: 'Benchmarks', description: 'First-party tok/s from the R9700 rig — no leaderboard spam', group: 'path' },
+  { href: '/benchmarks', label: 'Benchmarks', description: 'Cited 35B llama.cpp matrix from local-desktop run cards — Flash stays its own block', group: 'path' },
   { href: '/results', label: 'Results', description: 'Official amdai-bench/run@1 cards — amdai’s verified local-desktop tests, exact launch command', group: 'path' },
   { href: '/budget', label: 'Budget', description: 'Starter → Pro Radeon builds, no invented prices', group: 'path' },
   { href: '/calculator', label: 'Calculator', description: 'Size a model, ask what a Radeon can run, or read a speed floor — Q3 through BF16', group: 'path' },
