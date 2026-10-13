@@ -91,6 +91,7 @@ export const CONSUMER_NAV_LINKS = [
   { href: '/gpus/rx-7900-gre', label: 'RX 7900 GRE' },
   { href: '/gpus/rx7800xt', label: 'RX 7800 XT' },
   { href: '/gpus/rx-7700-xt', label: 'RX 7700 XT' },
+  { href: '/gpus/rx-7600-xt', label: 'RX 7600 XT' },
   { href: '/gpus/rx-9070-xt', label: 'RX 9070 XT' },
   { href: '/gpus/rx-9060-xt', label: 'RX 9060 XT' },
 ] as const;
