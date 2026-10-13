@@ -1,0 +1,619 @@
+---
+import Base from '../layouts/Base.astro';
+import Callout from '../components/Callout.astro';
+import { runs } from '../lib/run-card-data';
+import {
+  CODER390_HF,
+  CODER390_HF_GGUF,
+  DEFAULT_QWEN_COLS,
+  DEFAULT_QWEN_RIG,
+  QWEN_ALL_COLS,
+  QWEN_BACKENDS,
+  QWEN_COL_LABEL,
+  QWEN_MY_RIG_STORAGE_KEY,
+  QWEN_RAM_KITS,
+  qwenCompareRows,
+  type QwenColId,
+} from '../lib/qwen-compare';
+import { officialLinks } from '../lib/site';
+
+const rows = qwenCompareRows(runs);
+const measuredCount = rows.filter((row) =>
+  Object.values(row.decode).some((cell) => cell.value != null) ||
+  Object.values(row.prefill).some((cell) => cell.value != null),
+).length;
+const payload = rows.map((row) => ({
+  id: row.id,
+  family: row.spec.family,
+  model: row.spec.model,
+  short: row.spec.short,
+  type: row.type,
+  total: row.spec.totalParamsB,
+  active: row.spec.activeParamsB,
+  ctx: row.spec.nativeContext,
+  quant: row.spec.quant,
+  edition: row.spec.edition,
+  size: row.fileSizeText,
+  sizeGb: row.fileSizeGb,
+  sizeSource: row.sizeSource,
+  sizeCite: row.spec.sizeCite,
+  vram32: row.vram32.text,
+  vram32n: row.vram32.gib,
+  vram128: row.vram128.text,
+  vram128n: row.vram128.gib,
+  vramFull: row.vramFull.text,
+  vramFulln: row.vramFull.gib,
+  fit1: row.fit1x.text,
+  fit1v: row.fit1x.verdict,
+  fit2: row.fit2x.text,
+  fit2v: row.fit2x.verdict,
+  offload: row.offload1x.text,
+  offloadn: row.offload1x.gib,
+  decodeLlama: row.decode.llamacpp.text,
+  decodeLlaman: row.decode.llamacpp.value,
+  decodeStrata: row.decode.strata.text,
+  decodeStratan: row.decode.strata.value,
+  decodeVllm: row.decode.vllm.text,
+  decodeVllmn: row.decode.vllm.value,
+  prefillLlama: row.prefill.llamacpp.text,
+  prefillLlaman: row.prefill.llamacpp.value,
+  prefillStrata: row.prefill.strata.text,
+  prefillStratan: row.prefill.strata.value,
+  prefillVllm: row.prefill.vllm.text,
+  prefillVllmn: row.prefill.vllm.value,
+  hf: row.spec.hfUrl,
+  gguf: row.spec.ggufUrl,
+  runs: row.runHref,
+  runIds: row.runIds,
+  note: row.spec.note,
+  fits: {
+    llamacpp: { 1: row.fits.llamacpp[1], 2: row.fits.llamacpp[2] },
+    strata: { 1: row.fits.strata[1], 2: row.fits.strata[2] },
+    vllm: { 1: row.fits.vllm[1], 2: row.fits.vllm[2] },
+  },
+}));
+---
+
+<Base
+  title="Qwen 3.6 and 3.8 comparison"
+  description="Sortable comparison of every current Qwen 3.6 and 3.8 model × quant. Measured tok/s from local-desktop run cards; VRAM and fit are calculator estimates."
+>
+  <main id="main" class="mx-auto max-w-[96rem] px-4 py-10 sm:px-6">
+    <p class="kicker">Qwen 3.6 · Qwen 3.8 · one row per file</p>
+    <h1 class="display mt-3 text-4xl sm:text-5xl">Every current Qwen, side by side</h1>
+    <p class="mt-4 max-w-3xl text-lg leading-relaxed text-muted">
+      One row per model × quant for the 3.6 and 3.8 families we actually talk about:
+      35B-A3B, 27B, Flash, Coder390, and the educational Huihui 27B abliterated study row.
+      Qwen2.5 and Qwen3-8B are not listed.
+      Decode and prefill fill only from verified <code>data/runs/*.jsonl</code> cards.
+      File size is a Hugging Face listing when we have one.
+      VRAM, fit, and DDR5 offload reuse the <a class="underline decoration-accent/40" href="/calculator">calculator</a> and stay labeled estimate.
+    </p>
+    <div class="mt-6 flex flex-wrap gap-3">
+      <a class="btn-primary" href="/calculator">Open the calculator</a>
+      <a class="btn-secondary" href="/results">Run cards</a>
+      <a class="btn-ghost" href="/models">House models</a>
+      <a class="btn-ghost" href={officialLinks.qwen36Gguf}>35B GGUF</a>
+      <a class="btn-ghost" href={officialLinks.qwenFlashGguf}>Flash GGUF</a>
+      <a class="btn-ghost" href={CODER390_HF_GGUF}>Coder390 GGUF</a>
+    </div>
+
+    <Callout type="note" title="Measured cells stay empty until a card lands">
+      <p>
+        {measuredCount} of {rows.length} rows have at least one measured tok/s cell from local-desktop.
+        Coder390 sizes are cited from the
+        <a class="underline decoration-accent/40" href={CODER390_HF}>nerkyor Hugging Face GGUF page</a>
+        (Q4 LynnStyle 19.6 GB, Q6_K-MTP 23.2 GB, Q8_0-MTP 29.1 GB).
+        There is no Q5 on that original package.
+        MTP in a filename is not a house recommendation.
+      </p>
+    </Callout>
+
+    <section id="table" class="mt-12 scroll-mt-28" aria-labelledby="table-heading">
+      <div class="flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <p class="kicker">Comparison</p>
+          <h2 id="table-heading" class="mt-2 font-serif text-3xl">Filter the grid</h2>
+          <p class="mt-2 max-w-2xl text-sm text-muted">
+            GPU count, RAM kit, and backend write the My Rig profile (same engine as the calculator).
+            Fits-on-my-rig hides rows that need more VRAM + DDR5 than that profile.
+            The URL is shareable. Without JavaScript the full table stays visible.
+          </p>
+        </div>
+        <p id="qwen-count" class="text-sm text-muted">{rows.length} rows</p>
+      </div>
+
+      <form id="qwen-filters" class="mt-6 space-y-4" aria-controls="qwen-table">
+        <div>
+          <p class="font-mono text-[0.68rem] uppercase tracking-[0.12em] text-faint">GPU count</p>
+          <div class="mt-2 flex flex-wrap gap-2" role="group" aria-label="GPU count">
+            <button type="button" class="chip is-on" data-filter="gpuCount" data-value="">Any</button>
+            <button type="button" class="chip" data-filter="gpuCount" data-value="1">1× R9700</button>
+            <button type="button" class="chip" data-filter="gpuCount" data-value="2">2× R9700</button>
+          </div>
+        </div>
+        <div>
+          <p class="font-mono text-[0.68rem] uppercase tracking-[0.12em] text-faint">RAM size</p>
+          <div class="mt-2 flex flex-wrap gap-2" role="group" aria-label="RAM size">
+            <button type="button" class="chip is-on" data-filter="ramGb" data-value="">Any kit</button>
+            {QWEN_RAM_KITS.map((kit) => (
+              <button type="button" class="chip" data-filter="ramGb" data-value={String(kit)}>{kit} GB</button>
+            ))}
+          </div>
+        </div>
+        <div>
+          <p class="font-mono text-[0.68rem] uppercase tracking-[0.12em] text-faint">Backend</p>
+          <div class="mt-2 flex flex-wrap gap-2" role="group" aria-label="Backend">
+            <button type="button" class="chip is-on" data-filter="backendId" data-value="">Any</button>
+            {QWEN_BACKENDS.map((backend) => (
+              <button type="button" class="chip" data-filter="backendId" data-value={backend.id}>{backend.label}</button>
+            ))}
+          </div>
+        </div>
+        <div class="flex flex-wrap items-center gap-2">
+          <button type="button" class="chip" data-filter="fitsOnMyRig" data-value="1" id="qwen-fit">Fits on my rig</button>
+          <button type="button" class="chip" data-filter="family" data-value="3.6">3.6</button>
+          <button type="button" class="chip" data-filter="family" data-value="3.8">3.8</button>
+          <button type="button" class="chip" data-filter="edition" data-value="original">Original</button>
+          <button type="button" class="chip" data-filter="edition" data-value="abliterated">Abliterated</button>
+          <button type="reset" class="btn-ghost">Clear</button>
+          <button type="button" class="btn-ghost" id="qwen-copy">Copy link</button>
+        </div>
+        <p id="qwen-rig" class="text-sm text-muted">
+          My Rig default: {DEFAULT_QWEN_RIG.gpuCount}× R9700 · {DEFAULT_QWEN_RIG.ramGb} GB DDR5 · llama.cpp.
+          Saved locally as <code>{QWEN_MY_RIG_STORAGE_KEY}</code>, or pass a calculator share query.
+        </p>
+      </form>
+
+      <details class="card mt-6 p-4">
+        <summary class="cursor-pointer font-medium">Column picker</summary>
+        <p class="mt-2 text-sm text-muted">Hide dense columns on a small screen. Prefill stays off until you turn it on.</p>
+        <div id="qwen-cols" class="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+          {QWEN_ALL_COLS.map((col) => (
+            <label class="flex items-center gap-2 text-sm">
+              <input
+                type="checkbox"
+                name="col"
+                value={col}
+                checked={DEFAULT_QWEN_COLS.includes(col as (typeof DEFAULT_QWEN_COLS)[number])}
+              />
+              <span>{QWEN_COL_LABEL[col as QwenColId]}</span>
+            </label>
+          ))}
+        </div>
+      </details>
+
+      <div id="qwen-empty" class="card mt-6 hidden p-6" role="status">
+        <p class="kicker">Empty</p>
+        <h3 class="mt-2 text-xl tracking-tight">Nothing matches this rig</h3>
+        <p class="mt-3 text-sm leading-relaxed text-muted">
+          We will not invent a row to fill a filter. Drop a GPU or raise the RAM kit, or turn off fits-on-my-rig.
+        </p>
+      </div>
+
+      <div class="qwen-cards mt-6 grid gap-4 lg:hidden">
+        {rows.map((row) => (
+          <article class="card qwen-card p-5" data-row={row.id}>
+            <p class="kicker">Qwen {row.spec.family} · {row.type} · {row.spec.edition}</p>
+            <h3 class="mt-1 text-xl tracking-tight">{row.spec.short}</h3>
+            <p class="mt-1 font-mono text-sm text-muted">{row.spec.quant}</p>
+            <dl class="mt-4 grid grid-cols-2 gap-3 text-sm">
+              <div>
+                <dt class="text-faint">File</dt>
+                <dd class="tabular-nums">{row.fileSizeText}</dd>
+              </div>
+              <div>
+                <dt class="text-faint">VRAM @ full</dt>
+                <dd class="tabular-nums">{row.vramFull.text}</dd>
+              </div>
+              <div>
+                <dt class="text-faint">1× R9700</dt>
+                <dd>{row.fit1x.text}</dd>
+              </div>
+              <div>
+                <dt class="text-faint">DDR5 offload</dt>
+                <dd class="tabular-nums">{row.offload1x.text}</dd>
+              </div>
+              <div>
+                <dt class="text-faint">Decode llama.cpp</dt>
+                <dd class="tabular-nums">{row.decode.llamacpp.text || '—'}</dd>
+              </div>
+              <div>
+                <dt class="text-faint">Decode Strata</dt>
+                <dd class="tabular-nums">{row.decode.strata.text || '—'}</dd>
+              </div>
+            </dl>
+            <p class="mt-4 flex flex-wrap gap-3 text-sm">
+              <a class="underline decoration-accent/40" href={row.spec.hfUrl}>Hugging Face</a>
+              <a class="underline decoration-accent/40" href={row.runHref}>Run cards</a>
+            </p>
+          </article>
+        ))}
+      </div>
+
+      <div class="qwen-table-wrap mt-6 hidden overflow-auto lg:block">
+        <table class="table-lab qwen-table min-w-[84rem]" id="qwen-table">
+          <thead>
+            <tr>
+              {QWEN_ALL_COLS.map((col) => (
+                <th scope="col" data-col={col}>
+                  <button type="button" class="qwen-sort" data-sort={col}>
+                    {QWEN_COL_LABEL[col as QwenColId]}
+                  </button>
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((row) => (
+              <tr data-row={row.id}>
+                <td data-col="family">Qwen {row.spec.family}</td>
+                <td data-col="model">
+                  <span class="font-medium">{row.spec.model}</span>
+                  <span class="mt-0.5 block text-xs text-muted">{row.spec.short}</span>
+                </td>
+                <td data-col="type">{row.type}</td>
+                <td data-col="total" class="tabular-nums">{row.spec.totalParamsB}B</td>
+                <td data-col="active" class="tabular-nums">{row.spec.activeParamsB}B</td>
+                <td data-col="ctx" class="tabular-nums">262K</td>
+                <td data-col="quant">
+                  <span class="font-mono text-sm">{row.spec.quant}</span>
+                </td>
+                <td data-col="size" class="tabular-nums" title={row.spec.sizeCite}>
+                  {row.fileSizeText}
+                  {row.sizeSource !== 'formula' && (
+                    <span class="mt-0.5 block text-[0.7rem] uppercase tracking-wider text-faint">{row.sizeSource}</span>
+                  )}
+                </td>
+                <td data-col="vram32" class="tabular-nums" title={row.vram32.cite}>{row.vram32.text}</td>
+                <td data-col="vram128" class="tabular-nums" title={row.vram128.cite}>{row.vram128.text}</td>
+                <td data-col="vramFull" class="tabular-nums" title={row.vramFull.cite}>{row.vramFull.text}</td>
+                <td data-col="fit1">{row.fit1x.text}</td>
+                <td data-col="fit2">{row.fit2x.text}</td>
+                <td data-col="offload" class="tabular-nums" title={row.offload1x.cite}>{row.offload1x.text}</td>
+                <td data-col="decodeLlama" class="tabular-nums">{row.decode.llamacpp.text || '—'}</td>
+                <td data-col="decodeStrata" class="tabular-nums">{row.decode.strata.text || '—'}</td>
+                <td data-col="decodeVllm" class="tabular-nums">{row.decode.vllm.text || '—'}</td>
+                <td data-col="prefillLlama" class="tabular-nums">{row.prefill.llamacpp.text || '—'}</td>
+                <td data-col="prefillStrata" class="tabular-nums">{row.prefill.strata.text || '—'}</td>
+                <td data-col="prefillVllm" class="tabular-nums">{row.prefill.vllm.text || '—'}</td>
+                <td data-col="edition">{row.spec.edition}</td>
+                <td data-col="hf">
+                  <a class="underline decoration-accent/40" href={row.spec.hfUrl}>HF</a>
+                </td>
+                <td data-col="runs">
+                  {row.runIds.length ? (
+                    <a class="underline decoration-accent/40" href={row.runHref}>{row.runIds.length} cards</a>
+                  ) : (
+                    <a class="text-muted underline decoration-line" href="/results">none yet</a>
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+</Base>
+
+<script type="application/json" id="qwen-data" set:html={JSON.stringify(payload)} />
+
+<script>
+  const STORAGE = 'amdai-my-rig';
+  const DEFAULT_COLS = [
+    'family', 'model', 'type', 'total', 'active', 'ctx', 'quant', 'size',
+    'vram32', 'vram128', 'vramFull', 'fit1', 'fit2', 'offload',
+    'decodeLlama', 'decodeStrata', 'decodeVllm', 'edition', 'hf', 'runs',
+  ];
+  const NUM = {
+    size: 'sizeGb',
+    vram32: 'vram32n',
+    vram128: 'vram128n',
+    vramFull: 'vramFulln',
+    offload: 'offloadn',
+    decodeLlama: 'decodeLlaman',
+    decodeStrata: 'decodeStratan',
+    decodeVllm: 'decodeVllmn',
+    prefillLlama: 'prefillLlaman',
+    prefillStrata: 'prefillStratan',
+    prefillVllm: 'prefillVllmn',
+    total: 'total',
+    active: 'active',
+    ctx: 'ctx',
+  };
+
+  const dataEl = document.getElementById('qwen-data');
+  const form = document.getElementById('qwen-filters');
+  const count = document.getElementById('qwen-count');
+  const empty = document.getElementById('qwen-empty');
+  const rigLine = document.getElementById('qwen-rig');
+  const copyBtn = document.getElementById('qwen-copy');
+  const rows = dataEl ? JSON.parse(dataEl.textContent || '[]') : [];
+
+  const state = {
+    gpuCount: null,
+    ramGb: null,
+    backendId: null,
+    fitsOnMyRig: false,
+    family: null,
+    edition: null,
+    sort: 'model',
+    dir: 'asc',
+    cols: [...DEFAULT_COLS],
+  };
+
+  function readStoredRig() {
+    try {
+      const raw = localStorage.getItem(STORAGE);
+      if (!raw) return null;
+      const parsed = JSON.parse(raw);
+      return {
+        gpuCount: parsed.gpuCount === 2 ? 2 : 1,
+        ramGb: Number(parsed.ramGb) || 256,
+        backendId: parsed.backendId === 'strata' || parsed.backendId === 'vllm' ? parsed.backendId : 'llamacpp',
+        vramGb: Number(parsed.vramGb) || 32,
+      };
+    } catch {
+      return null;
+    }
+  }
+
+  function writeStoredRig() {
+    const rig = currentRig();
+    localStorage.setItem(STORAGE, JSON.stringify(rig));
+  }
+
+  function currentRig() {
+    const stored = readStoredRig();
+    return {
+      gpuCount: state.gpuCount ?? stored?.gpuCount ?? 1,
+      ramGb: state.ramGb ?? stored?.ramGb ?? 256,
+      backendId: state.backendId ?? stored?.backendId ?? 'llamacpp',
+      vramGb: stored?.vramGb ?? 32,
+    };
+  }
+
+  function parseQuery() {
+    const q = new URLSearchParams(location.search);
+    if (q.get('n') === '1' || q.get('n') === '2') state.gpuCount = Number(q.get('n'));
+    const ram = Number(q.get('ram') || '');
+    if ([64, 128, 192, 256].includes(ram)) state.ramGb = ram;
+    const be = q.get('be');
+    if (be === 'llamacpp' || be === 'strata' || be === 'vllm') state.backendId = be;
+    state.fitsOnMyRig = q.get('fit') === '1';
+    if (q.get('family') === '3.6' || q.get('family') === '3.8') state.family = q.get('family');
+    if (q.get('edition') === 'original' || q.get('edition') === 'abliterated') state.edition = q.get('edition');
+    if (q.get('sort')) state.sort = q.get('sort') || 'model';
+    if (q.get('dir') === 'desc' || q.get('dir') === 'asc') state.dir = q.get('dir');
+    const cols = (q.get('cols') || '').split(',').filter(Boolean);
+    if (cols.length) state.cols = cols;
+    if (!q.has('n') && !q.has('ram') && !q.has('be')) {
+      const stored = readStoredRig();
+      if (stored) {
+        state.gpuCount = stored.gpuCount;
+        state.ramGb = stored.ramGb;
+        state.backendId = stored.backendId;
+      }
+    }
+  }
+
+  function writeQuery() {
+    const q = new URLSearchParams();
+    if (state.gpuCount) q.set('n', String(state.gpuCount));
+    if (state.ramGb) q.set('ram', String(state.ramGb));
+    if (state.backendId) q.set('be', state.backendId);
+    if (state.fitsOnMyRig) q.set('fit', '1');
+    if (state.family) q.set('family', state.family);
+    if (state.edition) q.set('edition', state.edition);
+    if (state.sort !== 'model') q.set('sort', state.sort);
+    if (state.dir === 'desc') q.set('dir', 'desc');
+    if (state.cols.join(',') !== DEFAULT_COLS.join(',')) q.set('cols', state.cols.join(','));
+    const qs = q.toString();
+    history.replaceState(null, '', qs ? `${location.pathname}?${qs}` : location.pathname);
+  }
+
+  function rowFits(row) {
+    const rig = currentRig();
+    const n = rig.gpuCount === 2 ? 2 : 1;
+    const fit = row.fits?.[rig.backendId]?.[n];
+    if (!fit) return true;
+    if (fit.verdict !== 'no') return true;
+    return fit.ramKitGb <= rig.ramGb;
+  }
+
+  function visibleIds() {
+    const dir = state.dir === 'desc' ? -1 : 1;
+    const keyed = rows.filter((row) => {
+      if (state.family && row.family !== state.family) return false;
+      if (state.edition && row.edition !== state.edition) return false;
+      if (state.fitsOnMyRig && !rowFits(row)) return false;
+      return true;
+    });
+    keyed.sort((a, b) => {
+      const numKey = NUM[state.sort];
+      if (numKey) {
+        const av = a[numKey] ?? -1;
+        const bv = b[numKey] ?? -1;
+        return (av - bv) * dir;
+      }
+      if (state.sort === 'fit1') return (a.fit1v || '').localeCompare(b.fit1v || '') * dir;
+      if (state.sort === 'fit2') return (a.fit2v || '').localeCompare(b.fit2v || '') * dir;
+      const av = String(a[state.sort] ?? '');
+      const bv = String(b[state.sort] ?? '');
+      return av.localeCompare(bv) * dir;
+    });
+    return keyed.map((row) => row.id);
+  }
+
+  function syncChips() {
+    document.querySelectorAll('[data-filter]').forEach((btn) => {
+      if (!(btn instanceof HTMLButtonElement)) return;
+      const key = btn.dataset.filter;
+      const value = btn.dataset.value ?? '';
+      let on = false;
+      if (key === 'gpuCount') on = String(state.gpuCount ?? '') === value;
+      if (key === 'ramGb') on = String(state.ramGb ?? '') === value;
+      if (key === 'backendId') on = String(state.backendId ?? '') === value;
+      if (key === 'fitsOnMyRig') on = state.fitsOnMyRig && value === '1';
+      if (key === 'family') on = state.family === value;
+      if (key === 'edition') on = state.edition === value;
+      btn.classList.toggle('is-on', on);
+    });
+  }
+
+  function syncCols() {
+    document.querySelectorAll('#qwen-cols input[name="col"]').forEach((input) => {
+      if (input instanceof HTMLInputElement) input.checked = state.cols.includes(input.value);
+    });
+    document.querySelectorAll('[data-col]').forEach((el) => {
+      const col = el.getAttribute('data-col');
+      if (col) el.classList.toggle('is-hidden-col', !state.cols.includes(col));
+    });
+  }
+
+  function apply() {
+    const order = visibleIds();
+    const shown = new Set(order);
+    document.querySelectorAll('[data-row]').forEach((el) => {
+      const id = el.getAttribute('data-row');
+      el.hidden = !id || !shown.has(id);
+    });
+    const tbody = document.querySelector('#qwen-table tbody');
+    if (tbody) {
+      for (const id of order) {
+        const tr = tbody.querySelector(`[data-row="${id}"]`);
+        if (tr) tbody.appendChild(tr);
+      }
+    }
+    const cards = document.querySelector('.qwen-cards');
+    if (cards) {
+      for (const id of order) {
+        const card = cards.querySelector(`[data-row="${id}"]`);
+        if (card) cards.appendChild(card);
+      }
+    }
+    if (count) count.textContent = order.length === 1 ? '1 row' : `${order.length} rows`;
+    empty?.classList.toggle('hidden', order.length > 0);
+    const rig = currentRig();
+    if (rigLine) {
+      rigLine.textContent = `My Rig: ${rig.gpuCount}× R9700 · ${rig.ramGb} GB DDR5 · ${rig.backendId === 'strata' ? 'Strata' : rig.backendId === 'vllm' ? 'vLLM' : 'llama.cpp'}. Fits-on-my-rig uses native 262K, f16 KV.`;
+    }
+    writeQuery();
+    writeStoredRig();
+    syncChips();
+    syncCols();
+  }
+
+  parseQuery();
+  apply();
+
+  form?.addEventListener('click', (event) => {
+    const btn = event.target instanceof Element ? event.target.closest('[data-filter]') : null;
+    if (!(btn instanceof HTMLButtonElement)) return;
+    const key = btn.dataset.filter;
+    const value = btn.dataset.value ?? '';
+    if (key === 'gpuCount') state.gpuCount = value === '1' || value === '2' ? Number(value) : null;
+    if (key === 'ramGb') state.ramGb = value ? Number(value) : null;
+    if (key === 'backendId') state.backendId = value || null;
+    if (key === 'fitsOnMyRig') state.fitsOnMyRig = !state.fitsOnMyRig;
+    if (key === 'family') state.family = state.family === value ? null : value || null;
+    if (key === 'edition') state.edition = state.edition === value ? null : value || null;
+    apply();
+  });
+
+  form?.addEventListener('reset', () => {
+    state.gpuCount = null;
+    state.ramGb = null;
+    state.backendId = null;
+    state.fitsOnMyRig = false;
+    state.family = null;
+    state.edition = null;
+    state.sort = 'model';
+    state.dir = 'asc';
+    queueMicrotask(apply);
+  });
+
+  document.querySelectorAll('.qwen-sort').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      if (!(btn instanceof HTMLButtonElement)) return;
+      const key = btn.dataset.sort || 'model';
+      if (state.sort === key) state.dir = state.dir === 'asc' ? 'desc' : 'asc';
+      else {
+        state.sort = key;
+        state.dir = key.startsWith('decode') || key.startsWith('vram') || key === 'size' ? 'desc' : 'asc';
+      }
+      apply();
+    });
+  });
+
+  document.getElementById('qwen-cols')?.addEventListener('change', () => {
+    const cols = [...document.querySelectorAll('#qwen-cols input[name="col"]:checked')]
+      .map((input) => (input instanceof HTMLInputElement ? input.value : ''))
+      .filter(Boolean);
+    if (cols.length) state.cols = cols;
+    apply();
+  });
+
+  copyBtn?.addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(location.href);
+      copyBtn.textContent = 'Copied';
+      setTimeout(() => {
+        copyBtn.textContent = 'Copy link';
+      }, 1200);
+    } catch {
+      copyBtn.textContent = 'Copy failed';
+    }
+  });
+</script>
+
+<style>
+  .qwen-table-wrap {
+    max-height: min(70vh, 52rem);
+    border: 1px solid var(--line);
+    border-radius: 1rem;
+    background: color-mix(in srgb, var(--raised) 55%, transparent);
+  }
+  .qwen-table thead th {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    background: var(--canvas);
+    box-shadow: 0 1px 0 var(--line);
+  }
+  .qwen-sort {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    text-align: left;
+    font: inherit;
+    letter-spacing: inherit;
+    text-transform: inherit;
+    color: inherit;
+    background: none;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+  }
+  .qwen-sort:hover,
+  .qwen-sort:focus-visible {
+    color: var(--ink);
+  }
+  .is-hidden-col {
+    display: none;
+  }
+  .chip {
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: var(--raised);
+    color: var(--muted);
+    padding: 0.4rem 0.85rem;
+    font-size: 0.875rem;
+  }
+  .chip.is-on {
+    border-color: color-mix(in srgb, var(--accent) 55%, var(--line));
+    background: color-mix(in srgb, var(--accent) 16%, var(--raised));
+    color: var(--ink);
+  }
+</style>

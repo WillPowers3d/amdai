@@ -40,7 +40,7 @@ export function ogSlug(pathname: string) {
   if (slug === 'backends' || slug.startsWith('backends-')) return 'backends';
   if (slug === 'benchmarks' || slug === 'results') return 'stacks';
   if (slug === 'bios' || slug === 'credits' || slug === 'contribute' || slug === 'wanted') return 'default';
-  if (slug === 'qwen36-dual' || slug === 'flash-daily' || slug === 'flash-ram-offload') return 'stacks';
+  if (slug === 'qwen' || slug === 'qwen36-dual' || slug === 'flash-daily' || slug === 'flash-ram-offload') return 'stacks';
   if (slug === 'models' || slug.startsWith('models-') || slug.startsWith('gpus-') || slug.startsWith('recipes-')) return 'gpus';
   return OG_PAGES.has(slug) ? slug : 'default';
 }
@@ -77,6 +77,10 @@ export const officialLinks = {
   qwen36Gguf: 'https://huggingface.co/unsloth/Qwen3.6-35B-A3B-GGUF',
   qwenFlash: 'https://huggingface.co/Qwen/Qwen3.8-Flash-Next',
   qwenFlashGguf: 'https://huggingface.co/unsloth/Qwen3.8-Flash-Next-GGUF',
+  qwen38: 'https://huggingface.co/Qwen/Qwen3.8-27B',
+  qwen36Dense: 'https://huggingface.co/Qwen/Qwen3.6-27B',
+  coder390:
+    'https://huggingface.co/nerkyor/Qwen3.8-27B-Coder390-EfficientThink-Opus5.5-GPT6Astra-Grok4.7-DSV4Pro-K3-SFT-RLOO-GGUF-NInfer',
 };
 
 export type NavItem = {
@@ -96,6 +100,7 @@ export const homeLink: NavItem = {
 export const primaryNav: NavItem[] = [
   { href: '/start', label: 'Getting started', description: 'GPU → ROCm → llama.cpp → optional harness', group: 'path' },
   { href: '/stacks', label: 'Stacks', description: 'Daily driver and fast-agent cards from our test rig', group: 'path' },
+  { href: '/qwen', label: 'Qwen compare', description: 'Every current 3.6 / 3.8 model × quant — sortable, filterable, measured cells from run cards', group: 'path' },
   { href: '/qwen36-dual', label: '35B on two cards', description: 'Split vs two copies of UD-Q5_K_XL on two R9700s — measured on local-desktop', group: 'path' },
   { href: '/flash-daily', label: 'Flash daily driver', description: 'Qwen 3.8 Flash VRAM + DDR5 offload at Q3–Q6, full 262K', group: 'path' },
   { href: '/flash-ram-offload', label: 'Flash RAM offload', description: 'Run Flash with experts on DDR5 — kits, measured DIMM speed, launch shape', group: 'path' },

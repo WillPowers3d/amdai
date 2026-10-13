@@ -56,6 +56,7 @@ Public site URL is `https://amdai.net` (`site` in `astro.config.mjs`; override w
 | `/` | Home + living status card |
 | `/start` | Getting started (GPU → ROCm → llama.cpp → harness) |
 | `/stacks` | Recommended stack cards from the test rig |
+| `/qwen` | Master 3.6 / 3.8 comparison table — one row per model × quant, measured tok/s from run cards |
 | `/qwen36-dual` | 35B on two R9700s — split vs two copies, measured soak |
 | `/flash-daily` | Flash daily driver — Q3–Q6 VRAM + DDR5 offload at 262K |
 | `/flash-ram-offload` | Flash on DDR5 — system RAM at 262K, 128/192/256 kits, measured DIMM speed, expert-offload launch |
