@@ -217,6 +217,7 @@ export const GLOSSARY: GlossaryEntry[] = [
     deeper:
       'Publisher UD-Q6_K_XL folder ~169 GB. Two-card Strata at 262K: 32.8 tok/s at 8K/32K, 31.8 at 100K on the Flash daily page. Recipe: qwen38-flash.strata.262k. Q3 Flash rows stay estimates unless measured.',
     links: [
+      { href: '/models/flash', label: 'Flash model page' },
       { href: '/flash-daily', label: 'Flash daily driver' },
       { href: '/flash-ram-offload', label: 'Flash RAM offload' },
       { href: '/recipes/qwen38-flash.strata.262k', label: 'Flash Strata recipe' },
@@ -436,6 +437,7 @@ export const GLOSSARY: GlossaryEntry[] = [
     deeper:
       'Sibling 35B points on the same sweep include Q5_K_M, Q4_K_M, and Q6_K. Recipe qwen36-35b.llamacpp-vulkan.262k is the daily-driver launch. Q3 35B listings stay estimates unless measured.',
     links: [
+      { href: '/models/qwen36', label: '35B model page' },
       { href: '/qwen', label: 'Qwen compare' },
       { href: '/models', label: 'Models' },
       { href: '/tutorials/serve-qwen', label: 'Serve Qwen' },

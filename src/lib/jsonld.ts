@@ -412,6 +412,8 @@ export function pageJsonLd(input: {
     path === '/maintain' ||
     path === '/quants' ||
     path === '/gpus/r9700' ||
+    path === '/models/qwen36' ||
+    path === '/models/flash' ||
     path === '/compare/radeon-vs-nvidia' ||
     path === '/multi-gpu' ||
     path === '/methodology' ||

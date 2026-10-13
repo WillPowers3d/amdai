@@ -191,6 +191,25 @@ export const OG_CARDS: OgCard[] = [
     alt: 'AMDai 35B on two R9700s — split vs two copies',
   },
   {
+    slug: 'models-qwen36',
+    title: 'Qwen3.6-35B-A3B',
+    lede: 'UD-Q5 on llama.cpp Vulkan. One R9700, 262K',
+    alt: 'AMDai Qwen3.6-35B-A3B — measured daily driver on one R9700',
+    measured: true,
+  },
+  {
+    slug: 'models-flash',
+    title: 'Qwen 3.8 Flash',
+    lede: 'UD-Q6_K_XL. Strata 32.6 vs llama.cpp 16',
+    alt: 'AMDai Qwen 3.8 Flash — cited Strata vs llama.cpp pair',
+  },
+  {
+    slug: 'models',
+    title: 'House models',
+    lede: 'Qwen files we actually run. Contribute the rest',
+    alt: 'AMDai house models — Qwen files we actually run',
+  },
+  {
     slug: 'multi-gpu',
     title: 'Dual / multi-GPU',
     lede: 'When a second R9700 helps. llama.cpp first',
@@ -267,7 +286,8 @@ export function ogSlug(pathname: string): string {
     return SLUGS.has(slug) ? slug : 'compare';
   }
   if (slug === 'gpus-r9700') return 'gpus-r9700';
-  if (slug === 'models' || slug.startsWith('models-') || slug.startsWith('gpus-') || slug.startsWith('recipes-')) {
+  if (slug === 'models' || slug === 'models-qwen36' || slug === 'models-flash') return slug;
+  if (slug.startsWith('models-') || slug.startsWith('gpus-') || slug.startsWith('recipes-')) {
     return 'gpus';
   }
   return SLUGS.has(slug) ? slug : 'default';

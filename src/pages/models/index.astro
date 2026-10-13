@@ -1,43 +1,90 @@
 ---
 import Base from '../../layouts/Base.astro';
+import HowWeTest from '../../components/HowWeTest.astro';
+import NextSteps from '../../components/NextSteps.astro';
 import RecipeTable from '../../components/RecipeTable.astro';
+import { contributeModels, houseModelPages } from '../../lib/model-pages';
 import { recipesForModel } from '../../lib/recipes';
 import { recipes } from '../../lib/recipes-data';
-import { MODEL_PAGES } from '../../lib/gpu-pages';
+
+const pages = houseModelPages();
+const contribute = contributeModels();
 ---
 
 <Base
-  title="Models"
-  description="House Qwen models with tested Radeon recipes. Reverse view of the GPU directory."
+  title="House Qwen models"
+  description="House Qwen models with tested Radeon recipes. Reverse view of the GPU directory. Models without a cited row stay on contribute."
 >
   <main id="main" class="mx-auto max-w-6xl px-4 py-10 sm:px-6">
     <p class="kicker">Weights we actually run</p>
     <h1 class="display mt-3 text-4xl sm:text-5xl">Models</h1>
     <p class="mt-4 max-w-2xl text-lg leading-relaxed text-muted">
       The reverse of the GPU pages: pick a model, see which Radeon setups have a recipe.
-      Those older 2.5-class and 8B names stay off this site. Q3 appears only as estimate/community unless we measured it.
+      amdai’s two daily drivers first. Those older 2.5-class and 8B names stay off this site.
+      Q3 appears only as estimate/community unless we measured it.
+      A name with no cited local-desktop or recipe row is listed as contribute — we do not invent a shopper page.
       The <a class="underline decoration-accent/40" href="/qwen">Qwen compare</a> table lists every current 3.6 / 3.8 file.
     </p>
+    <div class="mt-4">
+      <HowWeTest />
+    </div>
+    <div class="mt-6 flex flex-wrap gap-3">
+      <a class="btn-secondary" href="/calculator">Calculator</a>
+      <a class="btn-ghost" href="/benchmarks">Benchmarks</a>
+      <a class="btn-ghost" href="/compare">Compare 35B</a>
+      <a class="btn-ghost" href="/gpus/r9700">R9700</a>
+      <a class="btn-ghost" href="/abliterated">Abliterated (educational)</a>
+    </div>
     <div class="mt-8 grid gap-6">
-      {MODEL_PAGES.map((model) => {
+      {pages.map((model) => {
         const rows = recipesForModel(recipes, model.id);
         return (
           <section class="card p-5 sm:p-6" aria-labelledby={`${model.id}-heading`}>
             <p class="kicker">{model.role}</p>
             <h2 id={`${model.id}-heading`} class="mt-1 text-2xl tracking-tight">
-              <a class="underline decoration-accent/40" href={`/models/${model.id}`}>{model.name}</a>
+              <a class="underline decoration-accent/40" href={model.path}>{model.name}</a>
             </h2>
             <p class="mt-2 text-sm text-muted">
-              Official <a class="underline decoration-accent/40" href={model.hf}>{model.official}</a>
+              Official <a class="underline decoration-accent/40" href={model.card.hf}>{model.card.official}</a>
               {' · '}
-              GGUF {model.gguf}
+              GGUF {model.card.ggufName}
+              {' · '}
+              {model.card.parameters} / {model.card.active}
             </p>
+            <p class="mt-3 text-sm leading-relaxed text-muted">{model.lead}</p>
             <div class="mt-5">
               <RecipeTable recipes={rows} empty="No tested recipe yet — contribute." />
             </div>
+            <p class="mt-4 text-sm">
+              <a class="underline decoration-accent/40" href={model.path}>Open the recipe page</a>
+              {' · '}
+              <a class="underline decoration-accent/40" href={`/calculator?model=${model.id}`}>Calculator</a>
+            </p>
           </section>
         );
       })}
     </div>
+
+    <section id="contribute" class="mt-12" aria-labelledby="contribute-heading">
+      <h2 id="contribute-heading" class="font-serif text-3xl">Contribute — no cited row yet</h2>
+      <p class="mt-3 max-w-2xl text-sm leading-relaxed text-muted">
+        These names show up in shopper questions. AMDai will not publish a model page without a cited recipe or run card.
+        Abliterated files stay on <a class="underline decoration-accent/40" href="/abliterated">/abliterated</a>.
+      </p>
+      <ul class="mt-6 grid gap-4">
+        {contribute.map((row) => (
+          <li class="rounded-2xl border border-line bg-raised/40 p-5">
+            <h3 class="text-xl tracking-tight">{row.name}</h3>
+            <p class="mt-2 text-sm leading-relaxed text-muted">{row.why}</p>
+            <p class="mt-3 text-sm">
+              <a class="underline decoration-accent/40" href={row.href}>
+                {row.href === '/contribute' ? 'Contribute a card' : 'See Qwen compare'}
+              </a>
+            </p>
+          </li>
+        ))}
+      </ul>
+    </section>
+    <NextSteps path="/models" />
   </main>
 </Base>

@@ -90,6 +90,8 @@ const dailyRam = dailyRecipe ? recipeSystemRam(dailyRecipe, measuredRamHits) : n
       <a class="btn-ghost" href="/stack-lab">Stack Lab</a>
       <a class="btn-ghost" href="/compare/radeon-vs-nvidia">Radeon vs NVIDIA</a>
       {page.calcId && <a class="btn-ghost" href={`/calculator?gpu=${page.calcId}`}>Open in calculator</a>}
+      <a class="btn-ghost" href="/models/qwen36">35B model page</a>
+      <a class="btn-ghost" href="/models/flash">Flash model page</a>
     </div>
     <div class="mt-4">
       <OpenInStackLab {...HOUSE_STACK_LAB.daily} compact />

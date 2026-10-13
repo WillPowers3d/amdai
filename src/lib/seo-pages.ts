@@ -9,13 +9,13 @@ import { harnesses, harnessesFile } from './harnesses-data';
 import { quizCombos, parseQuizCombo, pickHarness } from './harnesses';
 import { recipes } from './recipes-data';
 import { rocmProblems } from './rocm-problems-data';
-import { MODEL_PAGES } from './gpu-ids';
+import { houseModelPages } from './model-pages';
 import { runs } from './run-card-data';
 import { bootstrapPageMeta, registerRunCardMeta } from './seo';
 
 registerRunCardMeta(runs);
 
-const extra: Array<{ path: string; title: string; description: string }> = [];
+const extra: Array<{ path: string; title: string; description: string; published?: string }> = [];
 
 for (const page of gpuPages(recipes)) {
   if (page.id === 'r9700' || isConsumerRecipeGpu(page.id)) continue;
@@ -26,11 +26,12 @@ for (const page of gpuPages(recipes)) {
   });
 }
 
-for (const model of MODEL_PAGES) {
+for (const model of houseModelPages()) {
   extra.push({
-    path: `/models/${model.id}`,
-    title: model.name,
-    description: `${model.name} on Radeon — ${model.role}. Tested recipes and calculator links, not a VRAM-math guess.`,
+    path: model.path,
+    title: model.title,
+    description: model.description,
+    published: '2026-10-13',
   });
 }
 

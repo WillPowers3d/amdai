@@ -214,10 +214,19 @@ export function relatedFor(pathname: string): RelatedLink[] {
       if (id === 'flash') add(out, seen, '/flash-daily', 'Flash daily');
       if (id === 'qwen36') add(out, seen, '/qwen36-dual', '35B on two cards');
       add(out, seen, '/compare', 'Compare 35B');
+      add(out, seen, '/benchmarks', 'Benchmarks');
+      add(out, seen, '/calculator', 'Calculator');
       add(out, seen, '/gpus/r9700', 'R9700 measured page');
+      add(out, seen, '/gpus/rx7900xtx', 'RX 7900 XTX');
+      add(out, seen, '/stack-lab', 'Stack Lab');
+      add(out, seen, '/abliterated', 'Abliterated');
+      add(out, seen, '/contribute', 'Contribute');
       void model;
     } else {
       for (const model of MODEL_PAGES) add(out, seen, `/models/${model.id}`, model.name);
+      add(out, seen, '/qwen', 'Qwen compare');
+      add(out, seen, '/contribute', 'Contribute');
+      add(out, seen, '/abliterated', 'Abliterated');
     }
   }
 
@@ -276,6 +285,8 @@ export function assertRelatedValid(
     '/compare/radeon-vs-nvidia',
     '/setup',
     '/faq',
+    '/models/qwen36',
+    '/models/flash',
   ],
 ): string[] {
   const errors: string[] = [];
@@ -301,6 +312,14 @@ export function assertRelatedValid(
   const xtx = relatedFor('/gpus/rx7900xtx').map((link) => link.href);
   for (const href of ['/gpus/r9700', '/calculator', '/budget', '/setup', '/stack-lab']) {
     if (!xtx.includes(href)) errors.push(`/gpus/rx7900xtx missing ${href}`);
+  }
+  const qwen36 = relatedFor('/models/qwen36').map((link) => link.href);
+  for (const href of ['/qwen36-dual', '/compare', '/benchmarks', '/calculator', '/gpus/r9700']) {
+    if (!qwen36.includes(href)) errors.push(`/models/qwen36 missing ${href}`);
+  }
+  const flash = relatedFor('/models/flash').map((link) => link.href);
+  for (const href of ['/flash-daily', '/benchmarks', '/calculator', '/gpus/r9700']) {
+    if (!flash.includes(href)) errors.push(`/models/flash missing ${href}`);
   }
   return errors;
 }

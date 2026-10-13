@@ -1,0 +1,219 @@
+---
+import Callout from './Callout.astro';
+import HouseRam from './HouseRam.astro';
+import LaunchCommand from './LaunchCommand.astro';
+import OpenInStackLab from './OpenInStackLab.astro';
+import SystemRamNeed from './SystemRamNeed.astro';
+import { runPath } from '../lib/run-card';
+import { NO_DATA_CONTRIBUTE, NOT_ON_CARD, type HouseModelPage } from '../lib/model-pages';
+
+interface Props {
+  page: HouseModelPage;
+}
+
+const { page } = Astro.props;
+const q3Rows = page.configRows.filter((row) => row.quantKind === 'q3-estimate');
+const measuredRows = page.configRows.filter((row) => row.quantKind !== 'q3-estimate');
+---
+
+<section id="card" class="mt-10 scroll-mt-28" aria-labelledby="card-heading">
+  <h2 id="card-heading" class="font-serif text-3xl tracking-tight">Official model card</h2>
+  <dl class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+    <div class="rounded-2xl border border-line bg-raised/40 p-4">
+      <dt class="text-xs uppercase tracking-[0.14em] text-faint">Parameters</dt>
+      <dd class="mt-2 font-serif text-2xl tracking-tight">{page.card.parameters}</dd>
+      <dd class="mt-1 text-xs text-faint">Active {page.card.active}</dd>
+    </div>
+    <div class="rounded-2xl border border-line bg-raised/40 p-4">
+      <dt class="text-xs uppercase tracking-[0.14em] text-faint">Context</dt>
+      <dd class="mt-2 font-serif text-2xl tracking-tight tabular-nums">{page.card.context}</dd>
+      <dd class="mt-1 text-xs text-faint">From the official card</dd>
+    </div>
+    <div class="rounded-2xl border border-line bg-raised/40 p-4">
+      <dt class="text-xs uppercase tracking-[0.14em] text-faint">License</dt>
+      <dd class="mt-2 text-lg font-medium">
+        <a class="underline decoration-accent/40" href={page.card.licenseHref} rel="noopener">{page.card.license}</a>
+      </dd>
+      <dd class="mt-1 text-xs text-muted">{page.card.licenseNote}</dd>
+    </div>
+    <div class="rounded-2xl border border-line bg-raised/40 p-4">
+      <dt class="text-xs uppercase tracking-[0.14em] text-faint">Recommended</dt>
+      <dd class="mt-2 font-serif text-2xl tracking-tight">{page.recommendedQuant}</dd>
+      <dd class="mt-1 text-xs text-faint">{page.recommendedContextLabel} · {page.engine}</dd>
+    </div>
+  </dl>
+  <p class="mt-4 text-sm leading-relaxed text-muted">{page.card.archNote}</p>
+  <p class="mt-2 text-sm text-muted">
+    Official card:
+    <a class="underline decoration-accent/40" href={page.card.hf} rel="noopener">{page.card.official}</a>
+    {' · '}
+    GGUF:
+    <a class="underline decoration-accent/40" href={page.card.ggufHref} rel="noopener">{page.card.ggufName}</a>.
+    Abliterated derivatives are educational only —
+    <a class="underline decoration-accent/40" href="/abliterated">read /abliterated</a>, never the default on this page.
+  </p>
+</section>
+
+<section id="ram" class="mt-12 scroll-mt-28" aria-labelledby="ram-heading">
+  <h2 id="ram-heading" class="font-serif text-3xl tracking-tight">System RAM</h2>
+  <p class="mt-3 max-w-3xl text-sm leading-relaxed text-muted">
+    Kit sizes are real DIMM steps. Measured peaks come from run cards when we have them; otherwise the line is an estimate.
+  </p>
+  <div class="mt-6">
+    <HouseRam which={page.ramKind} />
+  </div>
+  {page.q3Ram && (
+    <div class="mt-6">
+      <p class="kicker">Q3 estimate · {page.name}</p>
+      <div class="mt-3">
+        <SystemRamNeed need={page.q3Ram} compact />
+      </div>
+    </div>
+  )}
+</section>
+
+{page.citedPair.length > 0 && (
+  <section id="cited-pair" class="mt-12 scroll-mt-28" aria-labelledby="cited-pair-heading">
+    <h2 id="cited-pair-heading" class="font-serif text-3xl tracking-tight">Cited house pair</h2>
+    <p class="mt-3 max-w-3xl text-sm leading-relaxed text-muted">
+      UD-Q6_K_XL at 262K. GPU count was not published on the prior first-party pair. llama.cpp first; Strata is the faster cited agent path.
+    </p>
+    <ul class="mt-6 grid gap-4 sm:grid-cols-2">
+      {page.citedPair.map((row) => (
+        <li class="rounded-2xl border border-line bg-raised/40 p-5">
+          <p class="kicker">{row.engine}</p>
+          <p class="mt-2 font-serif text-3xl tracking-tight">{row.decode}</p>
+          <p class="mt-2 text-sm leading-relaxed text-muted">{row.note}</p>
+          <p class="mt-3 text-sm">
+            <a class="underline decoration-accent/40" href={row.href}>Benchmarks</a>
+          </p>
+        </li>
+      ))}
+    </ul>
+  </section>
+)}
+
+<section id="config" class="mt-12 scroll-mt-28" aria-labelledby="config-heading">
+  <h2 id="config-heading" class="font-serif text-3xl tracking-tight">Configuration table</h2>
+  <p class="mt-3 max-w-3xl text-sm leading-relaxed text-muted">
+    Q6 / Q5 / Q4, plus Q3 as a labeled estimate. 1 GPU and 2 GPU. Contexts we actually talk about.
+    Decode, prefill, peak VRAM per card, VRAM total, and peak system RAM come from
+    <code>amdai-bench/run@1</code> cards when a cell is measured. A null field stays {NOT_ON_CARD}.
+    Untested cells say <strong class="text-ink">{NO_DATA_CONTRIBUTE}</strong>.
+    Q1 and Q2 stay off.
+  </p>
+  <div class="mt-6 overflow-x-auto">
+    <table class="table-lab min-w-[72rem]">
+      <caption>
+        {page.name} configurations. Measured cells cite run cards. Q3 is a labeled estimate unless a card exists.
+      </caption>
+      <thead>
+        <tr>
+          <th scope="col">Quant</th>
+          <th scope="col">GPUs</th>
+          <th scope="col">Context</th>
+          <th scope="col">Decode</th>
+          <th scope="col">Prefill</th>
+          <th scope="col">VRAM / card</th>
+          <th scope="col">VRAM total</th>
+          <th scope="col">System RAM</th>
+          <th scope="col">Source</th>
+        </tr>
+      </thead>
+      <tbody>
+        {measuredRows.map((row) => (
+          <tr>
+            <th scope="row">{row.quant}</th>
+            <td>{row.gpuCount} · {row.layout}</td>
+            <td>{row.contextLabel}</td>
+            <td>{row.decode}</td>
+            <td>{row.prefill}</td>
+            <td>{row.vramPerGpu}</td>
+            <td>{row.vramTotal}</td>
+            <td>{row.systemRam}</td>
+            <td>
+              <a class="underline decoration-accent/40" href={row.href}>{row.hrefLabel}</a>
+              {row.runIds.length > 1 && (
+                <span class="mt-1 block text-xs">
+                  {row.runIds.map((id) => (
+                    <a class="mr-2 underline decoration-accent/40" href={runPath(id)}>{id}</a>
+                  ))}
+                </span>
+              )}
+              {row.note && <span class="mt-1 block text-xs text-faint">{row.note}</span>}
+            </td>
+          </tr>
+        ))}
+        {q3Rows.map((row) => (
+          <tr>
+            <th scope="row">{row.quant} <span class="block text-xs font-normal text-faint">estimate</span></th>
+            <td>{row.gpuCount} · {row.layout}</td>
+            <td>{row.contextLabel}</td>
+            <td>{row.decode}</td>
+            <td>{row.prefill}</td>
+            <td>{row.vramPerGpu}</td>
+            <td>{row.vramTotal}</td>
+            <td>{row.systemRam}</td>
+            <td>
+              <a class="underline decoration-accent/40" href={row.href}>{row.hrefLabel}</a>
+              {row.note && <span class="mt-1 block text-xs text-faint">{row.note}</span>}
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="launch" class="mt-12 scroll-mt-28" aria-labelledby="launch-heading">
+  <h2 id="launch-heading" class="font-serif text-3xl tracking-tight">Launch commands</h2>
+  <p class="mt-3 max-w-3xl text-sm leading-relaxed text-muted">
+    llama.cpp first. Strata only where this site already documents it. Flags marked on the recipe stay shape-only.
+    Recommended context is {page.recommendedContextLabel}.
+  </p>
+  <div class="mt-6">
+    <OpenInStackLab {...page.stackLab} />
+  </div>
+  {page.launches.map((row) => (
+    <article class="card mt-8 scroll-mt-28 p-5 sm:p-6" id={row.recipeId} aria-labelledby={`${row.recipeId}-heading`}>
+      <p class="kicker">{row.backendLabel} · {row.quant} · {row.ctxLabel}</p>
+      <h3 id={`${row.recipeId}-heading`} class="mt-1 text-2xl tracking-tight">{row.backendLabel}</h3>
+      <div class="mt-5">
+        <LaunchCommand recipe={row.recipe} />
+      </div>
+      <p class="mt-4 text-sm">
+        <a class="underline decoration-accent/40" href={row.href}>Full recipe</a>
+        {' · '}
+        <a class="underline decoration-accent/40" href={row.recipe.calculator}>Calculator</a>
+      </p>
+    </article>
+  ))}
+</section>
+
+<section id="fit" class="mt-12 scroll-mt-28" aria-labelledby="fit-heading">
+  <h2 id="fit-heading" class="font-serif text-3xl tracking-tight">Fit by GPU</h2>
+  <p class="mt-3 max-w-3xl text-sm leading-relaxed text-muted">
+    Calculator VRAM at the house quant, one GPU. The R9700 35B badge is the measured card; other SKUs stay estimates.
+    Speed is not invented here.
+  </p>
+  <ul class="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+    {page.fitBadges.map((badge) => (
+      <li>
+        <a class="block rounded-2xl border border-line bg-raised/40 p-4 hover:border-accent/50" href={badge.href}>
+          <p class="kicker">{badge.kindLabel}</p>
+          <p class="mt-1 text-xl tracking-tight">{badge.name}</p>
+          <p class="mt-2 text-sm text-muted">{badge.verdictLabel}</p>
+          <p class="mt-1 text-xs text-faint">{badge.totalGb} estimate</p>
+        </a>
+      </li>
+    ))}
+  </ul>
+</section>
+
+<Callout type="note" title="Abliterated is not the default">
+  <p>
+    Huihui and other abliterated GGUFs stay on
+    <a class="underline decoration-accent/40" href="/abliterated">/abliterated</a>
+    as an educational catalog. This page is the official instruct file.
+  </p>
+</Callout>

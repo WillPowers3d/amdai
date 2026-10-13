@@ -160,6 +160,8 @@ export const CRUMB_LABELS: Record<string, string> = {
   '/gpus/rx7900xt': 'RX 7900 XT',
   '/gpus/rx7800xt': 'RX 7800 XT',
   '/models': 'Models',
+  '/models/qwen36': 'Qwen3.6-35B-A3B',
+  '/models/flash': 'Qwen 3.8 Flash',
   '/recipes': 'Recipes',
   '/blog': 'Blog',
   '/updates': 'Updates',
@@ -401,8 +403,21 @@ setDate('/gpus/rx7800xt', '2026-10-13');
 setMeta(
   '/models',
   'House Qwen models',
-  'The Qwen files this notebook actually writes about, with reverse recipe tables and Hugging Face cards.',
+  'House Qwen models with tested Radeon recipes. Reverse view of the GPU directory. Models without a cited row stay on contribute.',
 );
+setDate('/models', '2026-10-13');
+setMeta(
+  '/models/qwen36',
+  'Qwen3.6-35B-A3B',
+  'Qwen3.6-35B-A3B on one R9700 — Unsloth UD-Q5_K_XL, llama.cpp Vulkan, 262K. Measured local-desktop cards; Q3 is a labeled estimate.',
+);
+setDate('/models/qwen36', '2026-10-13');
+setMeta(
+  '/models/flash',
+  'Qwen 3.8 Flash',
+  'House recipe page for Qwen 3.8 Flash: cited UD-Q6_K_XL pair, two-card Q6, RAM lines, llama.cpp first. Q3 is a labeled estimate.',
+);
+setDate('/models/flash', '2026-10-13');
 setMeta(
   '/rocm',
   'What is ROCm',

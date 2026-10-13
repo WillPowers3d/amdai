@@ -226,6 +226,27 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
     { href: '/contribute', label: 'Contribute' },
     { href: '/about', label: 'About' },
   ],
+  '/models': [
+    { href: '/models/qwen36', label: 'Qwen3.6-35B-A3B' },
+    { href: '/models/flash', label: 'Qwen 3.8 Flash' },
+    { href: '/qwen', label: 'Qwen compare' },
+    { href: '/calculator', label: 'Calculator' },
+    { href: '/contribute', label: 'Contribute' },
+  ],
+  '/models/qwen36': [
+    { href: '/recipes/qwen36-35b.llamacpp-vulkan.262k', label: 'Daily-driver recipe' },
+    { href: '/gpus/r9700', label: 'R9700 measured page' },
+    { href: '/benchmarks', label: 'Benchmarks' },
+    { href: '/qwen36-dual', label: '35B on two cards' },
+    { href: '/stack-lab', label: 'Stack Lab' },
+  ],
+  '/models/flash': [
+    { href: '/flash-daily', label: 'Flash daily' },
+    { href: '/backends/strata', label: 'Strata' },
+    { href: '/benchmarks', label: 'Benchmarks' },
+    { href: '/gpus/r9700', label: 'R9700 measured page' },
+    { href: '/stack-lab', label: 'Stack Lab' },
+  ],
 };
 
 export const HIGH_TRAFFIC_PATHS = Object.keys(NEXT_STEPS);

@@ -78,7 +78,9 @@ Public site URL is `https://amdai.net` (`site` in `astro.config.mjs`; override w
 | `/gpus/rx7900xt` | RX 7900 XT consumer recipe sheet — 20 GB, gfx1100, calculator fit estimates; not measured on local-desktop |
 | `/gpus/rx7800xt` | RX 7800 XT consumer recipe sheet — 16 GB, gfx1101, calculator fit estimates; not measured on local-desktop |
 | `/gpus/<id>` | One card: recipe table, launch command, estimate sheet when listed, or “no tested recipe yet” |
-| `/models` | House Qwen models with reverse recipe tables |
+| `/models` | House Qwen models — daily drivers first; names without a cited row stay contribute |
+| `/models/qwen36` | Qwen3.6-35B-A3B recipe page — measured config table, RAM lines, llama.cpp launch, Stack Lab |
+| `/models/flash` | Qwen 3.8 Flash recipe page — cited Strata vs llama.cpp pair, two-card Q6, RAM lines |
 | `/recipes/<id>` | One launch: gates, command, RAM, withdrawal |
 | `/contribute` | Download recipe JSON (log required) |
 | `/wanted` | Card × model gaps — no bounty amounts |
