@@ -101,6 +101,7 @@ describe('primary path and nav IA', () => {
       '/gpus/rx-9070-xt': '../pages/gpus/rx-9070-xt.astro',
       '/gpus/rx-9060-xt': '../pages/gpus/rx-9060-xt.astro',
       '/gpus/rx-7900-gre': '../pages/gpus/rx-7900-gre.astro',
+      '/gpus/rx-7700-xt': '../pages/gpus/rx-7700-xt.astro',
       '/multi-gpu': '../pages/multi-gpu.astro',
       '/benchmarks': '../pages/benchmarks.astro',
       '/compare': '../pages/compare/index.astro',
