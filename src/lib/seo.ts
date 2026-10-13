@@ -215,10 +215,9 @@ export const CRUMB_LABELS: Record<string, string> = {
 export type Crumb = { name: string; href: string };
 
 /** Intermediate segments that are not real pages. */
-const SKIP_CRUMB = new Set(['/forum/c', '/forum/t', '/recipes', '/troubleshoot', '/go']);
+const SKIP_CRUMB = new Set(['/forum/c', '/forum/t', '/recipes', '/go']);
 
 const CRUMB_HREF: Record<string, string> = {
-  '/troubleshoot': '/troubleshooting',
   '/forum/c': '/forum',
   '/forum/t': '/forum',
   '/recipes': '/models',
@@ -474,6 +473,12 @@ setMeta(
   'Troubleshooting',
   'GPU not seen, wrong wheel, CPU fallback, and other home-lab ROCm failures with cited patterns.',
 );
+setMeta(
+  '/troubleshoot',
+  'Troubleshoot',
+  'Symptom-first fixes for a broken or slow Radeon local-AI box — rocminfo empty, install, OOM, wrong GPU, MODE1, DDR5, Windows. Cited only.',
+);
+setDate('/troubleshoot', '2026-10-13');
 setMeta(
   '/troubleshoot/errors',
   'Error paste',

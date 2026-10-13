@@ -430,8 +430,9 @@ export const FAQ_ENTRIES: FaqItem[] = [
     group: 'troubleshooting',
     question: 'The GPU is not seen or HIP configure is a mess — where do I start?',
     answer:
-      'Paste the log in the error matcher. Cited rows live on /rocm-problems: HIP no binary for GPU, Ubuntu archive packages shadowing AMD’s install, MODE1 reset / MES hang on gfx12, unofficial HSA overrides. Do not treat a community HSA_OVERRIDE as a measured fix. Walkthroughs: verify ROCm, then troubleshooting.',
+      'Start from a symptom on /troubleshoot, or paste the log in the error matcher. Cited rows live on /rocm-problems: HIP no binary for GPU, Ubuntu archive packages shadowing AMD’s install, MODE1 reset / MES hang on gfx12, unofficial HSA overrides. Do not treat a community HSA_OVERRIDE as a measured fix. Walkthroughs: verify ROCm, then troubleshooting.',
     links: [
+      { href: '/troubleshoot', label: 'Troubleshoot' },
       { href: '/rocm-problems', label: 'ROCm problems' },
       { href: '/troubleshoot/errors', label: 'Error paste' },
       { href: '/troubleshooting', label: 'Troubleshooting' },
@@ -501,6 +502,7 @@ export const REQUIRED_FAQ_HREFS = [
   '/multi-gpu',
   '/amdai-bench',
   '/compare/radeon-vs-nvidia',
+  '/troubleshoot',
 ] as const;
 
 const BANNED_VISIBLE = /Qwen2\.5|Qwen3-8B/i;

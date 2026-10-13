@@ -73,6 +73,7 @@ export const NAV_SURFACED = [
   '/budget',
   '/newsletter',
   '/models',
+  '/troubleshoot',
 ] as const;
 
 export const REQUIRED_HOME_START_HREFS = [
@@ -90,6 +91,7 @@ export const REQUIRED_HOME_START_HREFS = [
   '/faq',
   '/glossary',
   '/compare',
+  '/troubleshoot',
 ] as const;
 
 const NEXT_STEPS: Record<string, PathLink[]> = {
@@ -99,6 +101,7 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
     { href: '/gpus/r9700', label: 'R9700 measured page' },
     { href: '/benchmarks', label: 'Benchmarks' },
     { href: '/faq', label: 'FAQ' },
+    { href: '/troubleshoot', label: 'Troubleshoot' },
   ],
   '/start': [
     { href: '/setup', label: 'First-run setup' },
@@ -106,6 +109,7 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
     { href: '/gpus/r9700', label: 'R9700 measured page' },
     { href: '/benchmarks', label: 'Benchmarks' },
     { href: '/newsletter', label: 'Digest' },
+    { href: '/troubleshoot', label: 'Troubleshoot' },
   ],
   '/setup': [
     { href: '/gpus/r9700', label: 'R9700 measured page' },
@@ -246,6 +250,13 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
     { href: '/benchmarks', label: 'Benchmarks' },
     { href: '/gpus/r9700', label: 'R9700 measured page' },
     { href: '/stack-lab', label: 'Stack Lab' },
+  ],
+  '/troubleshoot': [
+    { href: '/troubleshoot/errors', label: 'Error paste' },
+    { href: '/setup', label: 'First-run setup' },
+    { href: '/rocm-problems', label: 'ROCm problems' },
+    { href: '/bios', label: 'BIOS' },
+    { href: '/faq', label: 'FAQ' },
   ],
 };
 

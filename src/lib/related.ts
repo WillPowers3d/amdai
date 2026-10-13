@@ -68,6 +68,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/gpus/r9700', label: 'R9700 measured page' },
       { href: '/benchmarks', label: 'Benchmarks' },
       { href: '/faq', label: 'FAQ' },
+      { href: '/troubleshoot', label: 'Troubleshoot' },
       { href: '/stack-lab', label: 'Stack Lab' },
     ];
   }
@@ -76,8 +77,20 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/setup', label: 'First-run setup' },
       { href: '/glossary', label: 'Glossary' },
       { href: '/faq', label: 'FAQ' },
+      { href: '/troubleshoot', label: 'Troubleshoot' },
       { href: '/rocm/glossary', label: 'ROCm glossary' },
       { href: '/backends', label: 'Backends' },
+    ];
+  }
+  if (path === '/troubleshoot' || path === '/troubleshooting' || path.startsWith('/troubleshoot/')) {
+    return [
+      { href: '/troubleshoot', label: 'Troubleshoot' },
+      { href: '/troubleshoot/errors', label: 'Error paste' },
+      { href: '/troubleshooting', label: 'Troubleshooting' },
+      { href: '/setup', label: 'First-run setup' },
+      { href: '/rocm-problems', label: 'ROCm problems' },
+      { href: '/bios', label: 'BIOS' },
+      { href: '/faq', label: 'FAQ' },
     ];
   }
   if (path === '/multi-gpu' || path === '/qwen36-dual') {
@@ -108,6 +121,7 @@ function topicLinks(path: string): RelatedLink[] {
     return [
       { href: '/rocm-problems', label: 'ROCm problems' },
       { href: '/rocm', label: 'What is ROCm' },
+      { href: '/troubleshoot', label: 'Troubleshoot' },
       { href: '/troubleshooting', label: 'Troubleshooting' },
       { href: '/contact', label: 'Contact' },
     ];

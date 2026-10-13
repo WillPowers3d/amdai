@@ -271,6 +271,7 @@ export function citeNumber(used: readonly CiteKey[], id: CiteKey): number {
 export const rocmRelated = [
   { href: '/rocm-problems', label: 'Open problems', blurb: 'Cited consumer gaps and how you can help.' },
   { href: '/tutorials/install-rocm', label: 'Install ROCm', blurb: 'Linux-first walkthrough for 10.1 on a listed Ubuntu.' },
+  { href: '/troubleshoot', label: 'Troubleshoot', blurb: 'Symptom-first checks for a broken or slow Radeon box.' },
   { href: '/troubleshoot/errors', label: 'Error paste', blurb: 'Match a log against cited ROCm / Ollama patterns.' },
   { href: '/troubleshooting', label: 'Troubleshooting', blurb: 'GPU not seen, wrong wheel, CPU fallback.' },
   { href: '/calculator', label: 'Calculator', blurb: 'Quant + hardware VRAM / RAM fit estimates.' },

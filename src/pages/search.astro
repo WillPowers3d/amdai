@@ -58,7 +58,7 @@ import Base from '../layouts/Base.astro';
       const search = await pagefind.search(query);
       const docs = await Promise.all(search.results.slice(0, 20).map((row) => row.data()));
       if (docs.length === 0) {
-        statusEl.textContent = 'No pages for that query. Try an error string on /troubleshoot/errors.';
+        statusEl.textContent = 'No pages for that query. Try a symptom on /troubleshoot or an error string on /troubleshoot/errors.';
         statusEl.classList.remove('hidden');
         return;
       }

@@ -104,6 +104,7 @@ export const primaryNav: NavItem[] = [
   { href: '/bios', label: 'BIOS', description: 'Above 4G, ReBAR/SAM, CSM, x8/x8 vs x16/x4 — cited chipset notes', group: 'learn' },
   { href: '/flash-ram-offload', label: 'Flash RAM offload', description: 'Run Flash with experts on DDR5 — kits, measured DIMM speed, launch shape', group: 'learn' },
   { href: '/tutorials', label: 'Tutorials', description: 'Practical how-tos for this stack', group: 'learn' },
+  { href: '/troubleshoot', label: 'Troubleshoot', description: 'Symptom-first fixes — GPU missing, install, OOM, slow, hang, Windows', group: 'learn' },
   { href: '/troubleshooting', label: 'Troubleshooting', description: 'GPU not seen, wrong wheel, CPU fallback', group: 'learn' },
   { href: '/troubleshoot/errors', label: 'Error paste', description: 'Match a log against cited ROCm / Ollama patterns', group: 'learn' },
   { href: '/updates', label: 'Updates', description: 'RSS + ROCm × llama.cpp × vLLM 0.31 matrix', group: 'learn' },

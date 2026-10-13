@@ -6,6 +6,11 @@
 import { GLOSSARY } from './glossary';
 import { FAQ_ITEMS } from './faq';
 import { SETUP_HOWTO_STEPS, SETUP_PUBLISHED } from './setup';
+import {
+  TROUBLESHOOT_HOWTO_STEPS,
+  TROUBLESHOOT_PUBLISHED,
+  troubleshootFaqItems,
+} from './troubleshoot';
 import { ROCM_FAQ_ALL } from './rocm-faq';
 import { ROCM_GLOSSARY } from './rocm-glossary';
 import {
@@ -297,6 +302,21 @@ export function pageJsonLd(input: {
 
   if (path === '/faq') {
     nodes.push(faqPageJsonLd(FAQ_ITEMS, url));
+    return nodes;
+  }
+  if (path === '/troubleshoot') {
+    const dates = articleDates(path);
+    nodes.push(
+      howToJsonLd({
+        name: input.title.replace(/ · AMDai$/, ''),
+        description: input.description,
+        url,
+        published: dates?.published ?? TROUBLESHOOT_PUBLISHED,
+        modified: dates?.modified ?? TROUBLESHOOT_PUBLISHED,
+        steps: TROUBLESHOOT_HOWTO_STEPS,
+      }),
+    );
+    nodes.push(faqPageJsonLd(troubleshootFaqItems(), url));
     return nodes;
   }
   if (path === '/rocm/faq') {

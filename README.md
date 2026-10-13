@@ -139,6 +139,7 @@ Public site URL is `https://amdai.net` (`site` in `astro.config.mjs`; override w
 | `/harnesses/{id}` | One harness: endpoint, tools, ROCm notes, hybrid |
 | `/hardware` | PSU, cooling, VRAM |
 | `/tutorials` | How-tos |
+| `/troubleshoot` | Symptom-first consumer hub — grouped guided flows, `?q=` filter |
 | `/troubleshooting` | Common failures |
 | `/troubleshoot/errors` | Paste-a-log matcher, cited patterns |
 | `/updates` | Dated notes + RSS + version matrix |
@@ -167,6 +168,7 @@ Public site URL is `https://amdai.net` (`site` in `astro.config.mjs`; override w
 | `src/data/products.yaml` | Check-price search URLs (no prices) |
 | `src/data/budget-tiers.yaml` | `/budget` tiers; USD bands stay TODO until cited |
 | `src/data/errors.yaml` | Cited troubleshooter patterns |
+| `src/data/troubleshoot.yaml` | Symptom-first `/troubleshoot` hub (needs_source rows excluded) |
 | `src/data/rocm-problems.yaml` | Cited `/rocm-problems` tracker (TODO if unverified) |
 | `src/data/harnesses.yaml` | Cited `/harnesses` catalog (no invented features) |
 | `src/data/backends.yaml` | `/backends` comparison + per-engine deep dives |

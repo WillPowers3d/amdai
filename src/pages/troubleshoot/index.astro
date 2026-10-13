@@ -1,0 +1,327 @@
+---
+import Base from '../../layouts/Base.astro';
+import HowWeTest from '../../components/HowWeTest.astro';
+import NextSteps from '../../components/NextSteps.astro';
+import OpenInStackLab from '../../components/OpenInStackLab.astro';
+import { forumEnabled } from '../../lib/flags';
+import { HOUSE_STACK_LAB } from '../../lib/stack-lab-open';
+import {
+  TROUBLESHOOT_HUB_LINKS,
+  filterSymptoms,
+  groupSymptoms,
+  loadTroubleshootFile,
+  parseTroubleshootQuery,
+  publishedSymptoms,
+  symptomHaystack,
+} from '../../lib/troubleshoot';
+
+const file = loadTroubleshootFile();
+const all = publishedSymptoms(file);
+const query = parseTroubleshootQuery(Astro.url.searchParams);
+const visible = filterSymptoms(query, all, file.groups);
+const visibleIds = new Set(visible.map((item) => item.id));
+const groups = groupSymptoms(all, file.groups);
+const usedGroups = new Set(visible.map((item) => item.group));
+const forumOn = forumEnabled();
+const index = all.map((item) => {
+  const group = file.groups.find((row) => row.id === item.group);
+  return { id: item.id, group: item.group, haystack: symptomHaystack(item, group) };
+});
+---
+
+<Base
+  title="Troubleshoot"
+  description="Symptom-first fixes for a broken or slow Radeon local-AI box — rocminfo empty, install, OOM, wrong GPU, MODE1, DDR5, Windows. Cited only."
+>
+  <main id="main" class="mx-auto max-w-3xl px-4 py-10 sm:px-6">
+    <a class="skip-link skip-to-trouble-nav" href="#trouble-sections">Skip to section nav</a>
+    <p class="kicker">When it breaks</p>
+    <h1 class="mt-3 font-serif text-4xl tracking-tight sm:text-5xl">Troubleshoot</h1>
+    <p class="mt-4 text-lg leading-relaxed text-muted">
+      Start from what you see, in plain English. Each symptom has quick checks, ranked causes, and a fix.
+      Commands are the ones this site already cites. We do not invent error strings or tok/s.
+      As of {file.as_of}.
+    </p>
+    <p class="mt-3 text-sm text-faint">
+      Have a log?
+      <a class="underline decoration-accent/40 underline-offset-2" href="/troubleshoot/errors">Paste it</a>.
+      Longer order-of-operations:
+      <a class="underline decoration-accent/40 underline-offset-2" href="/troubleshooting">Troubleshooting</a>.
+      First-run:
+      <a class="underline decoration-accent/40 underline-offset-2" href="/setup">Ubuntu setup</a>.
+    </p>
+    <p class="mt-5 flex flex-wrap gap-3">
+      <a class="btn-primary" href="/troubleshoot/errors">Paste a log</a>
+      <a class="btn-ghost" href="/setup">First-run setup</a>
+      <a class="btn-ghost" href="/rocm-problems">ROCm problems</a>
+    </p>
+    <div class="mt-4">
+      <OpenInStackLab {...HOUSE_STACK_LAB.doctor} compact />
+    </div>
+    <ul class="mt-6 flex flex-wrap gap-2">
+      {TROUBLESHOOT_HUB_LINKS.map((link) => (
+        <li>
+          <a
+            class="inline-flex min-h-9 items-center rounded-full border border-line bg-canvas px-3 text-sm text-ink hover:border-accent/50 hover:text-accent-ink"
+            href={link.href}
+          >
+            {link.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+
+    <search class="mt-10" aria-label="Filter symptoms">
+      <form class="flex flex-col gap-3 sm:flex-row" action="/troubleshoot" method="get" role="search" data-trouble-form>
+        <label class="sr-only" for="trouble-q">Filter symptoms</label>
+        <input
+          id="trouble-q"
+          name="q"
+          type="search"
+          value={query}
+          class="min-h-11 flex-1 rounded-full border border-line bg-raised px-4 text-ink"
+          placeholder="rocminfo, MODE1, VRAM, Windows…"
+          autocomplete="off"
+        />
+        <button type="submit" class="btn-primary">Filter</button>
+      </form>
+      <p class="mt-3 text-sm text-muted" data-trouble-status role="status" aria-live="polite">
+        {query
+          ? `${visible.length} of ${all.length} for “${query}”. Share this URL.`
+          : `${all.length} symptoms in ${file.groups.length} groups. Share a filter with ?q=.`}
+      </p>
+      <p
+        class:list={['mt-3 text-sm text-muted', visible.length > 0 && 'hidden']}
+        data-trouble-empty
+        role="status"
+      >
+        Nothing matches that filter. Clear the box or pick a section — we will not invent a fix.
+      </p>
+    </search>
+
+    <nav
+      id="trouble-sections"
+      class="trouble-sections sticky z-20 -mx-4 mt-8 border-y border-line bg-canvas/95 px-4 py-2 backdrop-blur-md sm:-mx-6 sm:px-6"
+      aria-label="Symptom groups"
+    >
+      <p class="mb-2 font-mono text-[0.68rem] uppercase tracking-[0.16em] text-faint">Jump to section</p>
+      <ol class="flex flex-wrap gap-2">
+        {file.groups.map((group) => {
+          const live = !query || usedGroups.has(group.id);
+          return (
+            <li>
+              <a
+                class:list={[
+                  'inline-flex min-h-11 items-center rounded-full border border-line bg-raised px-3 text-sm text-ink hover:border-accent/50 hover:text-accent-ink',
+                  !live && 'pointer-events-none text-faint',
+                ]}
+                href={`#${group.id}`}
+                data-trouble-section-link={group.id}
+                aria-disabled={live ? 'false' : 'true'}
+              >
+                {group.label}
+              </a>
+            </li>
+          );
+        })}
+      </ol>
+    </nav>
+
+    <div class="mt-10 space-y-12" data-trouble-list>
+      {groups.map(({ group, items }) => {
+        const sectionLive = !query || usedGroups.has(group.id);
+        return (
+          <section
+            id={group.id}
+            class="scroll-mt-36"
+            data-trouble-section={group.id}
+            aria-labelledby={`${group.id}-heading`}
+            hidden={!sectionLive}
+          >
+            <h2 id={`${group.id}-heading`} class="font-serif text-3xl tracking-tight">
+              {group.label}
+            </h2>
+            <p class="mt-2 text-sm leading-relaxed text-muted">{group.description}</p>
+            <div class="mt-6 space-y-8">
+              {items.map((item) => {
+                const on = !query || visibleIds.has(item.id);
+                return (
+                  <article
+                    id={item.id}
+                    class="scroll-mt-36 rounded-2xl border border-line bg-raised/50 p-5"
+                    data-trouble-item={item.id}
+                    data-trouble-group={item.group}
+                    aria-labelledby={`${item.id}-title`}
+                    hidden={!on}
+                  >
+                    <h3 id={`${item.id}-title`} class="font-serif text-2xl tracking-tight">
+                      <a class="hover:text-accent-ink" href={`#${item.id}`}>{item.title}</a>
+                    </h3>
+                    <p class="mt-4 leading-relaxed text-ink">{item.symptom}</p>
+
+                    <h4 class="mt-6 font-medium text-ink">Quick checks</h4>
+                    <ol class="mt-3 space-y-4">
+                      {item.checks.map((check) => (
+                        <li>
+                          <pre class="overflow-x-auto rounded-xl border border-line bg-canvas p-3 text-sm"><code>{check.command}</code></pre>
+                          <p class="mt-2 text-sm leading-relaxed text-muted">
+                            <span class="font-medium text-ink">Good output. </span>
+                            {check.good}
+                          </p>
+                        </li>
+                      ))}
+                    </ol>
+
+                    <h4 class="mt-6 font-medium text-ink">Likely causes</h4>
+                    <ol class="mt-3 list-decimal space-y-2 pl-5 text-sm leading-relaxed text-muted">
+                      {item.causes.map((cause) => (
+                        <li>{cause}</li>
+                      ))}
+                    </ol>
+
+                    <h4 class="mt-6 font-medium text-ink">The fix</h4>
+                    <p class="mt-3 text-sm leading-relaxed text-ink">{item.fix}</p>
+
+                    <ul class="mt-4 flex flex-wrap gap-2">
+                      {item.links.map((link) => (
+                        <li>
+                          <a
+                            class="inline-flex min-h-9 items-center rounded-full border border-line bg-canvas px-3 text-sm text-ink hover:border-accent/50 hover:text-accent-ink"
+                            href={link.href}
+                          >
+                            {link.label}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                    <p class="mt-4 text-xs leading-relaxed text-faint">
+                      {item.citations.map((cite, index) => (
+                        <>
+                          {index > 0 && ' · '}
+                          <a
+                            class="underline decoration-accent/40 underline-offset-2"
+                            href={cite.href}
+                            rel={cite.href.startsWith('http') ? 'noopener' : undefined}
+                          >
+                            {cite.label}
+                          </a>
+                        </>
+                      ))}
+                    </p>
+                  </article>
+                );
+              })}
+            </div>
+          </section>
+        );
+      })}
+    </div>
+
+    <section id="still-stuck" class="mt-14 scroll-mt-36" aria-labelledby="still-stuck-heading">
+      <h2 id="still-stuck-heading" class="font-serif text-3xl tracking-tight">Still stuck?</h2>
+      <p class="mt-4 leading-relaxed text-muted">
+        Do not invent a fix. Write a cited report with rocminfo, kernel, and the exact log.
+        Paste the string in the
+        <a class="underline decoration-accent/40 underline-offset-2" href="/troubleshoot/errors">error matcher</a>
+        first — a miss is a miss.
+      </p>
+      <p class="mt-4 flex flex-wrap gap-3">
+        <a class="btn-primary" href="/rocm-problems/report">Write a report</a>
+        {forumOn ? (
+          <a class="btn-ghost" href="/forum/new?category=install-drivers">Ask the forum</a>
+        ) : (
+          <a class="btn-ghost" href="/forum">Forum (off on this build)</a>
+        )}
+        <a class="btn-ghost" href="/rocm-problems">ROCm problems</a>
+      </p>
+      {!forumOn && (
+        <p class="mt-3 text-sm text-faint">
+          The forum is off on this static build. File a cited report instead, or read the
+          <a class="underline decoration-accent/40 underline-offset-2" href="/forum/rules">rules</a>
+          and come back when the forum is on.
+        </p>
+      )}
+    </section>
+
+    <NextSteps path="/troubleshoot" />
+    <div class="mt-8">
+      <HowWeTest />
+    </div>
+  </main>
+</Base>
+
+<script is:inline define:vars={{ index, total: all.length, groupCount: file.groups.length }}>
+  const input = document.getElementById('trouble-q');
+  const form = document.querySelector('[data-trouble-form]');
+  const statusEl = document.querySelector('[data-trouble-status]');
+  const emptyEl = document.querySelector('[data-trouble-empty]');
+  const params = new URLSearchParams(window.location.search);
+  const initial = (params.get('q') ?? '').trim();
+  if (input && initial && !input.value) input.value = initial;
+
+  function applyFilter(raw) {
+    const q = raw.trim().toLowerCase();
+    const next = new URL(window.location.href);
+    if (q) next.searchParams.set('q', raw.trim());
+    else next.searchParams.delete('q');
+    if (next.search !== window.location.search) {
+      window.history.replaceState({}, '', next);
+    }
+
+    const visibleIds = new Set();
+    for (const row of index) {
+      if (!q || row.haystack.includes(q)) visibleIds.add(row.id);
+    }
+
+    document.querySelectorAll('[data-trouble-item]').forEach((node) => {
+      const id = node.getAttribute('data-trouble-item');
+      node.hidden = !(!!id && visibleIds.has(id));
+    });
+
+    const used = new Set();
+    document.querySelectorAll('[data-trouble-section]').forEach((section) => {
+      const group = section.getAttribute('data-trouble-section');
+      const any = Array.from(section.querySelectorAll('[data-trouble-item]')).some((el) => !el.hidden);
+      section.hidden = !any;
+      if (any && group) used.add(group);
+    });
+
+    document.querySelectorAll('[data-trouble-section-link]').forEach((node) => {
+      const group = node.getAttribute('data-trouble-section-link');
+      const live = !!group && used.has(group);
+      node.setAttribute('aria-disabled', live ? 'false' : 'true');
+      node.classList.toggle('pointer-events-none', !live);
+      node.classList.toggle('text-faint', !live);
+    });
+
+    const shown = visibleIds.size;
+    if (statusEl) {
+      statusEl.textContent = q
+        ? shown + ' of ' + total + ' for “' + raw.trim() + '”. Share this URL.'
+        : total + ' symptoms in ' + groupCount + ' groups. Share a filter with ?q=.';
+    }
+    if (emptyEl) emptyEl.classList.toggle('hidden', shown > 0);
+  }
+
+  if (form && input) {
+    form.addEventListener('submit', function (event) {
+      event.preventDefault();
+      applyFilter(input.value);
+    });
+    input.addEventListener('input', function () {
+      applyFilter(input.value);
+    });
+  }
+
+  applyFilter(initial || (input ? input.value : ''));
+</script>
+
+<style>
+  .skip-to-trouble-nav:focus {
+    top: 3.5rem;
+  }
+
+  .trouble-sections {
+    top: var(--header-h);
+  }
+</style>

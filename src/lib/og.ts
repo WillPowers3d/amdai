@@ -216,6 +216,12 @@ export const OG_CARDS: OgCard[] = [
     alt: 'AMDai dual / multi-GPU — when a second R9700 helps',
   },
   {
+    slug: 'troubleshoot',
+    title: 'Troubleshoot',
+    lede: 'Symptom-first fixes. Cited commands only',
+    alt: 'AMDai troubleshoot — symptom-first Radeon local-AI fixes',
+  },
+  {
     slug: 'about',
     title: 'About AMDai',
     lede: 'Independent Radeon notes. amdai on local-desktop',

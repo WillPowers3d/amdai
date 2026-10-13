@@ -1,0 +1,549 @@
+# Symptom-first consumer troubleshooter for /troubleshoot.
+# Every published row needs a citation and an internal link.
+# needs_source: true rows are parsed, then excluded from the build.
+# Never invent error strings, issue numbers, version pins, or tok/s.
+as_of: 2026-10-13
+rule: Published symptoms need a citation and an internal link. Unsourced rows stay out of the build.
+
+groups:
+  - id: gpu-not-detected
+    label: GPU not detected
+    description: rocminfo or the Vulkan device list shows no agent, or the wrong gfx.
+  - id: install
+    label: Install problems
+    description: ROCm userspace vs kernel, groups, Secure Boot / DKMS, mixed apt repos.
+  - id: wont-load
+    label: Model will not load
+    description: Out of VRAM, context too big, wrong quant, or system RAM too small for offload.
+  - id: slow
+    label: Slow speed
+    description: Wrong Vulkan GPU, CPU fallback, two-card split tax, PCIe / BIOS.
+  - id: crashes
+    label: Crashes and hangs
+    description: MODE1 / MES reset, unstable DDR5, driver or kernel regressions.
+  - id: windows
+    label: Windows notes
+    description: What this site will say about Windows ROCm — and what it will not.
+
+symptoms:
+  - id: rocminfo-empty
+    group: gpu-not-detected
+    title: rocminfo shows no GPU
+    symptom: >
+      rocminfo lists only the CPU, or there is no GPU agent. Do not download a 20 GB
+      GGUF until a discrete agent appears.
+    checks:
+      - command: lspci
+        good: An AMD VGA or 3D controller line. No AMD line means power, slot, or the card never initialized.
+      - command: lsmod | grep amdgpu
+        good: The amdgpu module is listed.
+      - command: dmesg | grep -i amdgpu
+        good: The card initialized. MODE1 / MES lines belong on the hang flow, not here.
+      - command: rocminfo
+        good: A GPU agent with a marketing name and a gfx ID. CPU-only output is a miss.
+    causes:
+      - The card never initialized (cable, slot, or firmware).
+      - The amdgpu module is missing (Secure Boot / DKMS / distro module).
+      - Userspace is the Ubuntu archive rocm tree, or mixed with AMD’s repo.
+      - The process cannot open /dev/kfd or /dev/dri (groups).
+    fix: >
+      Work top down. lspci first, then the module, then rocminfo. New groups need a
+      full logout. Do not sudo inference to dodge permissions. Ubuntu 24.04+ is the
+      measured path on this site.
+    links:
+      - href: /setup
+        label: First-run setup
+      - href: /tutorials/verify-rocm
+        label: Verify ROCm
+      - href: /tutorials/install-rocm
+        label: Install ROCm
+      - href: /rocm
+        label: What is ROCm
+      - href: /troubleshoot/errors
+        label: Error paste
+    citations:
+      - href: https://rocm.docs.amd.com/en/docs-10.1.0/install/rocm.html
+        label: ROCm 10.1.0 install — post-install device access
+
+  - id: wrong-gfx
+    group: gpu-not-detected
+    title: Wrong gfx or hipErrorNoBinaryForGpu
+    symptom: >
+      rocminfo or llama-cli --list-devices shows gfx1100 when you expected gfx1201,
+      or HIP logs hipErrorNoBinaryForGpu / “No kernel image is available.”
+    checks:
+      - command: rocminfo | grep -E 'Marketing Name|gfx'
+        good: R9700 GPU agent is gfx1201. gfx1100 is a different card (RX 7900 XTX class), not a misspelling.
+      - command: llama-cli --list-devices
+        good: The discrete RADV / HIP device, not the RAPHAEL iGPU.
+    causes:
+      - You are looking at a different GPU or the iGPU.
+      - The HIP wheel, container, or llama.cpp HIP build was compiled for another AMDGPU_TARGETS list.
+      - Mixed ROCm libraries shadow the gfx you actually have.
+      - An unofficial HSA_OVERRIDE_GFX_VERSION is papering over a missing kernel image.
+    fix: >
+      Confirm the gfx on the discrete agent. Rebuild or reinstall with that target
+      (-DAMDGPU_TARGETS=gfx1201 / -DGGML_HIP=ON for llama.cpp). Do not set a random
+      HSA_OVERRIDE_GFX_VERSION on a card current ROCm already lists. If HIP still has
+      no binary, use llama.cpp Vulkan tonight.
+    links:
+      - href: /rocm/gfx
+        label: gfx IDs
+      - href: /gpus/r9700
+        label: R9700 measured page
+      - href: /gpus/rx7900xtx
+        label: RX 7900 XTX sheet
+      - href: /troubleshoot/errors#no-binary-for-gpu
+        label: hipErrorNoBinaryForGpu
+      - href: /rocm-problems
+        label: ROCm problems
+    citations:
+      - href: https://github.com/ROCm/HIP/blob/develop/docs/reference/error_codes.rst
+        label: HIP error codes — hipErrorNoBinaryForGpu (209)
+      - href: https://github.com/ollama/ollama/issues/14686
+        label: Ollama #14686 — HSA_OVERRIDE tried on R9700 Windows, still filtered
+
+  - id: groups-kfd
+    group: install
+    title: Not in render or video / Permission denied on /dev/kfd
+    symptom: >
+      Userspace is installed but the process cannot open /dev/kfd or /dev/dri.
+      Logs say Permission denied, no GPU found, or you are not a member of render/video.
+    checks:
+      - command: sudo usermod -aG render,video "$USER"
+        good: The command exits 0. Groups do not apply until a full logout or reboot.
+      - command: groups | grep -E 'render|video'
+        good: Both render and video appear in the current session after logout.
+      - command: ls -l /dev/kfd /dev/dri
+        good: The device nodes exist. Containers also need those nodes and matching GIDs.
+    causes:
+      - The user was never added to render and video.
+      - You opened a new shell without leaving the session.
+      - A container is missing --device /dev/kfd --device /dev/dri --group-add video.
+    fix: >
+      Add the groups, then log out completely. Do not sudo inference to dodge
+      permissions. Official Linux installs put the user in render and video.
+    links:
+      - href: /setup
+        label: First-run setup
+      - href: /tutorials/install-rocm
+        label: Install ROCm
+      - href: /troubleshoot/errors#no-gpu-permissions
+        label: Permissions pattern
+      - href: /faq
+        label: FAQ
+    citations:
+      - href: https://rocm.docs.amd.com/en/docs-10.1.0/install/rocm.html
+        label: ROCm 10.1.0 install — post-install device access
+
+  - id: mixed-apt
+    group: install
+    title: Distro apt ROCm mixed with AMD’s repo
+    symptom: >
+      gfx1201 “has 2 ISAs but can only support a single ISA,” or rocminfo never
+      lists the card after you installed both Ubuntu archive rocm and AMD’s repo.
+    checks:
+      - command: which rocminfo rocm-smi
+        good: The binaries resolve. Then ldd $(which rocminfo) should prefer /opt/rocm, not archive HIP.
+      - command: rocminfo | grep -E 'Marketing Name|gfx'
+        good: One GPU ISA that matches the card. A shadowed 5.7-era or 7.1-era archive tree will not list gfx1201 cleanly.
+    causes:
+      - Canonical/Ubuntu rocm or libamdhip64-dev is loaded instead of AMD’s 10.x install.
+      - You installed every amdrocm-core-sdk family package — TheRock wants one gfx family.
+      - Kernel vs userspace drifted after apt upgrade.
+    fix: >
+      Pick one source. Purge archive rocm, libamdhip64-dev, and libhsa-runtime*
+      before adding AMD’s 10.0/10.1 repo. Re-read ldconfig so /opt/rocm wins.
+      Ubuntu 24.04+ is the measured path on this site. If a stack died after
+      apt upgrade, bisect kernel vs ROCm userspace before you reinstall.
+    links:
+      - href: /rocm/versions
+        label: ROCm versions
+      - href: /tutorials/install-rocm
+        label: Install ROCm
+      - href: /rocm-problems
+        label: ROCm problems
+      - href: /troubleshoot/errors#mixed-apt-amd-repo
+        label: Mixed apt pattern
+      - href: /setup
+        label: First-run setup
+    citations:
+      - href: https://github.com/ROCm/ROCm/issues/6110
+        label: ROCm #6110 — Ubuntu HIP packages shadowing gfx1201 runtime
+
+  - id: secure-boot-dkms
+    group: install
+    title: Secure Boot blocks the amdgpu DKMS module
+    symptom: >
+      lsmod | grep amdgpu is empty. rocminfo sees only the CPU. dmesg mentions
+      Secure Boot, Lockdown, module verification failed, or DKMS key rejected.
+    checks:
+      - command: lsmod | grep amdgpu
+        good: The module is listed. Empty output with Secure Boot on is the classic miss.
+      - command: rocminfo
+        good: A GPU agent. CPU-only here usually means the module never loaded.
+    causes:
+      - An unsigned DKMS amdgpu will not load when Secure Boot is on.
+      - Distro module vs DKMS mismatch after a kernel upgrade.
+    fix: >
+      Enroll a MOK as your distro documents, disable Secure Boot, or keep a
+      signed distro module and install userspace only (--no-dkms when that is
+      the method you chose). Do not install a third driver to “fix” a black screen.
+    links:
+      - href: /setup
+        label: First-run setup
+      - href: /tutorials/install-rocm
+        label: Install ROCm
+      - href: /troubleshoot/errors#secure-boot-dkms
+        label: Secure Boot pattern
+      - href: /rocm
+        label: What is ROCm
+    citations:
+      - href: https://rocm.docs.amd.com/en/docs-10.1.0/install/rocm.html
+        label: ROCm 10.1.0 install methods (DKMS / distro module)
+
+  - id: oom-context
+    group: wont-load
+    title: Out of VRAM at long context
+    symptom: >
+      Load fails with out of memory, ggml_gallocr, HIP/CUDA out of memory, or
+      a KV-cache allocate. Short context works; long context does not.
+    checks:
+      - command: rocm-smi --showmeminfo vram --showuse
+        good: VRAM rises when you load. An empty table or idle VRAM at “OOM” means you are not looking at this card.
+    causes:
+      - Context grows the KV cache. This site’s estimate is 2 × kv_layers × kv_heads × head_dim × context × bytes.
+      - Hybrid Qwen cards only grow KV on full-attention layers. A 262K f16 KV on Qwen3.6-35B-A3B is a large add on top of the publisher GGUF.
+      - Partial offload plus a long context overflows the card you actually picked.
+    fix: >
+      Open the calculator. Prefer a smaller context or q8_0/q4_0 KV before you
+      drop the weight quant. House recipes start at Q4. Q3 is a labeled estimate
+      on the calculator — do not invent a Q3 to “make it fit.” Daily driver on
+      our rig is 262K f16 KV with 0% RAM offload on one 32 GB card.
+    links:
+      - href: /calculator
+        label: Calculator
+      - href: /glossary
+        label: Glossary
+      - href: /quants
+        label: Quants
+      - href: /gpus/r9700
+        label: R9700 measured page
+    citations:
+      - href: /calculator
+        label: Quant + Hardware Calculator (KV formula; estimates only)
+
+  - id: mmap-ram
+    group: wont-load
+    title: System RAM too small for offload
+    symptom: >
+      The GGUF is larger than VRAM. The process dies, swaps, or never finishes
+      mapping weights. Flash-class files usually need DDR5 expert offload even
+      with two 32 GB cards.
+    checks:
+      - command: rocm-smi --showmeminfo vram --showuse
+        good: VRAM is in use if any layers landed on the GPU. Idle VRAM with a huge RSS is offload or CPU.
+    causes:
+      - llama.cpp -ngl 99 means “offload what fits”; leftover layers spill to DDR5.
+      - Flash UD-Q6_K_XL is a ~169 GB publisher listing — expect RAM / expert offload.
+      - The 35B daily driver on our rig uses 0% RAM offload. Do not treat that as a Flash recipe.
+    fix: >
+      Size the offload on the calculator and the Flash RAM offload page. Copy
+      the launch shape. Exact -ot regex and --n-cpu-moe N from the rig owner
+      are not recorded — do not invent flag values. Q3 Flash rows are estimates
+      unless a card is measured.
+    links:
+      - href: /flash-ram-offload
+        label: Flash RAM offload
+      - href: /calculator
+        label: Calculator
+      - href: /glossary
+        label: Glossary
+      - href: /flash-daily
+        label: Flash daily
+    citations:
+      - href: /flash-ram-offload
+        label: Flash RAM offload — kits and launch shape
+      - href: /calculator
+        label: Calculator — estimates only
+
+  - id: wrong-quant
+    group: wont-load
+    title: Wrong quant for the card
+    symptom: >
+      The file is too big for the VRAM you have, or you reached for a Q3 to
+      “make it fit” without an estimate. House recipes start at Q4.
+    checks:
+      - command: rocm-smi --showmeminfo vram
+        good: Peak VRAM is below the card label after load. Overflow is a fit problem, not a “slow GPU.”
+    causes:
+      - Weights plus KV plus overhead exceed the card.
+      - You compared a publisher GGUF size to VRAM and ignored KV.
+      - Consumer 16–24 GB sheets are calculator estimates — not measured on local-desktop.
+    fix: >
+      Use the calculator against the card you own. Q3 is a labeled estimate.
+      Q1 and Q2 stay off. Do not invent a Q3 to force a 35B onto a 16 GB card.
+      R9700 32 GB is the measured house card for Qwen3.6-35B-A3B UD-Q5_K_XL.
+    links:
+      - href: /calculator
+        label: Calculator
+      - href: /quants
+        label: Quants
+      - href: /gpus/r9700
+        label: R9700 measured page
+      - href: /gpus/rx7800xt
+        label: RX 7800 XT sheet
+    citations:
+      - href: /calculator
+        label: Quant + Hardware Calculator (estimates only)
+
+  - id: wrong-vulkan-device
+    group: slow
+    title: Vulkan or HIP attached to the iGPU
+    symptom: >
+      Tokens are glacial. llama-cli --list-devices shows RAPHAEL / “AMD Radeon
+      Graphics” first. Marketing strings are not enough.
+    checks:
+      - command: llama-cli --list-devices
+        good: Pick RADV GFX1201 / the discrete index, not the iGPU.
+      - command: rocm-smi --showuse
+        good: Compute and VRAM move on the discrete card while you generate.
+    causes:
+      - Many boxes have a RAPHAEL/Strix iGPU plus the R9700. The first HIP or Vulkan device may be the iGPU.
+      - Visibility env vars were never set, or were set to the wrong index.
+    fix: >
+      List devices, then pin the discrete index. Set HIP_VISIBLE_DEVICES /
+      GGML_VK_VISIBLE_DEVICES / ROCR_VISIBLE_DEVICES only after you see the
+      confusion. Isolation docs are AMD GPU isolation.
+    links:
+      - href: /rocm/vulkan-hip
+        label: Vulkan vs HIP
+      - href: /backends/llamacpp
+        label: llama.cpp
+      - href: /troubleshoot/errors#igpu-vs-dgpu
+        label: iGPU pattern
+      - href: /glossary
+        label: Glossary
+    citations:
+      - href: https://rocm.docs.amd.com/en/latest/conceptual/gpu-isolation.html
+        label: AMD — GPU isolation environment variables
+
+  - id: cpu-fallback
+    group: slow
+    title: Generation is glacial and VRAM is empty
+    symptom: >
+      The process “runs” but rocm-smi stays idle and VRAM never rises. This is
+      CPU fallback, not a slow Radeon.
+    checks:
+      - command: rocm-smi --showproductname --showmeminfo vram --showuse
+        good: Compute and VRAM move. An empty table while you generate means the process is not on the GPU.
+      - command: llama-cli --list-devices
+        good: The discrete device is visible to this binary.
+    causes:
+      - The binary is a CUDA-shaped wheel (torch.version.hip is None) or a CPU llama.cpp build.
+      - Ollama ROCm on R9700 Windows logged “filtering device which didn't fully initialize” and ran on CPU.
+      - HIP configure failed and you kept generating anyway.
+    fix: >
+      Stop. Use llama.cpp you compiled (Vulkan first on this site). Confirm
+      rocminfo, then --list-devices, then watch rocm-smi. Consumers should stay
+      on llama.cpp. Uninstall a CUDA wheel from default PyPI if that is how
+      PyTorch arrived.
+    links:
+      - href: /troubleshooting
+        label: Troubleshooting
+      - href: /backends
+        label: Backends
+      - href: /tutorials/run-local-llm
+        label: Run a local LLM
+      - href: /troubleshoot/errors#cuda-wheel
+        label: CUDA wheel pattern
+    citations:
+      - href: https://github.com/ollama/ollama/issues/14686
+        label: Ollama #14686 — R9700 Windows ROCm init filtered to CPU
+      - href: https://rocm.docs.amd.com/projects/ai-ecosystem/en/latest/inference/vllm.html
+        label: AMD — vLLM on ROCm (not default PyPI)
+
+  - id: two-cards-slower
+    group: slow
+    title: Two cards slower than one
+    symptom: >
+      A 35B that fits one 32 GB card is slower when split across two. That is
+      a measured topology tax on local-desktop, not a broken second card.
+    checks:
+      - command: llama-cli --list-devices
+        good: Both discrete GPUs are visible. Pin one process per card when you want two models, not a split.
+    causes:
+      - Official llama.cpp Vulkan overnight cards — one-card decode is faster than a split of the same Qwen3.6-35B-A3B Unsloth UD-Q5_K_XL file.
+      - --split-mode layer (-sm layer) is the documented llama.cpp default for multi-GPU and is slower on this 35B than one card.
+      - A second card is for models that do not fit one 32 GB card (house example — Qwen 3.8 Flash UD-Q6_K_XL).
+    fix: >
+      Keep the 35B daily driver on one R9700. Use two cards for a file that
+      does not fit. Read /multi-gpu and the one-vs-two compare before you
+      chase clocks. We do not invent a Flash split tok/s.
+    links:
+      - href: /multi-gpu
+        label: Dual / multi-GPU
+      - href: /compare
+        label: Compare 35B
+      - href: /compare/one-vs-two-gpu
+        label: One vs split
+      - href: /qwen36-dual
+        label: 35B on two cards
+    citations:
+      - href: /multi-gpu
+        label: Dual / multi-GPU — cited local-desktop 35B split tax
+      - href: /compare
+        label: Compare 35B — one GPU vs split from run cards
+
+  - id: pcie-bios
+    group: slow
+    title: PCIe lanes, BIOS, or power state
+    symptom: >
+      The card is seen but feels starved — wrong slot, mixed x16/x4, Above 4G
+      / ReBAR off, or you are tuning C-states from an Instinct blog post.
+    checks:
+      - command: lspci
+        good: The AMD VGA/3D device is present. Slot width and generation are a firmware map, not a tok/s we invent.
+    causes:
+      - AMD’s AM5 chipset table lists CPU graphics as 1×16 or 2×8. ROCm on Radeon multi-GPU wants identical width (x16+x16 or x8+x8). A mixed x16+x8 pair is listed as not recommended.
+      - ROCm BAR guidance says to enable Above 4G Decoding. ReBAR / Smart Access Memory is AMD’s name for a full CPU view of graphics memory.
+      - Instinct OS-tuning docs discuss restricting CPU C-states. That is not a measured R9700 desktop recipe — we have not measured llama.cpp tok/s with C-states on versus off on local-desktop.
+    fix: >
+      Read /bios before you file “ROCm is broken” on a firmware miss. Keep GPUs
+      on CPU-connected slots. Do not invent a motherboard for local-desktop. Power and
+      C-state switches stay labeled Instinct guidance, not a house speed fix.
+    links:
+      - href: /bios
+        label: BIOS
+      - href: /multi-gpu
+        label: Dual / multi-GPU
+      - href: /hardware
+        label: Hardware
+      - href: /faq
+        label: FAQ
+    citations:
+      - href: https://www.amd.com/en/products/processors/chipsets/am5.html
+        label: AMD Socket AM5 Chipset
+      - href: https://rocm.docs.amd.com/projects/radeon-ryzen/en/latest/docs/install/installrad/native_linux/mgpu.html
+        label: ROCm on Radeon — mGPU setup
+      - href: https://rocm.docs.amd.com/en/latest/reference/system-optimization/bar-access-limits.html
+        label: ROCm — BAR access limits
+      - href: https://instinct.docs.amd.com/projects/system-acceptance/en/latest/common/os-tuning.html
+        label: Instinct OS tuning (C-states)
+
+  - id: mode1-hang
+    group: crashes
+    title: GPU hang / MODE1 reset
+    symptom: >
+      The desktop dies or compute stops. dmesg shows MODE1 reset, GPU smu mode1
+      reset, MES unrecoverable, failed to suspend gangs, or VRAM is lost due to
+      GPU reset.
+    checks:
+      - command: dmesg | grep -iE 'amdgpu|MODE1|MES'
+        good: A clean boot has no MODE1 / MES hang. After a reset, VRAM is lost — save the log before you reboot.
+    causes:
+      - The amdgpu driver declared the GPU hung and issued a MODE1 (SMU) reset. On gfx12 this has shown up after MES failed to recover a compute queue — including during ROCm HSA selftests on linux-next (July 2026 amd-gfx thread).
+      - Fine-tune / training on ROCm 10.0 has a known-issue class on the R9700. First mitigation is TORCH_BLAS_PREFER_HIPBLASLT=0. That is not an inference daily-driver issue.
+      - A kernel upgrade vs ROCm userspace drift.
+    fix: >
+      Save dmesg. If it started after a kernel upgrade, bisect kernel vs ROCm
+      userspace before you reinstall. For inference, switch to llama.cpp Vulkan
+      and see if the hang follows HIP. Do not apply a training workaround to
+      inference blindly.
+    links:
+      - href: /troubleshoot/errors#mode1-reset
+        label: MODE1 pattern
+      - href: /rocm-problems
+        label: ROCm problems
+      - href: /troubleshooting
+        label: Troubleshooting
+      - href: /rocm/vulkan-hip
+        label: Vulkan vs HIP
+    citations:
+      - href: https://lists.freedesktop.org/archives/amd-gfx/2026-July/148055.html
+        label: amd-gfx — GPU reset / MODE1 on gfx12 HSA tests (Jul 2026)
+      - href: https://rocm.docs.amd.com/en/docs-10.0.0/about/release-notes.html
+        label: ROCm 10.0.0 release notes (KI class; confirm on the live page)
+
+  - id: ddr5-expo
+    group: crashes
+    title: Unstable DDR5 / EXPO
+    symptom: >
+      Kernel oops, tainted overnight numbers, or hangs that follow the DIMM
+      profile rather than the GPU driver.
+    checks:
+      - command: dmesg | grep -i amdgpu
+        good: Separate a GPU MODE1 line from a host memory oops. The 2026-10-12 sweep oops was a RAM event, not a MODE1 row.
+    causes:
+      - First-party local-desktop note — DDR5-5200 later proved unstable. A kernel oops at 00:14 CT aborted the overnight sweep. All 33 cards predate that oops.
+      - AMD EXPO is AMD’s DDR5 overclocking-profile standard for Ryzen on socket AM5. EXPO is overclocking, not the JEDEC default.
+      - The motherboard model and whether EXPO was enabled on local-desktop are not published.
+    fix: >
+      Treat EXPO / XMP as an overclock profile. A two-DIMM kit profile is not
+      a four-DIMM guarantee. We do not invent a frequency as the only cause.
+      The 33-card sweep stays labeled measured, pending re-verify after the
+      RAM fix. Read How we test and the benchmark caveat.
+    links:
+      - href: /bios
+        label: BIOS
+      - href: /methodology
+        label: How we test
+      - href: /benchmarks
+        label: Benchmarks
+      - href: /hardware
+        label: Hardware
+    citations:
+      - href: /methodology
+        label: How we test — amdai-bench cards and the sweep caveat
+      - href: /benchmarks
+        label: Benchmarks — 33 cards predate the DDR5-5200 oops
+      - href: https://www.amd.com/en/products/processors/technologies/expo.html
+        label: AMD EXPO Technology for AMD Ryzen Processors for Socket AM5
+
+  - id: windows-rocm
+    group: windows
+    title: Windows ROCm fails or falls back to CPU
+    symptom: >
+      Ollama or HIP on Windows detects gfx1201, then logs “filtering device
+      which didn't fully initialize” and runs on CPU. Vulkan on the same box
+      can still generate.
+    checks:
+      - command: llama-cli --list-devices
+        good: A Vulkan device list on Windows. This site does not publish a Windows rocminfo recipe.
+    causes:
+      - Ollama 0.17.7 on Windows 11 with an R9700 detected gfx1201, then filtered the device and ran on CPU (#14686). The bundled ROCm (amdhip64_6.dll / 6.x tensiles through gfx1151) had no gfx1201 kernels. Vulkan (OLLAMA_VULKAN=1) worked.
+      - HSA_OVERRIDE_GFX_VERSION still failed to initialize ROCm on that Windows report.
+    fix: >
+      On Windows, use Vulkan llama.cpp (or Ollama’s Vulkan path) and do not
+      expect a full ROCm userspace. Linux + llama.cpp is the path this site
+      documents for HIP. Windows steps on /setup stay labeled estimates. We
+      do not publish a Windows tok/s card.
+    links:
+      - href: /setup#windows
+        label: Windows (estimate)
+      - href: /troubleshoot/errors#ollama-r9700-windows
+        label: Ollama Windows pattern
+      - href: /backends
+        label: Backends
+      - href: /faq
+        label: FAQ
+    citations:
+      - href: https://github.com/ollama/ollama/issues/14686
+        label: Ollama #14686 — R9700 Windows ROCm init filtered to CPU
+
+  # Excluded from the build — no Mesa release-note URL on this site for a specific consumer breakage.
+  - id: mesa-radv-version
+    group: slow
+    needs_source: true
+    title: Mesa / RADV version mismatch
+    symptom: A specific Mesa RADV pin is blamed for a hang or a missing Vulkan device.
+    checks:
+      - command: rocminfo
+        good: Not published — this row is excluded.
+    causes:
+      - No cited Mesa release note on this site for a consumer Radeon local-AI breakage.
+    fix: Left out until a release note is cited.
+    links:
+      - href: /rocm/vulkan-hip
+        label: Vulkan vs HIP
+    citations: []

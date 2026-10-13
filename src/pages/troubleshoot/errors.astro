@@ -1,7 +1,9 @@
 ---
 import Base from '../../layouts/Base.astro';
 import { errorPatterns, errorsFile, forumAskPath, forumSearchPath } from '../../lib/errors';
+import { forumEnabled } from '../../lib/flags';
 
+const forumOn = forumEnabled();
 const json = JSON.stringify(
   errorPatterns.map((row) => ({
     id: row.id,
@@ -27,6 +29,12 @@ const json = JSON.stringify(
     <p class="mt-4 text-lg leading-relaxed text-muted">
       Client-side matcher against {errorPatterns.length} patterns we have actually cited (as of {errorsFile.as_of}).
       No invented issue numbers. If nothing hits, that is a honest miss — file it upstream and tell us.
+    </p>
+    <p class="mt-3 text-sm text-faint">
+      Symptom-first hub:
+      <a class="underline decoration-accent/40 underline-offset-2" href="/troubleshoot">/troubleshoot</a>.
+      Longer walkthrough:
+      <a class="underline decoration-accent/40 underline-offset-2" href="/troubleshooting">Troubleshooting</a>.
     </p>
 
     <label class="mt-8 block font-medium" for="error-paste">Log or error string</label>
@@ -57,10 +65,21 @@ const json = JSON.stringify(
               ) : (
                 <a class="text-accent-ink underline decoration-accent/40 underline-offset-2" href={row.source || '/calculator'}>{row.source_label}</a>
               )}
-              {' · '}
-              <a class="text-accent-ink underline decoration-accent/40 underline-offset-2" href={forumSearchPath(row)}>Matching threads</a>
-              {' · '}
-              <a class="text-accent-ink underline decoration-accent/40 underline-offset-2" data-forum-ask={row.id} href={forumAskPath(row)}>Ask the forum</a>
+              {forumOn ? (
+                <>
+                  {' · '}
+                  <a class="text-accent-ink underline decoration-accent/40 underline-offset-2" href={forumSearchPath(row)}>Matching threads</a>
+                  {' · '}
+                  <a class="text-accent-ink underline decoration-accent/40 underline-offset-2" data-forum-ask={row.id} href={forumAskPath(row)}>Ask the forum</a>
+                </>
+              ) : (
+                <>
+                  {' · '}
+                  <a class="text-accent-ink underline decoration-accent/40 underline-offset-2" href="/rocm-problems/report">Write a report</a>
+                  {' · '}
+                  <a class="text-accent-ink underline decoration-accent/40 underline-offset-2" href="/forum">Forum (off on this build)</a>
+                </>
+              )}
             </p>
           </li>
         ))}
@@ -68,14 +87,19 @@ const json = JSON.stringify(
     </section>
 
     <p class="mt-10 text-sm text-muted">
+      Symptom-first hub: <a class="underline decoration-accent/40 underline-offset-2" href="/troubleshoot">Troubleshoot</a>.
       Broader order-of-operations: <a class="underline decoration-accent/40 underline-offset-2" href="/troubleshooting">Troubleshooting</a>.
       Backend pick: <a class="underline decoration-accent/40 underline-offset-2" href="/backends">chooser</a>.
-      Community: <a class="underline decoration-accent/40 underline-offset-2" href="/forum">forum</a>.
+      {forumOn ? (
+        <>Community: <a class="underline decoration-accent/40 underline-offset-2" href="/forum">forum</a>.</>
+      ) : (
+        <>Still stuck: <a class="underline decoration-accent/40 underline-offset-2" href="/rocm-problems/report">write a report</a>.</>
+      )}
     </p>
   </main>
 </Base>
 
-<script define:vars={{ json }}>
+<script define:vars={{ json, forumOn }}>
   const patterns = JSON.parse(json);
   const box = document.getElementById('error-paste');
   const status = document.querySelector('[data-error-status]');
@@ -120,19 +144,26 @@ const json = JSON.stringify(
     status.textContent = `${found.length} match${found.length === 1 ? '' : 'es'}.`;
     for (const row of found) {
       const li = document.createElement('li');
-      const ask = new URL(row.pattern.ask, location.origin);
-      if (query.trim()) ask.searchParams.set('body', query.trim().slice(0, 3500));
-      li.innerHTML = `<a class="text-sm text-accent-ink underline decoration-accent/40 underline-offset-2" href="#${row.pattern.id}">${row.pattern.title}</a> <span class="text-faint">· hit ${row.hits.slice(0, 2).join(', ')}</span> · <a class="text-sm underline" href="${ask.pathname + ask.search}">Ask the forum</a>`;
+      const extra = forumOn
+        ? (() => {
+            const ask = new URL(row.pattern.ask, location.origin);
+            if (query.trim()) ask.searchParams.set('body', query.trim().slice(0, 3500));
+            return ` · <a class="text-sm underline" href="${ask.pathname + ask.search}">Ask the forum</a>`;
+          })()
+        : ' · <a class="text-sm underline" href="/rocm-problems/report">Write a report</a>';
+      li.innerHTML = `<a class="text-sm text-accent-ink underline decoration-accent/40 underline-offset-2" href="#${row.pattern.id}">${row.pattern.title}</a> <span class="text-faint">· hit ${row.hits.slice(0, 2).join(', ')}</span>${extra}`;
       hitsEl.appendChild(li);
     }
-    document.querySelectorAll('[data-forum-ask]').forEach((link) => {
-      const id = link.getAttribute('data-forum-ask');
-      const pattern = patterns.find((row) => row.id === id);
-      if (!pattern) return;
-      const ask = new URL(pattern.ask, location.origin);
-      if (query.trim()) ask.searchParams.set('body', query.trim().slice(0, 3500));
-      link.setAttribute('href', ask.pathname + ask.search);
-    });
+    if (forumOn) {
+      document.querySelectorAll('[data-forum-ask]').forEach((link) => {
+        const id = link.getAttribute('data-forum-ask');
+        const pattern = patterns.find((row) => row.id === id);
+        if (!pattern) return;
+        const ask = new URL(pattern.ask, location.origin);
+        if (query.trim()) ask.searchParams.set('body', query.trim().slice(0, 3500));
+        link.setAttribute('href', ask.pathname + ask.search);
+      });
+    }
   }
 
   document.getElementById('error-run')?.addEventListener('click', render);
