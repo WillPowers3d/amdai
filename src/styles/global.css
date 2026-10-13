@@ -578,6 +578,8 @@ table > caption:not(.sr-only) {
   right: 8%;
   top: 18%;
   width: min(22rem, 46vw);
+  height: auto;
+  aspect-ratio: 1 / 1;
   opacity: 0.88;
   animation: silicon-pulse 7s var(--ease) infinite;
 }
@@ -929,6 +931,7 @@ html[data-theme="light"] .astro-code span {
   background: transparent;
   box-shadow: none;
   padding: 0;
+  min-height: 12rem;
 }
 
 .rocm-mermaid .mermaid-fallback {

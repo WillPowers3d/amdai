@@ -6,7 +6,7 @@ interface Props {
 const { title } = Astro.props;
 ---
 
-<figure class="rocm-mermaid">
+<figure class="rocm-mermaid" data-mermaid>
   {title && <figcaption class="kicker">{title}</figcaption>}
   <pre class="mermaid"><slot /></pre>
   <p class="mermaid-fallback">
@@ -15,49 +15,67 @@ const { title } = Astro.props;
 </figure>
 
 <script>
-  import mermaid from 'mermaid';
+  const figures = document.querySelectorAll<HTMLElement>('[data-mermaid]');
+  if (figures.length) {
+    let booted = false;
+    const boot = async () => {
+      if (booted) return;
+      booted = true;
+      const mermaid = (await import('mermaid')).default;
+      const root = document.documentElement;
+      const light = root.dataset.theme === 'light';
+      const styles = getComputedStyle(root);
+      const ink = styles.getPropertyValue('--ink').trim() || (light ? '#161412' : '#f4efe8');
+      const raised = styles.getPropertyValue('--raised').trim() || (light ? '#fffaf3' : '#111114');
+      const line = styles.getPropertyValue('--line').trim() || (light ? '#ddd4c8' : '#2c2724');
+      const accent = styles.getPropertyValue('--accent').trim() || (light ? '#c73b24' : '#e24a2f');
+      const canvas = styles.getPropertyValue('--canvas').trim() || (light ? '#f3efe6' : '#08080b');
+      const muted = styles.getPropertyValue('--muted').trim() || (light ? '#5c564e' : '#b9b1a7');
+      const soft = styles.getPropertyValue('--accent-soft').trim() || (light ? '#f6d8d0' : '#3a1611');
 
-  const root = document.documentElement;
-  const light = root.dataset.theme === 'light';
-  const styles = getComputedStyle(root);
-  const ink = styles.getPropertyValue('--ink').trim() || (light ? '#161412' : '#f4efe8');
-  const raised = styles.getPropertyValue('--raised').trim() || (light ? '#fffaf3' : '#111114');
-  const line = styles.getPropertyValue('--line').trim() || (light ? '#ddd4c8' : '#2c2724');
-  const accent = styles.getPropertyValue('--accent').trim() || (light ? '#c73b24' : '#e24a2f');
-  const canvas = styles.getPropertyValue('--canvas').trim() || (light ? '#f3efe6' : '#08080b');
-  const muted = styles.getPropertyValue('--muted').trim() || (light ? '#5c564e' : '#b9b1a7');
-  const soft = styles.getPropertyValue('--accent-soft').trim() || (light ? '#f6d8d0' : '#3a1611');
+      mermaid.initialize({
+        startOnLoad: false,
+        securityLevel: 'strict',
+        theme: 'base',
+        themeVariables: {
+          darkMode: !light,
+          background: canvas,
+          primaryColor: soft,
+          primaryTextColor: ink,
+          primaryBorderColor: accent,
+          secondaryColor: raised,
+          secondaryTextColor: ink,
+          secondaryBorderColor: line,
+          tertiaryColor: raised,
+          tertiaryTextColor: ink,
+          tertiaryBorderColor: line,
+          lineColor: muted,
+          textColor: ink,
+          mainBkg: raised,
+          nodeBorder: line,
+          clusterBkg: raised,
+          clusterBorder: line,
+          titleColor: ink,
+          edgeLabelBackground: canvas,
+          fontFamily: 'Geist, ui-sans-serif, system-ui, sans-serif',
+        },
+        flowchart: {
+          htmlLabels: false,
+          curve: 'linear',
+          padding: 12,
+        },
+      });
+      await mermaid.run({ querySelector: '.rocm-mermaid .mermaid' });
+    };
 
-  mermaid.initialize({
-    startOnLoad: true,
-    securityLevel: 'strict',
-    theme: 'base',
-    themeVariables: {
-      darkMode: !light,
-      background: canvas,
-      primaryColor: soft,
-      primaryTextColor: ink,
-      primaryBorderColor: accent,
-      secondaryColor: raised,
-      secondaryTextColor: ink,
-      secondaryBorderColor: line,
-      tertiaryColor: raised,
-      tertiaryTextColor: ink,
-      tertiaryBorderColor: line,
-      lineColor: muted,
-      textColor: ink,
-      mainBkg: raised,
-      nodeBorder: line,
-      clusterBkg: raised,
-      clusterBorder: line,
-      titleColor: ink,
-      edgeLabelBackground: canvas,
-      fontFamily: 'Geist, ui-sans-serif, system-ui, sans-serif',
-    },
-    flowchart: {
-      htmlLabels: false,
-      curve: 'linear',
-      padding: 12,
-    },
-  });
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (!entries.some((entry) => entry.isIntersecting)) return;
+        io.disconnect();
+        void boot();
+      },
+      { rootMargin: '0px', threshold: 0.2 },
+    );
+    figures.forEach((figure) => io.observe(figure));
+  }
 </script>
