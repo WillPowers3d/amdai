@@ -196,6 +196,7 @@ export const CRUMB_LABELS: Record<string, string> = {
   '/image-gen': 'Image gen',
   '/speech': 'Speech',
   '/long-context': 'Long context',
+  '/rag': 'RAG',
   '/setup': 'First-run setup',
   '/setup/windows': 'Windows setup',
   '/stack-lab': 'Stack Lab',
@@ -327,6 +328,12 @@ setMeta(
   'Run 128K–262K locally on Radeon. Measured 35B llama.cpp cards from local-desktop. f16 KV default. Empty cells stay not measured yet.',
 );
 setDate('/long-context', '2026-10-13');
+setMeta(
+  '/rag',
+  'Local RAG on Radeon',
+  'Chat with your own PDFs and notes on Radeon. llama.cpp embeddings first. Linux first. Fit estimates, not measured on local-desktop.',
+);
+setDate('/rag', '2026-10-13');
 setMeta(
   '/stacks',
   'Recommended stacks',

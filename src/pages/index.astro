@@ -151,6 +151,11 @@ const updates = (await getCollection('updates')).sort((a, b) => b.data.date.valu
             <h3 class="mt-2 text-2xl tracking-tight">Long context on Radeon</h3>
             <p class="mt-3 text-sm text-muted">128K–262K from local-desktop 35B llama.cpp cards. f16 KV default. Empty cells stay not measured yet.</p>
           </a>
+          <a class="card p-6" href="/rag">
+            <p class="kicker">Your files</p>
+            <h3 class="mt-2 text-2xl tracking-tight">RAG on Radeon</h3>
+            <p class="mt-3 text-sm text-muted">Cited llama.cpp-first local RAG for PDFs and notes. Linux first. Speeds not yet measured by AMDai.</p>
+          </a>
         </div>
         <NextSteps path="/" />
       </div>

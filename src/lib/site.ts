@@ -110,6 +110,7 @@ export const primaryNav: NavItem[] = [
   { href: '/image-gen', label: 'Image gen', description: 'Cited ComfyUI-first Radeon guide for SD / SDXL / Flux-class. Linux first. Not measured on local-desktop', group: 'learn' },
   { href: '/speech', label: 'Speech', description: 'Cited whisper.cpp Vulkan STT plus Piper TTS. Linux first. Not measured on local-desktop', group: 'learn' },
   { href: '/long-context', label: 'Long context', description: '128K–262K on Radeon. Measured 35B llama.cpp cards. f16 KV default. Empty cells stay not measured yet', group: 'learn' },
+  { href: '/rag', label: 'RAG', description: 'Cited llama.cpp-first local RAG on Radeon. Embed plus a Q4+ LLM. Linux first. Not measured on local-desktop', group: 'learn' },
   { href: '/harnesses', label: 'Harnesses', description: 'What to plug your local model into — agents, chat UIs, ComfyUI', group: 'learn' },
   { href: '/labs/shannon', label: 'Shannon’s lab', description: 'Cited How I run my Lab — Herdr, Coolify, secure-lab, autoresearch. Not measured by AMDai', group: 'learn' },
   { href: '/hardware', label: 'Hardware', description: 'PSU, cooling, noise, VRAM vs model size', group: 'learn' },

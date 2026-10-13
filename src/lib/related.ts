@@ -76,6 +76,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/image-gen', label: 'Image gen on Radeon' },
       { href: '/speech', label: 'Speech on Radeon' },
       { href: '/long-context', label: 'Long context' },
+      { href: '/rag', label: 'RAG on Radeon' },
     ];
   }
   if (path === '/faq' || path === '/glossary') {
@@ -166,6 +167,21 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/multi-gpu', label: 'Dual / multi-GPU' },
       { href: '/flash-ram-offload', label: 'Flash RAM offload' },
       { href: '/gpus/r9700', label: 'R9700 measured page' },
+      { href: '/rag', label: 'RAG on Radeon' },
+    ];
+  }
+  if (path === '/rag') {
+    return [
+      { href: '/rag', label: 'RAG on Radeon' },
+      { href: '/backends/llamacpp', label: 'llama.cpp' },
+      { href: '/harnesses', label: 'Harnesses' },
+      { href: '/harnesses/anythingllm', label: 'AnythingLLM' },
+      { href: '/harnesses/open-webui', label: 'Open WebUI' },
+      { href: '/setup', label: 'First-run setup' },
+      { href: '/long-context', label: 'Long context' },
+      { href: '/speech', label: 'Speech on Radeon' },
+      { href: '/image-gen', label: 'Image gen on Radeon' },
+      { href: '/gpus/r9700', label: 'R9700 measured page' },
     ];
   }
   if (path === '/speech') {
@@ -180,6 +196,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/calculator', label: 'Calculator' },
       { href: '/stack-lab', label: 'Stack Lab' },
       { href: '/long-context', label: 'Long context' },
+      { href: '/rag', label: 'RAG on Radeon' },
     ];
   }
   if (path === '/image-gen' || path.startsWith('/harnesses')) {
@@ -194,6 +211,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/gpus/r9700', label: 'R9700 measured page' },
       { href: '/speech', label: 'Speech on Radeon' },
       { href: '/long-context', label: 'Long context' },
+      { href: '/rag', label: 'RAG on Radeon' },
     ];
   }
   if (path === '/forum' || path.startsWith('/forum/')) {
@@ -376,6 +394,7 @@ export function assertRelatedValid(
     '/image-gen',
     '/speech',
     '/long-context',
+    '/rag',
   ],
 ): string[] {
   const errors: string[] = [];

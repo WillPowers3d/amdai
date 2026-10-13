@@ -282,6 +282,12 @@ export const OG_CARDS: OgCard[] = [
     alt: 'AMDai long context on Radeon — measured 35B cards, f16 KV default',
   },
   {
+    slug: 'rag',
+    title: 'Local RAG on Radeon',
+    lede: 'llama.cpp embeddings first. Speeds not yet measured by AMDai',
+    alt: 'AMDai local RAG on Radeon — cited llama.cpp embeddings guide, not yet measured',
+  },
+  {
     slug: 'troubleshoot',
     title: 'Troubleshoot',
     lede: 'Symptom-first fixes. Cited commands only',

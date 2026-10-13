@@ -351,6 +351,16 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
     { href: '/troubleshoot#oom-context', label: 'Long-context OOM' },
     { href: '/benchmarks', label: 'Benchmarks' },
   ],
+  '/rag': [
+    { href: '/setup', label: 'First-run setup' },
+    { href: '/backends/llamacpp', label: 'llama.cpp' },
+    { href: '/harnesses', label: 'Harnesses' },
+    { href: '/long-context', label: 'Long context' },
+    { href: '/gpus/r9700', label: 'R9700 measured page' },
+    { href: '/calculator', label: 'Calculator' },
+    { href: '/speech', label: 'Speech' },
+    { href: '/stack-lab', label: 'Stack Lab' },
+  ],
 };
 
 export const HIGH_TRAFFIC_PATHS = Object.keys(NEXT_STEPS);

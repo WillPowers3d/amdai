@@ -38,3 +38,9 @@ items:
     model: whisper.cpp STT / Piper TTS
     why: whisper.cpp Vulkan and Piper are the AMDai first speech path. AMDai has no first-party amdai-bench/run@1 speech card, so speeds stay not yet measured by AMDai.
     request: First-party whisper.cpp Vulkan card on one R9700. Log plus screenshot. Do not invent real-time factor or tok/s.
+  - id: r9700-rag
+    card: r9700
+    card_name: Radeon AI PRO R9700
+    model: llama.cpp embeddings / local RAG
+    why: llama.cpp --embeddings is the AMDai first RAG embed path. AMDai has no first-party amdai-bench/run@1 retrieval card, so speeds and recall stay not yet measured by AMDai.
+    request: First-party llama.cpp Vulkan embedding card on one R9700 next to the daily-driver chat sidecar. Log plus screenshot. Do not invent retrieval scores or tok/s.
