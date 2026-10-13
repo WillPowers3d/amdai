@@ -24,6 +24,7 @@ describe('shopper RAM labels', () => {
     assert.ok(RAM_OFFLOAD_SURFACES.includes('/gpus/rx-9070-xt'));
     assert.ok(RAM_OFFLOAD_SURFACES.includes('/gpus/rx-9060-xt'));
     assert.ok(RAM_OFFLOAD_SURFACES.includes('/gpus/rx-7900-gre'));
+    assert.ok(RAM_OFFLOAD_SURFACES.includes('/gpus/rx-7700-xt'));
     assert.ok(RAM_OFFLOAD_SURFACES.includes('/compare/radeon-vs-nvidia'));
     assert.ok(RAM_OFFLOAD_SURFACES.includes('/models/qwen36'));
     assert.ok(RAM_OFFLOAD_SURFACES.includes('/models/flash'));
