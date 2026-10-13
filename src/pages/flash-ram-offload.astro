@@ -1,0 +1,273 @@
+---
+import Base from '../layouts/Base.astro';
+import Callout from '../components/Callout.astro';
+import SystemRamNeed from '../components/SystemRamNeed.astro';
+import {
+  FLASH_OFFLOAD_CONTEXTS,
+  FLASH_OFFLOAD_CONTEXT_LABEL,
+  LLAMA_EXPERT_OFFLOAD_LAUNCH,
+  MEASURED_ON_OUR_RIG,
+  NOT_MEASURED_ON_local-desktop,
+  STRATA_EXPERT_OFFLOAD_LAUNCH,
+  dimmSpeedRows,
+  flashOffloadEmptyNotes,
+  flashRamOffloadRows,
+  flashSpeedGrid,
+  kitRecommendations,
+} from '../lib/flash-ram-offload';
+import { officialLinks } from '../lib/site';
+import { runs } from '../lib/run-card-data';
+
+const ramRows = flashRamOffloadRows();
+const twoCard = ramRows.filter((row) => row.cards === 2);
+const oneCard = ramRows.filter((row) => row.cards === 1);
+const grid = flashSpeedGrid(runs);
+const emptyNotes = flashOffloadEmptyNotes(grid);
+const kits = kitRecommendations(ramRows);
+const dimm = dimmSpeedRows(runs);
+const llama8k = dimm.find((row) => row.backend === 'llama.cpp' && row.context === 8192);
+const strata8k = dimm.find((row) => row.backend === 'Strata' && row.context === 8192);
+---
+
+<Base
+  title="Flash with RAM offload"
+  description="Run Qwen 3.8 Flash with experts on DDR5. System RAM at 262K, kit picks for 128 / 192 / 256 GB, measured DIMM-speed decode, and the expert-offload launch shape."
+>
+  <main id="main" class="mx-auto max-w-6xl px-4 py-10 sm:px-6">
+    <p class="kicker">local-desktop · Qwen 3.8 Flash</p>
+    <h1 class="display mt-3 text-4xl sm:text-5xl">Flash with RAM offload</h1>
+    <p class="mt-4 max-w-2xl text-lg leading-relaxed text-muted">
+      Qwen 3.8 Flash does not fit in one 32 GB card. Hot experts stay in VRAM. The rest lands on DDR5.
+      Decode cells come from verified <code>amdai-bench/run@1</code> Flash cards.
+      Empty stays <strong class="text-ink">{NOT_MEASURED_ON_local-desktop}</strong>.
+      RAM kits are calculator estimates (file size + KV), labeled as such.
+    </p>
+    <div class="mt-6 flex flex-wrap gap-3">
+      <a class="btn-primary" href="/flash-daily">Flash daily driver</a>
+      <a class="btn-secondary" href="/backends/strata">Strata deep dive</a>
+      <a class="btn-ghost" href="/results">Official run cards</a>
+      <a class="btn-ghost" href="/bios">BIOS / four DIMMs</a>
+      <a class="btn-ghost" href={officialLinks.qwenFlashGguf}>Unsloth GGUF</a>
+    </div>
+
+    <Callout type="check" title="What we measured">
+      Two-card UD-Q6_K_XL at 262K load. llama.cpp at 8K is
+      <strong class="text-ink">{llama8k?.at3600.text ?? NOT_MEASURED_ON_local-desktop}</strong> on DDR5-3600
+      → <strong class="text-ink">{llama8k?.at5200.text ?? NOT_MEASURED_ON_local-desktop}</strong> on DDR5-5200.
+      Strata at 8K is
+      <strong class="text-ink">{strata8k?.at3600.text ?? NOT_MEASURED_ON_local-desktop}</strong> on 3600
+      → <strong class="text-ink">{strata8k?.at5200.text ?? NOT_MEASURED_ON_local-desktop}</strong> on 5200.
+      {MEASURED_ON_OUR_RIG}.
+    </Callout>
+
+    <section id="ram" class="mt-12 scroll-mt-28" aria-labelledby="ram-heading">
+      <p class="kicker">Estimate · file size + KV</p>
+      <h2 id="ram-heading" class="mt-2 font-serif text-3xl">System RAM at 262K</h2>
+      <p class="mt-3 max-w-2xl text-muted">
+        Minimum system RAM is the 4K load. RAM at full context is 262144 tokens.
+        Spill is weights plus KV that missed the VRAM pool (32 GB on one R9700, 64 GB on two).
+        Every GiB column is an estimate. Linux GiB labeled GB.
+      </p>
+
+      <h3 class="mt-8 font-serif text-2xl">Two R9700s · 64 GB VRAM</h3>
+      <div class="card mt-4 overflow-x-auto">
+        <table class="table-lab min-w-[52rem]">
+          <thead>
+            <tr>
+              <th>Quant</th>
+              <th>File</th>
+              <th>Spill to DDR5</th>
+              <th>Min RAM kit</th>
+              <th>RAM at 262K</th>
+            </tr>
+          </thead>
+          <tbody>
+            {twoCard.map((row) => (
+              <tr>
+                <td class="font-medium">{row.label}</td>
+                <td class="tabular-nums">{row.fileGb} GB</td>
+                <td class="tabular-nums">{row.spillLabel}</td>
+                <td class="tabular-nums">{row.ram.atSelected.kitGb} GB</td>
+                <td class="tabular-nums">{row.ram.atFullContext.kitGb} GB</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="mt-10 font-serif text-2xl">One R9700 · 32 GB VRAM</h3>
+      <p class="mt-2 text-sm text-muted">More of the file lands on DDR5. Decode at this card count is {NOT_MEASURED_ON_local-desktop}.</p>
+      <div class="card mt-4 overflow-x-auto">
+        <table class="table-lab min-w-[52rem]">
+          <thead>
+            <tr>
+              <th>Quant</th>
+              <th>File</th>
+              <th>Spill to DDR5</th>
+              <th>Min RAM kit</th>
+              <th>RAM at 262K</th>
+            </tr>
+          </thead>
+          <tbody>
+            {oneCard.map((row) => (
+              <tr>
+                <td class="font-medium">{row.label}</td>
+                <td class="tabular-nums">{row.fileGb} GB</td>
+                <td class="tabular-nums">{row.spillLabel}</td>
+                <td class="tabular-nums">{row.ram.atSelected.kitGb} GB</td>
+                <td class="tabular-nums">{row.ram.atFullContext.kitGb} GB</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <div class="mt-8 grid gap-4 lg:grid-cols-2">
+        {twoCard.map((row) => (
+          <div class="card p-4">
+            <p class="kicker">{row.label} · two cards · estimate</p>
+            <SystemRamNeed need={row.ram} />
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <section id="kits" class="mt-12 scroll-mt-28" aria-labelledby="kits-heading">
+      <p class="kicker">Estimate · 128 / 192 / 256</p>
+      <h2 id="kits-heading" class="mt-2 font-serif text-3xl">Recommended setup per RAM kit</h2>
+      <p class="mt-3 max-w-2xl text-muted">
+        Picks follow the calculator kit rounding. They are not a tok/s promise.
+        256 GB is what local-desktop ships (~249 GB usable).
+      </p>
+      <div class="mt-6 grid gap-4 lg:grid-cols-3">
+        {kits.map((kit) => (
+          <article class="card p-5">
+            <p class="kicker">{kit.kitGb} GB kit</p>
+            <h3 class="mt-2 text-xl tracking-tight">{kit.headline}</h3>
+            <ul class="mt-4 space-y-2 text-sm text-muted">
+              {kit.lines.map((line) => <li>{line}</li>)}
+            </ul>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section id="speed" class="mt-12 scroll-mt-28" aria-labelledby="speed-heading">
+      <p class="kicker">From data/runs · Flash only</p>
+      <h2 id="speed-heading" class="mt-2 font-serif text-3xl">Decode by quant, cards, and engine</h2>
+      <p class="mt-3 max-w-2xl text-muted">
+        Q3–Q6 × 1 vs 2 R9700s × llama.cpp vs Strata × 4K / 32K / 128K / 256K.
+        A cell fills when a verified Flash run card matches. Until then it stays empty.
+      </p>
+      <div class="card mt-6 overflow-x-auto">
+        <table class="table-lab min-w-[56rem]">
+          <thead>
+            <tr>
+              <th>Quant</th>
+              <th>GPUs</th>
+              <th>Backend</th>
+              {FLASH_OFFLOAD_CONTEXTS.map((ctx) => (
+                <th>{FLASH_OFFLOAD_CONTEXT_LABEL[ctx]}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {grid.map((row) => (
+              <tr>
+                <td class="font-medium">{row.quant}</td>
+                <td>{row.cards}</td>
+                <td>{row.backend}</td>
+                {FLASH_OFFLOAD_CONTEXTS.map((ctx) => (
+                  <td class:list={['tabular-nums', !row.cells[ctx].measured && 'text-faint']}>
+                    {row.cells[ctx].href ? (
+                      <a class="underline decoration-accent/40" href={row.cells[ctx].href}>{row.cells[ctx].text}</a>
+                    ) : (
+                      row.cells[ctx].text
+                    )}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      {emptyNotes.length > 0 && (
+        <ul class="mt-4 space-y-1.5 text-sm text-muted">
+          {emptyNotes.map((note) => <li>{note}</li>)}
+        </ul>
+      )}
+    </section>
+
+    <section id="dimm" class="mt-12 scroll-mt-28" aria-labelledby="dimm-heading">
+      <p class="kicker">Measured · DDR5-3600 vs 5200</p>
+      <h2 id="dimm-heading" class="mt-2 font-serif text-3xl">Memory speed vs decode</h2>
+      <p class="mt-3 max-w-2xl text-muted">
+        Same two-card Q6, same 262K load. Only the DIMM clock changes.
+        llama.cpp at 8K is the 15.9 → 18.5 pair. Strata at 8K is the 32.0 → 32.8 pair.
+        Missing contexts stay {NOT_MEASURED_ON_local-desktop}.
+      </p>
+      <div class="card mt-6 overflow-x-auto">
+        <table class="table-lab min-w-[36rem]">
+          <thead>
+            <tr>
+              <th>Engine</th>
+              <th>Context</th>
+              <th>DDR5-3600</th>
+              <th>DDR5-5200</th>
+            </tr>
+          </thead>
+          <tbody>
+            {dimm.map((row) => (
+              <tr>
+                <td class="font-medium">{row.backend}</td>
+                <td>{row.contextLabel}</td>
+                <td class:list={['tabular-nums', !row.at3600.measured && 'text-faint']}>{row.at3600.text}</td>
+                <td class:list={['tabular-nums', !row.at5200.measured && 'text-faint']}>{row.at5200.text}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="launch" class="mt-12 scroll-mt-28" aria-labelledby="launch-heading">
+      <p class="kicker">Shape · flags TODO</p>
+      <h2 id="launch-heading" class="mt-2 font-serif text-3xl">Expert-offload launch</h2>
+      <p class="mt-3 max-w-2xl text-muted">
+        llama.cpp places leftover experts with <code>-ot</code> (tensor override) and
+        <code>--n-cpu-moe</code>. Strata’s equivalent is the expert-cache / RAM / SSD tier.
+        Exact regex, N, and Strata flags are not recorded — we will not invent them.
+      </p>
+      <h3 class="mt-8 font-serif text-2xl">llama.cpp Vulkan</h3>
+      <pre class="mt-3 overflow-x-auto rounded-xl border border-line bg-canvas/50 p-3 text-xs leading-relaxed"><code>{LLAMA_EXPERT_OFFLOAD_LAUNCH}</code></pre>
+      <h3 class="mt-8 font-serif text-2xl">Strata</h3>
+      <pre class="mt-3 overflow-x-auto rounded-xl border border-line bg-canvas/50 p-3 text-xs leading-relaxed"><code>{STRATA_EXPERT_OFFLOAD_LAUNCH}</code></pre>
+    </section>
+
+    <section id="pitfalls" class="mt-12 scroll-mt-28" aria-labelledby="pitfalls-heading">
+      <p class="kicker">Do this first</p>
+      <h2 id="pitfalls-heading" class="mt-2 font-serif text-3xl">Pitfalls</h2>
+      <div class="mt-6 grid gap-4 lg:grid-cols-2">
+        <article class="card p-5">
+          <h3 class="text-xl tracking-tight">Exclude the iGPU</h3>
+          <p class="mt-3 text-sm leading-relaxed text-muted">
+            A 7900-class APU or desktop iGPU will show up next to the R9700.
+            llama.cpp Vulkan: run <code>--list-devices</code>, then set
+            <code>GGML_VK_VISIBLE_DEVICES</code> (and <code>VK_ICD_FILENAMES</code> if needed) so the process
+            binds the discrete card. HIP / Strata: <code>HIP_VISIBLE_DEVICES</code> after <code>rocminfo</code>.
+            Do not copy an index from a blog — read your own device list.
+          </p>
+        </article>
+        <article class="card p-5">
+          <h3 class="text-xl tracking-tight">Four-DIMM DDR5 stability</h3>
+          <p class="mt-3 text-sm leading-relaxed text-muted">
+            Flash offload is a memory-bandwidth job. Four DIMMs are a different EXPO/XMP
+            validation than two. A 256 GB kit is usually 4×64. If the box is unstable at 5200,
+            drop to the JEDEC profile before you blame the engine.
+            Chipset notes and the empty board table live on <a class="underline decoration-accent/40" href="/bios">/bios</a>.
+          </p>
+        </article>
+      </div>
+    </section>
+  </main>
+</Base>

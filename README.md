@@ -58,6 +58,7 @@ Public site URL is `https://amdai.net` (`site` in `astro.config.mjs`; override w
 | `/stacks` | Recommended stack cards from the test rig |
 | `/qwen36-dual` | 35B on two R9700s — split vs two copies, measured soak |
 | `/flash-daily` | Flash daily driver — Q3–Q6 VRAM + DDR5 offload at 262K |
+| `/flash-ram-offload` | Flash on DDR5 — system RAM at 262K, 128/192/256 kits, measured DIMM speed, expert-offload launch |
 | `/backends/strata` | Strata deep dive — expert cache, prefill limits, MTP is Q2 |
 | `/budget` | Setup by budget — size/speed, local/hybrid, standard/abliterated |
 | `/calculator` | Quant + Hardware Calculator — size a model, ask what a Radeon can run, or read a speed floor (Q3 through BF16, client-side) |
