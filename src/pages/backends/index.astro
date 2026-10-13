@@ -12,6 +12,7 @@ import {
 } from '../../lib/backends';
 import { backends, backendsFile } from '../../lib/backends-data';
 import Qwen36Benches from '../../components/Qwen36Benches.astro';
+import HouseRam from '../../components/HouseRam.astro';
 import OpenInStackLab from '../../components/OpenInStackLab.astro';
 import { HOUSE_STACK_LAB } from '../../lib/stack-lab-open';
 
@@ -59,6 +60,9 @@ const tone: Record<string, string> = {
     </p>
     <div class="mt-4">
       <OpenInStackLab {...HOUSE_STACK_LAB.library} compact />
+    </div>
+    <div class="mt-6">
+      <HouseRam which="daily" compact />
     </div>
 
     {onRig.length > 0 && (

@@ -12,6 +12,7 @@ import {
   surfaceLabel,
 } from '../../lib/harnesses';
 import { harness, harnesses, harnessesFile } from '../../lib/harnesses-data';
+import HouseRam from '../../components/HouseRam.astro';
 
 export function getStaticPaths() {
   return harnesses().map((row) => ({ params: { slug: row.id } }));
@@ -48,6 +49,11 @@ const strata = endpointSet(harnessesFile, 'strata');
       {row.vendor}. {row.version_note}
     </p>
     <p class="mt-4 text-lg leading-relaxed text-muted">{row.summary}</p>
+    {row.id === 'hermes' && (
+      <div class="mt-4">
+        <HouseRam which="flash" compact kicker="Fast agent · Hermes points at this stack · 262K" />
+      </div>
+    )}
 
     {row.used_on_our_rig && (
       <Callout type="check" title="Used on our rig">

@@ -5,6 +5,7 @@
  */
 
 import { DIMM_KIT_GB } from './calculator';
+import { RAM_FULL_LABEL, RAM_MIN_LABEL } from './ram-surfaces';
 import {
   COMPARE_CONTEXTS,
   COMPARE_ENGINE,
@@ -368,8 +369,8 @@ export function r9700Blob(): string {
     FLASH_RERUN_NOTE,
     Q6_4K_VARIANCE_NOTE,
     Q6_DDR5_NOTE,
-    'Minimum system RAM needed',
-    'RAM needed at full context',
+    RAM_MIN_LABEL,
+    RAM_FULL_LABEL,
   ];
   return parts.join('\n');
 }
@@ -427,8 +428,8 @@ export function assertR9700Valid(cards: RunCard[]): string[] {
   }
 
   if (!/32 GB/.test(blob)) errors.push('must say 32 GB');
-  if (!/Minimum system RAM needed/.test(blob)) errors.push('missing Minimum system RAM needed');
-  if (!/RAM needed at full context/.test(blob)) errors.push('missing RAM needed at full context');
+  if (!blob.includes(RAM_MIN_LABEL)) errors.push(`missing ${RAM_MIN_LABEL}`);
+  if (!blob.includes(RAM_FULL_LABEL)) errors.push(`missing ${RAM_FULL_LABEL}`);
   if (!R9700_PATH_STEPS.some((step) => step.href === '/start')) errors.push('path missing Start');
   if (!R9700_PATH_STEPS.some((step) => step.href === '/setup')) errors.push('path missing /setup');
   if (!R9700_PATH_STEPS.some((step) => step.href.includes(R9700_DAILY_RECIPE))) {

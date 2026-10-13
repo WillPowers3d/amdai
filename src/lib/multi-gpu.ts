@@ -6,6 +6,7 @@
  */
 
 import { DIMM_KIT_GB } from './calculator';
+import { RAM_FULL_LABEL, RAM_MIN_LABEL } from './ram-surfaces';
 import { type FlashDailyFile } from './flash-daily';
 import { officialLinks } from './site';
 import {
@@ -284,8 +285,8 @@ export function multiGpuBlob(): string {
     SWEEP_REVERIFY,
     FLASH_RERUN_NOTE,
     Q6_4K_VARIANCE_NOTE,
-    'Minimum system RAM needed',
-    'RAM needed at full context',
+    RAM_MIN_LABEL,
+    RAM_FULL_LABEL,
     '--split-mode layer',
     '--split-mode row',
     '--tensor-split',
@@ -357,7 +358,7 @@ export function assertMultiGpuValid(cards: RunCard[], dual: DualFile, flash: Fla
   if (!/not measured/i.test(MULTI_GPU_VLLM.estimate)) errors.push('vLLM TP must stay unmeasured');
   if (!/300 W/.test(blob) || !/750 W/.test(blob)) errors.push('must cite AMD 300 W TBP and 750 W min PSU');
   if (!/1×16 or 2×8/.test(blob)) errors.push('must cite AM5 1×16 or 2×8');
-  if (!/Minimum system RAM needed/.test(blob) || !/RAM needed at full context/.test(blob)) {
+  if (!blob.includes(RAM_MIN_LABEL) || !blob.includes(RAM_FULL_LABEL)) {
     errors.push('calculator RAM lines missing');
   }
   if (!/UD-Q3_K_XL/.test(blob) || !/estimate/i.test(MULTI_GPU_QUANTS.q3)) {

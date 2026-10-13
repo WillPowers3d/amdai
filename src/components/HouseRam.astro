@@ -1,0 +1,28 @@
+---
+import SystemRamNeed from './SystemRamNeed.astro';
+import { houseSystemRam, type HouseRamKind } from '../lib/house-ram';
+
+interface Props {
+  which?: HouseRamKind;
+  compact?: boolean;
+  kicker?: string;
+}
+
+const { which = 'daily', compact = false, kicker } = Astro.props;
+const need = houseSystemRam(which);
+const defaultKicker =
+  which === 'flash'
+    ? 'Fast agent · Flash · 262K'
+    : 'Daily driver · 35B llama.cpp · 262K';
+---
+
+{
+  need && (
+    <div class="not-prose">
+      <p class="kicker">{kicker ?? defaultKicker}</p>
+      <div class="mt-3">
+        <SystemRamNeed need={need} compact={compact} />
+      </div>
+    </div>
+  )
+}

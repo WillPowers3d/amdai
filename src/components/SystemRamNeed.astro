@@ -1,5 +1,6 @@
 ---
 import { formatCtx, formatGiB, type SystemRamNeed } from '../lib/calculator';
+import { RAM_FULL_LABEL, RAM_MIN_LABEL } from '../lib/ram-surfaces';
 import { runPath } from '../lib/run-card';
 
 interface Props {
@@ -25,7 +26,7 @@ function headline(line: typeof selected): string {
 <div class:list={['rounded-xl border border-line bg-canvas/60 p-3 text-sm', compact && 'text-[0.9rem]']}>
   <div class="grid gap-3 sm:grid-cols-2">
     <div>
-      <p class="text-faint">Minimum system RAM needed</p>
+      <p class="text-faint">{RAM_MIN_LABEL}</p>
       <p class="mt-1 font-serif text-2xl tabular-nums">{headline(selected)}</p>
       <p class="mt-1 text-xs text-faint">
         {selected.label === 'measured' ? 'Measured' : 'Estimate'} · {formatGiB(selected.rawGiB)} GiB raw · {formatCtx(selected.context)} context
@@ -39,7 +40,7 @@ function headline(line: typeof selected): string {
       ) : null}
     </div>
     <div>
-      <p class="text-faint">RAM needed at full context</p>
+      <p class="text-faint">{RAM_FULL_LABEL}</p>
       <p class="mt-1 font-serif text-2xl tabular-nums">{headline(full)}</p>
       <p class="mt-1 text-xs text-faint">
         {full.label === 'measured' ? 'Measured' : 'Estimate'} · {formatGiB(full.rawGiB)} GiB raw · {formatCtx(need.fullContext)} full context

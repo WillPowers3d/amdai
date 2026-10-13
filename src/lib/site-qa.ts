@@ -8,6 +8,7 @@ import { existsSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSy
 import { dirname, join } from 'node:path';
 import { OG_SITE_NAME } from './site';
 import { gluedSentenceHits, htmlToVisibleText } from './html-text';
+import { isRamOffloadSurface, missingRamLabels } from './ram-surfaces';
 import { isAllowlistedStackLabHref } from './stack-lab-open';
 
 export const SITE_ORIGIN_DEFAULT = 'https://amdai.net';
@@ -396,11 +397,25 @@ export function lintHtml(html: string, file: string): QaIssue[] {
   return issues;
 }
 
+export function checkRamOffloadSurfaces(index: DistIndex): QaIssue[] {
+  const issues: QaIssue[] = [];
+  for (const [path, file] of index.pages) {
+    if (!isRamOffloadSurface(path)) continue;
+    const html = readFileSync(file, 'utf8');
+    if (isRedirectHtml(html)) continue;
+    for (const label of missingRamLabels(html)) {
+      issues.push(issue('content', file, `RAM-offload surface ${path} missing “${label}”`));
+    }
+  }
+  return issues;
+}
+
 export function checkContent(index: DistIndex): QaIssue[] {
   const issues: QaIssue[] = [];
   for (const [, file] of index.pages) {
     issues.push(...lintHtml(readFileSync(file, 'utf8'), file));
   }
+  issues.push(...checkRamOffloadSurfaces(index));
   return issues;
 }
 

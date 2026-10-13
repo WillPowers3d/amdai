@@ -15,6 +15,7 @@ import { gpuProducts } from '../lib/affiliates';
 import { recipes } from '../lib/recipes-data';
 import OpenInStackLab from '../components/OpenInStackLab.astro';
 import { HOUSE_STACK_LAB } from '../lib/stack-lab-open';
+import { RAM_FULL_LABEL, RAM_MIN_LABEL } from '../lib/ram-surfaces';
 
 const fitGpus = gpuProducts();
 const groups = [...new Set(MODEL_PRESETS.map((m) => m.group))];
@@ -324,13 +325,13 @@ const groups = [...new Set(MODEL_PRESETS.map((m) => m.group))];
           <div class="mt-5 rounded-xl border border-line p-3 text-sm" data-system-ram>
             <div class="grid gap-3 sm:grid-cols-2">
               <div>
-                <p class="text-faint">Minimum system RAM needed</p>
+                <p class="text-faint">{RAM_MIN_LABEL}</p>
                 <p class="mt-1 font-serif text-2xl tabular-nums" data-out="ramMinKit">—</p>
                 <p class="mt-1 text-xs text-faint" data-out="ramMinMeta"></p>
                 <p class="mt-1 text-xs" data-out="ramMinLinks"></p>
               </div>
               <div>
-                <p class="text-faint">RAM needed at full context</p>
+                <p class="text-faint">{RAM_FULL_LABEL}</p>
                 <p class="mt-1 font-serif text-2xl tabular-nums" data-out="ramFullKit">—</p>
                 <p class="mt-1 text-xs text-faint" data-out="ramFullMeta"></p>
                 <p class="mt-1 text-xs" data-out="ramFullLinks"></p>

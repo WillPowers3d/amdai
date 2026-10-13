@@ -384,6 +384,11 @@ export function compareHubCards() {
   ];
 }
 
+/** Labeled Q3 kit pair for pages that show Q6/Q5/Q4 RAM. Decode stays not measured. */
+export function q3RamNeed(gpuCount: CompareGpuCount = 1): ReturnType<typeof systemRamNeed> {
+  return systemRamNeed(calcInput(COMPARE_Q3, 4096, gpuCount));
+}
+
 export function assertCompareValid(cards: RunCard[]): string[] {
   const errors: string[] = [];
   const rows = oneVsTwoRows(cards);

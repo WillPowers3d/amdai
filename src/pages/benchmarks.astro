@@ -3,6 +3,7 @@ import Base from '../layouts/Base.astro';
 import Callout from '../components/Callout.astro';
 import NextSteps from '../components/NextSteps.astro';
 import HowWeTest from '../components/HowWeTest.astro';
+import HouseRam from '../components/HouseRam.astro';
 import OpenInStackLab from '../components/OpenInStackLab.astro';
 import { HOUSE_STACK_LAB } from '../lib/stack-lab-open';
 import { MEASURED_LABEL } from '../lib/benchmarks';
@@ -89,6 +90,9 @@ const launch = citedDailyLaunch(runs);
             says so. Fit check:
             <a class="underline decoration-accent/40" href="/calculator">calculator</a>.
           </p>
+          <div class="mt-4">
+            <HouseRam which="daily" compact />
+          </div>
         </article>
         <article class="card p-5">
           <p class="kicker">The runtime</p>

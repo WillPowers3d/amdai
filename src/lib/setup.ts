@@ -4,6 +4,8 @@
  * Do not invent tok/s, prices, or a Stack Lab download URL.
  */
 
+import { RAM_FULL_LABEL, RAM_MIN_LABEL } from './ram-surfaces';
+
 export const SETUP_NAME = 'First-run setup';
 export const SETUP_PUBLISHED = '2026-10-13';
 
@@ -306,7 +308,7 @@ export function assertSetupValid(): string[] {
       errors.push(`missing required href ${required}`);
     }
   }
-  if (!/Minimum system RAM needed/.test(SETUP_NUMBERS.body) || !/RAM needed at full context/.test(SETUP_NUMBERS.body)) {
+  if (!SETUP_NUMBERS.body.includes(RAM_MIN_LABEL) || !SETUP_NUMBERS.body.includes(RAM_FULL_LABEL)) {
     errors.push('calculator RAM lines missing');
   }
   if (!/estimate/i.test(blob)) errors.push('Windows/Q3 estimates must be labeled');

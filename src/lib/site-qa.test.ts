@@ -20,6 +20,7 @@ import {
   checkFooterTrustLinks,
   checkRssFeed,
   checkOrphansAndDepth,
+  checkRamOffloadSurfaces,
   REQUIRED_FOOTER_HREFS,
 } from './site-qa';
 
@@ -133,6 +134,18 @@ describe('site QA helpers', () => {
     assert.ok(issues.some((row) => row.message.includes('orphan') && row.message.includes('/ghost')));
     assert.ok(issues.some((row) => row.message.includes('link depth') && row.message.includes('/d')));
     assert.ok(!issues.some((row) => row.message.includes('/a') && row.message.includes('orphan')));
+  });
+
+  it('fails a RAM-offload surface that is missing either kit line', () => {
+    const root = join(tmpdir(), `amdai-qa-ram-${Date.now()}`);
+    mkdirSync(join(root, 'gpus/r9700'), { recursive: true });
+    const page = (body: string) =>
+      `<html><head><meta property="og:site_name" content="amdai"></head><body><main id="main">${body}</main></body></html>`;
+    writeFileSync(join(root, 'index.html'), page('<p>home</p>'));
+    writeFileSync(join(root, 'gpus/r9700/index.html'), page('<p>peak system RAM 42.9 GB</p>'));
+    const issues = checkRamOffloadSurfaces(indexDist(root, 'https://amdai.net'));
+    assert.ok(issues.some((row) => row.message.includes('Minimum system RAM needed')));
+    assert.ok(issues.some((row) => row.message.includes('RAM needed at full context')));
   });
 
   it('classifies external results without inventing citations', () => {
