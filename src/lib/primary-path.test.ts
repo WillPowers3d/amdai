@@ -55,7 +55,7 @@ describe('primary path and nav IA', () => {
     assert.match(start, /NextSteps/);
     assert.match(start, /measuredOgHeadline/);
     assert.match(start, /Ubuntu 24\.04\+/);
-    assert.match(start, /setup#windows/);
+    assert.match(start, /\/setup\/windows/);
     assert.doesNotMatch(start, /The longer map/);
     assert.doesNotMatch(blob, /\/two-r9700/);
     assert.doesNotMatch(blob, /upcoming|coming soon/i);
@@ -91,6 +91,7 @@ describe('primary path and nav IA', () => {
       '/': '../pages/index.astro',
       '/start': '../pages/start.astro',
       '/setup': '../pages/setup.astro',
+      '/setup/windows': '../pages/setup/windows.astro',
       '/faq': '../pages/faq.astro',
       '/gpus/r9700': '../pages/gpus/r9700.astro',
       '/gpus/rx7900xtx': '../pages/gpus/[id].astro',

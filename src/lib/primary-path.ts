@@ -117,6 +117,14 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
     { href: '/benchmarks', label: 'Benchmarks' },
     { href: '/stack-lab', label: 'Stack Lab' },
     { href: '/start', label: 'Getting started' },
+    { href: '/setup/windows', label: 'Windows setup' },
+  ],
+  '/setup/windows': [
+    { href: '/setup', label: 'First-run setup' },
+    { href: '/gpus/r9700', label: 'R9700 measured page' },
+    { href: '/backends/llamacpp', label: 'llama.cpp' },
+    { href: '/troubleshoot', label: 'Troubleshoot' },
+    { href: '/stack-lab', label: 'Stack Lab' },
   ],
   '/faq': [
     { href: '/start', label: 'Getting started' },

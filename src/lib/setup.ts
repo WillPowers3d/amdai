@@ -31,6 +31,7 @@ export type SetupPath = {
 export const SETUP_INTRO_LINKS: SetupLink[] = [
   { href: '/start', label: 'Getting started' },
   { href: '/faq', label: 'FAQ' },
+  { href: '/setup/windows', label: 'Windows guide' },
 ];
 
 export const SETUP_SECTIONS = [
@@ -126,7 +127,7 @@ export const SETUP_PATHS: SetupPath[] = [
     label: 'Windows',
     kicker: 'Honest limits',
     summary:
-      'Vulkan llama.cpp is the honest Windows path for tokens. Full ROCm userspace is a Linux product. ROCm 10.1 lists WSL2 as a technical preview. local-desktop cards are Ubuntu — we do not have Windows tok/s.',
+      'Cited Windows guide at /setup/windows. Vulkan llama.cpp is the honest first token. Full ROCm userspace is a Linux product. ROCm 10.1 lists WSL2 as a technical preview. local-desktop cards are Ubuntu — we do not have Windows tok/s.',
     recommended: false,
     steps: [
       {
@@ -148,6 +149,7 @@ export const SETUP_PATHS: SetupPath[] = [
           'Build or install llama.cpp with Vulkan. That is the labeled estimate for a first Windows token. Native Windows ROCm and PyTorch-on-Windows exist as a narrower product; do not expect rocm-smi culture. WSL2 ROCm 10.1 is a tech preview, not a measured daily driver. Prefer a spare-drive Ubuntu install if you want the cards on this site to match your box.',
         measured: false,
         links: [
+          { href: '/setup/windows', label: 'Windows guide' },
           { href: '/backends/llamacpp', label: 'llama.cpp' },
           { href: '/rocm-problems/windows-wsl-preview', label: 'Windows / WSL2 preview' },
           { href: '/rocm/vulkan-hip', label: 'Vulkan vs HIP' },
@@ -259,6 +261,7 @@ export const REQUIRED_SETUP_HREFS = [
   '/bios',
   '/troubleshooting',
   '/troubleshoot',
+  '/setup/windows',
 ] as const;
 
 const BANNED_VISIBLE = /Qwen2\.5|Qwen3-8B/i;

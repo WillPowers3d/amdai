@@ -187,6 +187,7 @@ export const CRUMB_LABELS: Record<string, string> = {
   '/flash-ram-offload': 'Flash RAM offload',
   '/start': 'Getting started',
   '/setup': 'First-run setup',
+  '/setup/windows': 'Windows setup',
   '/stack-lab': 'Stack Lab',
   '/stacks': 'Stacks',
   '/calculator': 'Calculator',
@@ -292,6 +293,12 @@ setMeta(
   'Ubuntu 24.04+ first token on a Radeon, plus an honest Windows path. llama.cpp first. Measured local-desktop cards, no invented tok/s.',
 );
 setDate('/setup', '2026-10-13');
+setMeta(
+  '/setup/windows',
+  'Windows first-run setup',
+  'Cited Windows ROCm + llama.cpp Vulkan first-run on Radeon. Ubuntu 24.04+ stays the measured AMDai path. Not measured on local-desktop.',
+);
+setDate('/setup/windows', '2026-10-13');
 setMeta(
   '/stacks',
   'Recommended stacks',

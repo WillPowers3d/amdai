@@ -6,6 +6,7 @@
 import { GLOSSARY } from './glossary';
 import { FAQ_ITEMS } from './faq';
 import { SETUP_HOWTO_STEPS, SETUP_PUBLISHED } from './setup';
+import { SETUP_WINDOWS_HOWTO_STEPS, SETUP_WINDOWS_PUBLISHED } from './setup-windows';
 import {
   TROUBLESHOOT_HOWTO_STEPS,
   TROUBLESHOOT_PUBLISHED,
@@ -388,6 +389,19 @@ export function pageJsonLd(input: {
         published: dates?.published ?? SETUP_PUBLISHED,
         modified: dates?.modified ?? SETUP_PUBLISHED,
         steps: SETUP_HOWTO_STEPS,
+      }),
+    );
+    return nodes;
+  }
+  if (path === '/setup/windows') {
+    nodes.push(
+      howToJsonLd({
+        name: input.title.replace(/ · AMDai$/, ''),
+        description: input.description,
+        url,
+        published: dates?.published ?? SETUP_WINDOWS_PUBLISHED,
+        modified: dates?.modified ?? SETUP_WINDOWS_PUBLISHED,
+        steps: SETUP_WINDOWS_HOWTO_STEPS,
       }),
     );
     return nodes;

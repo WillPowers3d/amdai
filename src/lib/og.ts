@@ -98,6 +98,12 @@ export const OG_CARDS: OgCard[] = [
     alt: 'AMDai first-run setup — Ubuntu 24.04+ measured path',
   },
   {
+    slug: 'setup-windows',
+    title: 'Windows first-run setup',
+    lede: 'Cited llama.cpp Vulkan. Not measured on local-desktop',
+    alt: 'AMDai Windows setup — cited, not measured on local-desktop',
+  },
+  {
     slug: 'stack-lab',
     title: 'Radeon Stack Lab',
     lede: 'Packages not published yet',

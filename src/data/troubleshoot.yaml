@@ -516,11 +516,11 @@ symptoms:
     fix: >
       On Windows, use Vulkan llama.cpp (or Ollama’s Vulkan path) and do not
       expect a full ROCm userspace. Linux + llama.cpp is the path this site
-      documents for HIP. Windows steps on /setup stay labeled estimates. We
+      documents for HIP. Windows steps on /setup/windows stay labeled cited, not measured on local-desktop. We
       do not publish a Windows tok/s card.
     links:
-      - href: /setup#windows
-        label: Windows (estimate)
+      - href: /setup/windows
+        label: Windows setup
       - href: /troubleshoot/errors#ollama-r9700-windows
         label: Ollama Windows pattern
       - href: /backends

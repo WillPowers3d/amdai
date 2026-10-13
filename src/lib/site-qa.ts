@@ -58,6 +58,8 @@ const CAMEL_ALLOW = [
   'Proxmox',
   'Prometheus',
   'Grafana',
+  'Adrenalin',
+  'LunarG',
 ];
 
 const SKIP_HREF = /^(mailto:|tel:|javascript:|data:|amdai-stack-lab:)/i;

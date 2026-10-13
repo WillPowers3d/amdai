@@ -70,7 +70,7 @@ import { HOUSE_STACK_LAB } from '../lib/stack-lab-open';
       <h2 id="pick-a-path-heading" class="font-serif text-3xl tracking-tight">Pick a path</h2>
       <div class="mt-6 grid gap-4 sm:grid-cols-2">
         {SETUP_PATHS.map((path) => (
-          <a class="card p-5 hover:border-accent/40" href={`#${path.id}`}>
+          <a class="card p-5 hover:border-accent/40" href={path.id === 'windows' ? '/setup/windows' : `#${path.id}`}>
             <p class="kicker">{path.kicker}</p>
             <h3 class="mt-2 text-xl tracking-tight">{path.label}</h3>
             <p class="mt-3 text-sm leading-relaxed text-muted">{path.summary}</p>
@@ -93,8 +93,9 @@ import { HOUSE_STACK_LAB } from '../lib/stack-lab-open';
         ) : (
           <Callout type="warn" title="Not measured on local-desktop">
             <p>
-              Every Windows step below is a labeled estimate. The tok/s on this site are
-              Ubuntu llama-bench cards.
+              Every Windows step is a labeled estimate. The tok/s on this site are
+              Ubuntu llama-bench cards. Full cited checklist:
+              <a href="/setup/windows">Windows first-run setup</a>.
             </p>
           </Callout>
         )}

@@ -57,7 +57,8 @@ Public site URL is `https://amdai.net` (`site` in `astro.config.mjs`; override w
 | --- | --- |
 | `/` | Home + living status card |
 | `/start` | Short hub — Ubuntu setup, measured recipe, benchmarks, optional Stack Lab |
-| `/setup` | First-run setup — Ubuntu 24.04+ (measured) and Windows (honest limits) |
+| `/setup` | First-run setup — Ubuntu 24.04+ measured path; Windows card links to `/setup/windows` |
+| `/setup/windows` | Cited Windows ROCm + llama.cpp Vulkan first-run — not measured on local-desktop |
 | `/stacks` | Recommended stack cards from the test rig |
 | `/qwen` | Master 3.6 / 3.8 comparison table — one row per model × quant, measured tok/s from run cards |
 | `/compare` | Cited 35B decisions from local-desktop cards — one vs split, Q6 / Q5 / Q4 plus a Q3 estimate, Radeon vs NVIDIA |

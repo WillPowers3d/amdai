@@ -158,9 +158,10 @@ export const FAQ_ENTRIES: FaqItem[] = [
     group: 'getting-started',
     question: 'Ubuntu or Windows for a first local LLM box?',
     answer:
-      'Ubuntu LTS named on AMD’s current ROCm matrix is the path we write. First-run setup walks Ubuntu 24.04+ to the first token and an honest Windows path. Radeon Stack Lab follows that Ubuntu path — packages are not published yet. Vulkan llama.cpp is the honest Windows path for tokens. Full ROCm userspace is a Linux product. ROCm 10.1 lists WSL2 as a technical preview — not a measured local-desktop daily driver. We do not have Windows tok/s cards.',
+      'Ubuntu LTS named on AMD’s current ROCm matrix is the path we write. First-run setup walks Ubuntu 24.04+ to the first token. The Windows guide at /setup/windows is cited vendor docs, not measured on local-desktop. Radeon Stack Lab follows that Ubuntu path — packages are not published yet. Vulkan llama.cpp is the honest Windows path for tokens. Full ROCm userspace is a Linux product. ROCm 10.1 lists WSL2 as a technical preview — not a measured local-desktop daily driver. We do not have Windows tok/s cards.',
     links: [
       { href: '/setup', label: 'First-run setup' },
+      { href: '/setup/windows', label: 'Windows setup' },
       { href: '/stack-lab', label: 'Stack Lab' },
       { href: '/start', label: 'Getting started' },
       { href: '/tutorials/install-rocm', label: 'Install ROCm' },

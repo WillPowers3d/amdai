@@ -74,7 +74,7 @@ export const R9700_PATH_STEPS = [
   {
     href: '/setup',
     label: 'First-run setup',
-    body: 'Ubuntu 24.04+ is the measured path to a first token. Windows stays an honest labeled estimate — we do not have Windows tok/s.',
+    body: 'Ubuntu 24.04+ is the measured path to a first token. Windows first-run lives on /setup/windows — cited, not measured on local-desktop.',
   },
   {
     href: `/recipes/${R9700_DAILY_RECIPE}`,

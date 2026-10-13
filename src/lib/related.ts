@@ -63,13 +63,14 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/amdai-bench', label: 'amdai-bench' },
     ];
   }
-  if (path === '/setup' || path === '/start') {
+  if (path === '/setup' || path === '/setup/windows' || path === '/start') {
     return [
       { href: '/gpus/r9700', label: 'R9700 measured page' },
       { href: '/benchmarks', label: 'Benchmarks' },
       { href: '/faq', label: 'FAQ' },
       { href: '/troubleshoot', label: 'Troubleshoot' },
       { href: '/stack-lab', label: 'Stack Lab' },
+      { href: '/setup/windows', label: 'Windows setup' },
     ];
   }
   if (path === '/faq' || path === '/glossary') {

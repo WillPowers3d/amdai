@@ -14,7 +14,7 @@ const runHref = ud4k?.one.runIds[0] ? `/results/${ud4k.one.runIds[0]}` : '/resul
 
 const hubs = [
   { href: '/setup', label: 'First-run setup', body: 'Ubuntu 24.04+ is the measured path to the first token.' },
-  { href: '/setup#windows', label: 'Windows (estimate)', body: 'Honest limits. Vulkan llama.cpp for tokens. No Windows tok/s card.' },
+  { href: '/setup/windows', label: 'Windows (cited, not measured)', body: 'llama.cpp Vulkan first. HIP SDK where AMD lists the card. No Windows tok/s card.' },
   { href: '/calculator', label: 'Check my rig', body: 'Weights, KV, and overhead vs card VRAM. No invented prices.' },
   { href: '/budget', label: 'Pick a budget', body: 'Starter through the two-R9700 Pro rig. Check-price only.' },
   { href: '/gpus/r9700', label: 'R9700 measured page', body: '32 GB 35B llama.cpp sheet — one GPU vs two, cited cards.' },
@@ -66,7 +66,7 @@ const hubs = [
 
     <p class="mt-5 flex flex-wrap gap-3">
       <a class="btn-primary" href="/setup">Ubuntu setup</a>
-      <a class="btn-ghost" href="/setup#windows">Windows (estimate)</a>
+      <a class="btn-ghost" href="/setup/windows">Windows setup</a>
       <a class="btn-ghost" href="/gpus/r9700">R9700 recipe</a>
       <a class="btn-ghost" href="/gpus/rx7900xtx">7900 XTX sheet</a>
       <a class="btn-ghost" href="/benchmarks">Benchmarks</a>
@@ -80,7 +80,7 @@ const hubs = [
     <section class="mt-12" aria-labelledby="hub-heading">
       <h2 id="hub-heading" class="font-serif text-3xl tracking-tight">Live pages</h2>
       <p class="mt-3 text-sm leading-relaxed text-muted">
-        Ubuntu first. Windows is an estimate pointer into setup. Stack Lab packages are not published yet.
+        Ubuntu first. Windows is a cited guide at /setup/windows. Stack Lab packages are not published yet.
       </p>
       <ul class="mt-8 grid gap-3 sm:grid-cols-2">
         {hubs.map((hub) => (

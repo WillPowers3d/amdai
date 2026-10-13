@@ -27,6 +27,7 @@ export const RAM_OFFLOAD_SURFACES = [
   '/backends/llamacpp',
   '/backends/strata',
   '/setup',
+  '/setup/windows',
   '/benchmarks',
   '/stacks',
   '/harnesses/hermes',
