@@ -18,6 +18,7 @@ import {
 import { officialLinks } from '../lib/site';
 import { FLASH_RERUN_NOTE, SWEEP_REVERIFY } from '../lib/run-card';
 import Qwen36Benches from '../components/Qwen36Benches.astro';
+import HowWeTest from '../components/HowWeTest.astro';
 
 const rows = qwenCompareRows(runs);
 const measuredCount = rows.filter((row) =>
@@ -100,6 +101,10 @@ const payload = rows.map((row) => ({
       <a class="btn-ghost" href={officialLinks.qwen36Gguf}>35B GGUF</a>
       <a class="btn-ghost" href={officialLinks.qwenFlashGguf}>Flash GGUF</a>
       <a class="btn-ghost" href={CODER390_HF_GGUF}>Coder390 GGUF</a>
+      <a class="btn-ghost" href="/methodology">How we test</a>
+    </div>
+    <div class="mt-4">
+      <HowWeTest />
     </div>
 
     <Callout type="warn" title="Flash / Strata / Q3 pending">

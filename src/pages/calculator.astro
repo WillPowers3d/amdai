@@ -6,6 +6,7 @@ import AskToggles from '../components/AskToggles.astro';
 import AbliteratedPicks from '../components/AbliteratedPicks.astro';
 import SaveSetupButton from '../components/SaveSetupButton.astro';
 import VramBar from '../components/VramBar.astro';
+import HowWeTest from '../components/HowWeTest.astro';
 import { BACKENDS, CONTEXT_PRESETS, GPU_PRESETS, KV_TYPES, MODEL_PRESETS, QUANTS } from '../lib/calculator';
 import { measuredRamHits } from '../lib/measured-ram-data';
 import { DEFAULT_PRIORITY } from '../lib/priority';
@@ -275,6 +276,7 @@ const groups = [...new Set(MODEL_PRESETS.map((m) => m.group))];
       </div>
 
       <div class="space-y-4 lg:sticky lg:top-24 lg:self-start">
+        <HowWeTest compact />
         <section class="rounded-2xl border border-line bg-raised p-5" id="calc-panel-model" role="tabpanel" aria-labelledby="calc-tab-model" data-panel="model">
           <p class="kicker">Required VRAM · estimate</p>
           <p class="mt-2 font-serif text-3xl" data-verdict-label>Fits in VRAM (estimate)</p>

@@ -17,6 +17,8 @@ import {
   indexDist,
   checkInternalLinks,
   checkSitemapAndRedirects,
+  checkFooterTrustLinks,
+  REQUIRED_FOOTER_HREFS,
 } from './site-qa';
 
 describe('site QA helpers', () => {
@@ -88,6 +90,10 @@ describe('site QA helpers', () => {
     assert.ok(map.some((i) => i.kind === 'sitemap' && i.message.includes('/ghost')));
     assert.ok(map.some((i) => i.kind === 'redirect' && i.message.includes('/old')));
     assert.equal(pathExists(index, '/'), true);
+    const footer = checkFooterTrustLinks(index);
+    for (const href of REQUIRED_FOOTER_HREFS) {
+      assert.ok(footer.some((i) => i.message.includes(href)), href);
+    }
   });
 
   it('classifies external results without inventing citations', () => {

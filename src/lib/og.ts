@@ -190,6 +190,30 @@ export const OG_CARDS: OgCard[] = [
     alt: 'AMDai dual / multi-GPU — when a second R9700 helps',
   },
   {
+    slug: 'about',
+    title: 'About AMDai',
+    lede: 'Independent Radeon notes. amdai on local-desktop',
+    alt: 'AMDai about — independent Radeon notes from local-desktop',
+  },
+  {
+    slug: 'methodology',
+    title: 'How we test',
+    lede: 'amdai-bench/run@1 cards. Estimates stay labeled',
+    alt: 'AMDai how we test — amdai-bench run cards',
+  },
+  {
+    slug: 'contact',
+    title: 'Contact',
+    lede: 'Honest routes. No invented inbox',
+    alt: 'AMDai contact — honest routes only',
+  },
+  {
+    slug: 'terms',
+    title: 'Terms of use',
+    lede: 'Informational. No warranty. You own the box',
+    alt: 'AMDai terms of use',
+  },
+  {
     slug: 'benchmarks',
     title: 'R9700 benchmarks',
     lede: 'First-party tok/s. No leaderboard spam',

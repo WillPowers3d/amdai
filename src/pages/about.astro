@@ -1,0 +1,69 @@
+---
+import Base from '../layouts/Base.astro';
+import NextSteps from '../components/NextSteps.astro';
+import { ABOUT, TRUST_FOOTER_LINKS } from '../lib/trust';
+---
+
+<Base
+  title="About AMDai"
+  description="Who runs AMDai, what the local-desktop Radeon test rig is, editorial independence, and how affiliate links work."
+>
+  <main id="main" class="mx-auto max-w-3xl px-4 py-10 sm:px-6">
+    <p class="kicker">{ABOUT.kicker}</p>
+    <h1 class="mt-3 font-serif text-4xl tracking-tight sm:text-5xl">{ABOUT.name}</h1>
+    <p class="mt-4 text-lg leading-relaxed text-muted">{ABOUT.lead}</p>
+
+    <section class="mt-10" aria-labelledby="who-heading">
+      <h2 id="who-heading" class="font-serif text-3xl tracking-tight">{ABOUT.who.title}</h2>
+      <p class="mt-3 leading-relaxed text-muted">{ABOUT.who.body}</p>
+      <p class="mt-3 text-sm text-muted">
+        Attribution for recipe ideas and the first-party set:
+        <a class="underline decoration-accent/40" href="/credits">Credits</a>.
+      </p>
+    </section>
+
+    <section class="mt-10" aria-labelledby="rig-heading">
+      <h2 id="rig-heading" class="font-serif text-3xl tracking-tight">{ABOUT.rig.title}</h2>
+      <p class="mt-3 leading-relaxed text-muted">{ABOUT.rig.body}</p>
+      <p class="mt-3 text-sm text-muted">
+        Measured 35B sheet:
+        <a class="underline decoration-accent/40" href="/gpus/r9700">R9700</a>
+        ·
+        <a class="underline decoration-accent/40" href="/results">run cards</a>
+        ·
+        <a class="underline decoration-accent/40" href="/methodology">How we test</a>.
+      </p>
+    </section>
+
+    <section class="mt-10" aria-labelledby="independence-heading">
+      <h2 id="independence-heading" class="font-serif text-3xl tracking-tight">{ABOUT.independence.title}</h2>
+      <p class="mt-3 leading-relaxed text-muted">{ABOUT.independence.body}</p>
+    </section>
+
+    <section class="mt-10" aria-labelledby="affiliates-heading">
+      <h2 id="affiliates-heading" class="font-serif text-3xl tracking-tight">{ABOUT.affiliates.title}</h2>
+      <p class="mt-3 leading-relaxed text-muted">{ABOUT.affiliates.body}</p>
+      <p class="mt-3 text-sm text-muted">
+        <a class="underline decoration-accent/40" href="/disclosure">Affiliate disclosure</a>
+        ·
+        <a class="underline decoration-accent/40" href="/privacy">Privacy</a>
+        ·
+        <a class="underline decoration-accent/40" href="/terms">Terms</a>.
+      </p>
+    </section>
+
+    <ul class="mt-12 flex flex-wrap gap-2">
+      {TRUST_FOOTER_LINKS.map((link) => (
+        <li>
+          <a
+            class="inline-flex min-h-11 items-center rounded-full border border-line bg-raised px-3 text-sm text-ink hover:border-accent/50 hover:text-accent-ink"
+            href={link.href}
+          >
+            {link.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+    <NextSteps path="/about" />
+  </main>
+</Base>

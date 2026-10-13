@@ -49,7 +49,7 @@ npm run preview
 
 Outbound citations are a separate, network-using pass: `npm run check:links:external` (alias `npm run qa:links:external`). It is not part of the default build. It writes a dated report next to the internal one and does not remove citations. Flaky externals do not fail `npm run build`.
 
-Public site URL is `https://amdai.net` (`site` in `astro.config.mjs`; override with `SITE_URL`). Default build is `ACCOUNTS_ENABLED=0` `FORUM_ENABLED=0` `NEWSLETTER_ENABLED=0` (static SSG, no database). Set `ACCOUNTS_ENABLED=1` for optional login, saved rigs, and `npm run notify`. Set `NEWSLETTER_ENABLED=1` (or accounts) for the email-only Lab Notes digest APIs. `NEWSLETTER_SEND` stays off; `npm run digest` drafts HTML + text under `artifacts/newsletter/` and only mails with `NEWSLETTER_SEND=1` plus `--send`. `FORUM_ENABLED=1` also requires accounts (same SQLite) and turns on `/forum`. Admins are the comma-separated list in `ADMIN_EMAILS`. Optional `MOD_EMAILS` promotes moderators.
+Public site URL is `https://amdai.net` (`site` in `astro.config.mjs`; override with `SITE_URL`). Default build is `ACCOUNTS_ENABLED=0` `FORUM_ENABLED=0` `NEWSLETTER_ENABLED=0` (static SSG, no database). Set `ACCOUNTS_ENABLED=1` for optional login, saved rigs, and `npm run notify`. Set `NEWSLETTER_ENABLED=1` (or accounts) for the email-only Lab Notes digest APIs. `NEWSLETTER_SEND` stays off; `npm run digest` drafts HTML + text under `artifacts/newsletter/` and only mails with `NEWSLETTER_SEND=1` plus `--send`. `FORUM_ENABLED=1` also requires accounts (same SQLite) and turns on `/forum`. Admins are the comma-separated list in `ADMIN_EMAILS`. Optional `MOD_EMAILS` promotes moderators. Optional `CONTACT_EMAIL` prints a mailto on `/contact`; unset or invalid renders no inbox.
 
 ## Information architecture
 
@@ -79,6 +79,11 @@ Public site URL is `https://amdai.net` (`site` in `astro.config.mjs`; override w
 | `/contribute` | Download recipe JSON (log required) |
 | `/wanted` | Card × model gaps — no bounty amounts |
 | `/credits` | Sybil / 0xSero MIT notice and local-desktop first-party set |
+| `/about` | Who runs AMDai, the published local-desktop kit, editorial independence, affiliate links |
+| `/methodology` | How we test — amdai-bench/run@1 cards, labeled estimates, citations, corrections |
+| `/contact` | Honest routes — contribute, ROCm problems; email only if `CONTACT_EMAIL` is set |
+| `/terms` | Short terms of use — informational, no warranty, hardware/BIOS at your risk |
+| `/amdai-bench` | Schema hub — run@1 JSON, runs dump, links to results and methodology |
 | `/benchmarks/methodology` | Our pass/fail suite in our words |
 | `/api/v1/catalog.json` | Static recipe catalog |
 | `/api/v1/gpus/<id>.json` | Per-card JSON |
@@ -132,7 +137,7 @@ Public site URL is `https://amdai.net` (`site` in `astro.config.mjs`; override w
 | `/search` | Pagefind (index built by `npm run build`) |
 | `/faq` | Consumer FAQ — grouped Q&A into measured pages, sticky nav, `?q=` filter |
 | `/glossary` | Consumer jargon — A–Z, search, deep links; ROCm citations stay on `/rocm/glossary` |
-| `/accessibility` | What we test for keyboard, screen readers, and phones — report via /forum or /contribute |
+| `/accessibility` | What we test for keyboard, screen readers, and phones — report via /contact, /forum, or /contribute |
 | `/blog` | Longer posts + version-note index |
 | `/maintain` | Weekday scrape checklist |
 | `/disclosure` | Amazon Associates, Rakuten, B&H |

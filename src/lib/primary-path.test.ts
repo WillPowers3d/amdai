@@ -97,6 +97,11 @@ describe('primary path and nav IA', () => {
       '/benchmarks': '../pages/benchmarks.astro',
       '/compare': '../pages/compare/index.astro',
       '/stack-lab': '../pages/stack-lab.astro',
+      '/about': '../pages/about.astro',
+      '/methodology': '../pages/methodology.astro',
+      '/contact': '../pages/contact.astro',
+      '/terms': '../pages/terms.astro',
+      '/amdai-bench': '../pages/amdai-bench/index.astro',
     };
     assert.deepEqual(HIGH_TRAFFIC_PATHS.sort(), Object.keys(files).sort());
     for (const [path, rel] of Object.entries(files)) {

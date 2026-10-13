@@ -16,6 +16,7 @@ interface ImportMetaEnv {
   readonly ADMIN_EMAILS?: string;
   readonly MOD_EMAILS?: string;
   readonly SITE_URL?: string;
+  readonly CONTACT_EMAIL?: string;
   readonly AUTH_SECRET?: string;
   readonly AUTH_URL?: string;
   readonly DATABASE_URL?: string;

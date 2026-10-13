@@ -1,0 +1,33 @@
+---
+import Base from '../../layouts/Base.astro';
+import NextSteps from '../../components/NextSteps.astro';
+import { AMDAI_BENCH_HUB, RUN_SCHEMA } from '../../lib/trust';
+import { AMDAI_BENCH_SCHEMA, AMDAI_BENCH_VERSION } from '../../lib/results';
+---
+
+<Base
+  title="amdai-bench"
+  description="amdai-bench/run@1 is the first-party measurement schema on AMDai — schema JSON, run dump, and the pages that print those cards."
+>
+  <main id="main" class="mx-auto max-w-3xl px-4 py-10 sm:px-6">
+    <p class="kicker">{AMDAI_BENCH_HUB.kicker}</p>
+    <h1 class="mt-3 font-serif text-4xl tracking-tight sm:text-5xl">{AMDAI_BENCH_HUB.name}</h1>
+    <p class="mt-4 text-lg leading-relaxed text-muted">{AMDAI_BENCH_HUB.lead}</p>
+    <p class="mt-6 flex flex-wrap gap-3 text-sm">
+      <a class="btn-primary" href="/results">Run cards</a>
+      <a class="btn-secondary" href="/methodology">How we test</a>
+      <a class="btn-ghost" href="/amdai-bench/run@1.schema.json">{RUN_SCHEMA} schema</a>
+      <a class="btn-ghost" href="/amdai-bench/runs.json">Runs JSON</a>
+      <a class="btn-ghost" href="/amdai-bench.v1.json">Derived {AMDAI_BENCH_SCHEMA} v{AMDAI_BENCH_VERSION}</a>
+      <a class="btn-ghost" href="/contribute">Contribute</a>
+      <a class="btn-ghost" href="/benchmarks">Benchmarks</a>
+    </p>
+    <p class="mt-8 text-sm leading-relaxed text-muted">
+      The product name stays lowercase. Official cards are credited to the submitter on
+      <a class="underline decoration-accent/40" href="/results">/results</a>.
+      Recipe pass/fail gates are a different page:
+      <a class="underline decoration-accent/40" href="/benchmarks/methodology">How we score a recipe</a>.
+    </p>
+    <NextSteps path="/amdai-bench" />
+  </main>
+</Base>

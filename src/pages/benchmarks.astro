@@ -2,6 +2,7 @@
 import Base from '../layouts/Base.astro';
 import Callout from '../components/Callout.astro';
 import NextSteps from '../components/NextSteps.astro';
+import HowWeTest from '../components/HowWeTest.astro';
 import { MEASURED_LABEL } from '../lib/benchmarks';
 import { benchmarksFile } from '../lib/benchmarks-data';
 import { runs } from '../lib/run-card-data';
@@ -48,6 +49,7 @@ const launch = citedDailyLaunch(runs);
       <a class="btn-ghost" href="/gpus/r9700">R9700 measured page</a>
       <a class="btn-ghost" href="/compare">Compare 35B</a>
       <a class="btn-ghost" href="/results">Run cards</a>
+      <a class="btn-ghost" href="/methodology">How we test</a>
       <a class="btn-ghost" href="/benchmarks/methodology">Gates / methodology</a>
       <a class="btn-ghost" href="/stack-lab">Stack Lab</a>
       <a class="btn-ghost" href="/calculator">Calculator</a>
@@ -121,6 +123,9 @@ const launch = citedDailyLaunch(runs);
         views. {COMPARE_Q3} is a labeled estimate on compare — not a measured row here
         ({COMPARE_Q3_CITE}).
       </p>
+      <div class="mt-3">
+        <HowWeTest />
+      </div>
 
       <Callout type="warn" title="Overnight sweep, 2026-10-12">
         <p>{SWEEP_REVERIFY}</p>

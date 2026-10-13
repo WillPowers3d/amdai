@@ -134,6 +134,11 @@ export const R9700_MORE: R9700MoreLink[] = [
     body: 'Official amdai-bench/run@1 pages. Every number on this sheet cites one.',
   },
   {
+    href: '/methodology',
+    label: 'How we test',
+    body: 'amdai-bench/run@1 cards, labeled estimates, citations, corrections.',
+  },
+  {
     href: '/faq',
     label: 'FAQ',
     body: 'Which GPU, Ubuntu vs Windows, and when Q3 is only an estimate.',
@@ -200,6 +205,7 @@ export const REQUIRED_R9700_HREFS = [
   '/compare/one-vs-two-gpu',
   '/compare/q4-q5-q6',
   '/results',
+  '/methodology',
   '/faq',
   '/glossary',
   '/multi-gpu',

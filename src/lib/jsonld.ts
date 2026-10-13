@@ -22,7 +22,8 @@ import {
   type Crumb,
 } from './seo';
 import { BRAND } from './site';
-import { RUN_SCHEMA, amdai } from './run-card';
+import { RUN_SCHEMA, amdai, amdai } from './run-card';
+import { TRUST_PUBLISHED } from './trust';
 import { runs } from './run-card-data';
 import { parseBios, type BiosFile } from './bios';
 import { parse } from 'yaml';
@@ -69,11 +70,32 @@ export function organizationJsonLd(): JsonLd {
     '@id': `${SITE_ORIGIN}/#organization`,
     name: BRAND,
     url: SITE_ORIGIN,
+    description: 'Independent consumer notes for local AI on AMD Radeon. Not affiliated with AMD.',
     founder: {
       '@type': 'Person',
       name: amdai.display,
-      alternateName: [amdai.handle, amdai.rig],
+      alternateName: [amdai.handle, amdai.rig, amdai.handle, amdai.display],
     },
+  };
+}
+
+export function aboutPageJsonLd(input: {
+  name: string;
+  description: string;
+  url: string;
+  published: string;
+  modified: string;
+}): JsonLd {
+  return {
+    '@type': 'AboutPage',
+    name: input.name,
+    description: input.description,
+    url: input.url,
+    datePublished: input.published,
+    dateModified: input.modified,
+    about: { '@id': `${SITE_ORIGIN}/#organization` },
+    publisher: { '@id': `${SITE_ORIGIN}/#organization` },
+    author: { '@type': 'Person', name: amdai.display },
   };
 }
 
@@ -314,6 +336,18 @@ export function pageJsonLd(input: {
   }
 
   const dates = articleDates(path);
+  if (path === '/about') {
+    nodes.push(
+      aboutPageJsonLd({
+        name: input.title.replace(/ · AMDai$/, ''),
+        description: input.description,
+        url,
+        published: dates?.published ?? TRUST_PUBLISHED,
+        modified: dates?.modified ?? TRUST_PUBLISHED,
+      }),
+    );
+    return nodes;
+  }
   if (path === '/stack-lab') {
     nodes.push(
       softwareApplicationJsonLd({
@@ -379,7 +413,11 @@ export function pageJsonLd(input: {
     path === '/maintain' ||
     path === '/quants' ||
     path === '/gpus/r9700' ||
-    path === '/multi-gpu';
+    path === '/multi-gpu' ||
+    path === '/methodology' ||
+    path === '/terms' ||
+    path === '/contact' ||
+    path === '/amdai-bench';
   if (article && dates) {
     nodes.push(
       techArticleJsonLd({

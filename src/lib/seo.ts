@@ -517,6 +517,36 @@ setMeta(
   'That path is not on AMDai. Try Getting started, Search, or the GPU directory from the header.',
 );
 setMeta(
+  '/about',
+  'About AMDai',
+  'Who runs AMDai, what the local-desktop Radeon test rig is, editorial independence, and how affiliate links work.',
+);
+setDate('/about', '2026-10-13');
+setMeta(
+  '/methodology',
+  'How we test',
+  'How AMDai produces measured tok/s (amdai-bench/run@1), how estimates are labeled including Q3, and how citations and corrections work.',
+);
+setDate('/methodology', '2026-10-13');
+setMeta(
+  '/contact',
+  'Contact',
+  'Honest AMDai contact routes: contribute a sourced recipe, ROCm problems, and the forum when it is enabled. No invented inbox.',
+);
+setDate('/contact', '2026-10-13');
+setMeta(
+  '/terms',
+  'Terms of use',
+  'Short AMDai terms: informational content, no warranty, you are responsible for hardware and BIOS changes, plus affiliate and privacy links.',
+);
+setDate('/terms', '2026-10-13');
+setMeta(
+  '/amdai-bench',
+  'amdai-bench',
+  'amdai-bench/run@1 is the first-party measurement schema on AMDai — schema JSON, run dump, and the pages that print those cards.',
+);
+setDate('/amdai-bench', '2026-10-13');
+setMeta(
   '/privacy',
   'Privacy',
   'What optional AMDai accounts and the Lab Notes digest store — email, topics, timestamps. No tracking pixel.',

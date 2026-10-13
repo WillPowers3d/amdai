@@ -1,6 +1,7 @@
 ---
 import { AMAZON_ASSOCIATE_DISCLOSURE } from '../lib/affiliates';
 import { navGroups, primaryNav, site } from '../lib/site';
+import { TRUST_FOOTER_LINKS } from '../lib/trust';
 import Logo from './Logo.astro';
 import NewsletterSignup from './NewsletterSignup.astro';
 ---
@@ -29,18 +30,25 @@ import NewsletterSignup from './NewsletterSignup.astro';
     ))}
   </div>
   <div class="border-t border-line">
-    <p class="mx-auto max-w-7xl px-4 py-4 text-xs leading-relaxed text-faint sm:px-6">
-      Independent, not affiliated with AMD.
-      Refresh <code class="font-mono">src/data/what-works.yaml</code> when the frontier moves.
-      <a class="underline decoration-accent/40 underline-offset-2" href="/maintain">Weekday scrape</a>.
-      <a class="underline decoration-accent/40 underline-offset-2" href="/disclosure">Affiliate disclosure</a>.
-      <a class="underline decoration-accent/40 underline-offset-2" href="/credits">Credits</a>.
-      <a class="underline decoration-accent/40 underline-offset-2" href="/privacy">Privacy</a>.
-      <a class="underline decoration-accent/40 underline-offset-2" href="/newsletter">Digest</a>.
-      <a class="underline decoration-accent/40 underline-offset-2" href="/faq">FAQ</a>.
-      <a class="underline decoration-accent/40 underline-offset-2" href="/setup">Setup</a>.
-      <a class="underline decoration-accent/40 underline-offset-2" href="/accessibility">Accessibility</a>.
-      {AMAZON_ASSOCIATE_DISCLOSURE} Always confirm the live ROCm matrix.
-    </p>
+    <nav class="mx-auto max-w-7xl px-4 py-4 sm:px-6" aria-label="Trust and legal">
+      <ul class="flex flex-wrap gap-x-4 gap-y-1 text-xs">
+        {TRUST_FOOTER_LINKS.map((link) => (
+          <li>
+            <a class="inline-flex min-h-11 items-center text-faint underline decoration-accent/40 underline-offset-2 hover:text-ink" href={link.href}>
+              {link.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+      <p class="mt-2 text-xs leading-relaxed text-faint">
+        Independent, not affiliated with AMD.
+        Refresh <code class="font-mono">src/data/what-works.yaml</code> when the frontier moves.
+        <a class="underline decoration-accent/40 underline-offset-2" href="/maintain">Weekday scrape</a>.
+        <a class="underline decoration-accent/40 underline-offset-2" href="/newsletter">Digest</a>.
+        <a class="underline decoration-accent/40 underline-offset-2" href="/faq">FAQ</a>.
+        <a class="underline decoration-accent/40 underline-offset-2" href="/setup">Setup</a>.
+        {AMAZON_ASSOCIATE_DISCLOSURE} Always confirm the live ROCm matrix.
+      </p>
+    </nav>
   </div>
 </footer>

@@ -170,6 +170,10 @@ export function requiredFieldsFor(type: string, node: Record<string, unknown>): 
       need('name');
       need('url');
       break;
+    case 'AboutPage':
+      need('name');
+      need('url');
+      break;
     case 'BreadcrumbList':
       if (!Array.isArray(node.itemListElement) || node.itemListElement.length < 2) {
         missing.push('itemListElement');

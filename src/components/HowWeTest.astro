@@ -1,0 +1,14 @@
+---
+import { HOW_WE_TEST } from '../lib/trust';
+
+interface Props {
+  compact?: boolean;
+}
+
+const { compact = false } = Astro.props;
+---
+
+<p class:list={['text-sm leading-relaxed', compact ? 'text-faint' : 'text-muted']}>
+  <a class="underline decoration-accent/40 underline-offset-2" href={HOW_WE_TEST.href}>{HOW_WE_TEST.label}</a>
+  {compact ? ' — measured cells cite run cards; estimates stay labeled.' : ` — ${HOW_WE_TEST.body}`}
+</p>

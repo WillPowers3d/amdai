@@ -1,0 +1,36 @@
+---
+import Base from '../layouts/Base.astro';
+import NextSteps from '../components/NextSteps.astro';
+import { TERMS } from '../lib/trust';
+---
+
+<Base
+  title="Terms of use"
+  description="Short AMDai terms: informational content, no warranty, you are responsible for hardware and BIOS changes, plus affiliate and privacy links."
+>
+  <main id="main" class="mx-auto max-w-3xl px-4 py-10 sm:px-6">
+    <p class="kicker">{TERMS.kicker}</p>
+    <h1 class="mt-3 font-serif text-4xl tracking-tight sm:text-5xl">{TERMS.name}</h1>
+    <p class="mt-4 text-lg leading-relaxed text-muted">{TERMS.lead}</p>
+
+    {TERMS.sections.map((section) => (
+      <section class="mt-10" aria-labelledby={`${section.title.replace(/\s+/g, '-').toLowerCase()}-heading`}>
+        <h2 id={`${section.title.replace(/\s+/g, '-').toLowerCase()}-heading`} class="font-serif text-3xl tracking-tight">
+          {section.title}
+        </h2>
+        <p class="mt-3 leading-relaxed text-muted">{section.body}</p>
+      </section>
+    ))}
+
+    <p class="mt-10 text-sm text-muted">
+      <a class="underline decoration-accent/40" href="/disclosure">Affiliate disclosure</a>
+      ·
+      <a class="underline decoration-accent/40" href="/privacy">Privacy</a>
+      ·
+      <a class="underline decoration-accent/40" href="/about">About</a>
+      ·
+      <a class="underline decoration-accent/40" href="/contact">Contact</a>.
+    </p>
+    <NextSteps path="/terms" />
+  </main>
+</Base>

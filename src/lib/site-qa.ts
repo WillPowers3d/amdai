@@ -403,9 +403,37 @@ export function checkContent(index: DistIndex): QaIssue[] {
   return issues;
 }
 
+export const REQUIRED_FOOTER_HREFS = [
+  '/about',
+  '/methodology',
+  '/contact',
+  '/terms',
+  '/privacy',
+  '/disclosure',
+  '/accessibility',
+  '/credits',
+] as const;
+
+export function checkFooterTrustLinks(index: DistIndex): QaIssue[] {
+  const home = index.pages.get('/');
+  if (!home) return [issue('link', '/', 'homepage missing — cannot check footer trust links')];
+  const html = readFileSync(home, 'utf8');
+  const issues: QaIssue[] = [];
+  for (const href of REQUIRED_FOOTER_HREFS) {
+    const found = html.includes(`href="${href}"`) || html.includes(`href='${href}'`);
+    if (!found) issues.push(issue('link', home, `footer missing required trust link ${href}`));
+  }
+  return issues;
+}
+
 export function runSiteQa(root: string, origin = SITE_ORIGIN_DEFAULT, configSource = ''): QaIssue[] {
   const index = indexDist(root, origin, configSource);
-  return [...checkInternalLinks(index), ...checkSitemapAndRedirects(index), ...checkContent(index)];
+  return [
+    ...checkInternalLinks(index),
+    ...checkSitemapAndRedirects(index),
+    ...checkContent(index),
+    ...checkFooterTrustLinks(index),
+  ];
 }
 
 export function formatQaReport(issues: QaIssue[]): string {

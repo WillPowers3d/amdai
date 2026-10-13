@@ -156,6 +156,41 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
     { href: '/benchmarks', label: 'Benchmarks' },
     { href: '/contribute', label: 'Contribute a card' },
   ],
+  '/about': [
+    { href: '/methodology', label: 'How we test' },
+    { href: '/results', label: 'Run cards' },
+    { href: '/disclosure', label: 'Affiliate disclosure' },
+    { href: '/credits', label: 'Credits' },
+    { href: '/contact', label: 'Contact' },
+  ],
+  '/methodology': [
+    { href: '/benchmarks', label: 'Benchmarks' },
+    { href: '/results', label: 'Run cards' },
+    { href: '/amdai-bench', label: 'amdai-bench' },
+    { href: '/contribute', label: 'Contribute' },
+    { href: '/about', label: 'About' },
+  ],
+  '/contact': [
+    { href: '/contribute', label: 'Contribute' },
+    { href: '/rocm-problems', label: 'ROCm problems' },
+    { href: '/about', label: 'About' },
+    { href: '/accessibility', label: 'Accessibility' },
+    { href: '/methodology', label: 'How we test' },
+  ],
+  '/terms': [
+    { href: '/disclosure', label: 'Affiliate disclosure' },
+    { href: '/privacy', label: 'Privacy' },
+    { href: '/about', label: 'About' },
+    { href: '/contact', label: 'Contact' },
+    { href: '/methodology', label: 'How we test' },
+  ],
+  '/amdai-bench': [
+    { href: '/methodology', label: 'How we test' },
+    { href: '/results', label: 'Run cards' },
+    { href: '/benchmarks', label: 'Benchmarks' },
+    { href: '/contribute', label: 'Contribute' },
+    { href: '/about', label: 'About' },
+  ],
 };
 
 export const HIGH_TRAFFIC_PATHS = Object.keys(NEXT_STEPS);
