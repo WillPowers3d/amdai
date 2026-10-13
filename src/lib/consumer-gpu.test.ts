@@ -34,7 +34,7 @@ describe('consumer GPU recipe sheets', () => {
   it('covers only cited directory SKUs and keeps house rules', () => {
     const pages = consumerRecipePages();
     assert.deepEqual(assertConsumerGpuValid(pages), []);
-    assert.deepEqual([...CONSUMER_RECIPE_IDS], ['rx7900xtx', 'rx7900xt', 'rx7800xt', 'rx9070xt']);
+    assert.deepEqual([...CONSUMER_RECIPE_IDS], ['rx7900xtx', 'rx7900xt', 'rx7800xt', 'rx9070xt', 'rx9060xt']);
     assert.equal(CONSUMER_PUBLISHED, '2026-10-13');
     assert.equal(CONSUMER_MODEL, 'Qwen3.6-35B-A3B');
     assert.equal(CONSUMER_ENGINE, 'llama.cpp');
@@ -53,9 +53,12 @@ describe('consumer GPU recipe sheets', () => {
     assert.equal(consumerPath('rx7900xt'), '/gpus/rx7900xt');
     assert.equal(consumerPath('rx7800xt'), '/gpus/rx7800xt');
     assert.equal(consumerPath('rx9070xt'), '/gpus/rx-9070-xt');
+    assert.equal(consumerPath('rx9060xt'), '/gpus/rx-9060-xt');
     assert.equal(isConsumerRecipeGpu('r9700'), false);
     assert.equal(isConsumerRecipeGpu('rx9070xt'), true);
     assert.equal(isConsumerRecipeGpu('rx-9070-xt'), true);
+    assert.equal(isConsumerRecipeGpu('rx9060xt'), true);
+    assert.equal(isConsumerRecipeGpu('rx-9060-xt'), true);
     assert.equal(isConsumerRecipeGpu('rx7900gre'), false);
 
     assert.equal(consumerShortName('rx7900xtx'), 'RX 7900 XTX');
@@ -70,6 +73,11 @@ describe('consumer GPU recipe sheets', () => {
     assert.equal(pages[3]?.path, '/gpus/rx-9070-xt');
     assert.match(pages[3]?.lead ?? '', /gfx1201/);
     assert.doesNotMatch(pages[3]?.stack.map((tip) => tip.body).join('\n') ?? '', /gfx110x ROCm family package/);
+    assert.equal(pages[4]?.vramLabel, '16 GB');
+    assert.equal(pages[4]?.gfx, 'gfx1200');
+    assert.equal(pages[4]?.path, '/gpus/rx-9060-xt');
+    assert.match(pages[4]?.lead ?? '', /8 GB XT LP/);
+    assert.match(pages[4]?.stack.map((tip) => tip.body).join('\n') ?? '', /gfx1200/);
   });
 
   it('uses calculator estimates and leaves speed not measured', () => {
@@ -116,8 +124,12 @@ describe('consumer GPU recipe sheets', () => {
     const xtx4kQ4 = compute(consumerCalcInput('rx7900xtx', 'q4_k_m', 4096));
     const xt16Q4 = compute(consumerCalcInput('rx7800xt', 'q4_k_m', 4096));
     const xt9070 = compute(consumerCalcInput('rx9070xt', 'q4_k_m', 4096));
+    const xt9060 = compute(consumerCalcInput('rx9060xt', 'q4_k_m', 4096));
     assert.ok(xt16Q4.verdict === 'no');
     assert.ok(xt9070.verdict === 'no');
+    assert.ok(xt9060.verdict === 'no');
+    assert.equal(consumerRecipeIdFromPage('rx-9060-xt'), 'rx9060xt');
+    assert.equal(gpuDirectoryHref('rx9060xt'), '/gpus/rx-9060-xt');
     assert.ok(xtx4kQ4.weightsGiB > 0);
     assert.ok(CONSUMER_NAV_LINKS.every((link) => link.href.startsWith('/gpus/')));
     assert.equal(consumerRecipeIdFromPage('rx-9070-xt'), 'rx9070xt');
