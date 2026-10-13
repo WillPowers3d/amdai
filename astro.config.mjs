@@ -5,6 +5,7 @@ import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 import node from '@astrojs/node';
 import { htmlSeparators } from './src/lib/html-separators.ts';
+import { canonicalUrl, isSitemapExcluded, lastmodFor, urlPath } from './src/lib/seo.ts';
 
 const accountsOn = process.env.ACCOUNTS_ENABLED === '1' || process.env.ACCOUNTS_ENABLED === 'true';
 const forumOn = process.env.FORUM_ENABLED === '1' || process.env.FORUM_ENABLED === 'true';
@@ -24,7 +25,22 @@ export default defineConfig({
   vite: {
     plugins: [tailwindcss()],
   },
-  integrations: [mdx(), sitemap(), htmlSeparators()],
+  integrations: [
+    mdx(),
+    sitemap({
+      filter: (page) => !isSitemapExcluded(new URL(page).pathname),
+      serialize(item) {
+        const path = urlPath(new URL(item.url).pathname);
+        const lastmod = lastmodFor(path);
+        return {
+          ...item,
+          url: canonicalUrl(path),
+          lastmod,
+        };
+      },
+    }),
+    htmlSeparators(),
+  ],
   redirects: {
     '/local-ai': '/software',
   },

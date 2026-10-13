@@ -1,0 +1,820 @@
+/**
+ * Titles, descriptions, canonicals, noindex, and lastmod for AMDai.
+ * Document titles end with " · AMDai". og:site_name stays the lowercase amdai.
+ * Never invent prices, ratings, or tok/s here.
+ */
+
+import { execSync } from 'node:child_process';
+import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { BRAND, site } from './site';
+import { GUIDE_UPDATED, rocmPages } from './rocm-guide';
+import { amdai, amdai, type RunCard } from './run-card';
+import { forumCategories } from './forum-categories';
+
+export const SITE_ORIGIN = 'https://amdai.net';
+export const TITLE_SUFFIX = ` · ${BRAND}`;
+export const TITLE_MAX = 60;
+export const DESC_MIN = 70;
+export const DESC_MAX = 160;
+export const SEARCH_ACTION_TEMPLATE = `${SITE_ORIGIN}/search?q={search_term_string}`;
+
+export const NOINDEX_EXACT = new Set([
+  '/login',
+  '/unsubscribe',
+  '/search',
+  '/404',
+  '/forum/inbox',
+  '/forum/mod',
+  '/forum/new',
+]);
+
+export const NOINDEX_PREFIXES = ['/account'];
+
+export function urlPath(pathname: string): string {
+  let path = pathname.split('?')[0] || '/';
+  if (!path.startsWith('/')) path = `/${path}`;
+  if (path.length > 1 && path.endsWith('/')) path = path.slice(0, -1);
+  return path || '/';
+}
+
+export function shouldNoindex(pathname: string): boolean {
+  const path = urlPath(pathname);
+  if (NOINDEX_EXACT.has(path)) return true;
+  if (path === '/account' || path.startsWith('/account/')) return true;
+  if (path === '/go' || path.startsWith('/go/')) return true;
+  return false;
+}
+
+export function isSitemapExcluded(pathname: string): boolean {
+  return shouldNoindex(pathname);
+}
+
+export function canonicalUrl(pathname: string, origin = SITE_ORIGIN): string {
+  const path = urlPath(pathname);
+  return path === '/' ? `${origin}/` : `${origin}${path}`;
+}
+
+export function isNestedPath(pathname: string): boolean {
+  return urlPath(pathname).split('/').filter(Boolean).length >= 2;
+}
+
+export function clipTitle(raw: string): string {
+  const trimmed = raw.replace(/\s+/g, ' ').trim();
+  const body = trimmed.endsWith(TITLE_SUFFIX) ? trimmed.slice(0, -TITLE_SUFFIX.length).trim() : trimmed;
+  if (body.length + TITLE_SUFFIX.length <= TITLE_MAX) return body;
+  const budget = TITLE_MAX - TITLE_SUFFIX.length;
+  return `${body.slice(0, Math.max(8, budget - 1)).replace(/\s+\S*$/, '').trimEnd()}…`;
+}
+
+export function documentTitle(pathname: string, heading?: string): string {
+  const path = urlPath(pathname);
+  if (path === '/') return `${BRAND} · ${site.name}`;
+  const mapped = PAGE_TITLES.get(path);
+  const body = clipTitle(mapped ?? heading ?? labelFromPath(path));
+  return `${body}${TITLE_SUFFIX}`;
+}
+
+export function fitDescription(raw: string, path = ''): string {
+  let text = raw.replace(/\s+/g, ' ').trim();
+  if (text.length < DESC_MIN) {
+    const pad = ` Independent ${BRAND} notes for a home Radeon box.`;
+    if ((text + pad).length <= DESC_MAX) text = `${text}${pad}`.trim();
+    else text = `${text} Independent Radeon AI notes.`.trim();
+  }
+  if (text.length > DESC_MAX) {
+    text = `${text.slice(0, DESC_MAX - 1).replace(/\s+\S*$/, '').trimEnd()}…`;
+  }
+  if (text.length < DESC_MIN && path) {
+    text = fallbackDescription(path);
+  }
+  return text;
+}
+
+export function pageDescription(pathname: string, provided?: string): string {
+  const path = urlPath(pathname);
+  const mapped = PAGE_DESCRIPTIONS.get(path);
+  if (mapped) return mapped;
+  if (provided && provided !== site.description) return fitDescription(provided, path);
+  return fallbackDescription(path);
+}
+
+export function fallbackDescription(pathname: string): string {
+  const path = urlPath(pathname);
+  const label = labelFromPath(path);
+  return fitDescription(
+    `${label} on AMDai — independent consumer ROCm notes from the R9700 lab, not an AMD publication.`,
+    path,
+  );
+}
+
+export function labelFromPath(pathname: string): string {
+  const path = urlPath(pathname);
+  if (path === '/') return site.name;
+  const hit = CRUMB_LABELS[path];
+  if (hit) return hit;
+  const last = path.split('/').filter(Boolean).at(-1) ?? path;
+  return last.replace(/[-_.]+/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+}
+
+export const CRUMB_LABELS: Record<string, string> = {
+  '/': 'Home',
+  '/rocm': 'ROCm',
+  '/rocm/stack': 'The stack',
+  '/rocm/gfx': 'gfx IDs',
+  '/rocm/vulkan-hip': 'Vulkan vs HIP',
+  '/rocm/versions': 'Versions',
+  '/rocm/history': 'History',
+  '/rocm/glossary': 'ROCm glossary',
+  '/rocm/faq': 'ROCm FAQ',
+  '/compare': 'Compare',
+  '/compare/one-vs-two-gpu': 'One vs two GPUs',
+  '/compare/q4-q5-q6': 'Q6 Q5 Q4',
+  '/harnesses': 'Harnesses',
+  '/harnesses/compare': 'Compare harnesses',
+  '/harnesses/quiz': 'Quiz',
+  '/harnesses/connect': 'Connect',
+  '/harnesses/agents': 'Agents',
+  '/harnesses/chat': 'Chat',
+  '/harnesses/image': 'Image',
+  '/backends': 'Backends',
+  '/benchmarks': 'Benchmarks',
+  '/benchmarks/methodology': 'Methodology',
+  '/results': 'Results',
+  '/rocm-problems': 'ROCm problems',
+  '/rocm-problems/help': 'How to help',
+  '/rocm-problems/report': 'Report',
+  '/rocm-problems/contribute': 'Contribute',
+  '/rocm-problems/works': 'What works',
+  '/tutorials': 'Tutorials',
+  '/tutorials/install-rocm': 'Install ROCm',
+  '/tutorials/verify-rocm': 'Verify ROCm',
+  '/tutorials/run-local-llm': 'Run a local Qwen',
+  '/tutorials/serve-qwen': 'Serve Qwen',
+  '/gpus': 'GPUs',
+  '/models': 'Models',
+  '/recipes': 'Recipes',
+  '/blog': 'Blog',
+  '/updates': 'Updates',
+  '/updates/matrix': 'Version matrix',
+  '/forum': 'Forum',
+  '/forum/c': 'Categories',
+  '/forum/rules': 'Rules',
+  '/forum/search': 'Forum search',
+  '/account': 'Account',
+  '/account/save': 'Save setup',
+  '/troubleshoot': 'Troubleshoot',
+  '/troubleshoot/errors': 'Error paste',
+  '/glossary': 'Glossary',
+  '/faq': 'FAQ',
+  '/bios': 'BIOS',
+  '/qwen': 'Qwen compare',
+  '/qwen36-dual': '35B on two cards',
+  '/flash-daily': 'Flash daily',
+  '/flash-ram-offload': 'Flash RAM offload',
+  '/start': 'Getting started',
+  '/stacks': 'Stacks',
+  '/calculator': 'Calculator',
+  '/budget': 'Budget',
+  '/quants': 'Quants',
+  '/software': 'AI software',
+  '/hardware': 'Hardware',
+  '/abliterated': 'Abliterated',
+  '/credits': 'Credits',
+  '/contribute': 'Contribute',
+  '/wanted': 'Wanted',
+  '/privacy': 'Privacy',
+  '/disclosure': 'Disclosure',
+  '/accessibility': 'Accessibility',
+  '/search': 'Search',
+  '/login': 'Sign in',
+  '/unsubscribe': 'Unsubscribe',
+};
+
+export type Crumb = { name: string; href: string };
+
+/** Intermediate segments that are not real pages. */
+const SKIP_CRUMB = new Set(['/forum/c', '/forum/t', '/recipes', '/troubleshoot', '/go']);
+
+const CRUMB_HREF: Record<string, string> = {
+  '/troubleshoot': '/troubleshooting',
+  '/forum/c': '/forum',
+  '/forum/t': '/forum',
+  '/recipes': '/models',
+};
+
+export function breadcrumbsFor(pathname: string): Crumb[] {
+  const path = urlPath(pathname);
+  const parts = path.split('/').filter(Boolean);
+  if (parts.length < 2) return [];
+  const crumbs: Crumb[] = [{ name: 'Home', href: '/' }];
+  let href = '';
+  for (let i = 0; i < parts.length; i += 1) {
+    href += `/${parts[i]}`;
+    const isLast = i === parts.length - 1;
+    if (!isLast && SKIP_CRUMB.has(href)) continue;
+    const target = isLast ? path : (CRUMB_HREF[href] ?? href);
+    const name =
+      CRUMB_LABELS[href] ??
+      CRUMB_LABELS[target] ??
+      PAGE_TITLES.get(isLast ? path : target) ??
+      labelFromPath(href);
+    if (crumbs.some((crumb) => crumb.href === target && !isLast)) continue;
+    crumbs.push({ name, href: target });
+  }
+  return crumbs;
+}
+
+export const PAGE_TITLES = new Map<string, string>();
+export const PAGE_DESCRIPTIONS = new Map<string, string>();
+export const PAGE_DATES = new Map<string, { published: string; modified: string }>();
+
+function setMeta(path: string, title: string, description: string) {
+  PAGE_TITLES.set(path, clipTitle(title));
+  PAGE_DESCRIPTIONS.set(path, fitDescription(description, path));
+}
+
+function setDate(path: string, published: string, modified = published) {
+  PAGE_DATES.set(path, { published: published.slice(0, 10), modified: modified.slice(0, 10) });
+}
+
+function isoDay(value: Date | string | null | undefined): string | null {
+  if (!value) return null;
+  if (typeof value === 'string') {
+    const day = value.slice(0, 10);
+    return /^\d{4}-\d{2}-\d{2}$/.test(day) ? day : null;
+  }
+  if (Number.isNaN(value.valueOf())) return null;
+  return value.toISOString().slice(0, 10);
+}
+
+setMeta('/', `${BRAND} · ${site.name}`, site.description);
+setMeta(
+  '/start',
+  'Getting started',
+  'GPU, then ROCm, then llama.cpp, then an optional harness — one path for a first home Radeon box.',
+);
+setMeta(
+  '/stacks',
+  'Recommended stacks',
+  'Daily-driver Qwen and the Flash agent stack from the two-R9700 lab. Measured cards, no invented tok/s.',
+);
+setMeta(
+  '/qwen',
+  'Qwen 3.6 / 3.8 compare',
+  'Every current Qwen 3.6 and 3.8 file × quant on AMDai, with measured cells from official local-desktop run cards.',
+);
+setMeta(
+  '/compare',
+  'Compare 35B on local-desktop',
+  'Cited 35B decisions from official local-desktop llama.cpp cards: one GPU versus split, and Q6 / Q5 / Q4 plus a labeled Q3 estimate.',
+);
+setMeta(
+  '/compare/one-vs-two-gpu',
+  'One R9700 vs two',
+  'Qwen3.6-35B-A3B on local-desktop: one R9700 versus a split across both cards — decode, prefill, VRAM, and RAM from run cards.',
+);
+setMeta(
+  '/compare/q4-q5-q6',
+  'Q6 vs Q5 vs Q4',
+  'Same 35B on local-desktop at Q6_K, UD-Q5_K_XL, Q5_K_M, and Q4_K_M, plus a labeled UD-Q3_K_XL estimate. 1-GPU or split.',
+);
+setMeta(
+  '/qwen36-dual',
+  '35B on two R9700s',
+  'Split versus two copies of UD-Q5_K_XL on two R9700s — soak and concurrency from official local-desktop cards.',
+);
+setMeta(
+  '/flash-daily',
+  'Flash daily driver',
+  'Qwen 3.8 Flash VRAM and DDR5 offload at Q3–Q6, full 262K. Pending DDR5 rerun is labeled on the page.',
+);
+setMeta(
+  '/flash-ram-offload',
+  'Flash RAM offload',
+  'Run Flash with experts on DDR5: kit sizes, measured DIMM speed, and the launch shape. No invented GB.',
+);
+setMeta(
+  '/benchmarks',
+  'R9700 benchmarks',
+  'First-party Qwen decode on a Radeon AI PRO R9700 — llama.cpp and Strata, measured on the lab rig. Empty cells stay empty.',
+);
+setMeta(
+  '/benchmarks/methodology',
+  'Bench methodology',
+  'How AMDai scores a local-AI recipe: load, chat, reasoning, tools, long context, and speed. Pass, fail, or not measured.',
+);
+setMeta(
+  '/results',
+  'Official run cards',
+  'amdai-bench/run@1 cards from overnight local-desktop tests — credited to amdai, with the exact launch command.',
+);
+setMeta(
+  '/budget',
+  'Setup by budget',
+  'Starter through two-R9700 Pro builds for local Qwen. Size and speed, never a live or invented price.',
+);
+setMeta(
+  '/calculator',
+  'Quant + hardware calc',
+  'Size a GGUF, ask what a Radeon can run, or read a speed floor — Q3 through BF16, client-side, no prices.',
+);
+setMeta(
+  '/quants',
+  'Quants Q3–Q8',
+  'Q3 through Q8, Unsloth UD dynamic files, KV types, and why Q1/Q2 stay off this notebook.',
+);
+setMeta(
+  '/gpus',
+  'GPU directory',
+  'Radeon cards with gfx IDs, VRAM, official ROCm rows, and tested recipes. Spec-only cards stay labeled.',
+);
+setMeta(
+  '/models',
+  'House Qwen models',
+  'The Qwen files this notebook actually writes about, with reverse recipe tables and Hugging Face cards.',
+);
+setMeta(
+  '/rocm',
+  'What is ROCm',
+  'AMD’s GPU compute stack in plain English, why it sits next to CUDA, and what that means on a home Radeon.',
+);
+setMeta(
+  '/rocm-problems',
+  'ROCm problems',
+  'Open consumer ROCm issues we track with citations — and how you can help. No invented workarounds.',
+);
+setMeta(
+  '/backends',
+  'Which backend?',
+  'Inference engines for a home Radeon box. llama.cpp first; Strata when you need the Flash agent path.',
+);
+setMeta(
+  '/software',
+  'AI software on AMD',
+  'llama.cpp first on a home Radeon; vLLM and Strata as labeled tries. Pins are dated snapshots.',
+);
+setMeta(
+  '/abliterated',
+  'Abliterated models',
+  'What abliteration is, how to vet a file, and the educational catalog. Official instruct stays first.',
+);
+setMeta(
+  '/harnesses',
+  'Harnesses',
+  'What to plug a local Qwen into after tokens work — agents, chat UIs, and ComfyUI. llama.cpp first.',
+);
+setMeta(
+  '/hardware',
+  'Hardware and power',
+  'PSU, cooling, noise, and VRAM versus model size for a home Radeon AI box. Cited or not recorded.',
+);
+setMeta(
+  '/bios',
+  'BIOS for local AI',
+  'Above 4G, Resizable BAR/SAM, CSM off, x8/x8 vs x16/x4, EXPO/XMP, IOMMU. Cited chipset notes only.',
+);
+setMeta(
+  '/stack-lab',
+  'Radeon Stack Lab',
+  'Ubuntu companion app with the same catalog as the YAML — qwen-reliable and qwen-fast-agent profiles.',
+);
+setMeta(
+  '/tutorials',
+  'Tutorials',
+  'Practical how-tos: install ROCm, verify the GPU, run a local Qwen, then serve it on the R9700.',
+);
+setMeta(
+  '/troubleshooting',
+  'Troubleshooting',
+  'GPU not seen, wrong wheel, CPU fallback, and other home-lab ROCm failures with cited patterns.',
+);
+setMeta(
+  '/troubleshoot/errors',
+  'Error paste',
+  'Paste a ROCm or Ollama log and match it against cited patterns. We do not invent a fix.',
+);
+setMeta(
+  '/updates',
+  'Updates',
+  'Dated ROCm, llama.cpp, and vLLM snapshots plus RSS. The home card is the current recommendation.',
+);
+setMeta(
+  '/updates/matrix',
+  'Version matrix',
+  'ROCm × llama.cpp × vLLM × card, cited or marked no data. Dated snapshot, not eternal law.',
+);
+setMeta(
+  '/faq',
+  'FAQ',
+  'Short answers for a first home Radeon box: ROCm, Qwen, llama.cpp, two cards, and affiliate links.',
+);
+setMeta(
+  '/glossary',
+  'Glossary',
+  'Plain-English jargon for a home Radeon box — ROCm, GGUF, Q3–Q6, KV cache, llama.cpp, and run cards.',
+);
+setMeta(
+  '/blog',
+  'Blog',
+  'Longer home-lab notes and succinct ROCm version essays. Living tracker, not a frozen manual.',
+);
+setMeta(
+  '/forum',
+  'Forum',
+  'Community threads for local Radeon AI. Off on this static build unless FORUM_ENABLED is set.',
+);
+setMeta(
+  '/forum/rules',
+  'Forum rules',
+  'How AMDai forum threads should be sourced: cite a log, no invented tok/s, Q3 labeled estimate.',
+);
+setMeta(
+  '/forum/search',
+  'Search the forum',
+  'Find forum threads by title, body, or a troubleshooter pattern. Off unless the forum is enabled.',
+);
+setMeta(
+  '/forum/new',
+  'New thread',
+  'Start a forum thread and attach a saved rig so helpers see GPU, ROCm, and backend. Off unless enabled.',
+);
+setMeta(
+  '/forum/inbox',
+  'Forum inbox',
+  'On-site reply notices for the AMDai forum. Email is opt-in. This page is not indexed.',
+);
+setMeta(
+  '/forum/mod',
+  'Forum moderation',
+  'Reports and audit log for the AMDai forum. Mods and admins only. This page is not indexed.',
+);
+setMeta(
+  '/account',
+  'My rig',
+  'Optional saved computer configs and stack-update alerts. Off unless ACCOUNTS_ENABLED is set.',
+);
+setMeta(
+  '/account/save',
+  'Save this setup',
+  'Turn a calculator or budget share link into a saved rig. Off unless accounts are enabled.',
+);
+setMeta(
+  '/login',
+  'Sign in',
+  'Optional login for saved rigs and stack-update alerts. Off on the public static build.',
+);
+setMeta(
+  '/unsubscribe',
+  'Unsubscribe',
+  'Stop optional stack-update emails from AMDai. Accounts stay off on the public static build.',
+);
+setMeta(
+  '/search',
+  'Search',
+  'Pagefind search over the AMDai notebook. The index is built at npm run build; this URL is noindex.',
+);
+setMeta(
+  '/404',
+  'Page not found',
+  'That path is not on AMDai. Try Getting started, Search, or the GPU directory from the header.',
+);
+setMeta(
+  '/privacy',
+  'Privacy',
+  'What optional AMDai accounts store — saved rigs and alert prefs. The public site is static HTML.',
+);
+setMeta(
+  '/contribute',
+  'Contribute a recipe',
+  'Submit a Radeon recipe as JSON with a log. No invented tok/s, no bounty amounts.',
+);
+setMeta(
+  '/wanted',
+  'Wanted recipes',
+  'Radeon × model gaps we want sourced recipes for. No bounty amounts and no invented speeds.',
+);
+setMeta(
+  '/credits',
+  'Credits',
+  'Sybil / 0xSero attribution for the recipe idea, and the local-desktop first-party set credited to amdai.',
+);
+setMeta(
+  '/disclosure',
+  'Affiliate disclosure',
+  'Amazon Associates, Rakuten, and B&H when those IDs are set. We never show a live or stale price.',
+);
+setMeta(
+  '/accessibility',
+  'Accessibility',
+  'What AMDai tests for keyboard, screen-reader, and mobile access — and how to report a problem.',
+);
+setMeta(
+  '/maintain',
+  'Weekday scrape',
+  'How the living status card is refreshed: cited sources only, no invented version pins or tok/s.',
+);
+
+for (const page of rocmPages) {
+  if (page.id === 'overview') continue;
+  const title =
+    page.id === 'glossary' ? 'ROCm glossary' : page.id === 'faq' ? 'ROCm FAQ' : page.title;
+  setMeta(page.href, title, page.description);
+  setDate(page.href, GUIDE_UPDATED.toISOString(), GUIDE_UPDATED.toISOString());
+}
+setDate('/rocm', GUIDE_UPDATED.toISOString(), GUIDE_UPDATED.toISOString());
+
+for (const cat of forumCategories) {
+  CRUMB_LABELS[`/forum/c/${cat.slug}`] = cat.title;
+  setMeta(
+    `/forum/c/${cat.slug}`,
+    `Forum: ${cat.title}`.slice(0, 51),
+    `${cat.title} on the AMDai forum — ${cat.blurb} Off unless the forum is enabled.`,
+  );
+}
+
+setMeta(
+  '/tutorials/install-rocm',
+  'Install ROCm',
+  'ROCm 10.1.0 on a home Radeon AI PRO R9700: official Ubuntu rows, ROCm CLI v0.2.0, and a do-not-mix-apt tree.',
+);
+setMeta(
+  '/tutorials/verify-rocm',
+  'Verify GPU and ROCm',
+  'Confirm the kernel sees the Radeon, rocminfo prints the gfx ID, and you are not on a CPU fallback.',
+);
+setMeta(
+  '/tutorials/run-local-llm',
+  'Run a local Qwen',
+  'Load the daily-driver Qwen GGUF in llama.cpp Vulkan on one R9700. Official instruct first.',
+);
+setMeta(
+  '/tutorials/serve-qwen',
+  'Serve Qwen on R9700',
+  'Stand up a loopback /v1 for harnesses after llama.cpp is generating tokens on the R9700.',
+);
+
+setMeta(
+  '/blog/living-status-not-gospel',
+  'The weekly card',
+  'Why the AMDai home card is a dated snapshot, not scripture — pins move, and we write the date.',
+);
+setMeta(
+  '/blog/rocm-versions-are-a-matching-problem',
+  'ROCm version matching',
+  'ROCm versions are a matching problem: driver, runtime, wheels, and the gfx target have to agree.',
+);
+setMeta(
+  '/blog/the-name-is-radeon-ai-pro-r9700',
+  'The R9700 name',
+  'The product is AMD Radeon AI PRO R9700. There is no consumer RX 9700 in the current lineup.',
+);
+setMeta(
+  '/blog/vulkan-is-an-on-ramp',
+  'Vulkan is an on-ramp',
+  'llama.cpp Vulkan is a real path on Radeon, not a consolation prize, and HIP is a different job.',
+);
+
+setMeta(
+  '/harnesses/compare',
+  'Compare harnesses',
+  'Agent, chat, and image UIs next to each other. Tokens on the GPU come first; the harness is optional.',
+);
+setMeta(
+  '/harnesses/quiz',
+  'Harness quiz',
+  'Answer four questions and get one harness pick. Local llama.cpp first; hybrid stays labeled.',
+);
+setMeta(
+  '/harnesses/connect',
+  'Connect a harness',
+  'Point a harness at the loopback /v1 after llama.cpp or Strata is serving. Copy the snippet, then verify.',
+);
+setMeta(
+  '/harnesses/agents',
+  'Agent harnesses',
+  'Hermes, OpenClaw, and other agents that talk to a local /v1. Not a substitute for working tokens.',
+);
+setMeta(
+  '/harnesses/chat',
+  'Chat harnesses',
+  'Chat UIs that wrap a local llama.cpp or Strata server. The engine still has to see the GPU.',
+);
+setMeta(
+  '/harnesses/image',
+  'Image harnesses',
+  'ComfyUI and friends on Radeon. Cite what you ran; this notebook’s measured work is text Qwen.',
+);
+
+setMeta(
+  '/rocm-problems/help',
+  'Help on ROCm issues',
+  'How to help the AMDai ROCm problem tracker: reproduce, cite, and send a log. No invented fixes.',
+);
+setMeta(
+  '/rocm-problems/report',
+  'Report a ROCm issue',
+  'File a cited consumer ROCm problem. We keep not-recorded rows empty instead of guessing.',
+);
+setMeta(
+  '/rocm-problems/contribute',
+  'Contribute a problem',
+  'Add a sourced ROCm tracker row — GPU, OS, version, and a link. No bounty amounts.',
+);
+setMeta(
+  '/rocm-problems/works',
+  'What still works',
+  'Cited workarounds and setups that still run on a home Radeon. Labeled, not a guarantee.',
+);
+
+function hereDir() {
+  return dirname(fileURLToPath(import.meta.url));
+}
+
+function walk(dir: string, out: string[] = []): string[] {
+  if (!existsSync(dir)) return out;
+  for (const name of readdirSync(dir)) {
+    const full = join(dir, name);
+    if (statSync(full).isDirectory()) walk(full, out);
+    else out.push(full);
+  }
+  return out;
+}
+
+function parseFrontmatter(file: string): Record<string, string> {
+  const text = readFileSync(file, 'utf8');
+  const fence = text.match(/^---\n([\s\S]*?)\n---/);
+  if (!fence) return {};
+  const data: Record<string, string> = {};
+  for (const line of fence[1].split('\n')) {
+    const match = line.match(/^(\w+):\s*(.+)$/);
+    if (match) data[match[1]!] = match[2]!.replace(/^["']|["']$/g, '').trim();
+  }
+  return data;
+}
+
+function loadContentDates() {
+  const root = existsSync(join(process.cwd(), 'src/content'))
+    ? join(process.cwd(), 'src/content')
+    : join(hereDir(), '../content');
+  for (const file of walk(root)) {
+    if (!/\.(md|mdx)$/.test(file)) continue;
+    const rel = file.slice(root.length).replaceAll('\\', '/').replace(/^\//, '');
+    const fm = parseFrontmatter(file);
+    const published = isoDay(fm.pubDate ?? fm.date ?? fm.updated);
+    const modified = isoDay(fm.updated ?? fm.pubDate ?? fm.date);
+    if (!published) continue;
+    let path = '';
+    if (rel.startsWith('guides/')) {
+      const id = rel.slice('guides/'.length).replace(/\.(md|mdx)$/, '');
+      if (id === 'rocm' || id === 'abliterated' || id === 'harnesses' || id === 'gpus') continue;
+      path = `/${id}`;
+    } else if (rel.startsWith('tutorials/')) {
+      path = `/tutorials/${rel.slice('tutorials/'.length).replace(/\.(md|mdx)$/, '')}`;
+    } else if (rel.startsWith('blog/')) {
+      path = `/blog/${rel.slice('blog/'.length).replace(/\.(md|mdx)$/, '')}`;
+    } else {
+      continue;
+    }
+    setDate(path, published, modified ?? published);
+    if (fm.title && !PAGE_TITLES.has(path)) setMeta(path, fm.title, fm.description ?? fm.summary ?? fallbackDescription(path));
+    if (fm.description && !PAGE_DESCRIPTIONS.has(path)) {
+      PAGE_DESCRIPTIONS.set(path, fitDescription(fm.description, path));
+    }
+  }
+}
+
+loadContentDates();
+
+export function registerRunCardMeta(cards: RunCard[]) {
+  for (const card of cards) {
+    const path = `/results/${card.run_id}`;
+    const ctx =
+      card.config.context_tokens >= 1000
+        ? `${card.config.context_tokens / 1000}K`
+        : `${card.config.context_tokens}`;
+    const gpus = `${card.hardware.gpu_count_used}×`;
+    const shortId = card.run_id.replace(/^local-desktop-/, '');
+    const title = clipTitle(`${card.model.quant} ${ctx} ${gpus} ${shortId}`.replace(/\s+/g, ' '));
+    const who = card.submitted_by.display;
+    const desc = fitDescription(
+      `${card.model.quant} ${card.model.name} at ${ctx} on ${gpus} R9700. Official ${card.schema} card ${card.run_id} by ${who} on ${card.submitted_by.rig}.`,
+      path,
+    );
+    setMeta(path, title, desc);
+    const published = isoDay(card.started_at) ?? isoDay(card.finished_at) ?? dateFromRunId(card.run_id);
+    const modified = isoDay(card.finished_at) ?? published;
+    if (published) setDate(path, published, modified ?? published);
+  }
+}
+
+export function dateFromRunId(runId: string): string | null {
+  const match = runId.match(/20(\d{2})(\d{2})(\d{2})/);
+  if (!match) return null;
+  return `20${match[1]}-${match[2]}-${match[3]}`;
+}
+
+export function datasetCoverage(cards: RunCard[]): { start: string; end: string } | null {
+  const days: string[] = [];
+  for (const card of cards) {
+    const start = isoDay(card.started_at);
+    const end = isoDay(card.finished_at);
+    if (start) days.push(start);
+    if (end) days.push(end);
+    const fromId = dateFromRunId(card.run_id);
+    if (fromId) days.push(fromId);
+  }
+  if (!days.length) return null;
+  days.sort();
+  return { start: days[0]!, end: days[days.length - 1]! };
+}
+
+const gitDayCache = new Map<string, string | null>();
+
+function gitDay(rel: string): string | null {
+  if (gitDayCache.has(rel)) return gitDayCache.get(rel) ?? null;
+  try {
+    const out = execSync(`git log -1 --format=%cs -- ${rel}`, {
+      encoding: 'utf8',
+      cwd: process.cwd(),
+      stdio: ['ignore', 'pipe', 'ignore'],
+    }).trim();
+    const day = /^\d{4}-\d{2}-\d{2}$/.test(out) ? out : null;
+    gitDayCache.set(rel, day);
+    return day;
+  } catch {
+    gitDayCache.set(rel, null);
+    return null;
+  }
+}
+
+export function lastmodFor(pathname: string): string | undefined {
+  const path = urlPath(pathname);
+  const hit = PAGE_DATES.get(path);
+  if (hit) return hit.modified;
+  if (path.startsWith('/rocm')) return isoDay(GUIDE_UPDATED) ?? undefined;
+  const rels =
+    path === '/'
+      ? ['src/pages/index.astro']
+      : [`src/pages${path}.astro`, `src/pages${path}/index.astro`, `src/content/guides${path}.mdx`];
+  for (const rel of rels) {
+    const day = gitDay(rel);
+    if (day) return day;
+  }
+  return gitDay('src') ?? gitDay('.') ?? undefined;
+}
+
+export function articleDates(pathname: string): { published: string; modified: string } | null {
+  const path = urlPath(pathname);
+  return PAGE_DATES.get(path) ?? (path.startsWith('/rocm') ? {
+    published: GUIDE_UPDATED.toISOString().slice(0, 10),
+    modified: GUIDE_UPDATED.toISOString().slice(0, 10),
+  } : null);
+}
+
+export const DATASET_CREATOR = {
+  name: amdai.display,
+  alternateName: [amdai.handle, amdai.handle, amdai.display, amdai.rig],
+} as const;
+
+/** Run-card notes are first-party lab measurements published on amdai.net. */
+export const DATASET_LICENSE = `${SITE_ORIGIN}/credits`;
+
+export function ensureUniqueMeta() {
+  const titles = new Map<string, string[]>();
+  const descs = new Map<string, string[]>();
+  for (const [path, title] of PAGE_TITLES) {
+    const full = path === '/' ? `${BRAND} · ${site.name}` : `${title}${TITLE_SUFFIX}`;
+    const list = titles.get(full) ?? [];
+    list.push(path);
+    titles.set(full, list);
+  }
+  for (const [path, desc] of PAGE_DESCRIPTIONS) {
+    const list = descs.get(desc) ?? [];
+    list.push(path);
+    descs.set(desc, list);
+  }
+  for (const [, paths] of titles) {
+    if (paths.length < 2) continue;
+    for (let i = 1; i < paths.length; i += 1) {
+      const path = paths[i]!;
+      PAGE_TITLES.set(path, clipTitle(`${labelFromPath(path)} ${i + 1}`));
+    }
+  }
+  for (const [desc, paths] of descs) {
+    if (paths.length < 2) continue;
+    for (let i = 1; i < paths.length; i += 1) {
+      const path = paths[i]!;
+      PAGE_DESCRIPTIONS.set(path, fitDescription(`${desc.replace(/\.$/, '')} (${path}).`, path));
+    }
+  }
+}
+
+export function bootstrapPageMeta(extra: Array<{ path: string; title: string; description: string; published?: string; modified?: string }>) {
+  for (const row of extra) {
+    setMeta(row.path, row.title, row.description);
+    if (row.published) setDate(row.path, row.published, row.modified ?? row.published);
+  }
+  ensureUniqueMeta();
+}

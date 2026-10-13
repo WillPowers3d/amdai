@@ -31,6 +31,16 @@ const OG_PAGES = new Set([
   'account',
   'search',
   'glossary',
+  'compare',
+  'compare-one-vs-two-gpu',
+  'compare-q4-q5-q6',
+  'results',
+  'bios',
+  'qwen',
+  'flash-ram-offload',
+  'flash-daily',
+  'qwen36-dual',
+  'benchmarks',
   'default',
 ]);
 
@@ -41,10 +51,11 @@ export function ogSlug(pathname: string) {
   if (slug === 'forum' || slug.startsWith('forum-')) return 'forum';
   if (slug === 'harnesses' || slug.startsWith('harnesses-')) return 'stacks';
   if (slug === 'backends' || slug.startsWith('backends-')) return 'backends';
-  if (slug === 'benchmarks' || slug === 'results') return 'stacks';
-  if (slug === 'bios' || slug === 'credits' || slug === 'contribute' || slug === 'wanted') return 'default';
-  if (slug === 'qwen' || slug === 'qwen36-dual' || slug === 'flash-daily' || slug === 'flash-ram-offload') return 'stacks';
-  if (slug === 'compare' || slug.startsWith('compare-')) return 'stacks';
+  if (slug === 'results' || slug.startsWith('results-')) return 'results';
+  if (slug === 'benchmarks' || slug.startsWith('benchmarks-')) return 'benchmarks';
+  if (slug === 'compare' || slug.startsWith('compare-')) {
+    return OG_PAGES.has(slug) ? slug : 'compare';
+  }
   if (slug === 'models' || slug.startsWith('models-') || slug.startsWith('gpus-') || slug.startsWith('recipes-')) return 'gpus';
   return OG_PAGES.has(slug) ? slug : 'default';
 }

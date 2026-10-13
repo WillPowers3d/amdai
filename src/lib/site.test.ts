@@ -48,5 +48,15 @@ describe('accessibility statement', () => {
     assert.match(page, /\/contribute/);
     assert.doesNotMatch(page, /@amdai\.|mailto:/i);
     assert.equal(ogSlug('/accessibility'), 'default');
+    assert.equal(ogSlug('/compare'), 'compare');
+    assert.equal(ogSlug('/compare/q4-q5-q6'), 'compare-q4-q5-q6');
+    assert.equal(ogSlug('/results'), 'results');
+    assert.equal(ogSlug('/bios'), 'bios');
+    assert.equal(ogSlug('/qwen'), 'qwen');
+    assert.equal(ogSlug('/flash-daily'), 'flash-daily');
+    assert.equal(ogSlug('/flash-ram-offload'), 'flash-ram-offload');
+    assert.equal(ogSlug('/qwen36-dual'), 'qwen36-dual');
+    assert.equal(ogSlug('/benchmarks'), 'benchmarks');
+    assert.equal(ogSlug('/rocm/faq'), 'rocm');
   });
 });

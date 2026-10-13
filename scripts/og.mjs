@@ -1,5 +1,7 @@
 import { chromium } from 'playwright';
-import { mkdir, writeFile } from 'node:fs/promises';
+import { mkdir, writeFile, unlink } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 
 const out = new URL('../public/og/', import.meta.url);
 const font = new URL('../public/fonts/geist-latin.woff2', import.meta.url).href;
@@ -19,6 +21,16 @@ const pages = [
   ['account', 'Saved rigs', 'Optional accounts. Off unless enabled.'],
   ['search', 'Search', 'Pagefind over the living notes'],
   ['glossary', 'Glossary', 'Plain-English jargon for a home Radeon box'],
+  ['compare', 'Compare 35B', 'One GPU vs split, and Q6 / Q5 / Q4 plus a Q3 estimate'],
+  ['compare-one-vs-two-gpu', 'One R9700 vs two', 'Split across both cards — from official run cards'],
+  ['compare-q4-q5-q6', 'Q6 vs Q5 vs Q4', 'Same 35B quants. Q3 is a labeled estimate'],
+  ['results', 'Official run cards', 'amdai-bench/run@1 from amdai on local-desktop'],
+  ['bios', 'BIOS for local AI', 'Above 4G, ReBAR/SAM, CSM, x8/x8 vs x16/x4'],
+  ['qwen', 'Qwen 3.6 / 3.8', 'Every current file × quant. Measured cells from cards'],
+  ['flash-ram-offload', 'Flash on DDR5', 'Experts on system RAM. Measured DIMM speed'],
+  ['flash-daily', 'Flash daily driver', 'Q3–Q6 VRAM + DDR5 offload at full 262K'],
+  ['qwen36-dual', '35B on two cards', 'Split vs two copies of UD-Q5 on two R9700s'],
+  ['benchmarks', 'R9700 benchmarks', 'First-party tok/s. No leaderboard spam'],
   ['default', 'AMDai', 'Independent Radeon AI notes. Not affiliated with AMD.'],
 ];
 
@@ -54,10 +66,11 @@ const browser = await chromium.launch({
 const page = await browser.newPage({ viewport: { width: 1200, height: 630 }, deviceScaleFactor: 1 });
 
 for (const [slug, title, lede] of pages) {
-  const file = new URL(`./og-tmp-${slug}.html`, import.meta.url);
+  const file = join(tmpdir(), `amdai-og-${slug}.html`);
   await writeFile(file, html(title, lede));
-  await page.goto(file.href, { waitUntil: 'networkidle' });
+  await page.goto(`file://${file}`, { waitUntil: 'networkidle' });
   await page.screenshot({ path: new URL(`${slug}.png`, out).pathname, type: 'png' });
+  await unlink(file).catch(() => {});
   console.log('og', slug);
 }
 

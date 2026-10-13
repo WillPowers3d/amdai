@@ -1,8 +1,8 @@
 ---
 import RocmGuide from '../../layouts/RocmGuide.astro';
-import Cite from '../../components/rocm/Cite.astro';
 import Sources from '../../components/rocm/Sources.astro';
 import type { CiteKey } from '../../lib/rocm-guide';
+import { ROCM_GLOSSARY, ROCM_GLOSSARY_GROUPS } from '../../lib/rocm-glossary';
 
 const used = [
   'rocmHome',
@@ -24,146 +24,33 @@ const used = [
   'llamaCpp',
 ] as const satisfies readonly CiteKey[];
 
-const headings = [
-  { depth: 2, slug: 'platform', text: 'Platform' },
-  { depth: 2, slug: 'hardware', text: 'Hardware names' },
-  { depth: 2, slug: 'software', text: 'Software layers' },
-  { depth: 2, slug: 'home-lab', text: 'Home-lab words this site uses' },
-];
+const headings = ROCM_GLOSSARY_GROUPS.map((group) => ({
+  depth: 2,
+  slug: group.id,
+  text: group.heading,
+}));
 ---
 
 <RocmGuide page="glossary" headings={headings}>
   <p>
     Short definitions. If a word has an official AMD sentence, that is cited. Site jargon is
-    labeled as ours.
+    labeled as ours. Consumer jargon for the rest of the site lives in the
+    <a href="/glossary">AMDai glossary</a>.
   </p>
 
-  <h2 id="platform">Platform</h2>
-  <dl>
-    <dt>ROCm</dt>
-    <dd>
-      AMD’s open-source GPU computing platform: compilers, runtimes, and libraries for AI, HPC,
-      and other workloads, on Linux and Windows, for Instinct, Radeon, and Ryzen AI.<Cite id="rocmHome" used={used} />
-      Historically <strong>Radeon Open Compute</strong>. See <a href="/rocm">overview</a>.
-    </dd>
-    <dt>CUDA</dt>
-    <dd>
-      NVIDIA’s GPU compute platform. HIP exists in part so CUDA-like code can be ported; HIP is
-      not a drop-in CUDA replacement.<Cite id="hipWhat" used={used} />
-    </dd>
-    <dt>TheRock</dt>
-    <dd>
-      ROCm’s build and release system since 7.14.<Cite id="rocm101Notes" used={used} /><Cite id="theRock" used={used} />
-    </dd>
-    <dt>ROCm CLI</dt>
-    <dd>
-      Official <code>rocm</code> binary for install / serve / diagnose / dashboard. 10.1 blog:
-      v0.2.0.<Cite id="rocm101Blog" used={used} /><Cite id="rocmCli" used={used} />
-    </dd>
-  </dl>
-
-  <h2 id="hardware">Hardware names</h2>
-  <dl>
-    <dt>gfx ID</dt>
-    <dd>
-      LLVM target for the GPU ISA — <code>gfx1201</code>, <code>gfx1100</code>, and so on. The
-      10.1.0 hardware table lists each supported device with its LLVM target and architecture.<Cite id="rocm101Notes" used={used} />
-      <a href="/rocm/gfx">gfx page</a> · <a href="/gpus">directory</a>.
-    </dd>
-    <dt>RDNA</dt>
-    <dd>
-      Radeon (and many Ryzen iGPU) architecture family. R9700 / RX 9070-class = RDNA 4 /
-      <code>gfx1201</code> on the 10.1.0 table.<Cite id="rocm101Notes" used={used} />
-    </dd>
-    <dt>CDNA</dt>
-    <dd>
-      Instinct datacenter architecture family. Same ROCm docs, different SKUs and often different
-      OS footnotes.<Cite id="rocm101Notes" used={used} />
-    </dd>
-    <dt>Radeon AI PRO R9700</dt>
-    <dd>
-      Workstation / local-AI card. 32&nbsp;GB. <code>gfx1201</code>. Our test-rig GPU. There is
-      no consumer “RX 9700.” <a href="/gpus">Directory</a>.
-    </dd>
-  </dl>
-
-  <h2 id="software">Software layers</h2>
-  <dl>
-    <dt>amdgpu</dt>
-    <dd>
-      In-tree Linux DRM driver for modern AMD GPUs (GCN, RDNA, CDNA).<Cite id="amdgpuKernel" used={used} />
-    </dd>
-    <dt>KFD / ROCK</dt>
-    <dd>
-      Kernel-side compute interface. ROCR docs: user-mode runtime talks to the AMDGPU driver set
-      and the ROCK kernel driver.<Cite id="rocr" used={used} />
-      On current Linux this is <code>amdkfd</code> / <code>/dev/kfd</code>.
-    </dd>
-    <dt>ROCr</dt>
-    <dd>
-      AMD’s user-mode HSA runtime.<Cite id="rocr" used={used} />
-    </dd>
-    <dt>HIP</dt>
-    <dd>
-      C++ runtime API and kernel language for AMD GPUs.<Cite id="hipWhat" used={used} />
-    </dd>
-    <dt>comgr</dt>
-    <dd>
-      Code Object Manager — compile, link, inspect GPU code objects. HIPRTC uses it.<Cite id="hipRtc" used={used} />
-    </dd>
-    <dt>rocBLAS</dt>
-    <dd>ROCm BLAS library, HIP C++, for AMD GPUs.<Cite id="rocblas" used={used} /></dd>
-    <dt>hipBLASLt</dt>
-    <dd>Flexible GEMM beyond classical BLAS.<Cite id="hipblaslt" used={used} /></dd>
-    <dt>MIOpen</dt>
-    <dd>AMD deep-learning primitives library.<Cite id="miopen" used={used} /></dd>
-    <dt>RCCL</dt>
-    <dd>
-      ROCm Communication Collectives Library — multi-GPU / multi-node primitives.<Cite id="rccl" used={used} />
-    </dd>
-    <dt>rocWMMA</dt>
-    <dd>Header library for mixed-precision matrix multiply-accumulate.<Cite id="rocwmma" used={used} /></dd>
-    <dt>Composable Kernel (CK)</dt>
-    <dd>Programming model for performance-critical ML kernels in HIP C++.<Cite id="ck" used={used} /></dd>
-    <dt>amd-smi</dt>
-    <dd>
-      Successor to <code>rocm-smi</code> after the deprecation period, per the 10.1 blog.<Cite id="rocm101Blog" used={used} />
-    </dd>
-    <dt>HSA_OVERRIDE_GFX_VERSION</dt>
-    <dd>
-      Unofficial env var used in community threads to load a nearby gfx’s code objects (example:
-      <code>10.3.0</code> on gfx1031).<Cite id="hsaOverride2353" used={used} />
-      Not an official recommendation. Not needed on official gfx1201 + ROCm 10.x.
-      <a href="/rocm/gfx">Details</a>.
-    </dd>
-    <dt>Vulkan</dt>
-    <dd>
-      Khronos graphics/compute API. llama.cpp can use it instead of HIP.<Cite id="llamaCpp" used={used} />
-      <a href="/rocm/vulkan-hip">Vulkan vs HIP</a>.
-    </dd>
-  </dl>
-
-  <h2 id="home-lab">Home-lab words this site uses</h2>
-  <dl>
-    <dt>Official (our column)</dt>
-    <dd>
-      Appears on AMD’s current matrix or matching release notes. Not a speed claim.
-      <a href="/rocm/versions">Policy</a>.
-    </dd>
-    <dt>Works / try</dt>
-    <dd>Ran here or in a cited community report, not on the official row. Labeled.</dd>
-    <dt>Daily driver</dt>
-    <dd>
-      Qwen3.6-35B-A3B UD-Q5_K_XL, llama.cpp Vulkan, one R9700. Measured on our rig, 2026-10 — 102.39 / 90.52 / 44.4 tok/s. <a href="/stacks">Stacks</a>.
-    </dd>
-    <dt>Fast agent</dt>
-    <dd>Qwen 3.8 Flash UD-Q6_K_XL on Strata v0.1.42. First-party ~32.6 vs ~16 tok/s.</dd>
-    <dt>House rules</dt>
-    <dd>
-      llama.cpp over vLLM for consumers; Q5 over Q4; Q3 listed as estimate/community; Q1/Q2 stay off; NVMe not HDD; one LLM per
-      GPU unless you deliberately combine.
-    </dd>
-  </dl>
+  {ROCM_GLOSSARY_GROUPS.map((group) => (
+    <section aria-labelledby={group.id}>
+      <h2 id={group.id}>{group.heading}</h2>
+      <dl>
+        {ROCM_GLOSSARY.filter((term) => term.group === group.id).map((term) => (
+          <>
+            <dt id={term.id}>{term.term}</dt>
+            <dd>{term.definition}</dd>
+          </>
+        ))}
+      </dl>
+    </section>
+  ))}
 
   <Sources used={used} />
 </RocmGuide>

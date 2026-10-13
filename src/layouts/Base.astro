@@ -1,9 +1,21 @@
 ---
 import '../styles/global.css';
+import '../lib/seo-pages';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import CommandPalette from '../components/CommandPalette.astro';
 import ReadingProgress from '../components/ReadingProgress.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import { jsonLdScript, pageJsonLd } from '../lib/jsonld';
+import {
+  breadcrumbsFor,
+  canonicalUrl,
+  documentTitle,
+  isNestedPath,
+  pageDescription,
+  shouldNoindex,
+  urlPath,
+} from '../lib/seo';
 import { OG_SITE_NAME, ogSlug, site } from '../lib/site';
 
 interface Props {
@@ -11,10 +23,14 @@ interface Props {
   description?: string;
 }
 
-const title = Astro.props.title ? `${Astro.props.title} · ${site.wordmark}` : `${site.wordmark} · ${site.name}`;
-const description = Astro.props.description ?? site.description;
-const canonical = new URL(Astro.url.pathname, Astro.site);
-const og = new URL(`/og/${ogSlug(Astro.url.pathname)}.png`, Astro.site);
+const path = urlPath(Astro.url.pathname);
+const title = documentTitle(path, Astro.props.title);
+const description = pageDescription(path, Astro.props.description);
+const canonical = canonicalUrl(path, Astro.site?.href.replace(/\/$/, '') || 'https://amdai.net');
+const og = new URL(`/og/${ogSlug(path)}.png`, Astro.site);
+const noindex = shouldNoindex(path);
+const crumbs = isNestedPath(path) ? breadcrumbsFor(path) : [];
+const jsonld = jsonLdScript(pageJsonLd({ pathname: path, title, description }));
 ---
 
 <!doctype html>
@@ -24,6 +40,7 @@ const og = new URL(`/og/${ogSlug(Astro.url.pathname)}.png`, Astro.site);
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
     <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex,nofollow" />}
     <meta name="theme-color" content="#08080b" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="canonical" href={canonical} />
@@ -42,6 +59,7 @@ const og = new URL(`/og/${ogSlug(Astro.url.pathname)}.png`, Astro.site);
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={og} />
     <title>{title}</title>
+    <Fragment set:html={`<script type="application/ld+json">${jsonld}</script>`} />
     <script is:inline>
       (function () {
         try {
@@ -58,6 +76,13 @@ const og = new URL(`/og/${ogSlug(Astro.url.pathname)}.png`, Astro.site);
     <ReadingProgress />
     <div data-pagefind-ignore>
       <Header />
+      {crumbs.length > 1 && (
+        <div class="border-b border-line">
+          <div class="mx-auto max-w-6xl px-4 sm:px-6">
+            <Breadcrumbs items={crumbs} />
+          </div>
+        </div>
+      )}
     </div>
     <div data-pagefind-body>
       <slot />
