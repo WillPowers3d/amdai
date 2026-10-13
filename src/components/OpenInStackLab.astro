@@ -25,6 +25,13 @@ const link = openInStackLab(input);
           {link.fallbackLabel}
         </a>
         .
+        {' '}
+        {link.localNote}
+        {' '}
+        <a class="underline decoration-accent/40 underline-offset-2" href={link.localHref}>
+          {link.localLabel}
+        </a>
+        .
       </p>
     </div>
   )

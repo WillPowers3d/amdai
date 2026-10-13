@@ -1,63 +1,62 @@
 /**
  * Lab Notes → Radeon Stack Lab handoff.
- * Allowlisted amdai-stack-lab: links only. No invented download URL or tok/s.
+ * Documented scheme only (docs/deeplink.md). No invented screens or query shapes.
  */
 
+import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { isQ4PlusQuant } from './quant-guard';
+
 export const STACK_LAB_SCHEME = 'amdai-stack-lab';
+export const STACK_LAB_COMPAT_SCHEME = 'radeon-stack-lab';
 export const STACK_LAB_FALLBACK_HREF = '/stack-lab#install';
 export const STACK_LAB_FALLBACK_LABEL = 'Stack Lab install notes';
 export const STACK_LAB_FALLBACK_BODY =
   'If the app is not installed, packages are not published yet. There is no public download URL. Read the';
+export const STACK_LAB_LOCAL_NOTE = 'If Stack Lab is already running on this machine,';
+export const STACK_LAB_LOCAL_LABEL = 'open the local app';
+export const STACK_LAB_LOCAL_ORIGIN = 'http://127.0.0.1:47321';
+export const STACK_LAB_OPEN_LABEL = 'Open in Stack Lab';
 
 export const STACK_LAB_SCREENS = [
-  'home',
   'recipes',
-  'profile',
+  'rig',
   'doctor',
-  'setup',
-  'results',
-  'backends',
-  'harnesses',
-  'bench',
+  'planner',
+  'library',
+  'support',
+  'updates',
+  'profile',
 ] as const;
 
 export type StackLabScreen = (typeof STACK_LAB_SCREENS)[number];
 
 export const STACK_LAB_PROFILE_IDS = ['qwen-reliable', 'qwen-fast-agent'] as const;
-export const STACK_LAB_BACKEND_IDS = ['llamacpp', 'strata'] as const;
-export const STACK_LAB_HARNESS_IDS = ['hermes'] as const;
 export const STACK_LAB_HOUSE_RECIPES = [
   'qwen36-35b.llamacpp-vulkan.262k',
   'qwen38-flash.strata.262k',
 ] as const;
 
-export const STACK_LAB_QUERY_KEYS = ['recipe', 'model', 'quant', 'engine', 'context', 'run'] as const;
-
-const RECIPE_ID = /^[a-z0-9][a-z0-9.-]+$/;
-const RUN_ID = /^[a-zA-Z0-9._:-]+$/;
-const MODEL = /^[\w .+-]{1,80}$/;
-const QUANT = /^(UD-)?Q[3-8](_[A-Z0-9]+)*$|^BF16$|^F16$/;
-const CONTEXT = /^\d{1,8}$/;
-const LOCAL_ORIGIN = /^http:\/\/127\.0\.0\.1:\d{2,5}$/;
+const ID = /^[a-z0-9][a-z0-9.-]+$/;
+const BANNED = /Qwen2\.5|Qwen3-8B/i;
+const Q1Q2 = /\b(?:IQ[12]_[A-Z0-9]+|Q[12]_[A-Z0-9]+)\b/;
+const Q4_FLOOR = new RegExp(`floor is q${'4'}|q${'4'} floor|q${'4'} and up only`, 'i');
 
 export type StackLabOpenInput = {
   screen: StackLabScreen;
   id?: string;
-  recipe?: string;
-  model?: string;
-  quant?: string;
-  engine?: string;
-  context?: number | string;
-  run?: string;
 };
 
 export type StackLabOpen = {
   href: string;
   fallbackHref: string;
-  localHref: string | null;
+  localHref: string;
   label: string;
   fallbackLabel: string;
   fallbackBody: string;
+  localNote: string;
+  localLabel: string;
   screen: StackLabScreen;
   id: string | null;
 };
@@ -67,105 +66,115 @@ export function isStackLabScreen(value: string): value is StackLabScreen {
 }
 
 function screenNeedsId(screen: StackLabScreen): boolean {
-  return screen === 'recipes' || screen === 'profile' || screen === 'backends' || screen === 'harnesses';
+  return screen === 'profile';
+}
+
+function walkRecipeJson(dir: string, out: string[] = []): string[] {
+  if (!existsSync(dir)) return out;
+  for (const name of readdirSync(dir)) {
+    const full = join(dir, name);
+    if (statSync(full).isDirectory()) walkRecipeJson(full, out);
+    else if (name.endsWith('.json')) out.push(full);
+  }
+  return out;
+}
+
+function recipeRoots(): string[] {
+  const here = dirname(fileURLToPath(import.meta.url));
+  return [join(here, '../data/recipes'), join(process.cwd(), 'src/data/recipes')];
+}
+
+/** Filesystem allowlist — do not import recipes-data (Vite glob) from this module. */
+export function knownStackLabRecipeIds(): readonly string[] {
+  const ids: string[] = [];
+  const seen = new Set<string>();
+  for (const root of recipeRoots()) {
+    for (const file of walkRecipeJson(root)) {
+      let row: {
+        id?: string;
+        model?: string;
+        official?: string;
+        withdrawn?: unknown;
+        weights?: { quant?: string };
+      };
+      try {
+        row = JSON.parse(readFileSync(file, 'utf8')) as typeof row;
+      } catch {
+        continue;
+      }
+      const id = row.id?.trim();
+      const quant = row.weights?.quant ?? '';
+      if (!id || seen.has(id) || row.withdrawn) continue;
+      if (!isQ4PlusQuant(quant)) continue;
+      if (BANNED.test(`${row.model ?? ''} ${row.official ?? ''} ${id}`)) continue;
+      seen.add(id);
+      ids.push(id);
+    }
+    if (ids.length) break;
+  }
+  return ids;
 }
 
 export function isAllowlistedStackLabId(screen: StackLabScreen, id: string | undefined): boolean {
   if (!id) return !screenNeedsId(screen);
-  if (screen === 'recipes') return RECIPE_ID.test(id);
+  if (!ID.test(id)) return false;
+  if (BANNED.test(id)) return false;
+  if (screen === 'recipes') return knownStackLabRecipeIds().includes(id);
   if (screen === 'profile') return (STACK_LAB_PROFILE_IDS as readonly string[]).includes(id);
-  if (screen === 'backends') return (STACK_LAB_BACKEND_IDS as readonly string[]).includes(id);
-  if (screen === 'harnesses') return (STACK_LAB_HARNESS_IDS as readonly string[]).includes(id);
-  if (screen === 'results') return RUN_ID.test(id);
   return false;
 }
 
-function cleanQuery(input: StackLabOpenInput): URLSearchParams | null {
-  const params = new URLSearchParams();
-  const recipe = input.recipe ?? (input.screen === 'recipes' ? input.id : undefined);
-  if (recipe) {
-    if (!RECIPE_ID.test(recipe)) return null;
-    params.set('recipe', recipe);
-  }
-  if (input.model) {
-    if (!MODEL.test(input.model) || /Qwen2\.5|Qwen3-8B/i.test(input.model)) return null;
-    params.set('model', input.model);
-  }
-  if (input.quant) {
-    if (!QUANT.test(input.quant)) return null;
-    params.set('quant', input.quant);
-  }
-  if (input.engine) {
-    if (!(STACK_LAB_BACKEND_IDS as readonly string[]).includes(input.engine)) return null;
-    params.set('engine', input.engine);
-  }
-  if (input.context != null && input.context !== '') {
-    const ctx = String(input.context);
-    if (!CONTEXT.test(ctx)) return null;
-    params.set('context', ctx);
-  }
-  if (input.run) {
-    if (!RUN_ID.test(input.run)) return null;
-    params.set('run', input.run);
-  }
-  return params;
+export function stackLabPath(screen: StackLabScreen, id?: string | null): string {
+  return id ? `${screen}/${id}` : screen;
 }
 
-export function stackLabLocalOrigin(raw = process.env.STACK_LAB_LOCAL_ORIGIN): string | null {
-  const value = (raw ?? '').trim().replace(/\/$/, '');
-  if (!value) return null;
-  if (!LOCAL_ORIGIN.test(value)) return null;
-  return value;
+export function stackLabHref(screen: StackLabScreen, id?: string | null): string {
+  return `${STACK_LAB_SCHEME}:${stackLabPath(screen, id)}`;
 }
 
-function labelFor(screen: StackLabScreen): string {
-  return screen === 'recipes' || screen === 'profile' ? 'Apply in Stack Lab' : 'Open in Stack Lab';
+export function stackLabLocalHref(screen: StackLabScreen, id?: string | null): string {
+  return `${STACK_LAB_LOCAL_ORIGIN}/#${stackLabPath(screen, id)}`;
 }
 
 export function openInStackLab(input: StackLabOpenInput): StackLabOpen | null {
   if (!isStackLabScreen(input.screen)) return null;
   const id = input.id?.trim() || undefined;
   if (!isAllowlistedStackLabId(input.screen, id)) return null;
-  const params = cleanQuery(input);
-  if (!params) return null;
-  const path = id ? `/${input.screen}/${id}` : `/${input.screen}`;
-  const query = params.toString();
-  const href = `${STACK_LAB_SCHEME}:/${path}${query ? `?${query}` : ''}`;
-  const localOrigin = stackLabLocalOrigin();
-  const localHref = localOrigin ? `${localOrigin}/open${path}${query ? `?${query}` : ''}` : null;
   return {
-    href,
+    href: stackLabHref(input.screen, id),
     fallbackHref: STACK_LAB_FALLBACK_HREF,
-    localHref,
-    label: labelFor(input.screen),
+    localHref: stackLabLocalHref(input.screen, id),
+    label: STACK_LAB_OPEN_LABEL,
     fallbackLabel: STACK_LAB_FALLBACK_LABEL,
     fallbackBody: STACK_LAB_FALLBACK_BODY,
+    localNote: STACK_LAB_LOCAL_NOTE,
+    localLabel: STACK_LAB_LOCAL_LABEL,
     screen: input.screen,
     id: id ?? null,
   };
 }
 
+export function openInStackLabForRecipe(recipe: {
+  id: string;
+  model: string;
+  official: string;
+  weights: { quant: string };
+}): StackLabOpen | null {
+  if (!isQ4PlusQuant(recipe.weights.quant)) return null;
+  if (BANNED.test(`${recipe.model} ${recipe.official} ${recipe.id}`)) return null;
+  return openInStackLab({ screen: 'recipes', id: recipe.id });
+}
+
+const HREF = /^(amdai-stack-lab):([a-z]+)(?:\/([a-z0-9][a-z0-9.-]+))?$/i;
+
 export function parseStackLabHref(href: string): StackLabOpen | null {
   const trimmed = href.trim();
-  if (!trimmed.toLowerCase().startsWith(`${STACK_LAB_SCHEME}:`)) return null;
-  let url: URL;
-  try {
-    url = new URL(trimmed);
-  } catch {
-    return null;
-  }
-  if (url.protocol !== `${STACK_LAB_SCHEME}:`) return null;
-  const parts = [url.hostname, ...url.pathname.split('/').filter(Boolean)].filter(Boolean);
-  const screen = parts[0];
-  const id = parts[1];
+  const match = trimmed.match(HREF);
+  if (!match) return null;
+  const screen = match[2];
+  const id = match[3];
   if (!screen || !isStackLabScreen(screen)) return null;
-  const input: StackLabOpenInput = { screen, id };
-  for (const key of STACK_LAB_QUERY_KEYS) {
-    const value = url.searchParams.get(key);
-    if (value) input[key] = value;
-  }
-  const built = openInStackLab(input);
-  return built;
+  return openInStackLab({ screen, id });
 }
 
 export function isAllowlistedStackLabHref(href: string): boolean {
@@ -173,58 +182,54 @@ export function isAllowlistedStackLabHref(href: string): boolean {
 }
 
 export const HOUSE_STACK_LAB = {
-  daily: {
-    screen: 'recipes' as const,
-    id: STACK_LAB_HOUSE_RECIPES[0],
-    recipe: STACK_LAB_HOUSE_RECIPES[0],
-    model: 'Qwen3.6-35B-A3B',
-    quant: 'UD-Q5_K_XL',
-    engine: 'llamacpp' as const,
-    context: 262144,
-  },
-  flash: {
-    screen: 'recipes' as const,
-    id: STACK_LAB_HOUSE_RECIPES[1],
-    recipe: STACK_LAB_HOUSE_RECIPES[1],
-    model: 'Qwen 3.8 Flash',
-    quant: 'UD-Q6_K_XL',
-    engine: 'strata' as const,
-    context: 262144,
-  },
+  recipes: { screen: 'recipes' as const },
+  daily: { screen: 'recipes' as const, id: STACK_LAB_HOUSE_RECIPES[0] },
+  flash: { screen: 'recipes' as const, id: STACK_LAB_HOUSE_RECIPES[1] },
   reliable: { screen: 'profile' as const, id: 'qwen-reliable' },
   fastAgent: { screen: 'profile' as const, id: 'qwen-fast-agent' },
   doctor: { screen: 'doctor' as const },
-  home: { screen: 'home' as const },
-  results: { screen: 'results' as const },
-  llama: { screen: 'backends' as const, id: 'llamacpp' },
-  strata: { screen: 'backends' as const, id: 'strata' },
-  hermes: { screen: 'harnesses' as const, id: 'hermes' },
-  bench: { screen: 'bench' as const },
+  planner: { screen: 'planner' as const },
+  library: { screen: 'library' as const },
+  support: { screen: 'support' as const },
+  rig: { screen: 'rig' as const },
+  updates: { screen: 'updates' as const },
 };
-
-const BANNED = /Qwen2\.5|Qwen3-8B/i;
-const Q1Q2 = /\b(?:IQ[12]_[A-Z0-9]+|Q[12]_[A-Z0-9]+)\b/;
-const Q4_FLOOR = new RegExp(`floor is q${'4'}|q${'4'} floor|q${'4'} and up only`, 'i');
 
 export function assertStackLabOpenValid(): string[] {
   const errors: string[] = [];
+  const hub = openInStackLab(HOUSE_STACK_LAB.recipes);
+  if (!hub || hub.href !== stackLabHref('recipes')) errors.push('recipes hub handoff failed');
   const daily = openInStackLab(HOUSE_STACK_LAB.daily);
   if (!daily) errors.push('daily recipe handoff failed');
-  if (daily && !daily.href.startsWith(`${STACK_LAB_SCHEME}:`)) errors.push('daily href must use scheme');
-  if (openInStackLab({ screen: 'recipes', id: '../etc/passwd' })) errors.push('must reject path id');
-  if (openInStackLab({ screen: 'harnesses', id: 'not-a-harness' })) errors.push('must reject unknown harness');
-  if (openInStackLab({ screen: 'backends', id: 'vllm' })) errors.push('must not hand off unmeasured engines as first');
-  if (openInStackLab({ screen: 'recipes', id: STACK_LAB_HOUSE_RECIPES[0], quant: 'Q2_K' })) {
-    errors.push('must reject Q1/Q2 quants');
+  if (daily && daily.href !== stackLabHref('recipes', STACK_LAB_HOUSE_RECIPES[0])) {
+    errors.push('daily href must be amdai-stack-lab:recipes/<id>');
   }
-  if (openInStackLab({ screen: 'home', id: 'nope' })) errors.push('home must not take an id');
-  if (stackLabLocalOrigin('https://evil.example')) errors.push('must reject non-localhost origin');
-  if (stackLabLocalOrigin('http://127.0.0.1:9')) errors.push('must reject short localhost port');
+  if (daily && daily.localHref !== stackLabLocalHref('recipes', STACK_LAB_HOUSE_RECIPES[0])) {
+    errors.push('daily local href must use 127.0.0.1:47321 hash');
+  }
+  if (daily && daily.label !== STACK_LAB_OPEN_LABEL) errors.push('label must be Open in Stack Lab');
+  if (openInStackLab({ screen: 'recipes', id: '../etc/passwd' })) errors.push('must reject path id');
+  if (openInStackLab({ screen: 'recipes', id: 'not-a-recipe' })) errors.push('must reject unknown recipe');
+  if (openInStackLab({ screen: 'profile', id: 'qwen-abliterated' })) errors.push('must reject unknown profile');
+  if (openInStackLab({ screen: 'recipes', id: 'qwen2.5-7b.llamacpp' })) errors.push('must reject banned model id');
+  if (openInStackLab({ screen: 'doctor', id: 'nope' })) errors.push('doctor must not take an id');
+  if (openInStackLab({ screen: 'custom' as StackLabScreen })) errors.push('custom has no mapped Lab Notes page');
+  if (isAllowlistedStackLabHref('amdai-stack-lab://recipes/qwen36-35b.llamacpp-vulkan.262k')) {
+    errors.push('must reject invented :// shape');
+  }
+  if (isAllowlistedStackLabHref(`${STACK_LAB_COMPAT_SCHEME}:recipes`)) {
+    errors.push('compat scheme is secondary — do not emit it as primary');
+  }
+  for (const id of STACK_LAB_HOUSE_RECIPES) {
+    if (!knownStackLabRecipeIds().includes(id)) errors.push(`house recipe missing from catalog: ${id}`);
+  }
   const blob = [
     STACK_LAB_FALLBACK_BODY,
     STACK_LAB_FALLBACK_LABEL,
+    STACK_LAB_OPEN_LABEL,
     daily?.href ?? '',
     daily?.fallbackHref ?? '',
+    daily?.localHref ?? '',
   ].join('\n');
   if (BANNED.test(blob)) errors.push('banned model');
   if (Q1Q2.test(blob)) errors.push('Q1/Q2 listed');

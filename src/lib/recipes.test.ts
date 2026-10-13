@@ -13,6 +13,7 @@ import {
   pickRecipes,
   recipesForCard,
   recipeTestedLine,
+  stackLabCatalogPayload,
   withdrawalUpdates,
   type Recipe,
 } from './recipes';
@@ -39,6 +40,11 @@ describe('recipe catalog', () => {
     assert.ok(seed['qwen38-flash.llamacpp.262k']);
     assert.equal(recipes.every((row) => row.proof[0]?.tier === 'tested-our-rig'), true);
     assert.equal(recipes.every((row) => row.withdrawn == null), true);
+    const stackLab = stackLabCatalogPayload(recipes);
+    assert.ok(stackLab.recipes.length);
+    assert.equal(stackLab.path, '/recipes.json');
+    assert.equal(stackLab.recipes[0]?.backend, 'llamacpp');
+    assert.doesNotMatch(JSON.stringify(stackLab), /Qwen2\.5|Qwen3-8B|"price"|MSRP/);
   });
 
   it('fails the build on Q1/Q2 and on a number without a source', () => {

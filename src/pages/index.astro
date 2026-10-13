@@ -7,6 +7,8 @@ import SiliconGrid from '../components/SiliconGrid.astro';
 import RigWizard from '../components/RigWizard.astro';
 import NextSteps from '../components/NextSteps.astro';
 import PrimaryPath from '../components/PrimaryPath.astro';
+import OpenInStackLab from '../components/OpenInStackLab.astro';
+import { HOUSE_STACK_LAB } from '../lib/stack-lab-open';
 import { HERO_HEADLINE, officialLinks, site } from '../lib/site';
 
 const tutorials = (await getCollection('tutorials')).sort((a, b) => a.data.order - b.data.order);
@@ -40,6 +42,9 @@ const updates = (await getCollection('updates')).sort((a, b) => b.data.date.valu
             <a class="btn-ghost" href="/gpus/r9700">R9700 recipe</a>
             <a class="btn-ghost" href="/benchmarks">Benchmarks</a>
           </p>
+          <div class="mt-4 max-w-xl">
+            <OpenInStackLab {...HOUSE_STACK_LAB.recipes} compact />
+          </div>
         </div>
         <RigWizard />
       </div>

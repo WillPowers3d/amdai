@@ -25,3 +25,8 @@ export function assertQuantAllowed(quant: string): string {
 export function isQ3Quant(quant: string): boolean {
   return /(?:^|[^a-z0-9])(?:ud-)?(?:iq3|q3)(?:[_-]|$)/i.test(quant);
 }
+
+/** Stack Lab handoff and /recipes.json: Q4+ recipes. Q3 stays on compare pages as a labeled estimate. */
+export function isQ4PlusQuant(quant: string): boolean {
+  return isQuantAllowed(quant) && !isQ3Quant(quant);
+}

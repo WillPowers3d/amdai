@@ -1,7 +1,9 @@
 ---
 import Base from '../layouts/Base.astro';
 import NextSteps from '../components/NextSteps.astro';
+import OpenInStackLab from '../components/OpenInStackLab.astro';
 import PrimaryPath from '../components/PrimaryPath.astro';
+import { HOUSE_STACK_LAB } from '../lib/stack-lab-open';
 import { measuredOgHeadline } from '../lib/og';
 import { runs } from '../lib/run-card-data';
 import { oneVsTwoRows } from '../lib/local-desktop-compare';
@@ -64,6 +66,9 @@ const hubs = [
       <a class="btn-ghost" href="/gpus/r9700">R9700 recipe</a>
       <a class="btn-ghost" href="/benchmarks">Benchmarks</a>
     </p>
+    <div class="mt-4">
+      <OpenInStackLab {...HOUSE_STACK_LAB.planner} compact />
+    </div>
 
     <PrimaryPath compact />
 

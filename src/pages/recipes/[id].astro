@@ -105,16 +105,7 @@ const proof = recipe.proof[0];
       <a class="btn-ghost" href="/stack-lab">Stack Lab</a>
     </p>
     <div class="mt-4">
-      <OpenInStackLab
-        screen="recipes"
-        id={recipe.id}
-        recipe={recipe.id}
-        model={recipe.model}
-        quant={recipe.weights.quant}
-        engine={recipe.backend}
-        context={recipe.ctx}
-        compact
-      />
+      <OpenInStackLab screen="recipes" id={recipe.id} compact />
     </div>
     <div class="mt-12">
       <NewsletterSignup variant="article" />

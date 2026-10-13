@@ -86,10 +86,11 @@ Public site URL is `https://amdai.net` (`site` in `astro.config.mjs`; override w
 | `/amdai-bench` | Schema hub — run@1 JSON, runs dump, links to results and methodology |
 | `/rss.xml` | Lab Notes RSS — blog posts, dated updates, and official run cards |
 | `/benchmarks/methodology` | Our pass/fail suite in our words |
+| `/recipes.json` | Stack Lab catalog — Q4+ recipes, llama.cpp first, no prices |
 | `/api/v1/catalog.json` | Static recipe catalog |
 | `/api/v1/gpus/<id>.json` | Per-card JSON |
 | `/api/v1/pick.json` | Static pick table (query strings are not evaluated here) |
-| `/stack-lab` | Radeon Stack Lab — Ubuntu 24.04+ companion (packages not published yet). Allowlisted `amdai-stack-lab:` handoff from Lab Notes |
+| `/stack-lab` | Radeon Stack Lab — Ubuntu 24.04+ companion (packages not published yet). Install, then Open in Stack Lab (`amdai-stack-lab:`) from Lab Notes |
 | `/rocm` | What is ROCm — multi-page consumer deep dive |
 | `/rocm/stack` | Layer-by-layer stack + mermaid diagram |
 | `/rocm/gfx` | GPU architectures, gfx IDs, HSA_OVERRIDE |

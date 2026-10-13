@@ -12,6 +12,8 @@ import {
 } from '../../lib/rocm-problems';
 import { rocmProblems, rocmProblemsFile } from '../../lib/rocm-problems-data';
 import type { SavedRigMatch } from '../../lib/rig-match';
+import OpenInStackLab from '../../components/OpenInStackLab.astro';
+import { HOUSE_STACK_LAB } from '../../lib/stack-lab-open';
 
 export const prerender = !accountsEnabled();
 
@@ -71,6 +73,9 @@ const affecting = new Set(rigHits.flatMap((hit) => hit.ids));
       <a class="btn-ghost" href="/forum">Forum</a>
       <a class="btn-ghost" href="/rocm">What is ROCm</a>
     </p>
+    <div class="mt-4">
+      <OpenInStackLab {...HOUSE_STACK_LAB.support} compact />
+    </div>
 
     {signedIn && rigHits.length > 0 && (
       <section class="card mt-8 p-5" aria-labelledby="affects-heading">

@@ -13,6 +13,8 @@ import { DEFAULT_PRIORITY } from '../lib/priority';
 import { DEFAULT_STYLE, DEFAULT_USAGE } from '../lib/ask';
 import { gpuProducts } from '../lib/affiliates';
 import { recipes } from '../lib/recipes-data';
+import OpenInStackLab from '../components/OpenInStackLab.astro';
+import { HOUSE_STACK_LAB } from '../lib/stack-lab-open';
 
 const fitGpus = gpuProducts();
 const groups = [...new Set(MODEL_PRESETS.map((m) => m.group))];
@@ -42,6 +44,9 @@ const groups = [...new Set(MODEL_PRESETS.map((m) => m.group))];
         <a class="btn-secondary" href="/multi-gpu">Dual / multi-GPU</a>
         <a class="btn-secondary" href="/gpus">GPU directory</a>
       </div>
+    </div>
+    <div class="mt-4">
+      <OpenInStackLab {...HOUSE_STACK_LAB.planner} compact />
     </div>
 
     <div id="ask-row" class="mt-8">

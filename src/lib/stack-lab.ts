@@ -33,11 +33,16 @@ export const STACK_LAB_SECTIONS = [
   { id: 'profiles', label: 'Profiles' },
 ] as const;
 
+export const STACK_LAB_OPEN_LEAD =
+  'Install Stack Lab, then Open in Stack Lab from these pages. Buttons use the documented amdai-stack-lab: screens (recipes, doctor, planner, library, support, profile). If the app is not installed, they fall back to this page’s install notes. The catalog is /recipes.json — Q4 and up, llama.cpp first.';
+
 export const STACK_LAB_INTRO_LINKS: StackLabLink[] = [
   { href: '/setup', label: 'First-run setup' },
   { href: '/faq#what-is-stack-lab', label: 'FAQ' },
   { href: '/stacks', label: 'Stacks' },
   { href: '/benchmarks', label: 'Benchmarks' },
+  { href: '/recipes.json', label: 'recipes.json' },
+  { href: '/start', label: 'Getting started' },
 ];
 
 export const STACK_LAB_JOBS: StackLabJob[] = [
@@ -79,7 +84,7 @@ export const STACK_LAB_JOBS: StackLabJob[] = [
     id: 'recipes-from-amdai',
     title: 'Recipes from amdai.net',
     body:
-      'Apply a pinned launch from Lab Notes — model, quant, engine, context. The daily-driver recipe is qwen36-35b.llamacpp-vulkan.262k. Flash on Strata is qwen38-flash.strata.262k. Lab Notes can hand off with an allowlisted amdai-stack-lab: link. If the app is not installed, stay on this page — packages are not published yet and there is no public download URL.',
+      'Apply a pinned launch from Lab Notes — model, quant, engine, context. The daily-driver recipe is qwen36-35b.llamacpp-vulkan.262k. Flash on Strata is qwen38-flash.strata.262k. Lab Notes hands off with amdai-stack-lab:recipes/<id>. If the app is not installed, stay on this page — packages are not published yet and there is no public download URL.',
     links: [
       { href: '/recipes/qwen36-35b.llamacpp-vulkan.262k', label: '35B recipe' },
       { href: '/recipes/qwen38-flash.strata.262k', label: 'Flash recipe' },
@@ -185,7 +190,7 @@ export const STACK_LAB_HANDOFFS: StackLabHandoff[] = [
     href: '/benchmarks',
     label: 'Benchmarks ↔ amdai-bench',
     body:
-      '33-card local-desktop matrix. Each cell links a run card. Stack Lab records those cards; Lab Notes renders them.',
+      '33-card local-desktop matrix. Each cell links a run card. Open in Stack Lab here uses amdai-stack-lab:library. Stack Lab records those cards; Lab Notes renders them.',
   },
   {
     href: '/results',
@@ -249,6 +254,8 @@ export const REQUIRED_STACK_LAB_HREFS = [
   '/stacks',
   '/amdai-bench/run@1.schema.json',
   '/disclosure',
+  '/recipes.json',
+  '/start',
 ] as const;
 
 const BANNED_VISIBLE = /Qwen2\.5|Qwen3-8B/i;
@@ -259,6 +266,7 @@ export function stackLabBlob(): string {
   const parts = [
     STACK_LAB_NAME,
     STACK_LAB_DIGEST,
+    STACK_LAB_OPEN_LEAD,
     STACK_LAB_INSTALL.title,
     STACK_LAB_INSTALL.lead,
     STACK_LAB_INSTALL.linux.label,
@@ -314,6 +322,10 @@ export function assertStackLabValid(): string[] {
   if (/stacklab:\/\//i.test(blob)) errors.push('do not invent a URI scheme');
   if (/(?:^|[^a-z-])amdai:\/\//i.test(blob)) errors.push('do not invent a URI scheme');
   if (!/amdai-stack-lab:/.test(blob)) errors.push('must document the amdai-stack-lab handoff');
+  if (!/Install Stack Lab, then Open in Stack Lab/i.test(blob)) {
+    errors.push('must tell visitors to install, then Open in Stack Lab from Lab Notes');
+  }
+  if (!/recipes\.json/.test(blob)) errors.push('must point at /recipes.json');
   if (/github\.com\/.+\/releases/i.test(blob)) errors.push('do not invent a GitHub release URL');
   for (const required of REQUIRED_STACK_LAB_HREFS) {
     if (![...hrefs].some((href) => href === required || href.startsWith(`${required}/`))) {

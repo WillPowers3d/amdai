@@ -39,7 +39,7 @@ describe('site QA helpers', () => {
     assert.equal(ext.kind, 'external');
     const skip = classifyRef('mailto:hi@example.com', '/', 'https://amdai.net');
     assert.equal(skip.kind, 'skip');
-    const scheme = classifyRef('amdai-stack-lab://recipes/qwen36-35b.llamacpp-vulkan.262k', '/', 'https://amdai.net');
+    const scheme = classifyRef('amdai-stack-lab:recipes/qwen36-35b.llamacpp-vulkan.262k', '/', 'https://amdai.net');
     assert.equal(scheme.kind, 'skip');
   });
 

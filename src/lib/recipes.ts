@@ -6,7 +6,7 @@
  */
 
 import { z } from 'astro/zod';
-import { assertQuantAllowed, isQ3Quant } from './quant-guard';
+import { assertQuantAllowed, isQ3Quant, isQ4PlusQuant } from './quant-guard';
 import { ALLOWED_TOK_S as BENCH_TOK } from './benchmarks';
 import { systemRamNeedFromQuery, type CalcInput, type MeasuredRamHit, type SystemRamNeed } from './calculator';
 import type { StackUpdate } from './rig-match';
@@ -308,27 +308,54 @@ export function harnessSnippetFromRecipe(recipe: Recipe): string {
   ].join('\n');
 }
 
+function recipeCatalogRow(row: Recipe, cards?: RunCard[]) {
+  return {
+    id: row.id,
+    card: row.card,
+    model: row.model,
+    model_id: row.model_id,
+    quant: row.weights.quant,
+    backend: row.backend,
+    build: row.build,
+    rocm_version: row.rocm_version,
+    gfx: row.gfx,
+    override: row.override,
+    ctx: row.ctx,
+    decode: proofTokS(row, cards),
+    prefill: row.proof[0]?.prefill ?? null,
+    tier: row.proof[0]?.tier ?? 'tested-our-rig',
+    source: row.proof[0]?.source ?? '',
+    calculator: row.calculator,
+  };
+}
+
 export function catalogPayload(list: Recipe[], cards?: RunCard[]) {
   return {
     as_of: '2026-10',
     label: MEASURED_LABEL,
-    recipes: liveRecipes(list).map((row) => ({
-      id: row.id,
-      card: row.card,
-      model: row.model,
-      model_id: row.model_id,
-      quant: row.weights.quant,
-      backend: row.backend,
-      build: row.build,
-      rocm_version: row.rocm_version,
-      gfx: row.gfx,
-      override: row.override,
-      ctx: row.ctx,
-      decode: proofTokS(row, cards),
-      prefill: row.proof[0]?.prefill ?? null,
-      tier: row.proof[0]?.tier ?? 'tested-our-rig',
-      source: row.proof[0]?.source ?? '',
-      calculator: row.calculator,
-    })),
+    recipes: liveRecipes(list).map((row) => recipeCatalogRow(row, cards)),
   };
+}
+
+/** Public Stack Lab catalog at /recipes.json — Q4+ only, llama.cpp first, no prices. */
+export function stackLabCatalogPayload(list: Recipe[], cards?: RunCard[]) {
+  const recipes = liveRecipes(list)
+    .filter((row) => isQ4PlusQuant(row.weights.quant))
+    .filter((row) => !/Qwen2\.5|Qwen3-8B/i.test(`${row.model} ${row.official} ${row.id}`))
+    .slice()
+    .sort((a, b) => {
+      if (a.backend !== b.backend) return a.backend === 'llamacpp' ? -1 : 1;
+      return a.id.localeCompare(b.id);
+    })
+    .map((row) => recipeCatalogRow(row, cards));
+  return {
+    as_of: '2026-10',
+    path: '/recipes.json',
+    label: MEASURED_LABEL,
+    recipes,
+  };
+}
+
+export function stackLabRecipeIds(list: Recipe[]): string[] {
+  return stackLabCatalogPayload(list).recipes.map((row) => row.id);
 }
