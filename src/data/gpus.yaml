@@ -209,3 +209,12 @@ cards:
     support: official
     rocm_note: Older but still listed on the 10.1 matrix.
     hsa_override: Not needed when the build lists gfx1030.
+
+  - name: AMD Ryzen AI Max+ 395 (Radeon 8060S)
+    family: Ryzen AI Max
+    arch: RDNA 3.5
+    gfx: gfx1151
+    vram_gb: null
+    support: official
+    rocm_note: Strix Halo APU. Official on the ROCm 10.1.0 Ryzen table as gfx1151. VRAM is Dynamic + carveout — shared system memory, not a discrete sticker.
+    hsa_override: Not needed when the build lists gfx1151.

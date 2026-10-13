@@ -160,6 +160,7 @@ export const CRUMB_LABELS: Record<string, string> = {
   '/tutorials/serve-qwen': 'Serve Qwen',
   '/gpus': 'GPUs',
   '/gpus/r9700': 'R9700',
+  '/gpus/strix-halo': 'Strix Halo',
   '/gpus/rx7900xtx': 'RX 7900 XTX',
   '/gpus/rx7900xt': 'RX 7900 XT',
   '/gpus/rx7800xt': 'RX 7800 XT',
@@ -392,6 +393,12 @@ setMeta(
   'Measured 35B llama.cpp on the Radeon AI PRO R9700 — 32 GB VRAM, one GPU vs two, cited decode and prefill from local-desktop run cards.',
 );
 setDate('/gpus/r9700', '2026-10-13');
+setMeta(
+  '/gpus/strix-halo',
+  'Ryzen AI Max / Strix Halo',
+  'Cited Ryzen AI Max+ 395 (Radeon 8060S, gfx1151) local-AI guide. Shared system memory, llama.cpp Vulkan first. Not measured on local-desktop.',
+);
+setDate('/gpus/strix-halo', '2026-10-13');
 setMeta(
   '/gpus/rx7900xtx',
   'RX 7900 XTX',

@@ -50,6 +50,7 @@ export type GpuId =
   | 'w7800'
   | 'w6800'
   | 'unified'
+  | 'strix-halo'
   | 'custom';
 export type BackendId = 'llamacpp' | 'strata' | 'ollama' | 'lmstudio' | 'vllm' | 'exllama';
 export type PathId = 'vulkan' | 'hip';
@@ -379,6 +380,7 @@ export const GPU_PRESETS: GpuPreset[] = [
   { id: 'w7800', name: 'Radeon PRO W7800', vramGb: 32, gfx: 'gfx1100', kind: 'discrete', bandwidthGBs: 0, bandwidthNote: 'Confirm 32 GB vs 48 GB sticker.' },
   { id: 'w6800', name: 'Radeon PRO W6800', vramGb: 32, gfx: 'gfx1030', kind: 'discrete', bandwidthGBs: 512, bandwidthNote: AMD_BW },
   { id: 'unified', name: 'Unified memory (APU / iGPU)', vramGb: 32, gfx: '', kind: 'unified', bandwidthGBs: 0, bandwidthNote: 'macOS / Ryzen AI lend the GPU a slice of one pool. Default usable is 70% — an estimate, not a Metal reading.' },
+  { id: 'strix-halo', name: 'Ryzen AI Max+ 395 / Strix Halo', vramGb: 64, gfx: 'gfx1151', kind: 'unified', bandwidthGBs: 0, bandwidthNote: 'Shared LPDDR5x. Confirm the OEM kit — we do not invent a GB/s figure.' },
   { id: 'custom', name: 'Custom GPU', vramGb: 24, gfx: '', kind: 'discrete', bandwidthGBs: 0, bandwidthNote: 'Enter VRAM and optional bandwidth from the product page.' },
 ];
 
@@ -1104,12 +1106,13 @@ export function applyModelPreset(id: ModelId, current: CalcInput): CalcInput {
 
 export function applyGpuPreset(id: GpuId, current: CalcInput): CalcInput {
   const gpu = gpuById(id);
+  const keepUnified = gpu.kind === 'unified' && current.gpuId === id;
   return {
     ...current,
     gpuId: id,
-    vramGb: id === 'custom' || id === 'unified' ? current.vramGb : gpu.vramGb,
+    vramGb: id === 'custom' || keepUnified ? current.vramGb : gpu.vramGb,
     kind: gpu.kind,
-    usablePct: gpu.kind === 'unified' ? (current.gpuId === 'unified' ? current.usablePct : 70) : 100,
+    usablePct: gpu.kind === 'unified' ? (keepUnified ? current.usablePct : 70) : 100,
     bandwidthGBs: gpu.bandwidthGBs || current.bandwidthGBs,
   };
 }
@@ -1422,7 +1425,7 @@ export function testedBadge(input: CalcInput): TestedBadge | null {
 function matchingGpus(input: CalcInput, totalGiB: number): MatchingGpu[] {
   const rows: MatchingGpu[] = [];
   for (const gpu of GPU_PRESETS) {
-    if (gpu.id === 'custom' || gpu.id === 'unified') continue;
+    if (gpu.id === 'custom' || gpu.id === 'unified' || gpu.kind === 'unified') continue;
     const probe: CalcInput = { ...input, gpuId: gpu.id, vramGb: gpu.vramGb, kind: 'discrete', usablePct: 100 };
     const factor = spareFactor(probe);
     const needed = totalGiB * factor;

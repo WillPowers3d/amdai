@@ -66,6 +66,7 @@ describe('accessibility statement', () => {
     assert.equal(ogSlug('/multi-gpu'), 'multi-gpu');
     assert.equal(ogSlug('/benchmarks'), 'benchmarks');
     assert.equal(ogSlug('/gpus/r9700'), 'gpus-r9700');
+    assert.equal(ogSlug('/gpus/strix-halo'), 'gpus-strix-halo');
     assert.equal(ogSlug('/gpus'), 'gpus');
     assert.equal(ogSlug('/rocm/faq'), 'rocm');
     assert.equal(ogSlug('/setup'), 'setup');

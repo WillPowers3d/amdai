@@ -32,6 +32,7 @@ const ALLOWED_HREFS = new Set([
   '/flash-ram-offload',
   '/gpus',
   '/gpus/r9700',
+  '/gpus/strix-halo',
   '/hardware',
   '/models',
   '/models/flash',

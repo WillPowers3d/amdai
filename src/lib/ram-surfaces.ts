@@ -9,6 +9,7 @@ export const RAM_FULL_LABEL = 'RAM needed at full context';
 /** Pages that talk about RAM offload or system RAM and must show both labels. */
 export const RAM_OFFLOAD_SURFACES = [
   '/gpus/r9700',
+  '/gpus/strix-halo',
   '/gpus/rx7900xtx',
   '/gpus/rx7900xt',
   '/gpus/rx7800xt',

@@ -74,6 +74,12 @@ export const OG_CARDS: OgCard[] = [
     measured: true,
   },
   {
+    slug: 'gpus-strix-halo',
+    title: 'Ryzen AI Max / Strix Halo',
+    lede: 'Cited shared-memory APU. Not measured on local-desktop',
+    alt: 'AMDai Strix Halo — cited Ryzen AI Max+ 395 guide, not measured on local-desktop',
+  },
+  {
     slug: 'rocm',
     title: 'What is ROCm',
     lede: 'The open compute stack, in plain English',
@@ -322,6 +328,7 @@ export function ogSlug(pathname: string): string {
     return SLUGS.has(slug) ? slug : 'compare';
   }
   if (slug === 'gpus-r9700') return 'gpus-r9700';
+  if (slug === 'gpus-strix-halo') return 'gpus-strix-halo';
   if (slug === 'models' || slug === 'models-qwen36' || slug === 'models-flash') return slug;
   if (slug.startsWith('models-') || slug.startsWith('gpus-') || slug.startsWith('recipes-')) {
     return 'gpus';

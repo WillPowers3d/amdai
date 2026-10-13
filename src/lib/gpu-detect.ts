@@ -33,6 +33,7 @@ export const GPU_DETECT: GpuDetectCard[] = [
   { id: 'w7900', name: 'Radeon PRO W7900', gfx: ['gfx1100'], names: ['w7900', 'pro w7900'], vramGb: 48 },
   { id: 'w7800', name: 'Radeon PRO W7800', gfx: ['gfx1100'], names: ['w7800', 'pro w7800'], vramGb: 32 },
   { id: 'w6800', name: 'Radeon PRO W6800', gfx: ['gfx1030'], names: ['w6800', 'pro w6800'], vramGb: 32 },
+  { id: 'strix-halo', name: 'Ryzen AI Max+ 395 / Strix Halo', gfx: ['gfx1151'], names: ['strix halo', 'ryzen ai max+ 395', 'ryzen ai max 395', '8060s', 'gfx1151'], vramGb: null },
 ];
 
 const NAME_ORDER = [...GPU_DETECT].sort((a, b) => {

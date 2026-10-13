@@ -76,6 +76,7 @@ export const primaryNav: NavItem[] = [
   { href: '/setup', label: 'First-run setup', description: 'Ubuntu 24.04+ to first token, plus an honest Windows path', group: 'path' },
   { href: '/setup/windows', label: 'Windows setup', description: 'Cited llama.cpp Vulkan first-run on Windows. Not measured on local-desktop', group: 'path' },
   { href: '/gpus/r9700', label: 'R9700', description: 'Measured 35B on the 32 GB Radeon AI PRO R9700 — one GPU vs two, cited run cards', group: 'path' },
+  { href: '/gpus/strix-halo', label: 'Strix Halo', description: 'Cited Ryzen AI Max+ 395 / Radeon 8060S APU guide. Shared memory. Not measured on local-desktop', group: 'path' },
   { href: '/stacks', label: 'Stacks', description: 'Daily driver and fast-agent cards from our test rig', group: 'path' },
   { href: '/flash-daily', label: 'Flash daily driver', description: 'Qwen 3.8 Flash VRAM + DDR5 offload at Q3–Q6, full 262K', group: 'path' },
   { href: '/qwen36-dual', label: '35B on two cards', description: 'Split vs two copies of UD-Q5_K_XL on two R9700s — measured on local-desktop', group: 'path' },

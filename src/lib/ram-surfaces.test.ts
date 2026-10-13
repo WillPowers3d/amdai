@@ -17,6 +17,7 @@ describe('shopper RAM labels', () => {
     assert.equal(RAM_MIN_LABEL, 'Minimum system RAM needed');
     assert.equal(RAM_FULL_LABEL, 'RAM needed at full context');
     assert.ok(RAM_OFFLOAD_SURFACES.includes('/gpus/r9700'));
+    assert.ok(RAM_OFFLOAD_SURFACES.includes('/gpus/strix-halo'));
     assert.ok(RAM_OFFLOAD_SURFACES.includes('/gpus/rx7900xtx'));
     assert.ok(RAM_OFFLOAD_SURFACES.includes('/gpus/rx7900xt'));
     assert.ok(RAM_OFFLOAD_SURFACES.includes('/gpus/rx7800xt'));

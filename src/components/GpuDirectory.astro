@@ -48,7 +48,7 @@ const families = [...new Set(gpuDirectory.cards.map((card) => card.family))];
                 </td>
                 <td class="px-3 py-2.5 text-muted">{card.arch}</td>
                 <td class="px-3 py-2.5"><code class="rounded bg-accent-soft px-1.5 py-0.5 font-mono text-[0.8em] text-accent-ink">{card.gfx}</code></td>
-                <td class="px-3 py-2.5 tabular-nums">{card.vram_gb == null ? 'Confirm SKU' : `${card.vram_gb} GB`}</td>
+                <td class="px-3 py-2.5 tabular-nums">{id === 'strix-halo' ? 'Shared (no discrete VRAM)' : card.vram_gb == null ? 'Confirm SKU' : `${card.vram_gb} GB`}</td>
                 <td class="px-3 py-2.5">
                   <span class:list={['font-medium', card.support === 'official' ? 'text-ok' : 'text-warn']}>
                     {card.support === 'official' ? 'Official' : 'Unofficial'}
@@ -58,6 +58,8 @@ const families = [...new Set(gpuDirectory.cards.map((card) => card.family))];
                 <td class="px-3 py-2.5 text-xs">
                   {count > 0 ? (
                     <a class="text-ok underline decoration-accent/40" href={`/gpus/${id}`}>{count} tested</a>
+                  ) : id === 'strix-halo' ? (
+                    <a class="underline decoration-accent/40" href={`/gpus/${id}`}>Cited APU guide — not measured</a>
                   ) : isConsumerRecipeGpu(id) ? (
                     <a class="underline decoration-accent/40" href={`/gpus/${id}`}>Estimate sheet — no tested recipe</a>
                   ) : (

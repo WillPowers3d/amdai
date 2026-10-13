@@ -114,9 +114,10 @@ export const FAQ_ENTRIES: FaqItem[] = [
     group: 'getting-started',
     question: 'Which GPU should I start with?',
     answer:
-      'The measured house box is one AMD Radeon AI PRO R9700 (32 GB, gfx1201). There is no consumer RX 9700. A 16 GB RX 9070 XT is the same generation with half the VRAM. A 7900 XTX (gfx1100) is still a practical home card on a different ROCm family package — see the RX 7900 XTX recipe sheet for calculator fit estimates, not local-desktop tok/s. Confirm the SKU on the R9700 measured page and the GPU directory, then size the file on the calculator before you buy a second card.',
+      'The measured house box is one AMD Radeon AI PRO R9700 (32 GB, gfx1201). There is no consumer RX 9700. A 16 GB RX 9070 XT is the same generation with half the VRAM. A 7900 XTX (gfx1100) is still a practical home card on a different ROCm family package — see the RX 7900 XTX recipe sheet for calculator fit estimates, not local-desktop tok/s. Mini-PCs on Ryzen AI Max / Strix Halo (Radeon 8060S, gfx1151) are a shared-memory APU, not a discrete VRAM card — see that cited guide. Confirm the SKU on the R9700 measured page and the GPU directory, then size the file on the calculator before you buy a second card.',
     links: [
       { href: '/gpus/r9700', label: 'R9700 measured page' },
+      { href: '/gpus/strix-halo', label: 'Strix Halo / Ryzen AI Max' },
       { href: '/gpus/rx7900xtx', label: 'RX 7900 XTX sheet' },
       { href: '/gpus/rx7900xt', label: 'RX 7900 XT sheet' },
       { href: '/gpus/rx7800xt', label: 'RX 7800 XT sheet' },
@@ -151,6 +152,20 @@ export const FAQ_ENTRIES: FaqItem[] = [
       { href: '/gpus/r9700', label: 'R9700 measured page' },
       { href: '/backends', label: 'Backends' },
       { href: '/calculator', label: 'Calculator' },
+    ],
+  },
+  {
+    id: 'strix-halo-apu',
+    group: 'getting-started',
+    question: 'Can I run a local Qwen on a Ryzen AI Max / Strix Halo mini-PC?',
+    answer:
+      'Yes as a cited path, not a measured local-desktop card. Ryzen AI Max+ 395 with Radeon 8060S is gfx1151 on AMD’s ROCm 10.1 matrix. It is an APU: the GPU uses shared system memory (we size 64 GB and 128 GB kits). llama.cpp Vulkan is the first token. HIP is second. The MES REMOVE_QUEUE hang is on the ROCm problems tracker. Size the file on the calculator. We do not invent tok/s for this box.',
+    links: [
+      { href: '/gpus/strix-halo', label: 'Strix Halo guide' },
+      { href: '/calculator', label: 'Calculator' },
+      { href: '/rocm-problems/strix-halo-mes-remove-queue', label: 'MES hang' },
+      { href: '/bios', label: 'BIOS' },
+      { href: '/setup', label: 'First-run setup' },
     ],
   },
   {

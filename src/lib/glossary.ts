@@ -87,6 +87,23 @@ export const GLOSSARY: GlossaryEntry[] = [
     seeAlso: ['amdai-bench', 'local-desktop'],
   },
   {
+    id: 'apu',
+    term: 'APU',
+    aliases: ['Strix Halo', 'Ryzen AI Max', 'Ryzen AI Max+ 395', 'Radeon 8060S', 'gfx1151'],
+    letter: 'A',
+    definition:
+      'A chip that combines CPU and GPU and shares one memory pool. There is no discrete VRAM sticker. The shopper box on AMDai is Ryzen AI Max+ 395 with Radeon 8060S (gfx1151) — Strix Halo in mini-PCs and laptops.',
+    why: 'A 64 GB or 128 GB kit is both system RAM and GPU memory. Size the file on the calculator before you assume a 35B Q5 “fits like an R9700.” Official tok/s on this site are still the discrete R9700 cards.',
+    deeper:
+      'AMD’s ROCm 10.1.0 GPU table prints VRAM for this SKU as Dynamic + carveout. BIOS UMA reserves a slice; GTT / dynamic allocation grows into the rest of the same kit. llama.cpp Vulkan first. Not measured on local-desktop.',
+    links: [
+      { href: '/gpus/strix-halo', label: 'Strix Halo guide' },
+      { href: '/calculator', label: 'Calculator' },
+      { href: '/gpus', label: 'GPU directory' },
+    ],
+    seeAlso: ['uma', 'gtt', 'vram', 'system-ram'],
+  },
+  {
     id: 'amdai-bench',
     term: 'amdai-bench',
     aliases: ['amdai-bench/run@1', 'run@1', 'bench schema'],
@@ -257,6 +274,23 @@ export const GLOSSARY: GlossaryEntry[] = [
       { href: '/models', label: 'Models' },
     ],
     seeAlso: ['quant', 'unsloth-ud', 'nvme'],
+  },
+  {
+    id: 'gtt',
+    term: 'GTT',
+    aliases: ['Graphics Translation Table', 'dynamic allocation', 'dynamic VRAM'],
+    letter: 'G',
+    definition:
+      'The path where the driver maps more of the same system-memory kit to the iGPU after boot, instead of living only inside a fixed BIOS carve-out.',
+    why: 'On Strix Halo, a tiny UMA reserve plus GTT can still load a large GGUF — and it can also starve the OS if the model plus KV eat the kit. The calculator’s 70% slice is an estimate of that split, not a firmware reading.',
+    deeper:
+      'AMD’s ROCm 10.1.0 APU table calls this Dynamic + carveout. Change the calculator usable percent if your BIOS printout disagrees. We do not invent a megabyte GTT cap.',
+    links: [
+      { href: '/gpus/strix-halo', label: 'Strix Halo guide' },
+      { href: '/calculator', label: 'Calculator' },
+      { href: '/bios', label: 'BIOS' },
+    ],
+    seeAlso: ['uma', 'apu', 'vram'],
   },
   {
     id: 'hip',
@@ -579,7 +613,7 @@ export const GLOSSARY: GlossaryEntry[] = [
       { href: '/flash-ram-offload', label: 'Flash RAM offload' },
       { href: '/hardware', label: 'Hardware' },
     ],
-    seeAlso: ['vram', 'offload', 'kv-cache'],
+    seeAlso: ['vram', 'offload', 'kv-cache', 'apu'],
   },
   {
     id: 'toks',
@@ -614,6 +648,23 @@ export const GLOSSARY: GlossaryEntry[] = [
     seeAlso: ['quant', 'gguf', 'qwen36'],
   },
   {
+    id: 'uma',
+    term: 'UMA',
+    aliases: ['UMA frame buffer', 'VRAM carve-out', 'dedicated GPU memory'],
+    letter: 'U',
+    definition:
+      'A BIOS reserve that hands the iGPU a fixed slice of system memory at boot. The rest of the kit stays with the OS unless GTT / dynamic allocation grows into it.',
+    why: 'A huge carve-out on a 64 GB Strix Halo box leaves little for the desktop. A tiny carve-out leans on GTT. Check the board menu; AMDai does not pin a megabyte number.',
+    deeper:
+      'Same pool as system RAM. The two shopper labels stay Minimum system RAM needed and RAM needed at full context, adapted for what is left after the GPU share. Link /bios and /gpus/strix-halo.',
+    links: [
+      { href: '/gpus/strix-halo', label: 'Strix Halo guide' },
+      { href: '/bios', label: 'BIOS' },
+      { href: '/calculator', label: 'Calculator' },
+    ],
+    seeAlso: ['gtt', 'apu', 'system-ram'],
+  },
+  {
     id: 'vllm',
     term: 'vLLM',
     aliases: ['vllm', 'ROCm vLLM', 'continuous batching'],
@@ -645,7 +696,7 @@ export const GLOSSARY: GlossaryEntry[] = [
       { href: '/hardware', label: 'Hardware' },
       { href: '/gpus', label: 'GPU directory' },
     ],
-    seeAlso: ['system-ram', 'kv-cache', 'offload'],
+    seeAlso: ['system-ram', 'kv-cache', 'offload', 'apu'],
   },
   {
     id: 'vulkan',

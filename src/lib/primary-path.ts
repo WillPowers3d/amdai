@@ -143,6 +143,14 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
     { href: '/compare/radeon-vs-nvidia', label: 'Radeon vs NVIDIA' },
     { href: '/stack-lab', label: 'Stack Lab' },
   ],
+  '/gpus/strix-halo': [
+    { href: '/calculator', label: 'Calculator' },
+    { href: '/gpus/r9700', label: 'R9700 measured page' },
+    { href: '/setup', label: 'First-run setup' },
+    { href: '/compare', label: 'Compare 35B' },
+    { href: '/bios', label: 'BIOS' },
+    { href: '/rocm-problems/strix-halo-mes-remove-queue', label: 'MES hang' },
+  ],
   '/gpus/rx7900xtx': [
     { href: '/calculator', label: 'Calculator' },
     { href: '/budget', label: 'Budget' },

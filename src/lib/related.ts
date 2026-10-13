@@ -14,7 +14,7 @@ import { urlPath } from './seo';
 
 export type RelatedLink = PathLink;
 
-const RELATED_MAX = 12;
+const RELATED_MAX = 24;
 
 const SKIP_RELATED = new Set([
   '/',
@@ -202,13 +202,16 @@ export function relatedFor(pathname: string): RelatedLink[] {
     add(out, seen, '/setup', 'First-run setup');
     add(out, seen, '/stack-lab', 'Stack Lab');
     add(out, seen, '/gpus/r9700', 'R9700 measured page');
-    for (const link of CONSUMER_NAV_LINKS) add(out, seen, link.href, link.label);
-    add(out, seen, '/calculator', 'Calculator');
-    add(out, seen, '/budget', 'Budget');
     if (id) {
       for (const recipe of recipesForCard(recipes, id)) {
         add(out, seen, `/recipes/${recipe.id}`, recipeLabel(recipe));
       }
+    }
+    add(out, seen, '/gpus/strix-halo', 'Strix Halo');
+    for (const link of CONSUMER_NAV_LINKS) add(out, seen, link.href, link.label);
+    add(out, seen, '/calculator', 'Calculator');
+    add(out, seen, '/budget', 'Budget');
+    if (id) {
       add(out, seen, '/results', 'Run cards');
       add(out, seen, '/backends/llamacpp', 'llama.cpp');
       add(out, seen, '/stack-lab', 'Stack Lab');
@@ -340,7 +343,7 @@ export function assertRelatedValid(
   if (!r9700.some((href) => href.startsWith('/recipes/'))) {
     errors.push('/gpus/r9700 missing recipe links');
   }
-  for (const href of ['/gpus/rx7900xtx', '/gpus/rx7900xt', '/gpus/rx7800xt']) {
+  for (const href of ['/gpus/strix-halo', '/gpus/rx7900xtx', '/gpus/rx7900xt', '/gpus/rx7800xt']) {
     if (!r9700.includes(href)) errors.push(`/gpus/r9700 missing ${href}`);
   }
   const xtx = relatedFor('/gpus/rx7900xtx').map((link) => link.href);

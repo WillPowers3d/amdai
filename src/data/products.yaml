@@ -4,6 +4,17 @@
 as_of: 2026-10-12
 
 products:
+  - id: strix-halo
+    name: AMD Ryzen AI Max+ 395
+    kind: gpu
+    note: Mini-PC and laptop search for the Strix Halo APU. No live or invented price. Confirm 64 GB vs 128 GB kit on the listing.
+    urls:
+      amazon: https://www.amazon.com/s?k=AMD+Ryzen+AI+Max%2B+395
+      newegg: https://www.newegg.com/p/pl?d=AMD+Ryzen+AI+Max+395
+      bhphoto: https://www.bhphotovideo.com/c/search?Ntt=AMD+Ryzen+AI+Max+395
+      microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=AMD+Ryzen+AI+Max+395
+      amd: https://www.amd.com/en/products/processors/laptop/ryzen/ai-300-series/amd-ryzen-ai-max-plus-395.html
+
   - id: r9700
     name: AMD Radeon AI PRO R9700
     kind: gpu
