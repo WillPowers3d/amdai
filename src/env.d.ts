@@ -17,6 +17,7 @@ interface ImportMetaEnv {
   readonly MOD_EMAILS?: string;
   readonly SITE_URL?: string;
   readonly CONTACT_EMAIL?: string;
+  readonly STACK_LAB_LOCAL_ORIGIN?: string;
   readonly AUTH_SECRET?: string;
   readonly AUTH_URL?: string;
   readonly DATABASE_URL?: string;

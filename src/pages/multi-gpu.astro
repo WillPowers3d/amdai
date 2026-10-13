@@ -32,6 +32,8 @@ import {
 } from '../lib/multi-gpu';
 import { runs } from '../lib/run-card-data';
 import { officialLinks } from '../lib/site';
+import OpenInStackLab from '../components/OpenInStackLab.astro';
+import { HOUSE_STACK_LAB } from '../lib/stack-lab-open';
 import { local-desktopDual } from '../lib/local-desktop-dual-data';
 
 const daily = multiGpuDailyRow(runs);
@@ -72,6 +74,9 @@ const flashOne = q6File ? flashRamRow('Q6', 1, q6File.file_gb) : null;
         </li>
       ))}
     </ul>
+    <div class="mt-4">
+      <OpenInStackLab {...HOUSE_STACK_LAB.daily} compact />
+    </div>
 
     <nav
       id="multi-gpu-sections"

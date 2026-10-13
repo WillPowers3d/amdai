@@ -3,6 +3,8 @@ import Base from '../layouts/Base.astro';
 import Callout from '../components/Callout.astro';
 import NextSteps from '../components/NextSteps.astro';
 import HowWeTest from '../components/HowWeTest.astro';
+import OpenInStackLab from '../components/OpenInStackLab.astro';
+import { HOUSE_STACK_LAB } from '../lib/stack-lab-open';
 import { MEASURED_LABEL } from '../lib/benchmarks';
 import { benchmarksFile } from '../lib/benchmarks-data';
 import { runs } from '../lib/run-card-data';
@@ -53,6 +55,9 @@ const launch = citedDailyLaunch(runs);
       <a class="btn-ghost" href="/benchmarks/methodology">Gates / methodology</a>
       <a class="btn-ghost" href="/stack-lab">Stack Lab</a>
       <a class="btn-ghost" href="/calculator">Calculator</a>
+    </div>
+    <div class="mt-4">
+      <OpenInStackLab {...HOUSE_STACK_LAB.results} compact />
     </div>
 
     <section class="mt-12" aria-labelledby="method-heading">

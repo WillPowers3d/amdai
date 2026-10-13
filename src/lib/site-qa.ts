@@ -8,6 +8,7 @@ import { existsSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSy
 import { dirname, join } from 'node:path';
 import { OG_SITE_NAME } from './site';
 import { gluedSentenceHits, htmlToVisibleText } from './html-text';
+import { isAllowlistedStackLabHref } from './stack-lab-open';
 
 export const SITE_ORIGIN_DEFAULT = 'https://amdai.net';
 
@@ -52,7 +53,7 @@ const CAMEL_ALLOW = [
   'SillyTavern',
 ];
 
-const SKIP_HREF = /^(mailto:|tel:|javascript:|data:)/i;
+const SKIP_HREF = /^(mailto:|tel:|javascript:|data:|amdai-stack-lab:)/i;
 
 export type QaIssue = {
   kind: 'link' | 'anchor' | 'asset' | 'sitemap' | 'redirect' | 'content' | 'brand';
@@ -427,6 +428,22 @@ export function checkFooterTrustLinks(index: DistIndex): QaIssue[] {
   return issues;
 }
 
+export function checkStackLabHrefs(index: DistIndex): QaIssue[] {
+  const issues: QaIssue[] = [];
+  for (const [path, file] of index.pages) {
+    const html = readFileSync(file, 'utf8');
+    if (isRedirectHtml(html)) continue;
+    const { hrefs } = extractRefs(html);
+    for (const href of hrefs) {
+      if (!/^amdai-stack-lab:/i.test(href)) continue;
+      if (!isAllowlistedStackLabHref(href)) {
+        issues.push(issue('link', file, `Stack Lab href is not allowlisted: ${href} (from ${path})`));
+      }
+    }
+  }
+  return issues;
+}
+
 export function checkRssFeed(index: DistIndex): QaIssue[] {
   const file = resolveOnDisk(index.root, '/rss.xml');
   if (!file) return [issue('link', '/rss.xml', 'Lab Notes feed /rss.xml missing')];
@@ -454,6 +471,7 @@ export function runSiteQa(root: string, origin = SITE_ORIGIN_DEFAULT, configSour
     ...checkContent(index),
     ...checkFooterTrustLinks(index),
     ...checkRssFeed(index),
+    ...checkStackLabHrefs(index),
   ];
 }
 

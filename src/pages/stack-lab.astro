@@ -3,6 +3,8 @@ import Base from '../layouts/Base.astro';
 import Callout from '../components/Callout.astro';
 import NewsletterSignup from '../components/NewsletterSignup.astro';
 import NextSteps from '../components/NextSteps.astro';
+import OpenInStackLab from '../components/OpenInStackLab.astro';
+import { HOUSE_STACK_LAB } from '../lib/stack-lab-open';
 import {
   STACK_LAB_CLI,
   STACK_LAB_HANDOFFS,
@@ -35,6 +37,15 @@ import {
       <a class="underline decoration-accent/40" href="/setup">first-run setup</a>.
       Packages are not published yet. There is no public download URL.
     </p>
+    <p class="mt-4 text-sm leading-relaxed text-muted">
+      <strong class="text-ink">Works with Stack Lab.</strong>
+      Lab Notes pages can open an allowlisted
+      <code class="font-mono text-ink">amdai-stack-lab:</code>
+      link when the companion is installed. The same buttons fall back here if it is not.
+    </p>
+    <div class="mt-4">
+      <OpenInStackLab {...HOUSE_STACK_LAB.home} compact />
+    </div>
     <ul class="mt-4 flex flex-wrap gap-2">
       {STACK_LAB_INTRO_LINKS.map((link) => (
         <li>

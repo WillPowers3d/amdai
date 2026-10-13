@@ -1,0 +1,31 @@
+---
+import {
+  openInStackLab,
+  type StackLabOpenInput,
+} from '../lib/stack-lab-open';
+
+interface Props extends StackLabOpenInput {
+  compact?: boolean;
+}
+
+const { compact = false, ...input } = Astro.props;
+const link = openInStackLab(input);
+---
+
+{
+  link && (
+    <div class:list={['flex flex-col gap-2', compact ? 'sm:flex-row sm:flex-wrap sm:items-center' : '']}>
+      <a class="btn-secondary inline-flex min-h-11 items-center px-4" href={link.href}>
+        {link.label}
+      </a>
+      <p class="text-sm leading-relaxed text-muted">
+        {link.fallbackBody}
+        {' '}
+        <a class="underline decoration-accent/40 underline-offset-2" href={link.fallbackHref}>
+          {link.fallbackLabel}
+        </a>
+        .
+      </p>
+    </div>
+  )
+}

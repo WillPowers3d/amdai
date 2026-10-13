@@ -35,6 +35,7 @@ describe('Radeon Stack Lab', () => {
     assert.match(blob, /amdai-bench\.ts/);
     assert.doesNotMatch(blob, /Qwen2\.5|Qwen3-8B/);
     assert.doesNotMatch(blob, /stacklab:\/\//i);
+    assert.match(blob, /amdai-stack-lab:/);
     assert.doesNotMatch(blob, /coming soon/i);
     assert.ok(STACK_LAB_CLI.commands.every((cmd) => cmd.includes('amdai-bench.ts')));
   });

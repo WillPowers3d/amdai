@@ -12,6 +12,8 @@ import {
 } from '../../lib/backends';
 import { backends, backendsFile } from '../../lib/backends-data';
 import Qwen36Benches from '../../components/Qwen36Benches.astro';
+import OpenInStackLab from '../../components/OpenInStackLab.astro';
+import { HOUSE_STACK_LAB } from '../../lib/stack-lab-open';
 
 const list = backends();
 const onRig = usedOnOurRig(list);
@@ -55,6 +57,9 @@ const tone: Record<string, string> = {
       <a class="btn-ghost" href="/rocm">What is ROCm</a>
       <a class="btn-ghost" href="/troubleshoot/errors">Paste a log</a>
     </p>
+    <div class="mt-4">
+      <OpenInStackLab {...HOUSE_STACK_LAB.llama} compact />
+    </div>
 
     {onRig.length > 0 && (
       <section class="card mt-10 p-5" aria-labelledby="rig-heading">

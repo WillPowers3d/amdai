@@ -79,7 +79,7 @@ export const STACK_LAB_JOBS: StackLabJob[] = [
     id: 'recipes-from-amdai',
     title: 'Recipes from amdai.net',
     body:
-      'Apply a pinned launch from Lab Notes — model, quant, engine, context. The daily-driver recipe is qwen36-35b.llamacpp-vulkan.262k. Flash on Strata is qwen38-flash.strata.262k. There is no invented query scheme; open the recipe page, then start that profile in Stack Lab when the app is installed.',
+      'Apply a pinned launch from Lab Notes — model, quant, engine, context. The daily-driver recipe is qwen36-35b.llamacpp-vulkan.262k. Flash on Strata is qwen38-flash.strata.262k. Lab Notes can hand off with an allowlisted amdai-stack-lab: link. If the app is not installed, stay on this page — packages are not published yet and there is no public download URL.',
     links: [
       { href: '/recipes/qwen36-35b.llamacpp-vulkan.262k', label: '35B recipe' },
       { href: '/recipes/qwen38-flash.strata.262k', label: 'Flash recipe' },
@@ -311,9 +311,9 @@ export function assertStackLabValid(): string[] {
   if (!STACK_LAB_CLI.commands.some((cmd) => cmd.includes('amdai-bench.ts'))) {
     errors.push('must document the in-repo amdai-bench CLI');
   }
-  if (/stacklab:\/\//i.test(blob) || /amdai:\/\//i.test(blob)) {
-    errors.push('do not invent a URI scheme');
-  }
+  if (/stacklab:\/\//i.test(blob)) errors.push('do not invent a URI scheme');
+  if (/(?:^|[^a-z-])amdai:\/\//i.test(blob)) errors.push('do not invent a URI scheme');
+  if (!/amdai-stack-lab:/.test(blob)) errors.push('must document the amdai-stack-lab handoff');
   if (/github\.com\/.+\/releases/i.test(blob)) errors.push('do not invent a GitHub release URL');
   for (const required of REQUIRED_STACK_LAB_HREFS) {
     if (![...hrefs].some((href) => href === required || href.startsWith(`${required}/`))) {

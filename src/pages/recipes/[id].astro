@@ -9,6 +9,7 @@ import { recipes } from '../../lib/recipes-data';
 import { measuredRamHits } from '../../lib/measured-ram-data';
 import NewsletterSignup from '../../components/NewsletterSignup.astro';
 import HowWeTest from '../../components/HowWeTest.astro';
+import OpenInStackLab from '../../components/OpenInStackLab.astro';
 
 export function getStaticPaths() {
   return recipes.map((recipe) => ({ params: { id: recipe.id }, props: { recipe } }));
@@ -103,6 +104,18 @@ const proof = recipe.proof[0];
       <a class="btn-ghost" href={`/models/${recipe.model_id}`}>Model page</a>
       <a class="btn-ghost" href="/stack-lab">Stack Lab</a>
     </p>
+    <div class="mt-4">
+      <OpenInStackLab
+        screen="recipes"
+        id={recipe.id}
+        recipe={recipe.id}
+        model={recipe.model}
+        quant={recipe.weights.quant}
+        engine={recipe.backend}
+        context={recipe.ctx}
+        compact
+      />
+    </div>
     <div class="mt-12">
       <NewsletterSignup variant="article" />
     </div>

@@ -15,6 +15,8 @@ import { gpuPageById } from '../../lib/gpu-pages';
 import { measuredRamHits } from '../../lib/measured-ram-data';
 import { runs } from '../../lib/run-card-data';
 import { officialLinks } from '../../lib/site';
+import OpenInStackLab from '../../components/OpenInStackLab.astro';
+import { HOUSE_STACK_LAB } from '../../lib/stack-lab-open';
 import {
   COMPARE_ENGINE,
   COMPARE_MODEL,
@@ -87,6 +89,9 @@ const dailyRam = dailyRecipe ? recipeSystemRam(dailyRecipe, measuredRamHits) : n
       <a class="btn-secondary" href="/recipes/qwen36-35b.llamacpp-vulkan.262k">Measured recipe</a>
       <a class="btn-ghost" href="/stack-lab">Stack Lab</a>
       {page.calcId && <a class="btn-ghost" href={`/calculator?gpu=${page.calcId}`}>Open in calculator</a>}
+    </div>
+    <div class="mt-4">
+      <OpenInStackLab {...HOUSE_STACK_LAB.daily} compact />
     </div>
 
     <nav
