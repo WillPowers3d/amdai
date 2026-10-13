@@ -16,7 +16,7 @@ describe('related links', () => {
     assert.ok(recipeIds.some((href) => hrefs.includes(href)));
     assert.ok(!hrefs.includes('/gpus/r9700'));
     assert.ok(!hrefs.includes('/two-r9700'));
-    for (const href of ['/gpus/strix-halo', '/gpus/rx7900xtx', '/gpus/rx7900xt', '/gpus/rx7800xt', '/gpus/rx-9070-xt', '/gpus/rx-9060-xt']) {
+    for (const href of ['/gpus/strix-halo', '/gpus/rx7900xtx', '/gpus/rx7900xt', '/gpus/rx7800xt', '/gpus/rx-9070-xt', '/gpus/rx-9060-xt', '/gpus/rx-7900-gre']) {
       assert.ok(hrefs.includes(href), href);
     }
     const xtx = relatedFor('/gpus/rx7900xtx').map((link) => link.href);

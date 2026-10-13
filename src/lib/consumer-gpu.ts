@@ -80,6 +80,7 @@ export const CONSUMER_FIT_QUANTS = [
 export const CONSUMER_NAV_LINKS = [
   { href: '/gpus/rx7900xtx', label: 'RX 7900 XTX' },
   { href: '/gpus/rx7900xt', label: 'RX 7900 XT' },
+  { href: '/gpus/rx-7900-gre', label: 'RX 7900 GRE' },
   { href: '/gpus/rx7800xt', label: 'RX 7800 XT' },
   { href: '/gpus/rx-9070-xt', label: 'RX 9070 XT' },
   { href: '/gpus/rx-9060-xt', label: 'RX 9060 XT' },
