@@ -31,7 +31,7 @@ import { RAM_FULL_LABEL, RAM_MIN_LABEL } from './ram-surfaces';
 import type { GpuDirectory } from './status';
 import { COMPARE_MODEL, COMPARE_Q3, COMPARE_Q3_CITE } from './local-desktop-compare';
 
-export const CONSUMER_RECIPE_IDS = ['rx7900xtx', 'rx7900xt', 'rx7800xt', 'rx9070xt', 'rx9060xt', 'rx7900gre', 'rx7700xt', 'rx7600xt'] as const;
+export const CONSUMER_RECIPE_IDS = ['rx7900xtx', 'rx7900xt', 'rx7800xt', 'rx9070xt', 'rx9060xt', 'rx7900gre', 'rx7700xt', 'rx7600xt', 'rx7600'] as const;
 export type ConsumerRecipeId = (typeof CONSUMER_RECIPE_IDS)[number];
 
 export const CONSUMER_PAGE_SLUG: Record<ConsumerRecipeId, string> = {
@@ -43,6 +43,7 @@ export const CONSUMER_PAGE_SLUG: Record<ConsumerRecipeId, string> = {
   rx7900gre: 'rx-7900-gre',
   rx7700xt: 'rx-7700-xt',
   rx7600xt: 'rx-7600-xt',
+  rx7600: 'rx-7600',
 };
 
 export const CONSUMER_PAGE_ALIASES: Record<string, ConsumerRecipeId> = {
@@ -64,6 +65,9 @@ export const CONSUMER_PAGE_ALIASES: Record<string, ConsumerRecipeId> = {
   rx7600xt: 'rx7600xt',
   'rx-7600-xt': 'rx7600xt',
   'rx7600-xt': 'rx7600xt',
+  rx7600: 'rx7600',
+  'rx-7600': 'rx7600',
+  'rx7600-8gb': 'rx7600',
 };
 
 export const CONSUMER_PUBLISHED = '2026-10-13';
@@ -92,6 +96,7 @@ export const CONSUMER_NAV_LINKS = [
   { href: '/gpus/rx7800xt', label: 'RX 7800 XT' },
   { href: '/gpus/rx-7700-xt', label: 'RX 7700 XT' },
   { href: '/gpus/rx-7600-xt', label: 'RX 7600 XT' },
+  { href: '/gpus/rx-7600', label: 'RX 7600' },
   { href: '/gpus/rx-9070-xt', label: 'RX 9070 XT' },
   { href: '/gpus/rx-9060-xt', label: 'RX 9060 XT' },
 ] as const;
@@ -144,6 +149,7 @@ const SHORT_NAME: Record<ConsumerRecipeId, string> = {
   rx7900gre: 'RX 7900 GRE',
   rx7700xt: 'RX 7700 XT',
   rx7600xt: 'RX 7600 XT',
+  rx7600: 'RX 7600',
 };
 
 const BUDGET_ANCHOR: Record<ConsumerRecipeId, { href: string; label: string }> = {
@@ -155,6 +161,7 @@ const BUDGET_ANCHOR: Record<ConsumerRecipeId, { href: string; label: string }> =
   rx7900gre: { href: '/budget#mid', label: 'Mid budget tier' },
   rx7700xt: { href: '/budget#starter', label: 'Starter budget tier' },
   rx7600xt: { href: '/budget#starter', label: 'Starter budget tier' },
+  rx7600: { href: '/budget#starter', label: 'Starter budget tier' },
 };
 
 const LEAD: Record<ConsumerRecipeId, string> = {
@@ -174,6 +181,8 @@ const LEAD: Record<ConsumerRecipeId, string> = {
     '12 GB gfx1101 RDNA 3 — smaller VRAM than the 16 GB 7800 XT on the same gfx1101 family package. Official on the cited ROCm matrix. House 35B Q4–Q6 files do not fit this VRAM on the calculator — expect RAM offload or a listed Q3 file, both estimates. Buy the 7800 XT when you want 16 GB on this gfx, or the R9700 when you want measured 32 GB recipes. The bare RX 7700 is a different listing — confirm VRAM there. Not a measured local-desktop card.',
   rx7600xt:
     '16 GB gfx1102 RDNA 3 — the 16 GB 7600-class card, not the 8 GB RX 7600. Same LLVM target as the cited 8 GB 7600 row on the ROCm 10.1 matrix; do not mix a gfx1101 (7800 / 7700 XT) or gfx1201 pin. House 35B Q4–Q6 files do not fit this VRAM on the calculator — expect RAM offload or a listed Q3 file, both estimates. Buy the 7800 XT when you want 16 GB on gfx1101, or the R9700 when you want measured 32 GB recipes. Not a measured local-desktop card.',
+  rx7600:
+    '8 GB gfx1102 RDNA 3 — the non-XT 7600, not the 16 GB RX 7600 XT. Same LLVM target as the cited 16 GB XT row on the ROCm 10.1 matrix; do not mix a gfx1101 (7800 / 7700 XT) or gfx1201 pin. House 35B Q4–Q6 files do not fit this VRAM on the calculator — expect RAM offload or a listed Q3 file, both estimates. Buy the 7600 XT when you want 16 GB on this gfx, or the R9700 when you want measured 32 GB recipes. Not a measured local-desktop card.',
 };
 
 export type ConsumerFitKind = 'estimate' | 'q3-estimate';
@@ -293,6 +302,26 @@ function kindLabel(kind: ConsumerFitKind): string {
 }
 
 function stackTips(id: ConsumerRecipeId, gfx: string): ConsumerStackTip[] {
+  if (id === 'rx7600') {
+    return [
+      {
+        title: 'llama.cpp first',
+        body: 'Vulkan is the consumer default on this site. HIP when rocminfo lists gfx1102. Official on the cited ROCm 10.1 gfx1102 row — not Vulkan-only. Ollama and vLLM are not the house path for this card.',
+      },
+      {
+        title: 'gfx1102 family package',
+        body: `${gfx} needs the gfx110x ROCm family package, same LLVM target as the 16 GB RX 7600 XT. Do not mix a gfx1101 (7800 / 7700 XT) or gfx1201 (R9700 / 9070 XT) install. Re-check the cited matrix before you install.`,
+      },
+      {
+        title: '8 GB, not the 16 GB XT',
+        body: 'This sheet sizes the 8 GB non-XT 7600. House 35B Q4–Q6 files do not fit this VRAM — expect RAM offload or a lighter listed Q3 file, both estimates. The 16 GB RX 7600 XT is a different listing at /gpus/rx-7600-xt. Size the file on the calculator before you download.',
+      },
+      {
+        title: 'Setup, then Stack Lab doctor',
+        body: 'First-run setup is Ubuntu. Open Stack Lab doctor for the gfx110x install family. House daily and Flash profiles are R9700 / local-desktop — they do not apply to this 8 GB card. Packages are not published yet.',
+      },
+    ];
+  }
   if (id === 'rx7600xt') {
     return [
       {
@@ -305,7 +334,7 @@ function stackTips(id: ConsumerRecipeId, gfx: string): ConsumerStackTip[] {
       },
       {
         title: '16 GB XT, not the 8 GB 7600',
-        body: 'This sheet sizes the 16 GB XT. House 35B Q4–Q6 files do not fit this VRAM — expect RAM offload or a lighter listed Q3 file, both estimates. The 8 GB RX 7600 is a different listing at /gpus/rx7600. Size the file on the calculator before you download.',
+        body: 'This sheet sizes the 16 GB XT. House 35B Q4–Q6 files do not fit this VRAM — expect RAM offload or a lighter listed Q3 file, both estimates. The 8 GB RX 7600 is a different listing at /gpus/rx-7600. Size the file on the calculator before you download.',
       },
       {
         title: 'Setup, then Stack Lab doctor',

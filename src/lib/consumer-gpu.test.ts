@@ -34,7 +34,7 @@ describe('consumer GPU recipe sheets', () => {
   it('covers only cited directory SKUs and keeps house rules', () => {
     const pages = consumerRecipePages();
     assert.deepEqual(assertConsumerGpuValid(pages), []);
-    assert.deepEqual([...CONSUMER_RECIPE_IDS], ['rx7900xtx', 'rx7900xt', 'rx7800xt', 'rx9070xt', 'rx9060xt', 'rx7900gre', 'rx7700xt', 'rx7600xt']);
+    assert.deepEqual([...CONSUMER_RECIPE_IDS], ['rx7900xtx', 'rx7900xt', 'rx7800xt', 'rx9070xt', 'rx9060xt', 'rx7900gre', 'rx7700xt', 'rx7600xt', 'rx7600']);
     assert.equal(CONSUMER_PUBLISHED, '2026-10-13');
     assert.equal(CONSUMER_MODEL, 'Qwen3.6-35B-A3B');
     assert.equal(CONSUMER_ENGINE, 'llama.cpp');
@@ -57,6 +57,7 @@ describe('consumer GPU recipe sheets', () => {
     assert.equal(consumerPath('rx7900gre'), '/gpus/rx-7900-gre');
     assert.equal(consumerPath('rx7700xt'), '/gpus/rx-7700-xt');
     assert.equal(consumerPath('rx7600xt'), '/gpus/rx-7600-xt');
+    assert.equal(consumerPath('rx7600'), '/gpus/rx-7600');
     assert.equal(isConsumerRecipeGpu('r9700'), false);
     assert.equal(isConsumerRecipeGpu('rx9070xt'), true);
     assert.equal(isConsumerRecipeGpu('rx-9070-xt'), true);
@@ -69,7 +70,9 @@ describe('consumer GPU recipe sheets', () => {
     assert.equal(isConsumerRecipeGpu('rx7700'), false);
     assert.equal(isConsumerRecipeGpu('rx7600xt'), true);
     assert.equal(isConsumerRecipeGpu('rx-7600-xt'), true);
-    assert.equal(isConsumerRecipeGpu('rx7600'), false);
+    assert.equal(isConsumerRecipeGpu('rx7600'), true);
+    assert.equal(isConsumerRecipeGpu('rx-7600'), true);
+    assert.equal(isConsumerRecipeGpu('rx7600-8gb'), true);
 
     assert.equal(consumerShortName('rx7900xtx'), 'RX 7900 XTX');
     assert.equal(pages[0]?.vramLabel, '24 GB');
@@ -100,6 +103,10 @@ describe('consumer GPU recipe sheets', () => {
     assert.equal(pages[7]?.gfx, 'gfx1102');
     assert.equal(pages[7]?.path, '/gpus/rx-7600-xt');
     assert.match(pages[7]?.lead ?? '', /8 GB RX 7600/);
+    assert.equal(pages[8]?.vramLabel, '8 GB');
+    assert.equal(pages[8]?.gfx, 'gfx1102');
+    assert.equal(pages[8]?.path, '/gpus/rx-7600');
+    assert.match(pages[8]?.lead ?? '', /16 GB RX 7600 XT/);
   });
 
   it('uses calculator estimates and leaves speed not measured', () => {
@@ -158,8 +165,12 @@ describe('consumer GPU recipe sheets', () => {
     assert.equal(gpuDirectoryHref('rx7700xt'), '/gpus/rx-7700-xt');
     assert.equal(consumerRecipeIdFromPage('rx-7600-xt'), 'rx7600xt');
     assert.equal(gpuDirectoryHref('rx7600xt'), '/gpus/rx-7600-xt');
+    assert.equal(consumerRecipeIdFromPage('rx-7600'), 'rx7600');
+    assert.equal(gpuDirectoryHref('rx7600'), '/gpus/rx-7600');
     const xt7600q4 = compute(consumerCalcInput('rx7600xt', 'q4_k_m', 4096));
     assert.ok(xt7600q4.verdict === 'no');
+    const bare7600q4 = compute(consumerCalcInput('rx7600', 'q4_k_m', 4096));
+    assert.ok(bare7600q4.verdict === 'no');
     const xt7700 = compute(consumerCalcInput('rx7700xt', 'q4_k_m', 4096));
     assert.ok(xt7700.verdict === 'no');
     const gre4k = compute(consumerCalcInput('rx7900gre', 'q4_k_m', 4096));

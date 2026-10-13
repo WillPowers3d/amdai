@@ -56,6 +56,8 @@ export default defineConfig({
     '/gpus/rx7700-xt': '/gpus/rx-7700-xt',
     '/gpus/rx7600xt': '/gpus/rx-7600-xt',
     '/gpus/rx7600-xt': '/gpus/rx-7600-xt',
+    '/gpus/rx7600': '/gpus/rx-7600',
+    '/gpus/rx7600-8gb': '/gpus/rx-7600',
   },
   markdown: {
     shikiConfig: {

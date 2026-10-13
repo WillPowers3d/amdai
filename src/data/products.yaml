@@ -136,6 +136,19 @@ products:
       microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=AMD+Radeon+RX+7600+XT
       amd: https://www.amd.com/en/products/graphics/desktops/radeon/7000-series/amd-radeon-rx-7600-xt.html
 
+  - id: rx7600
+    name: AMD Radeon RX 7600
+    kind: gpu
+    vram_gb: 8
+    calculator_gpu: rx7600
+    note: 8 GB non-XT listing. The 16 GB RX 7600 XT is a different SKU. No live or invented price.
+    urls:
+      amazon: https://www.amazon.com/s?k=AMD+Radeon+RX+7600
+      newegg: https://www.newegg.com/p/pl?d=AMD+Radeon+RX+7600
+      bhphoto: https://www.bhphotovideo.com/c/search?Ntt=AMD+Radeon+RX+7600
+      microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=AMD+Radeon+RX+7600
+      amd: https://www.amd.com/en/products/graphics/desktops/radeon/7000-series/amd-radeon-rx-7600.html
+
   - id: rtx5090
     name: NVIDIA GeForce RTX 5090
     kind: gpu
