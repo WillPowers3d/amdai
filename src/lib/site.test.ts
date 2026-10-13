@@ -23,9 +23,13 @@ describe('AMDai brand and hero', () => {
     assert.match(site.tagline, /R9700/);
     const calc = primaryNav.find((item) => item.href === '/calculator');
     const quants = primaryNav.find((item) => item.href === '/quants');
+    const glossary = primaryNav.find((item) => item.href === '/glossary');
     assert.match(calc?.description ?? '', /Q3/);
     assert.doesNotMatch(calc?.description ?? '', /Q4\+|Q4 floor|below Q4/i);
     assert.match(quants?.description ?? '', /Q3/);
     assert.doesNotMatch(quants?.description ?? '', /below Q4|Q4 floor/i);
+    assert.ok(glossary);
+    assert.match(glossary?.description ?? '', /Q3/);
+    assert.doesNotMatch(glossary?.description ?? '', /below Q4|Q4 floor/i);
   });
 });

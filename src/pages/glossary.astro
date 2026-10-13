@@ -1,0 +1,246 @@
+---
+import Base from '../layouts/Base.astro';
+import {
+  ALPHABET,
+  GLOSSARY,
+  activeLetters,
+  glossaryHaystack,
+  groupByLetter,
+} from '../lib/glossary';
+
+const lettersUsed = activeLetters();
+const groups = groupByLetter();
+const index = GLOSSARY.map((entry) => ({
+  id: entry.id,
+  letter: entry.letter,
+  haystack: glossaryHaystack(entry),
+}));
+---
+
+<Base
+  title="Glossary"
+  description="Plain-English jargon for a home Radeon box — ROCm, RDNA 4, GGUF, Q3–Q6, KV cache, llama.cpp, run cards, and the rest of the words AMDai uses."
+>
+  <main id="main" class="mx-auto max-w-3xl px-4 py-10 sm:px-6">
+    <a class="skip-link skip-to-letters" href="#glossary-letters">Skip to letter nav</a>
+    <p class="font-mono text-[0.72rem] uppercase tracking-[0.18em] text-accent">Jargon</p>
+    <h1 class="mt-3 font-serif text-4xl tracking-tight sm:text-5xl">Glossary</h1>
+    <p class="mt-4 text-lg leading-relaxed text-muted">
+      The words the rest of <strong class="text-ink">AMDai</strong> uses, in plain English.
+      Each entry says what it is, why it matters on a home Radeon box, and where the real
+      page lives. Numbers come from official local-desktop run cards — we do not invent tok/s or prices.
+    </p>
+    <p class="mt-3 text-sm text-faint">
+      ROCm-stack terms with AMD citations live on the
+      <a class="underline decoration-accent/40 underline-offset-2" href="/rocm/glossary">ROCm-guide glossary</a>.
+      This page is the consumer map.
+    </p>
+
+    <search class="mt-8" aria-label="Filter glossary">
+      <form class="flex flex-col gap-3 sm:flex-row" action="/glossary" method="get" role="search" data-glossary-form>
+        <label class="sr-only" for="glossary-q">Filter glossary entries</label>
+        <input
+          id="glossary-q"
+          name="q"
+          type="search"
+          class="min-h-11 flex-1 rounded-full border border-line bg-raised px-4 text-ink"
+          placeholder="KV cache, Q5, -ot, local-desktop…"
+          autocomplete="off"
+        />
+        <button type="submit" class="btn-primary">Filter</button>
+      </form>
+      <p class="mt-3 text-sm text-muted" data-glossary-status>
+        {GLOSSARY.length} entries, A–Z. Share a filter with <code class="font-mono text-ink">?q=</code>.
+      </p>
+      <p class="mt-3 hidden text-sm text-muted" data-glossary-empty role="status">
+        No entries match that filter. Clear the box or pick a letter — we will not invent a definition.
+      </p>
+    </search>
+
+    <nav
+      id="glossary-letters"
+      class="glossary-letters sticky z-20 -mx-4 mt-8 border-y border-line bg-canvas/95 px-4 py-2 backdrop-blur-md sm:-mx-6 sm:px-6"
+      aria-label="Glossary letters"
+    >
+      <p class="mb-2 font-mono text-[0.68rem] uppercase tracking-[0.16em] text-faint">Jump to letter</p>
+      <ol class="flex flex-wrap gap-1">
+        {ALPHABET.map((letter) => {
+          const used = lettersUsed.has(letter);
+          return (
+            <li>
+              {used ? (
+                <a
+                  class="inline-flex min-h-10 min-w-10 items-center justify-center rounded-md px-2 font-mono text-sm text-ink hover:bg-accent-soft hover:text-accent-ink"
+                  href={`#letter-${letter.toLowerCase()}`}
+                  data-letter-link={letter}
+                >
+                  {letter}
+                </a>
+              ) : (
+                <span
+                  class="inline-flex min-h-10 min-w-10 items-center justify-center rounded-md px-2 font-mono text-sm text-faint"
+                  aria-disabled="true"
+                  data-letter-link={letter}
+                >
+                  {letter}
+                </span>
+              )}
+            </li>
+          );
+        })}
+      </ol>
+    </nav>
+
+    <div class="mt-10 space-y-12" data-glossary-list>
+      {groups.map(({ letter, entries }) =>
+        entries.length ? (
+          <section
+            id={`letter-${letter.toLowerCase()}`}
+            class="scroll-mt-36"
+            data-letter-section={letter}
+            aria-labelledby={`letter-${letter.toLowerCase()}-heading`}
+          >
+            <h2
+              id={`letter-${letter.toLowerCase()}-heading`}
+              class="font-mono text-[0.72rem] uppercase tracking-[0.18em] text-accent"
+            >
+              {letter}
+            </h2>
+            <div class="mt-4 space-y-8">
+              {entries.map((entry) => (
+                <article
+                  id={entry.id}
+                  class="scroll-mt-36 rounded-2xl border border-line bg-raised/50 p-5"
+                  data-glossary-entry={entry.id}
+                  data-letter={entry.letter}
+                  aria-labelledby={`${entry.id}-term`}
+                >
+                  <h3 id={`${entry.id}-term`} class="font-serif text-2xl tracking-tight">
+                    <a class="hover:text-accent-ink" href={`#${entry.id}`}>{entry.term}</a>
+                  </h3>
+                  {entry.aliases.length > 0 && (
+                    <p class="mt-2 font-mono text-[0.72rem] leading-relaxed text-faint">
+                      Also: {entry.aliases.join(' · ')}
+                    </p>
+                  )}
+                  <p class="mt-4 leading-relaxed text-ink">{entry.definition}</p>
+                  <p class="mt-3 leading-relaxed text-muted">
+                    <span class="font-medium text-ink">On a home Radeon box.</span>
+                    {entry.why}
+                  </p>
+                  <ul class="mt-4 flex flex-wrap gap-2">
+                    {entry.links.map((link) => (
+                      <li>
+                        <a
+                          class="inline-flex min-h-9 items-center rounded-full border border-line bg-canvas px-3 text-sm text-ink hover:border-accent/50 hover:text-accent-ink"
+                          href={link.href}
+                        >
+                          {link.label}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                  {entry.seeAlso.length > 0 && (
+                    <p class="mt-4 text-sm text-faint">
+                      See also:{' '}
+                      {entry.seeAlso.map((id, i) => {
+                        const other = GLOSSARY.find((row) => row.id === id);
+                        return (
+                          <>
+                            {i > 0 && ' · '}
+                            <a class="underline decoration-accent/40 underline-offset-2" href={`#${id}`}>
+                              {other?.term ?? id}
+                            </a>
+                          </>
+                        );
+                      })}
+                    </p>
+                  )}
+                </article>
+              ))}
+            </div>
+          </section>
+        ) : null,
+      )}
+    </div>
+  </main>
+</Base>
+
+<script is:inline define:vars={{ index, total: GLOSSARY.length }}>
+  const input = document.getElementById('glossary-q');
+  const form = document.querySelector('[data-glossary-form]');
+  const statusEl = document.querySelector('[data-glossary-status]');
+  const emptyEl = document.querySelector('[data-glossary-empty]');
+  const params = new URLSearchParams(window.location.search);
+  const initial = (params.get('q') ?? '').trim();
+  if (input && initial) input.value = initial;
+
+  function applyFilter(raw) {
+    const q = raw.trim().toLowerCase();
+    const next = new URL(window.location.href);
+    if (q) next.searchParams.set('q', raw.trim());
+    else next.searchParams.delete('q');
+    if (next.search !== window.location.search) {
+      window.history.replaceState({}, '', next);
+    }
+
+    const visibleIds = new Set();
+    for (const row of index) {
+      if (!q || row.haystack.includes(q)) visibleIds.add(row.id);
+    }
+
+    document.querySelectorAll('[data-glossary-entry]').forEach((node) => {
+      const id = node.getAttribute('data-glossary-entry');
+      const show = !!id && visibleIds.has(id);
+      node.hidden = !show;
+    });
+
+    const used = new Set();
+    document.querySelectorAll('[data-letter-section]').forEach((section) => {
+      const letter = section.getAttribute('data-letter-section');
+      const any = Array.from(section.querySelectorAll('[data-glossary-entry]')).some((el) => !el.hidden);
+      section.hidden = !any;
+      if (any && letter) used.add(letter);
+    });
+
+    document.querySelectorAll('[data-letter-link]').forEach((node) => {
+      const letter = node.getAttribute('data-letter-link');
+      const live = !!letter && used.has(letter);
+      if (node.tagName === 'A') {
+        node.setAttribute('aria-disabled', live ? 'false' : 'true');
+        node.classList.toggle('pointer-events-none', !live);
+        node.classList.toggle('text-faint', !live);
+      }
+    });
+
+    const shown = visibleIds.size;
+    if (statusEl) {
+      statusEl.textContent = q
+        ? shown + ' of ' + total + ' for “' + raw.trim() + '”. Share this URL.'
+        : total + ' entries, A–Z. Share a filter with ?q=.';
+    }
+    if (emptyEl) emptyEl.classList.toggle('hidden', shown > 0);
+  }
+
+  if (form && input) {
+    form.addEventListener('submit', function (event) {
+      event.preventDefault();
+      applyFilter(input.value);
+    });
+    input.addEventListener('input', function () {
+      applyFilter(input.value);
+    });
+  }
+
+  applyFilter(initial);
+</script>
+
+<style>
+  .skip-to-letters:focus {
+    top: 3.5rem;
+  }
+
+  .glossary-letters {
+    top: var(--header-h);
+  }
+</style>

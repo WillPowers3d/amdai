@@ -13,7 +13,7 @@ const tutorials = (await getCollection('tutorials')).sort((a, b) => a.data.order
       <p class="font-mono text-[0.7rem] uppercase tracking-[0.16em] text-accent">Tutorials</p>
       <h1 class="mt-2 font-serif text-4xl tracking-tight sm:text-5xl">Do the work on a real box</h1>
       <p class="mt-4 max-w-2xl text-lg text-muted">
-        Install ROCm 10.1 the documented way (one method, never mixed with Ubuntu archive `rocm`), prove gfx1201, run official Qwen instruct on llama.cpp, then expose a loopback /v1. vLLM is advanced. Confirm package names against AMD docs and the weekly card before you copy them.
+        Install ROCm 10.1 the documented way (one method, never mixed with Ubuntu archive `rocm`), prove gfx1201, run official Qwen instruct on llama.cpp, then expose a loopback /v1. vLLM is advanced. Confirm package names against AMD docs and the weekly card before you copy them. Jargon used in the how-tos is defined in the <a class="underline decoration-accent/40 underline-offset-2" href="/glossary">glossary</a>.
       </p>
       <ol class="mt-10 grid gap-4">
         {tutorials.map((item, index) => (

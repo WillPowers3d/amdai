@@ -18,6 +18,7 @@ const pages = [
   ['start', 'Getting started', 'GPU → ROCm → llama.cpp → harness'],
   ['account', 'Saved rigs', 'Optional accounts. Off unless enabled.'],
   ['search', 'Search', 'Pagefind over the living notes'],
+  ['glossary', 'Glossary', 'Plain-English jargon for a home Radeon box'],
   ['default', 'AMDai', 'Independent Radeon AI notes. Not affiliated with AMD.'],
 ];
 

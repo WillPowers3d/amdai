@@ -30,6 +30,7 @@ const OG_PAGES = new Set([
   'start',
   'account',
   'search',
+  'glossary',
   'default',
 ]);
 
@@ -127,6 +128,7 @@ export const primaryNav: NavItem[] = [
   { href: '/troubleshoot/errors', label: 'Error paste', description: 'Match a log against cited ROCm / Ollama patterns', group: 'practice' },
   { href: '/updates', label: 'Updates', description: 'RSS + ROCm × llama.cpp × vLLM 0.31 matrix', group: 'practice' },
   { href: '/faq', label: 'FAQ', description: 'Short answers for a first home box', group: 'practice' },
+  { href: '/glossary', label: 'Glossary', description: 'Plain-English jargon — ROCm, GGUF, Q3–Q6, KV cache, run cards', group: 'practice' },
   { href: '/blog', label: 'Blog', description: 'Longer posts and ROCm version notes', group: 'practice' },
   { href: '/forum', label: 'Forum', description: 'Threads, rig badges, solved marks — off unless FORUM_ENABLED', group: 'practice' },
   { href: '/account', label: 'Account', description: 'Optional saved rigs and stack-update alerts', group: 'practice' },

@@ -1,0 +1,105 @@
+import { describe, it } from 'node:test';
+import assert from 'node:assert/strict';
+import { gluedSentenceHits } from './html-text';
+import {
+  GLOSSARY,
+  REQUIRED_GLOSSARY_IDS,
+  activeLetters,
+  assertGlossaryValid,
+  entryById,
+  filterGlossary,
+  glossaryHaystack,
+  groupByLetter,
+  parseGlossaryQuery,
+} from './glossary';
+import { primaryNav } from './site';
+
+const ALLOWED_HREFS = new Set([
+  '/abliterated',
+  '/backends',
+  '/backends/llamacpp',
+  '/backends/strata',
+  '/backends/vllm',
+  '/benchmarks',
+  '/budget',
+  '/calculator',
+  '/credits',
+  '/faq',
+  '/flash-daily',
+  '/flash-ram-offload',
+  '/gpus',
+  '/hardware',
+  '/models',
+  '/quants',
+  '/qwen',
+  '/qwen36-dual',
+  '/results',
+  '/rocm',
+  '/rocm/glossary',
+  '/software',
+  '/stack-lab',
+  '/stacks',
+  '/start',
+  '/tutorials/install-rocm',
+  '/tutorials/run-local-llm',
+  '/tutorials/serve-qwen',
+  '/tutorials/verify-rocm',
+]);
+
+describe('consumer glossary', () => {
+  it('covers the required terms with valid cross-links', () => {
+    assert.deepEqual(assertGlossaryValid(), []);
+    for (const id of REQUIRED_GLOSSARY_IDS) {
+      assert.ok(entryById(id), id);
+    }
+    assert.ok(GLOSSARY.length >= REQUIRED_GLOSSARY_IDS.length);
+    for (const entry of GLOSSARY) {
+      for (const link of entry.links) {
+        const path = link.href.split('#')[0] ?? link.href;
+        assert.ok(ALLOWED_HREFS.has(path), `${entry.id} unexpected href ${link.href}`);
+      }
+    }
+  });
+
+  it('filters, shares ?q=, and groups A–Z', () => {
+    assert.equal(parseGlossaryQuery('?q=kv+cache'), 'kv cache');
+    assert.equal(parseGlossaryQuery(new URLSearchParams('q=ROCm')), 'ROCm');
+    assert.equal(parseGlossaryQuery(''), '');
+    const kv = filterGlossary('kv cache');
+    assert.ok(kv.some((row) => row.id === 'kv-cache'));
+    const ot = filterGlossary('-ot');
+    assert.ok(ot.some((row) => row.id === 'expert-offload'));
+    assert.equal(filterGlossary('zzzz-no-such-term').length, 0);
+    assert.equal(filterGlossary('').length, GLOSSARY.length);
+    assert.ok(glossaryHaystack(entryById('quant')!).includes('q3'));
+    const groups = groupByLetter();
+    assert.equal(groups.length, 26);
+    assert.ok(groups.find((g) => g.letter === 'R')?.entries.some((e) => e.id === 'rocm'));
+    assert.equal(groups.find((g) => g.letter === 'X')?.entries.length, 0);
+    assert.ok(activeLetters().has('R'));
+    assert.ok(!activeLetters().has('X'));
+  });
+
+  it('keeps house rules, brand, and measured-only figures', () => {
+    const blob = GLOSSARY.map((row) => `${row.term}\n${row.definition}\n${row.why}`).join('\n');
+    assert.match(blob, /AMDai/);
+    assert.match(blob, /amdai-bench\/run@1/);
+    assert.doesNotMatch(blob, /AMDAI-BENCH|Amdai-Bench/);
+    assert.match(blob, /Vulkan first/i);
+    assert.match(blob, /not the daily driver/i);
+    assert.match(blob, /estimate/i);
+    assert.match(blob, /Q1\/Q2 stay off/);
+    assert.doesNotMatch(blob, /Qwen2\.5|Qwen3-8B/);
+    assert.doesNotMatch(blob, /\b(?:IQ[12]_[A-Z0-9]+|Q[12]_[A-Z0-9]+)\b/);
+    assert.doesNotMatch(blob, /floor is q4|q4 floor|q4 and up only/i);
+    assert.match(blob, /102\.39/);
+    assert.match(blob, /42\.9/);
+    assert.match(blob, /82\.78/);
+    assert.ok(primaryNav.some((item) => item.href === '/glossary'));
+    assert.match(primaryNav.find((item) => item.href === '/glossary')?.description ?? '', /ROCm|jargon|KV/i);
+    for (const entry of GLOSSARY) {
+      const hits = gluedSentenceHits(`${entry.definition} ${entry.why}`);
+      assert.deepEqual(hits, [], `${entry.id} glue ${hits[0]?.snippet ?? ''}`);
+    }
+  });
+});

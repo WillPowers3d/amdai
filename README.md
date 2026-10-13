@@ -124,6 +124,7 @@ Public site URL is `https://amdai.net` (`site` in `astro.config.mjs`; override w
 | `/updates` | Dated notes + RSS + version matrix |
 | `/search` | Pagefind (index built by `npm run build`) |
 | `/faq` | Short answers |
+| `/glossary` | Consumer jargon — A–Z, search, deep links; ROCm citations stay on `/rocm/glossary` |
 | `/blog` | Longer posts + version-note index |
 | `/maintain` | Weekday scrape checklist |
 | `/disclosure` | Amazon Associates, Rakuten, B&H |
