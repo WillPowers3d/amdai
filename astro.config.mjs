@@ -8,6 +8,7 @@ import { htmlSeparators } from './src/lib/html-separators.ts';
 import { canonicalUrl, isSitemapExcluded, lastmodFor, urlPath } from './src/lib/seo.ts';
 
 const accountsOn = process.env.ACCOUNTS_ENABLED === '1' || process.env.ACCOUNTS_ENABLED === 'true';
+const newsletterOn = process.env.NEWSLETTER_ENABLED === '1' || process.env.NEWSLETTER_ENABLED === 'true';
 const forumOn = process.env.FORUM_ENABLED === '1' || process.env.FORUM_ENABLED === 'true';
 if (forumOn && !accountsOn) {
   throw new Error('FORUM_ENABLED requires ACCOUNTS_ENABLED=1 (same SQLite, same session).');
@@ -17,7 +18,7 @@ export default defineConfig({
   site: process.env.SITE_URL || 'https://amdai.net',
   compressHTML: false,
   prefetch: true,
-  adapter: accountsOn ? node({ mode: 'standalone' }) : undefined,
+  adapter: accountsOn || newsletterOn ? node({ mode: 'standalone' }) : undefined,
   server: {
     host: '127.0.0.1',
     port: 43147,

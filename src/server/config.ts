@@ -1,4 +1,4 @@
-import { accountsEnabled, forumEnabled } from '../lib/flags';
+import { accountsEnabled, forumEnabled, newsletterEnabled } from '../lib/flags';
 import { parseAdminEmails } from '../lib/forum-perms';
 
 export function requireAccounts(): void {
@@ -10,6 +10,12 @@ export function requireAccounts(): void {
 export function requireForum(): void {
   if (!forumEnabled()) {
     throw new Error('Forum is disabled. Set FORUM_ENABLED=1 and ACCOUNTS_ENABLED=1.');
+  }
+}
+
+export function requireNewsletter(): void {
+  if (!newsletterEnabled()) {
+    throw new Error('Newsletter is disabled. Set NEWSLETTER_ENABLED=1 or ACCOUNTS_ENABLED=1.');
   }
 }
 

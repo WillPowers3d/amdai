@@ -1,0 +1,39 @@
+---
+import Base from '../../layouts/Base.astro';
+import { newsletterEnabled } from '../../lib/flags';
+
+const on = newsletterEnabled();
+---
+
+<Base title="Confirm digest" description="Confirm the AMDai Lab Notes digest. This page is not indexed.">
+  <main id="main" class="mx-auto max-w-lg px-4 py-10 sm:px-6">
+    <h1 class="font-serif text-4xl tracking-tight">Confirm the digest</h1>
+    {
+      on ? (
+        <p id="nl-confirm-status" class="mt-4 text-muted">Confirming…</p>
+      ) : (
+        <p class="mt-4 text-muted">
+          The digest mailer is off on this static build. Open the confirm link on a hosted
+          build with <code>NEWSLETTER_ENABLED=1</code> or accounts on.
+        </p>
+      )
+    }
+  </main>
+</Base>
+
+{
+  on && (
+    <script>
+      const token = new URLSearchParams(location.search).get('token');
+      fetch('/api/newsletter/confirm', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ token }),
+      }).then(async (res) => {
+        const body = (await res.json().catch(() => ({}))) as { message?: string };
+        const el = document.getElementById('nl-confirm-status');
+        if (el) el.textContent = body.message || (res.ok ? 'You are on the digest.' : 'That confirm link is invalid.');
+      });
+    </script>
+  )
+}

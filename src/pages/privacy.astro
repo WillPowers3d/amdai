@@ -5,7 +5,7 @@ import { accountsEnabled } from '../lib/flags';
 
 <Base
   title="Privacy"
-  description="What R9700 Lab Notes collects when optional accounts are on — email, saved rigs, and nothing else we do not need."
+  description="What optional AMDai accounts and the Lab Notes digest store — email, topics, timestamps. No tracking pixel."
 >
   <main id="main" class="mx-auto max-w-3xl px-4 py-10 sm:px-6">
     <p class="font-mono text-[0.72rem] uppercase tracking-[0.18em] text-accent">Legal</p>
@@ -22,6 +22,11 @@ import { accountsEnabled } from '../lib/flags';
         <li>Email address (magic link) or the verified GitHub email, if you sign in.</li>
         <li>Saved rigs you choose to store: GPU, VRAM, RAM, OS, backend, models/quants (Q3+), context, and the three preference toggles.</li>
         <li>Notification preference (instant / weekly / forum replies) and an unsubscribe token.</li>
+        <li>
+          Lab Notes digest (optional, no account): email, confirm state, topic choices
+          (run cards, guides, ROCm problems, Stack Lab), and timestamps. Confirm and
+          unsubscribe tokens. No tracking pixel.
+        </li>
         <li>If the forum is on: thread and reply text you post, optional attached-rig snapshots, votes, and reports.</li>
         <li>Session cookie and a CSRF cookie. No advertising IDs. No live prices.</li>
       </ul>
@@ -41,7 +46,10 @@ import { accountsEnabled } from '../lib/flags';
       <p class="mt-3 leading-relaxed text-muted">
         On <a class="underline decoration-accent/40 underline-offset-2" href="/account">/account</a> you can edit or
         delete rigs and export them as JSON. Email alerts are opt-in. Every alert includes an unsubscribe link.
-        POSTs to account and forum endpoints check CSRF and are rate-limited. Forum reply mail is opt-in.
+        The <a class="underline decoration-accent/40 underline-offset-2" href="/newsletter">Lab Notes digest</a>
+        is email-only double opt-in; one-click unsubscribe works without a login.
+        POSTs to account, forum, and digest endpoints check CSRF or a signed token and are rate-limited.
+        Forum reply mail is opt-in.
       </p>
     </section>
   </main>

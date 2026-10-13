@@ -14,6 +14,7 @@ export const FAILING_IMPACTS = new Set(['critical', 'serious']);
 export const A11Y_SHOT_PAGES = [
   '/qwen',
   '/benchmarks',
+  '/newsletter',
   '/backends',
   '/calculator',
   '/compare/one-vs-two-gpu',

@@ -49,7 +49,7 @@ npm run preview
 
 Outbound citations are a separate, network-using pass: `npm run check:links:external` (alias `npm run qa:links:external`). It is not part of the default build. It writes a dated report next to the internal one and does not remove citations. Flaky externals do not fail `npm run build`.
 
-Public site URL is `https://amdai.net` (`site` in `astro.config.mjs`; override with `SITE_URL`). Default build is `ACCOUNTS_ENABLED=0` `FORUM_ENABLED=0` (static SSG, no database). Set `ACCOUNTS_ENABLED=1` for optional login, saved rigs, and `npm run notify`. `FORUM_ENABLED=1` also requires accounts (same SQLite) and turns on `/forum`. Admins are the comma-separated list in `ADMIN_EMAILS`. Optional `MOD_EMAILS` promotes moderators.
+Public site URL is `https://amdai.net` (`site` in `astro.config.mjs`; override with `SITE_URL`). Default build is `ACCOUNTS_ENABLED=0` `FORUM_ENABLED=0` `NEWSLETTER_ENABLED=0` (static SSG, no database). Set `ACCOUNTS_ENABLED=1` for optional login, saved rigs, and `npm run notify`. Set `NEWSLETTER_ENABLED=1` (or accounts) for the email-only Lab Notes digest APIs. `NEWSLETTER_SEND` stays off; `npm run digest` drafts HTML + text under `artifacts/newsletter/` and only mails with `NEWSLETTER_SEND=1` plus `--send`. `FORUM_ENABLED=1` also requires accounts (same SQLite) and turns on `/forum`. Admins are the comma-separated list in `ADMIN_EMAILS`. Optional `MOD_EMAILS` promotes moderators.
 
 ## Information architecture
 
@@ -110,8 +110,9 @@ Public site URL is `https://amdai.net` (`site` in `astro.config.mjs`; override w
 | `/forum/new` | New thread, optional saved-rig badge |
 | `/forum/search` | Title/body search |
 | `/forum/mod` | Reports + audit log (mods/admins) |
+| `/newsletter` | Email-only Lab Notes digest (double opt-in; no account) |
 | `/account` | Optional saved rigs (off unless `ACCOUNTS_ENABLED=1`) |
-| `/privacy` | What optional accounts store |
+| `/privacy` | What optional accounts and the digest store |
 | `/harnesses` | Harnesses & frontends — what to plug your local model into |
 | `/harnesses/agents` | Agent harnesses (Hermes used on our rig, OpenHands, Aider, …) |
 | `/harnesses/chat` | Chat UIs (Open WebUI, LM Studio, llama.cpp web UI, …) |

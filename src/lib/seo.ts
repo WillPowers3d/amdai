@@ -23,6 +23,7 @@ export const SEARCH_ACTION_TEMPLATE = `${SITE_ORIGIN}/search?q={search_term_stri
 export const NOINDEX_EXACT = new Set([
   '/login',
   '/unsubscribe',
+  '/newsletter/confirm',
   '/search',
   '/404',
   '/forum/inbox',
@@ -190,6 +191,8 @@ export const CRUMB_LABELS: Record<string, string> = {
   '/search': 'Search',
   '/login': 'Sign in',
   '/unsubscribe': 'Unsubscribe',
+  '/newsletter': 'Digest',
+  '/newsletter/confirm': 'Confirm digest',
 };
 
 export type Crumb = { name: string; href: string };
@@ -468,7 +471,17 @@ setMeta(
 setMeta(
   '/unsubscribe',
   'Unsubscribe',
-  'Stop optional stack-update emails from AMDai. Accounts stay off on the public static build.',
+  'Stop optional stack-update emails and the AMDai Lab Notes digest. One click, no login.',
+);
+setMeta(
+  '/newsletter',
+  'Lab Notes digest',
+  'Email-only AMDai Lab Notes digest: new run cards, guides, ROCm problems, and Stack Lab. Double opt-in, no account.',
+);
+setMeta(
+  '/newsletter/confirm',
+  'Confirm digest',
+  'Confirm the AMDai Lab Notes digest from the link in mail. This page is not indexed.',
 );
 setMeta(
   '/search',
@@ -483,7 +496,7 @@ setMeta(
 setMeta(
   '/privacy',
   'Privacy',
-  'What optional AMDai accounts store — saved rigs and alert prefs. The public site is static HTML.',
+  'What optional AMDai accounts and the Lab Notes digest store — email, topics, timestamps. No tracking pixel.',
 );
 setMeta(
   '/contribute',

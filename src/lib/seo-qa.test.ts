@@ -28,8 +28,12 @@ describe('SEO helpers', () => {
     assert.equal(shouldNoindex('/search'), true);
     assert.equal(shouldNoindex('/forum/inbox'), true);
     assert.equal(shouldNoindex('/faq'), false);
+    assert.equal(shouldNoindex('/newsletter'), false);
+    assert.equal(shouldNoindex('/newsletter/confirm'), true);
     assert.equal(isSitemapExcluded('/search'), true);
     assert.equal(isSitemapExcluded('/results'), false);
+    assert.equal(isSitemapExcluded('/newsletter'), false);
+    assert.equal(isSitemapExcluded('/newsletter/confirm'), true);
     assert.equal(canonicalUrl('/faq'), `${SITE_ORIGIN}/faq`);
     assert.equal(canonicalUrl('/'), `${SITE_ORIGIN}/`);
     assert.match(SEARCH_ACTION_TEMPLATE, /\/search\?q=\{search_term_string\}/);

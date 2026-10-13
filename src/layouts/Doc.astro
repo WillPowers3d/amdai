@@ -2,6 +2,7 @@
 import Base from './Base.astro';
 import Sidebar from '../components/Sidebar.astro';
 import Toc from '../components/Toc.astro';
+import NewsletterSignup from '../components/NewsletterSignup.astro';
 
 interface Heading {
   depth: number;
@@ -38,6 +39,9 @@ const { title, description, kicker, updated, headings = [] } = Astro.props;
       <article id="article" class="prose-lab prose mt-10 max-w-none">
         <slot />
       </article>
+      <div class="not-prose mt-12">
+        <NewsletterSignup variant="article" />
+      </div>
     </main>
     <div class="hidden xl:block">
       <div class="sticky top-24">

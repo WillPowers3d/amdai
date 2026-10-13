@@ -7,6 +7,7 @@ import SystemRamNeed from '../../components/SystemRamNeed.astro';
 import { recipeSystemRam } from '../../lib/recipes';
 import { recipes } from '../../lib/recipes-data';
 import { measuredRamHits } from '../../lib/measured-ram-data';
+import NewsletterSignup from '../../components/NewsletterSignup.astro';
 
 export function getStaticPaths() {
   return recipes.map((recipe) => ({ params: { id: recipe.id }, props: { recipe } }));
@@ -95,5 +96,8 @@ const proof = recipe.proof[0];
       <a class="btn-secondary" href={`/gpus/${recipe.card}`}>{recipe.card} page</a>
       <a class="btn-ghost" href={`/models/${recipe.model_id}`}>Model page</a>
     </p>
+    <div class="mt-12">
+      <NewsletterSignup variant="article" />
+    </div>
   </main>
 </Base>

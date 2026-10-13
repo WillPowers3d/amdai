@@ -16,3 +16,13 @@ export function forumRequested(): boolean {
 export function forumEnabled(): boolean {
   return forumRequested() && accountsEnabled();
 }
+
+/** Newsletter APIs + file store. On with its own flag, or when accounts (same mailer) are on. */
+export function newsletterEnabled(): boolean {
+  return flagOn(process.env.NEWSLETTER_ENABLED) || accountsEnabled();
+}
+
+/** Actual digest mailing. Off unless NEWSLETTER_SEND=1 and the command passes --send. */
+export function newsletterSendEnabled(): boolean {
+  return flagOn(process.env.NEWSLETTER_SEND);
+}

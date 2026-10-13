@@ -24,6 +24,12 @@ const on = accountsEnabled();
             <code class="font-mono text-ink">src/data/stack-updates.yaml</code>. Matching tests run without a login.
           </p>
           <p>
+            Account holders manage the same Lab Notes digest topics (run cards, guides,
+            ROCm problems, Stack Lab) from this page when accounts are on. Email-only
+            signup without an account is
+            <a class="underline decoration-accent/40 underline-offset-2" href="/newsletter">/newsletter</a>.
+          </p>
+          <p>
             <a class="underline decoration-accent/40 underline-offset-2" href="/privacy">Privacy</a>
             ·
             <a class="underline decoration-accent/40 underline-offset-2" href="/login">Sign in</a>
@@ -47,6 +53,18 @@ const on = accountsEnabled();
           return;
         }
         const data = await me.json();
+        const selected = new Set((data.user.newsletterTopics as string[] | undefined) ?? []);
+        const topicBoxes = [
+          ['runs', 'New measured run cards'],
+          ['guides', 'Guides and tutorials'],
+          ['problems', 'ROCm problem updates'],
+          ['stack-lab', 'Stack Lab releases'],
+        ]
+          .map(
+            ([id, label]) =>
+              `<label class="flex min-h-11 items-center gap-2"><input type="checkbox" name="nlTopic" value="${id}" ${selected.has(id) ? 'checked' : ''}/> ${label}</label>`,
+          )
+          .join('');
         const rows = (data.rigs as Array<Record<string, unknown>>)
           .map((rig) => {
             const updates = (rig.updates as Array<{ id: string; summary: string; source_url: string; todo?: boolean; severity: string }>)
@@ -69,10 +87,16 @@ const on = accountsEnabled();
         root.innerHTML = `
           <p class="text-sm">Signed in as ${data.user.email}. <button id="logout" class="underline">Log out</button>
           <button id="export" class="ml-2 underline">Export JSON</button></p>
-          <form id="prefs" class="mt-4 flex flex-wrap gap-4 text-sm">
-            <label><input type="checkbox" name="instant" ${data.user.notifyInstant ? 'checked' : ''}/> Instant email</label>
-            <label><input type="checkbox" name="weekly" ${data.user.notifyWeekly ? 'checked' : ''}/> Weekly digest</label>
-            <label><input type="checkbox" name="replies" ${data.user.notifyReplies ? 'checked' : ''}/> Forum reply email</label>
+          <form id="prefs" class="mt-4 space-y-3 text-sm">
+            <div class="flex flex-wrap gap-4">
+              <label><input type="checkbox" name="instant" ${data.user.notifyInstant ? 'checked' : ''}/> Instant email</label>
+              <label><input type="checkbox" name="weekly" ${data.user.notifyWeekly ? 'checked' : ''}/> Weekly digest</label>
+              <label><input type="checkbox" name="replies" ${data.user.notifyReplies ? 'checked' : ''}/> Forum reply email</label>
+            </div>
+            <fieldset class="space-y-2">
+              <legend>AMDai Lab Notes digest topics</legend>
+              ${topicBoxes}
+            </fieldset>
             <button class="rounded-full border border-line px-3 py-1" type="submit">Save alerts</button>
           </form>
           <h2 class="mt-8 font-serif text-3xl">Updates for your rig</h2>
@@ -99,6 +123,7 @@ const on = accountsEnabled();
               instant: form.instant.checked,
               weekly: form.weekly.checked,
               replies: form.replies.checked,
+              newsletterTopics: [...form.querySelectorAll('[name="nlTopic"]:checked')].map((box) => box.value),
             }),
           });
         });

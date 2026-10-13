@@ -1,20 +1,29 @@
 ---
 import Base from '../layouts/Base.astro';
-import { accountsEnabled } from '../lib/flags';
+import { accountsEnabled, newsletterEnabled } from '../lib/flags';
 
-const on = accountsEnabled();
+const on = accountsEnabled() || newsletterEnabled();
 ---
 
-<Base title="Unsubscribe" description="Stop stack-update emails.">
+<Base title="Unsubscribe" description="Stop stack-update emails and the AMDai Lab Notes digest. No login required.">
   <main id="main" class="mx-auto max-w-lg px-4 py-10 sm:px-6">
     <h1 class="font-serif text-4xl tracking-tight">Unsubscribe</h1>
     {
       on ? (
         <p id="unsub-status" class="mt-4 text-muted">Updating preferences…</p>
       ) : (
-        <p class="mt-4 text-muted">Email alerts are not active on this static build.</p>
+        <p class="mt-4 text-muted">
+          Email alerts and the digest mailer are not active on this static build.
+          Open the unsubscribe link from an issue on a hosted build.
+        </p>
       )
     }
+    <p class="mt-6 text-sm text-muted">
+      The digest is email-only. One-click unsubscribe does not need an account.
+      <a class="underline decoration-accent/40" href="/newsletter">Lab Notes digest</a>
+      ·
+      <a class="underline decoration-accent/40" href="/privacy">Privacy</a>
+    </p>
   </main>
 </Base>
 
@@ -28,7 +37,7 @@ const on = accountsEnabled();
         body: JSON.stringify({ token }),
       }).then(async (res) => {
         const el = document.getElementById('unsub-status');
-        if (el) el.textContent = res.ok ? 'You will not get alert emails.' : 'That unsubscribe link is invalid.';
+        if (el) el.textContent = res.ok ? 'You will not get alert or digest emails.' : 'That unsubscribe link is invalid.';
       });
     </script>
   )

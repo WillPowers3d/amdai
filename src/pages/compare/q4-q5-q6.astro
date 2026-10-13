@@ -1,6 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
 import Callout from '../../components/Callout.astro';
+import NewsletterSignup from '../../components/NewsletterSignup.astro';
 import { FLASH_RERUN_NOTE } from '../../lib/run-card';
 import { runs } from '../../lib/run-card-data';
 import {
@@ -227,6 +228,9 @@ const quantOrder = [...COMPARE_QUANTS, COMPARE_Q3];
       ·
       <a class="underline decoration-accent/40" href="/calculator">calculator</a>
     </p>
+    <div class="mt-12">
+      <NewsletterSignup variant="article" />
+    </div>
   </main>
 </Base>
 

@@ -9,6 +9,9 @@ interface ImportMetaEnv {
   readonly BHPHOTO_QUERY_PARAM?: string;
   readonly AFFILIATE_CLICK_BEACON?: string;
   readonly ACCOUNTS_ENABLED?: string;
+  readonly NEWSLETTER_ENABLED?: string;
+  readonly NEWSLETTER_SEND?: string;
+  readonly NEWSLETTER_STORE?: string;
   readonly FORUM_ENABLED?: string;
   readonly ADMIN_EMAILS?: string;
   readonly MOD_EMAILS?: string;

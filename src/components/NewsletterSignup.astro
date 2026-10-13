@@ -1,0 +1,115 @@
+---
+import {
+  NEWSLETTER_CADENCE,
+  NEWSLETTER_NAME,
+  NEWSLETTER_TOPICS,
+} from '../lib/newsletter';
+
+interface Props {
+  variant?: 'compact' | 'article' | 'page';
+}
+
+const { variant = 'article' } = Astro.props;
+const compact = variant === 'compact';
+const formId = `nl-${variant}`;
+---
+
+<section class:list={['nl-signup', compact && 'nl-signup--compact']} aria-labelledby={`${formId}-title`}>
+  <h2 id={`${formId}-title`} class:list={[compact ? 'text-lg tracking-tight' : 'font-serif text-2xl']}>
+    {NEWSLETTER_NAME}
+  </h2>
+  <p class:list={['mt-2 text-sm leading-relaxed text-muted', compact && 'text-xs']}>
+    Email only — no account. Double opt-in. {NEWSLETTER_CADENCE}
+  </p>
+  <form class="nl-form mt-4 space-y-3" data-nl-form data-nl-variant={variant} novalidate>
+    <label class="hp" aria-hidden="true">Company site<input type="text" name="website" tabindex="-1" autocomplete="off" /></label>
+    <div>
+      <label class="block text-sm" for={`${formId}-email`}>
+        <span class="text-faint">Email</span>
+      </label>
+      <input
+        id={`${formId}-email`}
+        class="mt-1 w-full rounded-xl border border-line bg-raised px-3 py-2"
+        type="email"
+        name="email"
+        autocomplete="email"
+        required
+        inputmode="email"
+      />
+    </div>
+    {
+      !compact && (
+        <fieldset class="space-y-2">
+          <legend class="text-sm text-faint">Topics</legend>
+          {NEWSLETTER_TOPICS.map((topic) => (
+            <label class="flex min-h-11 items-start gap-2 text-sm">
+              <input class="mt-1" type="checkbox" name="topics" value={topic.id} checked />
+              <span>
+                <span class="text-ink">{topic.label}</span>
+                <span class="block text-xs text-faint">{topic.description}</span>
+              </span>
+            </label>
+          ))}
+        </fieldset>
+      )
+    }
+    <p class="sr-only">One-click unsubscribe is in every issue and does not need a login.</p>
+    <div class="flex flex-wrap items-center gap-3">
+      <button class="btn-primary" type="submit">Subscribe</button>
+      {compact && (
+        <a class="text-sm underline decoration-accent/40" href="/newsletter">Topics and privacy</a>
+      )}
+    </div>
+    <p class="text-sm text-muted" data-nl-status role="status" aria-live="polite"></p>
+  </form>
+</section>
+
+<script>
+  document.querySelectorAll<HTMLFormElement>('[data-nl-form]').forEach((form) => {
+    if (form.dataset.nlBound) return;
+    form.dataset.nlBound = '1';
+    const status = form.querySelector<HTMLElement>('[data-nl-status]');
+    const email = form.querySelector<HTMLInputElement>('input[name="email"]');
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      if (status) status.textContent = 'Sending confirm link…';
+      if (email) {
+        email.removeAttribute('aria-invalid');
+        email.removeAttribute('aria-describedby');
+      }
+      const data = new FormData(form);
+      const topics = [...form.querySelectorAll<HTMLInputElement>('input[name="topics"]:checked')].map((box) => box.value);
+      const res = await fetch('/api/newsletter/subscribe', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+          email: String(data.get('email') ?? ''),
+          topics,
+          website: String(data.get('website') ?? ''),
+        }),
+      }).catch(() => null);
+      if (!res) {
+        if (status) status.textContent = 'Network error. Try again.';
+        email?.focus();
+        return;
+      }
+      const body = (await res.json().catch(() => ({}))) as { message?: string; error?: string };
+      if (res.status === 404) {
+        if (status) {
+          status.textContent =
+            'This static build does not store email. The hosted mailer (NEWSLETTER_ENABLED or ACCOUNTS_ENABLED) sends the confirm link.';
+        }
+        return;
+      }
+      if (status) status.textContent = body.message || (res.ok ? 'Check your inbox.' : 'Could not subscribe.');
+      if (!res.ok && email) {
+        email.setAttribute('aria-invalid', 'true');
+        if (status) {
+          status.id = status.id || 'nl-status';
+          email.setAttribute('aria-describedby', status.id);
+        }
+        email.focus();
+      }
+    });
+  });
+</script>

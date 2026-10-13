@@ -12,6 +12,8 @@ export const GET: APIRoute = async ({ cookies }) => {
   const { stackUpdates } = await import('../../lib/stack-updates');
   const user = await getSessionUser(cookies);
   if (!user) return Response.json({ user: null }, { status: 401 });
+  const { getNewsletterStore } = await import('../../server/newsletter-store');
+  const newsletter = getNewsletterStore().getByEmail(user.email);
   const rows = await listRigs(user.id);
   const catalog = stackUpdates();
   return Response.json({
@@ -22,6 +24,8 @@ export const GET: APIRoute = async ({ cookies }) => {
       notifyWeekly: user.notifyWeekly,
       notifyReplies: user.notifyReplies,
       role: user.role,
+      newsletterTopics: newsletter?.confirmed ? newsletter.topics : [],
+      newsletterConfirmed: Boolean(newsletter?.confirmed),
     },
     rigs: rows.map((row) => ({
       ...toPublic(row),
