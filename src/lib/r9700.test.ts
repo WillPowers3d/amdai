@@ -1,5 +1,8 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+import { dirname, join } from 'node:path';
 import { runs } from './run-card-data';
 import { DIMM_KIT_GB } from './calculator';
 import { COMPARE_Q3 } from './local-desktop-compare';
@@ -83,5 +86,20 @@ describe('R9700 measured hero', () => {
     });
     assert.equal(ld['@type'], 'TechArticle');
     assert.doesNotMatch(JSON.stringify(ld), /aggregateRating|offers|"price"/i);
+  });
+
+  it('is linked from budget, calculator, and hardware', () => {
+    const here = dirname(fileURLToPath(import.meta.url));
+    const files = [
+      join(here, '../pages/budget.astro'),
+      join(here, '../pages/calculator.astro'),
+      join(here, '../content/guides/hardware.mdx'),
+    ];
+    for (const file of files) {
+      assert.match(readFileSync(file, 'utf8'), /\/gpus\/r9700/, file);
+    }
+    for (const required of ['/compare', '/results', '/faq', '/glossary']) {
+      assert.ok(r9700Hrefs().includes(required), required);
+    }
   });
 });

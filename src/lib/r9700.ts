@@ -119,9 +119,29 @@ export const R9700_MORE: R9700MoreLink[] = [
     body: '33-card local-desktop matrix. Every cell links a run card.',
   },
   {
+    href: '/compare',
+    label: 'Compare 35B',
+    body: 'Cited decisions from the overnight cards — layout and quant.',
+  },
+  {
     href: '/compare/one-vs-two-gpu',
     label: 'One vs two GPU',
     body: 'Same 35B, one R9700 versus a split. Decode winner per row.',
+  },
+  {
+    href: '/results',
+    label: 'Run cards',
+    body: 'Official amdai-bench/run@1 pages. Every number on this sheet cites one.',
+  },
+  {
+    href: '/faq',
+    label: 'FAQ',
+    body: 'Which GPU, Ubuntu vs Windows, and when Q3 is only an estimate.',
+  },
+  {
+    href: '/glossary',
+    label: 'Glossary',
+    body: 'Plain-English ROCm, GGUF, Q3–Q6, KV cache, run cards.',
   },
   {
     href: '/compare/q4-q5-q6',
@@ -171,8 +191,12 @@ export const REQUIRED_R9700_HREFS = [
   `/recipes/${R9700_DAILY_RECIPE}`,
   '/stack-lab',
   '/benchmarks',
+  '/compare',
   '/compare/one-vs-two-gpu',
   '/compare/q4-q5-q6',
+  '/results',
+  '/faq',
+  '/glossary',
   '/two-r9700',
   '/flash-daily',
   '/qwen',
@@ -345,8 +369,6 @@ export function r9700Hrefs(): string[] {
     ...R9700_MORE.map((row) => ({ href: row.href, label: row.label })),
     { href: '/gpus', label: 'GPU directory' },
     { href: '/disclosure', label: 'Disclosure' },
-    { href: '/compare', label: 'Compare 35B' },
-    { href: '/results', label: 'Run cards' },
   ];
   return [...new Set(links.map((link) => (link.href.split('?')[0] ?? link.href).split('#')[0] ?? link.href))];
 }

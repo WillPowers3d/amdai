@@ -6,7 +6,7 @@ updated: 2026-10-12
 order: 6
 ---
 
-The card is a 300&nbsp;W-class workstation part, not a silent HTPC dongle. Plan the box like a small workstation.
+The card is a 300&nbsp;W-class workstation part, not a silent HTPC dongle. Plan the box like a small workstation. Measured 35B decode, VRAM, and system RAM for this SKU: [R9700 measured page](/gpus/r9700).
 
 ## Official R9700 figures (AMD product page)
 
@@ -44,7 +44,7 @@ Weights + KV cache + batch share 32 GB. **Verify per file and context.** These a
 
 | Situation | 32 GB often means |
 | --- | --- |
-| Qwen3.6-35B-A3B UD-Q5_K_XL, 262K, f16 KV | Our one-card daily driver — see [stacks](/stacks) |
+| Qwen3.6-35B-A3B UD-Q5_K_XL, 262K, f16 KV | Our one-card daily driver — see [stacks](/stacks) and the [R9700 measured page](/gpus/r9700) |
 | Same at Q8 / even longer cache | Tight; measure. Q3 is estimate/community; Q1/Q2 stay off. |
 | Qwen 3.8 Flash UD-Q6_K_XL | Publisher file ~169 GB — expect RAM to hold most of it on 32 GB |
 | Dense 70B | Aggressive quant, short context, or another GPU |
