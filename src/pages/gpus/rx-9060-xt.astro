@@ -1,0 +1,65 @@
+---
+import Base from '../../layouts/Base.astro';
+import BuyButtons from '../../components/BuyButtons.astro';
+import ConsumerGpuSheet from '../../components/ConsumerGpuSheet.astro';
+import HowWeTest from '../../components/HowWeTest.astro';
+import NextSteps from '../../components/NextSteps.astro';
+import OpenInStackLab from '../../components/OpenInStackLab.astro';
+import RecipeTable from '../../components/RecipeTable.astro';
+import { consumerRecipePage } from '../../lib/consumer-gpu';
+import { gpuPageById } from '../../lib/gpu-pages';
+import { recipes } from '../../lib/recipes-data';
+import { HOUSE_STACK_LAB } from '../../lib/stack-lab-open';
+
+const sheet = consumerRecipePage('rx9060xt');
+const directory = gpuPageById(recipes, 'rx9060xt');
+if (!directory) throw new Error('missing RX 9060 XT GPU directory row');
+---
+
+<Base title={sheet.title} description={sheet.description}>
+  <main id="main" class="mx-auto max-w-6xl px-4 py-10 sm:px-6">
+    <p class="kicker">
+      <a class="underline decoration-accent/40" href="/gpus">GPU directory</a>
+      · {directory.family} · {directory.arch} · {directory.gfx}
+    </p>
+    <p class="mt-3 kicker">Cited, not measured on local-desktop</p>
+    <h1 class="display mt-3 text-4xl sm:text-5xl">{sheet.name}</h1>
+    <p class="mt-4 max-w-3xl text-lg leading-relaxed text-muted">{sheet.lead}</p>
+    <div class="mt-6 flex flex-wrap gap-3">
+      <a class="btn-primary" href={sheet.calculatorHref}>Open in calculator</a>
+      <a class="btn-secondary" href="/gpus/r9700">R9700 measured page</a>
+      <a class="btn-secondary" href="/gpus/rx-9070-xt">RX 9070 XT sheet</a>
+      <a class="btn-secondary" href="/compare/radeon-vs-nvidia">Radeon vs NVIDIA</a>
+      <a class="btn-ghost" href="/gpus">All cards</a>
+      <a class="btn-ghost" href="/setup">First-run setup</a>
+      <a class="btn-ghost" href="/models">Models</a>
+      <a class="btn-ghost" href="/faq">FAQ</a>
+      <a class="btn-ghost" href="/contribute">Contribute a recipe</a>
+    </div>
+    <div class="mt-4">
+      <OpenInStackLab {...HOUSE_STACK_LAB.doctor} />
+    </div>
+    <div class="mt-4">
+      <HowWeTest />
+    </div>
+    <ConsumerGpuSheet sheet={sheet} />
+    <BuyButtons product="rx9060xt" />
+
+    <section class="mt-12" aria-labelledby="config-heading">
+      <h2 id="config-heading" class="font-serif text-3xl">Configurations we have</h2>
+      <p class="mt-3 max-w-2xl text-sm text-muted">
+        No first-party amdai-bench/run@1 card exists for this SKU. llama.cpp first.
+        Empty cells stay empty. Fit numbers on this page are calculator estimates.
+        Shopper RAM lines stay <strong>Minimum system RAM needed</strong> and
+        <strong>RAM needed at full context</strong> — labeled estimate until measured.
+      </p>
+      <div class="mt-6">
+        <RecipeTable
+          recipes={directory.recipes}
+          empty="No tested recipe yet — contribute. This card stays listed so the gap is visible."
+        />
+      </div>
+    </section>
+    <NextSteps path="/gpus/rx-9060-xt" />
+  </main>
+</Base>

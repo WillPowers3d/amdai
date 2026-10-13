@@ -48,6 +48,8 @@ export default defineConfig({
     '/two-r9700': '/qwen36-dual',
     '/gpus/rx9070xt': '/gpus/rx-9070-xt',
     '/gpus/rx9070-xt': '/gpus/rx-9070-xt',
+    '/gpus/rx9060xt': '/gpus/rx-9060-xt',
+    '/gpus/rx9060-xt': '/gpus/rx-9060-xt',
   },
   markdown: {
     shikiConfig: {
