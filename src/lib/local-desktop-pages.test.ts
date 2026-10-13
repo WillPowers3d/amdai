@@ -134,6 +134,7 @@ describe('Strata deep dive', () => {
 describe('nav for the new pages', () => {
   it('lists /qwen36-dual and /flash-daily', () => {
     assert.ok(primaryNav.some((item) => item.href === '/qwen36-dual'));
+    assert.ok(primaryNav.some((item) => item.href === '/multi-gpu'));
     assert.ok(primaryNav.some((item) => item.href === '/flash-daily'));
     assert.ok(primaryNav.some((item) => item.href === '/flash-ram-offload'));
     assert.ok(primaryNav.some((item) => item.href === '/glossary'));

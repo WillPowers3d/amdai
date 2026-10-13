@@ -78,6 +78,7 @@ export const primaryNav: NavItem[] = [
   { href: '/stacks', label: 'Stacks', description: 'Daily driver and fast-agent cards from our test rig', group: 'path' },
   { href: '/flash-daily', label: 'Flash daily driver', description: 'Qwen 3.8 Flash VRAM + DDR5 offload at Q3–Q6, full 262K', group: 'path' },
   { href: '/qwen36-dual', label: '35B on two cards', description: 'Split vs two copies of UD-Q5_K_XL on two R9700s — measured on local-desktop', group: 'path' },
+  { href: '/multi-gpu', label: 'Dual / multi-GPU', description: 'When a second R9700 helps or hurts — llama.cpp first, cited local-desktop 35B and Flash', group: 'path' },
   { href: '/stack-lab', label: 'Stack Lab', description: 'Ubuntu 24.04+ companion — packages not published yet; records amdai-bench cards', group: 'path' },
   { href: '/calculator', label: 'Calculator', description: 'Size a model, ask what a Radeon can run, or read a speed floor — Q3 through BF16', group: 'tools' },
   { href: '/budget', label: 'Budget', description: 'Starter → Pro Radeon builds, no invented prices', group: 'tools' },

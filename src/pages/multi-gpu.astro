@@ -1,0 +1,399 @@
+---
+import Base from '../layouts/Base.astro';
+import Callout from '../components/Callout.astro';
+import NewsletterSignup from '../components/NewsletterSignup.astro';
+import NextSteps from '../components/NextSteps.astro';
+import SystemRamNeed from '../components/SystemRamNeed.astro';
+import { flashRamRow } from '../lib/flash-daily';
+import { flashDaily } from '../lib/flash-daily-data';
+import {
+  COMPARE_Q3,
+  COMPARE_Q3_CITE,
+  COMPARE_QUANTS,
+  DESKTOP2_KIT_GB,
+  FLASH_RERUN_NOTE,
+  MULTI_GPU_HARDWARE,
+  MULTI_GPU_INTRO_LINKS,
+  MULTI_GPU_LLAMA,
+  MULTI_GPU_MORE,
+  MULTI_GPU_NAME,
+  MULTI_GPU_OFFLOAD,
+  MULTI_GPU_QUANTS,
+  MULTI_GPU_SECTIONS,
+  MULTI_GPU_SOURCES,
+  MULTI_GPU_VLLM,
+  MULTI_GPU_WHEN,
+  Q6_4K_VARIANCE_NOTE,
+  SWEEP_REVERIFY,
+  local-desktop_KIT_GB,
+  multiGpuDaily256k,
+  multiGpuDailyRow,
+  multiGpuQuantRows,
+} from '../lib/multi-gpu';
+import { runs } from '../lib/run-card-data';
+import { officialLinks } from '../lib/site';
+import { local-desktopDual } from '../lib/local-desktop-dual-data';
+
+const daily = multiGpuDailyRow(runs);
+const at256 = multiGpuDaily256k(runs);
+const quant4k = multiGpuQuantRows(runs);
+const copies = local-desktopDual.copies;
+const split = local-desktopDual.split;
+const q6 = flashDaily.measured_q6_two_cards;
+const q6File = flashDaily.files.find((row) => row.short === 'Q6');
+const flashTwo = q6File ? flashRamRow('Q6', 2, q6File.file_gb) : null;
+const flashOne = q6File ? flashRamRow('Q6', 1, q6File.file_gb) : null;
+---
+
+<Base
+  title="Dual / multi-GPU"
+  description="When a second Radeon AI PRO R9700 helps or hurts: llama.cpp first, measured local-desktop 35B and Flash, plus cited PCIe and PSU. No invented tok/s."
+>
+  <main id="main" class="mx-auto max-w-3xl px-4 py-10 sm:px-6">
+    <a class="skip-link skip-to-multi-gpu-nav" href="#multi-gpu-sections">Skip to section nav</a>
+    <p class="kicker">Consumer Radeon · 2× R9700</p>
+    <h1 class="mt-3 font-serif text-4xl tracking-tight sm:text-5xl">{MULTI_GPU_NAME}</h1>
+    <p class="mt-4 text-lg leading-relaxed text-muted">
+      Two <strong class="text-ink">AMD Radeon AI PRO R9700</strong> cards (32 GB, gfx1201).
+      This is the consumer guide: when the second card helps, how llama.cpp splits or pins,
+      and the hardware that actually matters. Numbers are official local-desktop
+      <code class="font-mono text-ink">amdai-bench/run@1</code> cards, the two-card soak, or Flash Q6.
+      Anything unmeasured is labeled an estimate with a cite. We do not invent tok/s or prices.
+    </p>
+    <ul class="mt-4 flex flex-wrap gap-2">
+      {MULTI_GPU_INTRO_LINKS.map((link) => (
+        <li>
+          <a
+            class="inline-flex min-h-11 items-center rounded-full border border-line bg-canvas px-3 text-sm text-ink hover:border-accent/50 hover:text-accent-ink"
+            href={link.href}
+          >
+            {link.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+
+    <nav
+      id="multi-gpu-sections"
+      class="setup-sections sticky z-20 -mx-4 mt-8 border-y border-line bg-canvas/95 px-4 py-2 backdrop-blur-md sm:-mx-6 sm:px-6"
+      aria-label="Guide sections"
+    >
+      <p class="mb-2 font-mono text-[0.68rem] uppercase tracking-[0.16em] text-faint">Jump to section</p>
+      <ol class="flex flex-wrap gap-2">
+        {MULTI_GPU_SECTIONS.map((section) => (
+          <li>
+            <a
+              class="inline-flex min-h-11 items-center rounded-full border border-line bg-raised px-3 text-sm text-ink hover:border-accent/50 hover:text-accent-ink"
+              href={`#${section.id}`}
+            >
+              {section.label}
+            </a>
+          </li>
+        ))}
+      </ol>
+    </nav>
+
+    <Callout type="warn" title="Overnight sweep, 2026-10-12">
+      <p>{SWEEP_REVERIFY}</p>
+    </Callout>
+    <Callout type="warn" title="Flash / Strata / Q3 pending">
+      <p>{FLASH_RERUN_NOTE} Flash two-card points below are the earlier first-party Q6 set, not a new Desktop 2 run.</p>
+    </Callout>
+
+    <section id="when" class="mt-12 scroll-mt-36" aria-labelledby="when-heading">
+      <p class="kicker">Decision</p>
+      <h2 id="when-heading" class="mt-2 font-serif text-3xl tracking-tight">When a second card helps</h2>
+      <p class="mt-3 leading-relaxed text-muted">{MULTI_GPU_WHEN.lead}</p>
+      <p class="mt-3 leading-relaxed text-muted">{MULTI_GPU_WHEN.hurts}</p>
+      <p class="mt-3 leading-relaxed text-muted">{MULTI_GPU_WHEN.helpsFit}</p>
+      <p class="mt-3 leading-relaxed text-muted">{MULTI_GPU_WHEN.helpsSide}</p>
+      <p class="mt-3 leading-relaxed text-muted">{MULTI_GPU_WHEN.copies}</p>
+
+      <div class="mt-6 grid gap-4 sm:grid-cols-2">
+        <div class="card p-5">
+          <p class="text-faint">35B UD-Q5 · 1× 4K</p>
+          <p class="mt-1 font-serif text-3xl tabular-nums">{daily?.one.decode ?? 'not measured'}</p>
+          <p class="mt-1 text-xs text-faint">
+            {daily?.one.runIds[0] ? (
+              <a class="underline decoration-accent/40" href={`/results/${daily.one.runIds[0]}`}>{daily.one.runIds[0]}</a>
+            ) : (
+              'not measured'
+            )}
+          </p>
+        </div>
+        <div class="card p-5">
+          <p class="text-faint">35B UD-Q5 · split 4K</p>
+          <p class="mt-1 font-serif text-3xl tabular-nums">{daily?.both.decode ?? 'not measured'}</p>
+          <p class="mt-1 text-xs text-faint">
+            Slower than one card.
+            {daily?.both.runIds[0] ? (
+              <a class="underline decoration-accent/40" href={`/results/${daily.both.runIds[0]}`}> {daily.both.runIds[0]}</a>
+            ) : null}
+          </p>
+        </div>
+        <div class="card p-5">
+          <p class="text-faint">35B UD-Q5 · 1× 256K</p>
+          <p class="mt-1 font-serif text-3xl tabular-nums">{at256?.one.decode ?? 'not measured'}</p>
+          <p class="mt-1 text-xs text-faint">Still one card. Fits 32 GB at 262K.</p>
+        </div>
+        <div class="card p-5">
+          <p class="text-faint">35B UD-Q5 · split 256K</p>
+          <p class="mt-1 font-serif text-3xl tabular-nums">{split.single_request_tok_s} tok/s</p>
+          <p class="mt-1 text-xs text-faint">{split.note}</p>
+        </div>
+      </div>
+
+      <div class="card mt-6 overflow-x-auto">
+        <table class="table-lab min-w-[36rem]">
+          <caption>35B llama.cpp 4K decode on one R9700 versus a split. Official local-desktop cards.</caption>
+          <thead>
+            <tr>
+              <th scope="col">Quant</th>
+              <th scope="col">1× decode</th>
+              <th scope="col">Split decode</th>
+              <th scope="col">Cards</th>
+            </tr>
+          </thead>
+          <tbody>
+            {quant4k.map((row) => (
+              <tr>
+                <td class="font-medium">{row.quant}</td>
+                <td class="tabular-nums">{row.one.decode}</td>
+                <td class="tabular-nums">{row.both.decode}</td>
+                <td>
+                  {row.one.runIds[0] ? (
+                    <a class="underline decoration-accent/40" href={row.one.href}>1×</a>
+                  ) : (
+                    '—'
+                  )}
+                  {' · '}
+                  {row.both.runIds[0] ? (
+                    <a class="underline decoration-accent/40" href={row.both.href}>split</a>
+                  ) : (
+                    '—'
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p class="mt-3 text-sm text-muted">{Q6_4K_VARIANCE_NOTE}</p>
+
+      <dl class="card mt-6 grid gap-4 p-5 sm:grid-cols-3">
+        <div>
+          <dt class="text-faint">Two copies · per request</dt>
+          <dd class="mt-1 text-ink tabular-nums">{copies.per_request_tok_s} tok/s</dd>
+          <dd class="text-xs text-faint">About 100 tok/s · one copy per card</dd>
+        </div>
+        <div>
+          <dt class="text-faint">Total · 2 concurrent</dt>
+          <dd class="mt-1 text-ink tabular-nums">{copies.total_at_2_tok_s} tok/s</dd>
+          <dd class="text-xs text-faint">4–8 concurrent ~{copies.total_at_4_to_8_tok_s} tok/s</dd>
+        </div>
+        <div>
+          <dt class="text-faint">Soak</dt>
+          <dd class="mt-1 text-ink tabular-nums">{copies.soak_errors} errors</dd>
+          <dd class="text-xs text-faint">{copies.soak_requests} requests · {copies.soak_minutes} minutes</dd>
+        </div>
+      </dl>
+      <p class="mt-3 text-sm text-muted">
+        Full soak table:
+        <a class="underline decoration-accent/40" href="/qwen36-dual">35B on two cards</a>.
+        Matrix:
+        <a class="underline decoration-accent/40" href="/compare/one-vs-two-gpu">one vs split</a>.
+      </p>
+
+      <div class="card mt-6 p-5">
+        <p class="kicker">Flash · two cards</p>
+        <h3 class="mt-2 text-xl tracking-tight">Qwen 3.8 Flash UD-Q6_K_XL</h3>
+        <p class="mt-3 text-sm leading-relaxed text-muted">
+          Dual-GPU preset on this site is the measured two-card Flash Q6, not a 35B split.
+          Strata <strong class="text-ink">{q6.strata_8k_tok_s} tok/s</strong> at 8K and 32K,
+          <strong class="text-ink">{q6.strata_100k_tok_s} tok/s</strong> at 100K.
+          Prior first-party: {q6.prior_first_party}
+        </p>
+        <p class="mt-3 text-sm text-muted">
+          Side-by-side combo: Flash single-GPU + 35B single-GPU, each pinned to one card.
+          That layout is not a new tok/s card — read
+          <a class="underline decoration-accent/40" href="/flash-daily">Flash daily</a>
+          and the 35B one-card cells above.
+        </p>
+      </div>
+    </section>
+
+    <section id="llamacpp" class="mt-12 scroll-mt-36" aria-labelledby="llamacpp-heading">
+      <p class="kicker">Engine · default</p>
+      <h2 id="llamacpp-heading" class="mt-2 font-serif text-3xl tracking-tight">llama.cpp first</h2>
+      <p class="mt-3 leading-relaxed text-muted">{MULTI_GPU_LLAMA.lead}</p>
+      <ul class="mt-6 space-y-4 text-sm leading-relaxed text-muted">
+        <li>
+          <strong class="text-ink">Layer split.</strong> {MULTI_GPU_LLAMA.splitLayer}
+        </li>
+        <li>
+          <strong class="text-ink">Row split.</strong> {MULTI_GPU_LLAMA.splitRow}
+        </li>
+        <li>
+          <strong class="text-ink"><code class="font-mono text-ink">--tensor-split</code>.</strong> {MULTI_GPU_LLAMA.tensorSplit}
+        </li>
+        <li>
+          <strong class="text-ink"><code class="font-mono text-ink">--main-gpu</code>.</strong> {MULTI_GPU_LLAMA.mainGpu}
+        </li>
+        <li>
+          <strong class="text-ink">Vulkan devices.</strong> {MULTI_GPU_LLAMA.vulkan}
+        </li>
+        <li>
+          <strong class="text-ink">HIP / ROCm devices.</strong> {MULTI_GPU_LLAMA.hip}
+        </li>
+        <li>
+          <strong class="text-ink">Pin one model per card.</strong> {MULTI_GPU_LLAMA.pin}
+        </li>
+      </ul>
+      <p class="mt-4 text-sm text-muted">
+        Docs:
+        <a class="underline decoration-accent/40" href={officialLinks.llamaCpp}>ggml-org/llama.cpp</a>.
+        Install path:
+        <a class="underline decoration-accent/40" href="/backends/llamacpp">llama.cpp</a>
+        ·
+        <a class="underline decoration-accent/40" href="/tutorials/run-local-llm">run a local Qwen</a>
+        ·
+        <a class="underline decoration-accent/40" href="/tutorials/verify-rocm">verify ROCm</a>.
+      </p>
+    </section>
+
+    <section id="vllm" class="mt-12 scroll-mt-36" aria-labelledby="vllm-heading">
+      <p class="kicker">Engine · secondary</p>
+      <h2 id="vllm-heading" class="mt-2 font-serif text-3xl tracking-tight">vLLM tensor parallel</h2>
+      <p class="mt-3 leading-relaxed text-muted">{MULTI_GPU_VLLM.lead}</p>
+      <p class="mt-3 leading-relaxed text-muted">{MULTI_GPU_VLLM.measured}</p>
+      <p class="mt-3 leading-relaxed text-muted">{MULTI_GPU_VLLM.estimate}</p>
+      <p class="mt-4 text-sm text-muted">
+        <a class="underline decoration-accent/40" href={officialLinks.vllmUpstream}>vLLM GPU install</a>
+        ·
+        <a class="underline decoration-accent/40" href={officialLinks.vllmAmd}>vLLM on AMD ROCm</a>
+        ·
+        <a class="underline decoration-accent/40" href="/backends/vllm">vLLM on this site</a>.
+      </p>
+    </section>
+
+    <section id="hardware" class="mt-12 scroll-mt-36" aria-labelledby="hardware-heading">
+      <p class="kicker">Board · power · air</p>
+      <h2 id="hardware-heading" class="mt-2 font-serif text-3xl tracking-tight">Hardware</h2>
+      <p class="mt-3 leading-relaxed text-muted">{MULTI_GPU_HARDWARE.lead}</p>
+      <h3 class="mt-8 font-serif text-2xl tracking-tight">PCIe lanes and bifurcation</h3>
+      <p class="mt-3 leading-relaxed text-muted">{MULTI_GPU_HARDWARE.pcie}</p>
+      <p class="mt-3 text-sm text-muted">
+        <a class="underline decoration-accent/40" href="/bios">BIOS notes</a>
+        ·
+        <a class="underline decoration-accent/40" href="https://www.amd.com/en/products/processors/chipsets/am5.html">AMD AM5 chipset table</a>
+        ·
+        <a class="underline decoration-accent/40" href="https://rocm.docs.amd.com/projects/radeon-ryzen/en/latest/docs/install/installrad/native_linux/mgpu.html">ROCm on Radeon mGPU</a>.
+      </p>
+      <h3 class="mt-8 font-serif text-2xl tracking-tight">Slot spacing and cooling</h3>
+      <p class="mt-3 leading-relaxed text-muted">{MULTI_GPU_HARDWARE.cooling}</p>
+      <p class="mt-3 text-sm text-muted">
+        Longer notes:
+        <a class="underline decoration-accent/40" href="/hardware">hardware</a>.
+      </p>
+      <h3 class="mt-8 font-serif text-2xl tracking-tight">PSU sizing</h3>
+      <p class="mt-3 leading-relaxed text-muted">{MULTI_GPU_HARDWARE.psu}</p>
+      <p class="mt-3 text-sm text-muted">
+        <a class="underline decoration-accent/40" href={officialLinks.product}>AMD R9700 product page</a>
+        — 300 W TBP, 750 W minimum, double slot, PCIe 5.0 x16. No prices on this page.
+      </p>
+    </section>
+
+    <section id="quants" class="mt-12 scroll-mt-36" aria-labelledby="quants-heading">
+      <p class="kicker">Q6 / Q5 / Q4 · Q3 estimate</p>
+      <h2 id="quants-heading" class="mt-2 font-serif text-3xl tracking-tight">Quants</h2>
+      <p class="mt-3 leading-relaxed text-muted">{MULTI_GPU_QUANTS.lead}</p>
+      <p class="mt-3 leading-relaxed text-muted">{MULTI_GPU_QUANTS.q3}</p>
+      <ul class="mt-6 grid gap-3 sm:grid-cols-2">
+        {COMPARE_QUANTS.map((quant) => (
+          <li class="rounded-2xl border border-line bg-raised/40 px-4 py-3 text-sm">
+            <strong class="text-ink">{quant}</strong>
+            <span class="text-muted"> — measured on the overnight 35B cards.</span>
+          </li>
+        ))}
+        <li class="rounded-2xl border border-dashed border-line bg-canvas px-4 py-3 text-sm">
+          <strong class="text-ink">{COMPARE_Q3}</strong>
+          <span class="text-muted"> — estimate. {COMPARE_Q3_CITE}.</span>
+        </li>
+      </ul>
+      <p class="mt-4 text-sm text-muted">
+        Side-by-side:
+        <a class="underline decoration-accent/40" href="/compare/q4-q5-q6">Q6 / Q5 / Q4 + Q3 estimate</a>
+        ·
+        <a class="underline decoration-accent/40" href="/quants">quant explainer</a>.
+      </p>
+    </section>
+
+    <section id="offload" class="mt-12 scroll-mt-36" aria-labelledby="offload-heading">
+      <p class="kicker">When weights miss VRAM</p>
+      <h2 id="offload-heading" class="mt-2 font-serif text-3xl tracking-tight">RAM offload</h2>
+      <p class="mt-3 leading-relaxed text-muted">{MULTI_GPU_OFFLOAD.lead}</p>
+      {flashTwo && flashOne && (
+        <div class="mt-6 grid gap-4">
+          <div>
+            <p class="text-sm font-medium text-ink">Flash UD-Q6_K_XL · two cards (estimate unless a peak is cited)</p>
+            <div class="mt-2">
+              <SystemRamNeed need={flashTwo.ram} />
+            </div>
+          </div>
+          <div>
+            <p class="text-sm font-medium text-ink">Flash UD-Q6_K_XL · one card</p>
+            <div class="mt-2">
+              <SystemRamNeed need={flashOne.ram} />
+            </div>
+          </div>
+        </div>
+      )}
+      <p class="mt-4 text-sm text-muted">
+        Change context on the
+        <a class="underline decoration-accent/40" href="/calculator?model=flash&quant=q6_k&ctx=262144&n=2&split=1">calculator</a>.
+        Launch shape:
+        <a class="underline decoration-accent/40" href="/flash-ram-offload">Flash RAM offload</a>.
+        The 35B daily driver does not offload weights — those RAM peaks are OS / runtime on the
+        {local-desktop_KIT_GB} GB kit.
+      </p>
+    </section>
+
+    <section id="desktop-2" class="mt-12 scroll-mt-36" aria-labelledby="desktop-2-heading">
+      <p class="kicker">Planned kit · not measured</p>
+      <h2 id="desktop-2-heading" class="mt-2 font-serif text-3xl tracking-tight">Desktop 2</h2>
+      <p class="mt-3 leading-relaxed text-muted">{MULTI_GPU_OFFLOAD.desktop2}</p>
+      <p class="mt-3 text-sm text-muted">
+        {DESKTOP2_KIT_GB} GB is on the calculator DIMM list. Until that box records an
+        <code class="font-mono text-ink">amdai-bench/run@1</code> card, every Desktop 2 speed stays not measured.
+      </p>
+    </section>
+
+    <section id="more" class="mt-12 scroll-mt-36" aria-labelledby="more-heading">
+      <p class="kicker">Keep reading</p>
+      <h2 id="more-heading" class="mt-2 font-serif text-3xl tracking-tight">More pages</h2>
+      <ul class="mt-6 grid gap-3">
+        {MULTI_GPU_MORE.map((row) => (
+          <li>
+            <a class="card block p-5 hover:border-accent/40" href={row.href}>
+              <p class="font-medium text-ink">{row.label}</p>
+              <p class="mt-1 text-sm text-muted">{row.body}</p>
+            </a>
+          </li>
+        ))}
+      </ul>
+      <h3 class="mt-10 font-serif text-2xl tracking-tight">Citations</h3>
+      <ul class="mt-4 space-y-2 text-sm">
+        {MULTI_GPU_SOURCES.map((source) => (
+          <li>
+            <a class="underline decoration-accent/40" href={source.href}>{source.title}</a>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <NextSteps path="/multi-gpu" />
+    <div class="mt-12">
+      <NewsletterSignup variant="article" />
+    </div>
+  </main>
+</Base>

@@ -299,6 +299,12 @@ setMeta(
   'Split versus two copies of UD-Q5_K_XL on two R9700s — soak and concurrency from official local-desktop cards.',
 );
 setMeta(
+  '/multi-gpu',
+  'Dual / multi-GPU',
+  'When a second Radeon AI PRO R9700 helps or hurts: llama.cpp first, measured local-desktop 35B and Flash, plus cited PCIe and PSU. No invented tok/s.',
+);
+setDate('/multi-gpu', '2026-10-13');
+setMeta(
   '/flash-daily',
   'Flash daily driver',
   'Qwen 3.8 Flash VRAM and DDR5 offload at Q3–Q6, full 262K. Pending DDR5 rerun is labeled on the page.',

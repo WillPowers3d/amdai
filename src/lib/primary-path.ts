@@ -40,6 +40,7 @@ export const PRIMARY_PATH: PathStep[] = [
       { href: '/qwen', label: 'Qwen compare' },
       { href: '/flash-daily', label: 'Flash daily' },
       { href: '/qwen36-dual', label: 'Two cards' },
+      { href: '/multi-gpu', label: 'Dual / multi-GPU' },
     ],
   },
   {
@@ -126,6 +127,13 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
     { href: '/benchmarks', label: 'Benchmarks' },
     { href: '/compare', label: 'Compare 35B' },
     { href: '/stack-lab', label: 'Stack Lab' },
+  ],
+  '/multi-gpu': [
+    { href: '/gpus/r9700', label: 'R9700 measured page' },
+    { href: '/qwen36-dual', label: '35B on two cards' },
+    { href: '/flash-daily', label: 'Flash daily' },
+    { href: '/compare/one-vs-two-gpu', label: 'One vs split' },
+    { href: '/setup', label: 'First-run setup' },
   ],
   '/benchmarks': [
     { href: '/results', label: 'Run cards' },

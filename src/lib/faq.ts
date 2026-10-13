@@ -212,8 +212,9 @@ export const FAQ_ENTRIES: FaqItem[] = [
     group: 'speed-vram',
     question: 'Will two R9700s double decode speed?',
     answer:
-      'Not automatically. On the overnight cards, one R9700 UD-Q5_K_XL at 4K decodes 102.39 tok/s; the two-card split is 82.78 tok/s. A split pays an RCCL / topology tax. Two copies of the same server can serve two requests; that is not “double one chat.” Measure on /compare/one-vs-two-gpu and /qwen36-dual before you buy a second card for speed.',
+      'Not automatically. On the overnight cards, one R9700 UD-Q5_K_XL at 4K decodes 102.39 tok/s; the two-card split is 82.78 tok/s. A split pays an RCCL / topology tax. Two copies of the same server can serve two requests; that is not “double one chat.” Read /multi-gpu, then measure on /compare/one-vs-two-gpu and /qwen36-dual before you buy a second card for speed.',
     links: [
+      { href: '/multi-gpu', label: 'Dual / multi-GPU' },
       { href: '/compare/one-vs-two-gpu', label: 'One vs two GPU' },
       { href: '/qwen36-dual', label: '35B on two cards' },
       { href: '/benchmarks', label: 'Benchmarks' },

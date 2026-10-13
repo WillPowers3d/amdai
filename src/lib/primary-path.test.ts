@@ -93,6 +93,7 @@ describe('primary path and nav IA', () => {
       '/setup': '../pages/setup.astro',
       '/faq': '../pages/faq.astro',
       '/gpus/r9700': '../pages/gpus/r9700.astro',
+      '/multi-gpu': '../pages/multi-gpu.astro',
       '/benchmarks': '../pages/benchmarks.astro',
       '/compare': '../pages/compare/index.astro',
       '/stack-lab': '../pages/stack-lab.astro',

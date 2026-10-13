@@ -64,6 +64,7 @@ Public site URL is `https://amdai.net` (`site` in `astro.config.mjs`; override w
 | `/compare/one-vs-two-gpu` | One R9700 vs split: decode, prefill, VRAM, system RAM |
 | `/compare/q4-q5-q6` | Same 35B quants side by side; Q3 column labeled estimate |
 | `/qwen36-dual` | 35B on two R9700s — split vs two copies, measured soak |
+| `/multi-gpu` | Dual / multi-GPU — when a second R9700 helps, llama.cpp flags, cited PCIe and PSU |
 | `/flash-daily` | Flash daily driver — Q3–Q6 VRAM + DDR5 offload at 262K |
 | `/flash-ram-offload` | Flash on DDR5 — system RAM at 262K, 128/192/256 kits, measured DIMM speed, expert-offload launch |
 | `/backends/strata` | Strata deep dive — expert cache, prefill limits, MTP is Q2 |

@@ -163,8 +163,9 @@ export const GLOSSARY: GlossaryEntry[] = [
       'Two R9700s can run two full copies of a model (two clients) or one split / tensor-parallel copy (one larger or shared request). They are different layouts; AMDai does not treat “two GPUs” as free 2× speed.',
     why: 'On local-desktop, two copies of UD-Q5_K_XL sit near 100 tok/s per request. A split 4K pass is 82.78 tok/s total versus 102.39 on one card. Prefer two copies unless you deliberately need one shared context. House rule: one LLM per GPU unless you combine on purpose.',
     deeper:
-      'Layouts on amdai-bench cards: single, split, dual-instance. Two copies: about 100 tok/s per request, 172 at two concurrent, 177 at 4–8, 423 soak requests, 0 errors. Split 4K max total 82.78 versus 102.39 on one card.',
+      'Layouts on amdai-bench cards: single, split, dual-instance. Two copies: about 100 tok/s per request, 172 at two concurrent, 177 at 4–8, 423 soak requests, 0 errors. Split 4K max total 82.78 versus 102.39 on one card. Consumer guide: /multi-gpu.',
     links: [
+      { href: '/multi-gpu', label: 'Dual / multi-GPU' },
       { href: '/qwen36-dual', label: '35B on two cards' },
       { href: '/compare/one-vs-two-gpu', label: 'One vs split' },
       { href: '/calculator', label: 'Calculator' },

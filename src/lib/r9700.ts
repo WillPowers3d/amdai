@@ -149,6 +149,11 @@ export const R9700_MORE: R9700MoreLink[] = [
     body: 'Quant side-by-side. Q3 stays a labeled estimate.',
   },
   {
+    href: '/multi-gpu',
+    label: 'Dual / multi-GPU',
+    body: 'When a second R9700 helps or hurts — llama.cpp flags, PCIe, PSU. Desktop 2 192 GB is planned, not measured.',
+  },
+  {
     href: '/two-r9700',
     label: 'Two R9700s',
     body: 'Split versus two copies. A split is not two chats.',
@@ -197,6 +202,7 @@ export const REQUIRED_R9700_HREFS = [
   '/results',
   '/faq',
   '/glossary',
+  '/multi-gpu',
   '/two-r9700',
   '/flash-daily',
   '/qwen',

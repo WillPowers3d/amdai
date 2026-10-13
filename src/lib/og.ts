@@ -184,6 +184,12 @@ export const OG_CARDS: OgCard[] = [
     alt: 'AMDai 35B on two R9700s — split vs two copies',
   },
   {
+    slug: 'multi-gpu',
+    title: 'Dual / multi-GPU',
+    lede: 'When a second R9700 helps. llama.cpp first',
+    alt: 'AMDai dual / multi-GPU — when a second R9700 helps',
+  },
+  {
     slug: 'benchmarks',
     title: 'R9700 benchmarks',
     lede: 'First-party tok/s. No leaderboard spam',

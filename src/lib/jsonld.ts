@@ -378,7 +378,8 @@ export function pageJsonLd(input: {
     path === '/troubleshooting' ||
     path === '/maintain' ||
     path === '/quants' ||
-    path === '/gpus/r9700';
+    path === '/gpus/r9700' ||
+    path === '/multi-gpu';
   if (article && dates) {
     nodes.push(
       techArticleJsonLd({

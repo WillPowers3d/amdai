@@ -34,6 +34,7 @@ const ALLOWED_HREFS = new Set([
   '/gpus/r9700',
   '/hardware',
   '/models',
+  '/multi-gpu',
   '/quants',
   '/qwen',
   '/qwen36-dual',

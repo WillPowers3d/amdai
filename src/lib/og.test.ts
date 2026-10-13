@@ -42,6 +42,7 @@ describe('OG catalog', () => {
     assert.equal(ogSlug('/setup'), 'setup');
     assert.equal(ogSlug('/stack-lab'), 'stack-lab');
     assert.equal(ogSlug('/faq'), 'faq');
+    assert.equal(ogSlug('/multi-gpu'), 'multi-gpu');
     assert.equal(ogSlug('/accessibility'), 'default');
     assert.equal(ogSlug('/privacy'), 'default');
     assert.equal(ogImagePath('/setup'), '/og/setup.png');

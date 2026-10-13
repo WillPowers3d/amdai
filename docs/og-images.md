@@ -37,6 +37,7 @@ Required slugs (must exist): `home`, `gpus-r9700`, `benchmarks`, `compare`, `cal
 | `gpus` | `/gpus`, other `/gpus/<id>`, `/models`, `/recipes/<id>` | no |
 | `compare-one-vs-two-gpu` | `/compare/one-vs-two-gpu` | 1× vs split |
 | `compare-q4-q5-q6` | `/compare/q4-q5-q6` | no (Q3 stays a labeled estimate) |
+| `multi-gpu` | `/multi-gpu` | no — cites measured pages; lede stays static |
 
 Other catalog slugs (`start`, `glossary`, `results`, `qwen`, …) follow the same file.
 

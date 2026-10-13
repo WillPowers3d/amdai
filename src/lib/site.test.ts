@@ -58,6 +58,7 @@ describe('accessibility statement', () => {
     assert.equal(ogSlug('/flash-daily'), 'flash-daily');
     assert.equal(ogSlug('/flash-ram-offload'), 'flash-ram-offload');
     assert.equal(ogSlug('/qwen36-dual'), 'qwen36-dual');
+    assert.equal(ogSlug('/multi-gpu'), 'multi-gpu');
     assert.equal(ogSlug('/benchmarks'), 'benchmarks');
     assert.equal(ogSlug('/gpus/r9700'), 'gpus-r9700');
     assert.equal(ogSlug('/gpus'), 'gpus');
