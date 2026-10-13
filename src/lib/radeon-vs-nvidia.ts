@@ -333,6 +333,7 @@ export const DECISION_CASES: DecisionCase[] = [
     links: [
       { href: '/calculator', label: 'Calculator' },
       { href: '/gpus/rx7900xtx', label: 'RX 7900 XTX sheet' },
+      { href: '/gpus/rx-9070-xt', label: 'RX 9070 XT sheet' },
       { href: '/quants', label: 'Quants' },
     ],
   },
@@ -382,6 +383,7 @@ export const REQUIRED_PAGE_HREFS = [
   '/gpus/rx7900xtx',
   '/gpus/rx7900xt',
   '/gpus/rx7800xt',
+  '/gpus/rx-9070-xt',
   '/gpus',
   '/benchmarks',
   '/results',
