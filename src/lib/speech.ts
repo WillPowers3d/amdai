@@ -364,7 +364,9 @@ export const SPEECH_ALONGSIDE = `
   (8 GB OS/desktop plus 16 GB headroom plus whatever the LLM offload needs)
   — labeled estimate, not a measured speech peak. Piper is a separate
   CPU/ONNX process unless a cited ROCm path appears. On a second card, read
-  /multi-gpu. We have not measured speech-plus-LLM on local-desktop.
+  /multi-gpu. Stack Lab’s Speech (STT + TTS) workload is the companion —
+  Lab Notes hands off with amdai-stack-lab:speech, not a house 35B recipe id.
+  We have not measured speech-plus-LLM on local-desktop.
 `.replace(/\s+/g, ' ').trim();
 
 const BANNED = /Qwen2\.5|Qwen3-8B/i;
@@ -425,6 +427,7 @@ export function assertSpeechValid(): string[] {
   if (!blob.includes(RAM_MIN_LABEL) || !blob.includes(RAM_FULL_LABEL)) {
     errors.push('RAM lines missing');
   }
+  if (!/amdai-stack-lab:speech/.test(blob)) errors.push('must cite the speech Stack Lab screen');
   if (!/unofficial/i.test(blob)) errors.push('Windows unofficial path must be marked');
   if (SPEECH_FIT_ROWS.some((row) => row.speed !== SPEECH_SPEED_LABEL)) {
     errors.push('every fit row must use the unmeasured speed label');

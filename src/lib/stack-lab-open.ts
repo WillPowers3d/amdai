@@ -28,6 +28,7 @@ export const STACK_LAB_SCREENS = [
   'support',
   'updates',
   'profile',
+  'speech',
 ] as const;
 
 export type StackLabScreen = (typeof STACK_LAB_SCREENS)[number];
@@ -193,6 +194,7 @@ export const HOUSE_STACK_LAB = {
   support: { screen: 'support' as const },
   rig: { screen: 'rig' as const },
   updates: { screen: 'updates' as const },
+  speech: { screen: 'speech' as const },
 };
 
 export function assertStackLabOpenValid(): string[] {
@@ -213,6 +215,9 @@ export function assertStackLabOpenValid(): string[] {
   if (openInStackLab({ screen: 'profile', id: 'qwen-abliterated' })) errors.push('must reject unknown profile');
   if (openInStackLab({ screen: 'recipes', id: 'qwen2.5-7b.llamacpp' })) errors.push('must reject banned model id');
   if (openInStackLab({ screen: 'doctor', id: 'nope' })) errors.push('doctor must not take an id');
+  if (openInStackLab({ screen: 'speech', id: 'nope' })) errors.push('speech must not take an id');
+  const speech = openInStackLab(HOUSE_STACK_LAB.speech);
+  if (!speech || speech.href !== stackLabHref('speech')) errors.push('speech workload handoff failed');
   if (openInStackLab({ screen: 'custom' as StackLabScreen })) errors.push('custom has no mapped Lab Notes page');
   if (isAllowlistedStackLabHref('amdai-stack-lab://recipes/qwen36-35b.llamacpp-vulkan.262k')) {
     errors.push('must reject invented :// shape');

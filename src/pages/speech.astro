@@ -3,6 +3,8 @@ import Base from '../layouts/Base.astro';
 import Callout from '../components/Callout.astro';
 import HowWeTest from '../components/HowWeTest.astro';
 import NextSteps from '../components/NextSteps.astro';
+import OpenInStackLab from '../components/OpenInStackLab.astro';
+import { HOUSE_STACK_LAB } from '../lib/stack-lab-open';
 import {
   SPEECH_ALONGSIDE,
   SPEECH_CITED_LABEL,
@@ -41,6 +43,9 @@ import { RAM_FULL_LABEL, RAM_MIN_LABEL } from '../lib/ram-surfaces';
     </ul>
     <div class="mt-4">
       <HowWeTest />
+    </div>
+    <div class="mt-4">
+      <OpenInStackLab {...HOUSE_STACK_LAB.speech} compact />
     </div>
 
     <Callout type="note" title="whisper.cpp first, not a chat engine">

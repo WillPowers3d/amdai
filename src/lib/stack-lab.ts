@@ -34,7 +34,7 @@ export const STACK_LAB_SECTIONS = [
 ] as const;
 
 export const STACK_LAB_OPEN_LEAD =
-  'Install Stack Lab, then Open in Stack Lab from these pages. Buttons use the documented amdai-stack-lab: screens (recipes, doctor, planner, library, support, profile). If the app is not installed, they fall back to this page’s install notes. The catalog is /recipes.json — Q4 and up, llama.cpp first.';
+  'Install Stack Lab, then Open in Stack Lab from these pages. Buttons use the documented amdai-stack-lab: screens (recipes, doctor, planner, library, support, profile, speech). If the app is not installed, they fall back to this page’s install notes. The catalog is /recipes.json — Q4 and up, llama.cpp first.';
 
 export const STACK_LAB_INTRO_LINKS: StackLabLink[] = [
   { href: '/setup', label: 'First-run setup' },
@@ -134,6 +134,17 @@ export const STACK_LAB_JOBS: StackLabJob[] = [
       { href: '/benchmarks', label: 'Benchmarks' },
     ],
   },
+  {
+    id: 'speech-stt-tts',
+    title: 'Speech (STT + TTS)',
+    body:
+      'whisper.cpp first for STT (Vulkan, same ggml family as llama.cpp — not llama-server /v1). Piper is the first TTS path. Lab Notes hands off with amdai-stack-lab:speech. Speeds stay not yet measured by AMDai. llama.cpp stays first for the chat sidecar.',
+    links: [
+      { href: '/speech', label: 'Speech on Radeon' },
+      { href: '/backends/llamacpp', label: 'llama.cpp' },
+      { href: '/wanted', label: 'Wanted' },
+    ],
+  },
 ];
 
 export const STACK_LAB_INSTALL = {
@@ -207,6 +218,12 @@ export const STACK_LAB_HANDOFFS: StackLabHandoff[] = [
     label: 'Backends',
     body: 'llama.cpp first. Stack Lab selects a profile; it does not replace the engine.',
   },
+  {
+    href: '/speech',
+    label: 'Speech on Radeon',
+    body:
+      'Cited whisper.cpp Vulkan STT plus Piper TTS. Open in Stack Lab uses amdai-stack-lab:speech. No house 35B recipe id. Speeds stay not yet measured by AMDai.',
+  },
 ];
 
 export const STACK_LAB_CLI = {
@@ -256,6 +273,7 @@ export const REQUIRED_STACK_LAB_HREFS = [
   '/disclosure',
   '/recipes.json',
   '/start',
+  '/speech',
 ] as const;
 
 const BANNED_VISIBLE = /Qwen2\.5|Qwen3-8B/i;
@@ -301,7 +319,8 @@ export function assertStackLabValid(): string[] {
   const blob = stackLabBlob();
   const hrefs = new Set(stackLabHrefs());
   if (STACK_LAB_INSTALL.published) errors.push('do not mark packages published without a real artifact');
-  if (STACK_LAB_JOBS.length < 8) errors.push('need the eight companion jobs');
+  if (STACK_LAB_JOBS.length < 9) errors.push('need the nine companion jobs');
+  if (!STACK_LAB_JOBS.some((job) => job.title === 'Speech (STT + TTS)')) errors.push('missing Speech job');
   if (!STACK_LAB_JOBS.some((job) => job.title === 'Check my rig')) errors.push('missing Check my rig');
   if (!STACK_LAB_JOBS.some((job) => job.title === 'Setup doctor')) errors.push('missing Setup doctor');
   if (!STACK_LAB_JOBS.some((job) => job.title === 'Model manager')) errors.push('missing Model manager');

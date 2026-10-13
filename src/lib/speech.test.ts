@@ -44,11 +44,12 @@ describe('local speech guide', () => {
     assert.equal(SPEECH_MODELS.length, 5);
   });
 
-  it('is a real page with NextSteps and no house Stack Lab profile', () => {
+  it('is a real page with NextSteps and the Speech Stack Lab workload CTA', () => {
     const page = readFileSync(join(here, '../pages/speech.astro'), 'utf8');
     assert.match(page, /NextSteps/);
-    assert.match(page, /href="\/stack-lab"/);
-    assert.doesNotMatch(page, /HOUSE_STACK_LAB|OpenInStackLab/);
+    assert.match(page, /OpenInStackLab/);
+    assert.match(page, /HOUSE_STACK_LAB\.speech/);
+    assert.doesNotMatch(page, /HOUSE_STACK_LAB\.(daily|flash|reliable|fastAgent)/);
     assert.doesNotMatch(page, /coming soon/i);
     assert.doesNotMatch(page, /Qwen2\.5|Qwen3-8B/);
   });

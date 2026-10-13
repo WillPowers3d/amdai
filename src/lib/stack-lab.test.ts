@@ -21,7 +21,7 @@ describe('Radeon Stack Lab', () => {
     assert.equal(STACK_LAB_NAME, 'Radeon Stack Lab');
     assert.equal(STACK_LAB_PUBLISHED, '2026-10-13');
     assert.equal(STACK_LAB_INSTALL.published, false);
-    assert.equal(STACK_LAB_JOBS.length, 8);
+    assert.equal(STACK_LAB_JOBS.length, 9);
     const hrefs = stackLabHrefs();
     for (const required of REQUIRED_STACK_LAB_HREFS) {
       assert.ok(hrefs.includes(required), required);
