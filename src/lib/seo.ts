@@ -531,13 +531,13 @@ setDate('/methodology', '2026-10-13');
 setMeta(
   '/contact',
   'Contact',
-  'Honest AMDai contact routes: contribute a sourced recipe, ROCm problems, and the forum when it is enabled. No invented inbox.',
+  'Honest AMDai contact routes: contribute a sourced recipe, ROCm problems, and the forum. No invented inbox.',
 );
 setDate('/contact', '2026-10-13');
 setMeta(
   '/terms',
   'Terms of use',
-  'Short AMDai terms: informational content, no warranty, you are responsible for hardware and BIOS changes, plus affiliate and privacy links.',
+  'Short AMDai terms: informational content, not legal advice, no warranty, hardware/BIOS at your risk, affiliate and privacy links.',
 );
 setDate('/terms', '2026-10-13');
 setMeta(
@@ -546,6 +546,7 @@ setMeta(
   'amdai-bench/run@1 is the first-party measurement schema on AMDai — schema JSON, run dump, and the pages that print those cards.',
 );
 setDate('/amdai-bench', '2026-10-13');
+setDate('/rss.xml', '2026-10-13');
 setMeta(
   '/privacy',
   'Privacy',

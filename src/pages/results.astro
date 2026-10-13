@@ -5,6 +5,7 @@ import RunCard from '../components/RunCard.astro';
 import { FLASH_RERUN_NOTE, RUN_SCHEMA, SWEEP_REVERIFY, officialAmdaiRuns, uniqueRunFilters } from '../lib/run-card';
 import { runs } from '../lib/run-card-data';
 import { AMDAI_BENCH_SCHEMA, AMDAI_BENCH_VERSION } from '../lib/results';
+import HowWeTest from '../components/HowWeTest.astro';
 
 const cards = runs;
 const options = uniqueRunFilters(cards);
@@ -30,6 +31,9 @@ const submittedCount = cards.filter((card) => !card.submitted_by.verified).lengt
       <a class="btn-secondary" href="/amdai-bench/runs.json">Download run JSON</a>
       <a class="btn-ghost" href="/amdai-bench/run@1.schema.json">JSON Schema</a>
       <a class="btn-ghost" href="/amdai-bench.v1.json">Derived v{AMDAI_BENCH_VERSION} catalog</a>
+    </div>
+    <div class="mt-4">
+      <HowWeTest />
     </div>
 
     <Callout type="warn" title="Flash / Strata / Q3 pending">

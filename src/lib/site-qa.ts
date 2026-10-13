@@ -412,6 +412,7 @@ export const REQUIRED_FOOTER_HREFS = [
   '/disclosure',
   '/accessibility',
   '/credits',
+  '/rss.xml',
 ] as const;
 
 export function checkFooterTrustLinks(index: DistIndex): QaIssue[] {
@@ -426,6 +427,25 @@ export function checkFooterTrustLinks(index: DistIndex): QaIssue[] {
   return issues;
 }
 
+export function checkRssFeed(index: DistIndex): QaIssue[] {
+  const file = resolveOnDisk(index.root, '/rss.xml');
+  if (!file) return [issue('link', '/rss.xml', 'Lab Notes feed /rss.xml missing')];
+  const xml = readFileSync(file, 'utf8');
+  const issues: QaIssue[] = [];
+  if (!xml.trimStart().startsWith('<?xml')) issues.push(issue('content', file, 'feed is not XML'));
+  if (!/<rss version="2.0"/i.test(xml)) issues.push(issue('content', file, 'feed must be RSS 2.0'));
+  if (!/<atom:link[^>]+rel=["']self["']/i.test(xml)) issues.push(issue('content', file, 'feed missing atom self link'));
+  if (!/<item>/i.test(xml)) issues.push(issue('content', file, 'feed has no items'));
+  if (!/AMDai/.test(xml)) issues.push(issue('brand', file, 'feed must name AMDai'));
+  if (!/\/blog\//.test(xml)) issues.push(issue('content', file, 'feed missing Lab Notes posts'));
+  if (!/\/results\//.test(xml)) issues.push(issue('content', file, 'feed missing run cards'));
+  if (BANNED_MODEL_VISIBLE.test(xml)) issues.push(issue('content', file, 'feed mentions Qwen2.5 or Qwen3-8B'));
+  for (const pat of Q4_FLOOR_PHRASES) {
+    if (pat.test(xml)) issues.push(issue('content', file, `feed banned Q4-floor phrase (${pat})`));
+  }
+  return issues;
+}
+
 export function runSiteQa(root: string, origin = SITE_ORIGIN_DEFAULT, configSource = ''): QaIssue[] {
   const index = indexDist(root, origin, configSource);
   return [
@@ -433,6 +453,7 @@ export function runSiteQa(root: string, origin = SITE_ORIGIN_DEFAULT, configSour
     ...checkSitemapAndRedirects(index),
     ...checkContent(index),
     ...checkFooterTrustLinks(index),
+    ...checkRssFeed(index),
   ];
 }
 

@@ -17,6 +17,7 @@ import {
   amdai,
   assertTrustValid,
   contactEmail,
+  contactEmailWarning,
   contactRoutes,
   trustHrefs,
 } from './trust';
@@ -31,7 +32,11 @@ describe('trust / E-E-A-T pack', () => {
     assert.equal(amdai.handle, 'amdai');
     assert.equal(amdai.rig, 'local-desktop');
     assert.match(ABOUT.rig.body, /256 GB DDR5-5200/);
+    assert.match(ABOUT.rig.body, /Strata/);
     assert.match(ABOUT.rig.body, /motherboard model is not published/i);
+    assert.match(ABOUT.what.body, /ROCm/);
+    assert.match(TERMS.lead, /not legal advice/i);
+    assert.ok(contactEmailWarning());
     assert.match(METHODOLOGY.cards.body, /llama\.cpp/);
     assert.match(METHODOLOGY.estimates.body, /UD-Q3_K_XL/);
     assert.match(METHODOLOGY.estimates.body, /estimate/i);
@@ -43,10 +48,11 @@ describe('trust / E-E-A-T pack', () => {
     assert.match(TERMS.lead, /informational/i);
     assert.equal(HOW_WE_TEST.href, '/methodology');
     const hrefs = trustHrefs();
-    for (const required of ['/about', '/methodology', '/contact', '/terms', '/contribute', '/amdai-bench', '/benchmarks', '/results']) {
+    for (const required of ['/about', '/methodology', '/contact', '/terms', '/contribute', '/amdai-bench', '/benchmarks', '/results', '/rss.xml', '/forum']) {
       assert.ok(hrefs.includes(required), required);
     }
-    assert.ok(!contactRoutes().some((row) => row.href === '/forum'));
+    assert.ok(contactRoutes().some((row) => row.href === '/forum'));
+    assert.ok(REQUIRED_FOOTER_HREFS.includes('/rss.xml'));
   });
 
   it('is in nav and sitemap with AboutPage JSON-LD and no prices', () => {
@@ -83,6 +89,7 @@ describe('trust / E-E-A-T pack', () => {
       join(here, '../pages/gpus/r9700.astro'),
       join(here, '../pages/qwen.astro'),
       join(here, '../pages/calculator.astro'),
+      join(here, '../pages/results.astro'),
     ];
     for (const file of files) {
       assert.match(readFileSync(file, 'utf8'), /How we test|HowWeTest|\/methodology/, file);

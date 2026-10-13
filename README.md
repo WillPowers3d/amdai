@@ -84,6 +84,7 @@ Public site URL is `https://amdai.net` (`site` in `astro.config.mjs`; override w
 | `/contact` | Honest routes — contribute, ROCm problems; email only if `CONTACT_EMAIL` is set |
 | `/terms` | Short terms of use — informational, no warranty, hardware/BIOS at your risk |
 | `/amdai-bench` | Schema hub — run@1 JSON, runs dump, links to results and methodology |
+| `/rss.xml` | Lab Notes RSS — blog posts, dated updates, and official run cards |
 | `/benchmarks/methodology` | Our pass/fail suite in our words |
 | `/api/v1/catalog.json` | Static recipe catalog |
 | `/api/v1/gpus/<id>.json` | Per-card JSON |

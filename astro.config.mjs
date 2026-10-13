@@ -29,6 +29,7 @@ export default defineConfig({
   integrations: [
     mdx(),
     sitemap({
+      customPages: [`${(process.env.SITE_URL || 'https://amdai.net').replace(/\/$/, '')}/rss.xml`],
       filter: (page) => !isSitemapExcluded(new URL(page).pathname),
       serialize(item) {
         const path = urlPath(new URL(item.url).pathname);

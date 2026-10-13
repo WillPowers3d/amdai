@@ -18,6 +18,7 @@ import {
   checkInternalLinks,
   checkSitemapAndRedirects,
   checkFooterTrustLinks,
+  checkRssFeed,
   REQUIRED_FOOTER_HREFS,
 } from './site-qa';
 
@@ -94,6 +95,8 @@ describe('site QA helpers', () => {
     for (const href of REQUIRED_FOOTER_HREFS) {
       assert.ok(footer.some((i) => i.message.includes(href)), href);
     }
+    const feed = checkRssFeed(index);
+    assert.ok(feed.some((i) => i.message.includes('/rss.xml')));
   });
 
   it('classifies external results without inventing citations', () => {

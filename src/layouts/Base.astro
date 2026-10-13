@@ -47,6 +47,7 @@ const jsonld = jsonLdScript(pageJsonLd({ pathname: path, title, description }));
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="canonical" href={canonical} />
     <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="alternate" type="application/rss+xml" title={`${site.wordmark} Lab Notes`} href="/rss.xml" />
     <link rel="alternate" type="application/rss+xml" title={`${site.wordmark} · ${site.name} updates`} href="/updates/rss.xml" />
     <link rel="preload" href="/fonts/geist-latin.woff2" as="font" type="font/woff2" crossorigin />
     <meta property="og:title" content={title} />

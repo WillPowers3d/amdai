@@ -11,6 +11,7 @@ import RunCard from '../../components/RunCard.astro';
 import { officialAmdaiRuns, runsForGpu, verifiedMeasured } from '../../lib/run-card';
 import { runs } from '../../lib/run-card-data';
 import { measuredRamHits } from '../../lib/measured-ram-data';
+import HowWeTest from '../../components/HowWeTest.astro';
 
 export function getStaticPaths() {
   return gpuPages(recipes)
@@ -47,6 +48,9 @@ const gpuRuns = officialAmdaiRuns(verifiedMeasured(runsForGpu(runs, page.id)));
       {page.id === 'r9700' && <a class="btn-secondary" href="/compare">Compare 35B</a>}
       {page.calcId && <a class="btn-primary" href={`/calculator?gpu=${page.calcId}`}>Open in calculator</a>}
       <a class="btn-ghost" href="/contribute">Contribute a recipe</a>
+    </div>
+    <div class="mt-4">
+      <HowWeTest />
     </div>
 
     <section class="mt-12" aria-labelledby="config-heading">

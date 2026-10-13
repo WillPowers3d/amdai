@@ -8,6 +8,7 @@ import { recipeSystemRam } from '../../lib/recipes';
 import { recipes } from '../../lib/recipes-data';
 import { measuredRamHits } from '../../lib/measured-ram-data';
 import NewsletterSignup from '../../components/NewsletterSignup.astro';
+import HowWeTest from '../../components/HowWeTest.astro';
 
 export function getStaticPaths() {
   return recipes.map((recipe) => ({ params: { id: recipe.id }, props: { recipe } }));
@@ -52,9 +53,14 @@ const proof = recipe.proof[0];
     <section class="mt-10">
       <h2 class="font-serif text-3xl">Gates</h2>
       <p class="mt-2 text-sm text-muted">
-        Our checklist, in our words — not Sybil’s six-gate wording. Definitions live on
+        Our checklist, in our words — not Sybil’s six-gate wording. Recipe-gate definitions live on
         <a class="underline decoration-accent/40" href="/benchmarks/methodology">methodology</a>.
+        Measured tok/s:
+        <a class="underline decoration-accent/40" href="/methodology">How we test</a>.
       </p>
+      <div class="mt-3">
+        <HowWeTest compact />
+      </div>
       {proof && (
         <div class="mt-4">
           <GateChecklist gates={proof.gates} />
