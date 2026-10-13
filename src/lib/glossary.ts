@@ -77,7 +77,7 @@ export const GLOSSARY: GlossaryEntry[] = [
     aliases: ['amdai.net', 'R9700 Lab Notes', 'og:site_name'],
     letter: 'A',
     definition:
-      'The display wordmark for this notebook (AMDai · R9700 Lab Notes). Domain, URLs, package names, and amdai-bench stay lowercase. Open Graph site_name is the lowercase string amdai.',
+      'The display wordmark for this notebook (AMDai · R9700 Lab Notes). Domain, URLs, package names, and amdai-bench stay lowercase. Open Graph site_name is AMDai.',
     why: 'The header says AMDai; the address bar says amdai.net. Same project — mixed-case is display-only so it is not confused with AMD’s logo or an official AMD publication.',
     links: [
       { href: '/start', label: 'Getting started' },

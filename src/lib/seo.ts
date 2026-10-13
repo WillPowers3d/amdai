@@ -1,6 +1,6 @@
 /**
  * Titles, descriptions, canonicals, noindex, and lastmod for AMDai.
- * Document titles end with " · AMDai". og:site_name stays the lowercase amdai.
+ * Document titles end with " · AMDai". og:site_name is AMDai.
  * Never invent prices, ratings, or tok/s here.
  */
 

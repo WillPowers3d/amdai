@@ -12,8 +12,8 @@ describe('AMDai brand and hero', () => {
     assert.notEqual(site.wordmark, 'amdai');
     assert.notEqual(site.wordmark, 'AMDAi');
     assert.notEqual(site.wordmark, 'AMDAI');
-    assert.equal(OG_SITE_NAME, 'amdai');
-    assert.notEqual(OG_SITE_NAME, BRAND);
+    assert.equal(OG_SITE_NAME, 'AMDai');
+    assert.equal(OG_SITE_NAME, BRAND);
   });
 
   it('keeps the exact hero headline and leaves lowercase product ids alone', () => {

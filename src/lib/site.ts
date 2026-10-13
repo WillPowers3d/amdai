@@ -1,7 +1,7 @@
 /** Visible brand. Domain, URLs, package names, and amdai-bench stay lowercase. */
 export const BRAND = 'AMDai';
-/** Open Graph site_name and the public hostname stay lowercase. */
-export const OG_SITE_NAME = 'amdai';
+/** Open Graph site_name matches the AMDai wordmark. Hostname stays lowercase. */
+export const OG_SITE_NAME = 'AMDai';
 
 /** Homepage hero. Keep this exact string everywhere it is shown. */
 export const HERO_HEADLINE = 'Local Qwen on a R9700. Reliably.';

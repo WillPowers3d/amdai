@@ -12,7 +12,7 @@ Twitter uses the same 1.91:1 file (`twitter:card` = `summary_large_image`). A sq
 - `og:image:alt` / `twitter:image:alt` → catalog `alt` (starts with `AMDai`)
 - `og:image:width` / `og:image:height` → 1200 / 630
 - `twitter:card` → `summary_large_image`
-- `og:site_name` → `amdai` (lowercase; display wordmark stays `AMDai`)
+- `og:site_name` → `AMDai`
 
 `ogSlug(pathname)` in `src/lib/og.ts` maps the route. Unknown pages use `default`. Nested GPU / model / recipe pages share the `gpus` card, except `/gpus/r9700`.
 
