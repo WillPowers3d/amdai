@@ -205,6 +205,20 @@ export const FAQ_ENTRIES: FaqItem[] = [
     ],
   },
   {
+    id: 'local-speech',
+    group: 'getting-started',
+    question: 'Can I run speech-to-text or TTS on a Radeon, not just a local LLM?',
+    answer:
+      'Yes. whisper.cpp Vulkan is the AMDai first STT path — ggml family, not llama-server /v1. Piper is the first TTS path (pip install piper-tts). The cited shopper guide is /speech. Linux Ubuntu 24.04+ first. Memory cells copy the official whisper.cpp README table. Speech speeds are not yet measured by AMDai. llama.cpp stays first for LLMs. Q3 stays a labeled estimate. Nothing below Q3.',
+    links: [
+      { href: '/speech', label: 'Speech on Radeon' },
+      { href: '/setup', label: 'First-run setup' },
+      { href: '/setup/windows', label: 'Windows setup' },
+      { href: '/gpus/r9700', label: 'R9700' },
+      { href: '/backends/llamacpp', label: 'llama.cpp' },
+    ],
+  },
+  {
     id: 'vulkan-or-hip',
     group: 'getting-started',
     question: 'Vulkan or ROCm HIP?',
@@ -552,6 +566,7 @@ export const REQUIRED_FAQ_HREFS = [
   '/compare/radeon-vs-nvidia',
   '/troubleshoot',
   '/image-gen',
+  '/speech',
 ] as const;
 
 const BANNED_VISIBLE = /Qwen2\.5|Qwen3-8B/i;

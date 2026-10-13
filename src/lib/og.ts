@@ -270,6 +270,12 @@ export const OG_CARDS: OgCard[] = [
     alt: 'AMDai local image gen on Radeon — cited ComfyUI guide, not yet measured',
   },
   {
+    slug: 'speech',
+    title: 'Local speech on Radeon',
+    lede: 'whisper.cpp Vulkan first. Speeds not yet measured by AMDai',
+    alt: 'AMDai local speech on Radeon — cited whisper.cpp and Piper guide, not yet measured',
+  },
+  {
     slug: 'troubleshoot',
     title: 'Troubleshoot',
     lede: 'Symptom-first fixes. Cited commands only',

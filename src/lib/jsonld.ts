@@ -8,6 +8,7 @@ import { FAQ_ITEMS } from './faq';
 import { SETUP_HOWTO_STEPS, SETUP_PUBLISHED } from './setup';
 import { SETUP_WINDOWS_HOWTO_STEPS, SETUP_WINDOWS_PUBLISHED } from './setup-windows';
 import { IMAGE_GEN_HOWTO_STEPS, IMAGE_GEN_PUBLISHED } from './image-gen';
+import { SPEECH_HOWTO_STEPS, SPEECH_PUBLISHED } from './speech';
 import {
   TROUBLESHOOT_HOWTO_STEPS,
   TROUBLESHOOT_PUBLISHED,
@@ -416,6 +417,19 @@ export function pageJsonLd(input: {
         published: dates?.published ?? IMAGE_GEN_PUBLISHED,
         modified: dates?.modified ?? IMAGE_GEN_PUBLISHED,
         steps: IMAGE_GEN_HOWTO_STEPS,
+      }),
+    );
+    return nodes;
+  }
+  if (path === '/speech') {
+    nodes.push(
+      howToJsonLd({
+        name: input.title.replace(/ · AMDai$/, ''),
+        description: input.description,
+        url,
+        published: dates?.published ?? SPEECH_PUBLISHED,
+        modified: dates?.modified ?? SPEECH_PUBLISHED,
+        steps: SPEECH_HOWTO_STEPS,
       }),
     );
     return nodes;

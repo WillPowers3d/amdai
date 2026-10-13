@@ -194,6 +194,7 @@ export const CRUMB_LABELS: Record<string, string> = {
   '/flash-ram-offload': 'Flash RAM offload',
   '/start': 'Getting started',
   '/image-gen': 'Image gen',
+  '/speech': 'Speech',
   '/setup': 'First-run setup',
   '/setup/windows': 'Windows setup',
   '/stack-lab': 'Stack Lab',
@@ -313,6 +314,12 @@ setMeta(
   'Cited ComfyUI-first guide for Stable Diffusion, SDXL, and Flux-class models on Radeon. Linux ROCm PyTorch first. Fit estimates, not measured on local-desktop.',
 );
 setDate('/image-gen', '2026-10-13');
+setMeta(
+  '/speech',
+  'Local speech on Radeon',
+  'Cited whisper.cpp Vulkan STT plus Piper TTS on Radeon. Linux first. Memory from the official table. Speeds not yet measured by AMDai.',
+);
+setDate('/speech', '2026-10-13');
 setMeta(
   '/stacks',
   'Recommended stacks',

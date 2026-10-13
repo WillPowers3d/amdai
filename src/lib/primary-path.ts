@@ -331,6 +331,16 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
     { href: '/troubleshoot', label: 'Troubleshoot' },
     { href: '/stack-lab', label: 'Stack Lab' },
   ],
+  '/speech': [
+    { href: '/setup', label: 'First-run setup' },
+    { href: '/setup/windows', label: 'Windows setup' },
+    { href: '/gpus/r9700', label: 'R9700 measured page' },
+    { href: '/backends/llamacpp', label: 'llama.cpp' },
+    { href: '/image-gen', label: 'Image gen' },
+    { href: '/multi-gpu', label: 'Dual / multi-GPU' },
+    { href: '/calculator', label: 'Calculator' },
+    { href: '/stack-lab', label: 'Stack Lab' },
+  ],
 };
 
 export const HIGH_TRAFFIC_PATHS = Object.keys(NEXT_STEPS);

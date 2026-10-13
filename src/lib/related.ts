@@ -72,6 +72,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/stack-lab', label: 'Stack Lab' },
       { href: '/setup/windows', label: 'Windows setup' },
       { href: '/image-gen', label: 'Image gen on Radeon' },
+      { href: '/speech', label: 'Speech on Radeon' },
     ];
   }
   if (path === '/faq' || path === '/glossary') {
@@ -147,6 +148,19 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/labs/shannon', label: 'Shannon’s lab' },
     ];
   }
+  if (path === '/speech') {
+    return [
+      { href: '/speech', label: 'Speech on Radeon' },
+      { href: '/image-gen', label: 'Image gen on Radeon' },
+      { href: '/backends/llamacpp', label: 'llama.cpp' },
+      { href: '/setup', label: 'First-run setup' },
+      { href: '/setup/windows', label: 'Windows setup' },
+      { href: '/multi-gpu', label: 'Dual / multi-GPU' },
+      { href: '/gpus/r9700', label: 'R9700 measured page' },
+      { href: '/calculator', label: 'Calculator' },
+      { href: '/stack-lab', label: 'Stack Lab' },
+    ];
+  }
   if (path === '/image-gen' || path.startsWith('/harnesses')) {
     return [
       { href: '/image-gen', label: 'Image gen on Radeon' },
@@ -157,6 +171,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/setup', label: 'First-run setup' },
       { href: '/multi-gpu', label: 'Dual / multi-GPU' },
       { href: '/gpus/r9700', label: 'R9700 measured page' },
+      { href: '/speech', label: 'Speech on Radeon' },
     ];
   }
   if (path === '/forum' || path.startsWith('/forum/')) {
@@ -336,6 +351,7 @@ export function assertRelatedValid(
     '/models/qwen36',
     '/models/flash',
     '/image-gen',
+    '/speech',
   ],
 ): string[] {
   const errors: string[] = [];
