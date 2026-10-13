@@ -15,6 +15,7 @@ const pages = [
   ['stacks', 'Recommended stacks', 'Daily driver and fast agent from our rig'],
   ['backends', 'Which backend?', 'llama.cpp first. Strata when you need speed.'],
   ['gpus', 'GPU directory', 'Radeon cards, gfx IDs, official ROCm rows'],
+  ['gpus-r9700', 'Radeon AI PRO R9700', '32 GB measured 35B. One GPU vs two.'],
   ['rocm', 'What is ROCm', 'The open compute stack, in plain English'],
   ['forum', 'Forum', 'Community threads — off on this static build'],
   ['start', 'Getting started', 'GPU → ROCm → llama.cpp → harness'],

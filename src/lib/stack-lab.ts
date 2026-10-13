@@ -48,6 +48,7 @@ export const STACK_LAB_JOBS: StackLabJob[] = [
       'Read the GPU, VRAM, and OS so the catalog can match a recipe that actually fits. This is the same hardware check first-run setup walks on Ubuntu — Stack Lab is meant to do it on the box.',
     links: [
       { href: '/setup#ubuntu-hardware', label: 'Hardware check' },
+      { href: '/gpus/r9700', label: 'R9700 measured page' },
       { href: '/gpus', label: 'GPU directory' },
       { href: '/hardware', label: 'Hardware' },
     ],

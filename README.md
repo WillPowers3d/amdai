@@ -71,6 +71,7 @@ Public site URL is `https://amdai.net` (`site` in `astro.config.mjs`; override w
 | `/calculator` | Quant + Hardware Calculator — size a model, ask what a Radeon can run, or read a speed floor (Q3 through BF16, client-side) |
 | `/quants` | Q3–Q8, UD dynamic, KV types, why Q1/Q2 stay off |
 | `/gpus` | GPU directory — gfx IDs, VRAM, official ROCm rows, links to `/gpus/<id>` |
+| `/gpus/r9700` | Radeon AI PRO R9700 measured hero — 32 GB, 35B llama.cpp tables, Start → setup → recipe → Stack Lab |
 | `/gpus/<id>` | One card: recipe table, launch command, or “no tested recipe yet” |
 | `/models` | House Qwen models with reverse recipe tables |
 | `/recipes/<id>` | One launch: gates, command, RAM, withdrawal |

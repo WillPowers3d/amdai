@@ -452,6 +452,7 @@ export const GLOSSARY: GlossaryEntry[] = [
     deeper:
       '32 GB workstation SKU, gfx1201. Official product name is AMD Radeon AI PRO R9700. One card is the daily driver; two cards are copies or Flash offload, not automatic 2× decode. Size a PSU on /hardware — we do not invent a wattage.',
     links: [
+      { href: '/gpus/r9700', label: 'R9700 measured page' },
       { href: '/gpus', label: 'GPU directory' },
       { href: '/hardware', label: 'Hardware' },
       { href: '/budget', label: 'Budget' },

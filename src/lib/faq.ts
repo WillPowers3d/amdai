@@ -58,8 +58,9 @@ export const FAQ_ENTRIES: FaqItem[] = [
     group: 'getting-started',
     question: 'Which GPU should I start with?',
     answer:
-      'The measured house box is one AMD Radeon AI PRO R9700 (32 GB, gfx1201). There is no consumer RX 9700. A 16 GB RX 9070 XT is the same generation with half the VRAM. A 7900 XTX (gfx1100) is still a practical home card on a different ROCm family package. Confirm the SKU on the GPU directory, then size the file on the calculator before you buy a second card.',
+      'The measured house box is one AMD Radeon AI PRO R9700 (32 GB, gfx1201). There is no consumer RX 9700. A 16 GB RX 9070 XT is the same generation with half the VRAM. A 7900 XTX (gfx1100) is still a practical home card on a different ROCm family package. Confirm the SKU on the R9700 measured page and the GPU directory, then size the file on the calculator before you buy a second card.',
     links: [
+      { href: '/gpus/r9700', label: 'R9700 measured page' },
       { href: '/gpus', label: 'GPU directory' },
       { href: '/calculator', label: 'Calculator' },
       { href: '/start', label: 'Getting started' },
@@ -362,6 +363,7 @@ export const REQUIRED_FAQ_HREFS = [
   '/flash-ram-offload',
   '/stack-lab',
   '/recipes/qwen36-35b.llamacpp-vulkan.262k',
+  '/gpus/r9700',
 ] as const;
 
 const BANNED_VISIBLE = /Qwen2\.5|Qwen3-8B/i;

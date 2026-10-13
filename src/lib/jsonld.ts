@@ -377,7 +377,8 @@ export function pageJsonLd(input: {
     path === '/software' ||
     path === '/troubleshooting' ||
     path === '/maintain' ||
-    path === '/quants';
+    path === '/quants' ||
+    path === '/gpus/r9700';
   if (article && dates) {
     nodes.push(
       techArticleJsonLd({

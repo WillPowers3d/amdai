@@ -364,6 +364,12 @@ export function filterQuantRows(rows: QuantCompareRow[], state: CompareState): Q
 export function compareHubCards() {
   return [
     {
+      href: '/gpus/r9700',
+      kicker: 'This card',
+      title: 'Radeon AI PRO R9700',
+      body: 'One cited page for the 32 GB SKU: what it is for, Start → setup → recipe → Stack Lab, and the measured 35B tables.',
+    },
+    {
       href: '/compare/one-vs-two-gpu',
       kicker: 'Layout',
       title: 'One R9700 vs two (split)',

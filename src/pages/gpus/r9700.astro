@@ -1,0 +1,476 @@
+---
+import Base from '../../layouts/Base.astro';
+import BuyButtons from '../../components/BuyButtons.astro';
+import Callout from '../../components/Callout.astro';
+import EvidenceBadge from '../../components/EvidenceBadge.astro';
+import LaunchCommand from '../../components/LaunchCommand.astro';
+import NewsletterSignup from '../../components/NewsletterSignup.astro';
+import RecipeTable from '../../components/RecipeTable.astro';
+import RunCard from '../../components/RunCard.astro';
+import SystemRamNeed from '../../components/SystemRamNeed.astro';
+import { recipeSystemRam } from '../../lib/recipes';
+import { recipes } from '../../lib/recipes-data';
+import { gpuPageById } from '../../lib/gpu-pages';
+import { measuredRamHits } from '../../lib/measured-ram-data';
+import { runs } from '../../lib/run-card-data';
+import { officialLinks } from '../../lib/site';
+import {
+  COMPARE_ENGINE,
+  COMPARE_MODEL,
+  COMPARE_Q3,
+  COMPARE_Q3_CITE,
+  FLASH_RERUN_NOTE,
+  Q6_4K_VARIANCE_NOTE,
+  R9700_INTRO_LINKS,
+  R9700_MORE,
+  R9700_NAME,
+  R9700_PATH_STEPS,
+  R9700_SECTIONS,
+  R9700_SHORT,
+  R9700_VRAM,
+  R9700_WHAT,
+  SWEEP_REVERIFY,
+  r9700DailyStrip,
+  r9700OfficialRuns,
+  r9700OneVsTwo,
+  r9700RamKitRows,
+} from '../../lib/r9700';
+
+const page = gpuPageById(recipes, 'r9700');
+if (!page) throw new Error('missing r9700 GPU page');
+const llamaFirst = [...page.recipes].sort((a, b) => {
+  if (a.backend === b.backend) return b.ctx - a.ctx;
+  return a.backend === 'llamacpp' ? -1 : 1;
+});
+const gpuRuns = r9700OfficialRuns(runs);
+const daily = r9700DailyStrip(runs);
+const layout = r9700OneVsTwo(runs);
+const ramRows = r9700RamKitRows(runs);
+const dailyRecipe = llamaFirst.find((recipe) => recipe.id.includes('qwen36-35b.llamacpp-vulkan.262k'));
+const dailyRam = dailyRecipe ? recipeSystemRam(dailyRecipe, measuredRamHits) : null;
+---
+
+<Base
+  title={R9700_SHORT}
+  description="Measured 35B llama.cpp on the Radeon AI PRO R9700 — 32 GB VRAM, one GPU vs two, cited decode and prefill from local-desktop run cards."
+>
+  <main id="main" class="mx-auto max-w-6xl px-4 py-10 sm:px-6">
+    <a class="skip-link skip-to-r9700-nav" href="#r9700-sections">Skip to section nav</a>
+    <p class="kicker">
+      <a class="underline decoration-accent/40" href="/gpus">GPU directory</a>
+      · {page.family} · {page.arch} · {page.gfx}
+    </p>
+    <h1 class="display mt-3 text-4xl sm:text-5xl">{R9700_SHORT}</h1>
+    <p class="mt-4 max-w-3xl text-lg leading-relaxed text-muted">
+      {R9700_WHAT.lead}
+    </p>
+    <p class="mt-3 max-w-3xl leading-relaxed text-muted">
+      Published VRAM is <strong class="text-ink">{R9700_VRAM}</strong>.
+      {page.rocm_note}
+      Official on the current ROCm matrix.
+    </p>
+    <ul class="mt-5 flex flex-wrap gap-2">
+      {R9700_INTRO_LINKS.map((link) => (
+        <li>
+          <a
+            class="inline-flex min-h-11 items-center rounded-full border border-line bg-canvas px-3 text-sm text-ink hover:border-accent/50 hover:text-accent-ink"
+            href={link.href}
+          >
+            {link.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+    <div class="mt-6 flex flex-wrap gap-3">
+      <a class="btn-primary" href="/setup">First-run setup</a>
+      <a class="btn-secondary" href="/recipes/qwen36-35b.llamacpp-vulkan.262k">Measured recipe</a>
+      <a class="btn-ghost" href="/stack-lab">Stack Lab</a>
+      {page.calcId && <a class="btn-ghost" href={`/calculator?gpu=${page.calcId}`}>Open in calculator</a>}
+    </div>
+
+    <nav
+      id="r9700-sections"
+      class="r9700-sections sticky z-20 -mx-4 mt-8 border-y border-line bg-canvas/95 px-4 py-2 backdrop-blur-md sm:-mx-6 sm:px-6"
+      aria-label="R9700 sections"
+    >
+      <p class="mb-2 font-mono text-[0.68rem] uppercase tracking-[0.16em] text-faint">Jump to section</p>
+      <ol class="flex flex-wrap gap-2">
+        {R9700_SECTIONS.map((section) => (
+          <li>
+            <a
+              class="inline-flex min-h-11 items-center rounded-full border border-line bg-raised px-3 text-sm text-ink hover:border-accent/50 hover:text-accent-ink"
+              href={`#${section.id}`}
+            >
+              {section.label}
+            </a>
+          </li>
+        ))}
+      </ol>
+    </nav>
+
+    <section id="what-it-is" class="mt-10 scroll-mt-36" aria-labelledby="what-it-is-heading">
+      <h2 id="what-it-is-heading" class="font-serif text-3xl tracking-tight">What this card is for</h2>
+      <p class="mt-3 max-w-3xl leading-relaxed text-muted">{R9700_WHAT.forWhom}</p>
+      <p class="mt-3 max-w-3xl leading-relaxed text-muted">{R9700_WHAT.vram}</p>
+      <p class="mt-3 text-sm text-muted">
+        AMD product page:
+        <a class="underline decoration-accent/40" href={officialLinks.product} rel="noopener">Radeon AI PRO R9700</a>.
+        Directory of other Radeon cards:
+        <a class="underline decoration-accent/40" href="/gpus">/gpus</a>.
+      </p>
+    </section>
+
+    <section id="start-here" class="mt-12 scroll-mt-36" aria-labelledby="start-here-heading">
+      <h2 id="start-here-heading" class="font-serif text-3xl tracking-tight">Start → setup → recipe → Stack Lab</h2>
+      <p class="mt-3 max-w-3xl leading-relaxed text-muted">
+        One path. Do not skip to a harness. llama.cpp first.
+      </p>
+      <ol class="mt-8 grid gap-4 md:grid-cols-2">
+        {R9700_PATH_STEPS.map((step, index) => (
+          <li class="rounded-2xl border border-line bg-raised/50 p-5">
+            <p class="kicker">Step {index + 1}</p>
+            <h3 class="mt-2 font-serif text-2xl tracking-tight">
+              <a class="hover:text-accent-ink" href={step.href}>{step.label}</a>
+            </h3>
+            <p class="mt-3 leading-relaxed text-muted">{step.body}</p>
+            <p class="mt-4">
+              <a
+                class="inline-flex min-h-11 items-center rounded-full border border-line bg-canvas px-3 text-sm text-ink hover:border-accent/50 hover:text-accent-ink"
+                href={step.href}
+              >
+                {step.label}
+              </a>
+            </p>
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <section id="measured" class="mt-12 scroll-mt-36" aria-labelledby="measured-heading">
+      <h2 id="measured-heading" class="font-serif text-3xl tracking-tight">Measured 35B on this card</h2>
+      <p class="mt-3 max-w-3xl leading-relaxed text-muted">
+        {COMPARE_MODEL} on {COMPARE_ENGINE} Vulkan, f16 KV. UD-Q5_K_XL, Q5_K_M, Q4_K_M, and Q6_K
+        at 4K / 32K / 128K / 256K. One {R9700_SHORT} versus a split across two.
+        Every tok/s and measured GB cites an official <code class="font-mono text-ink">amdai-bench/run@1</code> card.
+        Empty stays not measured.
+      </p>
+      <Callout type="warn" title="Overnight sweep, 2026-10-12">
+        <p>{SWEEP_REVERIFY}</p>
+      </Callout>
+      <Callout type="note" title="Q6 4K has two cards">
+        <p>{Q6_4K_VARIANCE_NOTE}</p>
+      </Callout>
+
+      <h3 class="mt-10 font-serif text-2xl tracking-tight">Daily driver — UD-Q5_K_XL</h3>
+      <p class="mt-3 max-w-3xl text-sm leading-relaxed text-muted">
+        One card is the house daily driver. A split of the same file is slower at short context.
+        Two full copies are a different layout — that page is
+        <a class="underline decoration-accent/40" href="/two-r9700">/two-r9700</a>.
+      </p>
+      <div class="mt-6 overflow-x-auto">
+        <table class="table-lab min-w-[52rem]">
+          <caption>UD-Q5_K_XL decode, prefill, peak VRAM, and peak system RAM on one R9700 versus a split. Cited local-desktop cards.</caption>
+          <thead>
+            <tr>
+              <th scope="col">Context</th>
+              <th scope="col">1× decode</th>
+              <th scope="col">1× prefill</th>
+              <th scope="col">1× VRAM total</th>
+              <th scope="col">1× system RAM</th>
+              <th scope="col">Split decode</th>
+              <th scope="col">Split VRAM / card</th>
+            </tr>
+          </thead>
+          <tbody>
+            {daily.map((row) => (
+              <tr>
+                <td>{row.contextLabel}</td>
+                <td class="tabular-nums">
+                  {row.one.runIds.length ? <a class="underline decoration-accent/40" href={row.one.href}>{row.one.decode}</a> : row.one.decode}
+                </td>
+                <td class="tabular-nums">{row.one.prefill}</td>
+                <td class="tabular-nums">{row.one.vramTotal}</td>
+                <td class="tabular-nums">{row.one.systemRam}</td>
+                <td class="tabular-nums">
+                  {row.both.runIds.length ? <a class="underline decoration-accent/40" href={row.both.href}>{row.both.decode}</a> : row.both.decode}
+                </td>
+                <td class="tabular-nums">{row.both.vramPerGpu}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="mt-12 font-serif text-2xl tracking-tight">One GPU vs two — all measured quants</h3>
+      <p class="mt-3 max-w-3xl text-sm leading-relaxed text-muted">
+        Full filterable table lives on
+        <a class="underline decoration-accent/40" href="/compare/one-vs-two-gpu">one vs two GPU</a>.
+        The 33-card matrix is
+        <a class="underline decoration-accent/40" href="/benchmarks">/benchmarks</a>.
+      </p>
+      <div class="mt-6 hidden overflow-x-auto lg:block">
+        <table class="table-lab compare-sticky min-w-[72rem]">
+          <caption>One R9700 versus a split: decode, prefill, peak VRAM, and peak system RAM from official run cards.</caption>
+          <thead>
+            <tr>
+              <th scope="col" rowspan="2">Quant</th>
+              <th scope="col" rowspan="2">Context</th>
+              <th scope="colgroup" colspan="4">One R9700</th>
+              <th scope="colgroup" colspan="4">Both R9700s (split)</th>
+            </tr>
+            <tr>
+              <th scope="col">Decode</th>
+              <th scope="col">Prefill</th>
+              <th scope="col">VRAM total</th>
+              <th scope="col">System RAM</th>
+              <th scope="col">Decode</th>
+              <th scope="col">Prefill</th>
+              <th scope="col">VRAM / card</th>
+              <th scope="col">System RAM</th>
+            </tr>
+          </thead>
+          <tbody>
+            {layout.map((row) => (
+              <tr>
+                <td class="font-medium">
+                  {row.quant}
+                  {row.flag ? <span class="block text-xs font-normal text-faint">{row.flag}</span> : null}
+                </td>
+                <td>{row.contextLabel}</td>
+                <td class="tabular-nums">
+                  {row.one.runIds.length ? <a class="underline decoration-accent/40" href={row.one.href}>{row.one.decode}</a> : row.one.decode}
+                </td>
+                <td class="tabular-nums">{row.one.prefill}</td>
+                <td class="tabular-nums">{row.one.vramTotal}</td>
+                <td class="tabular-nums">{row.one.systemRam}</td>
+                <td class="tabular-nums">
+                  {row.both.runIds.length ? <a class="underline decoration-accent/40" href={row.both.href}>{row.both.decode}</a> : row.both.decode}
+                </td>
+                <td class="tabular-nums">{row.both.prefill}</td>
+                <td class="tabular-nums">{row.both.vramPerGpu}</td>
+                <td class="tabular-nums">{row.both.systemRam}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <div class="mt-6 grid gap-4 lg:hidden">
+        {layout.map((row) => (
+          <article class="rounded-2xl border border-line bg-raised/50 p-5">
+            <p class="kicker">{row.quant} · {row.contextLabel}</p>
+            <h3 class="mt-1 text-xl tracking-tight">{row.quant}</h3>
+            {row.flag ? <p class="mt-2 text-xs text-faint">{row.flag}</p> : null}
+            <dl class="mt-4 grid grid-cols-2 gap-3 text-sm">
+              <div>
+                <dt class="text-faint">1× decode</dt>
+                <dd class="tabular-nums">
+                  {row.one.runIds.length ? <a class="underline decoration-accent/40" href={row.one.href}>{row.one.decode}</a> : row.one.decode}
+                </dd>
+              </div>
+              <div>
+                <dt class="text-faint">Split decode</dt>
+                <dd class="tabular-nums">
+                  {row.both.runIds.length ? <a class="underline decoration-accent/40" href={row.both.href}>{row.both.decode}</a> : row.both.decode}
+                </dd>
+              </div>
+              <div>
+                <dt class="text-faint">1× prefill</dt>
+                <dd class="tabular-nums">{row.one.prefill}</dd>
+              </div>
+              <div>
+                <dt class="text-faint">Split prefill</dt>
+                <dd class="tabular-nums">{row.both.prefill}</dd>
+              </div>
+              <div>
+                <dt class="text-faint">1× VRAM total</dt>
+                <dd class="tabular-nums">{row.one.vramTotal}</dd>
+              </div>
+              <div>
+                <dt class="text-faint">Split VRAM / card</dt>
+                <dd class="tabular-nums">{row.both.vramPerGpu}</dd>
+              </div>
+              <div>
+                <dt class="text-faint">1× system RAM</dt>
+                <dd class="tabular-nums">{row.one.systemRam}</dd>
+              </div>
+              <div>
+                <dt class="text-faint">Split system RAM</dt>
+                <dd class="tabular-nums">{row.both.systemRam}</dd>
+              </div>
+            </dl>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section id="system-ram" class="mt-12 scroll-mt-36" aria-labelledby="system-ram-heading">
+      <h2 id="system-ram-heading" class="font-serif text-3xl tracking-tight">System RAM for this card</h2>
+      <p class="mt-3 max-w-3xl leading-relaxed text-muted">
+        Two lines everywhere RAM offload or full context shows up:
+        <strong class="text-ink">Minimum system RAM needed</strong> at the context you picked, and
+        <strong class="text-ink">RAM needed at full context</strong> (262144 for the house 35B).
+        We round up to a real DIMM kit (64 / 128 / 192 / 256 GB). The house box ships 256 GB DDR5.
+        A measured peak is labeled measured; a calculator line is labeled estimate until a card records RSS.
+      </p>
+      {dailyRam && (
+        <div class="mt-6">
+          <p class="kicker">Daily driver · UD-Q5_K_XL · 262K · one card</p>
+          <div class="mt-3">
+            <SystemRamNeed need={dailyRam} />
+          </div>
+        </div>
+      )}
+      <div class="mt-8 space-y-8">
+        {ramRows.map((row) => (
+          <div>
+            <h3 class="font-serif text-2xl tracking-tight">
+              {row.gpuCount === 1 ? 'One R9700' : 'Split'} · {row.contextLabel}
+            </h3>
+            <div class="mt-4 overflow-x-auto">
+              <table class="table-lab min-w-[48rem]">
+                <caption>
+                  Minimum system RAM needed and RAM needed at full context for {row.gpuCount === 1 ? 'one' : 'split'} {row.contextLabel}.
+                  Kits are labeled estimate until measured.
+                </caption>
+                <thead>
+                  <tr>
+                    <th scope="col">Quant</th>
+                    <th scope="col">Peak system RAM</th>
+                    <th scope="col">Minimum system RAM needed</th>
+                    <th scope="col">RAM needed at full context</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {row.columns.map((col) => (
+                    <tr>
+                      <td>
+                        {col.quant}
+                        <span class="mt-1 block text-xs text-faint">{col.kind === 'estimate' ? 'estimate' : 'measured'}</span>
+                      </td>
+                      <td class="tabular-nums">
+                        {col.runIds.length ? <a class="underline decoration-accent/40" href={col.href}>{col.systemRam}</a> : col.systemRam}
+                      </td>
+                      <td class="tabular-nums">{col.ramMin.text}</td>
+                      <td class="tabular-nums">{col.ramFull.text}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <section id="q3-estimate" class="mt-12 scroll-mt-36" aria-labelledby="q3-estimate-heading">
+      <h2 id="q3-estimate-heading" class="font-serif text-3xl tracking-tight">Q3 is a labeled estimate</h2>
+      <Callout type="warn" title={`${COMPARE_Q3} — not a local-desktop run`}>
+        <p>
+          {COMPARE_Q3} may appear in comparison chrome as a labeled estimate.
+          Cited file listing: {COMPARE_Q3_CITE}.
+          We do not invent a Q3 tok/s. Do not run Q3 on local-desktop from this page.
+          {FLASH_RERUN_NOTE}
+          Q1 and Q2 stay off.
+        </p>
+      </Callout>
+      <p class="mt-4 text-sm text-muted">
+        Quant picker:
+        <a class="underline decoration-accent/40" href="/compare/q4-q5-q6">Q6 / Q5 / Q4 + Q3 estimate</a>
+        ·
+        <a class="underline decoration-accent/40" href="/quants">Quants</a>
+        ·
+        <a class="underline decoration-accent/40" href="/calculator">Calculator</a>.
+      </p>
+    </section>
+
+    <section id="recipes" class="mt-12 scroll-mt-36" aria-labelledby="recipes-heading">
+      <h2 id="recipes-heading" class="font-serif text-3xl tracking-tight">Recipes we have</h2>
+      <p class="mt-3 max-w-3xl text-sm leading-relaxed text-muted">
+        A row is one launch that passed enough gates to publish. llama.cpp first.
+        Spec-only cards stay listed. Empty cells stay empty.
+      </p>
+      <div class="mt-6">
+        <RecipeTable
+          recipes={llamaFirst}
+          empty="No tested recipe yet — contribute. This card stays listed so the gap is visible."
+        />
+      </div>
+      {gpuRuns.length > 0 && (
+        <div class="mt-10">
+          <h3 class="font-serif text-2xl tracking-tight">Official run cards</h3>
+          <p class="mt-3 max-w-3xl text-sm text-muted">
+            Measured cells on this page come from verified <code class="font-mono text-ink">amdai-bench/run@1</code> cards credited to the submitter.
+          </p>
+          <div class="mt-6 grid gap-6">
+            {gpuRuns.map((card) => (
+              <RunCard card={card} heading="h3" compact />
+            ))}
+          </div>
+        </div>
+      )}
+      {llamaFirst.map((recipe) => (
+        <article class="card mt-8 scroll-mt-28 p-5 sm:p-6" id={recipe.id} aria-labelledby={`${recipe.id}-heading`}>
+          <div class="flex flex-wrap items-start justify-between gap-3">
+            <div>
+              <p class="kicker">{recipe.backend === 'llamacpp' ? 'llama.cpp' : 'Strata'} · {recipe.ctx_label}</p>
+              <h3 id={`${recipe.id}-heading`} class="mt-1 text-2xl tracking-tight">{recipe.model} · {recipe.weights.quant}</h3>
+            </div>
+            <EvidenceBadge tier={recipe.proof[0]?.tier ?? 'tested-our-rig'} />
+          </div>
+          <p class="mt-3 text-sm text-muted">{recipe.notes.join(' ')}</p>
+          <div class="mt-5">
+            <LaunchCommand recipe={recipe} />
+          </div>
+          {recipeSystemRam(recipe, measuredRamHits) && (
+            <div class="mt-5">
+              <SystemRamNeed need={recipeSystemRam(recipe, measuredRamHits)!} />
+            </div>
+          )}
+          <p class="mt-4 text-sm">
+            <a class="underline decoration-accent/40" href={`/recipes/${recipe.id}`}>Full recipe</a>
+            {' · '}
+            <a class="underline decoration-accent/40" href={recipe.calculator}>Calculator</a>
+          </p>
+        </article>
+      ))}
+    </section>
+
+    <section id="more" class="mt-12 scroll-mt-36" aria-labelledby="more-heading">
+      <h2 id="more-heading" class="font-serif text-3xl tracking-tight">Keep reading</h2>
+      <p class="mt-3 max-w-3xl leading-relaxed text-muted">
+        This page is the shopping sheet. The rest of AMDai stays linked — we do not copy orphan content here.
+      </p>
+      <ul class="mt-8 grid gap-4 sm:grid-cols-2">
+        {R9700_MORE.map((row) => (
+          <li class="rounded-2xl border border-line bg-raised/50 p-5">
+            <h3 class="font-serif text-2xl tracking-tight">
+              <a class="hover:text-accent-ink" href={row.href}>{row.label}</a>
+            </h3>
+            <p class="mt-3 text-sm leading-relaxed text-muted">{row.body}</p>
+          </li>
+        ))}
+      </ul>
+      <div class="mt-10">
+        <BuyButtons products={['r9700']} heading={R9700_NAME} />
+      </div>
+      <p class="mt-4 text-sm text-faint">
+        No live or invented prices. Retailer hops use the existing
+        <a class="underline decoration-accent/40" href="/disclosure">disclosure</a> path.
+      </p>
+    </section>
+
+    <div class="not-prose mt-12">
+      <NewsletterSignup variant="article" />
+    </div>
+  </main>
+</Base>
+
+<style>
+  .skip-to-r9700-nav:focus {
+    top: 3.5rem;
+  }
+
+  .r9700-sections {
+    top: var(--header-h);
+  }
+</style>

@@ -25,6 +25,7 @@ const OG_PAGES = new Set([
   'stacks',
   'backends',
   'gpus',
+  'gpus-r9700',
   'rocm',
   'forum',
   'start',
@@ -56,6 +57,7 @@ export function ogSlug(pathname: string) {
   if (slug === 'compare' || slug.startsWith('compare-')) {
     return OG_PAGES.has(slug) ? slug : 'compare';
   }
+  if (slug === 'gpus-r9700') return 'gpus-r9700';
   if (slug === 'models' || slug.startsWith('models-') || slug.startsWith('gpus-') || slug.startsWith('recipes-')) return 'gpus';
   return OG_PAGES.has(slug) ? slug : 'default';
 }
@@ -126,6 +128,7 @@ export const primaryNav: NavItem[] = [
   { href: '/budget', label: 'Budget', description: 'Starter → Pro Radeon builds, no invented prices', group: 'path' },
   { href: '/calculator', label: 'Calculator', description: 'Size a model, ask what a Radeon can run, or read a speed floor — Q3 through BF16', group: 'path' },
   { href: '/quants', label: 'Quants', description: 'Q3–Q8, UD dynamic, KV types, why Q1/Q2 stay off', group: 'path' },
+  { href: '/gpus/r9700', label: 'R9700', description: 'Measured 35B on the 32 GB Radeon AI PRO R9700 — one GPU vs two, cited run cards', group: 'path' },
   { href: '/gpus', label: 'GPU directory', description: 'Radeon cards, gfx IDs, VRAM, official ROCm rows, tested recipes', group: 'stack' },
   { href: '/models', label: 'Models', description: 'House Qwen models with reverse recipe tables and HF cards', group: 'stack' },
   { href: '/rocm', label: 'ROCm', description: 'What it is — stack, gfx IDs, Vulkan vs HIP, versions', group: 'stack' },

@@ -17,6 +17,7 @@ registerRunCardMeta(runs);
 const extra: Array<{ path: string; title: string; description: string }> = [];
 
 for (const page of gpuPages(recipes)) {
+  if (page.id === 'r9700') continue;
   extra.push({
     path: `/gpus/${page.id}`,
     title: page.name.replace(/^AMD /, ''),

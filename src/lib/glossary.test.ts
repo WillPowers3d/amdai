@@ -31,6 +31,7 @@ const ALLOWED_HREFS = new Set([
   '/flash-daily',
   '/flash-ram-offload',
   '/gpus',
+  '/gpus/r9700',
   '/hardware',
   '/models',
   '/quants',

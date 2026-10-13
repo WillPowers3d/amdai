@@ -154,6 +154,7 @@ export const CRUMB_LABELS: Record<string, string> = {
   '/tutorials/run-local-llm': 'Run a local Qwen',
   '/tutorials/serve-qwen': 'Serve Qwen',
   '/gpus': 'GPUs',
+  '/gpus/r9700': 'R9700',
   '/models': 'Models',
   '/recipes': 'Recipes',
   '/blog': 'Blog',
@@ -341,6 +342,12 @@ setMeta(
   'GPU directory',
   'Radeon cards with gfx IDs, VRAM, official ROCm rows, and tested recipes. Spec-only cards stay labeled.',
 );
+setMeta(
+  '/gpus/r9700',
+  'Radeon AI PRO R9700',
+  'Measured 35B llama.cpp on the Radeon AI PRO R9700 — 32 GB VRAM, one GPU vs two, cited decode and prefill from local-desktop run cards.',
+);
+setDate('/gpus/r9700', '2026-10-13');
 setMeta(
   '/models',
   'House Qwen models',

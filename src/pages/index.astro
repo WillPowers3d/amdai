@@ -54,8 +54,8 @@ const updates = (await getCollection('updates')).sort((a, b) => b.data.date.valu
         <li class="card p-5">
           <p class="kicker">1 · Radeon</p>
           <h3 class="mt-2 text-xl tracking-tight">Start from the card you own</h3>
-          <p class="mt-2 text-sm text-muted">R9700 has tested recipes. Other directory cards stay listed as gaps.</p>
-          <p class="mt-4"><a class="underline decoration-accent/40" href="/gpus/r9700">R9700 recipes</a> · <a class="underline decoration-accent/40" href="/gpus">Directory</a></p>
+          <p class="mt-2 text-sm text-muted">The 32 GB R9700 has a measured 35B sheet. Other directory cards stay listed as gaps.</p>
+          <p class="mt-4"><a class="underline decoration-accent/40" href="/gpus/r9700">R9700 measured page</a> · <a class="underline decoration-accent/40" href="/gpus">Directory</a></p>
         </li>
         <li class="card p-5">
           <p class="kicker">2 · Tested model</p>
@@ -120,6 +120,11 @@ const updates = (await getCollection('updates')).sort((a, b) => b.data.date.valu
         <p class="kicker">The rest of the lab</p>
         <h2 class="display mt-2 text-3xl sm:text-4xl">Directory, troubleshooter, forum, ROCm</h2>
         <div class="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          <a class="card p-6" href="/gpus/r9700">
+            <p class="kicker">This card</p>
+            <h3 class="mt-2 text-2xl tracking-tight">Radeon AI PRO R9700</h3>
+            <p class="mt-3 text-sm text-muted">32 GB measured 35B sheet — one GPU vs two, cited decode, VRAM, and system RAM. No invented tok/s.</p>
+          </a>
           <a class="card p-6" href="/gpus">
             <p class="kicker">Hardware</p>
             <h3 class="mt-2 text-2xl tracking-tight">GPU directory</h3>

@@ -13,7 +13,9 @@ import { runs } from '../../lib/run-card-data';
 import { measuredRamHits } from '../../lib/measured-ram-data';
 
 export function getStaticPaths() {
-  return gpuPages(recipes).map((page) => ({ params: { id: page.id }, props: { id: page.id } }));
+  return gpuPages(recipes)
+    .filter((page) => page.id !== 'r9700')
+    .map((page) => ({ params: { id: page.id }, props: { id: page.id } }));
 }
 
 const page = gpuPageById(recipes, Astro.props.id);
