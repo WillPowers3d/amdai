@@ -1,0 +1,27 @@
+---
+import { GATE_COPY, GATE_IDS, type GateStatus } from '../lib/recipes';
+
+interface Props {
+  gates: Record<(typeof GATE_IDS)[number], GateStatus>;
+}
+
+const { gates } = Astro.props;
+
+const tone = (status: GateStatus) =>
+  status === 'pass' ? 'text-ok' : status === 'fail' ? 'text-accent-ink' : 'text-faint';
+
+const word = (status: GateStatus) =>
+  status === 'pass' ? 'Pass' : status === 'fail' ? 'Fail' : 'Not measured';
+---
+
+<ul class="grid gap-3 sm:grid-cols-2">
+  {GATE_IDS.map((id) => (
+    <li class="rounded-xl border border-line bg-canvas/40 px-3 py-2">
+      <p class="flex flex-wrap items-baseline justify-between gap-2">
+        <span class="font-medium">{GATE_COPY[id].title}</span>
+        <span class:list={['font-mono text-xs uppercase tracking-[0.08em]', tone(gates[id])]}>{word(gates[id])}</span>
+      </p>
+      <p class="mt-1 text-xs leading-relaxed text-muted">{GATE_COPY[id].meaning}</p>
+    </li>
+  ))}
+</ul>

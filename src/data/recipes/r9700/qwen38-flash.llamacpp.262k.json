@@ -1,0 +1,58 @@
+{
+  "id": "qwen38-flash.llamacpp.262k",
+  "card": "r9700",
+  "model_id": "flash",
+  "model": "Qwen 3.8 Flash",
+  "official": "Qwen/Qwen3.8-Flash-Next",
+  "weights": {
+    "repo": "unsloth/Qwen3.8-Flash-Next-GGUF",
+    "commit": null,
+    "filename": "UD-Q6_K_XL (folder)",
+    "quant": "UD-Q6_K_XL"
+  },
+  "backend": "llamacpp",
+  "build": "vulkan",
+  "rocm_version": null,
+  "gfx": "gfx1201",
+  "override": null,
+  "ctx": 262144,
+  "ctx_label": "262K",
+  "card_count": 1,
+  "flags_todo": true,
+  "needs": { "host_ram_gb": null, "disk_gb": null },
+  "proof": [
+    {
+      "date": "2026-10",
+      "who": "local-desktop",
+      "tier": "tested-our-rig",
+      "source": "local-desktop strata-test report / Local AI measurements",
+      "gates": {
+        "load": "pass",
+        "chat": "pass",
+        "reasoning": "not_measured",
+        "tools": "not_measured",
+        "long_context": "pass",
+        "speed": "pass"
+      },
+      "decode": 16,
+      "prefill": null,
+      "log_hash": null
+    }
+  ],
+  "withdrawn": null,
+  "launch": {
+    "family": "llamacpp",
+    "todo_flags": true,
+    "env": [],
+    "lines": [
+      "# Shape only — llama.cpp Q6, 8 threads on the same Flash file. Exact flags TODO.",
+      "./build-vk/bin/llama-server \\",
+      "  -m ~/models/Qwen3.8-Flash-Next-UD-Q6_K_XL.gguf \\",
+      "  -t 8 \\",
+      "  -c 262144 \\",
+      "  --host 127.0.0.1 --port 8080"
+    ]
+  },
+  "calculator": "/calculator?gpu=r9700&vram=32&n=1&split=0&ram=256&model=flash&tp=125&ap=6&layers=48&kvl=12&kvh=2&hd=256&quant=q6_k&ctx=262144&kv=f16&oh=1",
+  "notes": ["llama.cpp Q6, 8 threads. Measured on our rig, 2026-10 — ~16 tok/s writing at 262K."]
+}

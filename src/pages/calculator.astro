@@ -10,6 +10,7 @@ import { BACKENDS, CONTEXT_PRESETS, GPU_PRESETS, KV_TYPES, MODEL_PRESETS, QUANTS
 import { DEFAULT_PRIORITY } from '../lib/priority';
 import { DEFAULT_STYLE, DEFAULT_USAGE } from '../lib/ask';
 import { gpuProducts } from '../lib/affiliates';
+import { recipes } from '../lib/recipes-data';
 
 const fitGpus = gpuProducts();
 const groups = [...new Set(MODEL_PRESETS.map((m) => m.group))];
@@ -46,6 +47,15 @@ const groups = [...new Set(MODEL_PRESETS.map((m) => m.group))];
       <span aria-hidden="true">●</span>
       <span data-tested-label></span>
     </div>
+    <p id="recipe-line" class="mt-3 max-w-3xl text-sm text-muted" data-recipe-line>Estimate only — no tested recipe for this card × model.</p>
+
+    <details class="mt-4 max-w-3xl rounded-2xl border border-line bg-raised/40 p-4">
+      <summary class="cursor-pointer font-medium">Detect GPU from rocminfo / rocm-smi</summary>
+      <p class="mt-2 text-sm text-muted">Paste a marketing name or a gfx ID. gfx1201 is shared — the name wins when both appear.</p>
+      <textarea id="gpu-detect" class="field mt-3 min-h-24" placeholder="Name: Radeon AI PRO R9700&#10;Marketing Name: Radeon AI PRO R9700&#10;Name: gfx1201"></textarea>
+      <p class="mt-2 text-sm text-faint" data-detect-status></p>
+    </details>
+    <script type="application/json" id="recipe-catalog" set:html={JSON.stringify(recipes)} />
 
     <div class="tabs mt-8" role="tablist" aria-label="Calculator view">
       <button type="button" class="tab is-on" data-view="model">Size this model</button>
@@ -456,6 +466,8 @@ const groups = [...new Set(MODEL_PRESETS.map((m) => m.group))];
     type PriorityAdvice,
   } from '../lib/priority';
   import { USAGE_COPY, parseAsk, type AskState } from '../lib/ask';
+  import { matchRecipe, recipeTestedLine, type Recipe } from '../lib/recipes';
+  import { detectPrimary } from '../lib/gpu-detect';
 
   const form = document.getElementById('calc-form') as HTMLFormElement;
   const shareBtn = document.getElementById('share-btn');
@@ -714,6 +726,24 @@ const groups = [...new Set(MODEL_PRESETS.map((m) => m.group))];
       }
     }
 
+    const catalog = JSON.parse(document.getElementById('recipe-catalog')?.textContent || '[]') as Recipe[];
+    const matched = matchRecipe(catalog, input);
+    const line = recipeTestedLine(matched);
+    const recipeLine = document.querySelector<HTMLParagraphElement>('[data-recipe-line]');
+    if (recipeLine) {
+      recipeLine.classList.toggle('text-ok', line.tested);
+      recipeLine.replaceChildren();
+      if (line.href) {
+        const link = document.createElement('a');
+        link.href = line.href;
+        link.className = 'underline decoration-accent/40';
+        link.textContent = line.text;
+        recipeLine.append(link);
+      } else {
+        recipeLine.textContent = line.text;
+      }
+    }
+
     const qs = shareQuery();
     const url = `${window.location.pathname}?${qs}`;
     setText('[data-share-url]', url);
@@ -796,6 +826,20 @@ const groups = [...new Set(MODEL_PRESETS.map((m) => m.group))];
     if (target.name === 'gguf') return;
     input = readForm();
     render();
+  });
+
+  document.getElementById('gpu-detect')?.addEventListener('input', (event) => {
+    const text = (event.target as HTMLTextAreaElement).value;
+    const hit = detectPrimary(text);
+    const status = document.querySelector('[data-detect-status]');
+    if (!hit) {
+      if (status) status.textContent = text.trim() ? 'No marketing name or gfx ID matched.' : '';
+      return;
+    }
+    if (status) status.textContent = `${hit.reason} → ${hit.name}`;
+    if (hit.confidence === 'name') {
+      sync(applyGpuPreset(hit.id as GpuId, readForm()));
+    }
   });
 
   field<HTMLInputElement>('gguf').addEventListener('change', async () => {

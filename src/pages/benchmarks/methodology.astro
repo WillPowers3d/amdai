@@ -1,0 +1,74 @@
+---
+import Base from '../../layouts/Base.astro';
+import GateChecklist from '../../components/GateChecklist.astro';
+import { GATE_COPY, type GateStatus } from '../../lib/recipes';
+
+const empty: Record<'load' | 'chat' | 'reasoning' | 'tools' | 'long_context' | 'speed', GateStatus> = {
+  load: 'not_measured',
+  chat: 'not_measured',
+  reasoning: 'not_measured',
+  tools: 'not_measured',
+  long_context: 'not_measured',
+  speed: 'not_measured',
+};
+---
+
+<Base
+  title="How we score a recipe"
+  description="AMDai’s pass/fail suite for a Radeon launch: load, chat, reasoning, tools, long context, decode. Our words, our thresholds."
+>
+  <main id="main" class="mx-auto max-w-3xl px-4 py-10 sm:px-6">
+    <p class="kicker">Benchmarks</p>
+    <h1 class="display mt-3 text-4xl sm:text-5xl">How we score a recipe</h1>
+    <p class="mt-4 text-lg leading-relaxed text-muted">
+      Compatibility on this site means a recipe passed the gates we print — not a VRAM spreadsheet.
+      These are our definitions. We do not copy another registry’s wording or hidden cutoffs.
+    </p>
+
+    <section class="mt-10 space-y-6">
+      <article>
+        <h2 class="text-2xl tracking-tight">Load</h2>
+        <p class="mt-2 text-muted">{GATE_COPY.load.meaning}</p>
+      </article>
+      <article>
+        <h2 class="text-2xl tracking-tight">Chat ends cleanly</h2>
+        <p class="mt-2 text-muted">{GATE_COPY.chat.meaning}</p>
+      </article>
+      <article>
+        <h2 class="text-2xl tracking-tight">Reasoning split</h2>
+        <p class="mt-2 text-muted">{GATE_COPY.reasoning.meaning}</p>
+      </article>
+      <article>
+        <h2 class="text-2xl tracking-tight">Tool call</h2>
+        <p class="mt-2 text-muted">{GATE_COPY.tools.meaning}</p>
+      </article>
+      <article>
+        <h2 class="text-2xl tracking-tight">Long-context recall at a stated fill</h2>
+        <p class="mt-2 text-muted">
+          {GATE_COPY.long_context.meaning} We do not publish a planted-token percentage until we run that test.
+        </p>
+      </article>
+      <article>
+        <h2 class="text-2xl tracking-tight">Decode recorded</h2>
+        <p class="mt-2 text-muted">
+          {GATE_COPY.speed.meaning} There is no invented “must beat N tok/s” cutoff on this page.
+          A slow honest number beats a missing one.
+        </p>
+      </article>
+    </section>
+
+    <section class="mt-12">
+      <h2 class="font-serif text-3xl">Blank card</h2>
+      <p class="mt-3 text-sm text-muted">Every seeded recipe starts with the unmeasured boxes honest.</p>
+      <div class="mt-4">
+        <GateChecklist gates={empty} />
+      </div>
+    </section>
+
+    <p class="mt-10 text-sm">
+      <a class="underline decoration-accent/40" href="/benchmarks">Back to benchmarks</a>
+      {' · '}
+      <a class="underline decoration-accent/40" href="/results">amdai-bench v1</a>
+    </p>
+  </main>
+</Base>

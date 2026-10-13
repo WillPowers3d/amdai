@@ -29,6 +29,9 @@ const categories = (Object.keys(CATEGORY_COPY) as HarnessCategory[]).map((id) =>
     <HarnessesNav current="overview" />
     <h1 class="display mt-6 text-4xl sm:text-5xl">Harnesses &amp; frontends: what to plug your local model into</h1>
     <p class="mt-4 max-w-2xl text-lg leading-relaxed text-muted">
+      Path: <strong class="text-ink">your Radeon</strong> → a
+      <a class="underline decoration-accent/40" href="/models">tested model</a> →
+      your agent (Hermes, Aider, Cline, OpenCode).
       A <strong class="text-ink">harness</strong> is the app or agent layer on top of an inference
       server. <a class="underline decoration-accent/40" href="/backends">llama-server</a>,
       <a class="underline decoration-accent/40" href="/stacks#fast-agent">Strata</a>,

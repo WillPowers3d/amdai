@@ -1,0 +1,40 @@
+---
+import Base from '../../layouts/Base.astro';
+import RecipeTable from '../../components/RecipeTable.astro';
+import { recipesForModel } from '../../lib/recipes';
+import { recipes } from '../../lib/recipes-data';
+import { MODEL_PAGES } from '../../lib/gpu-pages';
+
+export function getStaticPaths() {
+  return MODEL_PAGES.map((model) => ({ params: { id: model.id }, props: { id: model.id } }));
+}
+
+const model = MODEL_PAGES.find((row) => row.id === Astro.props.id);
+if (!model) throw new Error(`unknown model ${Astro.props.id}`);
+const rows = recipesForModel(recipes, model.id);
+---
+
+<Base
+  title={model.name}
+  description={`${model.name} on Radeon — tested recipes, launch commands, and calculator links.`}
+>
+  <main id="main" class="mx-auto max-w-6xl px-4 py-10 sm:px-6">
+    <p class="kicker">{model.role}</p>
+    <h1 class="display mt-3 text-4xl sm:text-5xl">{model.name}</h1>
+    <p class="mt-4 max-w-2xl text-lg leading-relaxed text-muted">
+      Official card: <a class="underline decoration-accent/40" href={model.hf}>{model.official}</a>.
+      GGUF tree: {model.gguf}. This page lists launches we have proof for — not a VRAM-math guess.
+    </p>
+    <div class="mt-6 flex flex-wrap gap-3">
+      <a class="btn-secondary" href="/models">All models</a>
+      <a class="btn-primary" href={`/calculator?model=${model.id}`}>Open in calculator</a>
+      <a class="btn-ghost" href={model.hf}>Hugging Face card</a>
+    </div>
+    <section class="mt-12">
+      <h2 class="font-serif text-3xl">Recipes</h2>
+      <div class="mt-6">
+        <RecipeTable recipes={rows} empty="No tested recipe yet — contribute." />
+      </div>
+    </section>
+  </main>
+</Base>

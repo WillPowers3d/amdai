@@ -44,6 +44,35 @@ const updates = (await getCollection('updates')).sort((a, b) => b.data.date.valu
     </section>
 
     <section class="mx-auto max-w-7xl px-4 py-14 sm:px-6">
+      <p class="kicker">Radeon → model → agent</p>
+      <h2 class="display mt-2 text-3xl sm:text-4xl">Your card, a tested model, then the harness</h2>
+      <p class="mt-4 max-w-2xl text-muted">
+        Pick a Radeon with a recipe, run the house Qwen on llama.cpp (or Strata for Flash), then point Hermes, Aider, Cline, or OpenCode at <code>:8080</code> / <code>:8083</code>.
+        Compatibility means a recipe passed our gates — not a spreadsheet.
+      </p>
+      <ol class="mt-8 grid gap-4 md:grid-cols-3">
+        <li class="card p-5">
+          <p class="kicker">1 · Radeon</p>
+          <h3 class="mt-2 text-xl tracking-tight">Start from the card you own</h3>
+          <p class="mt-2 text-sm text-muted">R9700 has tested recipes. Other directory cards stay listed as gaps.</p>
+          <p class="mt-4"><a class="underline decoration-accent/40" href="/gpus/r9700">R9700 recipes</a> · <a class="underline decoration-accent/40" href="/gpus">Directory</a></p>
+        </li>
+        <li class="card p-5">
+          <p class="kicker">2 · Tested model</p>
+          <h3 class="mt-2 text-xl tracking-tight">Daily 35B or Flash</h3>
+          <p class="mt-2 text-sm text-muted">Qwen3.6-35B-A3B on llama.cpp Vulkan. Flash on Strata when you want the faster agent.</p>
+          <p class="mt-4"><a class="underline decoration-accent/40" href="/models/qwen36">35B</a> · <a class="underline decoration-accent/40" href="/models/flash">Flash</a></p>
+        </li>
+        <li class="card p-5">
+          <p class="kicker">3 · Agent</p>
+          <h3 class="mt-2 text-xl tracking-tight">Hermes, Aider, Cline, OpenCode</h3>
+          <p class="mt-2 text-sm text-muted">Same OpenAI-shaped /v1. Copy the snippet generated from the recipe’s port and model name.</p>
+          <p class="mt-4"><a class="underline decoration-accent/40" href="/harnesses/connect">Connect a harness</a></p>
+        </li>
+      </ol>
+    </section>
+
+    <section class="mx-auto max-w-7xl px-4 py-14 sm:px-6">
       <p class="kicker">From the rig</p>
       <h2 class="display mt-2 text-3xl sm:text-4xl">Tested stacks, measured where we have numbers</h2>
       <div class="mt-8 grid gap-4 lg:grid-cols-3">

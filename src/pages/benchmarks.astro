@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import Callout from '../components/Callout.astro';
+import EvidenceBadge from '../components/EvidenceBadge.astro';
 import { compareRows, MEASURED_LABEL, metricLabel } from '../lib/benchmarks';
 import { benchmarksFile } from '../lib/benchmarks-data';
 
@@ -26,6 +27,7 @@ const flash = file.runs.filter((run) => run.model.includes('Flash'));
       <a class="btn-primary" href="#our-rig">Our test rig</a>
       <a class="btn-secondary" href="#compare">Comparison table</a>
           <a class="btn-ghost" href="/results">Comparable results</a>
+      <a class="btn-ghost" href="/benchmarks/methodology">Gates / methodology</a>
       <a class="btn-ghost" href="/calculator">Calculator</a>
       <a class="btn-ghost" href="/backends">Engines</a>
     </div>
@@ -124,6 +126,7 @@ const flash = file.runs.filter((run) => run.model.includes('Flash'));
               <th>Quant</th>
               <th>Context</th>
               <th>{metricLabel('tg')}</th>
+              <th>Evidence</th>
               <th>Fit</th>
             </tr>
           </thead>
@@ -133,6 +136,7 @@ const flash = file.runs.filter((run) => run.model.includes('Flash'));
                 <td class="font-medium">{run.quant}</td>
                 <td>{run.context_label}</td>
                 <td>{run.tok_s == null ? 'not measured' : `~${run.tok_s} tok/s`}</td>
+                <td><EvidenceBadge tier="tested-our-rig" compact /></td>
                 <td>
                   {run.calculator ? (
                     <a class="underline decoration-accent/40" href={run.calculator}>Calculator</a>
@@ -158,6 +162,7 @@ const flash = file.runs.filter((run) => run.model.includes('Flash'));
               <th>Engine</th>
               <th>Context</th>
               <th>{metricLabel('tg')}</th>
+              <th>Evidence</th>
               <th>Fit</th>
             </tr>
           </thead>
@@ -171,6 +176,7 @@ const flash = file.runs.filter((run) => run.model.includes('Flash'));
                 </td>
                 <td>{run.context_label}</td>
                 <td>{run.tok_s == null ? 'not measured' : `~${run.tok_s} tok/s`}</td>
+                <td><EvidenceBadge tier="tested-our-rig" compact /></td>
                 <td>
                   {run.calculator ? (
                     <a class="underline decoration-accent/40" href={run.calculator}>Calculator</a>

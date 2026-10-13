@@ -183,50 +183,62 @@ export function recipesForModel(list: Recipe[], modelId: string): Recipe[] {
   return liveRecipes(list).filter((row) => row.model_id === modelId);
 }
 
+function quantHint(quantId: CalcInput['quantId']): string | null {
+  if (quantId === 'q4_k_m') return 'Q4';
+  if (quantId === 'q5_k_m') return 'Q5';
+  if (quantId === 'q6_k') return 'Q6';
+  if (quantId === 'q3_k_m' || quantId === 'q3_k_s' || quantId === 'q3_k_xl' || quantId === 'iq3') return 'Q3';
+  return null;
+}
+
+function candidateScore(row: Recipe, input: CalcInput): number {
+  let score = 0;
+  if (row.ctx === input.context) score += 100;
+  else if (input.context <= 8192 && row.ctx_label === 'short') score += 40;
+  if (input.quantId === 'q5_k_m' && row.weights.quant.includes('UD-Q5')) score += 12;
+  if (input.quantId === 'q5_k_m' && row.weights.quant === 'Q5_K_M') score += 6;
+  if (input.quantId === 'q4_k_m' && /Q4_K_M/i.test(row.weights.quant)) score += 12;
+  if (input.quantId === 'q6_k' && /Q6/i.test(row.weights.quant)) score += 12;
+  if (row.backend === 'llamacpp') score += 2;
+  return score;
+}
+
 export function matchRecipe(list: Recipe[], input: CalcInput): Recipe | null {
   const live = liveRecipes(list);
   const card = input.gpuId;
   const model = input.modelId === 'custom' ? null : input.modelId;
   if (!model) return null;
-  const quantHint =
-    input.quantId === 'q4_k_m'
-      ? 'Q4'
-      : input.quantId === 'q5_k_m'
-        ? 'Q5'
-        : input.quantId === 'q6_k'
-          ? 'Q6'
-          : input.quantId === 'q3_k_m' ||
-              input.quantId === 'q3_k_s' ||
-              input.quantId === 'q3_k_xl' ||
-              input.quantId === 'iq3'
-            ? 'Q3'
-            : null;
-  if (!quantHint) return null;
+  const hint = quantHint(input.quantId);
+  if (!hint) return null;
 
   const candidates = live.filter((row) => {
     if (row.card !== card) return false;
     if (row.model_id !== model) return false;
     if (row.card_count !== input.gpuCount) return false;
-    if (!row.weights.quant.includes(quantHint)) return false;
+    if (!row.weights.quant.includes(hint)) return false;
     if (model === 'qwen36' && input.split) return false;
     return true;
   });
 
   if (!candidates.length) return null;
+  return [...candidates].sort((a, b) => candidateScore(b, input) - candidateScore(a, input))[0] ?? null;
+}
 
-  const exact = candidates.find((row) => row.ctx === input.context);
-  if (exact) return exact;
-  if (input.context <= 8192) {
-    return candidates.find((row) => row.ctx_label === 'short') ?? candidates[0] ?? null;
+export function recipeTestedLine(recipe: Recipe | null): { tested: boolean; text: string; href: string | null } {
+  if (!recipe) {
+    return { tested: false, text: 'Estimate only — no tested recipe for this card × model.', href: null };
   }
-  return candidates[0] ?? null;
+  const tok = proofTokS(recipe);
+  const tokBit = tok != null ? `${tok} tok/s` : 'see recipe';
+  return {
+    tested: true,
+    text: `Tested: ${tokBit} · ${TIER_LABEL[recipe.proof[0]?.tier ?? 'tested-our-rig']} · ${recipe.weights.quant} · ${recipe.ctx_label}`,
+    href: `/recipes/${recipe.id}`,
+  };
 }
 
 export function pickRecipes(list: Recipe[], gpu: string, vram: number | null): Recipe[] {
-  const live = liveRecipes(list).filter((row) => {
-    if (row.card !== gpu && !row.card.includes(gpu) && gpu && !gpu.includes(row.card)) return false;
-    return true;
-  });
+  const live = liveRecipes(list).filter((row) => row.card === gpu);
   const ranked = [...live].sort((a, b) => {
     const aDaily = a.model_id === 'qwen36' && a.backend === 'llamacpp' ? 0 : 1;
     const bDaily = b.model_id === 'qwen36' && b.backend === 'llamacpp' ? 0 : 1;
@@ -264,6 +276,17 @@ export function proofTokS(recipe: Recipe): number | null {
 export function launchText(recipe: Recipe): string {
   const env = recipe.launch.env.length ? `${recipe.launch.env.join('\n')}\n` : '';
   return `${env}${recipe.launch.lines.join('\n')}\n`;
+}
+
+export function harnessSnippetFromRecipe(recipe: Recipe): string {
+  const port = recipe.backend === 'strata' ? 8083 : 8080;
+  return [
+    `# Your Radeon → ${recipe.model} → your agent`,
+    `# Recipe ${recipe.id} · ${recipe.card} · ${recipe.weights.quant} · ${recipe.ctx_label}`,
+    `curl -s http://127.0.0.1:${port}/v1/models`,
+    `# Point Hermes / Aider / Cline / OpenCode at http://127.0.0.1:${port}/v1`,
+    `# Set the model field to the id that endpoint prints (not an invented name).`,
+  ].join('\n');
 }
 
 export function catalogPayload(list: Recipe[]) {

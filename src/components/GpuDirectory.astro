@@ -1,5 +1,8 @@
 ---
 import { gpuDirectory } from '../lib/status';
+import { recipes } from '../lib/recipes-data';
+import { gpuCardId } from '../lib/gpu-pages';
+import { recipesForCard } from '../lib/recipes';
 
 const families = [...new Set(gpuDirectory.cards.map((card) => card.family))];
 ---
@@ -28,13 +31,19 @@ const families = [...new Set(gpuDirectory.cards.map((card) => card.family))];
               <th class="px-3 py-2 font-medium">gfx</th>
               <th class="px-3 py-2 font-medium">VRAM</th>
               <th class="px-3 py-2 font-medium">ROCm</th>
+              <th class="px-3 py-2 font-medium">Recipes</th>
               <th class="px-3 py-2 font-medium">HSA_OVERRIDE</th>
             </tr>
           </thead>
           <tbody>
-            {gpuDirectory.cards.filter((card) => card.family === family).map((card) => (
+            {gpuDirectory.cards.filter((card) => card.family === family).map((card) => {
+              const id = gpuCardId(card);
+              const count = recipesForCard(recipes, id).length;
+              return (
               <tr class="border-t border-line align-top">
-                <td class="px-3 py-2.5 font-medium">{card.name}</td>
+                <td class="px-3 py-2.5 font-medium">
+                  <a class="underline decoration-accent/40" href={`/gpus/${id}`}>{card.name}</a>
+                </td>
                 <td class="px-3 py-2.5 text-muted">{card.arch}</td>
                 <td class="px-3 py-2.5"><code class="rounded bg-accent-soft px-1.5 py-0.5 font-mono text-[0.8em] text-accent-ink">{card.gfx}</code></td>
                 <td class="px-3 py-2.5 tabular-nums">{card.vram_gb == null ? 'Confirm SKU' : `${card.vram_gb} GB`}</td>
@@ -44,9 +53,17 @@ const families = [...new Set(gpuDirectory.cards.map((card) => card.family))];
                   </span>
                   <span class="mt-1 block text-xs text-muted">{card.rocm_note}</span>
                 </td>
+                <td class="px-3 py-2.5 text-xs">
+                  {count > 0 ? (
+                    <a class="text-ok underline decoration-accent/40" href={`/gpus/${id}`}>{count} tested</a>
+                  ) : (
+                    <span class="text-muted">No tested recipe yet — contribute</span>
+                  )}
+                </td>
                 <td class="px-3 py-2.5 text-xs text-muted">{card.hsa_override}</td>
               </tr>
-            ))}
+              );
+            })}
           </tbody>
         </table>
       </div>

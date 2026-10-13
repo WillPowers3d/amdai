@@ -1,0 +1,42 @@
+---
+import Base from '../../layouts/Base.astro';
+import RecipeTable from '../../components/RecipeTable.astro';
+import { recipesForModel } from '../../lib/recipes';
+import { recipes } from '../../lib/recipes-data';
+import { MODEL_PAGES } from '../../lib/gpu-pages';
+---
+
+<Base
+  title="Models"
+  description="House Qwen models with tested Radeon recipes. Reverse view of the GPU directory."
+>
+  <main id="main" class="mx-auto max-w-6xl px-4 py-10 sm:px-6">
+    <p class="kicker">Weights we actually run</p>
+    <h1 class="display mt-3 text-4xl sm:text-5xl">Models</h1>
+    <p class="mt-4 max-w-2xl text-lg leading-relaxed text-muted">
+      The reverse of the GPU pages: pick a model, see which Radeon setups have a recipe.
+      Qwen2.5 and Qwen3-8B are not listed. Q3 appears only as estimate/community unless we measured it.
+    </p>
+    <div class="mt-8 grid gap-6">
+      {MODEL_PAGES.map((model) => {
+        const rows = recipesForModel(recipes, model.id);
+        return (
+          <section class="card p-5 sm:p-6" aria-labelledby={`${model.id}-heading`}>
+            <p class="kicker">{model.role}</p>
+            <h2 id={`${model.id}-heading`} class="mt-1 text-2xl tracking-tight">
+              <a class="underline decoration-accent/40" href={`/models/${model.id}`}>{model.name}</a>
+            </h2>
+            <p class="mt-2 text-sm text-muted">
+              Official <a class="underline decoration-accent/40" href={model.hf}>{model.official}</a>
+              {' · '}
+              GGUF {model.gguf}
+            </p>
+            <div class="mt-5">
+              <RecipeTable recipes={rows} empty="No tested recipe yet — contribute." />
+            </div>
+          </section>
+        );
+      })}
+    </div>
+  </main>
+</Base>

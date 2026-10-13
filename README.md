@@ -59,7 +59,17 @@ Public site URL is `https://amdai.net` (`site` in `astro.config.mjs`; override w
 | `/budget` | Setup by budget — size/speed, local/hybrid, standard/abliterated |
 | `/calculator` | Quant + Hardware Calculator — size a model, ask what a Radeon can run, or read a speed floor (Q3 through BF16, client-side) |
 | `/quants` | Q3–Q8, UD dynamic, KV types, why Q1/Q2 stay off |
-| `/gpus` | GPU directory — gfx IDs, VRAM, official ROCm rows |
+| `/gpus` | GPU directory — gfx IDs, VRAM, official ROCm rows, links to `/gpus/<id>` |
+| `/gpus/<id>` | One card: recipe table, launch command, or “no tested recipe yet” |
+| `/models` | House Qwen models with reverse recipe tables |
+| `/recipes/<id>` | One launch: gates, command, RAM, withdrawal |
+| `/contribute` | Download recipe JSON (log required) |
+| `/wanted` | Card × model gaps — no bounty amounts |
+| `/credits` | Sybil / 0xSero MIT notice and local-desktop first-party set |
+| `/benchmarks/methodology` | Our pass/fail suite in our words |
+| `/api/v1/catalog.json` | Static recipe catalog |
+| `/api/v1/gpus/<id>.json` | Per-card JSON |
+| `/api/v1/pick.json` | Static pick table (query strings are not evaluated here) |
 | `/stack-lab` | Radeon Stack Lab companion (Ubuntu app, Origin repo / local) |
 | `/rocm` | What is ROCm — multi-page consumer deep dive |
 | `/rocm/stack` | Layer-by-layer stack + mermaid diagram |

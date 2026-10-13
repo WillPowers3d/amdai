@@ -1,0 +1,50 @@
+---
+import EvidenceBadge from './EvidenceBadge.astro';
+import { proofTokS, type Recipe } from '../lib/recipes';
+
+interface Props {
+  recipes: Recipe[];
+  empty: string;
+}
+
+const { recipes, empty } = Astro.props;
+---
+
+{recipes.length === 0 ? (
+  <p class="rounded-xl border border-dashed border-line bg-canvas/40 px-4 py-6 text-sm text-muted">{empty}</p>
+) : (
+  <div class="overflow-x-auto rounded-xl border border-line">
+    <table class="min-w-[52rem] w-full text-left text-sm">
+      <thead class="bg-raised text-[0.72rem] uppercase tracking-[0.08em] text-faint">
+        <tr>
+          <th class="px-3 py-2 font-medium">Model</th>
+          <th class="px-3 py-2 font-medium">Setup</th>
+          <th class="px-3 py-2 font-medium">Backend</th>
+          <th class="px-3 py-2 font-medium">Quant</th>
+          <th class="px-3 py-2 font-medium">Ctx</th>
+          <th class="px-3 py-2 font-medium">Decode</th>
+          <th class="px-3 py-2 font-medium">Evidence</th>
+        </tr>
+      </thead>
+      <tbody>
+        {recipes.map((row) => (
+          <tr class="border-t border-line align-top">
+            <td class="px-3 py-2.5">
+              <a class="font-medium underline decoration-accent/40" href={`/recipes/${row.id}`}>{row.model}</a>
+              <span class="mt-1 block text-xs text-muted">{row.weights.filename}</span>
+            </td>
+            <td class="px-3 py-2.5 tabular-nums">{row.card_count}× {row.card}</td>
+            <td class="px-3 py-2.5">
+              {row.backend === 'llamacpp' ? 'llama.cpp' : 'Strata'}
+              <span class="mt-1 block text-xs text-muted">{row.build}</span>
+            </td>
+            <td class="px-3 py-2.5">{row.weights.quant}</td>
+            <td class="px-3 py-2.5">{row.ctx_label}</td>
+            <td class="px-3 py-2.5 tabular-nums">{proofTokS(row) ?? '—'}</td>
+            <td class="px-3 py-2.5"><EvidenceBadge tier={row.proof[0]?.tier ?? 'tested-our-rig'} compact /></td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+)}

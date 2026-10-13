@@ -3,6 +3,10 @@ import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import UpdateCard from '../../components/UpdateCard.astro';
 import { matrixFile } from '../../lib/matrix';
+import { recipes } from '../../lib/recipes-data';
+import { withdrawalUpdates } from '../../lib/recipes';
+
+const withdrawn = withdrawalUpdates(recipes);
 
 const updates = (await getCollection('updates')).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 ---
@@ -30,6 +34,27 @@ const updates = (await getCollection('updates')).sort((a, b) => b.data.date.valu
       <p class="mt-4">
         <a class="text-accent-ink underline decoration-accent/40 underline-offset-2" href="/updates/matrix">Open the matrix</a>
       </p>
+    </section>
+
+    <section class="mt-12">
+      <h2 class="font-serif text-3xl">Withdrawn recipes</h2>
+      <p class="mt-3 text-sm text-muted">
+        A withdrawn recipe stays in git with a source and a reason. It also feeds “Updates for your rig” when accounts are on.
+      </p>
+      {withdrawn.length === 0 ? (
+        <p class="mt-4 rounded-xl border border-dashed border-line px-4 py-5 text-sm text-muted">
+          No seeded recipe is withdrawn. When a regression lands, the drawer on the recipe page will say so.
+        </p>
+      ) : (
+        <ul class="mt-4 space-y-2 text-sm">
+          {withdrawn.map((row) => (
+            <li>
+              <a class="underline decoration-accent/40" href={row.source_url}>{row.summary}</a>
+              <span class="text-faint"> · {row.date}</span>
+            </li>
+          ))}
+        </ul>
+      )}
     </section>
 
     <section class="mt-12">

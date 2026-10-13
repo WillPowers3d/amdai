@@ -1,0 +1,63 @@
+{
+  "id": "qwen36-35b.llamacpp-vulkan.262k",
+  "card": "r9700",
+  "model_id": "qwen36",
+  "model": "Qwen3.6-35B-A3B",
+  "official": "Qwen/Qwen3.6-35B-A3B",
+  "weights": {
+    "repo": "unsloth/Qwen3.6-35B-A3B-GGUF",
+    "commit": null,
+    "filename": "Qwen3.6-35B-A3B-UD-Q5_K_XL.gguf",
+    "quant": "UD-Q5_K_XL"
+  },
+  "backend": "llamacpp",
+  "build": "vulkan",
+  "rocm_version": null,
+  "gfx": "gfx1201",
+  "override": null,
+  "ctx": 262144,
+  "ctx_label": "256K",
+  "card_count": 1,
+  "flags_todo": true,
+  "needs": { "host_ram_gb": null, "disk_gb": null },
+  "proof": [
+    {
+      "date": "2026-10",
+      "who": "local-desktop",
+      "tier": "tested-our-rig",
+      "source": "local-desktop strata-test report / Local AI measurements",
+      "gates": {
+        "load": "pass",
+        "chat": "pass",
+        "reasoning": "not_measured",
+        "tools": "not_measured",
+        "long_context": "pass",
+        "speed": "pass"
+      },
+      "decode": 50,
+      "prefill": null,
+      "log_hash": null
+    }
+  ],
+  "withdrawn": null,
+  "launch": {
+    "family": "llamacpp",
+    "todo_flags": true,
+    "env": [],
+    "lines": [
+      "# Shape only — exact flags TODO on stacks.",
+      "./build-vk/bin/llama-server \\",
+      "  -m ~/models/Qwen3.6-35B-A3B-UD-Q5_K_XL.gguf \\",
+      "  -ngl 99 \\",
+      "  -c 262144 \\",
+      "  --cache-type-k f16 \\",
+      "  --cache-type-v f16 \\",
+      "  --host 127.0.0.1 --port 8080"
+    ]
+  },
+  "calculator": "/calculator?gpu=r9700&vram=32&n=1&split=0&ram=256&model=qwen36&tp=35&ap=3&layers=40&kvl=10&kvh=2&hd=256&quant=q5_k_m&ctx=262144&kv=f16&oh=1",
+  "notes": [
+    "One R9700, f16 KV, 0% RAM offload. Daily driver.",
+    "Measured on our rig, 2026-10 — ~50 tok/s decode at 256K."
+  ]
+}

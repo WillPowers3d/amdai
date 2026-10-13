@@ -4,8 +4,18 @@ import HouseRules from '../components/HouseRules.astro';
 import BuyButtons from '../components/BuyButtons.astro';
 import Qwen36Benches from '../components/Qwen36Benches.astro';
 import SystemRamNeed from '../components/SystemRamNeed.astro';
+import LaunchCommand from '../components/LaunchCommand.astro';
+import EvidenceBadge from '../components/EvidenceBadge.astro';
 import { stacksGuide } from '../lib/status';
 import { systemRamNeedFromQuery } from '../lib/calculator';
+import { recipes } from '../lib/recipes-data';
+
+const stackRecipe = (id: string) =>
+  id === 'daily-driver'
+    ? recipes.find((row) => row.id === 'qwen36-35b.llamacpp-vulkan.262k')
+    : id === 'fast-agent'
+      ? recipes.find((row) => row.id === 'qwen38-flash.strata.262k')
+      : undefined;
 ---
 
 <Base
@@ -73,6 +83,15 @@ import { systemRamNeedFromQuery } from '../lib/calculator';
           {stack.calculator.includes('?') && (
             <div class="mt-4">
               <SystemRamNeed need={systemRamNeedFromQuery(stack.calculator)} />
+            </div>
+          )}
+          {stackRecipe(stack.id) && (
+            <div class="mt-5">
+              <p class="mb-2 flex flex-wrap items-center gap-2">
+                <EvidenceBadge tier={stackRecipe(stack.id)!.proof[0]?.tier ?? 'tested-our-rig'} />
+                <a class="text-sm underline decoration-accent/40" href={`/recipes/${stackRecipe(stack.id)!.id}`}>Recipe</a>
+              </p>
+              <LaunchCommand recipe={stackRecipe(stack.id)!} />
             </div>
           )}
           <div class="mt-5 rounded-xl border border-dashed border-line bg-canvas/40 p-4">

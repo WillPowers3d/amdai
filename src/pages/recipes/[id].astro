@@ -1,0 +1,98 @@
+---
+import Base from '../../layouts/Base.astro';
+import EvidenceBadge from '../../components/EvidenceBadge.astro';
+import GateChecklist from '../../components/GateChecklist.astro';
+import LaunchCommand from '../../components/LaunchCommand.astro';
+import SystemRamNeed from '../../components/SystemRamNeed.astro';
+import { recipeSystemRam } from '../../lib/recipes';
+import { recipes } from '../../lib/recipes-data';
+
+export function getStaticPaths() {
+  return recipes.map((recipe) => ({ params: { id: recipe.id }, props: { recipe } }));
+}
+
+const { recipe } = Astro.props;
+const ram = recipeSystemRam(recipe);
+const proof = recipe.proof[0];
+---
+
+<Base
+  title={`${recipe.model} on ${recipe.card}`}
+  description={`Recipe ${recipe.id}: ${recipe.weights.quant}, ${recipe.backend}, ${recipe.ctx_label}.`}
+>
+  <main id="main" class="mx-auto max-w-3xl px-4 py-10 sm:px-6">
+    <p class="kicker">{recipe.card} · {recipe.gfx} · {recipe.card_count} card{recipe.card_count === 1 ? '' : 's'}</p>
+    <h1 class="display mt-3 text-4xl sm:text-5xl">{recipe.model}</h1>
+    <p class="mt-3 flex flex-wrap gap-2">
+      {proof && <EvidenceBadge tier={proof.tier} />}
+      <span class="badge">{recipe.weights.quant}</span>
+      <span class="badge">{recipe.backend === 'llamacpp' ? 'llama.cpp' : 'Strata'}</span>
+      <span class="badge">{recipe.ctx_label}</span>
+    </p>
+    <p class="mt-4 text-muted">{recipe.notes.join(' ')}</p>
+
+    {recipe.withdrawn && (
+      <section class="mt-8 rounded-2xl border border-warn/40 bg-warn/10 p-4">
+        <h2 class="text-xl tracking-tight">Withdrawn</h2>
+        <p class="mt-2 text-sm">{recipe.withdrawn.date}: {recipe.withdrawn.reason}</p>
+        <p class="mt-1 text-xs text-faint">{recipe.withdrawn.source}</p>
+      </section>
+    )}
+
+    <section class="mt-10">
+      <h2 class="font-serif text-3xl">Launch</h2>
+      <p class="mt-2 text-sm text-muted">llama.cpp is the consumer default. Strata is the Flash try. Exact extra flags stay TODO when marked.</p>
+      <div class="mt-4">
+        <LaunchCommand recipe={recipe} />
+      </div>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="font-serif text-3xl">Gates</h2>
+      <p class="mt-2 text-sm text-muted">
+        Our checklist, in our words — not Sybil’s six-gate wording. Definitions live on
+        <a class="underline decoration-accent/40" href="/benchmarks/methodology">methodology</a>.
+      </p>
+      {proof && (
+        <div class="mt-4">
+          <GateChecklist gates={proof.gates} />
+        </div>
+      )}
+    </section>
+
+    {ram && (
+      <section class="mt-10">
+        <h2 class="font-serif text-3xl">Host RAM</h2>
+        <p class="mt-2 text-sm text-muted">Kit sizes are estimates unless a Local AI RSS number lands.</p>
+        <div class="mt-4">
+          <SystemRamNeed need={ram} />
+        </div>
+      </section>
+    )}
+
+    <dl class="mt-10 grid gap-3 text-sm sm:grid-cols-2">
+      <div>
+        <dt class="text-faint">Weights</dt>
+        <dd>{recipe.weights.repo} / {recipe.weights.filename}</dd>
+      </div>
+      <div>
+        <dt class="text-faint">ROCm / override</dt>
+        <dd>{recipe.rocm_version ?? 'not recorded'} · {recipe.override ?? 'none'}</dd>
+      </div>
+      <div>
+        <dt class="text-faint">Proof</dt>
+        <dd>{proof?.who} · {proof?.date} · {proof?.source}</dd>
+      </div>
+      <div>
+        <dt class="text-faint">Decode / prefill</dt>
+        <dd class="tabular-nums">{proof?.decode ?? '—'} / {proof?.prefill ?? '—'}</dd>
+      </div>
+    </dl>
+
+    <p class="mt-8 flex flex-wrap gap-3 text-sm">
+      <a class="btn-primary" href={recipe.calculator}>Calculator</a>
+      <a class="btn-secondary" href={`/gpus/${recipe.card}`}>{recipe.card} page</a>
+      <a class="btn-ghost" href={`/models/${recipe.model_id}`}>Model page</a>
+    </p>
+  </main>
+</Base>

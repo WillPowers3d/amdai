@@ -12,6 +12,12 @@ import {
   type SnippetTarget,
 } from '../../lib/harnesses';
 import { harnesses, harnessesFile } from '../../lib/harnesses-data';
+import { recipes } from '../../lib/recipes-data';
+import { harnessSnippetFromRecipe, liveRecipes } from '../../lib/recipes';
+
+const recipeSnippets = liveRecipes(recipes)
+  .filter((row) => row.card === 'r9700')
+  .sort((a, b) => (a.backend === b.backend ? b.ctx - a.ctx : a.backend === 'llamacpp' ? -1 : 1));
 
 const targets: SnippetTarget[] = ['llama', 'strata'];
 const rows = harnesses();
@@ -42,6 +48,24 @@ const rows = harnesses();
     <ul class="mt-6 space-y-1.5 text-sm text-muted">
       {harnessesFile.notes.map((note) => <li>{note}</li>)}
     </ul>
+
+    <section class="mt-12" aria-labelledby="from-recipe-heading">
+      <h2 id="from-recipe-heading" class="text-2xl tracking-tight">From a tested recipe</h2>
+      <p class="mt-2 text-sm text-muted">
+        Port and model name come from the recipe. llama.cpp first. Do not invent a model id — curl <code>/v1/models</code>.
+      </p>
+      {recipeSnippets.map((recipe) => (
+        <SnippetBlock
+          snippet={{
+            id: `recipe-${recipe.id}`,
+            title: `${recipe.model} · ${recipe.backend === 'llamacpp' ? 'llama.cpp' : 'Strata'} · ${recipe.ctx_label}`,
+            language: 'bash',
+            applicable: true,
+            code: harnessSnippetFromRecipe(recipe),
+          }}
+        />
+      ))}
+    </section>
 
     {targets.map((target) => {
       const ep = endpointSet(harnessesFile, target);

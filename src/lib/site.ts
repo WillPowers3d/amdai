@@ -39,7 +39,8 @@ export function ogSlug(pathname: string) {
   if (slug === 'harnesses' || slug.startsWith('harnesses-')) return 'stacks';
   if (slug === 'backends' || slug.startsWith('backends-')) return 'backends';
   if (slug === 'benchmarks' || slug === 'results') return 'stacks';
-  if (slug === 'bios') return 'default';
+  if (slug === 'bios' || slug === 'credits' || slug === 'contribute' || slug === 'wanted') return 'default';
+  if (slug === 'models' || slug.startsWith('models-') || slug.startsWith('gpus-') || slug.startsWith('recipes-')) return 'gpus';
   return OG_PAGES.has(slug) ? slug : 'default';
 }
 
@@ -99,7 +100,8 @@ export const primaryNav: NavItem[] = [
   { href: '/budget', label: 'Budget', description: 'Starter → Pro Radeon builds, no invented prices', group: 'path' },
   { href: '/calculator', label: 'Calculator', description: 'Size a model, ask what a Radeon can run, or read a speed floor — Q3 through BF16', group: 'path' },
   { href: '/quants', label: 'Quants', description: 'Q3–Q8, UD dynamic, KV types, why Q1/Q2 stay off', group: 'path' },
-  { href: '/gpus', label: 'GPU directory', description: 'Radeon cards, gfx IDs, VRAM, official ROCm rows', group: 'stack' },
+  { href: '/gpus', label: 'GPU directory', description: 'Radeon cards, gfx IDs, VRAM, official ROCm rows, tested recipes', group: 'stack' },
+  { href: '/models', label: 'Models', description: 'House Qwen models with reverse recipe tables and HF cards', group: 'stack' },
   { href: '/rocm', label: 'ROCm', description: 'What it is — stack, gfx IDs, Vulkan vs HIP, versions', group: 'stack' },
   { href: '/rocm-problems', label: 'ROCm problems', description: "Open problems and how you can help — cited only", group: 'stack' },
   { href: '/backends', label: 'Backends', description: 'Inference engines compared — llama.cpp first', group: 'stack' },
@@ -118,6 +120,9 @@ export const primaryNav: NavItem[] = [
   { href: '/forum', label: 'Forum', description: 'Threads, rig badges, solved marks — off unless FORUM_ENABLED', group: 'practice' },
   { href: '/account', label: 'Account', description: 'Optional saved rigs and stack-update alerts', group: 'practice' },
   { href: '/privacy', label: 'Privacy', description: 'What optional accounts store', group: 'practice' },
+  { href: '/contribute', label: 'Contribute', description: 'Submit a Radeon recipe as JSON — log required, no invented tok/s', group: 'practice' },
+  { href: '/wanted', label: 'Wanted', description: 'Radeon × model gaps we want sourced recipes for', group: 'practice' },
+  { href: '/credits', label: 'Credits', description: 'Sybil / 0xSero attribution and the local-desktop first-party set', group: 'practice' },
   { href: '/disclosure', label: 'Disclosure', description: 'Amazon Associates, Rakuten, B&H — and what is not affiliate', group: 'practice' },
 ];
 

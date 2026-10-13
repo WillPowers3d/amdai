@@ -1,0 +1,28 @@
+# Recipe gaps we actually want. No bounty amounts — amdai has not signed those off.
+as_of: 2026-10
+rule: Gaps only. A wanted row is not a speed claim. No invented tok/s or prices.
+items:
+  - id: rx9070xt-qwen36
+    card: rx9070xt
+    card_name: Radeon RX 9070 XT
+    model: Qwen3.6-35B-A3B
+    why: Same gfx1201 as the R9700, half the VRAM. We have no one-card recipe.
+    request: llama.cpp Vulkan, Q5 or Q4 if it fits, short context first. Log plus screenshot.
+  - id: rx7900xtx-qwen36
+    card: rx7900xtx
+    card_name: Radeon RX 7900 XTX
+    model: Qwen3.6-35B-A3B
+    why: Best RDNA 3 consumer VRAM. Community runs exist; we have not reproduced them.
+    request: llama.cpp first. Q3 stays estimate/community unless you measured it here.
+  - id: r9700-2x-qwen36
+    card: r9700
+    card_name: Radeon AI PRO R9700 ×2
+    model: Qwen3.6-35B-A3B
+    why: The box has two cards. Seeded recipes are one-card only.
+    request: Split-server vs two copies. Do not send a number we did not ask you to measure.
+  - id: r9700-flash-q5
+    card: r9700
+    card_name: Radeon AI PRO R9700
+    model: Qwen 3.8 Flash
+    why: Seeded Flash proofs are UD-Q6_K_XL only (Strata 32.6 vs llama.cpp 16).
+    request: Q5 or Q4 offload run with host RAM measured. Q3 is allowed as estimate/community.

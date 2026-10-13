@@ -1,0 +1,59 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base
+  title="Credits"
+  description="Attribution for recipe ideas from local.sybilsolutions.ai / 0xSero, and the house test-rig work."
+>
+  <main id="main" class="mx-auto max-w-3xl px-4 py-10 sm:px-6">
+    <p class="kicker">Attribution</p>
+    <h1 class="display mt-3 text-4xl sm:text-5xl">Credits</h1>
+    <p class="mt-4 text-lg leading-relaxed text-muted">
+      AMDai is independent. Product names belong to their owners. Numbers on this site are either measured on our test rig or labeled.
+    </p>
+
+    <section class="mt-12">
+      <h2 class="font-serif text-3xl">Sybil Local AI registry</h2>
+      <p class="mt-3 leading-relaxed text-muted">
+        The idea of a <strong class="text-ink">recipe</strong> — one exact launch of model X on GPU Y, with proof it worked —
+        comes from the
+        <a class="underline decoration-accent/40" href="https://local.sybilsolutions.ai">Sybil Local AI registry</a>
+        by <strong class="text-ink">0xSero</strong>
+        (<a class="underline decoration-accent/40" href="https://github.com/sybil-solutions/local-ai-registry">sybil-solutions/local-ai-registry</a>).
+        That project is MIT-licensed, © 2026 0xSero.
+      </p>
+      <p class="mt-3 leading-relaxed text-muted">
+        We did <strong class="text-ink">not</strong> import their AMD card files or their recipe proofs on this ship.
+        We re-implemented the idea in our own words and Astro pages: evidence tiers, a pass/fail suite,
+        a static JSON API, withdrawals, and a contribute path.
+        Their site’s prose and UI code stay theirs.
+      </p>
+      <pre class="mt-6 overflow-x-auto rounded-2xl border border-line bg-raised p-4 text-xs leading-relaxed"><code>{`MIT License
+
+Copyright (c) 2026 0xSero
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.`}</code></pre>
+      <p class="mt-3 text-sm text-muted">
+        Full license text lives upstream. If we later ingest their AMD Q4+ rows, each cell will say
+        “Cited external” and link the recipe file. That import is a separate task.
+      </p>
+    </section>
+
+    <section class="mt-12">
+      <h2 class="font-serif text-3xl">local-desktop / our test rig</h2>
+      <p class="mt-3 leading-relaxed text-muted">
+        Seeded recipes on this site are amdai’s first-party R9700 numbers: 35B UD-Q5_K_XL 100.8 / ~88 / ~50,
+        Q5_K_M 108.3, Q4_K_M 116.5, Flash Strata ~32.6 vs llama.cpp ~16. Label: Measured on our rig, 2026-10.
+      </p>
+    </section>
+  </main>
+</Base>

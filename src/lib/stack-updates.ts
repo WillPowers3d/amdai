@@ -1,5 +1,7 @@
 import { parse } from 'yaml';
 import stackUpdatesRaw from '../data/stack-updates.yaml?raw';
+import { recipes } from './recipes-data';
+import { withdrawalUpdates } from './recipes';
 import { normalizeUpdate, type StackUpdate } from './rig-match';
 
 export type { StackComponent, StackSeverity, StackUpdate, SavedRigMatch, RigModel, MatchReason } from './rig-match';
@@ -21,5 +23,5 @@ export function parseStackUpdates(raw: string): StackUpdatesFile {
 export const stackUpdatesFile = parseStackUpdates(stackUpdatesRaw);
 
 export function stackUpdates(): StackUpdate[] {
-  return stackUpdatesFile.updates;
+  return [...stackUpdatesFile.updates, ...withdrawalUpdates(recipes)];
 }

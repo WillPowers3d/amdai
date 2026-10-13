@@ -1,0 +1,58 @@
+{
+  "id": "qwen38-flash.strata.262k",
+  "card": "r9700",
+  "model_id": "flash",
+  "model": "Qwen 3.8 Flash",
+  "official": "Qwen/Qwen3.8-Flash-Next",
+  "weights": {
+    "repo": "unsloth/Qwen3.8-Flash-Next-GGUF",
+    "commit": null,
+    "filename": "UD-Q6_K_XL (folder)",
+    "quant": "UD-Q6_K_XL"
+  },
+  "backend": "strata",
+  "build": "hip",
+  "rocm_version": null,
+  "gfx": "gfx1201",
+  "override": null,
+  "ctx": 262144,
+  "ctx_label": "262K",
+  "card_count": 1,
+  "flags_todo": true,
+  "needs": { "host_ram_gb": null, "disk_gb": null },
+  "proof": [
+    {
+      "date": "2026-10",
+      "who": "local-desktop",
+      "tier": "tested-our-rig",
+      "source": "local-desktop strata-test report / Local AI measurements",
+      "gates": {
+        "load": "pass",
+        "chat": "pass",
+        "reasoning": "not_measured",
+        "tools": "not_measured",
+        "long_context": "pass",
+        "speed": "pass"
+      },
+      "decode": 32.6,
+      "prefill": null,
+      "log_hash": null
+    }
+  ],
+  "withdrawn": null,
+  "launch": {
+    "family": "strata",
+    "todo_flags": true,
+    "env": [],
+    "lines": [
+      "# Shape only — exact Strata flags TODO. Recipe strata-flash-q6, no MTP.",
+      "# This site’s convention: 127.0.0.1:8083 so llama-server can keep :8080.",
+      "curl -s http://127.0.0.1:8083/v1/models"
+    ]
+  },
+  "calculator": "/calculator?gpu=r9700&vram=32&n=1&split=0&ram=256&model=flash&tp=125&ap=6&layers=48&kvl=12&kvh=2&hd=256&quant=q6_k&ctx=262144&kv=f16&oh=1",
+  "notes": [
+    "Strata v0.1.42, no MTP. Measured on our rig, 2026-10 — ~32.6 tok/s writing at 262K.",
+    "Publisher UD-Q6_K_XL folder ~169 GB — host RAM not measured."
+  ]
+}
