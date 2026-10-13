@@ -4,7 +4,7 @@
  * Flags dead, redirected, and slow links. Does not remove citations.
  */
 
-import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import {
   classifyExternalResult,
@@ -12,6 +12,7 @@ import {
   formatExternalReport,
   indexDist,
   SITE_ORIGIN_DEFAULT,
+  writeDatedReport,
   type ExternalLinkRow,
 } from '../lib/site-qa';
 
@@ -75,19 +76,8 @@ for (const item of hrefs) {
 
 const asOf = new Date().toISOString().slice(0, 10);
 const report = formatExternalReport(rows, asOf);
-const outDirs = [
-  join('/opt/cursor/artifacts/link-reports'),
-  join(process.cwd(), 'artifacts/link-reports'),
-];
-for (const dir of outDirs) {
-  try {
-    mkdirSync(dir, { recursive: true });
-    const path = join(dir, `${asOf}-external.md`);
-    writeFileSync(path, report);
-    console.log(`wrote ${path}`);
-  } catch (err) {
-    console.warn(`could not write ${dir}:`, err instanceof Error ? err.message : err);
-  }
+for (const path of writeDatedReport('external', report, asOf)) {
+  console.log(`wrote ${path}`);
 }
 const flagged = rows.filter((row) => row.status !== 'ok').length;
 console.log(`checked ${rows.length}, flagged ${flagged}`);

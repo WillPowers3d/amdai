@@ -4,9 +4,9 @@
  * External citation checks live in check-links-external (offline-safe CI).
  */
 
-import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
+import { existsSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
-import { BRAND } from './site';
+import { OG_SITE_NAME } from './site';
 import { gluedSentenceHits, htmlToVisibleText } from './html-text';
 
 export const SITE_ORIGIN_DEFAULT = 'https://amdai.net';
@@ -23,7 +23,8 @@ export const Q4_FLOOR_PHRASES = [
 export const BANNED_MODEL_VISIBLE = /Qwen2\.5|Qwen3-8B/i;
 export const Q1Q2_QUANT = /\b(?:IQ[12]_[A-Z0-9]+|Q[12]_[A-Z0-9]+)\b/;
 export const BROKEN_TOKEN = /\bundefined\b|\bNaN\b|\[object Object\]/;
-export const LEFTOVER_COPY = /\bTODO\b|\bTBD\b|\blorem ipsum\b|\bplaceholder text\b|\byour text here\b|\bwelcome to your app\b/i;
+export const LEFTOVER_COPY =
+  /\bTODO\b|\bTBD\b|\bFIXME\b|\bchangeme\b|\blorem ipsum\b|\bplaceholder text\b|\byour text here\b|\bwelcome to your app\b/i;
 
 const CAMEL_ALLOW = [
   'OpenAI',
@@ -362,13 +363,9 @@ export function lintHtml(html: string, file: string): QaIssue[] {
   const siteName = html.match(/property=["']og:site_name["'][^>]*content=["']([^"']+)["']/i)
     ?? html.match(/content=["']([^"']+)["'][^>]*property=["']og:site_name["']/i);
   if (siteName) {
-    if (siteName[1] !== BRAND) {
-      issues.push(issue('brand', file, `og:site_name='${siteName[1]}' must be exactly '${BRAND}'`));
+    if (siteName[1] !== OG_SITE_NAME) {
+      issues.push(issue('brand', file, `og:site_name='${siteName[1]}' must be exactly '${OG_SITE_NAME}'`));
     }
-  }
-
-  if (/\bog:site_name["']\s+content=["']amdai["']/.test(html) || /content=["']amdai["'][^>]*og:site_name/.test(html)) {
-    issues.push(issue('brand', file, "og:site_name='amdai' must be exactly 'AMDai'"));
   }
 
   const masked = maskCamel(visible);
@@ -418,6 +415,30 @@ export function formatQaReport(issues: QaIssue[]): string {
     lines.push(`- [${item.kind}] ${item.file}: ${item.message}`);
   }
   return lines.join('\n');
+}
+
+export function qaReportDirs(): string[] {
+  return [
+    '/opt/cursor/artifacts/link-reports',
+    join(process.cwd(), 'artifacts/link-reports'),
+    join(process.cwd(), 'reports'),
+  ];
+}
+
+export function writeDatedReport(slug: string, body: string, asOf = new Date().toISOString().slice(0, 10)): string[] {
+  const filename = `${asOf}-${slug}.md`;
+  const written: string[] = [];
+  for (const dir of qaReportDirs()) {
+    try {
+      mkdirSync(dir, { recursive: true });
+      const path = join(dir, filename);
+      writeFileSync(path, body.endsWith('\n') ? body : `${body}\n`);
+      written.push(path);
+    } catch {
+      /* directory may be unwritable in some CI images */
+    }
+  }
+  return written;
 }
 
 export function extractExternalHrefs(index: DistIndex): { href: string; pages: string[] }[] {

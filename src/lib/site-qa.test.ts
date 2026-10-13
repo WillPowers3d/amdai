@@ -46,19 +46,21 @@ describe('site QA helpers', () => {
   });
 
   it('lints leftover copy, banned models, brand, empty cells, and glue', () => {
-    const bad = `<html><head><meta property="og:site_name" content="amdai"></head>
+    const bad = `<html><head><meta property="og:site_name" content="AMDai"></head>
       <body><p>wheels.HIP is the path.</p><p>Qwen2.5 is here.</p><p>TODO later</p>
       <table><tr><td></td><td>not measured</td></tr></table></body></html>`;
     const issues = lintHtml(bad, 'page.html');
-    assert.ok(issues.some((i) => i.kind === 'brand'));
+    assert.ok(issues.some((i) => i.kind === 'brand' && i.message.includes('amdai')));
     assert.ok(issues.some((i) => /Qwen2\.5|Qwen3-8B/.test(i.message) || i.message.includes('mentions')));
     assert.ok(issues.some((i) => i.message.includes('TODO')));
     assert.ok(issues.some((i) => i.message.includes('empty table')));
     assert.ok(issues.some((i) => i.message.includes('glue')));
-    const good = `<html><head><meta property="og:site_name" content="AMDai"></head>
+    const good = `<html><head><meta property="og:site_name" content="amdai"></head>
       <body><p>llama.cpp first. Q3 is listed.</p><table><tr><td>not measured</td></tr></table></body></html>`;
     assert.deepEqual(lintHtml(good, 'ok.html'), []);
     assert.equal(leftoverHits('lorem ipsum dolor').length, 1);
+    assert.equal(leftoverHits('FIXME later').length, 1);
+    assert.equal(leftoverHits('changeme token').length, 1);
     assert.ok(BANNED_MODEL_VISIBLE.test('Qwen3-8B instruct'));
     assert.ok(Q1Q2_QUANT.test('IQ2_XXS'));
     assert.ok(Q1Q2_QUANT.test('Q1_K'));
@@ -72,7 +74,7 @@ describe('site QA helpers', () => {
     mkdirSync(join(root, 'og'), { recursive: true });
     writeFileSync(
       join(root, 'index.html'),
-      `<html><head><meta property="og:site_name" content="AMDai"><meta property="og:image" content="/og/missing.png"></head>
+      `<html><head><meta property="og:site_name" content="amdai"><meta property="og:image" content="/og/missing.png"></head>
        <body><main id="main"><a href="/nope">gone</a><a href="#missing">jump</a><p>ok.</p></main></body></html>`,
     );
     writeFileSync(join(root, 'sitemap-index.xml'), '<sitemapindex><loc>https://amdai.net/sitemap-0.xml</loc></sitemapindex>');

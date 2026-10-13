@@ -1,6 +1,6 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
-import { BRAND, HERO_HEADLINE, primaryNav, site } from './site';
+import { BRAND, HERO_HEADLINE, OG_SITE_NAME, primaryNav, site } from './site';
 import { AMDAI_BENCH_SCHEMA } from './results';
 
 describe('AMDai brand and hero', () => {
@@ -12,6 +12,8 @@ describe('AMDai brand and hero', () => {
     assert.notEqual(site.wordmark, 'amdai');
     assert.notEqual(site.wordmark, 'AMDAi');
     assert.notEqual(site.wordmark, 'AMDAI');
+    assert.equal(OG_SITE_NAME, 'amdai');
+    assert.notEqual(OG_SITE_NAME, BRAND);
   });
 
   it('keeps the exact hero headline and leaves lowercase product ids alone', () => {

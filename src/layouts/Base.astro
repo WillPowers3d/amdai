@@ -4,7 +4,7 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import CommandPalette from '../components/CommandPalette.astro';
 import ReadingProgress from '../components/ReadingProgress.astro';
-import { ogSlug, site } from '../lib/site';
+import { OG_SITE_NAME, ogSlug, site } from '../lib/site';
 
 interface Props {
   title?: string;
@@ -36,7 +36,7 @@ const og = new URL(`/og/${ogSlug(Astro.url.pathname)}.png`, Astro.site);
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={og} />
-    <meta property="og:site_name" content={site.wordmark} />
+    <meta property="og:site_name" content={OG_SITE_NAME} />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />

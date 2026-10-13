@@ -35,6 +35,7 @@ pnpm-debug.log*
 # local agent scratch
 agent-tools/
 artifacts/
+reports/
 
 # Playwright
 test-results/

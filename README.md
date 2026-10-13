@@ -45,9 +45,9 @@ npm run build
 npm run preview
 ```
 
-`npm run build` runs Pagefind over `dist/`, then the site QA gate (`tsx src/scripts/check-site.ts`): every internal link, `#` anchor, image, OG image, and asset in the built HTML must exist, sitemap and redirect targets included. Content lint fails the build on sentence glue, leftover TODO/TBD/lorem, broken tokens, empty table cells, banned model names, Q4-floor phrases, Q1/Q2 quants, and `og:site_name` that is not exactly `AMDai`. For `npm run dev` after a build, `npm run index` copies the index to `public/pagefind`.
+`npm run build` runs Pagefind over `dist/`, then the site QA gate (`npm run qa:links` / `tsx src/scripts/check-site.ts`): every internal link, `#` anchor, image, OG image, and asset in the built HTML must exist, sitemap and redirect targets included. Content lint fails the build on sentence glue, leftover TODO/TBD/FIXME/changeme/lorem, broken tokens, empty table cells, banned model names, Q4-floor phrases, Q1/Q2 quants, and `og:site_name` that is not exactly `amdai` (display wordmark stays `AMDai`). The gate writes a dated report under `artifacts/link-reports/`, `reports/`, and `/opt/cursor/artifacts/link-reports/`. For `npm run dev` after a build, `npm run index` copies the index to `public/pagefind`.
 
-Outbound citations are a separate, network-using pass: `npm run check:links:external`. It is not part of the default build. It writes a dated report under `/opt/cursor/artifacts/link-reports/` and does not remove citations.
+Outbound citations are a separate, network-using pass: `npm run check:links:external` (alias `npm run qa:links:external`). It is not part of the default build. It writes a dated report next to the internal one and does not remove citations. Flaky externals do not fail `npm run build`.
 
 Public site URL is `https://amdai.net` (`site` in `astro.config.mjs`; override with `SITE_URL`). Default build is `ACCOUNTS_ENABLED=0` `FORUM_ENABLED=0` (static SSG, no database). Set `ACCOUNTS_ENABLED=1` for optional login, saved rigs, and `npm run notify`. `FORUM_ENABLED=1` also requires accounts (same SQLite) and turns on `/forum`. Admins are the comma-separated list in `ADMIN_EMAILS`. Optional `MOD_EMAILS` promotes moderators.
 
