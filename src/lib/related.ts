@@ -1,0 +1,281 @@
+/**
+ * Data-driven “Related” links. Same GPU, model, quant, backend, or topic.
+ * Only real routes. No invented tok/s, prices, or /two-r9700.
+ */
+
+import { loadBackendsFromFs } from './backends';
+import { MODEL_PAGES } from './gpu-ids';
+import { GLOSSARY } from './glossary';
+import { stepsFor, type PathLink } from './primary-path';
+import { liveRecipes, recipesForCard, recipesForModel } from './recipes';
+import { recipes } from './recipes-data';
+import { urlPath } from './seo';
+
+export type RelatedLink = PathLink;
+
+const RELATED_MAX = 12;
+
+const SKIP_RELATED = new Set([
+  '/',
+  '/404',
+  '/search',
+  '/login',
+  '/unsubscribe',
+  '/newsletter/confirm',
+]);
+
+function recipeLabel(recipe: { weights: { quant: string }; ctx_label: string }): string {
+  return `${recipe.weights.quant} · ${recipe.ctx_label}`;
+}
+
+function backendLabel(id: string): string {
+  const row = loadBackendsFromFs().find((item) => item.id === id);
+  return row?.name ?? id;
+}
+
+function add(out: RelatedLink[], seen: Set<string>, href: string, label: string) {
+  const clean = urlPath((href.split('#')[0] || href).split('?')[0] || href);
+  if (!clean.startsWith('/') || seen.has(clean)) return;
+  if (clean === '/two-r9700') return;
+  seen.add(clean);
+  out.push({ href: clean, label });
+}
+
+function topicLinks(path: string): RelatedLink[] {
+  if (path === '/compare' || path.startsWith('/compare/')) {
+    return [
+      { href: '/gpus/r9700', label: 'R9700 measured page' },
+      { href: '/benchmarks', label: 'Benchmarks' },
+      { href: '/results', label: 'Run cards' },
+      { href: '/multi-gpu', label: 'Dual / multi-GPU' },
+      { href: '/qwen36-dual', label: '35B on two cards' },
+      { href: '/calculator', label: 'Calculator' },
+    ];
+  }
+  if (path === '/benchmarks' || path === '/benchmarks/methodology') {
+    return [
+      { href: '/results', label: 'Run cards' },
+      { href: '/compare', label: 'Compare 35B' },
+      { href: '/gpus/r9700', label: 'R9700 measured page' },
+      { href: '/methodology', label: 'How we test' },
+      { href: '/amdai-bench', label: 'amdai-bench' },
+    ];
+  }
+  if (path === '/setup' || path === '/start') {
+    return [
+      { href: '/gpus/r9700', label: 'R9700 measured page' },
+      { href: '/benchmarks', label: 'Benchmarks' },
+      { href: '/faq', label: 'FAQ' },
+      { href: '/stack-lab', label: 'Stack Lab' },
+    ];
+  }
+  if (path === '/faq' || path === '/glossary') {
+    return [
+      { href: '/setup', label: 'First-run setup' },
+      { href: '/glossary', label: 'Glossary' },
+      { href: '/faq', label: 'FAQ' },
+      { href: '/rocm/glossary', label: 'ROCm glossary' },
+      { href: '/backends', label: 'Backends' },
+    ];
+  }
+  if (path === '/multi-gpu' || path === '/qwen36-dual') {
+    return [
+      { href: '/gpus/r9700', label: 'R9700 measured page' },
+      { href: '/compare/one-vs-two-gpu', label: 'One vs split' },
+      { href: '/flash-daily', label: 'Flash daily' },
+      { href: '/setup', label: 'First-run setup' },
+    ];
+  }
+  if (path === '/flash-daily' || path === '/flash-ram-offload') {
+    return [
+      { href: '/models/flash', label: 'Qwen 3.8 Flash' },
+      { href: '/backends/strata', label: 'Strata' },
+      { href: '/multi-gpu', label: 'Dual / multi-GPU' },
+      { href: '/quants', label: 'Quants' },
+    ];
+  }
+  if (path.startsWith('/rocm') && !path.startsWith('/rocm-problems')) {
+    return [
+      { href: '/rocm', label: 'What is ROCm' },
+      { href: '/rocm-problems', label: 'ROCm problems' },
+      { href: '/glossary', label: 'Glossary' },
+      { href: '/setup', label: 'First-run setup' },
+    ];
+  }
+  if (path.startsWith('/rocm-problems')) {
+    return [
+      { href: '/rocm-problems', label: 'ROCm problems' },
+      { href: '/rocm', label: 'What is ROCm' },
+      { href: '/troubleshooting', label: 'Troubleshooting' },
+      { href: '/contact', label: 'Contact' },
+    ];
+  }
+  if (path.startsWith('/harnesses')) {
+    return [
+      { href: '/harnesses', label: 'Harnesses' },
+      { href: '/harnesses/compare', label: 'Compare harnesses' },
+      { href: '/backends/llamacpp', label: 'llama.cpp' },
+      { href: '/setup', label: 'First-run setup' },
+    ];
+  }
+  if (path === '/forum' || path.startsWith('/forum/')) {
+    return [
+      { href: '/forum', label: 'Forum' },
+      { href: '/forum/rules', label: 'Forum rules' },
+      { href: '/forum/search', label: 'Forum search' },
+      { href: '/rocm-problems', label: 'ROCm problems' },
+    ];
+  }
+  if (
+    path === '/about' ||
+    path === '/methodology' ||
+    path === '/contact' ||
+    path === '/terms' ||
+    path === '/amdai-bench' ||
+    path === '/privacy' ||
+    path === '/disclosure' ||
+    path === '/accessibility' ||
+    path === '/credits'
+  ) {
+    return [
+      { href: '/about', label: 'About' },
+      { href: '/methodology', label: 'How we test' },
+      { href: '/contact', label: 'Contact' },
+      { href: '/terms', label: 'Terms' },
+      { href: '/amdai-bench', label: 'amdai-bench' },
+    ];
+  }
+  return [];
+}
+
+export function relatedFor(pathname: string): RelatedLink[] {
+  const path = urlPath(pathname);
+  if (SKIP_RELATED.has(path)) return [];
+  if (path.startsWith('/account') || path.startsWith('/go/') || path.startsWith('/forum/inbox')) return [];
+  if (path === '/forum/mod' || path === '/forum/new') return [];
+
+  const seen = new Set<string>([path]);
+  const out: RelatedLink[] = [];
+
+  if (path === '/gpus' || path.startsWith('/gpus/')) {
+    const id = path === '/gpus' ? '' : path.slice('/gpus/'.length);
+    add(out, seen, '/compare', 'Compare 35B');
+    add(out, seen, '/benchmarks', 'Benchmarks');
+    add(out, seen, '/multi-gpu', 'Dual / multi-GPU');
+    add(out, seen, '/setup', 'First-run setup');
+    if (id) {
+      for (const recipe of recipesForCard(recipes, id)) {
+        add(out, seen, `/recipes/${recipe.id}`, recipeLabel(recipe));
+      }
+      add(out, seen, '/results', 'Run cards');
+      add(out, seen, '/backends/llamacpp', 'llama.cpp');
+    } else {
+      add(out, seen, '/gpus/r9700', 'R9700 measured page');
+    }
+  }
+
+  if (path.startsWith('/recipes/')) {
+    const recipe = liveRecipes(recipes).find((row) => `/recipes/${row.id}` === path);
+    if (recipe) {
+      add(out, seen, `/gpus/${recipe.card}`, recipe.card);
+      const model = MODEL_PAGES.find((row) => row.id === recipe.model_id);
+      add(out, seen, `/models/${recipe.model_id}`, model?.name ?? recipe.model);
+      add(out, seen, `/backends/${recipe.backend}`, backendLabel(recipe.backend));
+      for (const sibling of liveRecipes(recipes)) {
+        if (sibling.id === recipe.id) continue;
+        if (
+          sibling.model_id === recipe.model_id ||
+          sibling.backend === recipe.backend ||
+          sibling.weights.quant === recipe.weights.quant
+        ) {
+          add(out, seen, `/recipes/${sibling.id}`, recipeLabel(sibling));
+        }
+      }
+      add(out, seen, '/compare', 'Compare 35B');
+      add(out, seen, '/benchmarks', 'Benchmarks');
+    }
+  }
+
+  if (path === '/models' || path.startsWith('/models/')) {
+    const id = path === '/models' ? '' : path.slice('/models/'.length);
+    if (id) {
+      const model = MODEL_PAGES.find((row) => row.id === id);
+      for (const recipe of recipesForModel(recipes, id)) {
+        add(out, seen, `/recipes/${recipe.id}`, recipeLabel(recipe));
+      }
+      add(out, seen, '/qwen', 'Qwen compare');
+      if (id === 'flash') add(out, seen, '/flash-daily', 'Flash daily');
+      if (id === 'qwen36') add(out, seen, '/qwen36-dual', '35B on two cards');
+      add(out, seen, '/compare', 'Compare 35B');
+      add(out, seen, '/gpus/r9700', 'R9700 measured page');
+      void model;
+    } else {
+      for (const model of MODEL_PAGES) add(out, seen, `/models/${model.id}`, model.name);
+    }
+  }
+
+  if (path === '/backends' || path.startsWith('/backends/')) {
+    const id = path === '/backends' ? '' : path.slice('/backends/'.length);
+    add(out, seen, '/backends', 'Backends');
+    if (id) {
+      for (const recipe of liveRecipes(recipes).filter((row) => row.backend === id)) {
+        add(out, seen, `/recipes/${recipe.id}`, recipeLabel(recipe));
+      }
+      add(out, seen, '/software', 'AI software');
+      if (id !== 'llamacpp') add(out, seen, '/backends/llamacpp', 'llama.cpp');
+    } else {
+      for (const row of loadBackendsFromFs()) add(out, seen, `/backends/${row.id}`, row.name);
+    }
+  }
+
+  if (path.startsWith('/results/')) {
+    add(out, seen, '/results', 'Run cards');
+    add(out, seen, '/benchmarks', 'Benchmarks');
+    add(out, seen, '/gpus/r9700', 'R9700 measured page');
+    add(out, seen, '/amdai-bench', 'amdai-bench');
+  }
+
+  if (path.startsWith('/harnesses/quiz/') && path !== '/harnesses/quiz') {
+    add(out, seen, '/harnesses/quiz', 'Harness quiz');
+    add(out, seen, '/harnesses', 'Harnesses');
+  }
+
+  if (path === '/glossary') {
+    for (const entry of GLOSSARY.slice(0, 4)) {
+      add(out, seen, `/glossary#${entry.id}`, entry.term);
+    }
+  }
+
+  for (const link of topicLinks(path)) add(out, seen, link.href, link.label);
+
+  const curated = stepsFor(path);
+  if (curated) {
+    for (const link of curated) add(out, seen, link.href, link.label);
+  }
+
+  return out.slice(0, RELATED_MAX);
+}
+
+const BANNED = /Qwen2\.5|Qwen3-8B/i;
+const Q1Q2 = /\b(?:IQ[12]_[A-Z0-9]+|Q[12]_[A-Z0-9]+)\b/;
+
+export function assertRelatedValid(paths: string[] = ['/gpus/r9700', '/compare', '/setup', '/faq']): string[] {
+  const errors: string[] = [];
+  for (const path of paths) {
+    const links = relatedFor(path);
+    const blob = links.map((link) => `${link.label} ${link.href}`).join('\n');
+    if (BANNED.test(blob)) errors.push(`${path}: banned model`);
+    if (Q1Q2.test(blob)) errors.push(`${path}: lists Q1/Q2`);
+    if (/\$\d|\bMSRP\b/i.test(blob)) errors.push(`${path}: invented price`);
+    if (/\/two-r9700/.test(blob)) errors.push(`${path}: invented path`);
+    if (links.some((link) => link.href === path)) errors.push(`${path}: self-link`);
+  }
+  const r9700 = relatedFor('/gpus/r9700').map((link) => link.href);
+  for (const href of ['/compare', '/benchmarks', '/multi-gpu', '/setup']) {
+    if (!r9700.includes(href)) errors.push(`/gpus/r9700 missing ${href}`);
+  }
+  if (!r9700.some((href) => href.startsWith('/recipes/'))) {
+    errors.push('/gpus/r9700 missing recipe links');
+  }
+  return errors;
+}

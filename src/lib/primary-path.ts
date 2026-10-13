@@ -200,6 +200,12 @@ export function nextStepsFor(pathname: string): PathLink[] {
   return NEXT_STEPS[path] ?? NEXT_STEPS['/']!;
 }
 
+/** Curated next-step list for a path, or undefined — never falls back to the homepage list. */
+export function stepsFor(pathname: string): PathLink[] | undefined {
+  const path = pathname === '/' ? '/' : pathname.replace(/\/+$/, '') || '/';
+  return NEXT_STEPS[path];
+}
+
 export function primaryPathHrefs(): string[] {
   const hrefs = new Set<string>();
   for (const step of PRIMARY_PATH) {

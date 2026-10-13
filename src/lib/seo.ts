@@ -196,6 +196,14 @@ export const CRUMB_LABELS: Record<string, string> = {
   '/unsubscribe': 'Unsubscribe',
   '/newsletter': 'Digest',
   '/newsletter/confirm': 'Confirm digest',
+  '/multi-gpu': 'Dual / multi-GPU',
+  '/about': 'About',
+  '/methodology': 'How we test',
+  '/contact': 'Contact',
+  '/terms': 'Terms',
+  '/amdai-bench': 'amdai-bench',
+  '/maintain': 'Weekday scrape',
+  '/troubleshooting': 'Troubleshooting',
 };
 
 export type Crumb = { name: string; href: string };
@@ -212,9 +220,16 @@ const CRUMB_HREF: Record<string, string> = {
 
 export function breadcrumbsFor(pathname: string): Crumb[] {
   const path = urlPath(pathname);
+  if (path === '/') return [];
   const parts = path.split('/').filter(Boolean);
-  if (parts.length < 2) return [];
   const crumbs: Crumb[] = [{ name: 'Home', href: '/' }];
+  if (parts.length === 1) {
+    crumbs.push({
+      name: CRUMB_LABELS[path] ?? PAGE_TITLES.get(path) ?? labelFromPath(path),
+      href: path,
+    });
+    return crumbs;
+  }
   let href = '';
   for (let i = 0; i < parts.length; i += 1) {
     href += `/${parts[i]}`;

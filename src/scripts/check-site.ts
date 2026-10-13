@@ -1,7 +1,8 @@
 #!/usr/bin/env tsx
 /**
  * Fail the build on internal 404s, missing anchors/assets, sitemap/redirect
- * misses, and content lint. Run after `astro build` + pagefind.
+ * misses, content lint, and sitemap orphans / pages more than 3 clicks from
+ * home. Run after `astro build` + pagefind.
  */
 
 import { readFileSync } from 'node:fs';

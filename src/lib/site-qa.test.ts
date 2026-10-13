@@ -19,6 +19,7 @@ import {
   checkSitemapAndRedirects,
   checkFooterTrustLinks,
   checkRssFeed,
+  checkOrphansAndDepth,
   REQUIRED_FOOTER_HREFS,
 } from './site-qa';
 
@@ -99,6 +100,39 @@ describe('site QA helpers', () => {
     }
     const feed = checkRssFeed(index);
     assert.ok(feed.some((i) => i.message.includes('/rss.xml')));
+  });
+
+  it('fails sitemap orphans and pages deeper than three clicks from home', () => {
+    const root = join(tmpdir(), `amdai-qa-depth-${Date.now()}`);
+    mkdirSync(join(root, 'a'), { recursive: true });
+    mkdirSync(join(root, 'b'), { recursive: true });
+    mkdirSync(join(root, 'c'), { recursive: true });
+    mkdirSync(join(root, 'd'), { recursive: true });
+    const page = (body: string) =>
+      `<html><head><meta property="og:site_name" content="amdai"></head><body><main id="main">${body}</main></body></html>`;
+    writeFileSync(join(root, 'index.html'), page('<a href="/a">A</a>'));
+    writeFileSync(join(root, 'a/index.html'), page('<a href="/b">B</a>'));
+    writeFileSync(join(root, 'b/index.html'), page('<a href="/c">C</a>'));
+    writeFileSync(join(root, 'c/index.html'), page('<a href="/d">D</a>'));
+    writeFileSync(join(root, 'd/index.html'), page('<p>too deep</p>'));
+    mkdirSync(join(root, 'ghost'), { recursive: true });
+    writeFileSync(join(root, 'ghost/index.html'), page('<p>nobody links here</p>'));
+    writeFileSync(
+      join(root, 'sitemap-0.xml'),
+      `<urlset>
+        <url><loc>https://amdai.net/</loc></url>
+        <url><loc>https://amdai.net/a/</loc></url>
+        <url><loc>https://amdai.net/b/</loc></url>
+        <url><loc>https://amdai.net/c/</loc></url>
+        <url><loc>https://amdai.net/d/</loc></url>
+        <url><loc>https://amdai.net/ghost/</loc></url>
+      </urlset>`,
+    );
+    const index = indexDist(root, 'https://amdai.net');
+    const issues = checkOrphansAndDepth(index);
+    assert.ok(issues.some((row) => row.message.includes('orphan') && row.message.includes('/ghost')));
+    assert.ok(issues.some((row) => row.message.includes('link depth') && row.message.includes('/d')));
+    assert.ok(!issues.some((row) => row.message.includes('/a') && row.message.includes('orphan')));
   });
 
   it('classifies external results without inventing citations', () => {

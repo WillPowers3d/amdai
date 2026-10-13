@@ -207,6 +207,20 @@ body {
   color: var(--ink);
 }
 
+a.autolink {
+  display: inline-block;
+  min-height: 1.5rem;
+  padding-block: 0.15rem;
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--accent) 40%, transparent);
+  text-underline-offset: 0.14em;
+  vertical-align: baseline;
+}
+
+a.autolink:hover {
+  color: var(--accent-ink);
+}
+
 .display {
   letter-spacing: -0.038em;
   font-weight: 560;

@@ -1,0 +1,32 @@
+---
+import type { RelatedLink } from '../lib/related';
+
+interface Props {
+  items: RelatedLink[];
+}
+
+const { items } = Astro.props;
+---
+
+{
+  items.length > 0 && (
+    <aside class="related not-prose mt-12 mb-8" aria-labelledby="related-heading" data-related>
+      <h2 id="related-heading" class="font-serif text-3xl tracking-tight">Related</h2>
+      <p class="mt-3 max-w-2xl text-sm leading-relaxed text-muted">
+        Same GPU, model, backend, or topic — real pages on this notebook, not a guessed list.
+      </p>
+      <ul class="mt-6 flex flex-wrap gap-2">
+        {items.map((link) => (
+          <li>
+            <a
+              class="inline-flex min-h-11 items-center rounded-full border border-line bg-raised px-4 text-sm text-ink hover:border-accent/50 hover:text-accent-ink"
+              href={link.href}
+            >
+              {link.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </aside>
+  )
+}

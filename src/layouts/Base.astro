@@ -6,12 +6,13 @@ import Footer from '../components/Footer.astro';
 import CommandPalette from '../components/CommandPalette.astro';
 import ReadingProgress from '../components/ReadingProgress.astro';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
+import Related from '../components/Related.astro';
 import { jsonLdScript, pageJsonLd } from '../lib/jsonld';
+import { relatedFor } from '../lib/related';
 import {
   breadcrumbsFor,
   canonicalUrl,
   documentTitle,
-  isNestedPath,
   pageDescription,
   shouldNoindex,
   urlPath,
@@ -31,7 +32,8 @@ const canonical = canonicalUrl(path, Astro.site?.href.replace(/\/$/, '') || 'htt
 const og = new URL(`/og/${ogSlug(path)}.png`, Astro.site);
 const ogAlt = ogImageAlt(path);
 const noindex = shouldNoindex(path);
-const crumbs = isNestedPath(path) ? breadcrumbsFor(path) : [];
+const crumbs = path === '/' ? [] : breadcrumbsFor(path);
+const related = relatedFor(path);
 const jsonld = jsonLdScript(pageJsonLd({ pathname: path, title, description }));
 ---
 
@@ -92,6 +94,11 @@ const jsonld = jsonLdScript(pageJsonLd({ pathname: path, title, description }));
     </div>
     <div data-pagefind-body>
       <slot />
+      {related.length > 0 && (
+        <div class="mx-auto max-w-6xl px-4 sm:px-6">
+          <Related items={related} />
+        </div>
+      )}
     </div>
     <div data-pagefind-ignore>
       <Footer />

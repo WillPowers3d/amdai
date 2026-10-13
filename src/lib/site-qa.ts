@@ -463,6 +463,83 @@ export function checkRssFeed(index: DistIndex): QaIssue[] {
   return issues;
 }
 
+export const MAX_LINK_DEPTH = 3;
+
+export function sitemapPaths(index: DistIndex): string[] {
+  const locs: string[] = [];
+  for (const name of ['sitemap-0.xml', 'sitemap.xml']) {
+    const file = join(index.root, name);
+    if (existsSync(file)) locs.push(...extractSitemapLocs(readFileSync(file, 'utf8')));
+  }
+  const paths = new Set<string>();
+  for (const loc of locs) {
+    const ref = classifyRef(loc, '/', index.origin);
+    if (ref.kind === 'internal') paths.add(ref.path);
+  }
+  return [...paths];
+}
+
+export function internalOutlinks(index: DistIndex, path: string): string[] {
+  const file = index.pages.get(path);
+  if (!file) return [];
+  const html = readFileSync(file, 'utf8');
+  if (isRedirectHtml(html)) return [];
+  const { hrefs } = extractRefs(html);
+  const out = new Set<string>();
+  for (const href of hrefs) {
+    const ref = classifyRef(href, path, index.origin);
+    if (ref.kind !== 'internal') continue;
+    const dest = followRedirect(index, ref.path);
+    if (dest && dest !== path) out.add(dest);
+  }
+  return [...out];
+}
+
+export function checkOrphansAndDepth(index: DistIndex): QaIssue[] {
+  const issues: QaIssue[] = [];
+  const sitemap = sitemapPaths(index);
+  const inbound = new Map<string, Set<string>>();
+  const graph = new Map<string, string[]>();
+
+  for (const [path] of index.pages) {
+    const outs = internalOutlinks(index, path);
+    graph.set(path, outs);
+    for (const dest of outs) {
+      const set = inbound.get(dest) ?? new Set<string>();
+      set.add(path);
+      inbound.set(dest, set);
+    }
+  }
+
+  const depth = new Map<string, number>();
+  const queue = ['/'];
+  depth.set('/', 0);
+  while (queue.length) {
+    const current = queue.shift()!;
+    const here = depth.get(current)!;
+    for (const next of graph.get(current) ?? []) {
+      if (depth.has(next)) continue;
+      depth.set(next, here + 1);
+      queue.push(next);
+    }
+  }
+
+  for (const path of sitemap) {
+    if (path === '/') continue;
+    const from = inbound.get(path);
+    if (!from || from.size === 0) {
+      issues.push(issue('link', path, `orphan: ${path} is in the sitemap but no other page links to it`));
+    }
+    const hops = depth.get(path);
+    if (hops == null) {
+      issues.push(issue('link', path, `unreachable from homepage: ${path}`));
+    } else if (hops > MAX_LINK_DEPTH) {
+      issues.push(issue('link', path, `link depth ${hops} from homepage (max ${MAX_LINK_DEPTH}): ${path}`));
+    }
+  }
+  return issues;
+}
+
 export function runSiteQa(root: string, origin = SITE_ORIGIN_DEFAULT, configSource = ''): QaIssue[] {
   const index = indexDist(root, origin, configSource);
   return [
@@ -472,6 +549,7 @@ export function runSiteQa(root: string, origin = SITE_ORIGIN_DEFAULT, configSour
     ...checkFooterTrustLinks(index),
     ...checkRssFeed(index),
     ...checkStackLabHrefs(index),
+    ...checkOrphansAndDepth(index),
   ];
 }
 

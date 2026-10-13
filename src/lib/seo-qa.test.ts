@@ -14,12 +14,13 @@ import {
 import {
   SEARCH_ACTION_TEMPLATE,
   SITE_ORIGIN,
+  breadcrumbsFor,
   canonicalUrl,
   documentTitle,
   isSitemapExcluded,
   shouldNoindex,
 } from './seo';
-import { forbiddenJsonLdHits, organizationJsonLd, websiteJsonLd } from './jsonld';
+import { breadcrumbJsonLd, forbiddenJsonLdHits, organizationJsonLd, pageJsonLd, websiteJsonLd } from './jsonld';
 import { BRAND } from './site';
 
 describe('SEO helpers', () => {
@@ -38,6 +39,31 @@ describe('SEO helpers', () => {
     assert.equal(canonicalUrl('/faq'), `${SITE_ORIGIN}/faq`);
     assert.equal(canonicalUrl('/'), `${SITE_ORIGIN}/`);
     assert.match(SEARCH_ACTION_TEMPLATE, /\/search\?q=\{search_term_string\}/);
+  });
+
+  it('builds Home + page breadcrumbs for every path below the homepage', () => {
+    assert.deepEqual(breadcrumbsFor('/'), []);
+    const about = breadcrumbsFor('/about');
+    assert.equal(about.length, 2);
+    assert.equal(about[0]?.href, '/');
+    assert.equal(about[0]?.name, 'Home');
+    assert.equal(about[1]?.href, '/about');
+    assert.equal(about[1]?.name, 'About');
+    for (const path of ['/setup', '/faq', '/compare', '/benchmarks', '/multi-gpu', '/glossary', '/contact', '/terms']) {
+      const crumbs = breadcrumbsFor(path);
+      assert.equal(crumbs[0]?.href, '/');
+      assert.equal(crumbs.at(-1)?.href, path);
+      assert.ok(crumbs.length >= 2, path);
+    }
+    const gpu = breadcrumbsFor('/gpus/r9700');
+    assert.ok(gpu.length >= 3);
+    assert.equal(gpu[0]?.href, '/');
+    assert.equal(gpu[1]?.href, '/gpus');
+    assert.equal(gpu.at(-1)?.href, '/gpus/r9700');
+    const nodes = pageJsonLd({ pathname: '/about', title: 'About · AMDai', description: 'Who runs AMDai.' });
+    assert.ok(nodes.some((node) => node['@type'] === 'BreadcrumbList'));
+    const list = breadcrumbJsonLd(about);
+    assert.equal((list.itemListElement as { position: number }[]).length, 2);
   });
 
   it('builds unique AMDai titles', () => {

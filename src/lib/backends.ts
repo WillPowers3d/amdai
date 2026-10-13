@@ -2,6 +2,11 @@
  * Inference-engine catalog. Logic lives here so tests never import YAML via ?raw.
  */
 
+import { existsSync, readFileSync } from 'node:fs';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { parse } from 'yaml';
+
 export type BackendVerdict = 'default' | 'ok' | 'try' | 'advanced' | 'caution';
 
 export type BackendSource = {
@@ -235,4 +240,20 @@ export function assertBackendsValid(file: BackendsFile): string[] {
   }
 
   return errors;
+}
+
+/** Filesystem load for tests and post-build tools. Pages still use backends-data (?raw). */
+let backendsCache: Backend[] | null = null;
+
+export function loadBackendsFromFs(): Backend[] {
+  if (backendsCache) return backendsCache;
+  const here = dirname(fileURLToPath(import.meta.url));
+  const candidates = [join(here, '../data/backends.yaml'), join(process.cwd(), 'src/data/backends.yaml')];
+  for (const file of candidates) {
+    if (existsSync(file)) {
+      backendsCache = parseBackends(parse(readFileSync(file, 'utf8'))).engines;
+      return backendsCache;
+    }
+  }
+  throw new Error('backends.yaml missing');
 }

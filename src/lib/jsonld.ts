@@ -15,7 +15,6 @@ import {
   DATASET_CREATOR,
   DATASET_LICENSE,
   datasetCoverage,
-  isNestedPath,
   SEARCH_ACTION_TEMPLATE,
   SITE_ORIGIN,
   urlPath,
@@ -291,9 +290,9 @@ export function pageJsonLd(input: {
   const url = canonicalUrl(path);
   const nodes: JsonLd[] = [websiteJsonLd(), organizationJsonLd()];
 
-  if (isNestedPath(path)) {
+  if (path !== '/') {
     const crumbs = breadcrumbsFor(path);
-    if (crumbs.length) nodes.push(breadcrumbJsonLd(crumbs));
+    if (crumbs.length >= 2) nodes.push(breadcrumbJsonLd(crumbs));
   }
 
   if (path === '/faq') {

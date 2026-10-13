@@ -7,6 +7,7 @@ import {
   hybridLabel,
   parseQuizAnswers,
   pickHarness,
+  quizCombos,
   quizHasAnswers,
   quizResultPath,
   surfaceLabel,
@@ -197,6 +198,20 @@ const currentKey =
       {' · '}
       <a class="underline decoration-accent/40" href="/harnesses/quiz/image-local-web-no">ComfyUI</a>
     </p>
+
+    <details class="mt-8 rounded-2xl border border-line bg-raised/40 p-5">
+      <summary class="cursor-pointer font-medium">All quiz permalinks</summary>
+      <p class="mt-3 text-sm text-muted">
+        Every job × usage × surface × tools combo is a real static page. No invented pick.
+      </p>
+      <ul class="mt-4 flex flex-wrap gap-2 text-sm">
+        {quizCombos().map((combo) => (
+          <li>
+            <a class="underline decoration-accent/40" href={`/harnesses/quiz/${combo}`}>{combo}</a>
+          </li>
+        ))}
+      </ul>
+    </details>
   </main>
 </Base>
 

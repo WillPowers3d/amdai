@@ -2,6 +2,7 @@ import type { AstroIntegration } from 'astro';
 import { readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { applyAutolinks } from './autolink';
 import { assertHtmlTextSeparated, insertBlockSeparators } from './html-text';
 
 function walkHtml(dir: string, out: string[] = []): string[] {
@@ -35,6 +36,7 @@ export function htmlSeparators(): AstroIntegration {
         if (errors.length) {
           throw new Error(`Glued sentences in dist HTML:\n${errors.slice(0, 40).join('\n')}`);
         }
+        applyAutolinks(root);
       },
     },
   };
