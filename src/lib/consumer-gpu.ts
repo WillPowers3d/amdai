@@ -31,7 +31,7 @@ import { RAM_FULL_LABEL, RAM_MIN_LABEL } from './ram-surfaces';
 import type { GpuDirectory } from './status';
 import { COMPARE_MODEL, COMPARE_Q3, COMPARE_Q3_CITE } from './local-desktop-compare';
 
-export const CONSUMER_RECIPE_IDS = ['rx7900xtx', 'rx7900xt', 'rx7800xt', 'rx9070xt', 'rx9060xt', 'rx7900gre'] as const;
+export const CONSUMER_RECIPE_IDS = ['rx7900xtx', 'rx7900xt', 'rx7800xt', 'rx9070xt', 'rx9060xt', 'rx7900gre', 'rx7700xt'] as const;
 export type ConsumerRecipeId = (typeof CONSUMER_RECIPE_IDS)[number];
 
 export const CONSUMER_PAGE_SLUG: Record<ConsumerRecipeId, string> = {
@@ -41,6 +41,7 @@ export const CONSUMER_PAGE_SLUG: Record<ConsumerRecipeId, string> = {
   rx9070xt: 'rx-9070-xt',
   rx9060xt: 'rx-9060-xt',
   rx7900gre: 'rx-7900-gre',
+  rx7700xt: 'rx-7700-xt',
 };
 
 export const CONSUMER_PAGE_ALIASES: Record<string, ConsumerRecipeId> = {
@@ -56,6 +57,9 @@ export const CONSUMER_PAGE_ALIASES: Record<string, ConsumerRecipeId> = {
   rx7900gre: 'rx7900gre',
   'rx-7900-gre': 'rx7900gre',
   'rx7900-gre': 'rx7900gre',
+  rx7700xt: 'rx7700xt',
+  'rx-7700-xt': 'rx7700xt',
+  'rx7700-xt': 'rx7700xt',
 };
 
 export const CONSUMER_PUBLISHED = '2026-10-13';
@@ -132,6 +136,7 @@ const SHORT_NAME: Record<ConsumerRecipeId, string> = {
   rx9070xt: 'RX 9070 XT',
   rx9060xt: 'RX 9060 XT',
   rx7900gre: 'RX 7900 GRE',
+  rx7700xt: 'RX 7700 XT',
 };
 
 const BUDGET_ANCHOR: Record<ConsumerRecipeId, { href: string; label: string }> = {
@@ -141,6 +146,7 @@ const BUDGET_ANCHOR: Record<ConsumerRecipeId, { href: string; label: string }> =
   rx9070xt: { href: '/budget#starter', label: 'Starter budget tier' },
   rx9060xt: { href: '/budget#starter', label: 'Starter budget tier' },
   rx7900gre: { href: '/budget#mid', label: 'Mid budget tier' },
+  rx7700xt: { href: '/budget#starter', label: 'Starter budget tier' },
 };
 
 const LEAD: Record<ConsumerRecipeId, string> = {
@@ -156,6 +162,8 @@ const LEAD: Record<ConsumerRecipeId, string> = {
     '16 GB gfx1200 RDNA 4 — the cheaper 16 GB 9000-series card next to the 9070 XT. Official on the cited ROCm 10.1 matrix as gfx1200; do not mix a gfx1201 (R9700 / 9070 XT) or gfx110x (7900) family package. House 35B Q4–Q6 files do not fit this VRAM on the calculator — expect RAM offload or a listed Q3 file, both estimates. An 8 GB XT LP listing exists; treat it as a different SKU and size it on the calculator, not this 16 GB sheet. Not a measured local-desktop card.',
   rx7900gre:
     '16 GB gfx1100 RDNA 3 — mid-tier 7900 between the 20 GB 7900 XT and the 16 GB 7800 XT (gfx1101). Same gfx1100 family package as the 7900 XT / XTX; do not mix a gfx1201 (R9700 / 9070 XT) pin. House 35B Q4–Q6 files do not fit this VRAM on the calculator — expect RAM offload or a listed Q3 file, both estimates. Buy the 7900 XT when you want 20 GB on the same gfx, or the R9700 when you want measured 32 GB recipes. Not a measured local-desktop card.',
+  rx7700xt:
+    '12 GB gfx1101 RDNA 3 — smaller VRAM than the 16 GB 7800 XT on the same gfx1101 family package. Official on the cited ROCm matrix. House 35B Q4–Q6 files do not fit this VRAM on the calculator — expect RAM offload or a listed Q3 file, both estimates. Buy the 7800 XT when you want 16 GB on this gfx, or the R9700 when you want measured 32 GB recipes. The bare RX 7700 is a different listing — confirm VRAM there. Not a measured local-desktop card.',
 };
 
 export type ConsumerFitKind = 'estimate' | 'q3-estimate';
@@ -275,6 +283,26 @@ function kindLabel(kind: ConsumerFitKind): string {
 }
 
 function stackTips(id: ConsumerRecipeId, gfx: string): ConsumerStackTip[] {
+  if (id === 'rx7700xt') {
+    return [
+      {
+        title: 'llama.cpp first',
+        body: 'Vulkan is the consumer default on this site. HIP when rocminfo lists gfx1101. Official on the cited ROCm matrix — not Vulkan-only. Ollama and vLLM are not the house path for this card.',
+      },
+      {
+        title: 'gfx1101 family package',
+        body: `${gfx} needs the gfx110x ROCm family package, same pin as the 7800 XT. Do not mix a gfx1201 (R9700 / 9070 XT) or gfx1200 (9060 XT) install. Re-check the cited matrix before you install.`,
+      },
+      {
+        title: '12 GB vs 7800 XT',
+        body: 'Four GB less than the 7800 XT on the same gfx. House 35B Q4–Q6 files do not fit this VRAM — expect RAM offload or a lighter listed Q3 file, both estimates. Size the file on the calculator before you download. The R9700 remains the measured 32 GB north star.',
+      },
+      {
+        title: 'Setup, then Stack Lab doctor',
+        body: 'First-run setup is Ubuntu. Open Stack Lab doctor for the gfx110x install family. House daily and Flash profiles are R9700 / local-desktop — they do not apply to this 12 GB card. Packages are not published yet.',
+      },
+    ];
+  }
   if (id === 'rx7900gre') {
     return [
       {

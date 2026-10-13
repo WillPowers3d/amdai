@@ -167,6 +167,7 @@ export const CRUMB_LABELS: Record<string, string> = {
   '/gpus/rx-9070-xt': 'RX 9070 XT',
   '/gpus/rx-9060-xt': 'RX 9060 XT',
   '/gpus/rx-7900-gre': 'RX 7900 GRE',
+  '/gpus/rx-7700-xt': 'RX 7700 XT',
   '/models': 'Models',
   '/models/qwen36': 'Qwen3.6-35B-A3B',
   '/models/flash': 'Qwen 3.8 Flash',
@@ -438,6 +439,12 @@ setMeta(
   'RX 7900 GRE recipe sheet — 16 GB, gfx1100, cited ROCm matrix row. 35B Q6/Q5/Q4 VRAM fit estimates; UD-Q3_K_XL labeled estimate. Not measured on local-desktop.',
 );
 setDate('/gpus/rx-7900-gre', '2026-10-13');
+setMeta(
+  '/gpus/rx-7700-xt',
+  'RX 7700 XT',
+  'RX 7700 XT recipe sheet — 12 GB, gfx1101, cited ROCm matrix row. 35B Q6/Q5/Q4 VRAM fit estimates; UD-Q3_K_XL labeled estimate. Not measured on local-desktop.',
+);
+setDate('/gpus/rx-7700-xt', '2026-10-13');
 setMeta(
   '/models',
   'House Qwen models',

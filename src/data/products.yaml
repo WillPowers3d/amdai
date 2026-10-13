@@ -111,6 +111,18 @@ products:
       microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=AMD+Radeon+RX+7800+XT
       amd: https://www.amd.com/en/products/graphics/desktops/radeon/7000-series/amd-radeon-rx-7800-xt.html
 
+  - id: rx7700xt
+    name: AMD Radeon RX 7700 XT
+    kind: gpu
+    vram_gb: 12
+    calculator_gpu: rx7700xt
+    urls:
+      amazon: https://www.amazon.com/s?k=AMD+Radeon+RX+7700+XT
+      newegg: https://www.newegg.com/p/pl?d=AMD+Radeon+RX+7700+XT
+      bhphoto: https://www.bhphotovideo.com/c/search?Ntt=AMD+Radeon+RX+7700+XT
+      microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=AMD+Radeon+RX+7700+XT
+      amd: https://www.amd.com/en/products/graphics/desktops/radeon/7000-series/amd-radeon-rx-7700-xt.html
+
   - id: rtx5090
     name: NVIDIA GeForce RTX 5090
     kind: gpu
