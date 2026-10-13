@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import Callout from '../components/Callout.astro';
+import NextSteps from '../components/NextSteps.astro';
 import { MEASURED_LABEL } from '../lib/benchmarks';
 import { benchmarksFile } from '../lib/benchmarks-data';
 import { runs } from '../lib/run-card-data';
@@ -404,6 +405,8 @@ const launch = citedDailyLaunch(runs);
         ))}
       </ul>
     </section>
+
+    <NextSteps path="/benchmarks" />
   </main>
 </Base>
 

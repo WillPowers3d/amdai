@@ -1,4 +1,5 @@
 ---
+import { PINNED_NAV } from '../lib/primary-path';
 import { navGroups, primaryNav, site } from '../lib/site';
 import Logo from './Logo.astro';
 import ThemeToggle from './ThemeToggle.astro';
@@ -14,7 +15,7 @@ const isActive = (href: string) => {
   return current === href || current.startsWith(`${href}/`);
 };
 
-const pinned = primaryNav.filter((item) => ['/qwen', '/calculator', '/budget', '/stacks', '/benchmarks'].includes(item.href));
+const pinned = primaryNav.filter((item) => (PINNED_NAV as readonly string[]).includes(item.href));
 ---
 
 <header class="site-header">

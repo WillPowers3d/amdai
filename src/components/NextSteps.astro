@@ -1,0 +1,29 @@
+---
+import { nextStepsFor } from '../lib/primary-path';
+
+interface Props {
+  path?: string;
+}
+
+const path = Astro.props.path ?? Astro.url.pathname;
+const steps = nextStepsFor(path);
+---
+
+<section class="next-steps not-prose mt-12" aria-labelledby="next-steps-heading">
+  <h2 id="next-steps-heading" class="font-serif text-3xl tracking-tight">Next steps</h2>
+  <p class="mt-3 max-w-2xl text-sm leading-relaxed text-muted">
+    Real pages on this site. We do not invent a next click.
+  </p>
+  <ul class="mt-6 flex flex-wrap gap-2">
+    {steps.map((link) => (
+      <li>
+        <a
+          class="inline-flex min-h-11 items-center rounded-full border border-line bg-raised px-4 text-sm text-ink hover:border-accent/50 hover:text-accent-ink"
+          href={link.href}
+        >
+          {link.label}
+        </a>
+      </li>
+    ))}
+  </ul>
+</section>

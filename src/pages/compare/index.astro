@@ -4,6 +4,7 @@ import Callout from '../../components/Callout.astro';
 import { FLASH_RERUN_NOTE } from '../../lib/run-card';
 import { compareHubCards, SWEEP_REVERIFY } from '../../lib/local-desktop-compare';
 import NewsletterSignup from '../../components/NewsletterSignup.astro';
+import NextSteps from '../../components/NextSteps.astro';
 
 const cards = compareHubCards();
 ---
@@ -60,6 +61,7 @@ const cards = compareHubCards();
       ·
       <a class="underline decoration-accent/40 underline-offset-2" href="/glossary">glossary</a>
     </p>
+    <NextSteps path="/compare" />
     <div class="mt-12">
       <NewsletterSignup variant="article" />
     </div>

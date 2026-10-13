@@ -5,6 +5,7 @@ import Callout from '../../components/Callout.astro';
 import EvidenceBadge from '../../components/EvidenceBadge.astro';
 import LaunchCommand from '../../components/LaunchCommand.astro';
 import NewsletterSignup from '../../components/NewsletterSignup.astro';
+import NextSteps from '../../components/NextSteps.astro';
 import RecipeTable from '../../components/RecipeTable.astro';
 import RunCard from '../../components/RunCard.astro';
 import SystemRamNeed from '../../components/SystemRamNeed.astro';
@@ -460,6 +461,8 @@ const dailyRam = dailyRecipe ? recipeSystemRam(dailyRecipe, measuredRamHits) : n
         <a class="underline decoration-accent/40" href="/disclosure">disclosure</a> path.
       </p>
     </section>
+
+    <NextSteps path="/gpus/r9700" />
 
     <div class="not-prose mt-12">
       <NewsletterSignup variant="article" />

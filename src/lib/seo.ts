@@ -259,7 +259,7 @@ setMeta('/', `${BRAND} · ${site.name}`, site.description);
 setMeta(
   '/start',
   'Getting started',
-  'GPU, then ROCm, then llama.cpp, then an optional harness — one path for a first home Radeon box.',
+  'Check a rig or budget, first-run Ubuntu setup, then a measured 35B recipe — llama.cpp first, then benchmarks and optional Stack Lab.',
 );
 setMeta(
   '/setup',

@@ -56,7 +56,7 @@ Public site URL is `https://amdai.net` (`site` in `astro.config.mjs`; override w
 | URL | Section |
 | --- | --- |
 | `/` | Home + living status card |
-| `/start` | Getting started (GPU → ROCm → llama.cpp → harness) |
+| `/start` | Getting started — check a rig / budget → `/setup` → measured recipe → `/benchmarks` |
 | `/setup` | First-run setup — Ubuntu 24.04+ (measured) and Windows (honest limits) |
 | `/stacks` | Recommended stack cards from the test rig |
 | `/qwen` | Master 3.6 / 3.8 comparison table — one row per model × quant, measured tok/s from run cards |

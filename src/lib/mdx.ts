@@ -6,6 +6,8 @@ import HouseRules from '../components/HouseRules.astro';
 import GpuDirectory from '../components/GpuDirectory.astro';
 import BuyButtons from '../components/BuyButtons.astro';
 import AffiliateDisclosure from '../components/AffiliateDisclosure.astro';
+import NextSteps from '../components/NextSteps.astro';
+import PrimaryPath from '../components/PrimaryPath.astro';
 
 export const mdxComponents = {
   Callout,
@@ -16,4 +18,6 @@ export const mdxComponents = {
   GpuDirectory,
   BuyButtons,
   AffiliateDisclosure,
+  NextSteps,
+  PrimaryPath,
 };

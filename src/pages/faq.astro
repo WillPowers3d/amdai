@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import NewsletterSignup from '../components/NewsletterSignup.astro';
+import NextSteps from '../components/NextSteps.astro';
 import {
   FAQ_ENTRIES,
   FAQ_GROUPS,
@@ -123,6 +124,8 @@ const index = FAQ_ENTRIES.map((item) => ({
         </section>
       ))}
     </div>
+
+    <NextSteps path="/faq" />
 
     <div class="not-prose mt-12">
       <NewsletterSignup variant="article" />
