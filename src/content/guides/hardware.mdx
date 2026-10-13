@@ -36,6 +36,8 @@ Open-air test benches lie about case airflow. A small cube case will teach you a
 
 A short dual-slot PRO card fits places a triple-slot 7900 XTX does not. A PCIe 4.0 x16 riser will usually *work*. Decode-bound chat may not care; fat prefill might. Prefer a direct x16 slot if you are chasing prefill.
 
+Firmware: [BIOS settings](/bios) — Above 4G Decoding, Resizable BAR / SAM, CSM off, the x8/x8 versus x16/x4 split, EXPO/XMP, IOMMU. Chipset facts are cited. Per-board rows stay empty until someone submits one.
+
 ## VRAM versus model size (approximate)
 
 Weights + KV cache + batch share 32 GB. **Verify per file and context.** These are planning brackets, not promises:
@@ -43,12 +45,12 @@ Weights + KV cache + batch share 32 GB. **Verify per file and context.** These a
 | Situation | 32 GB often means |
 | --- | --- |
 | Qwen3.6-35B-A3B UD-Q5_K_XL, 262K, f16 KV | Our one-card daily driver — see [stacks](/stacks) |
-| Same at Q8 / even longer cache | Tight; measure. Floor is still Q4. |
+| Same at Q8 / even longer cache | Tight; measure. Q3 is estimate/community; Q1/Q2 stay off. |
 | Qwen 3.8 Flash UD-Q6_K_XL | Publisher file ~169 GB — expect RAM to hold most of it on 32 GB |
 | Dense 70B | Aggressive quant, short context, or another GPU |
 | MoE with few active experts | File size can surprise you — read the card and the [calculator](/calculator) |
 
-A 16 GB RX 9070 XT is the better buy if you live in smaller Qwen. The R9700 is the 32 GB bracket. Never drop below Q4 to “make it fit.”
+A 16 GB RX 9070 XT is the better buy if you live in smaller Qwen. The R9700 is the 32 GB bracket. Q3 is listed as estimate/community — do not drop to Q1/Q2 to “make it fit.”
 
 Host RAM: our test rig is **256 GB DDR5**. 64 GB is a reasonable home minimum next to one 32 GB GPU. Flash at UD-Q6_K_XL is a ~169 GB publisher file — that box needs a lot of RAM. 32 GB host gets ugly fast.
 
@@ -60,4 +62,4 @@ No live prices. As an Amazon Associate I earn from qualifying purchases.
 
 ## What not to optimize first
 
-Do not buy a second card for “double tok/s” before you have [one GPU proven](/tutorials/verify-rocm). Multi-GPU at home pays an RCCL/topology tax. See the [weekly honesty list](/).
+Do not buy a second card for “double tok/s” before you have [one GPU proven](/tutorials/verify-rocm). Multi-GPU at home pays an RCCL/topology tax. ROCm wants matching CPU-connected widths (x8/x8 or x16/x16), not a mixed leftover. See [BIOS](/bios) and the [weekly honesty list](/).

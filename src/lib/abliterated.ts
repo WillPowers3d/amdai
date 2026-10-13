@@ -32,9 +32,9 @@ export function catalogRows(): AbliteratedRow[] {
   return abliteratedGuide.rows;
 }
 
-export function q4PlusQuants(row: AbliteratedRow): { label: string; note: string }[] {
+export function listedQuants(row: AbliteratedRow): { label: string; note: string }[] {
   if (row.quants && row.quants.length) return row.quants;
-  return [{ label: row.quant_example, note: 'From catalog quant_example. Floor is Q4.' }];
+  return [{ label: row.quant_example, note: 'From catalog quant_example. Q3 is estimate/community unless measured; Q1/Q2 stay off.' }];
 }
 
 export function fieldOrUnknown(value?: string | null): string {

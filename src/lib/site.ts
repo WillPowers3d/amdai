@@ -1,7 +1,13 @@
+/** Visible brand. Domain, URLs, package names, and amdai-bench stay lowercase. */
+export const BRAND = 'AMDai';
+
+/** Homepage hero. Keep this exact string everywhere it is shown. */
+export const HERO_HEADLINE = 'Local Qwen on a R9700. Reliably.';
+
 export const site = {
   name: 'R9700 Lab Notes',
-  wordmark: 'amdai',
-  shortName: 'amdai',
+  wordmark: BRAND,
+  shortName: BRAND,
   tagline: 'Local AI on consumer AMD Radeon — ROCm notes from a real R9700 test rig.',
   description:
     'The consumer AMD ROCm notebook: llama.cpp and Qwen on Radeon GPUs, grounded in a two-R9700 test rig. Daily driver, fast agent stack, GPU directory, and a quant + hardware calculator.',
@@ -32,7 +38,8 @@ export function ogSlug(pathname: string) {
   if (slug === 'forum' || slug.startsWith('forum-')) return 'forum';
   if (slug === 'harnesses' || slug.startsWith('harnesses-')) return 'stacks';
   if (slug === 'backends' || slug.startsWith('backends-')) return 'backends';
-  if (slug === 'benchmarks') return 'stacks';
+  if (slug === 'benchmarks' || slug === 'results') return 'stacks';
+  if (slug === 'bios') return 'default';
   return OG_PAGES.has(slug) ? slug : 'default';
 }
 
@@ -88,9 +95,10 @@ export const primaryNav: NavItem[] = [
   { href: '/start', label: 'Getting started', description: 'GPU → ROCm → llama.cpp → optional harness', group: 'path' },
   { href: '/stacks', label: 'Stacks', description: 'Daily driver and fast-agent cards from our test rig', group: 'path' },
   { href: '/benchmarks', label: 'Benchmarks', description: 'First-party tok/s from the R9700 rig — no leaderboard spam', group: 'path' },
+  { href: '/results', label: 'Results', description: 'amdai-bench v1 comparable rows — verified local-desktop 35B, submitted stays empty', group: 'path' },
   { href: '/budget', label: 'Budget', description: 'Starter → Pro Radeon builds, no invented prices', group: 'path' },
-  { href: '/calculator', label: 'Calculator', description: 'Size a model, ask what a Radeon can run, or read a speed floor — Q4+', group: 'path' },
-  { href: '/quants', label: 'Quants', description: 'Q4–Q8, UD dynamic, KV types, why not below Q4', group: 'path' },
+  { href: '/calculator', label: 'Calculator', description: 'Size a model, ask what a Radeon can run, or read a speed floor — Q3 through BF16', group: 'path' },
+  { href: '/quants', label: 'Quants', description: 'Q3–Q8, UD dynamic, KV types, why Q1/Q2 stay off', group: 'path' },
   { href: '/gpus', label: 'GPU directory', description: 'Radeon cards, gfx IDs, VRAM, official ROCm rows', group: 'stack' },
   { href: '/rocm', label: 'ROCm', description: 'What it is — stack, gfx IDs, Vulkan vs HIP, versions', group: 'stack' },
   { href: '/rocm-problems', label: 'ROCm problems', description: "Open problems and how you can help — cited only", group: 'stack' },
@@ -99,6 +107,7 @@ export const primaryNav: NavItem[] = [
   { href: '/abliterated', label: 'Abliterated', description: 'Hub: what it is, how to vet files, catalog — educational only', group: 'stack' },
   { href: '/harnesses', label: 'Harnesses', description: 'What to plug your local model into — agents, chat UIs, ComfyUI', group: 'stack' },
   { href: '/hardware', label: 'Hardware', description: 'PSU, cooling, noise, VRAM vs model size', group: 'stack' },
+  { href: '/bios', label: 'BIOS', description: 'Above 4G, ReBAR/SAM, CSM, x8/x8 vs x16/x4 — cited chipset notes', group: 'stack' },
   { href: '/stack-lab', label: 'Stack Lab', description: 'Ubuntu companion — same catalog as the YAML', group: 'path' },
   { href: '/tutorials', label: 'Tutorials', description: 'Practical how-tos for this stack', group: 'practice' },
   { href: '/troubleshooting', label: 'Troubleshooting', description: 'GPU not seen, wrong wheel, CPU fallback', group: 'practice' },

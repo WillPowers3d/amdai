@@ -28,10 +28,10 @@ describe('benchmarks catalog', () => {
     }
   });
 
-  it('never invents a number, never drops below Q4, never names banned Qwen', () => {
+  it('never invents a number, never lists Q1/Q2, never names banned Qwen', () => {
     const blob = JSON.stringify(file);
     assert.doesNotMatch(blob, /Qwen2\.5|Qwen3-8B/);
-    assert.doesNotMatch(blob, /\b(?:Q[123]|IQ[123])(?:_|\b)/);
+    assert.doesNotMatch(blob, /\b(?:Q[12]|IQ[12])(?:_|\b)/);
     assert.doesNotMatch(blob, /1814/);
     for (const run of file.runs) {
       assert.equal(run.mtp, false);

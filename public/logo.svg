@@ -6,6 +6,6 @@
   <rect x="5" y="26.2" width="2.1" height="2.4" rx="0.3" fill="#6a6560"/>
   <rect x="10" y="26.2" width="2.1" height="2.4" rx="0.3" fill="#6a6560"/>
   <rect x="15" y="26.2" width="2.1" height="2.4" rx="0.3" fill="#e24a2f"/>
-  <text x="28" y="22" font-family="Geist, ui-sans-serif, system-ui, sans-serif" font-size="18" font-weight="560" letter-spacing="-0.04em" fill="#f4efe8">amd</text>
-  <text x="66" y="22" font-family="Geist, ui-sans-serif, system-ui, sans-serif" font-size="18" font-weight="560" letter-spacing="-0.04em" fill="#e24a2f">ai</text>
+  <text x="28" y="22" font-family="Geist, ui-sans-serif, system-ui, sans-serif" font-size="18" font-weight="560" letter-spacing="-0.04em" fill="#f4efe8">AMD</text>
+  <text x="74" y="22" font-family="Geist, ui-sans-serif, system-ui, sans-serif" font-size="18" font-weight="560" letter-spacing="-0.04em" fill="#e24a2f">ai</text>
 </svg>

@@ -1,7 +1,7 @@
 # Notable public Qwen abliterated / uncensored variants people run locally.
 # No download stats. Never invent a row, a quant, a base-model URL, or KV dims.
 # Educational local open-weight context only — not a default recommend.
-# Q4 and up only. No Qwen2.5. No Qwen3-8B.
+# Q3 through BF16. Q3 is estimate/community unless measured. No Qwen2.5. No Qwen3-8B. Q1/Q2 stay off.
 # Description fields (method, changes, behavior, caveats, best_use, sources)
 # must come from the model card or the author's docs. If a fact is missing,
 # write "not documented by uploader" — do not guess.
@@ -84,7 +84,7 @@ families:
       Refusals are reduced, not eliminated. The refusal boundary is less stable
       than the base. Lower quants compound that — JonathanColetti says evaluate
       on Q6_K or Q8_0, not IQ2 or IQ4_XS. Thinking-mode refusal may differ;
-      that card measured non-thinking. We still never list files below Q4.
+      that card measured non-thinking. Q3 is listed as estimate/community; Q1/Q2 stay off.
     best_use: >-
       Local llama.cpp GGUF experiment at Q4_K_M and up after official instruct
       works. Not a tested-on-our-rig pick.
@@ -259,9 +259,9 @@ rows:
     size: 27B
     quant_example: Community GGUF / Ollama tags exist — confirm the exact file
     quants:
-      - label: Q4 and up (confirm file)
-        note: Community GGUF / Ollama tags exist. No publisher GB listing in this catalog. Floor is still Q4.
-    vram_32gb: Same 27B envelope if you pick a 4–5 bit quant. Confirm the file. Floor is still Q4.
+      - label: Q3 and up (confirm file)
+        note: Community GGUF / Ollama tags exist. No publisher GB listing in this catalog. Q3 is estimate/community unless measured; Q1/Q2 stay off.
+    vram_32gb: Same 27B envelope if you pick a 3–5 bit quant. Confirm the file. Q3 is estimate/community; Q1/Q2 stay off.
     backends: llama.cpp first. vLLM unstated here.
     backend: llama.cpp first
     status: untested
@@ -341,8 +341,8 @@ rows:
       or newer.
     caveats: >-
       Unverified on our rig. Qwen3.5 may need a current llama.cpp. Confirm
-      whether you want the vision mmproj. Files below Q4 exist on the
-      mradermacher card (Q2_K, Q3_K_*); we do not list them. Floor is Q4.
+      whether you want the vision mmproj. Q1/Q2 files exist on the
+      mradermacher card (Q2_K); we do not list Q1/Q2. Q3_K_* is listed as estimate/community unless measured.
     best_use: Smaller educational file after official instruct works. Not tested on our rig.
     sources:
       - title: huihui-ai/Huihui-Qwen3.5-9B-abliterated
@@ -367,7 +367,7 @@ rows:
     quants:
       - label: Q4_K_M
         note: Publisher figure ~16.8 GB
-    vram_32gb: Fits with context room if the card is honest. Still never below Q4.
+    vram_32gb: Fits with context room if the card is honest. Q3 is estimate/community; Q1/Q2 stay off.
     backends: llama.cpp first; check card for vLLM
     backend: llama.cpp first
     status: community
@@ -391,7 +391,7 @@ rows:
       those tables there. Fine-tuning on refusal-heavy data can re-introduce
       refusals; the card says to avoid that if you want the edit to stick.
       They list derived FP8 / GGUF / MLX releases. GGUF is described as
-      2-bit through 16-bit — we only treat Q4 and up.
+      2-bit through 16-bit — we list Q3 as estimate/community and exclude Q1/Q2.
     caveats: >-
       Card disclaimer: safety alignment substantially removed; research use;
       you are liable; Apache-2.0 from the base. Refusal metric is a
@@ -403,7 +403,7 @@ rows:
     best_use: >-
       Read as a documented classic-abliteration BF16 source (fine-tune /
       re-quant / interpretability, per their intended-use list). Local GGUF
-      still needs a confirmed Q4+ file. Not tested on our rig.
+      still needs a confirmed Q3+ file. Not tested on our rig.
     sources:
       - title: orcarouter/Qwen3.8-27B-Uncensored
         url: https://huggingface.co/orcarouter/Qwen3.8-27B-Uncensored
@@ -448,7 +448,7 @@ rows:
       from the base after the merge. Architecture listed as
       Qwen3_5ForConditionalGeneration, 64 layers, vocab 248320, native
       context 262144, vision yes. Converted with llama.cpp a94d563ed.
-      IQ2_M and IQ4_XS exist on the card; we do not list IQ2 (below Q4) and
+      IQ2_M and IQ4_XS exist on the card; we do not list IQ2 (Q1/Q2 stay off) and
       we skip IQ4_XS because the uploader says not to evaluate behavior there.
     behavior: >-
       Card, vs unmodified base, same session: MMLU 83.4 → 83.3, ARC-Challenge
@@ -497,7 +497,7 @@ rows:
         note: Publisher "behavior-validated" quant (GGUFs.md / serve-l40.sh). No GB listing copied here.
       - label: Q5_K_M
         note: Publisher smaller/faster option; parity check is "same-direction only."
-      - label: Q4 and up (confirm file)
+      - label: Q3 and up (confirm file)
         note: Other GGUF notes live in GGUFs.md. Do not invent a GB figure.
     vram_32gb: Unknown until you pick a quant. Do not invent a fit.
     backends: llama.cpp tested by publisher; vLLM "compatible-by-registry, not load-tested"

@@ -507,6 +507,18 @@ input[type="range"] {
   max-width: none;
 }
 
+.prose-lab :where(p, h1, h2, h3, h4, h5, h6, ul, ol, dl, blockquote, pre, table, figure, hr, aside, section) {
+  display: block;
+}
+
+.prose-lab :where(li) {
+  display: list-item;
+}
+
+.prose-lab :where(li + li) {
+  margin-top: 0.35em;
+}
+
 .prose-lab :where(h1, h2, h3, h4) {
   font-family: var(--font-sans);
   font-weight: 560;

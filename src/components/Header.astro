@@ -26,11 +26,11 @@ const pinned = primaryNav.filter((item) => ['/calculator', '/budget', '/stacks',
     <nav class="mega-nav hidden lg:flex" aria-label="Primary">
       {navGroups.map((group) => (
         <div class="mega-item">
-          <button type="button" class="mega-trigger" aria-expanded="false">
+          <button type="button" class="mega-trigger" aria-expanded="false" aria-haspopup="true" aria-controls={`mega-panel-${group.id}`}>
             {group.label}
             <svg width="10" height="10" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 4.2 6 8l4-3.8" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
           </button>
-          <div class="mega-panel" hidden>
+          <div class="mega-panel" id={`mega-panel-${group.id}`} hidden>
             <p class="kicker">{group.label}</p>
             <ul>
               {primaryNav.filter((item) => item.group === group.id).map((item) => (
@@ -97,21 +97,8 @@ const pinned = primaryNav.filter((item) => ['/calculator', '/budget', '/stacks',
 </header>
 
 <script>
-  document.querySelectorAll('.mega-item').forEach((item) => {
-    const trigger = item.querySelector('.mega-trigger');
-    const panel = item.querySelector('.mega-panel');
-    if (!(trigger instanceof HTMLButtonElement) || !(panel instanceof HTMLElement)) return;
-    const set = (open: boolean) => {
-      trigger.setAttribute('aria-expanded', String(open));
-      panel.hidden = !open;
-    };
-    trigger.addEventListener('click', () => set(panel.hidden));
-    item.addEventListener('mouseenter', () => set(true));
-    item.addEventListener('mouseleave', () => set(false));
-    item.addEventListener('focusout', (event) => {
-      if (!item.contains(event.relatedTarget as Node)) set(false);
-    });
-  });
+  import { bindMegaNav } from '../lib/mega-nav';
+  bindMegaNav(document);
 
   const toggle = document.querySelector('[data-menu-toggle]');
   const menu = document.getElementById('mobile-nav');
@@ -140,6 +127,8 @@ const pinned = primaryNav.filter((item) => ['/calculator', '/budget', '/stacks',
 
   .mega-item {
     position: relative;
+    padding-bottom: 0.55rem;
+    margin-bottom: -0.55rem;
   }
 
   .mega-trigger,
@@ -163,7 +152,7 @@ const pinned = primaryNav.filter((item) => ['/calculator', '/budget', '/stacks',
 
   .mega-panel {
     position: absolute;
-    top: calc(100% + 0.45rem);
+    top: 100%;
     left: 0;
     width: min(38rem, 80vw);
     border: 1px solid var(--line);
@@ -171,6 +160,15 @@ const pinned = primaryNav.filter((item) => ['/calculator', '/budget', '/stacks',
     border-radius: 1rem;
     padding: 1rem;
     box-shadow: var(--shadow);
+  }
+
+  .mega-panel::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 100%;
+    height: 0.75rem;
   }
 
   .mega-panel ul {

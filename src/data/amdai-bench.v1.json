@@ -1,0 +1,141 @@
+{
+  "schema": "amdai-bench",
+  "version": 1,
+  "as_of": "2026-10",
+  "label": "Measured on our rig, 2026-10",
+  "source": "local-desktop strata-test report / Local AI measurements",
+  "results": [
+    {
+      "id": "local-desktop-qwen36-ud-q5",
+      "trust": "verified",
+      "hardware": {
+        "fingerprint": "local-desktop|r9700|gfx1201|32|256|2",
+        "host": "local-desktop",
+        "gpu": "AMD Radeon AI PRO R9700",
+        "gpu_id": "r9700",
+        "gfx": "gfx1201",
+        "gpu_count": 2,
+        "gpus_used": 1,
+        "vram_gb_each": 32,
+        "ram_gb": 256
+      },
+      "pins": {
+        "model": "Qwen3.6-35B-A3B",
+        "official": "Qwen/Qwen3.6-35B-A3B",
+        "gguf": "unsloth/Qwen3.6-35B-A3B-GGUF",
+        "quant": "UD-Q5_K_XL",
+        "backend": "llama.cpp",
+        "runtime": "Vulkan",
+        "kv": "f16",
+        "offload": "0%",
+        "mtp": false,
+        "threads": null,
+        "recipe": null
+      },
+      "contexts": [
+        {
+          "tokens": 4096,
+          "label": "short",
+          "prefill_tok_s": null,
+          "decode_tok_s": 100.8,
+          "vram_gb": null
+        },
+        {
+          "tokens": 32768,
+          "label": "32K",
+          "prefill_tok_s": null,
+          "decode_tok_s": 88,
+          "vram_gb": null
+        },
+        {
+          "tokens": 262144,
+          "label": "256K",
+          "prefill_tok_s": null,
+          "decode_tok_s": 50,
+          "vram_gb": null
+        }
+      ]
+    },
+    {
+      "id": "local-desktop-qwen36-q5km",
+      "trust": "verified",
+      "hardware": {
+        "fingerprint": "local-desktop|r9700|gfx1201|32|256|2",
+        "host": "local-desktop",
+        "gpu": "AMD Radeon AI PRO R9700",
+        "gpu_id": "r9700",
+        "gfx": "gfx1201",
+        "gpu_count": 2,
+        "gpus_used": 1,
+        "vram_gb_each": 32,
+        "ram_gb": 256
+      },
+      "pins": {
+        "model": "Qwen3.6-35B-A3B",
+        "official": "Qwen/Qwen3.6-35B-A3B",
+        "gguf": "unsloth/Qwen3.6-35B-A3B-GGUF",
+        "quant": "Q5_K_M",
+        "backend": "llama.cpp",
+        "runtime": "Vulkan",
+        "kv": "f16",
+        "offload": "0%",
+        "mtp": false,
+        "threads": null,
+        "recipe": null
+      },
+      "contexts": [
+        {
+          "tokens": 4096,
+          "label": "short",
+          "prefill_tok_s": null,
+          "decode_tok_s": 108.3,
+          "vram_gb": 28.5
+        }
+      ]
+    },
+    {
+      "id": "local-desktop-qwen36-q4km",
+      "trust": "verified",
+      "hardware": {
+        "fingerprint": "local-desktop|r9700|gfx1201|32|256|2",
+        "host": "local-desktop",
+        "gpu": "AMD Radeon AI PRO R9700",
+        "gpu_id": "r9700",
+        "gfx": "gfx1201",
+        "gpu_count": 2,
+        "gpus_used": 1,
+        "vram_gb_each": 32,
+        "ram_gb": 256
+      },
+      "pins": {
+        "model": "Qwen3.6-35B-A3B",
+        "official": "Qwen/Qwen3.6-35B-A3B",
+        "gguf": "unsloth/Qwen3.6-35B-A3B-GGUF",
+        "quant": "Q4_K_M",
+        "backend": "llama.cpp",
+        "runtime": "Vulkan",
+        "kv": "f16",
+        "offload": "0%",
+        "mtp": false,
+        "threads": null,
+        "recipe": null
+      },
+      "contexts": [
+        {
+          "tokens": 4096,
+          "label": "short",
+          "prefill_tok_s": null,
+          "decode_tok_s": 116.5,
+          "vram_gb": null
+        },
+        {
+          "tokens": 32768,
+          "label": "32K",
+          "prefill_tok_s": 1814,
+          "decode_tok_s": null,
+          "vram_gb": null
+        }
+      ]
+    }
+  ]
+}

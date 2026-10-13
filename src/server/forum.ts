@@ -279,7 +279,7 @@ async function notifyReply(thread: ThreadRow, postId: string, actor: ForumActor)
   await sendMail(
     op.email,
     `Reply on: ${thread.title}`,
-    `Someone replied to your thread on amdai.\n\n${url}\n\nTurn reply mail off under Account → alerts.`,
+    `Someone replied to your thread on AMDai.\n\n${url}\n\nTurn reply mail off under Account → alerts.`,
   );
 }
 

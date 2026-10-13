@@ -18,6 +18,7 @@ const { heading = '35B decode, measured' } = Astro.props;
     Cells that we still do not have stay <strong class="text-ink">not measured</strong>.
     Units match the hardware labels (GB).
     Full hub: <a class="underline decoration-accent/40" href="/benchmarks">benchmarks</a>.
+    Filterable JSON: <a class="underline decoration-accent/40" href="/results">comparable results</a>.
   </p>
   <div class="card mt-6 overflow-x-auto">
     <table class="table-lab min-w-[40rem]">
@@ -48,4 +49,43 @@ const { heading = '35B decode, measured' } = Astro.props;
   <ul class="mt-4 space-y-1.5 text-sm text-muted">
     {benches.notes.map((note) => <li>{note}</li>)}
   </ul>
+  <h3 class="mt-8 font-serif text-2xl">Q3 sizes on the same card (estimate / community)</h3>
+  <p class="mt-2 max-w-2xl text-sm text-muted">
+    Not measured on local-desktop. File sizes from
+    <a class="underline decoration-accent/40" href="https://huggingface.co/unsloth/Qwen3.6-35B-A3B-GGUF/tree/main">unsloth/Qwen3.6-35B-A3B-GGUF</a>.
+    Quality deltas are not first-party.
+  </p>
+  <div class="card mt-4 overflow-x-auto">
+    <table class="table-lab min-w-[28rem]">
+      <thead>
+        <tr>
+          <th>Quant</th>
+          <th>Publisher listing</th>
+          <th>Decode / VRAM</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="font-medium">UD-IQ3_S</td>
+          <td>13.7 GB</td>
+          <td>not measured · estimate / community</td>
+        </tr>
+        <tr>
+          <td class="font-medium">UD-Q3_K_S</td>
+          <td>15.4 GB</td>
+          <td>not measured · estimate / community</td>
+        </tr>
+        <tr>
+          <td class="font-medium">UD-Q3_K_M</td>
+          <td>16.6 GB</td>
+          <td>not measured · estimate / community</td>
+        </tr>
+        <tr>
+          <td class="font-medium">UD-Q3_K_XL</td>
+          <td>16.8 GB</td>
+          <td>not measured · estimate / community</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </section>

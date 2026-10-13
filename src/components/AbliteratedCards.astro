@@ -4,7 +4,7 @@ import {
   catalogFamilies,
   familyById,
   fieldOrUnknown,
-  q4PlusQuants,
+  listedQuants,
   rowById,
   statusLabel,
 } from '../lib/abliterated';
@@ -102,7 +102,7 @@ const rows = abliteratedGuide.rows;
 <section id="cards" class="mt-12">
   <h2 class="text-3xl tracking-tight">Variant cards</h2>
   <p class="mt-3 text-muted">
-    One card per catalog row. Quants are Q4 and up only. Status is from the YAML — nothing here is a
+    One card per catalog row. Quants are Q3 and up; Q3 is estimate/community unless measured. Status is from the YAML — nothing here is a
     tested-on-our-rig abliterated pick ({abliteratedGuide.tested_pick}).
   </p>
   <div class="mt-6 grid gap-4">
@@ -160,10 +160,10 @@ const rows = abliteratedGuide.rows;
           )}
           <dl class="mt-4 space-y-3 text-sm">
             <div>
-              <dt class="font-medium text-ink">Quants (Q4+)</dt>
+              <dt class="font-medium text-ink">Quants (Q3+)</dt>
               <dd class="mt-1 text-muted">
                 <ul class="space-y-1">
-                  {q4PlusQuants(row).map((q) => (
+                  {listedQuants(row).map((q) => (
                     <li>
                       <span class="font-medium text-ink">{q.label}</span>
                       <span class="text-faint"> — {q.note}</span>

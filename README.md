@@ -1,8 +1,8 @@
-# amdai · R9700 Lab Notes
+# AMDai · R9700 Lab Notes
 
 A static documentation site for **local AI on consumer AMD Radeon** — grounded in a real test rig with two **AMD Radeon AI PRO R9700** cards (32 GB, `gfx1201`) and 256 GB DDR5.
 
-Independent living notes. **Not affiliated with AMD.** The wordmark is `amdai` with a chip we drew; we do not use AMD’s logo as a lockup.
+Independent living notes. **Not affiliated with AMD.** The wordmark is `AMDai` with a chip we drew; we do not use AMD’s logo as a lockup.
 
 Visual system: [docs/design.md](docs/design.md). Dark-first ember-on-obsidian theme, Geist + Geist Mono (self-hosted in `public/fonts/`), mega-menu, ⌘K search, and per-page OG images.
 
@@ -19,7 +19,7 @@ Audience: home-lab and enthusiast users. Not enterprise Instinct marketing.
 
 Exact command lines and UD-Q5_K_XL VRAM stay `<!-- TODO: exact command line / measured VRAM from rig owner -->` until they are filled. Do not invent them. Sibling 35B points: Q5_K_M 108.3 tok/s (28.5 GB VRAM); Q4_K_M 116.5 tok/s decode, 1814 tok/s prefill at 32K.
 
-House rules: prefer llama.cpp over vLLM; prefer Q5 over Q4; never below Q4; fast NVMe only; one LLM per GPU unless you deliberately combine.
+House rules: prefer llama.cpp over vLLM; prefer Q5 over Q4; Q3 is listed as estimate/community unless measured; Q1/Q2 stay off; fast NVMe only; one LLM per GPU unless you deliberately combine.
 
 ## Stack
 
@@ -57,8 +57,8 @@ Public site URL is `https://amdai.net` (`site` in `astro.config.mjs`; override w
 | `/start` | Getting started (GPU → ROCm → llama.cpp → harness) |
 | `/stacks` | Recommended stack cards from the test rig |
 | `/budget` | Setup by budget — size/speed, local/hybrid, standard/abliterated |
-| `/calculator` | Quant + Hardware Calculator — size a model, ask what a Radeon can run, or read a speed floor (Q4+, client-side) |
-| `/quants` | Q4–Q8, UD dynamic, KV types, why not below Q4 |
+| `/calculator` | Quant + Hardware Calculator — size a model, ask what a Radeon can run, or read a speed floor (Q3 through BF16, client-side) |
+| `/quants` | Q3–Q8, UD dynamic, KV types, why Q1/Q2 stay off |
 | `/gpus` | GPU directory — gfx IDs, VRAM, official ROCm rows |
 | `/stack-lab` | Radeon Stack Lab companion (Ubuntu app, Origin repo / local) |
 | `/rocm` | What is ROCm — multi-page consumer deep dive |
@@ -77,6 +77,8 @@ Public site URL is `https://amdai.net` (`site` in `astro.config.mjs`; override w
 | `/rocm-problems/contribute` | Contributor guidelines for this site |
 | `/backends` | Inference engines compared — table + flowchart, llama.cpp default |
 | `/benchmarks` | First-party tok/s from the R9700 rig — methodology + local-desktop table |
+| `/results` | Comparable amdai-bench v1 rows — filters + verified/submitted badge |
+| `/bios` | Motherboard BIOS for local AI on Radeon — cited chipset notes, empty board table |
 | `/backends/{id}` | Deep dive: architecture, ROCm, quants, install, sources |
 | `/software` | llama.cpp first; vLLM / Strata as tries |
 | `/abliterated` | Abliterated hub — vet files, catalog table, method/variant cards, llama.cpp notes |
@@ -128,6 +130,9 @@ Public site URL is `https://amdai.net` (`site` in `astro.config.mjs`; override w
 | `src/data/rocm-problems.yaml` | Cited `/rocm-problems` tracker (TODO if unverified) |
 | `src/data/harnesses.yaml` | Cited `/harnesses` catalog (no invented features) |
 | `src/data/backends.yaml` | `/backends` comparison + per-engine deep dives |
+| `src/data/benchmarks.yaml` | `/benchmarks` first-party tok/s |
+| `src/data/amdai-bench.v1.json` | `/results` comparable catalog (35B seed only) |
+| `src/data/bios.yaml` | `/bios` chipset notes + community board table |
 | `src/data/version-matrix.yaml` | ROCm × engine × card (or “no data”) |
 
 Add a short dated note under `src/content/updates/` when a **line** changes (new Core SDK, new vLLM extras). Those render on `/rocm/versions` and the blog index.

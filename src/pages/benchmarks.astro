@@ -25,6 +25,7 @@ const flash = file.runs.filter((run) => run.model.includes('Flash'));
     <div class="mt-6 flex flex-wrap gap-3">
       <a class="btn-primary" href="#our-rig">Our test rig</a>
       <a class="btn-secondary" href="#compare">Comparison table</a>
+          <a class="btn-ghost" href="/results">Comparable results</a>
       <a class="btn-ghost" href="/calculator">Calculator</a>
       <a class="btn-ghost" href="/backends">Engines</a>
     </div>
@@ -232,8 +233,10 @@ const flash = file.runs.filter((run) => run.model.includes('Flash'));
         <li>
           <strong class="text-ink">Stack Lab — Benchmark my rig (upcoming).</strong>
           The Ubuntu companion will grow a flow that records model, quant, context,
-          engine, gfx, and tok/s without inventing a number. It is not shipping in
-          this snapshot. Map of the profiles:
+          engine, gfx, and tok/s without inventing a number. The comparable catalog
+          is already on <a class="underline decoration-accent/40" href="/results">/results</a>
+          as amdai-bench v1. It is not shipping in the companion app in this snapshot.
+          Map of the profiles:
           <a class="underline decoration-accent/40" href="/stack-lab">Radeon Stack Lab</a>.
         </li>
         <li>

@@ -17,7 +17,7 @@ const groups = [...new Set(MODEL_PRESETS.map((m) => m.group))];
 
 <Base
   title="Quant + Hardware Calculator"
-  description="Estimate GGUF weights, KV cache, and whether a stack fits a Radeon card — Q4 and above only. Client-side, shareable URL. AMD/Radeon first."
+  description="Estimate GGUF weights, KV cache, and whether a stack fits a Radeon card — Q3 through BF16. Client-side, shareable URL. AMD/Radeon first."
 >
   <main id="main" class="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-12">
     <p class="kicker">Estimate · not a bench</p>
@@ -27,7 +27,7 @@ const groups = [...new Set(MODEL_PRESETS.map((m) => m.group))];
         <p class="mt-4 text-lg leading-relaxed text-muted">
           Three views, one engine: size a model, ask what a Radeon can hold, or read a decode-speed floor.
           Totals are <strong class="font-medium text-ink">estimates</strong> unless a tested badge shows a first-party R9700 number.
-          Nothing below Q4. llama.cpp first. Qwen2.5 and Qwen3-8B are not offered.
+          Q3 is listed (estimate / community unless measured). Q1 / Q2 stay off. llama.cpp first. Qwen2.5 and Qwen3-8B are not offered.
         </p>
       </div>
       <div class="flex flex-wrap gap-2">
@@ -183,7 +183,7 @@ const groups = [...new Set(MODEL_PRESETS.map((m) => m.group))];
 
         <fieldset class="rounded-2xl border border-line bg-raised/40 p-4 sm:p-5">
           <legend class="px-1 font-serif text-2xl">Quant, context, backend</legend>
-          <p class="mt-2 text-xs text-faint">Nothing below Q4 is listed. Q1 / Q2 / Q3 / IQ1–IQ3 stay off this page, including draft heads.</p>
+          <p class="mt-2 text-xs text-faint">Q3_K_M, Q3_K_S, UD-Q3_K_XL, and IQ3 are listed. Those rows are estimates unless a tested badge applies. Q1 / Q2 stay off, including draft heads. Our local-desktop measurements stay Q4 and above.</p>
           <label class="mt-3 block text-sm">
             <span class="text-faint">Quant</span>
             <select name="quantId" class="field mt-1">
@@ -295,6 +295,33 @@ const groups = [...new Set(MODEL_PRESETS.map((m) => m.group))];
             <p class="mt-1"><span class="text-faint">Overflow to system RAM · </span><span class="tabular-nums" data-out="overflow">—</span> GiB (<span class="tabular-nums" data-out="ramPct">—</span>% of RAM)</p>
             <p class="mt-2 hidden text-sm text-warn" data-offload-warn></p>
           </div>
+          <div class="mt-5 rounded-xl border border-line p-3 text-sm" data-system-ram>
+            <div class="grid gap-3 sm:grid-cols-2">
+              <div>
+                <p class="text-faint">Minimum system RAM needed</p>
+                <p class="mt-1 font-serif text-2xl tabular-nums" data-out="ramMinKit">—</p>
+                <p class="mt-1 text-xs text-faint" data-out="ramMinMeta"></p>
+              </div>
+              <div>
+                <p class="text-faint">RAM needed at full context</p>
+                <p class="mt-1 font-serif text-2xl tabular-nums" data-out="ramFullKit">—</p>
+                <p class="mt-1 text-xs text-faint" data-out="ramFullMeta"></p>
+              </div>
+            </div>
+            <p class="mt-3 text-xs leading-relaxed text-faint" data-out="ramNote"></p>
+            <details class="mt-3">
+              <summary class="cursor-pointer text-xs font-medium">Breakdown</summary>
+              <dl class="mt-2 grid gap-1 text-xs text-muted sm:grid-cols-2">
+                <div><dt class="inline text-faint">Offloaded weights · </dt><dd class="inline tabular-nums" data-out="ramOffW">—</dd></div>
+                <div><dt class="inline text-faint">Separable embed in RAM · </dt><dd class="inline tabular-nums" data-out="ramEmbed">—</dd></div>
+                <div><dt class="inline text-faint">KV in RAM at selected · </dt><dd class="inline tabular-nums" data-out="ramKvSel">—</dd></div>
+                <div><dt class="inline text-faint">KV in RAM at full context · </dt><dd class="inline tabular-nums" data-out="ramKvFull">—</dd></div>
+                <div><dt class="inline text-faint">Runtime / backend · </dt><dd class="inline tabular-nums" data-out="ramRuntime">—</dd></div>
+                <div><dt class="inline text-faint">OS / desktop baseline · </dt><dd class="inline tabular-nums" data-out="ramOs">—</dd></div>
+                <div><dt class="inline text-faint">Headroom · </dt><dd class="inline tabular-nums" data-out="ramHead">—</dd></div>
+              </dl>
+            </details>
+          </div>
           <div class="mt-5 grid gap-3 text-sm sm:grid-cols-2">
             <div>
               <p class="text-faint" data-best-quant-label>Best quant that fits fully in VRAM</p>
@@ -313,7 +340,7 @@ const groups = [...new Set(MODEL_PRESETS.map((m) => m.group))];
 
         <section class="rounded-2xl border border-line bg-raised p-5" data-panel="gpu" hidden>
           <p class="font-mono text-[0.68rem] uppercase tracking-[0.16em] text-accent">What this GPU can run</p>
-          <p class="mt-2 text-sm text-muted">Largest fits first. Highest Q4+ quant that clears the pool with your context, KV, and backend. Out of reach stays at Q4_K_M so you can see the miss.</p>
+          <p class="mt-2 text-sm text-muted">Largest fits first. Highest listed quant that clears the pool with your context, KV, and backend. Out of reach is shown at the lightest listed quant (IQ3 / Q3) so you can see the miss.</p>
           <h3 class="mt-4 font-serif text-xl">Runs on this pool</h3>
           <ul class="mt-2 space-y-2 text-sm" data-gpu-fits></ul>
           <h3 class="mt-6 font-serif text-xl">Out of reach</h3>
@@ -384,7 +411,7 @@ const groups = [...new Set(MODEL_PRESETS.map((m) => m.group))];
         Estimate only. We show the selected card and any listed GPU whose published VRAM is at least the per-GPU total. Buttons open a search — never a stale price. As an Amazon Associate I earn from qualifying purchases.
       </p>
       <p class="mt-2 hidden text-sm text-warn" data-fit-none>
-        No listed card holds this estimate in VRAM. Expect system RAM offload (slow), or pick a smaller quant at or above Q4.
+        No listed card holds this estimate in VRAM. Expect system RAM offload (slow), or pick a smaller listed quant (Q3 and up).
       </p>
       {fitGpus.map((item) => (
         <div data-fit-card data-fit-vram={item.vram_gb} data-fit-gpu={item.calculator_gpu ?? ''} hidden>
@@ -539,7 +566,7 @@ const groups = [...new Set(MODEL_PRESETS.map((m) => m.group))];
     setText('[data-priority-lede]', PRIORITY_COPY[ask.priority].lede);
     setText('[data-usage-lede]', USAGE_COPY[ask.usage].lede);
     setText('[data-style-lede]', ask.style === 'abliterated'
-      ? 'Abliteration edits refusals in the weights. It can hurt quality. Verify the uploader and the file. You are responsible for what you run. Floor is still Q4. Tested pick: being reworked.'
+      ? 'Abliteration edits refusals in the weights. It can hurt quality. Verify the uploader and the file. You are responsible for what you run. Q1/Q2 stay off; Q3 is estimate/community unless measured. Tested pick: being reworked.'
       : 'Official instruct weights. This is the default and the reliability baseline. Prove Qwen3.6-35B-A3B before you swap.');
     setText('[data-priority-headline]', advice.headline);
     setText('[data-priority-body]', advice.body);
@@ -569,14 +596,14 @@ const groups = [...new Set(MODEL_PRESETS.map((m) => m.group))];
                 `<li class="rounded-xl border border-line bg-canvas/50 px-3 py-2"><span class="font-medium text-ink">${row.name}</span> · ${row.quant.label} · ${formatGiB(row.totalGiB)} GiB · ${row.verdict}${row.tested ? ' · tested on our rig' : ' · estimate'}</li>`,
             )
             .join('')
-        : '<li class="text-muted">Nothing in the catalog fits this pool at Q4 or above.</li>';
+        : '<li class="text-muted">Nothing in the catalog fits this pool at a listed quant.</li>';
     }
     if (misses) {
       misses.innerHTML = result.gpuMisses.length
         ? result.gpuMisses
-            .map((row) => `<li>${row.name} needs about ${formatGiB(row.totalGiB)} GiB at Q4_K_M (estimate)</li>`)
+            .map((row) => `<li>${row.name} needs about ${formatGiB(row.totalGiB)} GiB at ${row.quant.label} (estimate)</li>`)
             .join('')
-        : '<li>Every catalog model has a Q4+ fit on this pool.</li>';
+        : '<li>Every catalog model has a listed-quant fit on this pool.</li>';
     }
 
     const match = document.querySelector('[data-match-list]');
@@ -624,11 +651,30 @@ const groups = [...new Set(MODEL_PRESETS.map((m) => m.group))];
     setText('[data-out="available"]', formatGiB(result.availableVramGb));
     setText('[data-out="overflow"]', formatGiB(result.overflowGiB));
     setText('[data-out="ramPct"]', result.overflowRamPct == null ? '—' : result.overflowRamPct.toFixed(1));
+    const ram = result.systemRam;
+    setText('[data-out="ramMinKit"]', `${ram.atSelected.kitGb} GB kit`);
+    setText('[data-out="ramFullKit"]', `${ram.atFullContext.kitGb} GB kit`);
+    setText(
+      '[data-out="ramMinMeta"]',
+      `${ram.atSelected.label === 'measured' ? 'Measured' : 'Estimate'} · ${formatGiB(ram.atSelected.rawGiB)} GiB raw · ${formatCtx(ram.atSelected.context)} context`,
+    );
+    setText(
+      '[data-out="ramFullMeta"]',
+      `${ram.atFullContext.label === 'measured' ? 'Measured' : 'Estimate'} · ${formatGiB(ram.atFullContext.rawGiB)} GiB raw · ${formatCtx(ram.fullContext)} full context`,
+    );
+    setText('[data-out="ramNote"]', ram.atSelected.note);
+    setText('[data-out="ramOffW"]', `${formatGiB(ram.atSelected.breakdown.offloadedWeightsGiB)} GiB`);
+    setText('[data-out="ramEmbed"]', `${formatGiB(ram.atSelected.breakdown.separableEmbedGiB)} GiB`);
+    setText('[data-out="ramKvSel"]', `${formatGiB(ram.atSelected.breakdown.kvInRamGiB)} GiB`);
+    setText('[data-out="ramKvFull"]', `${formatGiB(ram.atFullContext.breakdown.kvInRamGiB)} GiB`);
+    setText('[data-out="ramRuntime"]', `${formatGiB(ram.atSelected.breakdown.runtimeOverheadGiB)} GiB`);
+    setText('[data-out="ramOs"]', `${formatGiB(ram.atSelected.breakdown.osDesktopGiB)} GiB`);
+    setText('[data-out="ramHead"]', `${formatGiB(ram.atSelected.breakdown.headroomGiB)} GiB`);
     setText('[data-weights-note]', result.weightsNote);
     setText('[data-kv-note]', result.kvNote);
     setText('[data-oh-note]', result.overheadNote);
     setText('[data-best-quant-label]', PRIORITY_COPY[ask.priority].bestQuantLabel);
-    setText('[data-out="bestQuant"]', pick ? `${pick.label} (estimate)` : 'No Q4+ quant fits fully in VRAM');
+    setText('[data-out="bestQuant"]', pick ? `${pick.label} (estimate)` : 'No listed quant fits fully in VRAM');
     setText('[data-out="maxBest"]', result.maxContextAtBest != null ? `${formatCtx(result.maxContextAtBest)} (estimate)` : '—');
     setText('[data-out="maxSelected"]', result.maxContextAtSelected != null ? `${formatCtx(result.maxContextAtSelected)} (estimate)` : '—');
     setText('[data-ctx-label]', `${formatCtx(input.context)} tokens`);

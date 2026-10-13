@@ -1,6 +1,6 @@
 ---
 import { abliteratedGuide } from '../lib/status';
-import { TIER_KEYS, TIER_LABEL, q4PlusQuants, statusLabel, testedPickLabel } from '../lib/abliterated';
+import { TIER_KEYS, TIER_LABEL, listedQuants, statusLabel, testedPickLabel } from '../lib/abliterated';
 ---
 
 <div class="not-prose my-6 overflow-x-auto rounded-xl border border-line">
@@ -11,7 +11,7 @@ import { TIER_KEYS, TIER_LABEL, q4PlusQuants, statusLabel, testedPickLabel } fro
         <th class="px-3 py-2 font-medium">Model</th>
         <th class="px-3 py-2 font-medium">Base</th>
         <th class="px-3 py-2 font-medium">Uploader</th>
-        <th class="px-3 py-2 font-medium">Quants (Q4+)</th>
+        <th class="px-3 py-2 font-medium">Quants (Q3+)</th>
         <th class="px-3 py-2 font-medium">Fit by tier</th>
         <th class="px-3 py-2 font-medium">Backend</th>
         <th class="px-3 py-2 font-medium">Status</th>
@@ -64,7 +64,7 @@ import { TIER_KEYS, TIER_LABEL, q4PlusQuants, statusLabel, testedPickLabel } fro
           </td>
           <td class="px-3 py-3 text-muted">
             <ul class="space-y-1">
-              {q4PlusQuants(row).map((q) => (
+              {listedQuants(row).map((q) => (
                 <li>
                   <span class="font-medium text-ink">{q.label}</span>
                   <span class="block text-xs text-faint">{q.note}</span>

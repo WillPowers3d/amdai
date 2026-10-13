@@ -41,7 +41,7 @@ export const STYLE_COPY: Record<Style, { label: string; short: string; lede: str
     label: 'Abliterated / uncensored',
     short: 'Abliterated',
     lede:
-      'Abliteration edits refusals in the weights. It can hurt quality. Verify the uploader and the file. You are responsible for what you run. Floor is still Q4. There is no tested-on-our-rig abliterated pick — being reworked. See the educational rows from the catalog, not an invented stack.',
+      'Abliteration edits refusals in the weights. It can hurt quality. Verify the uploader and the file. You are responsible for what you run. Q1/Q2 stay off; Q3 is estimate/community unless measured. There is no tested-on-our-rig abliterated pick — being reworked. See the educational rows from the catalog, not an invented stack.',
   },
 };
 

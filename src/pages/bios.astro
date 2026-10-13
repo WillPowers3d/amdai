@@ -1,0 +1,239 @@
+---
+import Base from '../layouts/Base.astro';
+import Callout from '../components/Callout.astro';
+import { boardsForChipset, sourceOf } from '../lib/bios';
+import { biosFile } from '../lib/bios-data';
+
+const file = biosFile;
+const used: string[] = [];
+function mark(id: string | undefined) {
+  if (id && file.sources[id] && !used.includes(id)) used.push(id);
+  return id;
+}
+function n(id: string | undefined) {
+  if (!id) return null;
+  mark(id);
+  return used.indexOf(id) + 1;
+}
+
+for (const setting of file.settings) {
+  for (const claim of setting.claims) mark(claim.cite);
+}
+for (const chipset of file.chipsets) {
+  mark(chipset.cite);
+  for (const note of chipset.notes) mark(note.cite);
+}
+
+const emptyBoards = file.boards.length === 0;
+---
+
+<Base
+  title="BIOS settings for local AI on Radeon"
+  description="Motherboard BIOS for local AI on Radeon — Above 4G, Resizable BAR/SAM, CSM off, PCIe x8/x8 vs x16/x4, EXPO/XMP, IOMMU. Cited chipset notes; board table from submissions only."
+>
+  <main id="main" class="mx-auto max-w-6xl px-4 py-10 sm:px-6">
+    <p class="kicker">Firmware · cited only</p>
+    <h1 class="display mt-3 text-4xl sm:text-5xl">BIOS settings for local AI on Radeon</h1>
+    <p class="mt-4 max-w-2xl text-lg leading-relaxed text-muted">
+      What the firmware must get right before ROCm or llama.cpp sees a 32&nbsp;GB card.
+      Organized by chipset. Every sentence here is cited or marked
+      <strong class="text-ink">TODO</strong>. We do not invent a motherboard for
+      {emptyBoards ? 'local-desktop' : 'the test rig'}.
+    </p>
+    <div class="mt-6 flex flex-wrap gap-3">
+      <a class="btn-primary" href="#settings">Settings</a>
+      <a class="btn-secondary" href="#chipsets">Chipsets</a>
+      <a class="btn-ghost" href="#boards">Board notes</a>
+      <a class="btn-ghost" href="/hardware">Hardware</a>
+    </div>
+
+    <Callout type="note" title={file.rule}>
+      As of {file.as_of}. Menu names move between vendors. If a string is not on an official
+      AMD, Intel, or ROCm page, it belongs in the board table with a citation — or it stays TODO.
+    </Callout>
+
+    <section id="settings" class="mt-12 scroll-mt-28" aria-labelledby="settings-heading">
+      <h2 id="settings-heading" class="font-serif text-3xl">Settings to look for</h2>
+      <p class="mt-3 max-w-2xl text-muted">
+        Cross-chipset. The chipset cards below only add official lane and memory-profile facts.
+      </p>
+      <div class="mt-8 space-y-6">
+        {file.settings.map((setting) => (
+          <article class="card p-5 sm:p-6" id={setting.id}>
+            <p class="kicker">{setting.topic}</p>
+            <h3 class="mt-2 text-2xl tracking-tight">{setting.title}</h3>
+            <p class="mt-3 text-sm leading-relaxed text-muted">{setting.summary}</p>
+            <ul class="mt-4 space-y-3 text-sm leading-relaxed text-muted">
+              {setting.claims.map((claim) => {
+                const num = n(claim.cite);
+                return (
+                  <li>
+                    {claim.text}
+                    {num ? (
+                      <sup class="rocm-cite">
+                        <a href={`#cite-${claim.cite}`} aria-label={`Source ${num}`}>[{num}]</a>
+                      </sup>
+                    ) : null}
+                    {claim.todo ? <span class="badge-warn ml-2">TODO</span> : null}
+                  </li>
+                );
+              })}
+            </ul>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section id="chipsets" class="mt-14 scroll-mt-28" aria-labelledby="chipset-heading">
+      <h2 id="chipset-heading" class="font-serif text-3xl">By chipset</h2>
+      <p class="mt-3 max-w-2xl text-muted">
+        Official lane tables only. A chipset that <em>can</em> do 2×8 does not mean your board
+        wired two GPU slots.
+      </p>
+      <div class="mt-8 grid gap-4 lg:grid-cols-2">
+        {file.chipsets.map((chipset) => {
+          const citeN = n(chipset.cite);
+          const rows = boardsForChipset(file, chipset.id);
+          return (
+            <article class="card p-5 sm:p-6" id={chipset.id}>
+              <p class="kicker">{chipset.socket} · {chipset.vendor}</p>
+              <h3 class="mt-2 text-2xl tracking-tight">{chipset.name}</h3>
+              <dl class="mt-4 grid gap-3 text-sm sm:grid-cols-2">
+                <div>
+                  <dt class="font-mono text-[0.68rem] uppercase tracking-[0.12em] text-faint">CPU graphics</dt>
+                  <dd class="mt-1 text-ink">{chipset.graphics}</dd>
+                </div>
+                <div>
+                  <dt class="font-mono text-[0.68rem] uppercase tracking-[0.12em] text-faint">NVMe / GPP</dt>
+                  <dd class="mt-1 text-ink">{chipset.nvme}</dd>
+                </div>
+                <div>
+                  <dt class="font-mono text-[0.68rem] uppercase tracking-[0.12em] text-faint">Usable PCIe</dt>
+                  <dd class="mt-1 text-ink">{chipset.usable_pcie}</dd>
+                </div>
+                <div>
+                  <dt class="font-mono text-[0.68rem] uppercase tracking-[0.12em] text-faint">Memory profile</dt>
+                  <dd class="mt-1 text-ink">{chipset.expo_xmp}</dd>
+                </div>
+                <div class="sm:col-span-2">
+                  <dt class="font-mono text-[0.68rem] uppercase tracking-[0.12em] text-faint">USB4 on the table</dt>
+                  <dd class="mt-1 text-ink">{chipset.usb4}</dd>
+                </div>
+              </dl>
+              {citeN ? (
+                <p class="mt-3 text-xs text-faint">
+                  Chipset row
+                  <sup class="rocm-cite"><a href={`#cite-${chipset.cite}`}>[{citeN}]</a></sup>
+                </p>
+              ) : null}
+              <ul class="mt-4 space-y-2 text-sm leading-relaxed text-muted">
+                {chipset.notes.map((note) => {
+                  const num = n(note.cite);
+                  return (
+                    <li>
+                      {note.text}
+                      {num ? (
+                        <sup class="rocm-cite">
+                          <a href={`#cite-${note.cite}`} aria-label={`Source ${num}`}>[{num}]</a>
+                        </sup>
+                      ) : null}
+                      {note.todo ? <span class="badge-warn ml-2">TODO</span> : null}
+                    </li>
+                  );
+                })}
+              </ul>
+              <p class="mt-4 text-xs text-faint">
+                {rows.length
+                  ? `${rows.length} submitted board note${rows.length === 1 ? '' : 's'}`
+                  : 'No submitted board notes for this chipset yet.'}
+              </p>
+            </article>
+          );
+        })}
+      </div>
+    </section>
+
+    <section id="boards" class="mt-14 scroll-mt-28" aria-labelledby="boards-heading">
+      <h2 id="boards-heading" class="font-serif text-3xl">Per-board notes</h2>
+      <p class="mt-3 max-w-2xl text-muted">
+        Community submissions only. The test-rig motherboard is not published, so this table
+        starts empty on purpose.
+      </p>
+
+      {emptyBoards ? (
+        <div class="card mt-6 p-6" role="status">
+          <p class="kicker">Empty</p>
+          <h3 class="mt-2 text-xl tracking-tight">No board rows yet</h3>
+          <p class="mt-3 text-sm leading-relaxed text-muted">
+            When someone sends a cited BIOS walkthrough, it lands here — vendor, model, chipset,
+            BIOS version, the label they actually saw, and an https source. Until then the
+            chipset cards above are the only facts.
+          </p>
+          <p class="mt-4 flex flex-wrap gap-3">
+            <a class="btn-secondary" href={file.submit.forum}>Submit in Hardware &amp; Builds</a>
+            <a class="btn-ghost" href="/rocm-problems/contribute">Contributor rules</a>
+          </p>
+        </div>
+      ) : (
+        <div class="card mt-6 overflow-x-auto">
+          <table class="table-lab min-w-[48rem]">
+            <thead>
+              <tr>
+                <th>Board</th>
+                <th>Chipset</th>
+                <th>BIOS</th>
+                <th>Notes</th>
+                <th>Source</th>
+              </tr>
+            </thead>
+            <tbody>
+              {file.boards.map((board) => (
+                <tr>
+                  <td class="font-medium">{board.vendor} {board.model}</td>
+                  <td>{board.chipset}</td>
+                  <td>{board.bios_version}</td>
+                  <td>{board.notes}</td>
+                  <td>
+                    {board.todo ? <span class="badge-warn">TODO</span> : board.cite ?? '—'}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+
+      <article class="card mt-6 p-5 sm:p-6">
+        <p class="kicker">How to add a row</p>
+        <h3 class="mt-2 text-xl tracking-tight">What a submission must include</h3>
+        <p class="mt-3 text-sm text-muted">
+          Post in the forum or send a patch to <code>{file.submit.file}</code>. Invented
+          slot maps and unlabeled tok/s get dropped.
+        </p>
+        <ul class="mt-4 list-disc space-y-1.5 pl-5 text-sm text-muted">
+          {file.submit.fields.map((field) => <li>{field}</li>)}
+        </ul>
+      </article>
+    </section>
+
+    <section id="sources" class="mt-14" aria-labelledby="sources-heading">
+      <h2 id="sources-heading" class="font-serif text-3xl">Sources</h2>
+      <p class="mt-3 max-w-2xl text-sm text-muted">
+        Official vendor and ROCm pages. Instinct C-state and ASPM notes are labeled as
+        Instinct guidance on the cards above — not as measured desktop advice.
+      </p>
+      <ol class="mt-4 list-decimal space-y-2 pl-5 text-sm">
+        {used.map((id) => {
+          const source = sourceOf(file, id);
+          if (!source) return null;
+          return (
+            <li id={`cite-${id}`}>
+              <a class="underline decoration-accent/40" href={source.href} rel="noopener">{source.title}</a>
+              <span class="text-faint"> — {source.publisher}</span>
+            </li>
+          );
+        })}
+      </ol>
+    </section>
+  </main>
+</Base>

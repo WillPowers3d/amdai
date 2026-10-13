@@ -31,6 +31,6 @@ export const POST: APIRoute = async ({ request, cookies }) => {
     sha256(token),
     Date.now() + 15 * 60 * 1000,
   ]);
-  await sendMail(email, 'Sign in to R9700 Lab Notes', `Use this one-time link (15 minutes):\n\n${magicLinkUrl(token)}\n`);
+  await sendMail(email, 'Sign in to AMDai', `Use this one-time link (15 minutes):\n\n${magicLinkUrl(token)}\n`);
   return Response.json({ ok: true, dev: !process.env.SMTP_HOST });
 };

@@ -7,9 +7,13 @@ import {
   DEFAULT_INPUT,
   GPU_PRESETS,
   KV_TYPES,
+  DIMM_KIT_GB,
   MEASURED_ON_OUR_RIG,
   MODEL_PRESETS,
   QUANTS,
+  local-desktop_DDR5_GB,
+  roundUpToDimmKitGb,
+  systemRamNeed,
   applyModelPreset,
   catalogGuardErrors,
   compute,
@@ -83,15 +87,27 @@ describe('stacks first-party 35B benches', () => {
 });
 
 describe('calculator catalog guards', () => {
-  it('never lists a quant below Q4 or a banned Qwen', () => {
+  it('lists Q3 options, rejects Q1/Q2, and keeps banned Qwen out', () => {
     assert.deepEqual(catalogGuardErrors(), []);
-    assert.ok(QUANTS.every((q) => q.bpw >= 4.85));
-    assert.ok(!KV_TYPES.some((k) => /q[123]_/i.test(k.id) && k.id.startsWith('q2')));
+    const ids = QUANTS.map((q) => q.id);
+    for (const required of ['q3_k_s', 'q3_k_m', 'q3_k_xl', 'iq3', 'q4_k_m'] as const) {
+      assert.ok(ids.includes(required), required);
+    }
+    assert.ok(QUANTS.every((q) => q.bpw >= 3.4));
+    assert.ok(!QUANTS.some((q) => /q[12]/i.test(q.id) && !/q3|q4|q5|q6|q8/.test(q.id)));
     const blob = MODEL_PRESETS.map((m) => `${m.id} ${m.name} ${m.official}`).join('\n');
     assert.doesNotMatch(blob, /Qwen2\.5/);
     assert.doesNotMatch(blob, /Qwen3-8B/);
     assert.ok(BACKENDS[0].id === 'llamacpp');
     assert.ok(GPU_PRESETS[0].id === 'r9700');
+    const flash = MODEL_PRESETS.find((m) => m.id === 'flash');
+    assert.equal(flash?.publisherFiles.q3_k_xl?.decimalGb, 90);
+    assert.equal(flash?.publisherFiles.iq3?.decimalGb, 81.96);
+    const qwen36 = MODEL_PRESETS.find((m) => m.id === 'qwen36');
+    assert.equal(qwen36?.publisherFiles.q3_k_s?.decimalGb, 15.4);
+    assert.equal(qwen36?.publisherFiles.q3_k_m?.decimalGb, 16.6);
+    assert.equal(qwen36?.publisherFiles.q3_k_xl?.decimalGb, 16.8);
+    assert.equal(qwen36?.publisherFiles.iq3?.decimalGb, 13.7);
   });
 
   it('keeps house models and a custom row', () => {
@@ -162,7 +178,7 @@ describe('calculator math and modes', () => {
     assert.ok(result.matching.every((g) => g.gfx.startsWith('gfx')));
     const catalog = gpuCatalog({ ...DEFAULT_INPUT, context: 8192, gpuId: 'r9700', vramGb: 32 });
     assert.ok(catalog.fits.some((row) => row.modelId === 'qwen36'));
-    assert.ok(catalog.fits.every((row) => row.quant.bpw >= 4.85));
+    assert.ok(catalog.fits.every((row) => row.quant.bpw >= 3.4));
     assert.ok(!catalog.fits.some((row) => /Qwen2\.5|Qwen3-8B/.test(row.name)));
   });
 
@@ -210,6 +226,41 @@ describe('calculator math and modes', () => {
   it('formats GiB without inventing a unit mix', () => {
     assert.equal(formatGiB(0), '0');
     assert.match(formatGiB(28.5), /28\.5/);
+  });
+
+  it('reports Flash host RAM as a kit with a breakdown, not a bare offload figure', () => {
+    const flash = compute(
+      applyModelPreset('flash', { ...DEFAULT_INPUT, gpuCount: 1, split: false, context: 32768, backendId: 'strata' }),
+    );
+    assert.ok(flash.overflowGiB > 1);
+    const ram = flash.systemRam;
+    assert.ok(ram.atSelected.kitGb >= 192);
+    assert.ok(ram.atFullContext.kitGb >= ram.atSelected.kitGb);
+    assert.equal(ram.atSelected.label, 'estimate');
+    assert.equal(ram.atFullContext.label, 'estimate');
+    assert.equal(ram.fullContext, 262144);
+    assert.ok(ram.atSelected.breakdown.offloadedWeightsGiB > 100);
+    assert.ok(ram.atFullContext.breakdown.kvInRamGiB >= ram.atSelected.breakdown.kvInRamGiB);
+    assert.ok(ram.atSelected.breakdown.osDesktopGiB > 0);
+    assert.ok(ram.atSelected.breakdown.headroomGiB > 0);
+    assert.ok(ram.atSelected.breakdown.runtimeOverheadGiB > 0);
+    assert.match(ram.atSelected.note, /Estimate/i);
+    assert.match(ram.atSelected.note, /256 GB DDR5/);
+    assert.ok((DIMM_KIT_GB as readonly number[]).includes(ram.atSelected.kitGb));
+    assert.ok((DIMM_KIT_GB as readonly number[]).includes(ram.atFullContext.kitGb));
+    assert.ok(ram.atSelected.rawGiB < ram.atSelected.kitGb + 1e-9);
+    assert.equal(local-desktop_DDR5_GB, 256);
+  });
+
+  it('rounds host RAM up to a real DIMM kit', () => {
+    assert.equal(roundUpToDimmKitGb(1), 16);
+    assert.equal(roundUpToDimmKitGb(64), 64);
+    assert.equal(roundUpToDimmKitGb(64.1), 96);
+    assert.equal(roundUpToDimmKitGb(169), 192);
+    assert.equal(roundUpToDimmKitGb(193), 256);
+    const daily = systemRamNeed(DEFAULT_INPUT);
+    assert.ok(daily.atSelected.kitGb <= 64);
+    assert.equal(daily.atSelected.label, 'estimate');
   });
 });
 

@@ -3,12 +3,12 @@
 as_of: 2026-10-12
 principle: >
   Reliability first on llama.cpp, then a faster agent engine if you need it.
-  Prefer Q5 over Q4. Never go below Q4. Load weights from fast NVMe.
+  Prefer Q5 over Q4. Q3 is listed as an estimate or community result. Q1/Q2 stay off. Load weights from fast NVMe.
   One LLM per GPU unless you deliberately combine. Abliterated is educational only.
 
 house_rules:
   - Prefer llama.cpp over vLLM for a home box. vLLM is a serve try, not the daily driver.
-  - Prefer Q5 over Q4. Q4_K_M is the floor. Never Q1, Q2, Q3, or IQ1–IQ3 — including draft / MTP heads.
+  - Prefer Q5 over Q4. Q3_K_M / Q3_K_S / UD-Q3_K_XL / IQ3 are listed as estimates unless measured. Never Q1, Q2, IQ1, or IQ2 — including draft / MTP heads.
   - Keep GGUFs on fast NVMe. Do not run a 20-plus-GB file from a spinning disk.
   - One LLM per GPU unless you deliberately combine (tensor/layer split).
   - Daily driver on our rig uses 0% system RAM offload. Offload is slow — treat it as a last resort.
@@ -44,7 +44,7 @@ recommendations:
       Measured split / VRAM / RAM on our rig is TODO. Offload is slow.
     notes: >
       Weights from unsloth/Qwen3.8-Flash-Next-GGUF. Fast NVMe is not optional at
-      this file size. Still never below Q4. Open /calculator with the Flash preset
+      this file size. Q3 is listed as estimate/community; Q1/Q2 stay off. Open /calculator with the Flash preset
       before you buy a second card.
 
   - id: abliterated-optional

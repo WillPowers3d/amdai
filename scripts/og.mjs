@@ -6,7 +6,7 @@ const font = new URL('../public/fonts/geist-latin.woff2', import.meta.url).href;
 await mkdir(out, { recursive: true });
 
 const pages = [
-  ['home', 'Local Qwen on a real R9700', 'Independent consumer notes for Radeon AI'],
+  ['home', 'Local Qwen on a R9700. Reliably.', 'Independent consumer notes for Radeon AI'],
   ['calculator', 'Quant + Hardware Calculator', 'Weights, KV, and overhead vs card VRAM'],
   ['budget', 'Setup by budget', 'Starter through the two-R9700 Pro rig'],
   ['abliterated', 'Abliterated models', 'Educational catalog. Official instruct first.'],
@@ -18,7 +18,7 @@ const pages = [
   ['start', 'Getting started', 'GPU → ROCm → llama.cpp → harness'],
   ['account', 'Saved rigs', 'Optional accounts. Off unless enabled.'],
   ['search', 'Search', 'Pagefind over the living notes'],
-  ['default', 'amdai', 'Independent Radeon AI notes. Not affiliated with AMD.'],
+  ['default', 'AMDai', 'Independent Radeon AI notes. Not affiliated with AMD.'],
 ];
 
 const html = (title, lede) => `<!doctype html>
@@ -39,7 +39,7 @@ p{margin:22px 0 0;font-size:26px;color:#b9b1a7;max-width:28ch}
 <body>
 <div class="grid"></div><div class="glow"></div>
 <div class="inner">
-  <div class="mark"><span class="chip"></span>amd<span class="ai">ai</span></div>
+  <div class="mark"><span class="chip"></span>AMD<span class="ai">ai</span></div>
   <h1>${title}</h1>
   <p>${lede}</p>
 </div>

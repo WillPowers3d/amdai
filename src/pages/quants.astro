@@ -4,20 +4,22 @@ import Base from '../layouts/Base.astro';
 
 <Base
   title="Quant explainer"
-  description="Q4 through Q8, Unsloth UD dynamic GGUFs, BF16, KV cache types, and why this site never goes below Q4. Links to the calculator."
+  description="Q3 through Q8, Unsloth UD dynamic GGUFs, BF16, KV cache types, and why Q1/Q2 stay off this site. Links to the calculator."
 >
   <main id="main" class="mx-auto max-w-3xl px-4 py-10 sm:px-6">
     <p class="font-mono text-[0.72rem] uppercase tracking-[0.18em] text-accent">Weights</p>
     <h1 class="mt-3 font-serif text-4xl tracking-tight sm:text-5xl">Quants, without folklore</h1>
     <p class="mt-4 text-lg leading-relaxed text-muted">
       A quant is a stored-weight encoding. Lower bits shrink the file and usually cost quality.
-      This site’s floor is <strong class="text-ink">Q4</strong>. The
+      This site lists <strong class="text-ink">Q3 through BF16</strong>. Q3 rows are estimates
+      or community results unless a tested badge says otherwise. Our local-desktop measurements stay
+      Q4 and above. The
       <a class="underline decoration-accent/40 underline-offset-2" href="/calculator">calculator</a>
-      estimates VRAM from these encodings. Numbers there are labeled estimates, not benches.
+      estimates VRAM from these encodings.
     </p>
 
     <section class="mt-10">
-      <h2 class="font-serif text-3xl">Q4 through Q8 (llama.cpp family)</h2>
+      <h2 class="font-serif text-3xl">Q3 through Q8 (llama.cpp family)</h2>
       <p class="mt-3 leading-relaxed text-muted">
         Nominal bits-per-weight used by the calculator (llama.cpp-family labels, not measured entropy):
       </p>
@@ -31,7 +33,11 @@ import Base from '../layouts/Base.astro';
             </tr>
           </thead>
           <tbody>
-            <tr class="border-b border-line/70"><td class="py-2 pr-3">Q4_K_M</td><td class="py-2 pr-3 font-mono">4.85</td><td class="py-2 text-muted">Floor. Prefer Q5 when it fits.</td></tr>
+            <tr class="border-b border-line/70"><td class="py-2 pr-3">Q3_K_S</td><td class="py-2 pr-3 font-mono">3.50</td><td class="py-2 text-muted">Estimate / community. 35B listing: Unsloth UD-Q3_K_S 15.4 GB.</td></tr>
+            <tr class="border-b border-line/70"><td class="py-2 pr-3">Q3_K_M</td><td class="py-2 pr-3 font-mono">3.91</td><td class="py-2 text-muted">Estimate / community. 35B listing: Unsloth UD-Q3_K_M 16.6 GB.</td></tr>
+            <tr class="border-b border-line/70"><td class="py-2 pr-3">UD-Q3_K_XL</td><td class="py-2 pr-3 font-mono">3.91</td><td class="py-2 text-muted">Estimate / community. 35B listing: Unsloth UD-Q3_K_XL 16.8 GB.</td></tr>
+            <tr class="border-b border-line/70"><td class="py-2 pr-3">IQ3 / UD-IQ3_S</td><td class="py-2 pr-3 font-mono">3.44</td><td class="py-2 text-muted">Estimate / community, only where the repo lists IQ3. 35B listing: Unsloth UD-IQ3_S 13.7 GB.</td></tr>
+            <tr class="border-b border-line/70"><td class="py-2 pr-3">Q4_K_M</td><td class="py-2 pr-3 font-mono">4.85</td><td class="py-2 text-muted">Measured on our rig for the 35B sibling. Prefer Q5 when it fits.</td></tr>
             <tr class="border-b border-line/70"><td class="py-2 pr-3">Q5_K_M / UD-Q5_K_XL</td><td class="py-2 pr-3 font-mono">5.69</td><td class="py-2 text-muted">Daily-driver family. Prefer Q5 over Q4.</td></tr>
             <tr class="border-b border-line/70"><td class="py-2 pr-3">Q6_K / UD-Q6_K_XL</td><td class="py-2 pr-3 font-mono">6.56</td><td class="py-2 text-muted">Flash agent family on our rig.</td></tr>
             <tr class="border-b border-line/70"><td class="py-2 pr-3">Q8_0</td><td class="py-2 pr-3 font-mono">8.5</td><td class="py-2 text-muted">Near-lossless GGUF; heavy.</td></tr>
@@ -40,12 +46,11 @@ import Base from '../layouts/Base.astro';
         </table>
       </div>
       <p class="mt-3 text-sm text-faint">
-        UD-Q5_K_XL / UD-Q6_K_XL share the Q5 / Q6 buckets unless a Hugging Face listing supplies a
-        publisher file size (decimal GB → GiB). Daily-driver listing:
-        <a class="underline decoration-accent/40 underline-offset-2" href="https://huggingface.co/unsloth/Qwen3.6-35B-A3B-GGUF">unsloth/Qwen3.6-35B-A3B-GGUF</a>
+        File sizes for the 35B Q3/Q5 rows come from
+        <a class="underline decoration-accent/40 underline-offset-2" href="https://huggingface.co/unsloth/Qwen3.6-35B-A3B-GGUF/tree/main">unsloth/Qwen3.6-35B-A3B-GGUF</a>
         (UD-Q5_K_XL 26.6 GB). Flash:
         <a class="underline decoration-accent/40 underline-offset-2" href="https://huggingface.co/unsloth/Qwen3.8-Flash-Next-GGUF">unsloth/Qwen3.8-Flash-Next-GGUF</a>
-        (UD-Q6_K_XL folder ~169 GB).
+        (UD-Q6_K_XL folder ~169 GB; UD-Q3_K_XL folder ~90 GB / LFS 89.99 GB; UD-IQ3_XXS LFS 81.96 GB). Quality deltas for Q3 are not measured on local-desktop.
       </p>
     </section>
 
@@ -55,7 +60,8 @@ import Base from '../layouts/Base.astro';
         Unsloth’s UD (dynamic) GGUFs mix higher-precision tensors into a named bucket so important
         layers stay closer to the original. We do not invent a quality delta. When the publisher
         lists a file size, the calculator uses that size instead of <code class="text-ink">params × bpw</code>.
-        Prefer the UD-Q5_K_XL / UD-Q6_K_XL files we name on <a class="underline decoration-accent/40 underline-offset-2" href="/stacks">/stacks</a>.
+        Prefer the UD-Q5_K_XL / UD-Q6_K_XL files we name on <a class="underline decoration-accent/40 underline-offset-2" href="/stacks">/stacks</a>
+        when you want the daily-driver or Flash path. UD-Q3_K_XL is the Q3 size step on the same card.
       </p>
     </section>
 
@@ -70,17 +76,16 @@ import Base from '../layouts/Base.astro';
       <ul class="mt-4 list-disc space-y-2 pl-5 text-muted">
         <li><strong class="text-ink">f16</strong> — 2 bytes. Daily driver on our rig.</li>
         <li><strong class="text-ink">q8_0</strong> — 1 byte. Smaller KV; quality trade is not measured here.</li>
-        <li><strong class="text-ink">q4_0</strong> — 0.5 bytes. Last KV lever before you cut context. Still not a weight quant below Q4.</li>
+        <li><strong class="text-ink">q4_0</strong> — 0.5 bytes. Last KV lever before you cut context. This is a KV type, not a weight quant.</li>
       </ul>
     </section>
 
     <section class="mt-10">
-      <h2 class="font-serif text-3xl">Why nothing below Q4</h2>
+      <h2 class="font-serif text-3xl">Q1 and Q2 stay off</h2>
       <p class="mt-3 leading-relaxed text-muted">
-        Q1, Q2, Q3, and IQ1–IQ3 (including draft / MTP heads) stay off this site. They exist in
-        the GGUF ecosystem. They are how people “fit” a model that does not fit, then wonder why
-        the agent is drunk. The house rule is: prefer Q5 over Q4; never go below Q4; use the
-        calculator and a smaller context or a smaller <em>named</em> model instead.
+        Q1, Q2, IQ1, and IQ2 (including draft / MTP heads) stay off this site. They exist in
+        the GGUF ecosystem. Q3 is listed with a publisher size when we have one, and labeled
+        estimate or community unless we measured it. Prefer Q5 over Q4 when the file still fits.
       </p>
     </section>
 

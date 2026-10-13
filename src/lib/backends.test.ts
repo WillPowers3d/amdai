@@ -74,9 +74,9 @@ describe('inference engine catalog', () => {
     assert.doesNotMatch(others, /116\.5/);
   });
 
-  it('states the Q4 floor and keeps the flowchart on llama.cpp', () => {
+  it('lists Q3 or says Q1/Q2 stay off, and keeps the flowchart on llama.cpp', () => {
     for (const row of list) {
-      assert.match(row.quants, /Q4/i, row.id);
+      assert.match(row.quants, /Q3|Q1\s*\/\s*Q2|Q1 and Q2/i, row.id);
     }
     assert.match(BACKEND_FLOWCHART, /llama\.cpp/);
     assert.match(BACKEND_FLOWCHART, /32\.6/);

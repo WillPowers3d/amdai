@@ -1,0 +1,270 @@
+# Motherboard BIOS notes for local AI on Radeon.
+# Every claim is cited or marked todo. Do not invent board rows or tok/s.
+as_of: 2026-10-12
+rule: Every claim needs a citation or a TODO. Per-board rows come only from community submissions.
+
+sources:
+  amd_csm:
+    title: UEFI-only Support for AMD Graphics Cards (RDNA 4 and later)
+    href: https://www.amd.com/en/resources/support-articles/faqs/GPU-N4XCSM.html
+    publisher: AMD
+  rocm_bar:
+    title: BAR access limits and physical addressing for AMD GPUs
+    href: https://rocm.docs.amd.com/en/latest/reference/system-optimization/bar-access-limits.html
+    publisher: AMD ROCm
+  amd_sam:
+    title: AMD Smart Technologies (Smart Access Memory)
+    href: https://www.amd.com/en/gaming/technologies/smart-technologies.html
+    publisher: AMD
+  amd_am5:
+    title: AMD Socket AM5 Chipset
+    href: https://www.amd.com/en/products/processors/chipsets/am5.html
+    publisher: AMD
+  amd_expo:
+    title: AMD EXPO Technology for AMD Ryzen Processors for Socket AM5
+    href: https://www.amd.com/en/products/processors/technologies/expo.html
+    publisher: AMD
+  intel_z890:
+    title: Intel Z890 Chipset specifications
+    href: https://www.intel.com/content/www/us/en/products/sku/237777/intel-z890-chipset/specifications.html
+    publisher: Intel
+  intel_xmp:
+    title: Intel Extreme Memory Profile (XMP)
+    href: https://www.intel.com/content/www/us/en/gaming/extreme-memory-profile-xmp.html
+    publisher: Intel
+  rocm_mgpu:
+    title: mGPU setup and configuration (ROCm on Radeon)
+    href: https://rocm.docs.amd.com/projects/radeon-ryzen/en/latest/docs/install/installrad/native_linux/mgpu.html
+    publisher: AMD ROCm
+  rocm_iommu:
+    title: Input-Output Memory Management Unit (IOMMU)
+    href: https://rocm.docs.amd.com/en/latest/conceptual/iommu.html
+    publisher: AMD ROCm
+  rocm_reqs:
+    title: ROCm system requirements (Linux)
+    href: https://rocm.docs.amd.com/projects/install-on-linux/en/latest/reference/system-requirements.html
+    publisher: AMD ROCm
+  rocm_sriov_rdna2:
+    title: AMD RDNA2 system optimization (SR-IOV BIOS notes)
+    href: https://rocm.docs.amd.com/en/latest/reference/system-optimization/rdna2.html
+    publisher: AMD ROCm
+  instinct_cstates:
+    title: Instinct OS tuning (C-states and IOMMU)
+    href: https://instinct.docs.amd.com/projects/system-acceptance/en/latest/common/os-tuning.html
+    publisher: AMD Instinct docs
+  instinct_aspm:
+    title: Instinct kernel parameters (pcie_aspm, max_cstate)
+    href: https://instinct.docs.amd.com/projects/system-acceptance/en/latest/common/kernel-parameters.html
+    publisher: AMD Instinct docs
+  r9700:
+    title: AMD Radeon AI PRO R9700 product page
+    href: https://www.amd.com/en/products/graphics/workstations/radeon-ai-pro/ai-9000-series/amd-radeon-ai-pro-r9700.html
+    publisher: AMD
+
+settings:
+  - id: above-4g
+    title: Above 4G Decoding
+    topic: bar
+    summary: Lets the firmware place a large GPU BAR in the MMIO window above 4 GB.
+    claims:
+      - text: On modern 64-bit platforms the firmware allocates an MMIO aperture below 4 GB for 32-bit compatibility and one or more apertures above 4 GB for devices that need more space.
+        cite: rocm_bar
+      - text: ROCm’s BAR guidance says to enable the BIOS option named Above 4G Decoding, and to keep the high MMIO aperture inside the device physical-address limit (the docs use a 44-bit example with MMIO High Base / MMIO High Size).
+        cite: rocm_bar
+      - text: Two 32 GB cards plus a 256 GB host map a large prefetchable BAR. We have not measured a tok/s delta with Above 4G off on local-desktop.
+        todo: true
+
+  - id: rebar-sam
+    title: Resizable BAR / Smart Access Memory
+    topic: bar
+    summary: AMD’s name for giving the CPU a full view of graphics memory. Menu labels vary by board.
+    claims:
+      - text: AMD Smart Access Memory is described as giving a Ryzen CPU immediate, full access to Radeon graphics memory.
+        cite: amd_sam
+      - text: AMD’s RDNA 4 UEFI note says Compatibility Support Module (CSM) mode disables advanced UEFI features, including AMD Smart Access Memory.
+        cite: amd_csm
+      - text: The exact BIOS string (Re-Size BAR Support, Resizable BAR, Smart Access Memory) is vendor-specific. Record it on a board row; do not assume one label.
+        todo: true
+      - text: We have not measured llama.cpp or Strata tok/s with Resizable BAR on versus off on the R9700 rig.
+        todo: true
+
+  - id: csm
+    title: CSM off (UEFI only)
+    topic: boot
+    summary: RDNA 4 and later graphics are UEFI-only in AMD’s support article.
+    claims:
+      - text: Starting with AMD RDNA 4 (Radeon RX 9000 Series Graphics and later), only UEFI mode is officially supported.
+        cite: amd_csm
+      - text: AMD says CSM emulates older BIOS behavior by disabling UEFI performance, security, and reliability features, and that Radeon graphics can lose Smart Access Memory when CSM is on.
+        cite: amd_csm
+      - text: AMD’s steps are to enter the UEFI interface and disable Compatibility Support Module / CSM, typically under the Boot menu, using the motherboard manual if the label is not obvious.
+        cite: amd_csm
+      - text: The Radeon AI PRO R9700 is an RDNA 4 workstation card (PCIe 5.0 x16). Treat it as in the RDNA 4-and-later UEFI-only set.
+        cite: r9700
+
+  - id: pcie-gen-bifurcation
+    title: PCIe slot generation, bifurcation, and the two-GPU split
+    topic: pcie
+    summary: CPU graphics lanes are 1×16 or 2×8 on the AM5 chipsets below. Matching width matters more than a mixed x16/x4 pair.
+    claims:
+      - text: The R9700 ships as a PCIe 5.0 x16 card on AMD’s product page.
+        cite: r9700
+      - text: AMD’s AM5 chipset table lists graphics as 1×16 or 2×8 (PCIe 5.0 on X870E and X670E; PCIe 4.0 on B650). That is the official CPU-direct split, not a chipset x4 leftover.
+        cite: amd_am5
+      - text: Intel’s Z890 specification lists supported processor PCIe configurations as PCIe 5.0 1×16+1×4 or 2×8+1×4 or 1×8+3×4, plus PCIe 4.0 1×4. Chipset lanes on that page are PCIe 4.0, up to 24, in x1/x2/x4.
+        cite: intel_z890
+      - text: ROCm on Radeon multi-GPU guidance requires identical PCIe lane width or bifurcation on the slots the GPUs use (x16+x16 or x8+x8). A mixed x16+x8 pair is listed as not recommended.
+        cite: rocm_mgpu
+      - text: The same ROCm page says to use CPU-connected slots and avoid chipset-connected slots, and to read the motherboard’s electrical map. An x16/x4 two-GPU layout is usually one CPU slot plus a chipset or leftover x4 — confirm on the board, do not assume.
+        cite: rocm_mgpu
+      - text: ROCm requires CPUs that support PCIe atomics (modern CPUs after first-generation Zen and Intel Haswell, on the Linux system-requirements page). Some consumer boards only expose atomics on the first slot.
+        cite: rocm_reqs
+      - text: Which physical slots on a named board go x8/x8 versus x16/x4, and whether a Gen5 slot downtrains with two cards, stays a per-board note.
+        todo: true
+
+  - id: expo-xmp
+    title: Memory EXPO / XMP and four DIMMs
+    topic: memory
+    summary: EXPO and XMP are overclock profiles. Four DIMMs are a different validation than two.
+    claims:
+      - text: AMD EXPO (Extended Profiles for Overclocking) is AMD’s DDR5 overclocking-profile standard for Ryzen on socket AM5.
+        cite: amd_expo
+      - text: AMD’s AM5 chipset table marks X870E, X670E, and B650 as supporting DDR5 memory overclocking with AMD EXPO.
+        cite: amd_am5
+      - text: Intel XMP is Intel’s BIOS-enabled overclock profile for compatible DDR5/DDR4 modules on compatible Intel Core / Core Ultra platforms.
+        cite: intel_xmp
+      - text: EXPO and XMP are overclocking, not the JEDEC default. A two-DIMM kit profile is not a four-DIMM guarantee. Check the board QVL for the kit you actually bought.
+        todo: true
+      - text: local-desktop has 256 GB DDR5. The motherboard model, DIMM count, and whether EXPO is enabled are not published. Do not invent a frequency.
+        todo: true
+
+  - id: iommu-sriov
+    title: IOMMU and SR-IOV
+    topic: iommu
+    summary: IOMMU is a BIOS-plus-kernel story. SR-IOV is documented for specific Instinct / PRO SKUs, not the R9700.
+    claims:
+      - text: ROCm documents three Linux IOMMU modes — remapping (default; recommended for Radeon GPUs that need peer-to-peer DMA), passthrough (`iommu=pt`; recommended for Instinct and for Radeon GPUs that do not need P2P), and `iommu=off` (not recommended).
+        cite: rocm_iommu
+      - text: ROCm’s BAR page also lists enabling the IOMMU (non-passthrough) as a way to keep device virtual I/O addresses inside physical-address limits.
+        cite: rocm_bar
+      - text: ROCm on Radeon multi-GPU notes IOMMU-related hangs and points at the multi-GPU application-hang write-up. BIOS on versus `iommu=pt` on a two-R9700 desktop is not measured here.
+        cite: rocm_mgpu
+        todo: true
+      - text: SR-IOV BIOS enablement in current ROCm docs is written for specific SKUs (RDNA2 V620 is a documented example; W6800 is called unsupported there). The Radeon AI PRO R9700 is not on that SR-IOV list.
+        cite: rocm_sriov_rdna2
+      - text: ROCm’s Linux system-requirements virtualization table covers Instinct accelerators and selected Radeon PRO parts. Do not treat SR-IOV as a consumer R9700 feature.
+        cite: rocm_reqs
+
+  - id: power-cstates
+    title: Power and C-states
+    topic: power
+    summary: Instinct cluster docs talk about C-states. That is not a measured R9700 desktop recipe.
+    claims:
+      - text: AMD Instinct OS-tuning docs discuss restricting CPU C-states (`processor.max_cstate=0`, or disabling C2 after boot) when the BIOS has not already limited them, as a latency/responsiveness setting for Instinct systems.
+        cite: instinct_cstates
+      - text: Those pages are Instinct system-acceptance guidance. We have not measured llama.cpp tok/s or hang rate with C-states on versus off on local-desktop.
+        todo: true
+      - text: The R9700 product page publishes 300 W TBP and a 750 W minimum PSU recommendation. That is electrical, not a C-state switch.
+        cite: r9700
+
+  - id: fan-aspm
+    title: Fan curves and PCIe ASPM
+    topic: power
+    summary: ASPM is a PCIe power-management feature. Fan curves are board firmware.
+    claims:
+      - text: AMD Instinct kernel-parameter notes list `pcie_aspm=off` as a way to disable PCIe Active State Power Management, at the cost of slightly higher bus power, and call it recommended when prioritizing performance on those systems.
+        cite: instinct_aspm
+      - text: That ASPM note is Instinct system-acceptance guidance. Effect on a desktop R9700 llama.cpp session is not measured.
+        todo: true
+      - text: Motherboard fan and pump curves are vendor BIOS or a vendor app. No local-desktop fan curve is published.
+        todo: true
+
+chipsets:
+  - id: x870e
+    name: AMD X870E
+    socket: AM5
+    vendor: AMD
+    graphics: 1×16 or 2×8 PCIe 5.0
+    nvme: 1×4 PCIe 5.0 plus 4× PCIe GPP
+    usable_pcie: 44 total / 24 PCIe 5.0 (up to)
+    expo_xmp: AMD EXPO (DDR5 memory overclocking enabled on the AM5 table)
+    usb4: Standard
+    cite: amd_am5
+    notes:
+      - text: Official AM5 table — CPU graphics lanes are 1×16 or 2×8 at PCIe 5.0. That is the chipset capability, not a promise that every X870E board wires two full x8 GPU slots.
+        cite: amd_am5
+      - text: Prefer that 2×8 CPU split over a second GPU in a chipset slot. Confirm the board map before you buy the second card.
+        cite: rocm_mgpu
+      - text: USB4 is listed as standard on X870E. That can consume CPU lanes on some boards — check the manual.
+        cite: amd_am5
+
+  - id: x670e
+    name: AMD X670E
+    socket: AM5
+    vendor: AMD
+    graphics: 1×16 or 2×8 PCIe 5.0
+    nvme: 1×4 PCIe 5.0 plus 4× PCIe GPP
+    usable_pcie: 44 total / 24 PCIe 5.0 (up to)
+    expo_xmp: AMD EXPO (DDR5 memory overclocking enabled on the AM5 table)
+    usb4: Optional
+    cite: amd_am5
+    notes:
+      - text: Same official CPU graphics split as X870E — 1×16 or 2×8 PCIe 5.0 — on AMD’s AM5 table.
+        cite: amd_am5
+      - text: USB4 is optional on X670E, not standard. Do not assume a USB4 header ate a GPU lane without the board diagram.
+        cite: amd_am5
+      - text: Identical-width CPU slots still apply if you run two cards.
+        cite: rocm_mgpu
+
+  - id: b650
+    name: AMD B650
+    socket: AM5
+    vendor: AMD
+    graphics: 1×16 or 2×8 PCIe 4.0
+    nvme: 1×4 PCIe 4.0 (PCIe 5.0 optional)
+    usable_pcie: 36 total / 0 PCIe 5.0 (up to)
+    expo_xmp: AMD EXPO (DDR5 memory overclocking enabled on the AM5 table)
+    usb4: Not listed as standard on the AM5 table
+    cite: amd_am5
+    notes:
+      - text: Official AM5 table — B650 CPU graphics are 1×16 or 2×8 at PCIe 4.0. The R9700 is a PCIe 5.0 x16 card and will train to the slot’s generation.
+        cite: amd_am5
+      - text: B650E on the same AMD table is the Extreme variant with PCIe 5.0 graphics (1×16 or 2×8). Do not treat a B650 board as B650E.
+        cite: amd_am5
+      - text: A second GPU on B650 still wants a CPU-direct x8/x8 pair, not a chipset leftover. Many B650 boards only wire one full GPU slot — that is a board fact, not a chipset promise.
+        cite: rocm_mgpu
+        todo: true
+
+  - id: z890
+    name: Intel Z890
+    socket: LGA 1851 (Intel Core Ultra Series 2 desktop)
+    vendor: Intel
+    graphics: Processor PCIe 5.0 — 1×16+1×4 or 2×8+1×4 or 1×8+3×4; processor PCIe 4.0 1×4
+    nvme: Board-specific. Chipset contributes PCIe 4.0 lanes (x1 / x2 / x4), up to 24.
+    usable_pcie: Chipset max 24 PCIe 4.0 lanes; DMI 4.0 ×8 to the CPU
+    expo_xmp: Intel XMP (BIOS-enabled overclock profiles on compatible kits)
+    usb4: Not stated on the Z890 expansion table we cite; read the board.
+    cite: intel_z890
+    notes:
+      - text: Intel’s Z890 specification lists those processor PCIe configs. A 1×16+1×4 split is a CPU leftover x4 (often storage), not “the chipset gave you a second x16.”
+        cite: intel_z890
+      - text: Chipset lanes are PCIe 4.0, maximum 24, configurations x1/x2/x4. ROCm still says keep GPUs on CPU-connected slots of matching width.
+        cite: intel_z890
+      - text: Intel XMP is the overclock-profile name on this platform. Four-DIMM XMP stability is kit- and board-specific.
+        cite: intel_xmp
+      - text: Intel BIOS labels for VT-d (IOMMU), Resizable BAR, and Above 4G Decoding vary. Record them on a board row.
+        todo: true
+
+# Community submissions only. Do not invent a local-desktop motherboard.
+boards: []
+
+submit:
+  forum: /forum/c/hardware-builds
+  file: src/data/bios.yaml
+  fields:
+    - vendor (ASUS, MSI, Gigabyte, ASRock, …)
+    - model and chipset id (x870e / x670e / b650 / z890)
+    - BIOS version and date
+    - slot map (which physical slots are CPU x16 / x8 / chipset)
+    - the setting label you actually saw, the value, and an https citation or photo note
+    - four-DIMM kit part number if you talk about EXPO/XMP

@@ -3,7 +3,9 @@ import Base from '../layouts/Base.astro';
 import HouseRules from '../components/HouseRules.astro';
 import BuyButtons from '../components/BuyButtons.astro';
 import Qwen36Benches from '../components/Qwen36Benches.astro';
+import SystemRamNeed from '../components/SystemRamNeed.astro';
 import { stacksGuide } from '../lib/status';
+import { systemRamNeedFromQuery } from '../lib/calculator';
 ---
 
 <Base
@@ -68,6 +70,11 @@ import { stacksGuide } from '../lib/status';
               <dd class="mt-1">{stack.offload}</dd>
             </div>
           </dl>
+          {stack.calculator.includes('?') && (
+            <div class="mt-4">
+              <SystemRamNeed need={systemRamNeedFromQuery(stack.calculator)} />
+            </div>
+          )}
           <div class="mt-5 rounded-xl border border-dashed border-line bg-canvas/40 p-4">
             <p class="font-mono text-[0.68rem] uppercase tracking-[0.12em] text-faint">What we know / still TODO</p>
             <ul class="mt-2 space-y-1.5 text-sm text-muted">

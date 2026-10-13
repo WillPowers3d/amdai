@@ -44,7 +44,7 @@ Paste the first error, not a paraphrase.
 - OS / distro / kernel:
 - ROCm / HIP prefix:
 - Backend + version (llama.cpp / Strata / vLLM / Ollama):
-- Model / quant / context (Q4 floor):
+- Model / quant / context (Q3+; Q1/Q2 stay off):
 
 ## Command
 ```
@@ -55,7 +55,7 @@ Paste the first error, not a paraphrase.
 - [ ] llama.cpp Vulkan on the same GGUF
 - [ ] Unset HSA_OVERRIDE_GFX_VERSION
 - [ ] One GPU visible (HIP_VISIBLE_DEVICES / GGML_VK_VISIBLE_DEVICES)
-- [ ] Matching thread: (amdai tracker URL or GitHub issue)
+- [ ] Matching thread: (AMDai tracker URL or GitHub issue)
 
 ## Logs
 Attach `rocm-report.txt` and `dmesg | grep -iE 'amdgpu|MODE1|MES'` if it hung.

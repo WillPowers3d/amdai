@@ -8,7 +8,7 @@ notes:
   - Consumer default is llama.cpp. Vulkan is what we run for the 35B daily driver.
   - "First-party 35B (one R9700, llama.cpp, f16 KV). Measured on our rig, 2026-10: UD-Q5_K_XL 100.8 tok/s short / ~88 at 32K / ~50 at 256K; Q5_K_M 108.3 tok/s (28.5 GB VRAM); Q4_K_M 116.5 tok/s decode, 1814 tok/s prefill at 32K."
   - First-party Flash Q6: Strata v0.1.42 ~32.6 tok/s vs llama.cpp ~16. Measured on our rig, 2026-10.
-  - Never go below Q4 (no Q1/Q2/Q3 or IQ1–IQ3, including draft/MTP).
+  - Q3 is listed as an estimate or community result unless measured. Q1/Q2 and IQ1/IQ2 stay off, including draft/MTP.
   - curl /v1 before you debug a harness. Do not let a desktop app download a CUDA llama.cpp on a Radeon.
 
 flowchart_fallback:
@@ -41,7 +41,7 @@ engines:
     badly: Many concurrent clients, continuous batching, “just pip install.”
     rocm_level: First-class if you build it. HIP needs a gfx1201 userspace. Vulkan needs a working ICD (RADV is the usual Linux path).
     vulkan: Yes — GGML_VULKAN. Daily driver on our rig.
-    quants: GGUF Q4–Q8 and UD dynamic. Floor is Q4. Never Q1/Q2/Q3 or IQ1–IQ3.
+    quants: GGUF Q3–Q8 and UD dynamic, including Q3_K_M / Q3_K_S / UD-Q3_K_XL / IQ3 where the card lists them. Q3 is estimate/community unless measured. Q1/Q2 stay off.
     multi_gpu: Possible (split / tensor). We run the daily driver on ONE R9700. Do not assume a split.
     offload: -ngl / --n-gpu-layers. Daily driver is 0% system RAM offload.
     moe: >-
@@ -121,7 +121,7 @@ engines:
     badly: First install; undocumented flags; being your only engine.
     rocm_level: HIP download on the v0.1.42 notes. Official notes name RX 7900 / 9070 / AI PRO R9700. gfx12 prompt-path switches default on for gfx1200/gfx1201.
     vulkan: Not documented as a Vulkan engine. Do not treat it as “Vulkan won.”
-    quants: Publisher Flash file we run is Unsloth UD-Q6_K_XL. Floor is still Q4. Do not use their IQ2/IQ3 examples as a house quant.
+    quants: Publisher Flash file we run is Unsloth UD-Q6_K_XL. Q3 (UD-Q3_K_XL ~90 GB, UD-IQ3_XXS 81.96 GB) is listed as estimate/community. Do not use their IQ1/IQ2 examples as a house quant.
     multi_gpu: Layer split is documented. 0.1.42 notes a two-R9700 checkpoint-save fix. We do not assume a split on the daily driver.
     offload: Expert cache / RAM / SSD tiers are the point of the product. Publisher UD-Q6_K_XL folder ~169 GB — expect RAM to hold most of it on one 32 GB card.
     moe: First-class. Flash-Next is a large MoE; routing and expert cache are the architecture.
@@ -182,7 +182,7 @@ engines:
       devices. That is not the same as AMD’s 10.0 supported-combo pin
       (0.27 + PyTorch 2.13). Treat 0.31 as a try on this site.
     vulkan: No. HIP/ROCm only.
-    quants: Engine/framework quants (FP8, AWQ, GPTQ, …) plus HF weights — still never below Q4-class. GGUF is not the house path here.
+    quants: Engine/framework quants (FP8, AWQ, GPTQ, …) plus HF weights. Q3 is listed as estimate/community unless measured; Q1/Q2 stay off. GGUF is not the house path here.
     multi_gpu: Yes, RCCL. Two consumer cards is a different project. Start on one GPU.
     offload: Not a RAM-offload strategy. Do not treat vLLM as llama.cpp -ngl.
     moe: Supported on some pins (AITER MoE paths). Completeness on gfx1201 Qwen MoE is not measured here.
@@ -242,7 +242,7 @@ engines:
       the wrong directory; Windows ROCm lagged Linux (6.2 vs 7.2 in #14391).
       Listing gfx1201 ≠ “works on my R9700 tonight.”
     vulkan: Optional / emerging in their roadmap comments. Prefer a Vulkan llama.cpp you built if ROCm attach fails.
-    quants: Their library tags. Floor is still Q4. Do not pull a Q2 “to make it fit.”
+    quants: Their library tags. Q3 is listed as estimate/community unless measured. Do not pull a Q1/Q2 “to make it fit.”
     multi_gpu: Not the house path. One card first.
     offload: Their scheduler. If VRAM never moves, you are on CPU.
     moe: Whatever the bundled runner implements. Not measured here.
@@ -301,7 +301,7 @@ engines:
       do not run them on a current build. gfx1201 completeness of the
       bundled ROCm engine is not documented as our daily driver.
     vulkan: Yes — the honest cross-vendor path. Prefer it over a mystery ROCm blob until the meter moves.
-    quants: GGUF in the app library. Floor is Q4.
+    quants: GGUF in the app library. Q3 is listed as estimate/community unless measured; Q1/Q2 stay off.
     multi_gpu: Not documented as our path.
     offload: In-app GPU offload slider. We have no measured VRAM.
     moe: Depends on the bundled llama.cpp. Not measured.
@@ -355,7 +355,7 @@ engines:
       RX 9070 XT. Workaround: SGLANG_USE_AITER=0 / --attention-backend triton.
       Some MoE models are called out as possibly broken on Radeon.
     vulkan: No.
-    quants: SGLang/AMD matrix (FP8, AWQ, GPTQ, …). GGUF is documented as not on the AMD quant short-list. Floor is still Q4-class.
+    quants: SGLang/AMD matrix (FP8, AWQ, GPTQ, …). GGUF is documented as not on the AMD quant short-list. Q3 is listed as estimate/community unless measured; Q1/Q2 stay off.
     multi_gpu: Documented for Instinct-class serving. Not measured on two R9700.
     offload: Not llama.cpp -ngl. Host/HF cache only as documented.
     moe: Some MoE models (GPT-OSS-20B, MiniMax-M2.7) are listed as possibly failing on Radeon. Do not assume Qwen MoE works.
@@ -414,7 +414,7 @@ engines:
       ExLlamaV2 has a community PR to fix gfx1201 compile — do not treat it
       as merged or as a house path. FA2 on ROCm has been discussed as CDNA-oriented.
     vulkan: No.
-    quants: EXL3 (recommended on current TabbyAPI), FP16/BF16; EXL2 on the checkpoint branch. Still never below Q4-class.
+    quants: EXL3 (recommended on current TabbyAPI), FP16/BF16; EXL2 on the checkpoint branch. Q3 is listed as estimate/community unless measured; Q1/Q2 stay off.
     multi_gpu: Documented on NVIDIA. Not documented for two R9700.
     offload: ExLlama cache / GPU split. Not measured.
     moe: Not documented as our Qwen MoE path.
@@ -467,7 +467,7 @@ engines:
       userspace on this site. Vulkan is documented as available in Linux
       packages.
     vulkan: Yes — documented. A more honest AMD on-ramp here than their ROCm 6.2 wheel on a 10.1 box.
-    quants: MLC’s own compiled quants. Floor is still Q4-class. Do not chase IQ2 artifacts.
+    quants: MLC’s own compiled quants. Q3 is listed as estimate/community unless measured. Do not chase IQ1/IQ2 artifacts.
     multi_gpu: Not documented as our path.
     offload: Compile-time device placement. Not measured.
     moe: Not documented against Qwen3.6-35B-A3B here.
@@ -522,7 +522,7 @@ engines:
       ik_llama.cpp: ROCm/Vulkan are explicitly unmaintained; issues will not
       be resolved unless you do the work.
     vulkan: ik_llama.cpp can compile Vulkan; maintainers say it is not the focus and to use upstream llama.cpp on AMD.
-    quants: GGUF. Their docs mention IQ2/IQ3-class kernels — this site still refuses anything below Q4, including draft/MTP.
+    quants: GGUF. Their docs mention IQ2/IQ3-class kernels — this site lists IQ3 as estimate/community and still refuses Q1/Q2, including draft/MTP.
     multi_gpu: KT multi-GPU HIP has reported segfaults. Not our path.
     offload: CPU/RAM is the product. That fights this site’s “0% RAM offload” daily driver.
     moe: Yes — that is why people show up. Not a replacement for our 35B Vulkan Q5.
@@ -577,7 +577,7 @@ engines:
       is possible and still a thinner cookbook than CUDA. ROCm 10.0 KI —
       training GPU resets; try TORCH_BLAS_PREFER_HIPBLASLT=0.
     vulkan: No (this is HIP). Use llama.cpp Vulkan for chat.
-    quants: bitsandbytes / AWQ / GPTQ / native dtypes — still never below Q4-class for anything we would serve.
+    quants: bitsandbytes / AWQ / GPTQ / native dtypes — Q3 is listed as estimate/community unless measured; Q1/Q2 stay off for anything we would serve.
     multi_gpu: DDP / device_map. RCCL tax. Not the house chat path.
     offload: device_map="auto" / CPU offload — a research tool, not the daily driver.
     moe: If the HF model implements it. Not our Flash stack.

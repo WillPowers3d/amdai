@@ -111,7 +111,7 @@ runs:
     metric: tg
     tok_s: 116.5
     calculator: /calculator?gpu=r9700&vram=32&n=1&split=0&ram=256&model=qwen36&tp=35&ap=3&layers=40&kvl=10&kvh=2&hd=256&quant=q4_k_m&ctx=4096&kv=f16&oh=1
-    notes: Q4 floor. Prefer Q5 when it fits. Long-context tok/s not measured.
+    notes: Prefer Q5 when it fits. Q3 is estimate/community unless measured. Long-context tok/s not measured.
 
   - id: flash-strata-262k
     model: Qwen 3.8 Flash

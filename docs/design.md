@@ -2,7 +2,7 @@
 
 Independent consumer notes for local AI on Radeon. The visual system has to feel like a lab instrument: precise, dark, a little warm, never corporate-AMD and never generic “AI purple.” Budget is not a constraint on taste; it is a constraint on weight. Every decorative pixel has to earn a Lighthouse score.
 
-This site is **not affiliated with AMD**. Ember is a color, not a lockup. Product names stay nominative. The wordmark is **amdai**, lowercase, with a chip motif we drew ourselves.
+This site is **not affiliated with AMD**. Ember is a color, not a lockup. Product names stay nominative. The wordmark is **AMDai**, with a chip motif we drew ourselves.
 
 ## Moodboard
 
@@ -70,9 +70,9 @@ This site is **not affiliated with AMD**. Ember is a color, not a lockup. Produc
 
 ## Identity
 
-**Name.** amdai — spoken “am-dye.” The longer title “R9700 Lab Notes” stays in document titles and the footer.
+**Name.** AMDai — spoken “am-dye.” The longer title “R9700 Lab Notes” stays next to the wordmark in document titles and the footer.
 
-**Mark.** A 5×5 die with corner pads (a chip, not a chevron, not the AMD arrow). Wordmark is lowercase `amdai` in the UI sans, tracking slightly tight, with the `ai` in ember.
+**Mark.** A 5×5 die with corner pads (a chip, not a chevron, not the AMD arrow). Wordmark is `AMDai` in the UI sans, tracking slightly tight, with the `ai` in ember.
 
 **Voice in the UI.** Short, specific, adult. “Estimate, not a bench.” “Tested on our rig.” “Independent, not affiliated with AMD.”
 

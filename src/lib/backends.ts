@@ -205,8 +205,8 @@ export function assertBackendsValid(file: BackendsFile): string[] {
       if (!/^https:\/\//.test(source.href)) errors.push(`${row.id} non-https ${source.href}`);
     }
     if (!row.what) errors.push(`${row.id} missing what`);
-    if (!row.quants.toLowerCase().includes('q4')) {
-      errors.push(`${row.id} must mention the Q4 floor`);
+    if (!/Q3|Q1\s*\/\s*Q2|Q1 and Q2/i.test(row.quants)) {
+      errors.push(`${row.id} must list Q3 or say Q1/Q2 stay off`);
     }
     if (row.id === 'llamacpp' && row.used_on_our_rig) llamacppUsed = true;
     if (row.id === 'strata' && row.used_on_our_rig) strataUsed = true;

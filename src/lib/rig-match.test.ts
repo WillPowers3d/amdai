@@ -38,15 +38,20 @@ const rx7900: SavedRigMatch = {
 };
 
 describe('quant guard', () => {
-  it('allows Q4 and up', () => {
+  it('allows Q3 and up', () => {
+    assert.equal(isQuantAllowed('Q3_K_M'), true);
+    assert.equal(isQuantAllowed('Q3_K_S'), true);
+    assert.equal(isQuantAllowed('UD-Q3_K_XL'), true);
+    assert.equal(isQuantAllowed('UD-IQ3_S'), true);
     assert.equal(isQuantAllowed('Q4_K_M'), true);
     assert.equal(isQuantAllowed('UD-Q5_K_XL'), true);
     assert.equal(isQuantAllowed('bf16'), true);
   });
-  it('rejects below Q4', () => {
-    assert.equal(isQuantAllowed('Q3_K_M'), false);
+  it('rejects Q1/Q2', () => {
     assert.equal(isQuantAllowed('IQ2_M'), false);
     assert.equal(isQuantAllowed('Q2_K'), false);
+    assert.equal(isQuantAllowed('Q1_K'), false);
+    assert.equal(isQuantAllowed('IQ1_S'), false);
   });
 });
 

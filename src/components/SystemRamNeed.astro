@@ -1,0 +1,47 @@
+---
+import { formatCtx, formatGiB, type SystemRamNeed } from '../lib/calculator';
+
+interface Props {
+  need: SystemRamNeed;
+  /** Hide when both kits are tiny and there is no offload story. */
+  compact?: boolean;
+}
+
+const { need, compact = false } = Astro.props;
+const selected = need.atSelected;
+const full = need.atFullContext;
+const b = selected.breakdown;
+const fb = full.breakdown;
+---
+
+<div class:list={['rounded-xl border border-line bg-canvas/60 p-3 text-sm', compact && 'text-[0.9rem]']}>
+  <div class="grid gap-3 sm:grid-cols-2">
+    <div>
+      <p class="text-faint">Minimum system RAM needed</p>
+      <p class="mt-1 font-serif text-2xl tabular-nums">{selected.kitGb} GB kit</p>
+      <p class="mt-1 text-xs text-faint">
+        {selected.label === 'measured' ? 'Measured' : 'Estimate'} · {formatGiB(selected.rawGiB)} GiB raw · {formatCtx(selected.context)} context
+      </p>
+    </div>
+    <div>
+      <p class="text-faint">RAM needed at full context</p>
+      <p class="mt-1 font-serif text-2xl tabular-nums">{full.kitGb} GB kit</p>
+      <p class="mt-1 text-xs text-faint">
+        {full.label === 'measured' ? 'Measured' : 'Estimate'} · {formatGiB(full.rawGiB)} GiB raw · {formatCtx(need.fullContext)} full context
+      </p>
+    </div>
+  </div>
+  <p class="mt-3 text-xs leading-relaxed text-faint">{selected.note}</p>
+  <details class="mt-3">
+    <summary class="cursor-pointer text-xs font-medium text-ink">Breakdown</summary>
+    <dl class="mt-2 grid gap-1 text-xs text-muted sm:grid-cols-2">
+      <div><dt class="inline text-faint">Offloaded weights · </dt><dd class="inline tabular-nums">{formatGiB(b.offloadedWeightsGiB)} GiB</dd></div>
+      <div><dt class="inline text-faint">Separable embed in RAM · </dt><dd class="inline tabular-nums">{formatGiB(b.separableEmbedGiB)} GiB</dd></div>
+      <div><dt class="inline text-faint">KV in RAM at selected · </dt><dd class="inline tabular-nums">{formatGiB(b.kvInRamGiB)} GiB</dd></div>
+      <div><dt class="inline text-faint">KV in RAM at full context · </dt><dd class="inline tabular-nums">{formatGiB(fb.kvInRamGiB)} GiB</dd></div>
+      <div><dt class="inline text-faint">Runtime / backend · </dt><dd class="inline tabular-nums">{formatGiB(b.runtimeOverheadGiB)} GiB</dd></div>
+      <div><dt class="inline text-faint">OS / desktop baseline · </dt><dd class="inline tabular-nums">{formatGiB(b.osDesktopGiB)} GiB</dd></div>
+      <div><dt class="inline text-faint">Headroom · </dt><dd class="inline tabular-nums">{formatGiB(b.headroomGiB)} GiB</dd></div>
+    </dl>
+  </details>
+</div>

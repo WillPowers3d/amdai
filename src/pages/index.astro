@@ -5,7 +5,7 @@ import StatusPanel from '../components/StatusPanel.astro';
 import HouseRules from '../components/HouseRules.astro';
 import SiliconGrid from '../components/SiliconGrid.astro';
 import RigWizard from '../components/RigWizard.astro';
-import { officialLinks, site } from '../lib/site';
+import { HERO_HEADLINE, officialLinks, site } from '../lib/site';
 
 const tutorials = (await getCollection('tutorials')).sort((a, b) => a.data.order - b.data.order);
 const posts = (await getCollection('blog'))
@@ -22,10 +22,10 @@ const updates = (await getCollection('updates')).sort((a, b) => b.data.date.valu
         <div>
           <p class="kicker">Consumer Radeon · living notes</p>
           <h1 class="display mt-5 max-w-xl text-4xl sm:text-6xl lg:text-[4.4rem]">
-            Local Qwen on a real R9700. Not a brochure.
+            {HERO_HEADLINE}
           </h1>
           <p class="mt-6 max-w-xl text-lg leading-relaxed text-muted">
-            amdai is the independent notebook for home-lab AI on Radeon. Which GGUF, which engine, whether it fits your VRAM — grounded in a two-card test rig, written for people who buy one GPU.
+            AMDai is the independent notebook for home-lab AI on Radeon. Which GGUF, which engine, whether it fits your VRAM — grounded in a two-card test rig, written for people who buy one GPU.
           </p>
           <p class="mt-4 max-w-xl text-muted">
             Our test rig is two <strong class="font-medium text-ink">{site.officialGpu}</strong> cards
@@ -68,7 +68,7 @@ const updates = (await getCollection('updates')).sort((a, b) => b.data.date.valu
         <a class="card p-6" href="/benchmarks">
           <p class="kicker">First-party</p>
           <h3 class="mt-2 text-2xl tracking-tight">Benchmarks</h3>
-          <p class="mt-3 text-muted">How to read pp/tg, then the local-desktop table: 35B llama.cpp and Flash Strata vs llama.cpp. Empty cells stay not measured.</p>
+          <p class="mt-3 text-muted">How to read pp/tg, then the local-desktop table: 35B llama.cpp and Flash Strata vs llama.cpp. Empty cells stay not measured. Comparable JSON: <span class="text-ink">/results</span>.</p>
           <p class="mt-4 flex flex-wrap gap-2">
             <span class="badge-tested">Measured on our rig, 2026-10</span>
             <span class="badge">No leaderboard spam</span>
@@ -81,11 +81,21 @@ const updates = (await getCollection('updates')).sort((a, b) => b.data.date.valu
       <div class="mx-auto max-w-7xl px-4 py-14 sm:px-6">
         <p class="kicker">The rest of the lab</p>
         <h2 class="display mt-2 text-3xl sm:text-4xl">Directory, troubleshooter, forum, ROCm</h2>
-        <div class="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+        <div class="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           <a class="card p-6" href="/gpus">
             <p class="kicker">Hardware</p>
             <h3 class="mt-2 text-2xl tracking-tight">GPU directory</h3>
             <p class="mt-3 text-sm text-muted">Radeon cards, gfx IDs, VRAM, official ROCm rows. No invented support claims.</p>
+          </a>
+          <a class="card p-6" href="/bios">
+            <p class="kicker">Firmware</p>
+            <h3 class="mt-2 text-2xl tracking-tight">BIOS for local AI</h3>
+            <p class="mt-3 text-sm text-muted">Above 4G, ReBAR/SAM, CSM off, x8/x8 vs x16/x4, EXPO/XMP, IOMMU. Cited chipsets; board table empty until submissions.</p>
+          </a>
+          <a class="card p-6" href="/results">
+            <p class="kicker">Comparable</p>
+            <h3 class="mt-2 text-2xl tracking-tight">amdai-bench v1</h3>
+            <p class="mt-3 text-sm text-muted">Filter verified local-desktop 35B rows. Submitted badge stays empty. No invented tok/s.</p>
           </a>
           <a class="card p-6" href="/troubleshoot/errors">
             <p class="kicker">When it breaks</p>

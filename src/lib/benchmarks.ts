@@ -9,7 +9,7 @@ export const MEASURED_LABEL = 'Measured on our rig, 2026-10';
 export const ALLOWED_TOK_S = [100.8, 88, 50, 108.3, 116.5, 32.6, 16] as const;
 
 const BANNED_MODEL = /Qwen2\.5|Qwen3-8B/i;
-const BELOW_Q4 = /\b(?:Q[123]|IQ[123])(?:_|\b)/i;
+const FORBIDDEN_Q1Q2 = /\b(?:Q[12]|IQ[12])(?:_|\b)/i;
 
 export type BenchMetric = 'tg' | 'pp';
 
@@ -116,7 +116,7 @@ export function assertBenchmarksValid(file: BenchmarksFile): string[] {
     if (BANNED_MODEL.test(`${run.model} ${run.official} ${run.gguf}`)) {
       errors.push(`${run.id} names a banned model`);
     }
-    if (BELOW_Q4.test(run.quant)) errors.push(`${run.id} is below Q4`);
+    if (FORBIDDEN_Q1Q2.test(run.quant)) errors.push(`${run.id} is Q1/Q2`);
     if (run.mtp) errors.push(`${run.id} must not use MTP`);
     if (run.metric !== 'tg' && run.metric !== 'pp') errors.push(`${run.id} bad metric`);
     if (run.tok_s != null && !isAllowedTok(run.tok_s)) {

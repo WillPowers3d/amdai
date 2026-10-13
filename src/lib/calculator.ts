@@ -12,7 +12,7 @@
 export const GIB = 1024 ** 3;
 export const DECIMAL_GB = 1e9;
 
-export type QuantId = 'q4_k_m' | 'q5_k_m' | 'q6_k' | 'q8_0' | 'bf16';
+export type QuantId = 'q3_k_s' | 'q3_k_m' | 'q3_k_xl' | 'iq3' | 'q4_k_m' | 'q5_k_m' | 'q6_k' | 'q8_0' | 'bf16';
 export type KvId = 'f16' | 'q8_0' | 'q5_1' | 'q4_0';
 export type ModelId =
   | 'qwen36'
@@ -199,6 +199,44 @@ export type SpeedFloor = {
   measured: TestedBadge | null;
 };
 
+/** Consumer DIMM kits we round the host-RAM estimate up to (module labels in GB). */
+export const DIMM_KIT_GB = [16, 32, 48, 64, 96, 128, 192, 256, 384, 512, 768, 1024] as const;
+
+/** OS + desktop idle estimate. Not measured on local-desktop. */
+export const OS_DESKTOP_BASELINE_GIB = 8;
+
+/** Spare so the box does not sit at 100% RAM. Estimate, not a bench. */
+export const RAM_HEADROOM_GIB = 16;
+
+/** local-desktop ships this kit. Measured process RSS is TODO until Local AI numbers arrive. */
+export const local-desktop_DDR5_GB = 256;
+export const local-desktop_MEASURED_RAM_GIB: number | null = null;
+
+export type SystemRamBreakdown = {
+  offloadedWeightsGiB: number;
+  separableEmbedGiB: number;
+  kvInRamGiB: number;
+  runtimeOverheadGiB: number;
+  osDesktopGiB: number;
+  headroomGiB: number;
+};
+
+export type SystemRamLine = {
+  context: number;
+  rawGiB: number;
+  kitGb: number;
+  measured: boolean;
+  label: 'estimate' | 'measured';
+  note: string;
+  breakdown: SystemRamBreakdown;
+};
+
+export type SystemRamNeed = {
+  atSelected: SystemRamLine;
+  atFullContext: SystemRamLine;
+  fullContext: number;
+};
+
 export type CalcResult = {
   weightsGiB: number;
   weightsSource: 'publisher' | 'file' | 'formula';
@@ -226,10 +264,15 @@ export type CalcResult = {
   gpuMisses: GpuFitRow[];
   sweep: ContextSweepRow[];
   speed: SpeedFloor;
+  systemRam: SystemRamNeed;
 };
 
-/** llama.cpp-family nominal bits-per-weight. Q1–Q3 / IQ1–IQ3 are intentionally absent. */
+/** llama.cpp-family nominal bits-per-weight. Q1 / Q2 / IQ1–IQ2 stay absent. Q3 is listed. */
 export const QUANTS: Quant[] = [
+  { id: 'q3_k_s', label: 'Q3_K_S', short: 'Q3S', bpw: 3.5, bpwNote: 'nominal GGUF Q3_K_S — estimate unless a publisher listing is attached' },
+  { id: 'q3_k_m', label: 'Q3_K_M', short: 'Q3', bpw: 3.91, bpwNote: 'nominal GGUF Q3_K_M — estimate unless a publisher listing is attached' },
+  { id: 'q3_k_xl', label: 'UD-Q3_K_XL', short: 'Q3XL', bpw: 3.91, bpwNote: 'Unsloth UD Q3 bucket; uses Q3_K_M bpw unless a publisher file size is listed' },
+  { id: 'iq3', label: 'IQ3 / UD-IQ3_S / UD-IQ3_XXS', short: 'IQ3', bpw: 3.44, bpwNote: 'nominal IQ3 bucket — only when the GGUF repo lists an IQ3 file (35B: UD-IQ3_S; Flash: UD-IQ3_XXS)' },
   { id: 'q4_k_m', label: 'Q4_K_M', short: 'Q4', bpw: 4.85, bpwNote: 'nominal GGUF Q4_K_M' },
   { id: 'q5_k_m', label: 'Q5_K_M / UD-Q5_K_XL', short: 'Q5', bpw: 5.69, bpwNote: 'nominal GGUF Q5_K_M; UD-Q5_K_XL uses the same bucket' },
   { id: 'q6_k', label: 'Q6_K / UD-Q6_K_XL', short: 'Q6', bpw: 6.56, bpwNote: 'nominal GGUF Q6_K; UD-Q6_K_XL uses the same bucket' },
@@ -350,6 +393,10 @@ export const MODEL_PRESETS: ModelPreset[] = [
     archNote:
       'Official card: 35B total / 3B active, 40 layers, 10 full-attention (GQA 2×256). Only those 10 layers grow a token-length KV cache.',
     publisherFiles: {
+      q3_k_s: { decimalGb: 15.4, label: 'Hugging Face listing for Qwen3.6-35B-A3B-UD-Q3_K_S.gguf (15.4 GB)' },
+      q3_k_m: { decimalGb: 16.6, label: 'Hugging Face listing for Qwen3.6-35B-A3B-UD-Q3_K_M.gguf (16.6 GB)' },
+      q3_k_xl: { decimalGb: 16.8, label: 'Hugging Face listing for Qwen3.6-35B-A3B-UD-Q3_K_XL.gguf (16.8 GB)' },
+      iq3: { decimalGb: 13.7, label: 'Hugging Face listing for Qwen3.6-35B-A3B-UD-IQ3_S.gguf (13.7 GB)' },
       q5_k_m: { decimalGb: 26.6, label: 'Hugging Face listing for Qwen3.6-35B-A3B-UD-Q5_K_XL.gguf (26.6 GB)' },
     },
   },
@@ -380,6 +427,14 @@ export const MODEL_PRESETS: ModelPreset[] = [
     archNote:
       'Official card (Qwen3.8-Flash-Next): 125B total / 6B active, plus a 51B n-gram embedding llama.cpp can keep in system RAM. 48 layers, 12 sparse-attention layers (GQA 2×256). Publisher UD-Q6_K_XL folder lists ~169 GB.',
     publisherFiles: {
+      q3_k_xl: {
+        decimalGb: 90,
+        label: 'Hugging Face folder listing for UD-Q3_K_XL (~90 GB across 3 shards; LFS sizes sum 89.99 GB)',
+      },
+      iq3: {
+        decimalGb: 81.96,
+        label: 'Hugging Face LFS sizes for UD-IQ3_XXS (81.96 GB across 3 shards). Estimate / community — not measured on local-desktop',
+      },
       q6_k: { decimalGb: 169, label: 'Hugging Face folder listing for UD-Q6_K_XL (~169 GB across 6 shards)' },
     },
   },
@@ -677,7 +732,7 @@ export const MODEL_PRESETS: ModelPreset[] = [
     defaultQuant: 'q5_k_m',
     defaultCtx: 8192,
     defaultKv: 'f16',
-    archNote: 'Dense 8B Llama — not Qwen3-8B. Q4+ only.',
+    archNote: 'Dense 8B Llama — not Qwen3-8B. Q3 is an estimate unless a publisher file is listed.',
     publisherFiles: {},
   },
   {
@@ -785,7 +840,7 @@ export const MODEL_PRESETS: ModelPreset[] = [
     defaultQuant: 'q4_k_m',
     defaultCtx: 8192,
     defaultKv: 'f16',
-    archNote: 'MoE 21.5B / 3.6B active. Alternating attention: 12 full-context layers, 12 at a 128-token window. Native MXFP4 on disk is not a Q3 — we still offer Q4+ only.',
+    archNote: 'MoE 21.5B / 3.6B active. Alternating attention: 12 full-context layers, 12 at a 128-token window. Native MXFP4 on disk is not a Q3; GGUF Q3 rows here are formula estimates.',
     publisherFiles: {},
   },
   {
@@ -1124,6 +1179,77 @@ function overflowOf(input: CalcInput, totalGiB: number): { available: number; us
   return { ...pool, perGpu, overflow: Math.max(0, totalGiB - pool.available) };
 }
 
+export function roundUpToDimmKitGb(rawGiB: number): number {
+  if (!(rawGiB > 0)) return DIMM_KIT_GB[0];
+  for (const kit of DIMM_KIT_GB) {
+    if (kit + 1e-9 >= rawGiB) return kit;
+  }
+  return DIMM_KIT_GB[DIMM_KIT_GB.length - 1];
+}
+
+export function modelFullContext(input: CalcInput): number {
+  const model = modelById(input.modelId);
+  if (input.modelId !== 'custom' && model.defaultCtx > 0) return model.defaultCtx;
+  return Math.max(input.context, 262144);
+}
+
+function systemRamLine(input: CalcInput): SystemRamLine {
+  const { weights, kv, overhead } = totalFor(input);
+  const { available } = usablePoolGb(input);
+  const embedRam = input.separableEmbed ? embedTableGiB(input) : 0;
+  let vramLeft = Math.max(0, available);
+  const weightsOnGpu = Math.min(weights.gib, vramLeft);
+  vramLeft -= weightsOnGpu;
+  const kvOnGpu = Math.min(kv.gib, vramLeft);
+  vramLeft -= kvOnGpu;
+
+  const breakdown: SystemRamBreakdown = {
+    offloadedWeightsGiB: weights.gib - weightsOnGpu,
+    separableEmbedGiB: embedRam,
+    kvInRamGiB: kv.gib - kvOnGpu,
+    runtimeOverheadGiB: overhead.gib,
+    osDesktopGiB: OS_DESKTOP_BASELINE_GIB,
+    headroomGiB: RAM_HEADROOM_GIB,
+  };
+  const rawGiB =
+    breakdown.offloadedWeightsGiB +
+    breakdown.separableEmbedGiB +
+    breakdown.kvInRamGiB +
+    breakdown.runtimeOverheadGiB +
+    breakdown.osDesktopGiB +
+    breakdown.headroomGiB;
+  const kitGb = roundUpToDimmKitGb(rawGiB);
+  const measured = local-desktop_MEASURED_RAM_GIB != null;
+  const local-desktop =
+    kitGb === local-desktop_DDR5_GB || rawGiB > 128
+      ? ` local-desktop ships ${local-desktop_DDR5_GB} GB DDR5; measured host-RAM usage is TODO until Local AI numbers arrive.`
+      : '';
+  return {
+    context: input.context,
+    rawGiB,
+    kitGb,
+    measured,
+    label: measured ? 'measured' : 'estimate',
+    note: measured
+      ? `Measured on our rig — ${local-desktop_MEASURED_RAM_GIB} GiB used on the ${local-desktop_DDR5_GB} GB DDR5 kit.`
+      : `Estimate. Offloaded weights + KV in RAM + runtime + OS/desktop + headroom, rounded up to a ${kitGb} GB DIMM kit.${local-desktop}`,
+    breakdown,
+  };
+}
+
+export function systemRamNeed(input: CalcInput): SystemRamNeed {
+  const fullContext = modelFullContext(input);
+  return {
+    atSelected: systemRamLine(input),
+    atFullContext: systemRamLine({ ...input, context: fullContext }),
+    fullContext,
+  };
+}
+
+export function formatKitGb(n: number): string {
+  return `${n} GB kit`;
+}
+
 function verdictOf(totalGiB: number, available: number, factor: number): { verdict: Verdict; label: string } {
   if (totalGiB > available + 1e-9) return { verdict: 'no', label: 'Does not fit this GPU' };
   if (totalGiB * factor > available + 1e-9) return { verdict: 'tight', label: 'Tight — little desktop headroom' };
@@ -1236,11 +1362,12 @@ export function gpuCatalog(input: CalcInput): { fits: GpuFitRow[]; misses: GpuFi
       const { verdict } = verdictOf(totalGiB, available, spareFactor(run));
       fits.push({ modelId: model.id, name: model.name, quant: best, totalGiB, verdict, tested: testedBadge(run) });
     } else {
-      const { totalGiB } = totalFor({ ...seeded, quantId: 'q4_k_m' });
+      const lightest = QUANTS.reduce((a, b) => (a.bpw <= b.bpw ? a : b));
+      const { totalGiB } = totalFor({ ...seeded, quantId: lightest.id });
       misses.push({
         modelId: model.id,
         name: model.name,
-        quant: quantById('q4_k_m'),
+        quant: lightest,
         totalGiB,
         verdict: 'no',
         tested: null,
@@ -1329,6 +1456,7 @@ export function compute(input: CalcInput): CalcResult {
     gpuMisses: catalog.misses,
     sweep: contextSweep(input),
     speed: speedFloor(input, overflow, tested),
+    systemRam: systemRamNeed(input),
   };
 }
 
@@ -1367,6 +1495,13 @@ export function exportEstimate(input: CalcInput, result: CalcResult): string {
         totalGiB: result.totalGiB,
         overflowGiB: result.overflowGiB,
         verdict: result.verdict,
+        systemRam: {
+          minKitGb: result.systemRam.atSelected.kitGb,
+          fullContextKitGb: result.systemRam.atFullContext.kitGb,
+          fullContext: result.systemRam.fullContext,
+          label: result.systemRam.atSelected.label,
+          breakdown: result.systemRam.atSelected.breakdown,
+        },
       },
       notes: {
         weights: result.weightsNote,
@@ -1538,15 +1673,23 @@ export function queryToInput(search: string): CalcInput {
 export function catalogGuardErrors(): string[] {
   const errors: string[] = [];
   const banned = /Qwen2\.5|Qwen3-8B/i;
-  const below = /\b(?:Q[123]|IQ[123])(?:_|\b)/i;
+  const q1q2 = /\b(?:Q[12]|IQ[12])(?:_|\b)/i;
   for (const model of MODEL_PRESETS) {
     const blob = `${model.id} ${model.name} ${model.official}`;
     if (banned.test(blob)) errors.push(`banned model text: ${model.id}`);
   }
-  for (const quant of QUANTS) {
-    if (below.test(quant.label) || quant.bpw < 4) errors.push(`quant below Q4: ${quant.id}`);
+  const ids = new Set(QUANTS.map((q) => q.id));
+  for (const required of ['q3_k_s', 'q3_k_m', 'q3_k_xl', 'iq3', 'q4_k_m'] as const) {
+    if (!ids.has(required)) errors.push(`missing quant ${required}`);
   }
-  const ids = new Set(MODEL_PRESETS.map((m) => m.id));
-  if (ids.size !== MODEL_PRESETS.length) errors.push('duplicate model id');
+  for (const quant of QUANTS) {
+    if (q1q2.test(quant.label) || quant.bpw < 3) errors.push(`Q1/Q2 quant listed: ${quant.id}`);
+  }
+  const modelIds = new Set(MODEL_PRESETS.map((m) => m.id));
+  if (modelIds.size !== MODEL_PRESETS.length) errors.push('duplicate model id');
   return errors;
+}
+
+export function systemRamNeedFromQuery(search: string): SystemRamNeed {
+  return systemRamNeed(queryToInput(search.startsWith('/calculator') ? search.replace(/^\/calculator/, '') : search));
 }

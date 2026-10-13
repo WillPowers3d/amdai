@@ -28,22 +28,34 @@ tiers:
     backend: llama.cpp (Vulkan first; HIP if rocminfo is clean). Not Ollama, not vLLM.
     give_up: Versus Mid — 4–8 GB more VRAM, so Qwen3.6-35B-A3B at Q4 has a chance to sit in GPU memory at a modest context. On 16 GB the house GGUF does not fit in VRAM even at Q4 (formula weights alone are above 16 GB; publisher Q5 is 26.6 GB).
     size:
-      verdict: 16 GB cannot hold Qwen3.6-35B-A3B at Q4 in VRAM (formula weights already exceed 16 GB). Max-size here means RAM offload at Q4 — tokens per second will be lower. We have no tok/s for this setup. Do not drop below Q4.
+      verdict: 16 GB cannot hold Qwen3.6-35B-A3B at Q4 in VRAM (formula weights already exceed 16 GB). Max-size here means RAM offload at Q4 or the listed Q3 files — tokens per second will be lower. We have no tok/s for this setup. Q3 rows are estimates.
       give_up: Versus Mid — 4–8 GB more VRAM so Q4 has a chance to sit in GPU memory at a modest context (estimate).
     speed:
-      verdict: Speed wants the whole file in one GPU with no offload. The house Q4+ GGUFs do not fit 16 GB. This tier cannot be a speed pick for those models. Do not drop below Q4 to fake a fit.
+      verdict: Speed wants the whole file in one GPU with no offload. The house Q4–Q6 GGUFs do not fit 16 GB. This tier cannot be a speed pick for those models. Q3 is listed as estimate/community — it is not a speed cheat.
       give_up: Versus Mid — a 20–24 GB card that may hold Q4 at a modest context with no offload (estimate).
     fits:
       - model: Qwen3.6-35B-A3B
         quant: Q4_K_M
-        note: Estimate only. Q4 formula weights for 35B already exceed 16 GB, so expect RAM offload (slow). Do not drop below Q4.
+        note: Estimate only. Q4 formula weights for 35B already exceed 16 GB, so expect RAM offload (slow). Q3 is the lighter listed step, also an estimate.
         calculator: /calculator?gpu=rx9070xt&vram=16&n=1&split=0&ram=64&model=qwen36&tp=35&ap=3&layers=40&kvl=10&kvh=2&hd=256&quant=q4_k_m&ctx=8192&kv=f16&oh=1
         tested: false
         show: [size, speed]
+      - model: Qwen3.6-35B-A3B
+        quant: UD-Q3_K_XL
+        note: Estimate / community. Unsloth listing 16.8 GB (UD-Q3_K_XL). Not measured on local-desktop. Still expect RAM offload plus KV on 16 GB.
+        calculator: /calculator?gpu=rx9070xt&vram=16&n=1&split=0&ram=64&model=qwen36&tp=35&ap=3&layers=40&kvl=10&kvh=2&hd=256&quant=q3_k_xl&ctx=8192&kv=f16&oh=1
+        tested: false
+        show: [size]
       - model: Qwen 3.8 Flash
         quant: UD-Q6_K_XL
         note: Publisher file ~169 GB. Will overflow 16 GB by a lot. Shown so the calculator can say no. Not a speed pick.
         calculator: /calculator?gpu=rx9070xt&vram=16&n=1&split=0&ram=64&model=flash&tp=125&ap=6&layers=48&kvl=12&kvh=2&hd=256&quant=q6_k&ctx=32768&kv=f16&oh=1
+        tested: false
+        show: [size]
+      - model: Qwen 3.8 Flash
+        quant: UD-Q3_K_XL
+        note: Estimate / community. Hugging Face folder ~90 GB (3 shards). Still far past 16 GB VRAM. Q1/Q2 stay off.
+        calculator: /calculator?gpu=rx9070xt&vram=16&n=1&split=0&ram=64&model=flash&tp=125&ap=6&layers=48&kvl=12&kvh=2&hd=256&quant=q3_k_xl&ctx=32768&kv=f16&oh=1
         tested: false
         show: [size]
 
@@ -71,7 +83,7 @@ tiers:
     backend: llama.cpp (HIP gfx1100 / gfx1101, or Vulkan). Still not vLLM.
     give_up: Versus Enthusiast — 32 GB and gfx1201. The daily-driver Q5 at 262K is a one-R9700 stack we actually ran, not a 24 GB guess.
     size:
-      verdict: On 24 GB, Q4 + a modest context may fit (estimate). Q5 at 262K will not. More RAM only helps if you offload — tokens per second will be lower (estimate). Never below Q4.
+      verdict: On 24 GB, Q4 + a modest context may fit (estimate). Q5 at 262K will not. Q3_K_M / UD-Q3_K_XL are listed as estimates if you need a smaller file. More RAM only helps if you offload — tokens per second will be lower (estimate).
       give_up: Versus Enthusiast — 32 GB and gfx1201. The daily-driver Q5 at 262K is a one-R9700 stack we actually ran, not a 24 GB guess.
     speed:
       verdict: One 24 GB card, Q4_K_M, shorter context, no split. Q5 at long context is a size move and likely overflows. Offload kills speed. Tokens per second — estimate only; no first-party number on a 7900.
@@ -87,6 +99,12 @@ tiers:
         quant: UD-Q5_K_XL
         note: Publisher 26.6 GB file plus KV will not sit in 24 GB at 262K. Try a shorter context in the calculator before you leave Q5. Size path — offload is slow.
         calculator: /calculator?gpu=rx7900xtx&vram=24&n=1&split=0&ram=64&model=qwen36&tp=35&ap=3&layers=40&kvl=10&kvh=2&hd=256&quant=q5_k_m&ctx=32768&kv=f16&oh=1
+        tested: false
+        show: [size]
+      - model: Qwen3.6-35B-A3B
+        quant: Q3_K_M
+        note: Estimate / community. Unsloth UD-Q3_K_M listing 16.6 GB. Not measured on local-desktop. A 24 GB card may hold Q3 + modest context (calculator estimate).
+        calculator: /calculator?gpu=rx7900xtx&vram=24&n=1&split=0&ram=64&model=qwen36&tp=35&ap=3&layers=40&kvl=10&kvh=2&hd=256&quant=q3_k_m&ctx=32768&kv=f16&oh=1
         tested: false
         show: [size]
 
@@ -131,6 +149,12 @@ tiers:
         calculator: /calculator?gpu=r9700&vram=32&n=1&split=0&ram=64&model=flash&tp=125&ap=6&layers=48&kvl=12&kvh=2&hd=256&quant=q6_k&ctx=262144&kv=f16&oh=1
         tested: false
         show: [size]
+      - model: Qwen 3.8 Flash
+        quant: UD-Q3_K_XL
+        note: Estimate / community. Hugging Face folder ~90 GB. Still overflows one 32 GB card. Q1/Q2 stay off. Not measured on local-desktop.
+        calculator: /calculator?gpu=r9700&vram=32&n=1&split=0&ram=64&model=flash&tp=125&ap=6&layers=48&kvl=12&kvh=2&hd=256&quant=q3_k_xl&ctx=262144&kv=f16&oh=1
+        tested: false
+        show: [size]
 
   - id: pro
     name: Pro
@@ -170,9 +194,15 @@ tiers:
         show: [size, speed]
       - model: Qwen 3.8 Flash
         quant: UD-Q6_K_XL
-        note: Tested on our rig — Strata v0.1.42 ~32.6 tok/s vs llama.cpp ~16. Publisher file ~169 GB; VRAM/RAM figures still TODO. Size pick, not the speed pick.
+        note: Tested on our rig — Strata v0.1.42 ~32.6 tok/s vs llama.cpp ~16. Publisher file ~169 GB; VRAM/RAM figures still TODO. Size pick, not the speed pick. Minimum system RAM and full-context RAM are calculator estimates until Local AI numbers arrive.
         calculator: /calculator?gpu=r9700&vram=32&n=1&split=0&ram=256&model=flash&tp=125&ap=6&layers=48&kvl=12&kvh=2&hd=256&quant=q6_k&ctx=262144&kv=f16&oh=1
         tested: fast
+        show: [size]
+      - model: Qwen 3.8 Flash
+        quant: UD-Q3_K_XL
+        note: Estimate / community. Hugging Face folder ~90 GB. Not measured on local-desktop. Shown so the size ladder includes the listed Q3 step.
+        calculator: /calculator?gpu=r9700&vram=32&n=1&split=0&ram=256&model=flash&tp=125&ap=6&layers=48&kvl=12&kvh=2&hd=256&quant=q3_k_xl&ctx=262144&kv=f16&oh=1
+        tested: false
         show: [size]
 
 upgrade:

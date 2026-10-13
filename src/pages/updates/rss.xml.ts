@@ -1,5 +1,6 @@
 import { getCollection } from 'astro:content';
 import type { APIRoute } from 'astro';
+import { site } from '../../lib/site';
 
 function escapeXml(value: string): string {
   return value
@@ -29,7 +30,7 @@ export const GET: APIRoute = async ({ site }) => {
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0">
   <channel>
-    <title>R9700 Lab Notes — updates</title>
+    <title>${escapeXml(`${site.wordmark} · ${site.name} — updates`)}</title>
     <link>${new URL('/updates', origin).toString()}</link>
     <description>Dated ROCm / llama.cpp / vLLM snapshots from the living tracker.</description>
     ${items}

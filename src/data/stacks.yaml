@@ -87,7 +87,7 @@ stacks:
     model: Same official Qwen you already trust on llama.cpp
     official: Pin whatever the weekly card names
     gguf: HF weights, not GGUF
-    quant: Framework default — still never below Q4-class
+    quant: Framework default — Q3 listed as estimate/community; Q1/Q2 stay off
     engine: Community / ROCm vLLM 0.31 try (0.30 previous; AMD 0.27 on ROCm 10.0 is the conservative pin)
     gpus: One GPU first
     context: Confirm the engine, do not assume 262K

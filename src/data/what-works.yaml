@@ -13,7 +13,7 @@ summary: >
   Unsloth UD-Q6_K_XL on Strata v0.1.42 at 262K (Measured on our rig, 2026-10:
   ~32.6 tok/s vs llama.cpp ~16 tok/s); llama.cpp Q6 is the fallback. Prefer
   llama.cpp over vLLM at home.
-  Prefer Q5 over Q4. Never go below Q4. Load GGUFs from fast NVMe. One LLM
+  Prefer Q5 over Q4. Q3 is listed as an estimate or community result. Q1/Q2 stay off. Load GGUFs from fast NVMe. One LLM
   per GPU unless you deliberately combine. vLLM 0.31 is a serve try, not the
   daily path. Abliterated weights stay educational, never the default.
 
@@ -28,12 +28,12 @@ inference:
   serving: Consumer default is llama.cpp. Fast-agent try on our rig is Strata v0.1.42. Cutting-edge vLLM try is community/ROCm 0.31 (0.30 previous; AMD-validated 0.27/0.29 still the conservative pin on the 10.0 matrix).
   amd_supported_combo: ROCm 10.0 AI ecosystem matrix — vLLM 0.27 + PyTorch 2.13; gfx1201 listed. 10.1 matrix lists the same Radeon rows.
   known_good_this_week: One R9700 + llama.cpp Vulkan + Qwen3.6-35B-A3B UD-Q5_K_XL at 262K f16 KV (~50 tok/s at 256K; Measured on our rig, 2026-10). Strata + Qwen 3.8 Flash UD-Q6_K_XL for agents. vLLM 0.31 = try, not the house default.
-  do_not: plain `pip install vllm` from default PyPI (that is the CUDA wheel). Do not run Q1/Q2/Q3 or IQ1–IQ3, including draft/MTP heads.
+  do_not: plain `pip install vllm` from default PyPI (that is the CUDA wheel). Do not run Q1/Q2 or IQ1–IQ2, including draft/MTP heads. Q3 is estimate/community unless measured.
 
 qwen:
   reliability_first: Qwen3.6-35B-A3B — Unsloth GGUF UD-Q5_K_XL — one 32 GB R9700 — llama.cpp Vulkan — 262144 context — f16 KV — no RAM offload
   build: Qwen/Qwen3.6-35B-A3B · GGUF unsloth/Qwen3.6-35B-A3B-GGUF (file Qwen3.6-35B-A3B-UD-Q5_K_XL.gguf; publisher listing 26.6 GB)
-  quant: UD-Q5_K_XL (Q5 family). Prefer Q5 over Q4. Floor is Q4_K_M. Never below Q4.
+  quant: UD-Q5_K_XL (Q5 family). Prefer Q5 over Q4. Q3_K_M / Q3_K_S / UD-Q3_K_XL / IQ3 are listed as estimates. Our measurements stay Q4 and above.
   serve: "llama.cpp Vulkan (or HIP gfx1201). Measured on our rig, 2026-10 — UD-Q5_K_XL 100.8 / ~88 / ~50 tok/s. TODO: exact command line / UD-Q5_K_XL VRAM from rig owner."
   then_capability: "Qwen 3.8 Flash (Qwen/Qwen3.8-Flash-Next) Unsloth UD-Q6_K_XL on Strata v0.1.42 at 262K. Measured on our rig ~32.6 tok/s vs llama.cpp ~16 tok/s. llama.cpp Q6 is the fallback. Publisher UD-Q6_K_XL folder ~169 GB — expect RAM to hold most of it on one 32 GB card. TODO: exact flags / measured VRAM+RAM."
   abliterated: Educational only, never the default. Primary study row is Huihui-Qwen3.8-27B-abliterated. See /abliterated.
@@ -56,7 +56,7 @@ honesty:
   - Fast-agent tok/s (Strata ~32.6 vs llama.cpp ~16) is measured on that rig (Measured on our rig, 2026-10); VRAM/RAM figures are still TODO
   - Qwen 3.8 Flash UD-Q6_K_XL is a large GGUF (publisher ~169 GB) — the calculator will show RAM overflow on 32 GB
   - Never invent measured VRAM, RAM, or flags; placeholders stay TODO until the rig owner fills them
-  - Q4 is the floor. Q1/Q2/Q3 and IQ1–IQ3 stay off the site, including drafts
+  - Q3 is listed as an estimate or community result unless measured. Q1/Q2 and IQ1/IQ2 stay off the site, including drafts
   - Abliterated is a second experiment, not a profile
   - ROCm 10.0 KI — training/fine-tune GPU resets on R9700. Try `TORCH_BLAS_PREFER_HIPBLASLT=0`
   - Multi consumer GPU = RCCL/atomics tax; test before you buy the second card for speed

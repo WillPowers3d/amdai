@@ -4,6 +4,7 @@ import tailwindcss from '@tailwindcss/vite';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 import node from '@astrojs/node';
+import { htmlSeparators } from './src/lib/html-separators.ts';
 
 const accountsOn = process.env.ACCOUNTS_ENABLED === '1' || process.env.ACCOUNTS_ENABLED === 'true';
 const forumOn = process.env.FORUM_ENABLED === '1' || process.env.FORUM_ENABLED === 'true';
@@ -13,6 +14,7 @@ if (forumOn && !accountsOn) {
 
 export default defineConfig({
   site: process.env.SITE_URL || 'https://amdai.net',
+  compressHTML: false,
   prefetch: true,
   adapter: accountsOn ? node({ mode: 'standalone' }) : undefined,
   server: {
@@ -22,7 +24,7 @@ export default defineConfig({
   vite: {
     plugins: [tailwindcss()],
   },
-  integrations: [mdx(), sitemap()],
+  integrations: [mdx(), sitemap(), htmlSeparators()],
   redirects: {
     '/local-ai': '/software',
   },

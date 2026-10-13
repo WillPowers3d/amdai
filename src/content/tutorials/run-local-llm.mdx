@@ -11,7 +11,7 @@ order: 3
 Goal: **official Qwen instruct** generating on the R9700, with `rocm-smi` (or `amd-smi`) showing GPU use. **llama.cpp first.** Ollama is optional and still rocky on gfx1201. vLLM lives in the [advanced section of Serve Qwen](/tutorials/serve-qwen#advanced-vllm), not here.
 
 <Callout type="check">
-**Default:** Qwen3.6-35B-A3B Unsloth **UD-Q5_K_XL** on **one** R9700, **Vulkan**, 262144 context, f16 KV, no RAM offload. Do not start with an [abliterated](/abliterated) file. Keep the GGUF on NVMe. Floor is Q4 — prefer Q5. See [quants](/quants) and the [calculator](/calculator).
+**Default:** Qwen3.6-35B-A3B Unsloth **UD-Q5_K_XL** on **one** R9700, **Vulkan**, 262144 context, f16 KV, no RAM offload. Do not start with an [abliterated](/abliterated) file. Keep the GGUF on NVMe. Q1/Q2 stay off; prefer Q5. Q3 is estimate/community unless measured. See [quants](/quants) and the [calculator](/calculator).
 </Callout>
 
 ## Do this in order

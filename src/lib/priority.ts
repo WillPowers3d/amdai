@@ -1,7 +1,7 @@
 /**
  * Size-vs-speed priority. Shared by /budget and /calculator.
  * Speed claims are estimates unless a first-party “Tested on our rig” number applies.
- * Never recommend a quant below Q4.
+ * Q3 is listed as estimate/community unless measured. Never recommend Q1/Q2.
  */
 import {
   applyGpuPreset,
@@ -28,9 +28,9 @@ export const PRIORITY_COPY: Record<
     label: 'Max model size',
     short: 'Size',
     lede:
-      'Favor more total VRAM — a larger card or a second GPU — and plenty of system RAM so a bigger file can overflow. Pick the largest house model and the highest quant that still makes sense (Q5 or Q6 when they fit, never below Q4). Tokens per second will be lower than an in-VRAM load. Speed numbers are estimates unless a “Tested on our rig” badge is showing.',
+      'Favor more total VRAM — a larger card or a second GPU — and plenty of system RAM so a bigger file can overflow. Pick the largest house model and the highest quant that still makes sense (Q5 or Q6 when they fit; Q3 is estimate/community). Tokens per second will be lower than an in-VRAM load. Speed numbers are estimates unless a “Tested on our rig” badge is showing.',
     offload:
-      'Overflow to system RAM is the max-size path. Tokens per second will be lower than keeping the whole file in VRAM (estimate — no tok/s unless a tested badge applies). Do not drop below Q4.',
+      'Overflow to system RAM is the max-size path. Tokens per second will be lower than keeping the whole file in VRAM (estimate — no tok/s unless a tested badge applies). Q3 is listed as estimate/community; Q1/Q2 stay off.',
     bestQuantLabel: 'Highest quant that fits in VRAM (max size)',
   },
   speed: {
@@ -39,7 +39,7 @@ export const PRIORITY_COPY: Record<
     lede:
       'Favor the whole model in one GPU’s VRAM with no RAM offload. Prefer a MoE with few active parameters (Qwen3.6-35B-A3B style), Q4_K_M to Q5, a shorter context, and a single fast card. Offloading weights or KV into system RAM kills speed.',
     offload:
-      'Offloading to system RAM kills speed. Fit the file on one GPU, shorten context, or stay at Q4_K_M–Q5. Do not drop below Q4.',
+      'Offloading to system RAM kills speed. Fit the file on one GPU, shorten context, or stay at Q4_K_M–Q5. Q3 is not a speed pick.',
     bestQuantLabel: 'Q4_K_M–Q5 that fits one GPU (speed)',
   },
 };
@@ -84,7 +84,7 @@ export function appendPriority(pathAndQuery: string, priority: Priority): string
   return `${path}?${withPriorityParam(search, priority)}`;
 }
 
-/** Speed: Q5 if it fits one GPU, else Q4_K_M. Size: highest Q4+ that fits VRAM. */
+/** Speed: Q5 if it fits one GPU, else Q4_K_M. Size: highest listed quant that fits VRAM. */
 export function bestQuantForPriority(input: CalcInput, priority: Priority): Quant | null {
   if (priority === 'size') return bestQuantThatFits(input);
   const single: CalcInput = { ...input, split: false, gpuCount: 1 };
@@ -156,7 +156,7 @@ export function calculatorAdvice(input: CalcInput, result: CalcResult, priority:
     if (input.quantId === 'q6_k' || input.quantId === 'q8_0' || input.quantId === 'bf16') {
       return {
         headline: 'Speed: Q4_K_M to Q5 is the band',
-        body: 'Q6 and above are a size/quality move and need more VRAM. If Q5 already fits one GPU, stay there. Never drop below Q4. Tokens per second: estimate only.',
+        body: 'Q6 and above are a size/quality move and need more VRAM. If Q5 already fits one GPU, stay there. Q3 is listed as estimate/community; Q1/Q2 stay off. Tokens per second: estimate only.',
       };
     }
     if (oneGpu && moe && q4to5 && result.verdict !== 'no') {
@@ -192,7 +192,7 @@ export function calculatorAdvice(input: CalcInput, result: CalcResult, priority:
   if (input.modelId !== 'flash' && input.ramGb >= 128) {
     return {
       headline: 'Max size: you have the RAM for a larger file',
-      body: 'Qwen 3.8 Flash UD-Q6_K_XL is the largest house GGUF (publisher ~169 GB). Expect system-RAM residency and lower tokens per second than an in-VRAM 35B. First-party Flash numbers exist only on our Pro rig (Strata ~32.6 vs llama.cpp ~16). Never below Q4.',
+      body: 'Qwen 3.8 Flash UD-Q6_K_XL is the largest house GGUF (publisher ~169 GB). Expect system-RAM residency and lower tokens per second than an in-VRAM 35B. First-party Flash numbers exist only on our Pro rig (Strata ~32.6 vs llama.cpp ~16). Q3 is listed as estimate/community; Q1/Q2 stay off.',
       applyLabel: 'Apply size defaults (Flash Q6, 2× GPU split, ≥128 GB RAM)',
       apply: sizeDefaults(input),
     };
@@ -208,7 +208,7 @@ export function calculatorAdvice(input: CalcInput, result: CalcResult, priority:
   if (result.bestQuant && result.bestQuant.id !== input.quantId && result.bestQuant.bpw > quantById(input.quantId).bpw) {
     return {
       headline: `Max size: ${result.bestQuant.label} still fits (estimate)`,
-      body: 'You asked for the largest file that stays in VRAM. A higher quant at or above Q5 is the size move when it fits. Tokens per second will be lower than a lighter quant (estimate). Never below Q4.',
+      body: 'You asked for the largest file that stays in VRAM. A higher quant at or above Q5 is the size move when it fits. Tokens per second will be lower than a lighter quant (estimate). Q3 is listed as estimate/community; Q1/Q2 stay off.',
     };
   }
   if (oneGpu && !input.split) {
