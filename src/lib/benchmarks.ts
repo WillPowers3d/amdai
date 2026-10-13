@@ -6,7 +6,7 @@
 export const MEASURED_LABEL = 'Measured on our rig, 2026-10';
 
 /** tok/s published for this hub. Anything else is a validation error. */
-export const ALLOWED_TOK_S = [100.8, 88, 50, 108.3, 116.5, 32.6, 16] as const;
+export const ALLOWED_TOK_S = [102.39, 90.52, 44.4, 109.73, 117.69, 32.6, 16] as const;
 
 const BANNED_MODEL = /Qwen2\.5|Qwen3-8B/i;
 const FORBIDDEN_Q1Q2 = /\b(?:Q[12]|IQ[12])(?:_|\b)/i;

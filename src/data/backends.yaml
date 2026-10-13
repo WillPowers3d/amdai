@@ -6,7 +6,7 @@ default_id: llamacpp
 
 notes:
   - Consumer default is llama.cpp. Vulkan is what we run for the 35B daily driver.
-  - "First-party 35B (one R9700, llama.cpp, f16 KV). Measured on our rig, 2026-10: UD-Q5_K_XL 100.8 tok/s short / ~88 at 32K / ~50 at 256K; Q5_K_M 108.3 tok/s (28.5 GB VRAM); Q4_K_M 116.5 tok/s decode, 1814 tok/s prefill at 32K."
+  - "First-party 35B (one R9700, llama.cpp, f16 KV). Measured on our rig, 2026-10: UD-Q5_K_XL 102.39 tok/s short / 90.52 at 32K / 66.43 at 128K / 44.4 at 256K; Q5_K_M 109.73 tok/s (24.68 GB VRAM); Q4_K_M 117.69 tok/s decode, 1902.1 tok/s prefill at 32K."
   - First-party Flash Q6: Strata v0.1.42 ~32.6 tok/s vs llama.cpp ~16. Measured on our rig, 2026-10.
   - Q3 is listed as an estimate or community result unless measured. Q1/Q2 and IQ1/IQ2 stay off, including draft/MTP.
   - curl /v1 before you debug a harness. Do not let a desktop app download a CUDA llama.cpp on a Radeon.
@@ -46,10 +46,10 @@ engines:
     offload: -ngl / --n-gpu-layers. Daily driver is 0% system RAM offload.
     moe: >-
       MoE GGUF (Qwen3.6-35B-A3B is A3B). Measured on our rig, 2026-10 — one R9700,
-      llama.cpp, f16 KV: UD-Q5_K_XL 100.8 tok/s short / ~88 at 32K / ~50 at 256K;
-      Q5_K_M 108.3 tok/s (28.5 GB VRAM); Q4_K_M 116.5 tok/s decode, 1814 tok/s
+      llama.cpp, f16 KV: UD-Q5_K_XL 102.39 tok/s short / 90.52 at 32K / 66.43 at 128K / 44.4 at 256K;
+      Q5_K_M 109.73 tok/s (24.68 GB VRAM); Q4_K_M 117.69 tok/s decode, 1902.1 tok/s
       prefill at 32K.
-    context: Our daily driver is 262144, f16 KV — confirmed on the rig; ~50 tok/s decode at 256K (Measured on our rig, 2026-10). Exact flags not recorded.
+    context: Our daily driver is 262144, f16 KV — confirmed on the rig; 44.4 tok/s decode at 256K (Measured on our rig, 2026-10). Official llama-bench c060ca974.
     concurrency: One interactive user is the honest home path. llama-server can take more clients; it is not vLLM continuous batching.
     api: OpenAI /v1 (chat/completions, models). llama.cpp also documents Anthropic /v1/messages and OpenAI /v1/responses.
     difficulty: Medium — you compile. Vulkan CMake is the on-ramp.
@@ -89,7 +89,7 @@ engines:
       Missing gfx1201 HIP binaries show up as hipErrorNoBinaryForGpu.
     choose: >-
       Tokens on one card tonight, or a /v1 for Hermes. 35B daily driver lives
-      here (Vulkan). Measured on our rig, 2026-10: UD-Q5_K_XL 100.8 / ~88 / ~50 tok/s.
+      here (Vulkan). Measured on our rig, 2026-10: UD-Q5_K_XL 102.39 / 90.52 / 44.4 tok/s.
     sources:
       - title: llama.cpp repository
         href: https://github.com/ggml-org/llama.cpp

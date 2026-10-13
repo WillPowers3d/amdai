@@ -19,6 +19,10 @@ export const amdai = {
   verified: true,
 } as const;
 
+/** Flash / Strata / Q3 were excluded from the 2026-10-13 35B drop after a RAM crash. */
+export const FLASH_RERUN_NOTE =
+  'Flash, Strata, and Q3 runs are pending a rerun after amdai stabilizes the DDR5.';
+
 export const LAYOUTS = ['single', 'split', 'dual-instance', 'tensor-parallel'] as const;
 export type RunLayout = (typeof LAYOUTS)[number];
 
@@ -377,9 +381,11 @@ export function verifiedMeasured(cards: RunCard[]): RunCard[] {
 }
 
 export function officialAmdaiRuns(cards: RunCard[]): RunCard[] {
-  return verifiedMeasured(cards).filter(
-    (card) => card.submitted_by.handle === amdai.handle && card.submitted_by.rig === amdai.rig,
-  );
+  return verifiedMeasured(cards).filter((card) => {
+    const handle = card.submitted_by.handle.toLowerCase().replace(/[^a-z]/g, '');
+    const house = handle === amdai.handle || handle === 'amdai';
+    return house && card.submitted_by.rig === amdai.rig;
+  });
 }
 
 export type RunMatch = {
@@ -438,10 +444,28 @@ export type Qwen36Row = {
   quant: string;
   decode_short: string;
   decode_32k: string;
+  decode_128k: string;
   decode_256k: string;
   prefill_32k: string;
   vram_gb: string;
+  flag?: string;
 };
+
+export function q6OneGpu4kPair(cards: RunCard[]): { low: number; high: number } | null {
+  const hits = matchRuns(verifiedMeasured(cards), {
+    model: 'qwen36',
+    quant: 'Q6_K',
+    backend: 'llama.cpp',
+    context: 4096,
+    layout: 'single',
+    gpus: 1,
+  })
+    .map((card) => card.results.decode_tps)
+    .filter((n): n is number => n != null)
+    .sort((a, b) => a - b);
+  if (hits.length < 2) return null;
+  return { low: hits[0]!, high: hits[hits.length - 1]! };
+}
 
 export function qwen36TableFromRuns(cards: RunCard[]): {
   label: string;
@@ -452,8 +476,8 @@ export function qwen36TableFromRuns(cards: RunCard[]): {
   rows: Qwen36Row[];
 } {
   const pool = verifiedMeasured(cards);
-  const cell = (quant: string, context: number, kind: 'decode' | 'prefill' | 'vram', approx = false): string => {
-    const hits = matchRuns(pool, {
+  const hitsFor = (quant: string, context: number) =>
+    matchRuns(pool, {
       model: 'qwen36',
       quant,
       backend: 'llama.cpp',
@@ -461,27 +485,38 @@ export function qwen36TableFromRuns(cards: RunCard[]): {
       layout: 'single',
       gpus: 1,
     });
-    if (kind === 'decode') return formatTokCell(hits.find((c) => c.results.decode_tps != null)?.results.decode_tps ?? null, approx);
+  const cell = (quant: string, context: number, kind: 'decode' | 'prefill' | 'vram'): string => {
+    const hits = hitsFor(quant, context);
+    if (kind === 'decode') {
+      const values = hits.map((c) => c.results.decode_tps).filter((n): n is number => n != null);
+      if (values.length > 1) return `${values.sort((a, b) => a - b).join(' / ')} tok/s`;
+      return formatTokCell(values[0] ?? null);
+    }
     if (kind === 'prefill') return formatTokCell(hits.find((c) => c.results.prefill_tps != null)?.results.prefill_tps ?? null);
     const vram = hits.find((c) => c.results.peak_vram_gb_total != null || c.results.peak_vram_gb_per_gpu.length)?.results;
     const n = vram?.peak_vram_gb_total ?? vram?.peak_vram_gb_per_gpu[0] ?? null;
     return formatVramCell(n);
   };
+  const q6off = (context: number) =>
+    context >= 32768 ? 'Partly offloaded to DDR5 on 1 GPU' : undefined;
   return {
     label: MEASURED_LABEL,
     engine: 'llama.cpp',
     gpu: 'one R9700',
     kv: 'f16',
     notes: [
-      'Cells come from verified amdai-bench/run@1 cards on local-desktop. Empty stays not measured.',
-      'One R9700, llama.cpp Vulkan, f16 KV, layout single. Dual-instance and split cards live on /results.',
+      'Cells come from verified amdai-bench/run@1 cards on local-desktop (2026-10-12/13, llama.cpp c060ca974 Vulkan). Empty stays not measured.',
+      'One R9700, llama.cpp Vulkan, f16 KV, layout single. Dual-instance and split cards live on /results and /qwen36-dual.',
+      'Q6_K 4K keeps both repeats (82.62 and 103.23 tok/s) to show variance. Q6_K at 32K and up partly offloaded to DDR5.',
+      FLASH_RERUN_NOTE,
     ],
     rows: [
       {
         quant: 'UD-Q5_K_XL',
         decode_short: cell('UD-Q5_K_XL', 4096, 'decode'),
-        decode_32k: cell('UD-Q5_K_XL', 32768, 'decode', true),
-        decode_256k: cell('UD-Q5_K_XL', 262144, 'decode', true),
+        decode_32k: cell('UD-Q5_K_XL', 32768, 'decode'),
+        decode_128k: cell('UD-Q5_K_XL', 131072, 'decode'),
+        decode_256k: cell('UD-Q5_K_XL', 262144, 'decode'),
         prefill_32k: cell('UD-Q5_K_XL', 32768, 'prefill'),
         vram_gb: cell('UD-Q5_K_XL', 4096, 'vram'),
       },
@@ -489,6 +524,7 @@ export function qwen36TableFromRuns(cards: RunCard[]): {
         quant: 'Q5_K_M',
         decode_short: cell('Q5_K_M', 4096, 'decode'),
         decode_32k: cell('Q5_K_M', 32768, 'decode'),
+        decode_128k: cell('Q5_K_M', 131072, 'decode'),
         decode_256k: cell('Q5_K_M', 262144, 'decode'),
         prefill_32k: cell('Q5_K_M', 32768, 'prefill'),
         vram_gb: cell('Q5_K_M', 4096, 'vram'),
@@ -497,9 +533,20 @@ export function qwen36TableFromRuns(cards: RunCard[]): {
         quant: 'Q4_K_M',
         decode_short: cell('Q4_K_M', 4096, 'decode'),
         decode_32k: cell('Q4_K_M', 32768, 'decode'),
+        decode_128k: cell('Q4_K_M', 131072, 'decode'),
         decode_256k: cell('Q4_K_M', 262144, 'decode'),
         prefill_32k: cell('Q4_K_M', 32768, 'prefill'),
         vram_gb: cell('Q4_K_M', 4096, 'vram'),
+      },
+      {
+        quant: 'Q6_K',
+        decode_short: cell('Q6_K', 4096, 'decode'),
+        decode_32k: cell('Q6_K', 32768, 'decode'),
+        decode_128k: cell('Q6_K', 131072, 'decode'),
+        decode_256k: cell('Q6_K', 262144, 'decode'),
+        prefill_32k: cell('Q6_K', 32768, 'prefill'),
+        vram_gb: cell('Q6_K', 4096, 'vram'),
+        flag: q6off(32768),
       },
     ],
   };
@@ -591,7 +638,7 @@ export function deriveV1Catalog(cards: RunCard[]): AmdaiBenchFile {
   return {
     schema: AMDAI_BENCH_SCHEMA,
     version: AMDAI_BENCH_VERSION,
-    as_of: '2026-10',
+    as_of: '2026-10-13',
     label: MEASURED_LABEL,
     source: 'local-desktop official run cards (amdai-bench/run@1)',
     results,
@@ -603,6 +650,7 @@ export function contextLabel(tokens: number): string {
   if (tokens === 8192) return '8K';
   if (tokens === 32768) return '32K';
   if (tokens === 100000) return '100K';
+  if (tokens === 131072) return '128K';
   if (tokens === 262144) return '256K';
   if (tokens >= 1024 && tokens % 1024 === 0) return `${tokens / 1024}K`;
   return `${tokens}`;

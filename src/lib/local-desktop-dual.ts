@@ -7,7 +7,8 @@ export const MEASURED_ON_OUR_RIG = 'Measured on our rig, 2026-10';
 
 /** tok/s, soak, and VRAM/RAM figures this page may print. */
 export const ALLOWED_DUAL_NUMBERS = [
-  57, 79, 100, 172, 177, 423, 20.6, 27.7, 29.7, 13, 50, 61, 100.8, 88, 108.3, 116.5, 249, 256,
+  42.03, 82.78, 100, 172, 177, 423, 20.6, 27.7, 29.7, 13, 50, 61, 102.39, 90.52, 66.43, 44.4,
+  109.73, 117.69, 82.62, 103.23, 249, 256,
 ] as const;
 
 export type DualSource = { title: string; href: string; date: string };

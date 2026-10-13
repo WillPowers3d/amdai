@@ -35,26 +35,26 @@ describe('calculator tested badges', () => {
     const badge = testedBadge(DEFAULT_INPUT);
     assert.equal(badge?.id, 'daily');
     assert.match(badge?.label ?? '', new RegExp(MEASURED_ON_OUR_RIG));
-    assert.match(badge?.label ?? '', /~50 tok\/s at 256K/);
-    assert.match(badge?.label ?? '', /100\.8/);
-    assert.match(badge?.label ?? '', /108\.3 tok\/s \(28\.5 GB VRAM\)/);
+    assert.match(badge?.label ?? '', /44\.4 tok\/s at 256K/);
+    assert.match(badge?.label ?? '', /102\.39/);
+    assert.match(badge?.label ?? '', /109\.73 tok\/s \(24\.68 GB VRAM\)/);
   });
 
   it('labels the 32K and short-context UD-Q5 points', () => {
     const at32k = testedBadge({ ...DEFAULT_INPUT, context: 32768 });
     assert.equal(at32k?.id, 'daily');
-    assert.match(at32k?.label ?? '', /~88 tok\/s at 32K/);
+    assert.match(at32k?.label ?? '', /90\.52 tok\/s at 32K/);
     const short = testedBadge({ ...DEFAULT_INPUT, context: 4096 });
     assert.equal(short?.id, 'daily');
-    assert.match(short?.label ?? '', /100\.8 tok\/s at short context/);
+    assert.match(short?.label ?? '', /102\.39 tok\/s at short context/);
   });
 
   it('labels Q4_K_M decode and 32K prefill', () => {
     const badge = testedBadge({ ...DEFAULT_INPUT, quantId: 'q4_k_m', context: 32768 });
     assert.equal(badge?.id, 'q4');
     assert.match(badge?.label ?? '', new RegExp(MEASURED_ON_OUR_RIG));
-    assert.match(badge?.label ?? '', /116\.5 tok\/s/);
-    assert.match(badge?.label ?? '', /1814 tok\/s at 32K/);
+    assert.match(badge?.label ?? '', /117\.69 tok\/s/);
+    assert.match(badge?.label ?? '', /1902\.1 tok\/s at 32K/);
   });
 
   it('does not badge a split or a non-R9700 card', () => {
@@ -71,19 +71,19 @@ describe('stacks first-party 35B benches', () => {
     const quants = file.qwen36_measured.rows.map((row) => row.quant);
     assert.deepEqual(quants, ['UD-Q5_K_XL', 'Q5_K_M', 'Q4_K_M']);
     const ud = file.qwen36_measured.rows[0];
-    assert.equal(ud.decode_short, '100.8 tok/s');
-    assert.equal(ud.decode_32k, '~88 tok/s');
-    assert.equal(ud.decode_256k, '~50 tok/s');
+    assert.equal(ud.decode_short, '102.39 tok/s');
+    assert.equal(ud.decode_32k, '90.52 tok/s');
+    assert.equal(ud.decode_256k, '44.4 tok/s');
     const q5 = file.qwen36_measured.rows[1];
-    assert.equal(q5.decode_short, '108.3 tok/s');
-    assert.equal(q5.vram_gb, '28.5 GB');
+    assert.equal(q5.decode_short, '109.73 tok/s');
+    assert.equal(q5.vram_gb, '24.68 GB');
     const q4 = file.qwen36_measured.rows[2];
-    assert.equal(q4.decode_short, '116.5 tok/s');
-    assert.equal(q4.prefill_32k, '1814 tok/s');
+    assert.equal(q4.decode_short, '117.69 tok/s');
+    assert.equal(q4.prefill_32k, '1902.1 tok/s');
     const measured = file.stacks.find((stack) => stack.id === 'daily-driver')?.measured.join('\n') ?? '';
     assert.match(measured, /Measured on our rig, 2026-10/);
-    assert.match(measured, /28\.5 GB/);
-    assert.doesNotMatch(measured, /28\.5 GiB/);
+    assert.match(measured, /24\.68 GB/);
+    assert.doesNotMatch(measured, /24\.68 GiB/);
   });
 });
 

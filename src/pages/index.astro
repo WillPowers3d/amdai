@@ -79,10 +79,10 @@ const updates = (await getCollection('updates')).sort((a, b) => b.data.date.valu
         <a class="card p-6" href="/stacks">
           <p class="kicker">Daily driver</p>
           <h3 class="mt-2 text-2xl tracking-tight">Qwen3.6-35B-A3B · UD-Q5_K_XL</h3>
-          <p class="mt-3 text-muted">llama.cpp Vulkan on one R9700. 262K context, f16 KV, 0% RAM offload. <strong class="text-ink">100.8 tok/s</strong> short context, ~88 at 32K, ~50 at 256K — Measured on our rig, 2026-10.</p>
+          <p class="mt-3 text-muted">llama.cpp Vulkan on one R9700. 262K context, f16 KV, 0% RAM offload. <strong class="text-ink">102.39 tok/s</strong> short context, 90.52 at 32K, 66.43 at 128K, 44.4 at 256K — Measured on our rig, 2026-10.</p>
           <p class="mt-4 flex flex-wrap gap-2">
             <span class="badge-tested">Measured on our rig, 2026-10</span>
-            <span class="badge">100.8 / ~88 / ~50 tok/s</span>
+            <span class="badge">102.39 / 90.52 / 44.4 tok/s</span>
           </p>
         </a>
         <a class="card p-6" href="/flash-daily">

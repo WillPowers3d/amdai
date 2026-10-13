@@ -1,6 +1,7 @@
 /**
  * Write official amdai / local-desktop run cards. Numbers only from published first-party set.
  * Do not invent tok/s, VRAM, flags, or a Flash Q3 score.
+ * 35B singles/split from this seed are retired — use data/runs/local-desktop-35b-20261013.jsonl.
  */
 
 import { mkdirSync, writeFileSync } from 'node:fs';

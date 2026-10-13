@@ -59,19 +59,19 @@ describe('inference engine catalog', () => {
     assert.match(blob, /32\.6/);
     assert.match(blob, /16/);
     const llamaBlob = `${llama.moe} ${llama.choose} ${llama.context}`;
-    assert.match(llamaBlob, /100\.8/);
-    assert.match(llamaBlob, /108\.3/);
-    assert.match(llamaBlob, /116\.5/);
-    assert.match(llamaBlob, /1814/);
-    assert.match(llamaBlob, /28\.5 GB/);
+    assert.match(llamaBlob, /102\.39/);
+    assert.match(llamaBlob, /109\.73/);
+    assert.match(llamaBlob, /117\.69/);
+    assert.match(llamaBlob, /1902\.1/);
+    assert.match(llamaBlob, /24\.68 GB/);
     assert.match(llamaBlob, /Measured on our rig, 2026-10/);
     const others = list
       .filter((row) => row.id !== 'llamacpp')
       .map((row) => `${row.what} ${row.run} ${row.choose}`)
       .join('\n');
-    assert.doesNotMatch(others, /100\.8/);
-    assert.doesNotMatch(others, /108\.3/);
-    assert.doesNotMatch(others, /116\.5/);
+    assert.doesNotMatch(others, /102\.39/);
+    assert.doesNotMatch(others, /109\.73/);
+    assert.doesNotMatch(others, /117\.69/);
   });
 
   it('lists Q3 or says Q1/Q2 stay off, and keeps the flowchart on llama.cpp', () => {

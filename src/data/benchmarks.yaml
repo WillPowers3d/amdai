@@ -11,7 +11,7 @@ test_rig:
   ram: 256 GB DDR5
   note: Daily-driver and 35B rows use ONE card. The second card is there; do not assume a split.
 
-# Allowed tok/s: 100.8, 88, 50, 108.3, 116.5, 32.6, 16. null = not measured.
+# Allowed tok/s: 102.39, 90.52, 44.4, 109.73, 117.69, 32.6, 16. null = not measured.
 runs:
   - id: qwen36-ud-q5-short
     model: Qwen3.6-35B-A3B
@@ -29,7 +29,7 @@ runs:
     context_label: short
     context_tokens: 4096
     metric: tg
-    tok_s: 100.8
+    tok_s: 102.39
     calculator: /calculator?gpu=r9700&vram=32&n=1&split=0&ram=256&model=qwen36&tp=35&ap=3&layers=40&kvl=10&kvh=2&hd=256&quant=q5_k_m&ctx=4096&kv=f16&oh=1
     notes: One R9700, f16 KV, nothing offloaded.
 
@@ -49,7 +49,7 @@ runs:
     context_label: 32K
     context_tokens: 32768
     metric: tg
-    tok_s: 88
+    tok_s: 90.52
     calculator: /calculator?gpu=r9700&vram=32&n=1&split=0&ram=256&model=qwen36&tp=35&ap=3&layers=40&kvl=10&kvh=2&hd=256&quant=q5_k_m&ctx=32768&kv=f16&oh=1
     notes: One R9700, f16 KV, nothing offloaded.
 
@@ -69,7 +69,7 @@ runs:
     context_label: 256K
     context_tokens: 262144
     metric: tg
-    tok_s: 50
+    tok_s: 44.4
     calculator: /calculator?gpu=r9700&vram=32&n=1&split=0&ram=256&model=qwen36&tp=35&ap=3&layers=40&kvl=10&kvh=2&hd=256&quant=q5_k_m&ctx=262144&kv=f16&oh=1
     notes: Full 262144 context on one R9700, f16 KV, nothing offloaded.
 
@@ -89,7 +89,7 @@ runs:
     context_label: short
     context_tokens: 4096
     metric: tg
-    tok_s: 108.3
+    tok_s: 109.73
     calculator: /calculator?gpu=r9700&vram=32&n=1&split=0&ram=256&model=qwen36&tp=35&ap=3&layers=40&kvl=10&kvh=2&hd=256&quant=q5_k_m&ctx=4096&kv=f16&oh=1
     notes: Sibling Q5 file on the same card. Long-context tok/s not measured.
 
@@ -109,7 +109,7 @@ runs:
     context_label: short
     context_tokens: 4096
     metric: tg
-    tok_s: 116.5
+    tok_s: 117.69
     calculator: /calculator?gpu=r9700&vram=32&n=1&split=0&ram=256&model=qwen36&tp=35&ap=3&layers=40&kvl=10&kvh=2&hd=256&quant=q4_k_m&ctx=4096&kv=f16&oh=1
     notes: Prefer Q5 when it fits. Q3 is estimate/community unless measured. Long-context tok/s not measured.
 

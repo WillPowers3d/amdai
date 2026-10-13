@@ -60,7 +60,7 @@ export const TIER_LABEL: Record<EvidenceTier, string> = {
   'load-only': 'Load only',
 };
 
-const ALLOWED_PROOF_NUMBERS = new Set<number>([...BENCH_TOK, 116.5, 1814]);
+const ALLOWED_PROOF_NUMBERS = new Set<number>([...BENCH_TOK, 117.69, 1902.1]);
 
 const gateStatus = z.enum(['pass', 'fail', 'not_measured']);
 

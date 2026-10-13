@@ -73,10 +73,10 @@ describe('amdai-bench v1 catalog', () => {
       assert.ok(vrams.some((n) => Math.abs(n - allowed) < 1e-9), String(allowed));
     }
     const q4 = rows.find((row) => row.quant === 'Q4_K_M' && row.contextTokens === 32768);
-    assert.equal(q4?.prefill, 1814);
-    assert.equal(q4?.decode, null);
+    assert.equal(q4?.prefill, 1902.1);
+    assert.equal(q4?.decode, 101.88);
     assert.equal(formatTokS(null), 'not measured');
-    assert.equal(formatVram(28.5), '28.5 GB');
+    assert.equal(formatVram(24.68), '24.68 GB');
   });
 
   it('filters by GPU, GPU count, backend, quant, context, and trust', () => {
@@ -98,7 +98,7 @@ describe('amdai-bench v1 catalog', () => {
       trust: 'verified',
     });
     assert.equal(daily.length, 1);
-    assert.equal(daily[0]?.decode, 50);
+    assert.equal(daily[0]?.decode, 44.4);
 
     const submitted = filterResultRows(rows, { trust: 'submitted' });
     assert.equal(submitted.length, 0);

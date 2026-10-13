@@ -63,8 +63,8 @@ describe('/qwen measured vs estimate', () => {
   it('fills decode/prefill only from verified jsonl and leaves Coder390 blank', () => {
     const udq5 = rows.find((r) => r.spec.modelKey === '35b-a3b' && r.spec.quant === 'UD-Q5_K_XL');
     assert.ok(udq5);
-    assert.equal(udq5?.decode.llamacpp.value, 100.8);
-    assert.match(udq5?.decode.llamacpp.text ?? '', /100\.8/);
+    assert.equal(udq5?.decode.llamacpp.value, 102.39);
+    assert.match(udq5?.decode.llamacpp.text ?? '', /102\.39/);
     assert.ok(udq5?.decode.llamacpp.runId);
     assert.equal(udq5?.decode.vllm.value, null);
     assert.equal(udq5?.decode.vllm.text, '');
@@ -76,7 +76,10 @@ describe('/qwen measured vs estimate', () => {
     assert.ok(flash?.decode.llamacpp.value != null);
 
     const q4 = rows.find((r) => r.spec.modelKey === '35b-a3b' && r.spec.quant === 'Q4_K_M');
-    assert.equal(q4?.prefill.llamacpp.value, 1814);
+    assert.equal(q4?.prefill.llamacpp.value, 2733.9);
+
+    const q6 = rows.find((r) => r.spec.modelKey === '35b-a3b' && r.spec.quant === 'Q6_K');
+    assert.match(q6?.decode.llamacpp.text ?? '', /82\.62 \/ 103\.23 @ 4K \(two repeats\)/);
 
     const coder = rows.filter((r) => r.spec.modelKey === 'coder390');
     assert.ok(coder.length >= 3);
@@ -91,10 +94,10 @@ describe('/qwen measured vs estimate', () => {
   it('labels VRAM and offload as estimates unless a run recorded peak VRAM', () => {
     const udq5 = rows.find((r) => r.spec.modelKey === '35b-a3b' && r.spec.quant === 'UD-Q5_K_XL');
     assert.ok(udq5);
-    assert.match(udq5?.vram32.text ?? '', /est\./);
-    assert.equal(udq5?.vram32.label, 'estimate');
-    assert.match(udq5?.vram128.text ?? '', /est\./);
-    assert.match(udq5?.vramFull.text ?? '', /est\./);
+    assert.equal(udq5?.vram32.text, '26.7 GB');
+    assert.equal(udq5?.vram32.label, 'measured');
+    assert.equal(udq5?.vram128.text, '28.82 GB');
+    assert.equal(udq5?.vramFull.text, '29.34 GB');
     assert.notEqual(udq5?.vramFull.text, '57.4 GB');
     assert.match(udq5?.fit1x.text ?? '', /est\./);
     assert.match(udq5?.offload1x.text ?? '', /est\./);

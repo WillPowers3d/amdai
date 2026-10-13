@@ -2,8 +2,28 @@
 import Base from '../layouts/Base.astro';
 import Callout from '../components/Callout.astro';
 import OvernightRows from '../components/OvernightRows.astro';
+import { FLASH_RERUN_NOTE, contextLabel, matchRuns, verifiedMeasured } from '../lib/run-card';
+import { runs } from '../lib/run-card-data';
 import { MEASURED_ON_OUR_RIG } from '../lib/local-desktop-dual';
 import { local-desktopDual as file } from '../lib/local-desktop-dual-data';
+
+const splitOfficial = [4096, 32768, 131072, 262144].map((ctx) => {
+  const card = matchRuns(verifiedMeasured(runs), {
+    model: 'qwen36',
+    quant: 'UD-Q5_K_XL',
+    backend: 'llama.cpp',
+    context: ctx,
+    layout: 'split',
+    gpus: 2,
+  })[0];
+  return {
+    ctx,
+    label: contextLabel(ctx),
+    decode: card?.results.decode_tps ?? null,
+    prefill: card?.results.prefill_tps ?? null,
+    vram: card?.results.peak_vram_gb_total ?? null,
+  };
+});
 
 const copies = file.copies;
 const split = file.split;
@@ -27,12 +47,16 @@ const split = file.split;
       <a class="btn-ghost" href="/backends/llamacpp">llama.cpp</a>
     </div>
 
+    <Callout type="warn" title="Flash / Strata / Q3 pending">
+      <p>{FLASH_RERUN_NOTE} This page is 35B llama.cpp only.</p>
+    </Callout>
+
     <Callout type="check" title="Recommendation">
       <p>
         <strong class="text-ink">{file.recommendation}</strong>
-        Split decode is about <strong class="text-ink">{split.single_request_tok_s} tok/s</strong> for one request
-        and at most <strong class="text-ink">{split.max_total_tok_s} tok/s</strong> total.
-        Two copies hold about <strong class="text-ink">{copies.per_request_tok_s} tok/s</strong> per request.
+        Official split llama-bench is <strong class="text-ink">{split.max_total_tok_s} tok/s</strong> at 4K
+        and <strong class="text-ink">{split.single_request_tok_s} tok/s</strong> at 256K.
+        Two copies still hold about <strong class="text-ink">{copies.per_request_tok_s} tok/s</strong> per request.
       </p>
     </Callout>
 
@@ -92,15 +116,38 @@ const split = file.split;
       <p class="mt-3 max-w-2xl text-muted">{split.note}</p>
       <div class="mt-6 grid gap-4 sm:grid-cols-2">
         <div class="card p-5">
-          <p class="text-faint">Single request</p>
-          <p class="mt-1 font-serif text-3xl tabular-nums">about {split.single_request_tok_s} tok/s</p>
+          <p class="text-faint">Single request · 256K</p>
+          <p class="mt-1 font-serif text-3xl tabular-nums">{split.single_request_tok_s} tok/s</p>
         </div>
         <div class="card p-5">
-          <p class="text-faint">Total ceiling</p>
-          <p class="mt-1 font-serif text-3xl tabular-nums">at most {split.max_total_tok_s} tok/s</p>
+          <p class="text-faint">4K decode · split</p>
+          <p class="mt-1 font-serif text-3xl tabular-nums">{split.max_total_tok_s} tok/s</p>
         </div>
       </div>
+      <div class="card mt-6 overflow-x-auto">
+        <table class="table-lab min-w-[36rem]">
+          <thead>
+            <tr>
+              <th>Context</th>
+              <th>Decode</th>
+              <th>Prefill</th>
+              <th>VRAM</th>
+            </tr>
+          </thead>
+          <tbody>
+            {splitOfficial.map((row) => (
+              <tr>
+                <td class="font-medium">{row.label}</td>
+                <td class="tabular-nums">{row.decode != null ? `${row.decode} tok/s` : 'not measured'}</td>
+                <td class="tabular-nums">{row.prefill != null ? `${row.prefill} tok/s` : 'not measured'}</td>
+                <td class="tabular-nums">{row.vram != null ? `${row.vram} GB` : 'not measured'}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
       <p class="mt-4 text-sm text-muted">
+        Official llama-bench split (c060ca974 Vulkan, UD-Q5_K_XL, two R9700s).
         A split 35B is slower than one card and much slower than two copies.
         House rule still stands: one LLM per GPU unless you deliberately combine.
       </p>
@@ -128,7 +175,7 @@ const split = file.split;
               <tr>
                 <td class="font-medium">{row.quant}</td>
                 <td>{row.context}</td>
-                <td class="tabular-nums">{row.context === '32K' || row.context === '256K' ? `about ${row.tok_s}` : row.tok_s} tok/s</td>
+                <td class="tabular-nums">{row.tok_s} tok/s</td>
                 <td class="text-muted">{row.note}</td>
               </tr>
             ))}

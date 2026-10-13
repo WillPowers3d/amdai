@@ -34,7 +34,7 @@
         "long_context": "not_measured",
         "speed": "pass"
       },
-      "decode": 100.8,
+      "decode": 102.39,
       "prefill": null,
       "log_hash": null
     }
@@ -56,5 +56,5 @@
     ]
   },
   "calculator": "/calculator?gpu=r9700&vram=32&n=1&split=0&ram=256&model=qwen36&tp=35&ap=3&layers=40&kvl=10&kvh=2&hd=256&quant=q5_k_m&ctx=4096&kv=f16&oh=1",
-  "notes": ["Measured on our rig, 2026-10 — 100.8 tok/s decode at short context."]
+  "notes": ["Measured on our rig, 2026-10 — 102.39 tok/s decode at short context. Official llama-bench c060ca974."]
 }

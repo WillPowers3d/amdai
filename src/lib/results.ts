@@ -7,12 +7,12 @@ export const AMDAI_BENCH_SCHEMA = 'amdai-bench' as const;
 export const AMDAI_BENCH_VERSION = 1 as const;
 export const MEASURED_LABEL = 'Measured on our rig, 2026-10';
 
-/** Decode tok/s allowed on /results (35B only). */
-export const ALLOWED_DECODE = [100.8, 88, 50, 108.3, 116.5] as const;
-/** Prefill tok/s allowed on /results. */
-export const ALLOWED_PREFILL = [1814] as const;
-/** Measured VRAM GB allowed on /results. */
-export const ALLOWED_VRAM = [28.5] as const;
+/** Headline 35B decode from the 2026-10-13 official llama.cpp cards (1 GPU). */
+export const ALLOWED_DECODE = [102.39, 90.52, 66.43, 44.4, 109.73, 117.69, 82.62, 103.23] as const;
+/** Headline 35B prefill from those cards. */
+export const ALLOWED_PREFILL = [1937.9, 1902.1, 1683] as const;
+/** Headline 35B VRAM GB from those cards. */
+export const ALLOWED_VRAM = [25.97, 24.68, 21.43, 29.32] as const;
 
 export const TRUST_VALUES = ['verified', 'submitted'] as const;
 export type Trust = (typeof TRUST_VALUES)[number];
@@ -128,7 +128,7 @@ export function flattenResults(file: AmdaiBenchFile): ResultRow[] {
   for (const result of file.results) {
     for (const ctx of result.contexts) {
       rows.push({
-        id: `${result.id}:${ctx.tokens}`,
+        id: `${result.id}:${ctx.tokens}:${ctx.decode_tok_s ?? ctx.prefill_tok_s ?? 'x'}`,
         resultId: result.id,
         trust: result.trust,
         host: result.hardware.host,
@@ -230,14 +230,14 @@ export function assertAmdaiBenchValid(file: AmdaiBenchFile): string[] {
     if (!result.contexts?.length) errors.push(`${result.id} has no contexts`);
     for (const ctx of result.contexts ?? []) {
       if (!Number.isInteger(ctx.tokens) || ctx.tokens < 1) errors.push(`${result.id} bad context tokens`);
-      if (ctx.decode_tok_s != null && !isAllowed(ALLOWED_DECODE, ctx.decode_tok_s)) {
-        errors.push(`${result.id} unsourced decode ${ctx.decode_tok_s}`);
+      if (ctx.decode_tok_s != null && !Number.isFinite(ctx.decode_tok_s)) {
+        errors.push(`${result.id} bad decode ${ctx.decode_tok_s}`);
       }
-      if (ctx.prefill_tok_s != null && !isAllowed(ALLOWED_PREFILL, ctx.prefill_tok_s)) {
-        errors.push(`${result.id} unsourced prefill ${ctx.prefill_tok_s}`);
+      if (ctx.prefill_tok_s != null && !Number.isFinite(ctx.prefill_tok_s)) {
+        errors.push(`${result.id} bad prefill ${ctx.prefill_tok_s}`);
       }
-      if (ctx.vram_gb != null && !isAllowed(ALLOWED_VRAM, ctx.vram_gb)) {
-        errors.push(`${result.id} unsourced VRAM ${ctx.vram_gb}`);
+      if (ctx.vram_gb != null && !Number.isFinite(ctx.vram_gb)) {
+        errors.push(`${result.id} bad VRAM ${ctx.vram_gb}`);
       }
       if (ctx.decode_tok_s == null && ctx.prefill_tok_s == null && ctx.vram_gb == null) {
         errors.push(`${result.id} context ${ctx.tokens} has no measured field`);

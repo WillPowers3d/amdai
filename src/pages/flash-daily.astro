@@ -6,7 +6,7 @@ import SystemRamNeed from '../components/SystemRamNeed.astro';
 import { officialLinks } from '../lib/site';
 import { formatLinuxGb, flashRamTable, NOT_MEASURED_ON_local-desktop } from '../lib/flash-daily';
 import { flashDaily as file } from '../lib/flash-daily-data';
-import { flashQ3FromRuns, formatTokCell } from '../lib/run-card';
+import { FLASH_RERUN_NOTE, flashQ3FromRuns, formatTokCell } from '../lib/run-card';
 import { runs } from '../lib/run-card-data';
 
 const q6 = file.measured_q6_two_cards;
@@ -39,6 +39,10 @@ const flashQ3Cell = flashQ3
       <a class="btn-ghost" href="/qwen36-dual">35B on two cards</a>
       <a class="btn-ghost" href={officialLinks.qwenFlashGguf}>Unsloth GGUF</a>
     </div>
+
+    <Callout type="warn" title="Flash / Strata / Q3 pending">
+      <p>{FLASH_RERUN_NOTE} Figures on this page are the earlier first-party Flash Q6 set, not the 2026-10-13 35B drop.</p>
+    </Callout>
 
     <Callout type="check" title="Measured Q6 on two cards">
       <p>

@@ -18,17 +18,20 @@ overnight_results_json_rows: []
 overnight_note: Space for overnight results.json rows. Empty until that file lands.
 
 single_card:
-  - { quant: UD-Q5_K_XL, tok_s: 100.8, context: short, note: One R9700, llama.cpp Vulkan, f16 KV }
-  - { quant: UD-Q5_K_XL, tok_s: 88, context: 32K, note: about 88 }
-  - { quant: UD-Q5_K_XL, tok_s: 50, context: 256K, note: about 50 }
-  - { quant: Q5_K_M, tok_s: 108.3, context: short, note: Sibling quant }
-  - { quant: Q4_K_M, tok_s: 116.5, context: short, note: Sibling quant }
+  - { quant: UD-Q5_K_XL, tok_s: 102.39, context: 4K, note: Official llama.cpp c060ca974, one R9700 }
+  - { quant: UD-Q5_K_XL, tok_s: 90.52, context: 32K, note: Official 2026-10-12 }
+  - { quant: UD-Q5_K_XL, tok_s: 66.43, context: 128K, note: Official 2026-10-12 }
+  - { quant: UD-Q5_K_XL, tok_s: 44.4, context: 256K, note: Official 2026-10-12 }
+  - { quant: Q5_K_M, tok_s: 109.73, context: 4K, note: Official 2026-10-12 }
+  - { quant: Q4_K_M, tok_s: 117.69, context: 4K, note: Official 2026-10-12 }
+  - { quant: Q6_K, tok_s: 82.62, context: 4K, note: One of two 4K repeats }
+  - { quant: Q6_K, tok_s: 103.23, context: 4K, note: One of two 4K repeats }
 
 split:
   title: One server split across both cards
-  single_request_tok_s: 57
-  max_total_tok_s: 79
-  note: About 57 tok/s for a single request. At most 79 tok/s total.
+  single_request_tok_s: 42.03
+  max_total_tok_s: 82.78
+  note: Official llama-bench 2026-10-12 (c060ca974 Vulkan). 42.03 tok/s at 256K; 82.78 at 4K. The older ~57 / 79 pair is retired.
 
 copies:
   title: Two copies (one per card) behind a least-connections balancer

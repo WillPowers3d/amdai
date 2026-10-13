@@ -2,13 +2,13 @@
 import Base from '../layouts/Base.astro';
 import Callout from '../components/Callout.astro';
 import RunCard from '../components/RunCard.astro';
-import { RUN_SCHEMA, uniqueRunFilters } from '../lib/run-card';
+import { FLASH_RERUN_NOTE, RUN_SCHEMA, officialAmdaiRuns, uniqueRunFilters } from '../lib/run-card';
 import { runs } from '../lib/run-card-data';
 import { AMDAI_BENCH_SCHEMA, AMDAI_BENCH_VERSION } from '../lib/results';
 
 const cards = runs;
 const options = uniqueRunFilters(cards);
-const officialCount = cards.filter((card) => card.submitted_by.handle === 'amdai' && card.submitted_by.verified).length;
+const officialCount = officialAmdaiRuns(cards).length;
 const submittedCount = cards.filter((card) => !card.submitted_by.verified).length;
 ---
 
@@ -30,6 +30,10 @@ const submittedCount = cards.filter((card) => !card.submitted_by.verified).lengt
       <a class="btn-ghost" href="/amdai-bench/run@1.schema.json">JSON Schema</a>
       <a class="btn-ghost" href="/amdai-bench.v1.json">Derived v{AMDAI_BENCH_VERSION} catalog</a>
     </div>
+
+    <Callout type="warn" title="Flash / Strata / Q3 pending">
+      <p>{FLASH_RERUN_NOTE} This drop is 35B llama.cpp only. No Flash rows were added.</p>
+    </Callout>
 
     <Callout type="check" title="Verified vs submitted">
       Green <strong class="text-ink">Verified</strong> cards were measured on local-desktop and credited to the submitter.

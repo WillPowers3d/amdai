@@ -34,7 +34,7 @@
         "long_context": "not_measured",
         "speed": "pass"
       },
-      "decode": 116.5,
+      "decode": 117.69,
       "prefill": null,
       "log_hash": null
     }
@@ -57,7 +57,7 @@
   },
   "calculator": "/calculator?gpu=r9700&vram=32&n=1&split=0&ram=256&model=qwen36&tp=35&ap=3&layers=40&kvl=10&kvh=2&hd=256&quant=q4_k_m&ctx=4096&kv=f16&oh=1",
   "notes": [
-    "Measured on our rig, 2026-10 — 116.5 tok/s decode at short context.",
-    "Prefill 1814 tok/s at 32K is a separate bench point on the same file."
+    "Measured on our rig, 2026-10 — 117.69 tok/s decode at short context.",
+    "Prefill 1902.1 tok/s at 32K is a separate bench point on the same file."
   ]
 }

@@ -646,11 +646,26 @@ function pickMeasured(cards: RunCard[], spec: QwenSpec, backend: QwenBackendId, 
     });
   const hit = scored[0];
   if (!hit || hit.value == null) return emptyMeasured();
+  const q6pair =
+    spec.modelKey === '35b-a3b' &&
+    spec.runQuant === 'Q6_K' &&
+    kind === 'decode' &&
+    hit.card.config.context_tokens === 4096
+      ? scored
+          .filter((row) => row.card.config.context_tokens === 4096 && row.card.hardware.gpu_count_used === 1)
+          .map((row) => row.value)
+          .filter((n): n is number => n != null)
+          .sort((a, b) => a - b)
+      : [];
+  const text =
+    q6pair.length > 1
+      ? `${q6pair.join(' / ')} @ 4K (two repeats)`
+      : `${hit.value} @ ${contextLabel(hit.card.config.context_tokens)}`;
   return {
     value: hit.value,
     context: hit.card.config.context_tokens,
     runId: hit.card.run_id,
-    text: `${hit.value} @ ${contextLabel(hit.card.config.context_tokens)}`,
+    text,
   };
 }
 

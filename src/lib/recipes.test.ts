@@ -28,7 +28,7 @@ describe('recipe catalog', () => {
     const decodes = recipes.flatMap((row) => row.proof.map((proof) => proof.decode).filter((n): n is number => n != null));
     assert.deepEqual(
       [...new Set(decodes)].sort((a, b) => a - b),
-      [16, 32.6, 50, 88, 100.8, 108.3, 116.5],
+      [16, 32.6, 44.4, 90.52, 102.39, 109.73, 117.69],
     );
     assert.ok(seed['qwen36-35b.llamacpp-vulkan.4k']);
     assert.ok(seed['qwen36-35b.llamacpp-vulkan.32k']);
@@ -76,7 +76,7 @@ describe('recipe catalog', () => {
     const daily = queryToInput('?gpu=r9700&vram=32&n=1&split=0&ram=256&model=qwen36&quant=q5_k_m&ctx=262144&kv=f16');
     const hit = matchRecipe(recipes, daily);
     assert.equal(hit?.id, 'qwen36-35b.llamacpp-vulkan.262k');
-    assert.match(recipeTestedLine(hit).text, /Tested: 50 tok\/s/);
+    assert.match(recipeTestedLine(hit).text, /Tested: 44\.4 tok\/s/);
     assert.equal(recipeTestedLine(null).tested, false);
 
     const q4 = queryToInput('?gpu=r9700&vram=32&n=1&model=qwen36&quant=q4_k_m&ctx=4096&kv=f16');

@@ -170,7 +170,7 @@ export function usedOnOurRig(list: Backend[]): Backend[] {
 
 /** Which-one flowchart. Defaults to llama.cpp. Text fallback is flowchart_fallback. */
 export const BACKEND_FLOWCHART = `flowchart TD
-  start["Need tokens on a Radeon tonight?"] --> llama["llama.cpp\\nVulkan 35B: 100.8 / ~88 / ~50 tok/s\\nMeasured on our rig, 2026-10"]
+  start["Need tokens on a Radeon tonight?"] --> llama["llama.cpp\\nVulkan 35B: 102.39 / 90.52 / 44.4 tok/s\\nMeasured on our rig, 2026-10"]
   llama --> proven{"Daily driver already\\nworks on /v1?"}
   proven -->|"No"| stay["Stay on llama.cpp\\ncurl /v1, then a harness"]
   proven -->|"Yes, want Flash agent"| strata["Strata v0.1.42\\n~32.6 tok/s vs llama.cpp ~16\\nfirst-party Flash Q6"]
@@ -227,8 +227,8 @@ export function assertBackendsValid(file: BackendsFile): string[] {
   }
   const llamacpp = file.engines.find((row) => row.id === 'llamacpp');
   const llamaBlob = llamacpp ? `${llamacpp.moe} ${llamacpp.choose} ${llamacpp.context}` : '';
-  if (llamacpp && !/100\.8/.test(llamaBlob)) {
-    errors.push('llamacpp must cite the first-party 35B 100.8 tok/s figure');
+  if (llamacpp && !/102\.39/.test(llamaBlob)) {
+    errors.push('llamacpp must cite the first-party 35B 102.39 tok/s figure');
   }
   if (llamacpp && !/Measured on our rig, 2026-10/.test(llamaBlob)) {
     errors.push('llamacpp 35B figures must be labeled Measured on our rig, 2026-10');

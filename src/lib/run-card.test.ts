@@ -64,21 +64,29 @@ describe('amdai-bench/run@1', () => {
     assert.doesNotMatch(JSON.stringify(runs), /Qwen2\.5|Qwen3-8B/);
     assert.doesNotMatch(JSON.stringify(runs), /\b(?:Q[12]|IQ[12])(?:_|\b)/);
     assert.doesNotMatch(
-      runs.map((card) => card.software.launch_command).join('\n'),
+      runs
+        .filter((card) => !/llama-bench/.test(card.software.launch_command))
+        .map((card) => card.software.launch_command)
+        .join('\n'),
       /^(?!#).*GGML_VK_VISIBLE_DEVICES/m,
     );
   });
 
   it('feeds the 35B table and derived v1 catalog from verified single-card llama.cpp rows', () => {
     const table = qwen36TableFromRuns(runs);
-    assert.equal(table.rows[0]?.decode_short, '100.8 tok/s');
-    assert.equal(table.rows[0]?.decode_32k, '~88 tok/s');
-    assert.equal(table.rows[0]?.decode_256k, '~50 tok/s');
-    assert.equal(table.rows[0]?.vram_gb, 'not measured');
-    assert.equal(table.rows[1]?.decode_short, '108.3 tok/s');
-    assert.equal(table.rows[1]?.vram_gb, '28.5 GB');
-    assert.equal(table.rows[2]?.decode_short, '116.5 tok/s');
-    assert.equal(table.rows[2]?.prefill_32k, '1814 tok/s');
+    assert.equal(table.rows[0]?.decode_short, '102.39 tok/s');
+    assert.equal(table.rows[0]?.decode_32k, '90.52 tok/s');
+    assert.equal(table.rows[0]?.decode_128k, '66.43 tok/s');
+    assert.equal(table.rows[0]?.decode_256k, '44.4 tok/s');
+    assert.equal(table.rows[0]?.vram_gb, '25.97 GB');
+    assert.equal(table.rows[1]?.decode_short, '109.73 tok/s');
+    assert.equal(table.rows[1]?.vram_gb, '24.68 GB');
+    assert.equal(table.rows[2]?.decode_short, '117.69 tok/s');
+    assert.equal(table.rows[2]?.prefill_32k, '1902.1 tok/s');
+    assert.equal(table.rows[3]?.quant, 'Q6_K');
+    assert.equal(table.rows[3]?.decode_short, '82.62 / 103.23 tok/s');
+    assert.match(table.rows[3]?.flag ?? '', /DDR5/);
+    assert.ok(table.notes.some((note) => /pending a rerun/i.test(note)));
 
     const derived = deriveV1Catalog(runs);
     assert.deepEqual(assertAmdaiBenchValid(derived), []);

@@ -49,11 +49,12 @@ const next = index >= 0 && index < neighbors.length - 1 ? neighbors[index + 1] :
       <Callout type="check" title="Used on our rig">
         Daily driver: Qwen3.6-35B-A3B Unsloth UD-Q5_K_XL on <strong>one</strong> R9700 via
         llama.cpp <strong>Vulkan</strong>, 262144 context, f16 KV, 0% RAM offload.
-        <strong>Measured on our rig, 2026-10</strong> — UD-Q5_K_XL decode <strong>100.8 tok/s</strong>
-        at short context, <strong>~88</strong> at 32K, <strong>~50</strong> at 256K; Q5_K_M
-        <strong>108.3 tok/s</strong> (28.5 GB VRAM); Q4_K_M <strong>116.5 tok/s</strong> decode,
-        <strong>1814 tok/s</strong> prefill at 32K. Exact command line / UD-Q5_K_XL VRAM stay
-        not recorded on <a href="/stacks">stacks</a>. Table: <a href="/benchmarks">benchmarks</a>.
+        <strong>Measured on our rig, 2026-10</strong> — UD-Q5_K_XL decode <strong>102.39 tok/s</strong>
+        at short context, <strong>90.52</strong> at 32K, <strong>66.43</strong> at 128K,
+        <strong>44.4</strong> at 256K (25.97 GB VRAM at 4K); Q5_K_M
+        <strong>109.73 tok/s</strong> (24.68 GB VRAM); Q4_K_M <strong>117.69 tok/s</strong> decode,
+        <strong>1902.1 tok/s</strong> prefill at 32K. Official llama-bench cards:
+        <a href="/results">/results</a>. Table: <a href="/benchmarks">benchmarks</a>.
       </Callout>
     )}
     {row.used_on_our_rig && row.id === 'strata' && (

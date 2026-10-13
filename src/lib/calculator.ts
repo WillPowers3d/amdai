@@ -1321,24 +1321,26 @@ export function testedBadge(input: CalcInput): TestedBadge | null {
   if (input.quantId === 'q5_k_m') {
     let focus: string;
     if (input.context === 262144) {
-      focus = 'UD-Q5_K_XL decode ~50 tok/s at 256K (also 100.8 at short context, ~88 at 32K)';
+      focus = 'UD-Q5_K_XL decode 44.4 tok/s at 256K (also 102.39 at short context, 90.52 at 32K, 66.43 at 128K)';
+    } else if (input.context === 131072) {
+      focus = 'UD-Q5_K_XL decode 66.43 tok/s at 128K (also 102.39 at short context, 90.52 at 32K, 44.4 at 256K)';
     } else if (input.context === 32768) {
-      focus = 'UD-Q5_K_XL decode ~88 tok/s at 32K (also 100.8 at short context, ~50 at 256K)';
+      focus = 'UD-Q5_K_XL decode 90.52 tok/s at 32K (also 102.39 at short context, 66.43 at 128K, 44.4 at 256K)';
     } else if (input.context <= 8192) {
-      focus = 'UD-Q5_K_XL decode 100.8 tok/s at short context (also ~88 at 32K, ~50 at 256K)';
+      focus = 'UD-Q5_K_XL decode 102.39 tok/s at short context (also 90.52 at 32K, 66.43 at 128K, 44.4 at 256K)';
     } else {
-      focus = 'UD-Q5_K_XL decode 100.8 tok/s short / ~88 at 32K / ~50 at 256K (this exact context was not a bench point)';
+      focus = 'UD-Q5_K_XL decode 102.39 tok/s short / 90.52 at 32K / 66.43 at 128K / 44.4 at 256K (this exact context was not a bench point)';
     }
     return {
       id: 'daily',
-      label: `${MEASURED_ON_OUR_RIG} — ${focus}. Q5_K_M sibling 108.3 tok/s (28.5 GB VRAM). One R9700, llama.cpp, f16 KV.`,
+      label: `${MEASURED_ON_OUR_RIG} — ${focus}. Q5_K_M sibling 109.73 tok/s (24.68 GB VRAM). One R9700, llama.cpp, f16 KV.`,
     };
   }
 
   if (input.quantId === 'q4_k_m') {
     return {
       id: 'q4',
-      label: `${MEASURED_ON_OUR_RIG} — Q4_K_M decode 116.5 tok/s; prefill 1814 tok/s at 32K. One R9700, llama.cpp, f16 KV.`,
+      label: `${MEASURED_ON_OUR_RIG} — Q4_K_M decode 117.69 tok/s; prefill 1902.1 tok/s at 32K. One R9700, llama.cpp, f16 KV.`,
     };
   }
 

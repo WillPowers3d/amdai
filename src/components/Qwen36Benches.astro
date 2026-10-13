@@ -28,6 +28,7 @@ const { heading = '35B decode, measured' } = Astro.props;
           <th>Quant</th>
           <th>Decode · short</th>
           <th>Decode · 32K</th>
+          <th>Decode · 128K</th>
           <th>Decode · 256K</th>
           <th>Prefill · 32K</th>
           <th>VRAM</th>
@@ -38,8 +39,9 @@ const { heading = '35B decode, measured' } = Astro.props;
           <tr>
             <td class="font-medium">{row.quant}</td>
             <td>{row.decode_short}</td>
-            <td>{row.decode_32k}</td>
-            <td>{row.decode_256k}</td>
+            <td>{row.decode_32k}{row.quant === 'Q6_K' ? ' · DDR5' : ''}</td>
+            <td>{row.decode_128k}{row.quant === 'Q6_K' ? ' · DDR5' : ''}</td>
+            <td>{row.decode_256k}{row.quant === 'Q6_K' ? ' · DDR5' : ''}</td>
             <td>{row.prefill_32k}</td>
             <td>{row.vram_gb}</td>
           </tr>

@@ -163,13 +163,13 @@ export function calculatorAdvice(input: CalcInput, result: CalcResult, priority:
       if (result.tested?.id === 'daily') {
         return {
           headline: 'Speed: in-VRAM MoE on one card (tested on our rig)',
-          body: 'Daily driver shape: Qwen3.6-35B-A3B Q5, one R9700, 0% RAM offload, f16 KV. Measured on our rig, 2026-10 — UD-Q5_K_XL decode 100.8 tok/s at short context, ~88 at 32K, ~50 at 256K. Q5_K_M sibling 108.3 tok/s (28.5 GB VRAM).',
+          body: 'Daily driver shape: Qwen3.6-35B-A3B Q5, one R9700, 0% RAM offload, f16 KV. Measured on our rig, 2026-10 — UD-Q5_K_XL decode 102.39 tok/s at short context, 90.52 at 32K, 66.43 at 128K, 44.4 at 256K. Q5_K_M sibling 109.73 tok/s (24.68 GB VRAM).',
         };
       }
       if (result.tested?.id === 'q4') {
         return {
           headline: 'Speed: in-VRAM MoE on one card (tested on our rig)',
-          body: 'Q4_K_M on one R9700, llama.cpp, f16 KV. Measured on our rig, 2026-10 — 116.5 tok/s decode; 1814 tok/s prefill at 32K. Prefer Q5 when it fits.',
+          body: 'Q4_K_M on one R9700, llama.cpp, f16 KV. Measured on our rig, 2026-10 — 117.69 tok/s decode; 1902.1 tok/s prefill at 32K. Prefer Q5 when it fits.',
         };
       }
       return {
@@ -186,7 +186,7 @@ export function calculatorAdvice(input: CalcInput, result: CalcResult, priority:
   if (result.tested?.id === 'fast') {
     return {
       headline: 'Max size: Flash Q6 on the Pro RAM path (tested on our rig)',
-      body: 'Publisher file ~169 GB. First-party: Strata v0.1.42 ~32.6 tok/s vs llama.cpp ~16 on our rig for this Flash Q6. A one-card 35B in VRAM is faster — Measured on our rig, 2026-10: UD-Q5_K_XL 100.8 tok/s short / ~88 at 32K / ~50 at 256K.',
+      body: 'Publisher file ~169 GB. First-party: Strata v0.1.42 ~32.6 tok/s vs llama.cpp ~16 on our rig for this Flash Q6. A one-card 35B in VRAM is faster — Measured on our rig, 2026-10: UD-Q5_K_XL 102.39 tok/s short / 90.52 at 32K / 44.4 at 256K.',
     };
   }
   if (input.modelId !== 'flash' && input.ramGb >= 128) {

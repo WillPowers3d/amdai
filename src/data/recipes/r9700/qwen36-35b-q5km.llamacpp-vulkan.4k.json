@@ -34,7 +34,7 @@
         "long_context": "not_measured",
         "speed": "pass"
       },
-      "decode": 108.3,
+      "decode": 109.73,
       "prefill": null,
       "log_hash": null
     }
@@ -56,5 +56,5 @@
     ]
   },
   "calculator": "/calculator?gpu=r9700&vram=32&n=1&split=0&ram=256&model=qwen36&tp=35&ap=3&layers=40&kvl=10&kvh=2&hd=256&quant=q5_k_m&ctx=4096&kv=f16&oh=1",
-  "notes": ["Sibling Q5 file. Measured on our rig, 2026-10 — 108.3 tok/s short."]
+  "notes": ["Sibling Q5 file. Measured on our rig, 2026-10 — 109.73 tok/s short (24.68 GB VRAM). Official llama-bench c060ca974."]
 }

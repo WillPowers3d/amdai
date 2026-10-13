@@ -32,8 +32,8 @@ describe('local-desktop dual 35B page', () => {
     assert.deepEqual(assertDualValid(dual), []);
     assert.equal(dual.host, 'local-desktop');
     assert.equal(dual.label, MEASURED_ON_OUR_RIG);
-    assert.equal(dual.split.single_request_tok_s, 57);
-    assert.equal(dual.split.max_total_tok_s, 79);
+    assert.equal(dual.split.single_request_tok_s, 42.03);
+    assert.equal(dual.split.max_total_tok_s, 82.78);
     assert.equal(dual.copies.per_request_tok_s, 100);
     assert.equal(dual.copies.total_at_2_tok_s, 172);
     assert.equal(dual.copies.total_at_4_to_8_tok_s, 177);

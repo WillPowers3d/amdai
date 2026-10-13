@@ -16,28 +16,29 @@ qwen36_measured:
   gpu: one R9700
   kv: f16
   notes:
-    - One R9700, llama.cpp, f16 KV. Exact command lines stay not recorded.
-    - UD-Q5_K_XL VRAM is not measured. Q5_K_M VRAM is 28.5 GB.
-    - Prefill is published only for Q4_K_M at 32K.
+    - One R9700, llama.cpp Vulkan, f16 KV. Official llama-bench c060ca974 (2026-10-12/13).
+    - UD-Q5_K_XL peak VRAM is 25.97 GB at 4K / 29.34 GB at 256K. Q5_K_M VRAM is 24.68 GB at 4K.
+    - Q6_K 4K keeps both repeats (82.62 / 103.23). Q6_K at 32K and up partly offloaded to DDR5.
+    - Flash, Strata, and Q3 runs are pending a rerun after amdai stabilizes the DDR5.
   rows:
     - quant: UD-Q5_K_XL
-      decode_short: 100.8 tok/s
-      decode_32k: ~88 tok/s
-      decode_256k: ~50 tok/s
-      prefill_32k: not measured
-      vram_gb: not measured
+      decode_short: 102.39 tok/s
+      decode_32k: 90.52 tok/s
+      decode_256k: 44.4 tok/s
+      prefill_32k: 1937.9 tok/s
+      vram_gb: 25.97 GB
     - quant: Q5_K_M
-      decode_short: 108.3 tok/s
-      decode_32k: not measured
-      decode_256k: not measured
-      prefill_32k: not measured
-      vram_gb: 28.5 GB
+      decode_short: 109.73 tok/s
+      decode_32k: 96.21 tok/s
+      decode_256k: 40.54 tok/s
+      prefill_32k: 1902.6 tok/s
+      vram_gb: 24.68 GB
     - quant: Q4_K_M
-      decode_short: 116.5 tok/s
-      decode_32k: not measured
-      decode_256k: not measured
-      prefill_32k: 1814 tok/s
-      vram_gb: not measured
+      decode_short: 117.69 tok/s
+      decode_32k: 101.88 tok/s
+      decode_256k: 47.77 tok/s
+      prefill_32k: 1902.1 tok/s
+      vram_gb: 21.43 GB
 
 stacks:
   - id: daily-driver
@@ -55,10 +56,10 @@ stacks:
     measured:
       - Publisher GGUF listing 26.6 GB (Hugging Face) — file size, not VRAM
       - Context 262144 and f16 KV confirmed on our rig
-      - "UD-Q5_K_XL decode: 100.8 tok/s at short context, ~88 tok/s at 32K, ~50 tok/s at 256K. Measured on our rig, 2026-10. One R9700, llama.cpp, f16 KV."
-      - "Q5_K_M sibling: 108.3 tok/s, 28.5 GB VRAM. Measured on our rig, 2026-10. One R9700, llama.cpp, f16 KV."
-      - "Q4_K_M sibling: 116.5 tok/s decode; 1814 tok/s prefill at 32K. Measured on our rig, 2026-10. One R9700, llama.cpp, f16 KV."
-      - "not recorded: exact command line / measured VRAM for UD-Q5_K_XL from rig owner."
+      - "UD-Q5_K_XL decode: 102.39 tok/s at short context, 90.52 tok/s at 32K, 66.43 tok/s at 128K, 44.4 tok/s at 256K. Measured on our rig, 2026-10. One R9700, llama.cpp, f16 KV."
+      - "Q5_K_M sibling: 109.73 tok/s, 24.68 GB VRAM. Measured on our rig, 2026-10. One R9700, llama.cpp, f16 KV."
+      - "Q4_K_M sibling: 117.69 tok/s decode; 1902.1 tok/s prefill at 32K. Measured on our rig, 2026-10. One R9700, llama.cpp, f16 KV."
+      - "UD-Q5_K_XL peak VRAM 25.97 GB at 4K / 29.34 GB at 256K from official llama-bench c060ca974."
     why: Full native context on one 32 GB card, Q5-family quality, no RAM crawl.
     calculator: /calculator?gpu=r9700&vram=32&n=1&split=0&ram=256&model=qwen36&tp=35&ap=3&layers=40&kvl=10&kvh=2&hd=256&quant=q5_k_m&ctx=262144&kv=f16&oh=1
 
