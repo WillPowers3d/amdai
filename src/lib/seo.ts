@@ -470,7 +470,7 @@ setMeta(
 setMeta(
   '/faq',
   'FAQ',
-  'First-time Radeon local-LLM FAQ: GPU, Ubuntu vs Windows, 35B vs Flash, Q6/Q5/Q4, measured speed, RAM, Stack Lab, and ROCm problems.',
+  'AMDai FAQ: what this notebook is, R9700 32 GB, llama.cpp vs Strata, Q6/Q5/Q4, RAM, Open in Stack Lab, run cards, and affiliate notes.',
 );
 setMeta(
   '/glossary',

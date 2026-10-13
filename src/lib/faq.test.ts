@@ -22,7 +22,10 @@ describe('FAQ source', () => {
     assert.deepEqual(assertFaqValid(), []);
     assert.ok(FAQ_ENTRIES.length >= 16);
     assert.equal(FAQ_ITEMS.length, FAQ_ENTRIES.length);
-    assert.equal(FAQ_GROUPS.length, 6);
+    assert.equal(FAQ_GROUPS.length, 7);
+    assert.ok(FAQ_ENTRIES.some((item) => item.id === 'what-is-amdai'));
+    assert.ok(FAQ_ENTRIES.some((item) => item.id === 'open-in-stack-lab'));
+    assert.ok(FAQ_ENTRIES.some((item) => item.id === 'affiliate-links'));
     const questions = FAQ_ENTRIES.map((item) => item.question);
     assert.equal(new Set(questions).size, questions.length);
     const blob = FAQ_ENTRIES.map((item) => `${item.question} ${item.answer}`).join('\n');
@@ -50,12 +53,16 @@ describe('FAQ source', () => {
     assert.ok(vulkan.some((item) => item.id === 'vulkan-or-hip'));
     const ram = filterFaq('full context');
     assert.ok(ram.some((item) => item.id === 'min-ram-vs-full-context'));
+    assert.ok(filterFaq('rakuten').some((item) => item.id === 'affiliate-links'));
+    assert.ok(filterFaq('open in stack lab').some((item) => item.id === 'open-in-stack-lab'));
+    assert.ok(filterFaq('what is amdai').some((item) => item.id === 'what-is-amdai'));
     assert.equal(filterFaq('zzzz-no-such-faq').length, 0);
     assert.equal(filterFaq('').length, FAQ_ENTRIES.length);
     const grouped = groupFaq();
     assert.equal(grouped.length, FAQ_GROUPS.length);
-    assert.ok(faqHaystack(FAQ_ENTRIES[0]!).includes('gpu'));
-    assert.match(faqPlainAnswer(FAQ_ENTRIES[0]!), /See /);
+    const gpu = FAQ_ENTRIES.find((item) => item.id === 'which-gpu');
+    assert.ok(gpu && faqHaystack(gpu).includes('gpu'));
+    assert.match(faqPlainAnswer(gpu!), /See /);
   });
 
   it('builds FAQPage JSON-LD without price or rating keys', () => {

@@ -120,6 +120,8 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
     { href: '/glossary', label: 'Glossary' },
     { href: '/gpus/r9700', label: 'R9700 measured page' },
     { href: '/compare', label: 'Compare 35B' },
+    { href: '/about', label: 'About' },
+    { href: '/disclosure', label: 'Affiliate disclosure' },
   ],
   '/gpus/r9700': [
     { href: '/setup', label: 'First-run setup' },

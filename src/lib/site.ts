@@ -93,7 +93,7 @@ export const primaryNav: NavItem[] = [
   { href: '/about', label: 'About', description: 'Who runs AMDai, the local-desktop rig, and editorial independence', group: 'learn' },
   { href: '/methodology', label: 'How we test', description: 'amdai-bench/run@1 cards, labeled estimates, citations, corrections', group: 'learn' },
   { href: '/contact', label: 'Contact', description: 'Honest routes — contribute, ROCm problems, forum when enabled', group: 'learn' },
-  { href: '/faq', label: 'FAQ', description: 'First-time Radeon local-LLM questions — GPU, quants, measured speed, RAM', group: 'learn' },
+  { href: '/faq', label: 'FAQ', description: 'First-time Radeon questions — AMDai, GPU, quants, RAM, Stack Lab, affiliates', group: 'learn' },
   { href: '/glossary', label: 'Glossary', description: 'Plain-English jargon — ROCm, GGUF, Q3–Q6, KV cache, run cards', group: 'learn' },
   { href: '/rocm', label: 'ROCm', description: 'What it is — stack, gfx IDs, Vulkan vs HIP, versions', group: 'learn' },
   { href: '/rocm-problems', label: 'ROCm problems', description: "Open problems and how you can help — cited only", group: 'learn' },

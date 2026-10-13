@@ -9,6 +9,11 @@ export const FAQ_NAME = 'AMDai FAQ';
 
 export const FAQ_GROUPS = [
   {
+    id: 'about',
+    label: 'About AMDai',
+    description: 'Who writes this notebook, measured vs estimate, affiliates, and the Lab Notes feed.',
+  },
+  {
     id: 'getting-started',
     label: 'Getting started',
     description: 'Which GPU, Ubuntu vs Windows, and Vulkan vs ROCm HIP.',
@@ -16,7 +21,7 @@ export const FAQ_GROUPS = [
   {
     id: 'models-quants',
     label: 'Models & quants',
-    description: '35B vs Flash, Q6 / Q5 / Q4, and when Q3 is only an estimate.',
+    description: '35B vs Flash, llama.cpp vs Strata, Q6 / Q5 / Q4, and when Q3 is only an estimate.',
   },
   {
     id: 'speed-vram',
@@ -31,7 +36,7 @@ export const FAQ_GROUPS = [
   {
     id: 'stack-lab',
     label: 'Stack Lab',
-    description: 'Recipes, amdai-bench cards, and when a harness comes later.',
+    description: 'Open in Stack Lab, recipes, amdai-bench cards, and when a harness comes later.',
   },
   {
     id: 'troubleshooting',
@@ -54,6 +59,57 @@ export type FaqItem = {
 
 export const FAQ_ENTRIES: FaqItem[] = [
   {
+    id: 'what-is-amdai',
+    group: 'about',
+    question: 'What is AMDai?',
+    answer:
+      'AMDai is an independent consumer notebook for local AI on AMD Radeon and ROCm. It is not an AMD publication, not a store, and not a scraped leaderboard. Official numbers come from amdai-bench/run@1 cards on the local-desktop R9700 rig unless a cell says estimate or cited. Who runs it and how we test live on About and Methodology.',
+    links: [
+      { href: '/about', label: 'About' },
+      { href: '/methodology', label: 'How we test' },
+      { href: '/contact', label: 'Contact' },
+      { href: '/start', label: 'Getting started' },
+    ],
+  },
+  {
+    id: 'measured-vs-estimate',
+    group: 'about',
+    question: 'How do you label measured vs estimate?',
+    answer:
+      'A measured cell cites an official amdai-bench/run@1 card. Calculator totals, Q3 35B rows, and Windows paths stay labeled estimate unless a card says measured. Empty stays not measured. We do not invent tok/s or prices to fill a hole. The full rule set is on How we test.',
+    links: [
+      { href: '/methodology', label: 'How we test' },
+      { href: '/results', label: 'Run cards' },
+      { href: '/amdai-bench', label: 'amdai-bench' },
+      { href: '/compare', label: 'Compare 35B' },
+    ],
+  },
+  {
+    id: 'affiliate-links',
+    group: 'about',
+    question: 'Do store buttons earn affiliate commission?',
+    answer:
+      'Some Check-price buttons are Amazon Associates, Rakuten (Newegg), or B&H when those IDs are set. A commission does not change the price you pay and does not change the recommendation. We do not show a live or stale price. Full program notes are on the affiliate disclosure.',
+    links: [
+      { href: '/disclosure', label: 'Affiliate disclosure' },
+      { href: '/budget', label: 'Setup by budget' },
+      { href: '/about', label: 'About' },
+    ],
+  },
+  {
+    id: 'lab-notes-rss',
+    group: 'about',
+    question: 'How do I follow Lab Notes without an account?',
+    answer:
+      'Subscribe to the Lab Notes RSS feed for posts, dated updates, and official run cards. The email digest is optional and email-only. We do not invent a social account.',
+    links: [
+      { href: '/rss.xml', label: 'RSS feed' },
+      { href: '/newsletter', label: 'Lab Notes digest' },
+      { href: '/blog', label: 'Blog' },
+      { href: '/updates', label: 'Updates' },
+    ],
+  },
+  {
     id: 'which-gpu',
     group: 'getting-started',
     question: 'Which GPU should I start with?',
@@ -68,6 +124,20 @@ export const FAQ_ENTRIES: FaqItem[] = [
       { href: '/calculator', label: 'Calculator' },
       { href: '/start', label: 'Getting started' },
       { href: '/hardware', label: 'Hardware' },
+      { href: '/budget', label: 'Setup by budget' },
+    ],
+  },
+  {
+    id: 'pick-a-budget',
+    group: 'getting-started',
+    question: 'How do I pick a budget tier?',
+    answer:
+      'Setup by budget is four tiers from a ~16 GB card to the two-R9700 Pro rig. Size vs speed changes the pick. Buttons say Check price — we do not invent a street price. Consumer 7900 / 7800 sheets are estimates; the R9700 page is the measured north star.',
+    links: [
+      { href: '/budget', label: 'Setup by budget' },
+      { href: '/calculator', label: 'Calculator' },
+      { href: '/gpus/r9700', label: 'R9700 measured page' },
+      { href: '/disclosure', label: 'Affiliate disclosure' },
     ],
   },
   {
@@ -160,6 +230,20 @@ export const FAQ_ENTRIES: FaqItem[] = [
     ],
   },
   {
+    id: 'llamacpp-vs-strata',
+    group: 'models-quants',
+    question: 'Why llama.cpp first instead of Strata?',
+    answer:
+      'AMDai’s consumer default is llama.cpp (Vulkan first) for the daily-driver 35B. Strata is the first-party Flash try on the house Pro rig — the cited pair is ~32.6 tok/s versus llama.cpp ~16 tok/s at 262K on Qwen 3.8 Flash UD-Q6_K_XL. Start on llama.cpp unless the job is that Flash pin.',
+    links: [
+      { href: '/backends', label: 'Backends' },
+      { href: '/backends/llamacpp', label: 'llama.cpp' },
+      { href: '/backends/strata', label: 'Strata' },
+      { href: '/stacks', label: 'Stacks' },
+      { href: '/harnesses', label: 'Harnesses' },
+    ],
+  },
+  {
     id: 'q6-q5-q4',
     group: 'models-quants',
     question: 'Q6, Q5, or Q4 — what should I pick?',
@@ -225,6 +309,19 @@ export const FAQ_ENTRIES: FaqItem[] = [
     ],
   },
   {
+    id: 'two-gpu-combo',
+    group: 'speed-vram',
+    question: 'What is a two-GPU Combo versus a split?',
+    answer:
+      'A split is one model cut across two cards (llama.cpp -sm layer on the overnight rows). A Combo on this site is two models at once — Flash on one card and 35B on the other — not a promise of 2× decode. Read Dual / multi-GPU before you buy a second card for speed.',
+    links: [
+      { href: '/multi-gpu', label: 'Dual / multi-GPU' },
+      { href: '/compare/one-vs-two-gpu', label: 'One vs two GPU' },
+      { href: '/qwen36-dual', label: '35B on two cards' },
+      { href: '/flash-daily', label: 'Flash daily' },
+    ],
+  },
+  {
     id: 'q6-4k-two-numbers',
     group: 'speed-vram',
     question: 'Why does Q6_K 1-GPU 4K show 82.62 and 103.23 tok/s?',
@@ -275,6 +372,19 @@ export const FAQ_ENTRIES: FaqItem[] = [
     ],
   },
   {
+    id: 'open-in-stack-lab',
+    group: 'stack-lab',
+    question: 'How does Open in Stack Lab work?',
+    answer:
+      'Allowlisted Lab Notes buttons use the documented amdai-stack-lab: screens (recipes, doctor, planner, library, support, profile). If the app is not installed, they fall back to Stack Lab install notes — packages are not published yet, and there is no public download URL. If Stack Lab is already running on this machine, the local app is 127.0.0.1:47321. House profiles qwen-reliable and qwen-fast-agent are the measured R9700 daily and Flash pins. They do not apply to untested consumer cards.',
+    links: [
+      { href: '/stack-lab', label: 'Stack Lab' },
+      { href: '/stack-lab#install', label: 'Install notes' },
+      { href: '/recipes.json', label: 'recipes.json' },
+      { href: '/gpus/r9700', label: 'R9700 measured page' },
+    ],
+  },
+  {
     id: 'recipes-and-amdai-bench',
     group: 'stack-lab',
     question: 'How do recipes and amdai-bench connect?',
@@ -285,6 +395,7 @@ export const FAQ_ENTRIES: FaqItem[] = [
       { href: '/results', label: 'Run cards' },
       { href: '/benchmarks', label: 'Benchmarks' },
       { href: '/stack-lab', label: 'Stack Lab' },
+      { href: '/amdai-bench', label: 'amdai-bench' },
       { href: '/contribute', label: 'Contribute a recipe' },
     ],
   },
@@ -368,6 +479,14 @@ export const REQUIRED_FAQ_HREFS = [
   '/stack-lab',
   '/recipes/qwen36-35b.llamacpp-vulkan.262k',
   '/gpus/r9700',
+  '/about',
+  '/methodology',
+  '/contact',
+  '/disclosure',
+  '/rss.xml',
+  '/budget',
+  '/multi-gpu',
+  '/amdai-bench',
 ] as const;
 
 const BANNED_VISIBLE = /Qwen2\.5|Qwen3-8B/i;
@@ -440,5 +559,25 @@ export function assertFaqValid(items: FaqItem[] = FAQ_ENTRIES): string[] {
   }
   if (BANNED_VISIBLE.test(blob)) errors.push('banned model in FAQ');
   if (/TODO|TBD|FIXME|lorem ipsum/i.test(blob)) errors.push('leftover copy');
+  for (const required of [
+    'what-is-amdai',
+    'measured-vs-estimate',
+    'affiliate-links',
+    'lab-notes-rss',
+    'open-in-stack-lab',
+    'llamacpp-vs-strata',
+    'min-ram-vs-full-context',
+    'when-is-q3-an-estimate',
+  ]) {
+    if (!items.some((item) => item.id === required)) errors.push(`missing ${required}`);
+  }
+  const about = items.find((item) => item.id === 'what-is-amdai');
+  if (about && !/AMDai/.test(about.answer)) errors.push('what-is-amdai must name AMDai');
+  const open = items.find((item) => item.id === 'open-in-stack-lab');
+  if (open && !/amdai-stack-lab:/.test(open.answer)) errors.push('Open in Stack Lab must name the documented scheme');
+  if (open && !/not published yet/i.test(open.answer)) errors.push('Open in Stack Lab must stay unpublished');
+  const ram = items.find((item) => item.id === 'min-ram-vs-full-context');
+  if (ram && !ram.answer.includes('Minimum system RAM needed')) errors.push('RAM answer missing min label');
+  if (ram && !ram.answer.includes('RAM needed at full context')) errors.push('RAM answer missing full label');
   return [...new Set(errors)];
 }

@@ -140,7 +140,7 @@ Public site URL is `https://amdai.net` (`site` in `astro.config.mjs`; override w
 | `/troubleshoot/errors` | Paste-a-log matcher, cited patterns |
 | `/updates` | Dated notes + RSS + version matrix |
 | `/search` | Pagefind (index built by `npm run build`) |
-| `/faq` | Consumer FAQ — grouped Q&A into measured pages, sticky nav, `?q=` filter |
+| `/faq` | Consumer FAQ — About AMDai, GPU, quants, RAM, Open in Stack Lab, affiliates; sticky nav, `?q=` filter |
 | `/glossary` | Consumer jargon — A–Z, search, deep links; ROCm citations stay on `/rocm/glossary` |
 | `/accessibility` | What we test for keyboard, screen readers, and phones — report via /contact, /forum, or /contribute |
 | `/blog` | Longer posts + version-note index |
