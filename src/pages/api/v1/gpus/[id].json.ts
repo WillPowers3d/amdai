@@ -1,6 +1,7 @@
 import { recipes } from '../../../../lib/recipes-data';
 import { gpuPageById, gpuPages } from '../../../../lib/gpu-pages';
 import { proofTokS } from '../../../../lib/recipes';
+import { runs } from '../../../../lib/run-card-data';
 
 export function getStaticPaths() {
   return gpuPages(recipes).map((page) => ({ params: { id: page.id } }));
@@ -25,7 +26,7 @@ export async function GET({ params }: { params: { id: string } }) {
           quant: row.weights.quant,
           backend: row.backend,
           ctx: row.ctx,
-          decode: proofTokS(row),
+          decode: proofTokS(row, runs),
           calculator: row.calculator,
         })),
       },

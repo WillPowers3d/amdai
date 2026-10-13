@@ -1,4 +1,6 @@
-import catalog from '../data/amdai-bench.v1.json';
+import { deriveV1Catalog } from './run-card';
+import { runs } from './run-card-data';
 import { parseAmdaiBench, type AmdaiBenchFile } from './results';
 
-export const amdaiBenchFile: AmdaiBenchFile = parseAmdaiBench(catalog);
+/** Derived from verified 35B single-card llama.cpp run cards. Does not invent Flash. */
+export const amdaiBenchFile: AmdaiBenchFile = parseAmdaiBench(deriveV1Catalog(runs));

@@ -18,9 +18,11 @@ import {
   uniqueFilterValues,
 } from './results';
 import { primaryNav } from './site';
+import { amdaiBenchFile } from './results-data';
 
 const raw = readFileSync(new URL('../data/amdai-bench.v1.json', import.meta.url), 'utf8');
-const file = parseAmdaiBench(JSON.parse(raw));
+const snapshot = parseAmdaiBench(JSON.parse(raw));
+const file = amdaiBenchFile;
 
 describe('amdai-bench v1 catalog', () => {
   it('is version 1 and seeds only the cited 35B local-desktop numbers', () => {
@@ -104,5 +106,8 @@ describe('amdai-bench v1 catalog', () => {
     const missingGpu = filterResultRows(rows, { gpu: 'rx9070xt' });
     assert.equal(missingGpu.length, 0);
     assert.ok(primaryNav.some((item) => item.href === '/results'));
+    assert.match(primaryNav.find((item) => item.href === '/results')?.description ?? '', /run@1/);
+    assert.equal(snapshot.schema, file.schema);
+    assert.equal(snapshot.version, file.version);
   });
 });

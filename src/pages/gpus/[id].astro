@@ -7,6 +7,9 @@ import SystemRamNeed from '../../components/SystemRamNeed.astro';
 import { recipeSystemRam } from '../../lib/recipes';
 import { recipes } from '../../lib/recipes-data';
 import { gpuPageById, gpuPages } from '../../lib/gpu-pages';
+import RunCard from '../../components/RunCard.astro';
+import { officialAmdaiRuns, runsForGpu, verifiedMeasured } from '../../lib/run-card';
+import { runs } from '../../lib/run-card-data';
 
 export function getStaticPaths() {
   return gpuPages(recipes).map((page) => ({ params: { id: page.id }, props: { id: page.id } }));
@@ -18,6 +21,7 @@ const llamaFirst = [...page.recipes].sort((a, b) => {
   if (a.backend === b.backend) return b.ctx - a.ctx;
   return a.backend === 'llamacpp' ? -1 : 1;
 });
+const gpuRuns = officialAmdaiRuns(verifiedMeasured(runsForGpu(runs, page.id)));
 ---
 
 <Base
@@ -54,6 +58,20 @@ const llamaFirst = [...page.recipes].sort((a, b) => {
         />
       </div>
     </section>
+
+    {gpuRuns.length > 0 && (
+      <section class="mt-12" aria-labelledby="runs-heading">
+        <h2 id="runs-heading" class="font-serif text-3xl">Official run cards</h2>
+        <p class="mt-3 max-w-2xl text-sm text-muted">
+          Measured cells on this page come from verified <code>amdai-bench/run@1</code> cards credited to the submitter.
+        </p>
+        <div class="mt-6 grid gap-6">
+          {gpuRuns.map((card) => (
+            <RunCard card={card} heading="h3" compact />
+          ))}
+        </div>
+      </section>
+    )}
 
     {llamaFirst.map((recipe) => (
       <section class="card mt-8 scroll-mt-28 p-5 sm:p-6" id={recipe.id} aria-labelledby={`${recipe.id}-heading`}>

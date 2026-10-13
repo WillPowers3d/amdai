@@ -2,6 +2,8 @@ import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parseRecipes, type Recipe } from './recipes';
+import { measuredProofNumbers } from './run-card';
+import { runs } from './run-card-data';
 
 function walkJson(dir: string, out: { file: string; data: unknown }[] = []): { file: string; data: unknown }[] {
   for (const name of readdirSync(dir)) {
@@ -43,5 +45,5 @@ function fromGlob(): { file: string; data: unknown }[] {
 const raws = fromGlob();
 const loaded = raws.length ? raws : fromFs();
 
-/** Parsed at import. A bad recipe fails the build. */
-export const recipes: Recipe[] = parseRecipes(loaded);
+/** Parsed at import. A bad recipe fails the build. Overnight run numbers are allowed. */
+export const recipes: Recipe[] = parseRecipes(loaded, { extraProofNumbers: measuredProofNumbers(runs) });

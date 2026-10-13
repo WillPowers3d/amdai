@@ -1,7 +1,8 @@
 ---
-import { stacksGuide } from '../lib/status';
+import { qwen36TableFromRuns } from '../lib/run-card';
+import { runs } from '../lib/run-card-data';
 
-const benches = stacksGuide.qwen36_measured;
+const benches = qwen36TableFromRuns(runs);
 
 type Props = {
   heading?: string;

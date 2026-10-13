@@ -19,7 +19,10 @@ pnpm-debug.log*
 .env.production
 
 # local SQLite (accounts). Never commit. Root-only so src/data/ YAML stays tracked.
-/data/
+# Official run cards live in data/runs/*.jsonl and must be committed.
+/data/*
+!/data/runs/
+!/data/runs/**
 *.sqlite
 *.sqlite-journal
 

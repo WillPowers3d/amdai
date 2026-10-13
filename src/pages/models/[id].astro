@@ -1,9 +1,12 @@
 ---
 import Base from '../../layouts/Base.astro';
 import RecipeTable from '../../components/RecipeTable.astro';
+import RunCard from '../../components/RunCard.astro';
 import { recipesForModel } from '../../lib/recipes';
 import { recipes } from '../../lib/recipes-data';
 import { MODEL_PAGES } from '../../lib/gpu-pages';
+import { officialAmdaiRuns, runsForModelName, verifiedMeasured } from '../../lib/run-card';
+import { runs } from '../../lib/run-card-data';
 
 export function getStaticPaths() {
   return MODEL_PAGES.map((model) => ({ params: { id: model.id }, props: { id: model.id } }));
@@ -12,6 +15,7 @@ export function getStaticPaths() {
 const model = MODEL_PAGES.find((row) => row.id === Astro.props.id);
 if (!model) throw new Error(`unknown model ${Astro.props.id}`);
 const rows = recipesForModel(recipes, model.id);
+const modelRuns = officialAmdaiRuns(verifiedMeasured(runsForModelName(runs, model.id)));
 ---
 
 <Base
@@ -39,5 +43,19 @@ const rows = recipesForModel(recipes, model.id);
         <RecipeTable recipes={rows} empty="No tested recipe yet — contribute." />
       </div>
     </section>
+
+    {modelRuns.length > 0 && (
+      <section class="mt-12" aria-labelledby="runs-heading">
+        <h2 id="runs-heading" class="font-serif text-3xl">Official run cards</h2>
+        <p class="mt-3 max-w-2xl text-sm text-muted">
+          Measured cells come from verified <code>amdai-bench/run@1</code> cards credited to the submitter.
+        </p>
+        <div class="mt-6 grid gap-6">
+          {modelRuns.map((card) => (
+            <RunCard card={card} heading="h3" compact />
+          ))}
+        </div>
+      </section>
+    )}
   </main>
 </Base>

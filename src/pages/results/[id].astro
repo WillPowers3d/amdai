@@ -1,0 +1,34 @@
+---
+import Base from '../../layouts/Base.astro';
+import RunCard from '../../components/RunCard.astro';
+import { runs } from '../../lib/run-card-data';
+import { RUN_SCHEMA, runPath } from '../../lib/run-card';
+
+export function getStaticPaths() {
+  return runs.map((card) => ({ params: { id: card.run_id }, props: { id: card.run_id } }));
+}
+
+const card = runs.find((row) => row.run_id === Astro.props.id);
+if (!card) throw new Error(`unknown run ${Astro.props.id}`);
+---
+
+<Base
+  title={`${card.model.name} · ${card.model.quant} · ${card.run_id}`}
+  description={`${RUN_SCHEMA} card ${card.run_id} credited to ${card.submitted_by.display} on ${card.submitted_by.rig}.`}
+>
+  <main id="main" class="mx-auto max-w-4xl px-4 py-10 sm:px-6">
+    <p class="kicker">
+      <a class="underline decoration-accent/40" href="/results">All run cards</a>
+      {' · '}
+      {runPath(card.run_id)}
+    </p>
+    <h1 class="display mt-3 text-4xl sm:text-5xl">Test-run {card.run_id}</h1>
+    <p class="mt-4 max-w-2xl text-lg leading-relaxed text-muted">
+      Official {RUN_SCHEMA} card. Credited to {card.submitted_by.display}.
+      {card.submitted_by.verified ? 'Verified on local-desktop.' : 'Submitted — not rerun here.'}
+    </p>
+    <div class="mt-8">
+      <RunCard card={card} heading="h2" />
+    </div>
+  </main>
+</Base>

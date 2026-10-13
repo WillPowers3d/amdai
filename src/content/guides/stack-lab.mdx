@@ -56,9 +56,19 @@ Radeon Stack Lab (Ubuntu app, local)
 
 Weekday scrape updates the YAML here. The companion catalog should follow. Maintainer steps: [weekday scrape](/maintain). Public cards: [Recommended stacks](/stacks). First-party tok/s: [benchmarks](/benchmarks).
 
-## Benchmark my rig (upcoming)
+## Benchmark my rig — `amdai-bench/run@1`
 
-Stack Lab will grow a **Benchmark my rig** flow that records model, quant, context, engine, gfx, and tok/s — no invented numbers. The on-site catalog already uses that schema: **amdai-bench v1** on [comparable results](/results) (`/amdai-bench.v1.json`). Seeded with verified local-desktop 35B rows only. The companion export is not shipping in this snapshot. Until it lands, reproduce from [llama.cpp](/backends/llamacpp) or [Strata](/backends/strata) and read the published set on [benchmarks](/benchmarks).
+Stack Lab’s **amdai-bench** emitter writes one official test-run card per line (`data/runs/*.jsonl`). Schema id **`amdai-bench/run@1`**, published at [docs/amdai-bench-run.schema.json](https://amdai.net/amdai-bench/run@1.schema.json). Required fields: submitter (handle / display / rig / verified), hardware, software including the **exact launch command**, model, config (layout `single` | `split` | `dual-instance` | `tensor-parallel`), results, and `measured`. Do not invent tok/s, VRAM, or flags. Q3 is estimate/community unless measured; a measured Qwen 3.8 Flash Q3 run is the approved one-time exception (`exceptions: ["flash-q3-measured-approved"]`).
+
+On this site the cards render on [official results](/results) with a page per `run_id`, credited to the submitter and a verified badge. The older **amdai-bench v1** file (`/amdai-bench.v1.json`) is derived from verified 35B single-card llama.cpp rows only.
+
+Local emit:
+
+```bash
+npx tsx src/scripts/amdai-bench.ts validate
+npx tsx src/scripts/amdai-bench.ts emit < card.json
+npx tsx src/scripts/amdai-bench.ts append data/runs/local-desktop-amdai.jsonl < card.json
+```
 
 ## What to do if you only have these notes
 

@@ -6,11 +6,17 @@ import SystemRamNeed from '../components/SystemRamNeed.astro';
 import { officialLinks } from '../lib/site';
 import { formatLinuxGb, flashRamTable, NOT_MEASURED_ON_local-desktop } from '../lib/flash-daily';
 import { flashDaily as file } from '../lib/flash-daily-data';
+import { flashQ3FromRuns, formatTokCell } from '../lib/run-card';
+import { runs } from '../lib/run-card-data';
 
 const q6 = file.measured_q6_two_cards;
 const ramRows = flashRamTable(file);
 const twoCard = ramRows.filter((row) => row.cards === 2);
 const oneCard = ramRows.filter((row) => row.cards === 1);
+const flashQ3 = flashQ3FromRuns(runs);
+const flashQ3Cell = flashQ3
+  ? `${formatTokCell(flashQ3.results.decode_tps)} · measured`
+  : null;
 ---
 
 <Base
@@ -138,6 +144,8 @@ const oneCard = ramRows.filter((row) => row.cards === 1);
                 <td>
                   {row.short === 'Q6' ? (
                     <span>{q6.strata_8k_tok_s} / {q6.strata_100k_tok_s} tok/s · measured</span>
+                  ) : row.short === 'Q3' && flashQ3 && flashQ3.hardware.gpu_count_used === 2 && flashQ3Cell ? (
+                    <span>{flashQ3Cell}</span>
                   ) : (
                     <span class="text-faint">{NOT_MEASURED_ON_local-desktop}</span>
                   )}
@@ -174,7 +182,13 @@ const oneCard = ramRows.filter((row) => row.cards === 1);
                 <td class="tabular-nums">{formatLinuxGb(row.offloadedWeightsGiB)} <span class="text-faint">est.</span></td>
                 <td class="tabular-nums">{row.ram.atSelected.kitGb} GB</td>
                 <td class="tabular-nums">{row.ram.atFullContext.kitGb} GB</td>
-                <td><span class="text-faint">{NOT_MEASURED_ON_local-desktop} at this card count</span></td>
+                <td>
+                  {row.short === 'Q3' && flashQ3 && flashQ3.hardware.gpu_count_used === 1 ? (
+                    <span>{flashQ3Cell}</span>
+                  ) : (
+                    <span class="text-faint">{NOT_MEASURED_ON_local-desktop} at this card count</span>
+                  )}
+                </td>
               </tr>
             ))}
           </tbody>

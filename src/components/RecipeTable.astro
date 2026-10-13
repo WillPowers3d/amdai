@@ -1,6 +1,7 @@
 ---
 import EvidenceBadge from './EvidenceBadge.astro';
 import { proofTokS, type Recipe } from '../lib/recipes';
+import { runs } from '../lib/run-card-data';
 
 interface Props {
   recipes: Recipe[];
@@ -40,7 +41,7 @@ const { recipes, empty } = Astro.props;
             </td>
             <td class="px-3 py-2.5">{row.weights.quant}</td>
             <td class="px-3 py-2.5">{row.ctx_label}</td>
-            <td class="px-3 py-2.5 tabular-nums">{proofTokS(row) ?? '—'}</td>
+            <td class="px-3 py-2.5 tabular-nums">{proofTokS(row, runs) ?? '—'}</td>
             <td class="px-3 py-2.5"><EvidenceBadge tier={row.proof[0]?.tier ?? 'tested-our-rig'} compact /></td>
           </tr>
         ))}

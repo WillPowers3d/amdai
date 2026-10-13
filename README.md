@@ -90,7 +90,8 @@ Public site URL is `https://amdai.net` (`site` in `astro.config.mjs`; override w
 | `/rocm-problems/contribute` | Contributor guidelines for this site |
 | `/backends` | Inference engines compared — table + flowchart, llama.cpp default |
 | `/benchmarks` | First-party tok/s from the R9700 rig — methodology + local-desktop table |
-| `/results` | Comparable amdai-bench v1 rows — filters + verified/submitted badge |
+| `/results` | Official `amdai-bench/run@1` cards — credited to the submitter, page per run |
+| `/results/<id>` | One test-run card, including the exact launch command |
 | `/bios` | Motherboard BIOS for local AI on Radeon — cited chipset notes, empty board table |
 | `/backends/{id}` | Deep dive: architecture, ROCm, quants, install, sources |
 | `/software` | llama.cpp first; vLLM / Strata as tries |
@@ -147,7 +148,8 @@ Public site URL is `https://amdai.net` (`site` in `astro.config.mjs`; override w
 | `src/data/flash-daily.yaml` | `/flash-daily` Q3–Q6 RAM + measured Q6 |
 | `src/data/strata-deep.yaml` | `/backends/strata` deep dive + dated community cites |
 | `src/data/benchmarks.yaml` | `/benchmarks` first-party tok/s |
-| `src/data/amdai-bench.v1.json` | `/results` comparable catalog (35B seed only) |
+| `data/runs/*.jsonl` | Official `amdai-bench/run@1` cards (overnight local-desktop drops). Schema: `docs/amdai-bench-run.schema.json` |
+| `src/data/amdai-bench.v1.json` | Derived 35B-only compatibility snapshot — live `/amdai-bench.v1.json` comes from the run cards |
 | `src/data/bios.yaml` | `/bios` chipset notes + community board table |
 | `src/data/version-matrix.yaml` | ROCm × engine × card (or “no data”) |
 
@@ -155,7 +157,7 @@ Add a short dated note under `src/content/updates/` when a **line** changes (new
 
 Weekday procedure: [docs/weekday-scrape.md](docs/weekday-scrape.md) and `/maintain`.
 
-**Radeon Stack Lab** is a separate Ubuntu companion (Origin repo / local app — no public domain documented here). Profiles: `qwen-reliable` (daily driver), `qwen-fast-agent` (Flash). Keep its living catalog aligned with the YAML.
+**Radeon Stack Lab** is a separate Ubuntu companion (Origin repo / local app — no public domain documented here). Profiles: `qwen-reliable` (daily driver), `qwen-fast-agent` (Flash). Keep its living catalog aligned with the YAML. Its **amdai-bench** emitter must write `amdai-bench/run@1` (see `npx tsx src/scripts/amdai-bench.ts`).
 
 ## Authoring MDX
 

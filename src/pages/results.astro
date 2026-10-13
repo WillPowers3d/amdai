@@ -1,98 +1,68 @@
 ---
 import Base from '../layouts/Base.astro';
 import Callout from '../components/Callout.astro';
-import {
-  AMDAI_BENCH_SCHEMA,
-  AMDAI_BENCH_VERSION,
-  flattenResults,
-  formatTokS,
-  formatVram,
-  uniqueFilterValues,
-  trustLabel,
-} from '../lib/results';
-import { amdaiBenchFile } from '../lib/results-data';
+import RunCard from '../components/RunCard.astro';
+import { RUN_SCHEMA, uniqueRunFilters } from '../lib/run-card';
+import { runs } from '../lib/run-card-data';
+import { AMDAI_BENCH_SCHEMA, AMDAI_BENCH_VERSION } from '../lib/results';
 
-const file = amdaiBenchFile;
-const rows = flattenResults(file);
-const options = uniqueFilterValues(rows);
-const submittedCount = rows.filter((row) => row.trust === 'submitted').length;
+const cards = runs;
+const options = uniqueRunFilters(cards);
+const officialCount = cards.filter((card) => card.submitted_by.handle === 'amdai' && card.submitted_by.verified).length;
+const submittedCount = cards.filter((card) => !card.submitted_by.verified).length;
 ---
 
 <Base
-  title="Comparable results"
-  description="amdai-bench v1 comparable results — hardware fingerprint, pins, context, prefill/decode tok/s, VRAM. Seeded with local-desktop 35B measurements only."
+  title="Official test-run cards"
+  description="amdai-bench/run@1 cards from overnight local-desktop tests — credited to the submitter, with the exact launch command. Verified amdai rows feed the model, GPU, and 35B tables."
 >
   <main id="main" class="mx-auto max-w-6xl px-4 py-10 sm:px-6">
-    <p class="kicker">{file.label}</p>
-    <h1 class="display mt-3 text-4xl sm:text-5xl">Comparable results</h1>
+    <p class="kicker">{RUN_SCHEMA}</p>
+    <h1 class="display mt-3 text-4xl sm:text-5xl">Official test-run cards</h1>
     <p class="mt-4 max-w-2xl text-lg leading-relaxed text-muted">
-      Stack Lab’s <code>{AMDAI_BENCH_SCHEMA}</code> v{AMDAI_BENCH_VERSION} catalog.
-      One row is one hardware fingerprint, one pin set, and one context.
-      Prefill, decode, and VRAM stay <strong class="text-ink">not measured</strong> when we do not have the figure.
+      Every overnight local-desktop drop lands here as one card, credited to the person who ran it.
+      amdai’s verified rows show the badge. A measured Qwen 3.8 Flash Q3 run is an approved
+      one-time exception — when that jsonl line arrives, it will show as measured.
     </p>
     <div class="mt-6 flex flex-wrap gap-3">
-      <a class="btn-primary" href="#table">Results table</a>
-      <a class="btn-secondary" href="/amdai-bench.v1.json">Download JSON</a>
-      <a class="btn-ghost" href="/benchmarks">Benchmarks hub</a>
-      <a class="btn-ghost" href="/stack-lab">Stack Lab</a>
+      <a class="btn-primary" href="#cards">Run cards</a>
+      <a class="btn-secondary" href="/amdai-bench/runs.json">Download run JSON</a>
+      <a class="btn-ghost" href="/amdai-bench/run@1.schema.json">JSON Schema</a>
+      <a class="btn-ghost" href="/amdai-bench.v1.json">Derived v{AMDAI_BENCH_VERSION} catalog</a>
     </div>
 
     <Callout type="check" title="Verified vs submitted">
-      Green <strong class="text-ink">Verified</strong> rows were measured on {file.source}.
-      <strong class="text-ink">Submitted</strong> is the badge for a community JSON that matches
-      this schema and has not been rerun here. There are {submittedCount} submitted rows in this
-      snapshot — the empty state under the table is what you get if you filter to that badge.
+      Green <strong class="text-ink">Verified</strong> cards were measured on local-desktop and credited to the submitter.
+      This snapshot has {officialCount} official amdai cards.
+      <strong class="text-ink">Submitted</strong> is the badge for a community jsonl line that matches
+      <code>{RUN_SCHEMA}</code> and has not been rerun here. There are {submittedCount} submitted cards.
+      Unverified rows do not fill the model, GPU, or 35B tables.
     </Callout>
 
     <section class="mt-10" aria-labelledby="schema-heading">
-      <h2 id="schema-heading" class="font-serif text-3xl">amdai-bench v{AMDAI_BENCH_VERSION}</h2>
+      <h2 id="schema-heading" class="font-serif text-3xl">amdai-bench/run@1</h2>
       <p class="mt-3 max-w-2xl text-sm text-muted">
-        Versioned JSON. Fields: hardware fingerprint, pins (model / quant / backend / KV),
-        contexts with prefill tok/s, decode tok/s, and VRAM. Schema id
-        <code>{AMDAI_BENCH_SCHEMA}</code>, version {AMDAI_BENCH_VERSION}.
+        Published schema in <code>docs/amdai-bench-run.schema.json</code>.
+        Stack Lab’s amdai-bench emitter writes this object (one jsonl line).
+        The older <code>{AMDAI_BENCH_SCHEMA}</code> v{AMDAI_BENCH_VERSION} file is derived from
+        verified 35B single-card llama.cpp rows only — it never invents Flash scores.
       </p>
-      <dl class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <div class="card p-4">
-          <dt class="kicker">Hardware</dt>
-          <dd class="mt-2 text-sm text-muted">host · gpu_id · gfx · VRAM · RAM · cards in the box</dd>
-        </div>
-        <div class="card p-4">
-          <dt class="kicker">Pins</dt>
-          <dd class="mt-2 text-sm text-muted">model · quant · backend · runtime · KV · offload</dd>
-        </div>
-        <div class="card p-4">
-          <dt class="kicker">Contexts</dt>
-          <dd class="mt-2 text-sm text-muted">token length · prefill · decode · measured VRAM</dd>
-        </div>
-        <div class="card p-4">
-          <dt class="kicker">Trust</dt>
-          <dd class="mt-2 text-sm text-muted">verified (local-desktop) or submitted (community)</dd>
-        </div>
-      </dl>
     </section>
 
-    <section id="table" class="mt-12 scroll-mt-28" aria-labelledby="table-heading">
-      <h2 id="table-heading" class="font-serif text-3xl">Filter the catalog</h2>
+    <section id="cards" class="mt-12 scroll-mt-28" aria-labelledby="cards-heading">
+      <h2 id="cards-heading" class="font-serif text-3xl">Filter the cards</h2>
       <p class="mt-3 max-w-2xl text-muted">
-        Filters run in the browser. Without JavaScript the full seeded table stays visible.
+        Filters run in the browser. Without JavaScript the full set stays visible.
+        Each card links to its own page with the exact launch command.
       </p>
 
-      <form id="results-filters" class="card mt-6 grid gap-4 p-5 sm:grid-cols-2 lg:grid-cols-3" aria-controls="results-body">
+      <form id="results-filters" class="card mt-6 grid gap-4 p-5 sm:grid-cols-2 lg:grid-cols-3" aria-controls="results-list">
         <label class="block text-sm">
-          <span class="font-mono text-[0.68rem] uppercase tracking-[0.12em] text-faint">GPU</span>
-          <select name="gpu" class="field mt-1">
-            <option value="">All GPUs</option>
-            {options.gpu.map((value) => (
+          <span class="font-mono text-[0.68rem] uppercase tracking-[0.12em] text-faint">Model</span>
+          <select name="model" class="field mt-1">
+            <option value="">All models</option>
+            {options.model.map((value) => (
               <option value={value}>{value}</option>
-            ))}
-          </select>
-        </label>
-        <label class="block text-sm">
-          <span class="font-mono text-[0.68rem] uppercase tracking-[0.12em] text-faint">GPUs used</span>
-          <select name="gpus" class="field mt-1">
-            <option value="">Any count</option>
-            {options.gpus.map((value) => (
-              <option value={String(value)}>{value}</option>
             ))}
           </select>
         </label>
@@ -124,6 +94,15 @@ const submittedCount = rows.filter((row) => row.trust === 'submitted').length;
           </select>
         </label>
         <label class="block text-sm">
+          <span class="font-mono text-[0.68rem] uppercase tracking-[0.12em] text-faint">GPUs used</span>
+          <select name="gpus" class="field mt-1">
+            <option value="">Any count</option>
+            {options.gpus.map((value) => (
+              <option value={String(value)}>{value}</option>
+            ))}
+          </select>
+        </label>
+        <label class="block text-sm">
           <span class="font-mono text-[0.68rem] uppercase tracking-[0.12em] text-faint">Trust</span>
           <select name="trust" class="field mt-1">
             <option value="">Verified + submitted</option>
@@ -133,104 +112,55 @@ const submittedCount = rows.filter((row) => row.trust === 'submitted').length;
         </label>
         <div class="flex flex-wrap items-end gap-3 sm:col-span-2 lg:col-span-3">
           <button type="reset" class="btn-ghost">Clear filters</button>
-          <p id="results-count" class="text-sm text-muted">{rows.length} rows</p>
+          <p id="results-count" class="text-sm text-muted">{cards.length} cards</p>
         </div>
       </form>
 
-      <div class="card mt-6 overflow-x-auto">
-        <table class="table-lab min-w-[56rem]">
-          <thead>
-            <tr>
-              <th>Trust</th>
-              <th>GPU</th>
-              <th>GPUs</th>
-              <th>Backend</th>
-              <th>Quant</th>
-              <th>Context</th>
-              <th>Prefill</th>
-              <th>Decode</th>
-              <th>VRAM</th>
-            </tr>
-          </thead>
-          <tbody id="results-body">
-            {rows.map((row) => (
-              <tr
-                data-gpu={row.gpuId}
-                data-gpus={String(row.gpusUsed)}
-                data-backend={row.backend}
-                data-quant={row.quant}
-                data-context={String(row.contextTokens)}
-                data-trust={row.trust}
-              >
-                <td>
-                  <span class:list={[row.trust === 'verified' ? 'badge-tested' : 'badge']}>
-                    {trustLabel(row.trust)}
-                  </span>
-                </td>
-                <td class="font-medium">
-                  {row.gpu}
-                  <span class="block text-xs text-faint">{row.gfx}</span>
-                </td>
-                <td>{row.gpusUsed}</td>
-                <td>
-                  {row.backend}
-                  <span class="block text-xs text-faint">{row.runtime}</span>
-                </td>
-                <td>{row.quant}</td>
-                <td>{row.contextLabel}</td>
-                <td>{formatTokS(row.prefill)}</td>
-                <td>{formatTokS(row.decode)}</td>
-                <td>{formatVram(row.vramGb)}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        <div id="results-empty" class="hidden p-6" role="status">
-          <p class="kicker">Empty</p>
-          <h3 class="mt-2 text-xl tracking-tight">No rows match these filters</h3>
-          <p class="mt-3 text-sm leading-relaxed text-muted">
-            This snapshot only seeds verified local-desktop Qwen3.6-35B-A3B numbers on one R9700
-            and llama.cpp Vulkan. Submitted community benches, other GPUs, and multi-GPU
-            splits are not here yet — we will not invent them.
-          </p>
-        </div>
+      <div id="results-list" class="mt-8 grid gap-6">
+        {cards.map((card) => (
+          <RunCard card={card} heading="h3" />
+        ))}
       </div>
-      <p class="mt-3 text-xs text-faint">
-        {file.label}. Source: {file.source}. Fingerprint host {file.results[0]?.hardware.host}.
-      </p>
+      <div id="results-empty" class="card mt-6 hidden p-6" role="status">
+        <p class="kicker">Empty</p>
+        <h3 class="mt-2 text-xl tracking-tight">No cards match these filters</h3>
+        <p class="mt-3 text-sm leading-relaxed text-muted">
+          Overnight drops go in <code>data/runs/*.jsonl</code>. We will not invent a row to fill a filter.
+        </p>
+      </div>
     </section>
   </main>
 </Base>
 
 <script>
   const form = document.getElementById('results-filters');
-  const body = document.getElementById('results-body');
+  const list = document.getElementById('results-list');
   const empty = document.getElementById('results-empty');
   const count = document.getElementById('results-count');
-  if (form instanceof HTMLFormElement && body && empty && count) {
-    const rows = [...body.querySelectorAll('tr')];
+  if (form instanceof HTMLFormElement && list && empty && count) {
+    const cards = [...list.querySelectorAll('article')];
     const apply = () => {
       const data = new FormData(form);
-      const gpu = String(data.get('gpu') ?? '');
-      const gpus = String(data.get('gpus') ?? '');
+      const model = String(data.get('model') ?? '');
       const backend = String(data.get('backend') ?? '');
       const quant = String(data.get('quant') ?? '');
       const context = String(data.get('context') ?? '');
+      const gpus = String(data.get('gpus') ?? '');
       const trust = String(data.get('trust') ?? '');
       let visible = 0;
-      for (const row of rows) {
+      for (const card of cards) {
         const show =
-          (!gpu || row.dataset.gpu === gpu) &&
-          (!gpus || row.dataset.gpus === gpus) &&
-          (!backend || row.dataset.backend === backend) &&
-          (!quant || row.dataset.quant === quant) &&
-          (!context || row.dataset.context === context) &&
-          (!trust || row.dataset.trust === trust);
-        row.hidden = !show;
+          (!model || card.dataset.model === model) &&
+          (!backend || card.dataset.backend === backend) &&
+          (!quant || card.dataset.quant === quant) &&
+          (!context || card.dataset.context === context) &&
+          (!gpus || card.dataset.gpus === gpus) &&
+          (!trust || card.dataset.verified === trust);
+        card.hidden = !show;
         if (show) visible += 1;
       }
       empty.classList.toggle('hidden', visible > 0);
-      count.textContent = visible === 1 ? '1 row' : `${visible} rows`;
+      count.textContent = visible === 1 ? '1 card' : `${visible} cards`;
     };
     form.addEventListener('change', apply);
     form.addEventListener('reset', () => {

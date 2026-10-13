@@ -19,6 +19,7 @@ import {
 import { recipes } from './recipes-data';
 import { primaryNav } from './site';
 import { parseWanted } from './wanted';
+import { FLASH_Q3_EXCEPTION } from './run-card';
 
 const seed = Object.fromEntries(recipes.map((row) => [row.id, row]));
 
@@ -53,6 +54,17 @@ describe('recipe catalog', () => {
       ),
     );
     assert.throws(() => parseRecipe({ ...base, model: 'Qwen2.5-7B', official: 'Qwen/Qwen2.5-7B' }, 'banned'));
+    const flashQ3 = {
+      ...seed['qwen38-flash.strata.262k']!,
+      id: 'qwen38-flash-q3-exception',
+      weights: { ...seed['qwen38-flash.strata.262k']!.weights, quant: 'UD-Q3_K_XL', filename: 'UD-Q3_K_XL (folder)' },
+      notes: [`Measured on our rig, 2026-10. Exception ${FLASH_Q3_EXCEPTION}.`],
+      proof: [{ ...seed['qwen38-flash.strata.262k']!.proof[0]!, decode: 12.3 }],
+    };
+    assert.throws(() => parseRecipe(flashQ3, 'flash-q3-unsourced'));
+    const accepted = parseRecipe(flashQ3, 'flash-q3-ok', { extraProofNumbers: [12.3] });
+    assert.equal(accepted.weights.quant, 'UD-Q3_K_XL');
+    assert.match(accepted.notes.join(' '), /flash-q3-measured-approved/);
   });
 
   it('keeps llama.cpp first in pick and matches calculator presets to recipes', () => {

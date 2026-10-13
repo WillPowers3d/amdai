@@ -1,0 +1,188 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://amdai.net/amdai-bench/run@1.schema.json",
+  "title": "amdai-bench/run@1",
+  "description": "One official test-run card. Stack Lab amdai-bench and overnight local-desktop drops emit this object (one JSON object per jsonl line). Do not invent tok/s, VRAM, or flags. Q3 is estimate/community unless measured; a measured Qwen 3.8 Flash Q3 run is an approved one-time exception. Q1/Q2 stay off.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "run_id",
+    "submitted_by",
+    "started_at",
+    "finished_at",
+    "hardware",
+    "software",
+    "model",
+    "config",
+    "results",
+    "measured"
+  ],
+  "properties": {
+    "schema": { "const": "amdai-bench/run@1" },
+    "run_id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]+$" },
+    "submitted_by": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["handle", "display", "rig", "verified"],
+      "properties": {
+        "handle": { "type": "string", "minLength": 1 },
+        "display": { "type": "string", "minLength": 1 },
+        "rig": { "type": "string", "minLength": 1 },
+        "verified": { "type": "boolean" }
+      }
+    },
+    "started_at": { "type": ["string", "null"] },
+    "finished_at": { "type": ["string", "null"] },
+    "hardware": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "gpus",
+        "gpu_count_used",
+        "cpu",
+        "ram_kit_gb",
+        "ram_usable_gb",
+        "ram_speed_mts",
+        "motherboard",
+        "bios_version",
+        "resizable_bar"
+      ],
+      "properties": {
+        "gpus": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["model", "gfx", "vram_gb", "pcie"],
+            "properties": {
+              "model": { "type": "string" },
+              "gfx": { "type": "string" },
+              "vram_gb": { "type": "number" },
+              "pcie": { "type": ["string", "null"] }
+            }
+          }
+        },
+        "gpu_count_used": { "type": "integer", "minimum": 1, "maximum": 8 },
+        "cpu": { "type": ["string", "null"] },
+        "ram_kit_gb": { "type": "number" },
+        "ram_usable_gb": { "type": ["number", "null"] },
+        "ram_speed_mts": { "type": ["number", "null"] },
+        "motherboard": { "type": ["string", "null"] },
+        "bios_version": { "type": ["string", "null"] },
+        "resizable_bar": { "type": ["boolean", "null"] }
+      }
+    },
+    "software": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "os",
+        "kernel",
+        "mesa_or_vulkan_driver",
+        "rocm_version",
+        "backend",
+        "backend_version_or_commit",
+        "launch_command"
+      ],
+      "properties": {
+        "os": { "type": "string" },
+        "kernel": { "type": ["string", "null"] },
+        "mesa_or_vulkan_driver": { "type": ["string", "null"] },
+        "rocm_version": { "type": ["string", "null"] },
+        "backend": { "type": "string" },
+        "backend_version_or_commit": { "type": ["string", "null"] },
+        "launch_command": { "type": "string", "minLength": 1 }
+      }
+    },
+    "model": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "repo", "file", "quant", "file_size_gb"],
+      "properties": {
+        "name": { "type": "string" },
+        "repo": { "type": "string" },
+        "file": { "type": "string" },
+        "quant": { "type": "string" },
+        "file_size_gb": { "type": ["number", "null"] },
+        "sha256": { "type": ["string", "null"] }
+      }
+    },
+    "config": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "context_tokens",
+        "kv_type",
+        "layout",
+        "offload",
+        "concurrency",
+        "prompt_tokens",
+        "gen_tokens"
+      ],
+      "properties": {
+        "context_tokens": { "type": "integer", "minimum": 1 },
+        "kv_type": { "type": "string" },
+        "layout": { "enum": ["single", "split", "dual-instance", "tensor-parallel"] },
+        "offload": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["experts_to_ram", "note"],
+          "properties": {
+            "experts_to_ram": { "type": "boolean" },
+            "note": { "type": "string" }
+          }
+        },
+        "concurrency": { "type": "integer", "minimum": 1 },
+        "prompt_tokens": { "type": ["integer", "null"] },
+        "gen_tokens": { "type": ["integer", "null"] }
+      }
+    },
+    "results": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "prefill_tps",
+        "decode_tps",
+        "peak_vram_gb_per_gpu",
+        "peak_vram_gb_total",
+        "peak_system_ram_gb",
+        "errors",
+        "duration_s"
+      ],
+      "properties": {
+        "prefill_tps": { "type": ["number", "null"] },
+        "decode_tps": { "type": ["number", "null"] },
+        "aggregate_tps": { "type": ["number", "null"] },
+        "peak_vram_gb_per_gpu": {
+          "type": "array",
+          "items": { "type": "number" }
+        },
+        "peak_vram_gb_total": { "type": ["number", "null"] },
+        "peak_system_ram_gb": { "type": ["number", "null"] },
+        "errors": { "type": "integer", "minimum": 0 },
+        "duration_s": { "type": ["number", "null"] }
+      }
+    },
+    "measured": { "type": "boolean" },
+    "estimates": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "decode_tps": { "type": "number" },
+        "prefill_tps": { "type": "number" },
+        "decode_tps_low": { "type": "number" },
+        "decode_tps_high": { "type": "number" },
+        "ram_gb": { "type": "number" },
+        "note": { "type": "string" }
+      }
+    },
+    "notes": { "type": "string" },
+    "exceptions": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "raw_log_path": { "type": ["string", "null"] }
+  }
+}

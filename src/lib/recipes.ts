@@ -10,6 +10,7 @@ import { assertQuantAllowed, isQ3Quant } from './quant-guard';
 import { ALLOWED_TOK_S as BENCH_TOK } from './benchmarks';
 import { systemRamNeedFromQuery, type CalcInput, type SystemRamNeed } from './calculator';
 import type { StackUpdate } from './rig-match';
+import { FLASH_Q3_EXCEPTION, matchRuns, verifiedMeasured, type RunCard } from './run-card';
 
 export const MEASURED_LABEL = 'Measured on our rig, 2026-10';
 
@@ -130,25 +131,31 @@ export const recipeSchema = z.object({
 
 export type Recipe = z.infer<typeof recipeSchema>;
 
+export type ParseRecipeOpts = { extraProofNumbers?: Iterable<number> };
+
 export function recipeSystemRam(recipe: Recipe): SystemRamNeed | null {
   if (!recipe.calculator.includes('?')) return null;
   return systemRamNeedFromQuery(recipe.calculator);
 }
 
-export function parseRecipe(raw: unknown, file = 'recipe'): Recipe {
+export function parseRecipe(raw: unknown, file = 'recipe', opts: ParseRecipeOpts = {}): Recipe {
   const parsed = recipeSchema.parse(raw);
   assertQuantAllowed(parsed.weights.quant);
   if (isQ3Quant(parsed.weights.quant)) {
     const notes = parsed.notes.join(' ');
-    if (!/estimate|community/i.test(notes)) {
+    const flashMeasuredApproved =
+      /flash/i.test(parsed.model) &&
+      (notes.includes(FLASH_Q3_EXCEPTION) || /measured/i.test(notes));
+    if (!/estimate|community/i.test(notes) && !flashMeasuredApproved) {
       throw new Error(`${file}: Q3 recipe must be labeled estimate or community unless measured`);
     }
   }
+  const extra = new Set(opts.extraProofNumbers ?? []);
   for (const proof of parsed.proof) {
-    if (proof.decode != null && !ALLOWED_PROOF_NUMBERS.has(proof.decode)) {
+    if (proof.decode != null && !ALLOWED_PROOF_NUMBERS.has(proof.decode) && !extra.has(proof.decode)) {
       throw new Error(`${file}: unsourced decode ${proof.decode}`);
     }
-    if (proof.prefill != null && !ALLOWED_PROOF_NUMBERS.has(proof.prefill)) {
+    if (proof.prefill != null && !ALLOWED_PROOF_NUMBERS.has(proof.prefill) && !extra.has(proof.prefill)) {
       throw new Error(`${file}: unsourced prefill ${proof.prefill}`);
     }
     if ((proof.decode != null || proof.prefill != null) && !proof.source.trim()) {
@@ -161,8 +168,8 @@ export function parseRecipe(raw: unknown, file = 'recipe'): Recipe {
   return parsed;
 }
 
-export function parseRecipes(raws: { file: string; data: unknown }[]): Recipe[] {
-  const list = raws.map((row) => parseRecipe(row.data, row.file));
+export function parseRecipes(raws: { file: string; data: unknown }[], opts: ParseRecipeOpts = {}): Recipe[] {
+  const list = raws.map((row) => parseRecipe(row.data, row.file, opts));
   const ids = new Set<string>();
   for (const row of list) {
     if (ids.has(row.id)) throw new Error(`duplicate recipe id ${row.id}`);
@@ -269,7 +276,19 @@ export function withdrawalUpdates(list: Recipe[]): StackUpdate[] {
     }));
 }
 
-export function proofTokS(recipe: Recipe): number | null {
+export function proofTokS(recipe: Recipe, cards?: RunCard[]): number | null {
+  if (cards?.length) {
+    const backend = recipe.backend === 'llamacpp' ? 'llama.cpp' : 'Strata';
+    const hits = matchRuns(verifiedMeasured(cards), {
+      model: recipe.model_id,
+      quant: recipe.weights.quant,
+      backend,
+      context: recipe.ctx,
+      gpus: recipe.card_count,
+    });
+    const n = hits.find((card) => card.results.decode_tps != null)?.results.decode_tps;
+    if (n != null) return n;
+  }
   return recipe.proof[0]?.decode ?? null;
 }
 
@@ -289,7 +308,7 @@ export function harnessSnippetFromRecipe(recipe: Recipe): string {
   ].join('\n');
 }
 
-export function catalogPayload(list: Recipe[]) {
+export function catalogPayload(list: Recipe[], cards?: RunCard[]) {
   return {
     as_of: '2026-10',
     label: MEASURED_LABEL,
@@ -305,7 +324,7 @@ export function catalogPayload(list: Recipe[]) {
       gfx: row.gfx,
       override: row.override,
       ctx: row.ctx,
-      decode: proofTokS(row),
+      decode: proofTokS(row, cards),
       prefill: row.proof[0]?.prefill ?? null,
       tier: row.proof[0]?.tier ?? 'tested-our-rig',
       source: row.proof[0]?.source ?? '',

@@ -1,0 +1,210 @@
+---
+import {
+  RUN_SCHEMA,
+  contextLabel,
+  formatNullable,
+  formatTokCell,
+  formatVramCell,
+  runPath,
+  type RunCard,
+} from '../lib/run-card';
+
+interface Props {
+  card: RunCard;
+  heading?: 'h2' | 'h3';
+  compact?: boolean;
+}
+
+const { card, heading = 'h2', compact = false } = Astro.props;
+const Heading = heading;
+const who = card.submitted_by;
+const hw = card.hardware;
+const sw = card.software;
+const model = card.model;
+const cfg = card.config;
+const res = card.results;
+const gpuLine = hw.gpus.map((gpu) => `${gpu.model} ${gpu.vram_gb} GB ${gpu.gfx}`).join(' · ');
+const when = card.started_at ?? card.finished_at ?? '2026-10 (date not recorded)';
+---
+
+<article
+  class:list={['card scroll-mt-28 p-5 sm:p-6', compact && 'h-full']}
+  id={card.run_id}
+  data-run={card.run_id}
+  data-gpu={hw.gpus[0]?.gfx === 'gfx1201' ? 'r9700' : hw.gpus[0]?.gfx}
+  data-gpus={String(hw.gpu_count_used)}
+  data-backend={sw.backend}
+  data-quant={model.quant}
+  data-context={String(cfg.context_tokens)}
+  data-model={model.name}
+  data-verified={who.verified ? 'verified' : 'submitted'}
+  data-measured={card.measured ? 'measured' : 'estimate'}
+>
+  <div class="flex flex-wrap items-start justify-between gap-3">
+    <div>
+      <p class="kicker">{RUN_SCHEMA} · {cfg.layout} · {contextLabel(cfg.context_tokens)}</p>
+      <Heading class="mt-1 text-2xl tracking-tight">
+        <a class="underline decoration-accent/40" href={runPath(card.run_id)}>{model.name} · {model.quant}</a>
+      </Heading>
+      <p class="mt-2 text-sm text-muted">
+        {sw.backend}
+        {sw.backend_version_or_commit ? ` ${sw.backend_version_or_commit}` : ''}
+        · {hw.gpu_count_used} GPU{hw.gpu_count_used === 1 ? '' : 's'}
+        · {cfg.context_tokens.toLocaleString()} tokens
+      </p>
+    </div>
+    <div class="flex flex-wrap items-center gap-2">
+      {card.measured ? (
+        <span class="badge-tested">Measured</span>
+      ) : (
+        <span class="badge">Estimate</span>
+      )}
+      {who.verified ? <span class="badge-tested">Verified</span> : <span class="badge">Submitted</span>}
+    </div>
+  </div>
+
+  <p class="mt-4 text-sm">
+    Credited to <strong class="text-ink">{who.display}</strong>
+    <span class="text-muted"> @{who.handle} · {who.rig}</span>
+    {who.verified && <span class="sr-only"> verified submitter</span>}
+  </p>
+  <p class="mt-1 text-xs text-faint">{when}</p>
+
+  <dl class="mt-5 grid gap-3 text-sm sm:grid-cols-2 lg:grid-cols-3">
+    <div>
+      <dt class="font-mono text-[0.68rem] uppercase tracking-[0.12em] text-faint">Prefill</dt>
+      <dd class="mt-1 tabular-nums">{formatTokCell(res.prefill_tps)}</dd>
+    </div>
+    <div>
+      <dt class="font-mono text-[0.68rem] uppercase tracking-[0.12em] text-faint">Decode</dt>
+      <dd class="mt-1 tabular-nums">{formatTokCell(res.decode_tps)}</dd>
+    </div>
+    <div>
+      <dt class="font-mono text-[0.68rem] uppercase tracking-[0.12em] text-faint">Aggregate</dt>
+      <dd class="mt-1 tabular-nums">{formatTokCell(res.aggregate_tps ?? null)}</dd>
+    </div>
+    <div>
+      <dt class="font-mono text-[0.68rem] uppercase tracking-[0.12em] text-faint">Peak VRAM</dt>
+      <dd class="mt-1 tabular-nums">
+        {res.peak_vram_gb_per_gpu.length
+          ? `${res.peak_vram_gb_per_gpu.join(' / ')} GB/GPU`
+          : formatVramCell(res.peak_vram_gb_total)}
+        {res.peak_vram_gb_total != null && res.peak_vram_gb_per_gpu.length
+          ? ` · ${res.peak_vram_gb_total} GB total`
+          : ''}
+      </dd>
+    </div>
+    <div>
+      <dt class="font-mono text-[0.68rem] uppercase tracking-[0.12em] text-faint">Peak system RAM</dt>
+      <dd class="mt-1 tabular-nums">{formatVramCell(res.peak_system_ram_gb)}</dd>
+    </div>
+    <div>
+      <dt class="font-mono text-[0.68rem] uppercase tracking-[0.12em] text-faint">Errors · duration</dt>
+      <dd class="mt-1 tabular-nums">
+        {res.errors} · {res.duration_s == null ? 'not recorded' : `${res.duration_s} s`}
+      </dd>
+    </div>
+  </dl>
+
+  {!compact && (
+    <>
+      <h3 class="mt-6 font-serif text-xl">Hardware</h3>
+      <dl class="mt-3 grid gap-3 text-sm sm:grid-cols-2">
+        <div>
+          <dt class="text-faint">GPUs in the box</dt>
+          <dd class="mt-1">{gpuLine}</dd>
+        </div>
+        <div>
+          <dt class="text-faint">GPUs used · PCIe</dt>
+          <dd class="mt-1">{hw.gpu_count_used} · {formatNullable(hw.gpus[0]?.pcie)}</dd>
+        </div>
+        <div>
+          <dt class="text-faint">CPU</dt>
+          <dd class="mt-1">{formatNullable(hw.cpu)}</dd>
+        </div>
+        <div>
+          <dt class="text-faint">RAM kit / usable / MT/s</dt>
+          <dd class="mt-1 tabular-nums">
+            {hw.ram_kit_gb} GB / {formatNullable(hw.ram_usable_gb)} GB / {formatNullable(hw.ram_speed_mts)}
+          </dd>
+        </div>
+        <div>
+          <dt class="text-faint">Board · BIOS · ReBAR</dt>
+          <dd class="mt-1">
+            {formatNullable(hw.motherboard)} · {formatNullable(hw.bios_version)} · {formatNullable(hw.resizable_bar)}
+          </dd>
+        </div>
+      </dl>
+
+      <h3 class="mt-6 font-serif text-xl">Software</h3>
+      <dl class="mt-3 grid gap-3 text-sm sm:grid-cols-2">
+        <div>
+          <dt class="text-faint">OS · kernel</dt>
+          <dd class="mt-1">{sw.os} · {formatNullable(sw.kernel)}</dd>
+        </div>
+        <div>
+          <dt class="text-faint">Mesa / Vulkan · ROCm</dt>
+          <dd class="mt-1">{formatNullable(sw.mesa_or_vulkan_driver)} · {formatNullable(sw.rocm_version)}</dd>
+        </div>
+        <div>
+          <dt class="text-faint">Backend</dt>
+          <dd class="mt-1">{sw.backend} {formatNullable(sw.backend_version_or_commit, '')}</dd>
+        </div>
+      </dl>
+
+      <h3 class="mt-6 font-serif text-xl">Model and config</h3>
+      <dl class="mt-3 grid gap-3 text-sm sm:grid-cols-2">
+        <div>
+          <dt class="text-faint">Repo · file</dt>
+          <dd class="mt-1">{model.repo} · {model.file}</dd>
+        </div>
+        <div>
+          <dt class="text-faint">File size · sha256</dt>
+          <dd class="mt-1">{model.file_size_gb == null ? 'not recorded' : `${model.file_size_gb} GB`} · {formatNullable(model.sha256)}</dd>
+        </div>
+        <div>
+          <dt class="text-faint">KV · offload</dt>
+          <dd class="mt-1">{cfg.kv_type} · {cfg.offload.experts_to_ram ? 'experts to RAM' : 'no RAM offload'} — {cfg.offload.note}</dd>
+        </div>
+        <div>
+          <dt class="text-faint">Concurrency · prompt / gen</dt>
+          <dd class="mt-1 tabular-nums">
+            {cfg.concurrency} · {formatNullable(cfg.prompt_tokens)} / {formatNullable(cfg.gen_tokens)}
+          </dd>
+        </div>
+      </dl>
+
+      {card.estimates && (
+        <div class="mt-6 rounded-xl border border-line bg-canvas/40 px-4 py-3 text-sm">
+          <p class="kicker">Estimates</p>
+          <p class="mt-2 text-muted">
+            {card.estimates.decode_tps_low != null && card.estimates.decode_tps_high != null
+              ? `${card.estimates.decode_tps_low}–${card.estimates.decode_tps_high} tok/s`
+              : ''}
+            {card.estimates.decode_tps != null ? ` decode ${card.estimates.decode_tps}` : ''}
+            {card.estimates.prefill_tps != null ? ` prefill ${card.estimates.prefill_tps}` : ''}
+            {card.estimates.ram_gb != null ? ` RAM ${card.estimates.ram_gb} GB` : ''}
+          </p>
+          {card.estimates.note && <p class="mt-2 text-muted">{card.estimates.note}</p>}
+        </div>
+      )}
+
+      {card.notes && <p class="mt-6 text-sm leading-relaxed text-muted">{card.notes}</p>}
+      {card.exceptions?.length ? (
+        <p class="mt-3 text-xs text-faint">Exceptions: {card.exceptions.join(', ')}</p>
+      ) : null}
+      {card.raw_log_path && <p class="mt-2 text-xs text-faint">Log: {card.raw_log_path}</p>}
+
+      <h3 class="mt-6 font-serif text-xl">Launch command</h3>
+      <p class="mt-2 text-xs text-faint">Exact command as recorded. Shape-only lines stay TODO — we do not invent flags.</p>
+      <pre class="mt-3 overflow-x-auto rounded-xl border border-line bg-canvas/50 p-3 text-xs leading-relaxed"><code>{sw.launch_command}</code></pre>
+    </>
+  )}
+
+  {compact && card.notes && <p class="mt-4 text-sm leading-relaxed text-muted">{card.notes}</p>}
+  {compact && (
+    <p class="mt-4 text-sm">
+      <a class="underline decoration-accent/40" href={runPath(card.run_id)}>Full card · launch command</a>
+    </p>
+  )}
+</article>
