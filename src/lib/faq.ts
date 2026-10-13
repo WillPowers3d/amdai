@@ -141,6 +141,19 @@ export const FAQ_ENTRIES: FaqItem[] = [
     ],
   },
   {
+    id: 'radeon-vs-nvidia',
+    group: 'getting-started',
+    question: 'Radeon or NVIDIA for a local LLM?',
+    answer:
+      'Radeon wins the VRAM class we shop — 32 GB on the R9700, 24 / 20 / 16 GB on the RX 7900 / 7800 sheets, two-card layouts we measured on local-desktop, and our cited llama.cpp numbers. NVIDIA wins CUDA day-one: vLLM and a longer tail of engines and models land there first. Specs cite the vendor page. NVIDIA tok/s stay “no cited number yet” unless a third-party figure is linked. Buttons say Check price — we do not print a figure. The shopper page is Radeon vs NVIDIA.',
+    links: [
+      { href: '/compare/radeon-vs-nvidia', label: 'Radeon vs NVIDIA' },
+      { href: '/gpus/r9700', label: 'R9700 measured page' },
+      { href: '/backends', label: 'Backends' },
+      { href: '/calculator', label: 'Calculator' },
+    ],
+  },
+  {
     id: 'ubuntu-or-windows',
     group: 'getting-started',
     question: 'Ubuntu or Windows for a first local LLM box?',
@@ -487,6 +500,7 @@ export const REQUIRED_FAQ_HREFS = [
   '/budget',
   '/multi-gpu',
   '/amdai-bench',
+  '/compare/radeon-vs-nvidia',
 ] as const;
 
 const BANNED_VISIBLE = /Qwen2\.5|Qwen3-8B/i;
@@ -568,6 +582,7 @@ export function assertFaqValid(items: FaqItem[] = FAQ_ENTRIES): string[] {
     'llamacpp-vs-strata',
     'min-ram-vs-full-context',
     'when-is-q3-an-estimate',
+    'radeon-vs-nvidia',
   ]) {
     if (!items.some((item) => item.id === required)) errors.push(`missing ${required}`);
   }

@@ -74,3 +74,12 @@ retailers:
       - amd.com
       - www.amd.com
     note: Also available at — official product page, no tracking params.
+
+  - id: nvidia
+    name: NVIDIA
+    program: none
+    affiliate: false
+    hosts:
+      - nvidia.com
+      - www.nvidia.com
+    note: Also available at — official product page, no tracking params.

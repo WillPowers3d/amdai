@@ -25,6 +25,7 @@ describe('FAQ source', () => {
     assert.equal(FAQ_GROUPS.length, 7);
     assert.ok(FAQ_ENTRIES.some((item) => item.id === 'what-is-amdai'));
     assert.ok(FAQ_ENTRIES.some((item) => item.id === 'open-in-stack-lab'));
+    assert.ok(FAQ_ENTRIES.some((item) => item.id === 'radeon-vs-nvidia'));
     assert.ok(FAQ_ENTRIES.some((item) => item.id === 'affiliate-links'));
     const questions = FAQ_ENTRIES.map((item) => item.question);
     assert.equal(new Set(questions).size, questions.length);
@@ -56,6 +57,7 @@ describe('FAQ source', () => {
     assert.ok(filterFaq('rakuten').some((item) => item.id === 'affiliate-links'));
     assert.ok(filterFaq('open in stack lab').some((item) => item.id === 'open-in-stack-lab'));
     assert.ok(filterFaq('what is amdai').some((item) => item.id === 'what-is-amdai'));
+    assert.ok(filterFaq('nvidia').some((item) => item.id === 'radeon-vs-nvidia'));
     assert.equal(filterFaq('zzzz-no-such-faq').length, 0);
     assert.equal(filterFaq('').length, FAQ_ENTRIES.length);
     const grouped = groupFaq();

@@ -132,6 +132,7 @@ export const CRUMB_LABELS: Record<string, string> = {
   '/compare': 'Compare',
   '/compare/one-vs-two-gpu': 'One vs two GPUs',
   '/compare/q4-q5-q6': 'Q6 Q5 Q4',
+  '/compare/radeon-vs-nvidia': 'Radeon vs NVIDIA',
   '/harnesses': 'Harnesses',
   '/harnesses/compare': 'Compare harnesses',
   '/harnesses/quiz': 'Quiz',
@@ -311,6 +312,12 @@ setMeta(
   'Q6 vs Q5 vs Q4',
   'Same 35B on local-desktop at Q6_K, UD-Q5_K_XL, Q5_K_M, and Q4_K_M, plus a labeled UD-Q3_K_XL estimate. 1-GPU or split.',
 );
+setMeta(
+  '/compare/radeon-vs-nvidia',
+  'Radeon vs NVIDIA',
+  'Cited Radeon vs NVIDIA for a local LLM: vendor specs, measured R9700 35B, and an honest CUDA vs ROCm software split. No invented prices.',
+);
+setDate('/compare/radeon-vs-nvidia', '2026-10-13');
 setMeta(
   '/qwen36-dual',
   '35B on two R9700s',

@@ -99,6 +99,7 @@ describe('primary path and nav IA', () => {
       '/multi-gpu': '../pages/multi-gpu.astro',
       '/benchmarks': '../pages/benchmarks.astro',
       '/compare': '../pages/compare/index.astro',
+      '/compare/radeon-vs-nvidia': '../pages/compare/radeon-vs-nvidia.astro',
       '/stack-lab': '../pages/stack-lab.astro',
       '/about': '../pages/about.astro',
       '/methodology': '../pages/methodology.astro',

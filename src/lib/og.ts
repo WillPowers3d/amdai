@@ -148,6 +148,13 @@ export const OG_CARDS: OgCard[] = [
     alt: 'AMDai Q6 vs Q5 vs Q4 — Q3 is a labeled estimate',
   },
   {
+    slug: 'compare-radeon-vs-nvidia',
+    title: 'Radeon vs NVIDIA',
+    lede: 'Cited specs. Measured R9700. Empty RTX speed',
+    alt: 'AMDai Radeon vs NVIDIA — cited specs, measured R9700',
+    measured: true,
+  },
+  {
     slug: 'results',
     title: 'Official run cards',
     lede: 'amdai-bench/run@1 from amdai on local-desktop',

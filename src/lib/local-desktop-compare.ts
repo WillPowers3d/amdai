@@ -381,6 +381,12 @@ export function compareHubCards() {
       title: 'Q6 vs Q5 vs Q4 — plus a Q3 estimate',
       body: 'Same 35B family, 1-GPU or split. Quality vs speed vs VRAM. Q3 is a labeled estimate (Unsloth UD-Q3_K_XL listing), not a local-desktop run.',
     },
+    {
+      href: '/compare/radeon-vs-nvidia',
+      kicker: 'Camp',
+      title: 'Radeon vs NVIDIA',
+      body: 'Cited specs and an honest software split for shoppers picking an R9700 / RX 7900-class card versus an RTX 5090, 4090, 3090, 5080, 5070 Ti, or 5060 Ti 16GB. Measured R9700 tok/s; NVIDIA speed stays empty until a cited figure exists.',
+    },
   ];
 }
 

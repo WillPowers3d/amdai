@@ -16,6 +16,7 @@ export const RAM_OFFLOAD_SURFACES = [
   '/compare',
   '/compare/one-vs-two-gpu',
   '/compare/q4-q5-q6',
+  '/compare/radeon-vs-nvidia',
   '/calculator',
   '/budget',
   '/qwen',
@@ -52,6 +53,7 @@ export function assertRamSurfacesValid(): string[] {
   if (!RAM_OFFLOAD_SURFACES.includes('/gpus/rx7900xtx')) errors.push('missing /gpus/rx7900xtx');
   if (!RAM_OFFLOAD_SURFACES.includes('/gpus/rx7900xt')) errors.push('missing /gpus/rx7900xt');
   if (!RAM_OFFLOAD_SURFACES.includes('/gpus/rx7800xt')) errors.push('missing /gpus/rx7800xt');
+  if (!RAM_OFFLOAD_SURFACES.includes('/compare/radeon-vs-nvidia')) errors.push('missing /compare/radeon-vs-nvidia');
   if (!RAM_OFFLOAD_SURFACES.includes('/calculator')) errors.push('missing /calculator');
   if (!isRamOffloadSurface('/recipes/qwen36-35b.llamacpp-vulkan.262k')) {
     errors.push('recipe pages must be RAM surfaces');

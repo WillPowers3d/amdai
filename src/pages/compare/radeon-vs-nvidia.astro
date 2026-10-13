@@ -1,0 +1,321 @@
+---
+import Base from '../../layouts/Base.astro';
+import BuyButtons from '../../components/BuyButtons.astro';
+import Callout from '../../components/Callout.astro';
+import HowWeTest from '../../components/HowWeTest.astro';
+import HouseRam from '../../components/HouseRam.astro';
+import NewsletterSignup from '../../components/NewsletterSignup.astro';
+import NextSteps from '../../components/NextSteps.astro';
+import SystemRamNeed from '../../components/SystemRamNeed.astro';
+import { runs } from '../../lib/run-card-data';
+import { SWEEP_REVERIFY } from '../../lib/run-card';
+import {
+  COMPARE_ENGINE,
+  COMPARE_MODEL,
+  COMPARE_Q3,
+  COMPARE_Q3_CITE,
+} from '../../lib/local-desktop-compare';
+import {
+  DECISION_CASES,
+  LEAD,
+  NVIDIA_SPEED_EMPTY,
+  RADEON_VS_NVIDIA_NAME,
+  SOFTWARE_ROWS,
+  SPEC_ROWS,
+  SPEED_NOTE,
+  measuredSpeedRows,
+  q3EstimateRam,
+  sixteenGbRamNeed,
+} from '../../lib/radeon-vs-nvidia';
+
+const speed = measuredSpeedRows(runs);
+const q3Ram = q3EstimateRam();
+const sixteenRam = sixteenGbRamNeed();
+const radeonSpecs = SPEC_ROWS.filter((row) => row.camp === 'radeon');
+const nvidiaSpecs = SPEC_ROWS.filter((row) => row.camp === 'nvidia');
+const productIds = SPEC_ROWS.map((row) => row.productId);
+
+function ramFor(kind: (typeof DECISION_CASES)[number]['ram']) {
+  if (kind === 'sixteen') return sixteenRam;
+  if (kind === 'q3') return q3Ram;
+  return null;
+}
+---
+
+<Base
+  title={RADEON_VS_NVIDIA_NAME}
+  description="Cited Radeon vs NVIDIA for a local LLM: vendor specs, measured R9700 35B, and an honest CUDA vs ROCm software split. No invented prices or tok/s."
+>
+  <main id="main" class="mx-auto max-w-6xl px-4 py-10 sm:px-6">
+    <p class="kicker">
+      <a class="underline decoration-accent/40" href="/compare">Compare</a>
+      · {COMPARE_MODEL} · {COMPARE_ENGINE}
+    </p>
+    <h1 class="display mt-3 text-4xl sm:text-5xl">Radeon vs NVIDIA for a local LLM</h1>
+    <p class="mt-4 max-w-3xl text-lg leading-relaxed text-muted">{LEAD.honest}</p>
+    <div class="mt-4">
+      <HowWeTest />
+    </div>
+    <div class="mt-6">
+      <HouseRam which="daily" compact />
+    </div>
+
+    <section id="honest" class="mt-10 grid gap-4 md:grid-cols-2" aria-labelledby="honest-heading">
+      <h2 id="honest-heading" class="sr-only">Where each camp wins</h2>
+      <article class="rounded-2xl border border-line bg-raised/50 p-5">
+        <p class="kicker">Where Radeon wins</p>
+        <h3 class="mt-2 font-serif text-2xl tracking-tight">VRAM class, 32 GB, two cards, our cards</h3>
+        <p class="mt-3 leading-relaxed text-muted">{LEAD.winsRadeon}</p>
+        <p class="mt-3 text-sm text-muted">
+          Measured sheet:
+          <a class="underline decoration-accent/40" href="/gpus/r9700">R9700</a>
+          ·
+          <a class="underline decoration-accent/40" href="/gpus/rx7900xtx">RX 7900 XTX</a>
+          ·
+          <a class="underline decoration-accent/40" href="/gpus/rx7900xt">RX 7900 XT</a>
+          ·
+          <a class="underline decoration-accent/40" href="/gpus/rx7800xt">RX 7800 XT</a>
+        </p>
+      </article>
+      <article class="rounded-2xl border border-line bg-raised/50 p-5">
+        <p class="kicker">Where NVIDIA wins</p>
+        <h3 class="mt-2 font-serif text-2xl tracking-tight">CUDA, vLLM, day-one models</h3>
+        <p class="mt-3 leading-relaxed text-muted">{LEAD.winsNvidia}</p>
+        <p class="mt-3 text-sm text-muted">
+          Software notes:
+          <a class="underline decoration-accent/40" href="/backends">Backends</a>
+          ·
+          <a class="underline decoration-accent/40" href="/rocm">ROCm</a>
+          ·
+          <a class="underline decoration-accent/40" href="/setup">First-run setup</a>
+        </p>
+      </article>
+    </section>
+
+    <Callout type="warn" title="Overnight sweep, 2026-10-12">
+      <p>{SWEEP_REVERIFY}</p>
+    </Callout>
+
+    <section id="specs" class="mt-12" aria-labelledby="specs-heading">
+      <h2 id="specs-heading" class="font-serif text-3xl tracking-tight">Vendor specs</h2>
+      <p class="mt-3 max-w-3xl leading-relaxed text-muted">
+        VRAM, memory bandwidth, and board power. Each cell links the vendor spec page.
+        TBP is AMD’s label; TGP is NVIDIA’s. Buttons say Check price — we do not show a live or stale figure.
+        GPU directory:
+        <a class="underline decoration-accent/40" href="/gpus">/gpus</a>.
+      </p>
+
+      <div class="mt-8 overflow-x-auto">
+        <table class="table-lab min-w-[56rem]">
+          <caption>Cited vendor VRAM, bandwidth, and board power for the Radeon and RTX cards on this page.</caption>
+          <thead>
+            <tr>
+              <th scope="col">Card</th>
+              <th scope="col">Camp</th>
+              <th scope="col">VRAM</th>
+              <th scope="col">Bandwidth</th>
+              <th scope="col">Board power</th>
+            </tr>
+          </thead>
+          <tbody>
+            {SPEC_ROWS.map((row) => (
+              <tr>
+                <th scope="row">
+                  <a class="underline decoration-accent/40" href={row.href} rel="noopener">{row.name}</a>
+                </th>
+                <td>{row.camp === 'radeon' ? 'Radeon' : 'NVIDIA'}</td>
+                <td>
+                  <a class="underline decoration-accent/40" href={row.vram.href} rel="noopener">{row.vram.value}</a>
+                  <span class="mt-1 block text-xs text-faint">{row.vram.source}</span>
+                </td>
+                <td>
+                  <a class="underline decoration-accent/40" href={row.bandwidth.href} rel="noopener">{row.bandwidth.value}</a>
+                  <span class="mt-1 block text-xs text-faint">{row.bandwidth.source}</span>
+                </td>
+                <td>
+                  <a class="underline decoration-accent/40" href={row.power.href} rel="noopener">{row.power.value}</a>
+                  <span class="mt-1 block text-xs text-faint">{row.power.source}</span>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <p class="mt-4 text-sm text-faint">
+        Radeon product pages: {radeonSpecs.map((row) => row.name).join(', ')}.
+        NVIDIA product / compare pages: {nvidiaSpecs.map((row) => row.name).join(', ')}.
+        RTX 5060 Ti is the 16 GB SKU — NVIDIA also lists an 8 GB card.
+      </p>
+      <BuyButtons products={productIds} />
+    </section>
+
+    <section id="speed" class="mt-12" aria-labelledby="speed-heading">
+      <h2 id="speed-heading" class="font-serif text-3xl tracking-tight">Speed</h2>
+      <p class="mt-3 max-w-3xl leading-relaxed text-muted">{SPEED_NOTE}</p>
+      <p class="mt-3 text-sm text-muted">
+        Full 4K / 32K / 128K / 256K matrix including Q6_K:
+        <a class="underline decoration-accent/40" href="/compare/one-vs-two-gpu">one vs two GPU</a>
+        ·
+        <a class="underline decoration-accent/40" href="/benchmarks">benchmarks</a>
+        ·
+        <a class="underline decoration-accent/40" href="/results">run cards</a>.
+      </p>
+
+      <div class="mt-8 overflow-x-auto">
+        <table class="table-lab min-w-[56rem]">
+          <caption>
+            Measured {COMPARE_MODEL} llama.cpp Vulkan decode on one R9700 versus a split, plus NVIDIA cells with no cited number yet.
+          </caption>
+          <thead>
+            <tr>
+              <th scope="col">Quant</th>
+              <th scope="col">Context</th>
+              <th scope="col">1× R9700 decode</th>
+              <th scope="col">2× split decode</th>
+              <th scope="col">NVIDIA (5090 / 4090 / 3090 / 5080 / 5070 Ti / 5060 Ti 16GB)</th>
+            </tr>
+          </thead>
+          <tbody>
+            {speed.map((row) => (
+              <tr>
+                <th scope="row">{row.quant}</th>
+                <td>{row.contextLabel}</td>
+                <td class="tabular-nums">
+                  {row.one.runIds.length ? (
+                    <a class="underline decoration-accent/40" href={row.one.href}>{row.one.decode}</a>
+                  ) : (
+                    row.one.decode
+                  )}
+                  <span class="mt-1 block text-xs text-faint">Measured · local-desktop</span>
+                </td>
+                <td class="tabular-nums">
+                  {row.both.runIds.length ? (
+                    <a class="underline decoration-accent/40" href={row.both.href}>{row.both.decode}</a>
+                  ) : (
+                    row.both.decode
+                  )}
+                  <span class="mt-1 block text-xs text-faint">Measured · local-desktop</span>
+                </td>
+                <td>
+                  {row.nvidia}
+                  <span class="mt-1 block text-xs text-faint">Not third-party, not apples-to-apples — empty on purpose</span>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <aside class="mt-10 rounded-2xl border border-line bg-raised/40 p-5" aria-labelledby="q3-heading">
+      <p class="kicker">Q3 estimate</p>
+      <h2 id="q3-heading" class="mt-2 font-serif text-2xl tracking-tight">{COMPARE_Q3}</h2>
+      <p class="mt-3 text-sm leading-relaxed text-muted">
+        Q6 / Q5 / Q4 above are from local-desktop cards. <strong class="text-ink">{COMPARE_Q3}</strong> is a labeled
+        estimate ({COMPARE_Q3_CITE}) — not a local-desktop run. Decode stays not measured. Full Q3 column:
+        <a class="underline decoration-accent/40" href="/compare/q4-q5-q6">Q6 / Q5 / Q4 + Q3 estimate</a>.
+      </p>
+      <div class="mt-4">
+        <SystemRamNeed need={q3Ram} compact />
+      </div>
+    </aside>
+
+    <section id="software" class="mt-12" aria-labelledby="software-heading">
+      <h2 id="software-heading" class="font-serif text-3xl tracking-tight">Software reality</h2>
+      <p class="mt-3 max-w-3xl leading-relaxed text-muted">
+        llama.cpp first (Vulkan, then ROCm/HIP). Strata is the Flash pin. vLLM, Ollama, and LM Studio
+        are secondary. Longer engine notes:
+        <a class="underline decoration-accent/40" href="/backends">/backends</a>,
+        <a class="underline decoration-accent/40" href="/rocm">/rocm</a>,
+        <a class="underline decoration-accent/40" href="/rocm-problems">/rocm-problems</a>,
+        <a class="underline decoration-accent/40" href="/setup">/setup</a>.
+      </p>
+      <ul class="mt-8 grid gap-4">
+        {SOFTWARE_ROWS.map((row) => (
+          <li class="rounded-2xl border border-line bg-raised/50 p-5">
+            <h3 class="font-serif text-2xl tracking-tight">{row.name}</h3>
+            <dl class="mt-4 grid gap-4 md:grid-cols-2 text-sm leading-relaxed">
+              <div>
+                <dt class="text-faint">Radeon</dt>
+                <dd class="mt-1 text-muted">{row.radeon}</dd>
+              </div>
+              <div>
+                <dt class="text-faint">NVIDIA</dt>
+                <dd class="mt-1 text-muted">{row.nvidia}</dd>
+              </div>
+            </dl>
+            <p class="mt-3 text-sm">
+              {row.hrefs.map((link, index) => (
+                <>
+                  {index > 0 ? ' · ' : ''}
+                  <a
+                    class="underline decoration-accent/40"
+                    href={link.href}
+                    rel={link.href.startsWith('http') ? 'noopener' : undefined}
+                  >
+                    {link.label}
+                  </a>
+                </>
+              ))}
+            </p>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section id="which" class="mt-12" aria-labelledby="which-heading">
+      <h2 id="which-heading" class="font-serif text-3xl tracking-tight">Which should you buy?</h2>
+      <p class="mt-3 max-w-3xl leading-relaxed text-muted">
+        Use case first, then VRAM, then software. Size vs speed still changes the pick on
+        <a class="underline decoration-accent/40" href="/budget">setup by budget</a>
+        and the
+        <a class="underline decoration-accent/40" href="/calculator">calculator</a>.
+        FAQ:
+        <a class="underline decoration-accent/40" href="/faq">/faq</a>.
+      </p>
+      <ul class="mt-8 grid gap-4">
+        {DECISION_CASES.map((row) => {
+          const need = ramFor(row.ram);
+          return (
+            <li class="rounded-2xl border border-line bg-raised/50 p-5">
+              <p class="kicker">{row.title}</p>
+              <h3 class="mt-2 font-serif text-2xl tracking-tight">{row.pick}</h3>
+              <p class="mt-3 leading-relaxed text-muted">{row.body}</p>
+              {row.ram === 'daily' ? (
+                <div class="mt-4">
+                  <HouseRam which="daily" compact />
+                </div>
+              ) : need ? (
+                <div class="mt-4">
+                  <SystemRamNeed need={need} compact />
+                </div>
+              ) : null}
+              <p class="mt-3 text-sm">
+                {row.links.map((link, index) => (
+                  <>
+                    {index > 0 ? ' · ' : ''}
+                    <a class="underline decoration-accent/40" href={link.href}>{link.label}</a>
+                  </>
+                ))}
+              </p>
+            </li>
+          );
+        })}
+      </ul>
+    </section>
+
+    <p class="mt-10 text-sm text-muted">
+      Also:
+      <a class="underline decoration-accent/40" href="/compare">Compare hub</a>
+      ·
+      <a class="underline decoration-accent/40" href="/disclosure">Affiliate disclosure</a>
+      ·
+      <a class="underline decoration-accent/40" href="/methodology">How we test</a>
+    </p>
+    <NextSteps path="/compare/radeon-vs-nvidia" />
+    <div class="mt-12">
+      <NewsletterSignup variant="article" />
+    </div>
+  </main>
+</Base>

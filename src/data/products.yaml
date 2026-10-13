@@ -75,6 +75,78 @@ products:
       microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=AMD+Radeon+RX+7800+XT
       amd: https://www.amd.com/en/products/graphics/desktops/radeon/7000-series/amd-radeon-rx-7800-xt.html
 
+  - id: rtx5090
+    name: NVIDIA GeForce RTX 5090
+    kind: gpu
+    vram_gb: 32
+    note: Official NVIDIA product page plus retailer search. No live or invented price.
+    urls:
+      amazon: https://www.amazon.com/s?k=NVIDIA+GeForce+RTX+5090
+      newegg: https://www.newegg.com/p/pl?d=NVIDIA+GeForce+RTX+5090
+      bhphoto: https://www.bhphotovideo.com/c/search?Ntt=NVIDIA+GeForce+RTX+5090
+      microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=NVIDIA+GeForce+RTX+5090
+      nvidia: https://www.nvidia.com/en-us/geforce/graphics-cards/50-series/rtx-5090/
+
+  - id: rtx4090
+    name: NVIDIA GeForce RTX 4090
+    kind: gpu
+    vram_gb: 24
+    note: Official NVIDIA product page plus retailer search. No live or invented price.
+    urls:
+      amazon: https://www.amazon.com/s?k=NVIDIA+GeForce+RTX+4090
+      newegg: https://www.newegg.com/p/pl?d=NVIDIA+GeForce+RTX+4090
+      bhphoto: https://www.bhphotovideo.com/c/search?Ntt=NVIDIA+GeForce+RTX+4090
+      microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=NVIDIA+GeForce+RTX+4090
+      nvidia: https://www.nvidia.com/en-us/geforce/graphics-cards/40-series/rtx-4090/
+
+  - id: rtx3090
+    name: NVIDIA GeForce RTX 3090
+    kind: gpu
+    vram_gb: 24
+    note: Official NVIDIA compare page plus retailer search. No live or invented price.
+    urls:
+      amazon: https://www.amazon.com/s?k=NVIDIA+GeForce+RTX+3090
+      newegg: https://www.newegg.com/p/pl?d=NVIDIA+GeForce+RTX+3090
+      bhphoto: https://www.bhphotovideo.com/c/search?Ntt=NVIDIA+GeForce+RTX+3090
+      microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=NVIDIA+GeForce+RTX+3090
+      nvidia: https://www.nvidia.com/en-us/geforce/graphics-cards/compare/
+
+  - id: rtx5080
+    name: NVIDIA GeForce RTX 5080
+    kind: gpu
+    vram_gb: 16
+    note: Official NVIDIA 50-series page plus retailer search. No live or invented price.
+    urls:
+      amazon: https://www.amazon.com/s?k=NVIDIA+GeForce+RTX+5080
+      newegg: https://www.newegg.com/p/pl?d=NVIDIA+GeForce+RTX+5080
+      bhphoto: https://www.bhphotovideo.com/c/search?Ntt=NVIDIA+GeForce+RTX+5080
+      microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=NVIDIA+GeForce+RTX+5080
+      nvidia: https://www.nvidia.com/en-us/geforce/graphics-cards/50-series/
+
+  - id: rtx5070ti
+    name: NVIDIA GeForce RTX 5070 Ti
+    kind: gpu
+    vram_gb: 16
+    note: Official NVIDIA 50-series page plus retailer search. No live or invented price.
+    urls:
+      amazon: https://www.amazon.com/s?k=NVIDIA+GeForce+RTX+5070+Ti
+      newegg: https://www.newegg.com/p/pl?d=NVIDIA+GeForce+RTX+5070+Ti
+      bhphoto: https://www.bhphotovideo.com/c/search?Ntt=NVIDIA+GeForce+RTX+5070+Ti
+      microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=NVIDIA+GeForce+RTX+5070+Ti
+      nvidia: https://www.nvidia.com/en-us/geforce/graphics-cards/50-series/
+
+  - id: rtx5060ti-16
+    name: NVIDIA GeForce RTX 5060 Ti 16GB
+    kind: gpu
+    vram_gb: 16
+    note: 16 GB SKU. NVIDIA also lists an 8 GB 5060 Ti — confirm the listing. No live or invented price.
+    urls:
+      amazon: https://www.amazon.com/s?k=NVIDIA+GeForce+RTX+5060+Ti+16GB
+      newegg: https://www.newegg.com/p/pl?d=NVIDIA+GeForce+RTX+5060+Ti+16GB
+      bhphoto: https://www.bhphotovideo.com/c/search?Ntt=NVIDIA+GeForce+RTX+5060+Ti+16GB
+      microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=NVIDIA+GeForce+RTX+5060+Ti+16GB
+      nvidia: https://www.nvidia.com/en-us/geforce/graphics-cards/50-series/
+
   - id: ddr5-kit
     name: High-capacity DDR5 kit
     kind: part

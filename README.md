@@ -60,9 +60,10 @@ Public site URL is `https://amdai.net` (`site` in `astro.config.mjs`; override w
 | `/setup` | First-run setup — Ubuntu 24.04+ (measured) and Windows (honest limits) |
 | `/stacks` | Recommended stack cards from the test rig |
 | `/qwen` | Master 3.6 / 3.8 comparison table — one row per model × quant, measured tok/s from run cards |
-| `/compare` | Cited 35B decisions from local-desktop cards — one vs split, Q6 / Q5 / Q4 plus a Q3 estimate |
+| `/compare` | Cited 35B decisions from local-desktop cards — one vs split, Q6 / Q5 / Q4 plus a Q3 estimate, Radeon vs NVIDIA |
 | `/compare/one-vs-two-gpu` | One R9700 vs split: decode, prefill, VRAM, system RAM |
 | `/compare/q4-q5-q6` | Same 35B quants side by side; Q3 column labeled estimate |
+| `/compare/radeon-vs-nvidia` | Cited Radeon vs NVIDIA for local-LLM shoppers — vendor specs, measured R9700, empty RTX speed until cited |
 | `/qwen36-dual` | 35B on two R9700s — split vs two copies, measured soak |
 | `/multi-gpu` | Dual / multi-GPU — when a second R9700 helps, llama.cpp flags, cited PCIe and PSU |
 | `/flash-daily` | Flash daily driver — Q3–Q6 VRAM + DDR5 offload at 262K |
