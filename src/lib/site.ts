@@ -100,6 +100,7 @@ export const primaryNav: NavItem[] = [
   { href: '/software', label: 'AI software', description: 'llama.cpp first; vLLM and Strata as tries', group: 'learn' },
   { href: '/abliterated', label: 'Abliterated', description: 'Hub: what it is, how to vet files, catalog — educational only', group: 'learn' },
   { href: '/harnesses', label: 'Harnesses', description: 'What to plug your local model into — agents, chat UIs, ComfyUI', group: 'learn' },
+  { href: '/labs/shannon', label: 'Shannon’s lab', description: 'Cited How I run my Lab — Herdr, Coolify, secure-lab, autoresearch. Not measured by AMDai', group: 'learn' },
   { href: '/hardware', label: 'Hardware', description: 'PSU, cooling, noise, VRAM vs model size', group: 'learn' },
   { href: '/bios', label: 'BIOS', description: 'Above 4G, ReBAR/SAM, CSM, x8/x8 vs x16/x4 — cited chipset notes', group: 'learn' },
   { href: '/flash-ram-offload', label: 'Flash RAM offload', description: 'Run Flash with experts on DDR5 — kits, measured DIMM speed, launch shape', group: 'learn' },
@@ -115,7 +116,7 @@ export const primaryNav: NavItem[] = [
   { href: '/privacy', label: 'Privacy', description: 'What optional accounts and the Lab Notes digest store', group: 'learn' },
   { href: '/contribute', label: 'Contribute', description: 'Submit a Radeon recipe as JSON — log required, no invented tok/s', group: 'learn' },
   { href: '/wanted', label: 'Wanted', description: 'Radeon × model gaps we want sourced recipes for', group: 'learn' },
-  { href: '/credits', label: 'Credits', description: 'Sybil / 0xSero attribution and the local-desktop first-party set', group: 'learn' },
+  { href: '/credits', label: 'Credits', description: 'Sybil / 0xSero attribution, the local-desktop first-party set, and Shannon’s cited lab', group: 'learn' },
   { href: '/disclosure', label: 'Disclosure', description: 'Amazon Associates, Rakuten, B&H — and what is not affiliate', group: 'learn' },
 ];
 

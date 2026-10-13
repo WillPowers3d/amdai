@@ -126,6 +126,25 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/contact', label: 'Contact' },
     ];
   }
+  if (path === '/labs' || path === '/labs/shannon' || path === '/secure-lab' || path === '/autoresearch') {
+    return [
+      { href: '/labs/shannon', label: 'Shannon’s lab' },
+      { href: '/harnesses', label: 'Harnesses' },
+      { href: '/secure-lab', label: 'Secure home lab' },
+      { href: '/autoresearch', label: 'Autoresearch idea' },
+      { href: '/hardware', label: 'Hardware' },
+      { href: '/amdai-bench', label: 'amdai-bench' },
+      { href: '/credits', label: 'Credits' },
+    ];
+  }
+  if (path === '/hardware') {
+    return [
+      { href: '/bios', label: 'BIOS' },
+      { href: '/gpus/r9700', label: 'R9700 measured page' },
+      { href: '/multi-gpu', label: 'Dual / multi-GPU' },
+      { href: '/labs/shannon', label: 'Shannon’s lab' },
+    ];
+  }
   if (path.startsWith('/harnesses')) {
     return [
       { href: '/harnesses', label: 'Harnesses' },

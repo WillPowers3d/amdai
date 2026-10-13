@@ -222,6 +222,30 @@ export const OG_CARDS: OgCard[] = [
     alt: 'AMDai troubleshoot — symptom-first Radeon local-AI fixes',
   },
   {
+    slug: 'labs',
+    title: 'Community labs',
+    lede: 'Cited write-ups. Not measured by AMDai',
+    alt: 'AMDai community labs — cited, not measured',
+  },
+  {
+    slug: 'labs-shannon',
+    title: 'Shannon’s lab',
+    lede: 'How I run my Lab. Cited, not measured by AMDai',
+    alt: 'AMDai Shannon lab — cited How I run my Lab',
+  },
+  {
+    slug: 'secure-lab',
+    title: 'Secure home lab',
+    lede: 'Isolated enclave. Cited, not measured by AMDai',
+    alt: 'AMDai secure home lab — cited Shannon layout',
+  },
+  {
+    slug: 'autoresearch',
+    title: 'Autoresearch idea',
+    lede: 'Container per GPU. Cited, not measured by AMDai',
+    alt: 'AMDai autoresearch idea — cited Shannon layout',
+  },
+  {
     slug: 'about',
     title: 'About AMDai',
     lede: 'Independent Radeon notes. amdai on local-desktop',

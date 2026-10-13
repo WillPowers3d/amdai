@@ -75,5 +75,8 @@ describe('accessibility statement', () => {
     assert.equal(ogSlug('/models/qwen36'), 'models-qwen36');
     assert.equal(ogSlug('/models/flash'), 'models-flash');
     assert.equal(ogSlug('/troubleshoot'), 'troubleshoot');
+    assert.equal(ogSlug('/labs/shannon'), 'labs-shannon');
+    assert.equal(ogSlug('/secure-lab'), 'secure-lab');
+    assert.equal(ogSlug('/autoresearch'), 'autoresearch');
   });
 });

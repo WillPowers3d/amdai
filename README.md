@@ -84,7 +84,11 @@ Public site URL is `https://amdai.net` (`site` in `astro.config.mjs`; override w
 | `/recipes/<id>` | One launch: gates, command, RAM, withdrawal |
 | `/contribute` | Download recipe JSON (log required) |
 | `/wanted` | Card × model gaps — no bounty amounts |
-| `/credits` | Sybil / 0xSero MIT notice and local-desktop first-party set |
+| `/credits` | Sybil / 0xSero MIT notice, local-desktop first-party set, and Shannon’s cited lab write-up |
+| `/labs` | Community labs index — cited write-ups, not measured on local-desktop |
+| `/labs/shannon` | Shannon (@iamMrDuncan) How I run my Lab — cited, not measured by AMDai |
+| `/secure-lab` | Cited secure-lab layout — isolated enclave, Proxmox split, guardrails, separate NVMe, offsite backup |
+| `/autoresearch` | Cited amdai-bench idea — container per GPU, Prometheus/Grafana, bot steering; Thermite has no public repo here |
 | `/about` | Who runs AMDai, the published local-desktop kit, editorial independence, affiliate links |
 | `/methodology` | How we test — amdai-bench/run@1 cards, labeled estimates, citations, corrections |
 | `/contact` | Honest routes — contribute, ROCm problems; email only if `CONTACT_EMAIL` is set |
@@ -137,7 +141,9 @@ Public site URL is `https://amdai.net` (`site` in `astro.config.mjs`; override w
 | `/harnesses/quiz` | Pick a harness (GET, no JS required) |
 | `/harnesses/connect` | Copy-paste :8080 / :8083 snippets |
 | `/harnesses/{id}` | One harness: endpoint, tools, ROCm notes, hybrid |
-| `/hardware` | PSU, cooling, VRAM |
+| `/harnesses/herdr` | Herdr — lab-wide agent/machine access, cited from Shannon, not a /v1 client |
+| `/harnesses/coolify` | Coolify — self-hosted artifacts/dashboards, cited from Shannon, not a /v1 client |
+| `/hardware` | PSU, cooling, VRAM, and old/cheap AMD cards (Radeon VII not measured) |
 | `/tutorials` | How-tos |
 | `/troubleshoot` | Symptom-first consumer hub — grouped guided flows, `?q=` filter |
 | `/troubleshooting` | Common failures |
@@ -169,6 +175,7 @@ Public site URL is `https://amdai.net` (`site` in `astro.config.mjs`; override w
 | `src/data/budget-tiers.yaml` | `/budget` tiers; USD bands stay TODO until cited |
 | `src/data/errors.yaml` | Cited troubleshooter patterns |
 | `src/data/troubleshoot.yaml` | Symptom-first `/troubleshoot` hub (needs_source rows excluded) |
+| `src/data/shannon-lab.yaml` | Shannon community-lab write-up — cited, not measured by AMDai |
 | `src/data/rocm-problems.yaml` | Cited `/rocm-problems` tracker (TODO if unverified) |
 | `src/data/harnesses.yaml` | Cited `/harnesses` catalog (no invented features) |
 | `src/data/backends.yaml` | `/backends` comparison + per-engine deep dives |

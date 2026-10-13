@@ -1,0 +1,106 @@
+# Community lab write-up from Shannon (@iamMrDuncan).
+# Every published claim is cited. Nothing here is measured on local-desktop.
+# Do not invent tok/s, prices, or a Thermite repo URL.
+as_of: 2026-10-13
+cited_label: Cited, not measured by AMDai
+author: Shannon
+handle: iamMrDuncan
+article:
+  title: How I run my Lab
+  date: 2026-10-12
+  href: https://x.com/iamMrDuncan/status/2109744566001938923
+p100_post:
+  title: Qwen 3.8 27B on a P100 (Shannon, 2026-10-05)
+  date: 2026-10-05
+  href: https://x.com/iamMrDuncan/status/2107109051301568582
+  model: Qwen 3.8 27B
+  decode: ~33 tok/s
+  extras: MTP
+  device: NVIDIA P100
+  note: NVIDIA cited context only. Not a Radeon figure. Not measured by AMDai.
+
+sources:
+  article:
+    title: Shannon — How I run my Lab (X Article, 2026-10-12)
+    href: https://x.com/iamMrDuncan/status/2109744566001938923
+  p100:
+    title: Shannon — Qwen 3.8 27B / P100 note (2026-10-05)
+    href: https://x.com/iamMrDuncan/status/2107109051301568582
+  herdr:
+    title: Herdr — the runtime your coding agents live on
+    href: https://github.com/herdrdev/herdr
+  herdr_docs:
+    title: Herdr docs
+    href: https://herdr.dev/docs
+  coolify:
+    title: What is Coolify
+    href: https://coolify.io/docs/core/what-is-coolify
+  hermes:
+    title: Hermes Agent — local models
+    href: https://hermes-agent.nousresearch.com/docs/user-guide/local-models
+
+ideas:
+  - id: herdr
+    group: harnesses
+    title: Herdr
+    body: >
+      Lab-wide agent and machine access. Official Herdr is a terminal workspace
+      for several coding agents at once — detach without stopping work, list
+      which pane is working or blocked, drive panes from a CLI. Shannon’s
+      write-up is why it appears on this site. Not used on local-desktop.
+  - id: coolify
+    group: harnesses
+    title: Coolify
+    body: >
+      Self-hosted artifacts and dashboards. Official Coolify is an open-source
+      control plane for deploying Docker workloads on servers you own. It is
+      not an OpenAI-shaped /v1 chat client. Shannon’s write-up is why it
+      appears next to the harness catalog.
+  - id: hermes-profiles
+    group: harnesses
+    title: Hermes multi-profile and desktop bot mode
+    body: >
+      Next to amdai’s Hermes on local-desktop (Strata :8083 and llama-server :8080),
+      Shannon describes a multi-profile Hermes setup and Hermes desktop bot
+      mode. That layout is his. We have not reproduced it. Official Hermes
+      docs stay the attach path. llama.cpp first.
+  - id: radeon-vii
+    group: cheap-amd
+    title: Radeon VII for autoresearch
+    body: >
+      Shannon uses a Radeon VII for automated engine and runtime autoresearch
+      aimed at prefill and decode. He did not publish a VII tok/s in the
+      sources we cite. Marked not measured on AMDai. Do not invent a house
+      number. Q3 stays a labeled estimate if someone later contributes a
+      recipe. Nothing below Q3.
+  - id: p100-context
+    group: cheap-amd
+    title: P100 cited context (NVIDIA)
+    body: >
+      Shannon’s 2026-10-05 post cites Qwen 3.8 27B at about 33 tok/s with MTP
+      on a P100. That is NVIDIA, cited context only. It is not a Radeon
+      figure and not a local-desktop card. Do not paste it into a Radeon table.
+  - id: secure-lab
+    group: secure
+    title: Isolated command enclave
+    body: >
+      Shannon’s lab write-up describes an isolated command enclave behind its
+      own router, Proxmox VMs that split the agent host from the knowledge-base
+      host, a guardrail / prompt-injection layer in front of agents, models on
+      a separate NVMe, and offsite backup. Cited layout only. We have not
+      built this on local-desktop.
+  - id: thermite
+    group: autoresearch
+    title: Thermite harness
+    body: >
+      Shannon wrote that Thermite, the harness that steers those experiments,
+      is intended to be open-sourced. There is no public repo URL on this
+      site. Do not invent a GitHub path. Not used on local-desktop.
+  - id: autoresearch
+    group: autoresearch
+    title: Container-per-GPU experiment loop
+    body: >
+      Idea for amdai-bench, cited from Shannon’s layout — one container per
+      GPU, automatic experiments, Prometheus / Grafana for results, a bot that
+      steers the next run. House cards stay amdai-bench/run@1 with an exact
+      launch command. This page is an idea, not a shipped runner.

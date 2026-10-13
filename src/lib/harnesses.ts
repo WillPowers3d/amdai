@@ -775,6 +775,42 @@ GENERIC_OPEN_AI_API_KEY=sk-123abc
         { note: 'Daily-driver context is 262144; exact flags not recorded in stacks.yaml.' },
       );
 
+    case 'herdr':
+      return block(
+        row.snippet,
+        `${row.title} — not an LLM /v1 client`,
+        'text',
+        `
+# Cited, not measured by AMDai.
+# Herdr is a terminal workspace for coding agents you already run.
+# It does not speak llama-server ${v1} or Strata.
+# Official docs: https://herdr.dev/docs
+# Shannon’s lab write-up is why this row exists: /labs/shannon
+`,
+        {
+          applicable: false,
+          note: 'Not a llama-server /v1 attach. Cited from Shannon’s How I run my Lab — not used on local-desktop.',
+        },
+      );
+
+    case 'coolify':
+      return block(
+        row.snippet,
+        `${row.title} — not an LLM /v1 client`,
+        'text',
+        `
+# Cited, not measured by AMDai.
+# Coolify is a self-hosted control plane for Docker workloads.
+# It does not speak llama-server ${v1} or Strata.
+# Official docs: https://coolify.io/docs/core/what-is-coolify
+# Shannon’s lab write-up is why this row exists: /labs/shannon
+`,
+        {
+          applicable: false,
+          note: 'Not a llama-server /v1 attach. Cited from Shannon’s How I run my Lab — not used on local-desktop.',
+        },
+      );
+
     case 'comfyui':
       return block(
         row.snippet,
@@ -875,6 +911,8 @@ export function assertHarnessesValid(file: HarnessesFile): string[] {
     'anythingllm',
     'llamacpp-webui',
     'comfyui',
+    'herdr',
+    'coolify',
   ];
   for (const id of required) {
     if (!ids.has(id)) errors.push(`missing required harness ${id}`);

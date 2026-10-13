@@ -1,0 +1,72 @@
+---
+import Base from '../layouts/Base.astro';
+import HowWeTest from '../components/HowWeTest.astro';
+import { SHANNON_CITED_LABEL, loadShannonLab, shannonIdea } from '../lib/shannon-lab';
+
+const file = loadShannonLab();
+const idea = shannonIdea('secure-lab');
+const steps = [
+  {
+    title: 'Isolated command enclave',
+    body: 'Put the command host behind its own router so agent tools and the rest of the house do not share a LAN by default.',
+  },
+  {
+    title: 'Proxmox split',
+    body: 'One VM for the agent host, another for the knowledge-base host. A compromised tool loop should not sit on the same guest as the notes store.',
+  },
+  {
+    title: 'Guardrail in front of agents',
+    body: 'A prompt-injection / guardrail layer in front of the agents — Shannon’s layout, not a product we pin. Tokens on the GPU still come first.',
+  },
+  {
+    title: 'Models on their own NVMe',
+    body: 'Keep GGUFs on a disk that is not the OS or the knowledge-base volume. House rule on AMDai is still NVMe, not a spinning disk.',
+  },
+  {
+    title: 'Offsite backup',
+    body: 'Back up the knowledge base and configs offsite. We do not invent a vendor or a retention number.',
+  },
+];
+---
+
+<Base
+  title="Secure home lab"
+  description="Cited secure-lab layout from Shannon’s How I run my Lab — isolated enclave, Proxmox split, guardrails, separate NVMe, offsite backup. Not measured by AMDai."
+>
+  <main id="main" class="mx-auto max-w-3xl px-4 py-10 sm:px-6">
+    <p class="kicker">Cited, not measured by AMDai</p>
+    <h1 class="mt-3 font-serif text-4xl tracking-tight sm:text-5xl">Secure home lab</h1>
+    <p class="mt-4 text-lg leading-relaxed text-muted">
+      {idea?.body}
+    </p>
+    <p class="mt-3 text-sm text-faint">
+      Source:
+      <a class="underline decoration-accent/40" href={file.article.href} rel="noopener">{file.article.title}</a>
+      ({file.article.date}). Write-up:
+      <a class="underline decoration-accent/40" href="/labs/shannon">Shannon’s lab</a>.
+      llama.cpp first. This is not a local-desktop recipe.
+    </p>
+
+    <ol class="mt-10 space-y-6">
+      {steps.map((step, index) => (
+        <li class="rounded-2xl border border-line bg-raised/50 p-5">
+          <p class="font-mono text-[0.68rem] uppercase tracking-[0.14em] text-faint">
+            {index + 1} · {SHANNON_CITED_LABEL}
+          </p>
+          <h2 class="mt-2 font-serif text-2xl tracking-tight">{step.title}</h2>
+          <p class="mt-3 leading-relaxed text-ink">{step.body}</p>
+        </li>
+      ))}
+    </ol>
+
+    <p class="mt-10 text-sm text-muted">
+      After the box is isolated, attach a harness the usual way:
+      <a class="underline decoration-accent/40" href="/harnesses/connect">Connect</a>.
+      amdai’s Hermes notes stay on
+      <a class="underline decoration-accent/40" href="/harnesses/hermes">/harnesses/hermes</a>.
+    </p>
+    <div class="mt-8">
+      <HowWeTest />
+    </div>
+  </main>
+</Base>

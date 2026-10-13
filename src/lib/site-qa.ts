@@ -52,6 +52,12 @@ const CAMEL_ALLOW = [
   'LibreChat',
   'AnythingLLM',
   'SillyTavern',
+  'Coolify',
+  'Herdr',
+  'Thermite',
+  'Proxmox',
+  'Prometheus',
+  'Grafana',
 ];
 
 const SKIP_HREF = /^(mailto:|tel:|javascript:|data:|amdai-stack-lab:)/i;

@@ -38,6 +38,8 @@ describe('harness catalog', () => {
     assert.ok(ids.includes('openhands'));
     assert.ok(ids.includes('cursor'));
     assert.ok(ids.includes('comfyui'));
+    assert.ok(ids.includes('herdr'));
+    assert.ok(ids.includes('coolify'));
     assert.ok(!ids.includes('compare'));
     assert.ok(!ids.includes('quiz'));
   });
@@ -150,6 +152,23 @@ describe('copy-paste snippets', () => {
     assert.equal(comfy.applicable, false);
     assert.match(comfy.code, /8188/);
     assert.ok(!comfy.code.includes('chat/completions'));
+
+    const herdr = harnessSnippet(list.find((row) => row.id === 'herdr')!, llama);
+    const coolify = harnessSnippet(list.find((row) => row.id === 'coolify')!, llama);
+    assert.equal(herdr.applicable, false);
+    assert.equal(coolify.applicable, false);
+    assert.match(herdr.code, /Cited, not measured by AMDai/);
+    assert.match(coolify.code, /Cited, not measured by AMDai/);
+    assert.ok(!herdr.code.includes('chat/completions'));
+    assert.ok(!coolify.code.includes('chat/completions'));
+  });
+
+  it('never picks Herdr or Coolify as the quiz primary', () => {
+    for (const combo of quizCombos()) {
+      const pick = pickHarness(parseQuizCombo(combo), list);
+      assert.notEqual(pick.primary.id, 'herdr', combo);
+      assert.notEqual(pick.primary.id, 'coolify', combo);
+    }
   });
 
   it('proves /v1 with curl before a harness snippet', () => {

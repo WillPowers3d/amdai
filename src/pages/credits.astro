@@ -4,7 +4,7 @@ import Base from '../layouts/Base.astro';
 
 <Base
   title="Credits"
-  description="Attribution for recipe ideas from local.sybilsolutions.ai / 0xSero, and the house test-rig work."
+  description="Attribution for recipe ideas from local.sybilsolutions.ai / 0xSero, the house test-rig work, and Shannon’s cited lab write-up."
 >
   <main id="main" class="mx-auto max-w-3xl px-4 py-10 sm:px-6">
     <p class="kicker">Attribution</p>
@@ -58,6 +58,24 @@ copies or substantial portions of the Software.`}</code></pre>
         dual-instance ~100 / 172 / ~177. Flash / Strata / Q3 are pending a DDR5 rerun.
         Label: Measured on our rig, 2026-10.
         A measured Qwen 3.8 Flash Q3 run is an approved one-time exception — it will show as measured when the jsonl line lands.
+      </p>
+    </section>
+
+    <section class="mt-12">
+      <h2 class="font-serif text-3xl">Shannon / @iamMrDuncan</h2>
+      <p class="mt-3 leading-relaxed text-muted">
+        The community lab write-up on
+        <a class="underline decoration-accent/40" href="/labs/shannon">/labs/shannon</a>
+        is sourced from Shannon (@iamMrDuncan), X Article
+        <a class="underline decoration-accent/40" href="https://x.com/iamMrDuncan/status/2109744566001938923" rel="noopener">How I run my Lab</a>
+        (2026-10-12). Every claim there is labeled
+        <strong class="text-ink">Cited, not measured by AMDai</strong>.
+        We did not invent tok/s, prices, or a Thermite repo URL.
+        Herdr and Coolify appear in
+        <a class="underline decoration-accent/40" href="/harnesses">/harnesses</a>
+        because of that write-up. The P100 Qwen 3.8 27B ~33 tok/s with MTP figure is NVIDIA
+        cited context only —
+        <a class="underline decoration-accent/40" href="https://x.com/iamMrDuncan/status/2107109051301568582" rel="noopener">Oct 5 post</a>.
       </p>
     </section>
   </main>

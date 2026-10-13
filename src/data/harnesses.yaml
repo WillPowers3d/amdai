@@ -1,6 +1,6 @@
 # Cited harness / frontend catalog. Do not invent features or versions.
 # Exact llama.cpp / Strata flags for our rig stay not recorded until stacks.yaml is filled.
-as_of: 2026-10-12
+as_of: 2026-10-13
 llama_server_port: 8080
 strata_port: 8083
 vllm_port: 8000
@@ -557,6 +557,75 @@ harnesses:
         href: https://github.com/ggml-org/llama.cpp/blob/HEAD/tools/server/README.md
       - title: llama serve — built-in web UI
         href: https://llama.app/docs/serve
+
+  - id: herdr
+    title: Herdr
+    category: agent
+    vendor: Herdr
+    used_on_our_rig: false
+    summary: >-
+      Lab-wide agent and machine access. Official Herdr is a terminal workspace
+      for several coding agents at once. Cited, not measured by AMDai — Shannon’s
+      How I run my Lab is why it appears here. Not an OpenAI-shaped /v1 chat client.
+    what_for: >-
+      Detach without stopping work, see which pane is working or blocked, and
+      drive panes from a CLI. Not used on local-desktop.
+    homepage: https://herdr.dev/docs
+    docs: https://herdr.dev/docs
+    repo: https://github.com/herdrdev/herdr
+    version_note: Cited, not measured by AMDai. Docs checked 2026-10-13. Do not invent a release pin.
+    llama_base: n/a
+    strata_base: n/a
+    model_field: n/a (not a llama-server /v1 client)
+    api_key: n/a
+    tools: Workspace panes for coding agents you already run. Not a llama-server /v1 attach.
+    long_context: n/a
+    rocm: Herdr does not own the GPU. You still run llama.cpp first.
+    hybrid: Not documented as a /v1 client. Shannon’s lab uses it for machine access.
+    local_ok: true
+    hybrid_ok: false
+    surfaces: [cli]
+    snippet: herdr
+    sources:
+      - title: Herdr — the runtime your coding agents live on
+        href: https://github.com/herdrdev/herdr
+      - title: Herdr docs
+        href: https://herdr.dev/docs
+      - title: Shannon — How I run my Lab (X Article, 2026-10-12)
+        href: https://x.com/iamMrDuncan/status/2109744566001938923
+
+  - id: coolify
+    title: Coolify
+    category: agent
+    vendor: Coolify
+    used_on_our_rig: false
+    summary: >-
+      Self-hosted artifacts and dashboards. Official Coolify is an open-source
+      control plane for deploying Docker workloads on servers you own. Cited,
+      not measured by AMDai. Not an OpenAI-shaped /v1 chat client.
+    what_for: >-
+      Host the dashboards and artifacts a lab already produces. Shannon’s
+      write-up is why it sits next to the harness catalog. Not used on local-desktop.
+    homepage: https://coolify.io/docs/core/what-is-coolify
+    docs: https://coolify.io/docs/core/what-is-coolify
+    version_note: Cited, not measured by AMDai. Docs checked 2026-10-13. Do not invent a release pin.
+    llama_base: n/a
+    strata_base: n/a
+    model_field: n/a (not a llama-server /v1 client)
+    api_key: n/a
+    tools: Deploy Docker workloads you already own. Not LLM tools.
+    long_context: n/a
+    rocm: Coolify does not own the GPU. llama.cpp first on the inference box.
+    hybrid: Official page is self-hosted. We do not invent a cloud SKU.
+    local_ok: true
+    hybrid_ok: false
+    surfaces: [web]
+    snippet: coolify
+    sources:
+      - title: What is Coolify
+        href: https://coolify.io/docs/core/what-is-coolify
+      - title: Shannon — How I run my Lab (X Article, 2026-10-12)
+        href: https://x.com/iamMrDuncan/status/2109744566001938923
 
   - id: comfyui
     title: ComfyUI on ROCm

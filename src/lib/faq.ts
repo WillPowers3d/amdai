@@ -474,6 +474,18 @@ export const FAQ_ENTRIES: FaqItem[] = [
       { href: '/rocm/glossary', label: 'ROCm glossary' },
     ],
   },
+  {
+    id: 'community-labs',
+    group: 'about',
+    question: 'Do you cite other people’s home labs?',
+    answer:
+      'Yes, labeled Cited, not measured by AMDai. Shannon’s How I run my Lab is the first community write-up — Herdr, Coolify, a secure-lab layout, and an amdai-bench idea. We do not invent tok/s from those notes. House cards stay on /results. llama.cpp first. Q3 stays a labeled estimate. Nothing below Q3.',
+    links: [
+      { href: '/labs/shannon', label: 'Shannon’s lab' },
+      { href: '/credits', label: 'Credits' },
+      { href: '/results', label: 'Run cards' },
+    ],
+  },
 ];
 
 export const FAQ_ITEMS: FaqItem[] = FAQ_ENTRIES;

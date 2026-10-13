@@ -427,6 +427,10 @@ export function pageJsonLd(input: {
     (path.startsWith('/rocm') && path !== '/rocm/faq' && path !== '/rocm/glossary') ||
     path === '/start' ||
     path === '/hardware' ||
+    path === '/labs' ||
+    path === '/labs/shannon' ||
+    path === '/secure-lab' ||
+    path === '/autoresearch' ||
     path === '/software' ||
     path === '/troubleshooting' ||
     path === '/maintain' ||

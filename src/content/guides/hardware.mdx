@@ -2,7 +2,7 @@
 title: Hardware and power
 kicker: Home lab
 description: PSU, cooling, case, noise, and VRAM versus model size for a 32 GB Radeon AI PRO R9700 — no fake benches.
-updated: 2026-10-12
+updated: 2026-10-13
 order: 6
 ---
 
@@ -59,6 +59,14 @@ Host RAM: our test rig is **256 GB DDR5**. 64 GB is a reasonable home minimum ne
 No live prices. As an Amazon Associate I earn from qualifying purchases.
 
 <BuyButtons products={['r9700', 'ddr5-kit', 'nvme', 'psu-1000w']} />
+
+<h2 id="old-cheap-amd">Old / cheap AMD cards</h2>
+
+Cited, not measured by AMDai. Shannon (@iamMrDuncan) uses a **Radeon VII** for automated engine and runtime autoresearch aimed at prefill and decode. He did not publish a VII tok/s in the sources we cite. Marked **not measured**. Do not invent a house number. Q3 stays a labeled estimate if someone later contributes a recipe. Nothing below Q3. llama.cpp first.
+
+This is not a `/gpus/radeon-vii` sheet. We do not invent VRAM, gfx, or speed for that card.
+
+NVIDIA cited context only (not a Radeon figure, not a local-desktop card): Shannon’s 2026-10-05 post cites Qwen 3.8 27B at about 33 tok/s with MTP on a P100. Do not paste that number into a Radeon table. Source and write-up: [Shannon’s lab](/labs/shannon#p100-context). Autoresearch idea: [/autoresearch](/autoresearch#radeon-vii).
 
 ## What not to optimize first
 

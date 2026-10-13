@@ -140,6 +140,10 @@ export const CRUMB_LABELS: Record<string, string> = {
   '/harnesses/agents': 'Agents',
   '/harnesses/chat': 'Chat',
   '/harnesses/image': 'Image',
+  '/labs': 'Community labs',
+  '/labs/shannon': 'Shannon’s lab',
+  '/secure-lab': 'Secure home lab',
+  '/autoresearch': 'Autoresearch',
   '/backends': 'Backends',
   '/benchmarks': 'Benchmarks',
   '/benchmarks/methodology': 'Methodology',
@@ -452,6 +456,31 @@ setMeta(
   'Hardware and power',
   'PSU, cooling, noise, and VRAM versus model size for a home Radeon AI box. Cited or not recorded.',
 );
+setDate('/hardware', '2026-10-13');
+setMeta(
+  '/labs',
+  'Community labs',
+  'Cited home-lab write-ups that are not measured on local-desktop. Shannon’s How I run my Lab is the first. Not measured by AMDai.',
+);
+setDate('/labs', '2026-10-13');
+setMeta(
+  '/labs/shannon',
+  'Shannon’s lab',
+  'Cited write-up from Shannon (@iamMrDuncan), How I run my Lab, Oct 12 2026. Not measured by AMDai. No invented numbers.',
+);
+setDate('/labs/shannon', '2026-10-13');
+setMeta(
+  '/secure-lab',
+  'Secure home lab',
+  'Cited secure-lab layout from Shannon’s How I run my Lab — isolated enclave, Proxmox split, guardrails, separate NVMe, offsite backup. Not measured by AMDai.',
+);
+setDate('/secure-lab', '2026-10-13');
+setMeta(
+  '/autoresearch',
+  'Autoresearch idea',
+  'Cited idea for amdai-bench — container per GPU, automatic experiments, Prometheus/Grafana, bot steering. Not measured by AMDai.',
+);
+setDate('/autoresearch', '2026-10-13');
 setMeta(
   '/bios',
   'BIOS for local AI',
@@ -628,7 +657,7 @@ setMeta(
 setMeta(
   '/credits',
   'Credits',
-  'Sybil / 0xSero attribution for the recipe idea, and the local-desktop first-party set credited to amdai.',
+  'Sybil / 0xSero attribution for the recipe idea, the local-desktop first-party set credited to amdai, and Shannon’s cited lab write-up.',
 );
 setMeta(
   '/disclosure',

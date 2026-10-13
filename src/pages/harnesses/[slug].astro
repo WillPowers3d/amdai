@@ -64,6 +64,15 @@ const strata = endpointSet(harnessesFile, 'strata');
       </Callout>
     )}
 
+    {row.id === 'hermes' && (
+      <Callout type="note" title="Shannon’s Hermes — cited, not measured by AMDai">
+        Shannon (@iamMrDuncan) describes a multi-profile Hermes setup and Hermes desktop
+        <strong>bot mode</strong>. That layout is his. We have not reproduced it on local-desktop.
+        Official Hermes docs stay the attach path. llama.cpp first.
+        Write-up: <a href="/labs/shannon">Shannon’s lab</a>.
+      </Callout>
+    )}
+
     <article class="prose-lab prose mt-10 max-w-none">
       <h2 id="what">What it’s for</h2>
       <p>{row.what_for}</p>
