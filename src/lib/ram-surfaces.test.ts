@@ -17,6 +17,9 @@ describe('shopper RAM labels', () => {
     assert.equal(RAM_MIN_LABEL, 'Minimum system RAM needed');
     assert.equal(RAM_FULL_LABEL, 'RAM needed at full context');
     assert.ok(RAM_OFFLOAD_SURFACES.includes('/gpus/r9700'));
+    assert.ok(RAM_OFFLOAD_SURFACES.includes('/gpus/rx7900xtx'));
+    assert.ok(RAM_OFFLOAD_SURFACES.includes('/gpus/rx7900xt'));
+    assert.ok(RAM_OFFLOAD_SURFACES.includes('/gpus/rx7800xt'));
     assert.ok(isRamOffloadSurface('/recipes/qwen36-35b.llamacpp-vulkan.262k'));
     assert.equal(isRamOffloadSurface('/results'), false);
     assert.deepEqual(missingRamLabels('<p>peak system RAM 42.9 GB</p>'), [RAM_MIN_LABEL, RAM_FULL_LABEL]);

@@ -128,6 +128,27 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
     { href: '/compare', label: 'Compare 35B' },
     { href: '/stack-lab', label: 'Stack Lab' },
   ],
+  '/gpus/rx7900xtx': [
+    { href: '/calculator', label: 'Calculator' },
+    { href: '/budget', label: 'Budget' },
+    { href: '/gpus/r9700', label: 'R9700 measured page' },
+    { href: '/setup', label: 'First-run setup' },
+    { href: '/stack-lab', label: 'Stack Lab' },
+  ],
+  '/gpus/rx7900xt': [
+    { href: '/calculator', label: 'Calculator' },
+    { href: '/budget', label: 'Budget' },
+    { href: '/gpus/r9700', label: 'R9700 measured page' },
+    { href: '/setup', label: 'First-run setup' },
+    { href: '/stack-lab', label: 'Stack Lab' },
+  ],
+  '/gpus/rx7800xt': [
+    { href: '/calculator', label: 'Calculator' },
+    { href: '/budget', label: 'Budget' },
+    { href: '/gpus/r9700', label: 'R9700 measured page' },
+    { href: '/setup', label: 'First-run setup' },
+    { href: '/stack-lab', label: 'Stack Lab' },
+  ],
   '/multi-gpu': [
     { href: '/gpus/r9700', label: 'R9700 measured page' },
     { href: '/qwen36-dual', label: '35B on two cards' },

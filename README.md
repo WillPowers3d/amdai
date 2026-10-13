@@ -73,7 +73,10 @@ Public site URL is `https://amdai.net` (`site` in `astro.config.mjs`; override w
 | `/quants` | Q3–Q8, UD dynamic, KV types, why Q1/Q2 stay off |
 | `/gpus` | GPU directory — gfx IDs, VRAM, official ROCm rows, links to `/gpus/<id>` |
 | `/gpus/r9700` | Radeon AI PRO R9700 measured hero — 32 GB, 35B llama.cpp tables, Start → setup → recipe → Stack Lab |
-| `/gpus/<id>` | One card: recipe table, launch command, or “no tested recipe yet” |
+| `/gpus/rx7900xtx` | RX 7900 XTX consumer recipe sheet — 24 GB, gfx1100, calculator fit estimates; not measured on local-desktop |
+| `/gpus/rx7900xt` | RX 7900 XT consumer recipe sheet — 20 GB, gfx1100, calculator fit estimates; not measured on local-desktop |
+| `/gpus/rx7800xt` | RX 7800 XT consumer recipe sheet — 16 GB, gfx1101, calculator fit estimates; not measured on local-desktop |
+| `/gpus/<id>` | One card: recipe table, launch command, estimate sheet when listed, or “no tested recipe yet” |
 | `/models` | House Qwen models with reverse recipe tables |
 | `/recipes/<id>` | One launch: gates, command, RAM, withdrawal |
 | `/contribute` | Download recipe JSON (log required) |

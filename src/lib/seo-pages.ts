@@ -3,6 +3,7 @@
  */
 
 import { backends } from './backends-data';
+import { isConsumerRecipeGpu } from './consumer-gpu';
 import { gpuPages } from './gpu-pages';
 import { harnesses, harnessesFile } from './harnesses-data';
 import { quizCombos, parseQuizCombo, pickHarness } from './harnesses';
@@ -17,7 +18,7 @@ registerRunCardMeta(runs);
 const extra: Array<{ path: string; title: string; description: string }> = [];
 
 for (const page of gpuPages(recipes)) {
-  if (page.id === 'r9700') continue;
+  if (page.id === 'r9700' || isConsumerRecipeGpu(page.id)) continue;
   extra.push({
     path: `/gpus/${page.id}`,
     title: page.name.replace(/^AMD /, ''),

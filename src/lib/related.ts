@@ -9,6 +9,7 @@ import { GLOSSARY } from './glossary';
 import { stepsFor, type PathLink } from './primary-path';
 import { liveRecipes, recipesForCard, recipesForModel } from './recipes';
 import { recipes } from './recipes-data';
+import { CONSUMER_NAV_LINKS } from './consumer-gpu';
 import { urlPath } from './seo';
 
 export type RelatedLink = PathLink;
@@ -163,14 +164,17 @@ export function relatedFor(pathname: string): RelatedLink[] {
     add(out, seen, '/benchmarks', 'Benchmarks');
     add(out, seen, '/multi-gpu', 'Dual / multi-GPU');
     add(out, seen, '/setup', 'First-run setup');
+    add(out, seen, '/gpus/r9700', 'R9700 measured page');
+    for (const link of CONSUMER_NAV_LINKS) add(out, seen, link.href, link.label);
+    add(out, seen, '/calculator', 'Calculator');
+    add(out, seen, '/budget', 'Budget');
     if (id) {
       for (const recipe of recipesForCard(recipes, id)) {
         add(out, seen, `/recipes/${recipe.id}`, recipeLabel(recipe));
       }
       add(out, seen, '/results', 'Run cards');
       add(out, seen, '/backends/llamacpp', 'llama.cpp');
-    } else {
-      add(out, seen, '/gpus/r9700', 'R9700 measured page');
+      add(out, seen, '/stack-lab', 'Stack Lab');
     }
   }
 
@@ -259,7 +263,9 @@ export function relatedFor(pathname: string): RelatedLink[] {
 const BANNED = /Qwen2\.5|Qwen3-8B/i;
 const Q1Q2 = /\b(?:IQ[12]_[A-Z0-9]+|Q[12]_[A-Z0-9]+)\b/;
 
-export function assertRelatedValid(paths: string[] = ['/gpus/r9700', '/compare', '/setup', '/faq']): string[] {
+export function assertRelatedValid(
+  paths: string[] = ['/gpus/r9700', '/gpus/rx7900xtx', '/gpus/rx7900xt', '/gpus/rx7800xt', '/compare', '/setup', '/faq'],
+): string[] {
   const errors: string[] = [];
   for (const path of paths) {
     const links = relatedFor(path);
@@ -276,6 +282,13 @@ export function assertRelatedValid(paths: string[] = ['/gpus/r9700', '/compare',
   }
   if (!r9700.some((href) => href.startsWith('/recipes/'))) {
     errors.push('/gpus/r9700 missing recipe links');
+  }
+  for (const href of ['/gpus/rx7900xtx', '/gpus/rx7900xt', '/gpus/rx7800xt']) {
+    if (!r9700.includes(href)) errors.push(`/gpus/r9700 missing ${href}`);
+  }
+  const xtx = relatedFor('/gpus/rx7900xtx').map((link) => link.href);
+  for (const href of ['/gpus/r9700', '/calculator', '/budget', '/setup', '/stack-lab']) {
+    if (!xtx.includes(href)) errors.push(`/gpus/rx7900xtx missing ${href}`);
   }
   return errors;
 }

@@ -3,6 +3,7 @@ import { gpuDirectory } from '../lib/status';
 import { recipes } from '../lib/recipes-data';
 import { gpuCardId } from '../lib/gpu-pages';
 import { recipesForCard } from '../lib/recipes';
+import { isConsumerRecipeGpu } from '../lib/consumer-gpu';
 
 const families = [...new Set(gpuDirectory.cards.map((card) => card.family))];
 ---
@@ -57,6 +58,8 @@ const families = [...new Set(gpuDirectory.cards.map((card) => card.family))];
                 <td class="px-3 py-2.5 text-xs">
                   {count > 0 ? (
                     <a class="text-ok underline decoration-accent/40" href={`/gpus/${id}`}>{count} tested</a>
+                  ) : isConsumerRecipeGpu(id) ? (
+                    <a class="underline decoration-accent/40" href={`/gpus/${id}`}>Estimate sheet — no tested recipe</a>
                   ) : (
                     <span class="text-muted">No tested recipe yet — contribute</span>
                   )}

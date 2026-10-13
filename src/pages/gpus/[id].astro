@@ -1,7 +1,10 @@
 ---
 import Base from '../../layouts/Base.astro';
+import BuyButtons from '../../components/BuyButtons.astro';
+import ConsumerGpuSheet from '../../components/ConsumerGpuSheet.astro';
 import EvidenceBadge from '../../components/EvidenceBadge.astro';
 import LaunchCommand from '../../components/LaunchCommand.astro';
+import NextSteps from '../../components/NextSteps.astro';
 import RecipeTable from '../../components/RecipeTable.astro';
 import SystemRamNeed from '../../components/SystemRamNeed.astro';
 import { recipeSystemRam } from '../../lib/recipes';
@@ -12,6 +15,8 @@ import { officialAmdaiRuns, runsForGpu, verifiedMeasured } from '../../lib/run-c
 import { runs } from '../../lib/run-card-data';
 import { measuredRamHits } from '../../lib/measured-ram-data';
 import HowWeTest from '../../components/HowWeTest.astro';
+import { consumerRecipePage, isConsumerRecipeGpu } from '../../lib/consumer-gpu';
+import { gpuDirectory } from '../../lib/status';
 
 export function getStaticPaths() {
   return gpuPages(recipes)
@@ -21,6 +26,7 @@ export function getStaticPaths() {
 
 const page = gpuPageById(recipes, Astro.props.id);
 if (!page) throw new Error(`unknown GPU page ${Astro.props.id}`);
+const sheet = isConsumerRecipeGpu(page.id) ? consumerRecipePage(page.id) : null;
 const llamaFirst = [...page.recipes].sort((a, b) => {
   if (a.backend === b.backend) return b.ctx - a.ctx;
   return a.backend === 'llamacpp' ? -1 : 1;
@@ -29,29 +35,51 @@ const gpuRuns = officialAmdaiRuns(verifiedMeasured(runsForGpu(runs, page.id)));
 ---
 
 <Base
-  title={page.name}
-  description={`${page.name} recipes — model, backend, quant, context, decode, and a copyable launch command. Spec-only cards stay listed.`}
+  title={sheet?.title ?? page.name}
+  description={
+    sheet?.description ??
+    `${page.name} recipes — model, backend, quant, context, decode, and a copyable launch command. Spec-only cards stay listed.`
+  }
 >
   <main id="main" class="mx-auto max-w-6xl px-4 py-10 sm:px-6">
-    <p class="kicker">{page.family} · {page.arch} · {page.gfx}</p>
-    <h1 class="display mt-3 text-4xl sm:text-5xl">{page.name}</h1>
-    <p class="mt-4 max-w-2xl text-lg leading-relaxed text-muted">
-      {page.vram_gb == null ? 'Confirm VRAM on the product page.' : `${page.vram_gb} GB published VRAM.`}
-      {page.rocm_note}
-      {page.support === 'official' ? ' Official on the current ROCm matrix.' : ' Unofficial on the current matrix.'}
+    <p class="kicker">
+      <a class="underline decoration-accent/40" href="/gpus">GPU directory</a>
+      · {page.family} · {page.arch} · {page.gfx}
     </p>
-    <p class="mt-3 text-sm text-muted">
-      HSA_OVERRIDE: {page.hsa_override}
+    <h1 class="display mt-3 text-4xl sm:text-5xl">{sheet?.name ?? page.name}</h1>
+    <p class="mt-4 max-w-3xl text-lg leading-relaxed text-muted">
+      {sheet ? sheet.lead : (
+        <>
+          {page.vram_gb == null ? 'Confirm VRAM on the product page.' : `${page.vram_gb} GB published VRAM.`}
+          {page.rocm_note}
+          {page.support === 'official' ? ' Official on the current ROCm matrix.' : ' Unofficial on the current matrix.'}
+        </>
+      )}
     </p>
+    {!sheet && (
+      <p class="mt-3 text-sm text-muted">
+        HSA_OVERRIDE: {page.hsa_override}
+        {' · '}
+        <a class="underline decoration-accent/40" href={gpuDirectory.matrix} rel="noopener">ROCm matrix</a>
+        {' · '}
+        <a class="underline decoration-accent/40" href={gpuDirectory.linux_reqs} rel="noopener">Linux requirements</a>
+      </p>
+    )}
     <div class="mt-6 flex flex-wrap gap-3">
       <a class="btn-secondary" href="/gpus">All cards</a>
       {page.id === 'r9700' && <a class="btn-secondary" href="/compare">Compare 35B</a>}
-      {page.calcId && <a class="btn-primary" href={`/calculator?gpu=${page.calcId}`}>Open in calculator</a>}
+      {(sheet || page.calcId) && (
+        <a class="btn-primary" href={sheet?.calculatorHref ?? `/calculator?gpu=${page.calcId}`}>
+          Open in calculator
+        </a>
+      )}
       <a class="btn-ghost" href="/contribute">Contribute a recipe</a>
     </div>
     <div class="mt-4">
       <HowWeTest />
     </div>
+    {sheet && <ConsumerGpuSheet sheet={sheet} />}
+    {sheet && <BuyButtons product={sheet.id} />}
 
     <section class="mt-12" aria-labelledby="config-heading">
       <h2 id="config-heading" class="font-serif text-3xl">Configurations we have</h2>
@@ -112,5 +140,6 @@ const gpuRuns = officialAmdaiRuns(verifiedMeasured(runsForGpu(runs, page.id)));
         </p>
       </section>
     ))}
+    {sheet && <NextSteps path={sheet.path} />}
   </main>
 </Base>

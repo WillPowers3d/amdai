@@ -58,9 +58,12 @@ export const FAQ_ENTRIES: FaqItem[] = [
     group: 'getting-started',
     question: 'Which GPU should I start with?',
     answer:
-      'The measured house box is one AMD Radeon AI PRO R9700 (32 GB, gfx1201). There is no consumer RX 9700. A 16 GB RX 9070 XT is the same generation with half the VRAM. A 7900 XTX (gfx1100) is still a practical home card on a different ROCm family package. Confirm the SKU on the R9700 measured page and the GPU directory, then size the file on the calculator before you buy a second card.',
+      'The measured house box is one AMD Radeon AI PRO R9700 (32 GB, gfx1201). There is no consumer RX 9700. A 16 GB RX 9070 XT is the same generation with half the VRAM. A 7900 XTX (gfx1100) is still a practical home card on a different ROCm family package — see the RX 7900 XTX recipe sheet for calculator fit estimates, not local-desktop tok/s. Confirm the SKU on the R9700 measured page and the GPU directory, then size the file on the calculator before you buy a second card.',
     links: [
       { href: '/gpus/r9700', label: 'R9700 measured page' },
+      { href: '/gpus/rx7900xtx', label: 'RX 7900 XTX sheet' },
+      { href: '/gpus/rx7900xt', label: 'RX 7900 XT sheet' },
+      { href: '/gpus/rx7800xt', label: 'RX 7800 XT sheet' },
       { href: '/gpus', label: 'GPU directory' },
       { href: '/calculator', label: 'Calculator' },
       { href: '/start', label: 'Getting started' },

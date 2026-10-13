@@ -9,6 +9,9 @@ export const RAM_FULL_LABEL = 'RAM needed at full context';
 /** Pages that talk about RAM offload or system RAM and must show both labels. */
 export const RAM_OFFLOAD_SURFACES = [
   '/gpus/r9700',
+  '/gpus/rx7900xtx',
+  '/gpus/rx7900xt',
+  '/gpus/rx7800xt',
   '/multi-gpu',
   '/compare',
   '/compare/one-vs-two-gpu',
@@ -46,6 +49,9 @@ export function assertRamSurfacesValid(): string[] {
   if (RAM_FULL_LABEL !== 'RAM needed at full context') errors.push('full label drifted');
   if (RAM_OFFLOAD_SURFACES.length < 10) errors.push('surface list too short');
   if (!RAM_OFFLOAD_SURFACES.includes('/gpus/r9700')) errors.push('missing /gpus/r9700');
+  if (!RAM_OFFLOAD_SURFACES.includes('/gpus/rx7900xtx')) errors.push('missing /gpus/rx7900xtx');
+  if (!RAM_OFFLOAD_SURFACES.includes('/gpus/rx7900xt')) errors.push('missing /gpus/rx7900xt');
+  if (!RAM_OFFLOAD_SURFACES.includes('/gpus/rx7800xt')) errors.push('missing /gpus/rx7800xt');
   if (!RAM_OFFLOAD_SURFACES.includes('/calculator')) errors.push('missing /calculator');
   if (!isRamOffloadSurface('/recipes/qwen36-35b.llamacpp-vulkan.262k')) {
     errors.push('recipe pages must be RAM surfaces');

@@ -11,6 +11,7 @@ import { systemRamNeedFromQuery } from '../lib/calculator';
 import { measuredRamHits } from '../lib/measured-ram-data';
 import { DEFAULT_PRIORITY } from '../lib/priority';
 import { DEFAULT_STYLE, DEFAULT_USAGE, suggestedBudgetTier } from '../lib/ask';
+import { consumerShortName, isConsumerRecipeGpu } from '../lib/consumer-gpu';
 
 const hasBands = bandsReady();
 const payload = JSON.stringify({
@@ -47,6 +48,11 @@ const payload = JSON.stringify({
       <a class="underline decoration-accent/40 underline-offset-2" href="/calculator">calculator</a>.
       Measured 35B on the 32 GB house card:
       <a class="underline decoration-accent/40 underline-offset-2" href="/gpus/r9700">R9700 measured page</a>.
+      Consumer cards shoppers buy next to it:
+      <a class="underline decoration-accent/40 underline-offset-2" href="/gpus/rx7900xtx">RX 7900 XTX</a>,
+      <a class="underline decoration-accent/40 underline-offset-2" href="/gpus/rx7900xt">RX 7900 XT</a>,
+      <a class="underline decoration-accent/40 underline-offset-2" href="/gpus/rx7800xt">RX 7800 XT</a>
+      — estimate sheets, not local-desktop runs.
       Two cards:
       <a class="underline decoration-accent/40 underline-offset-2" href="/multi-gpu">Dual / multi-GPU</a>
       — a second R9700 is not automatic 2× decode.
@@ -115,6 +121,20 @@ const payload = JSON.stringify({
             </span>
           </div>
           <p class="mt-2 text-sm text-muted">{tier.vram_note}</p>
+          {tier.gpus.some((id) => isConsumerRecipeGpu(id)) && (
+            <p class="mt-2 text-sm text-muted">
+              Recipe sheets (estimates, not local-desktop):
+              {tier.gpus.filter(isConsumerRecipeGpu).map((id, index, list) => (
+                <>
+                  {index > 0 ? (index === list.length - 1 ? ' and ' : ', ') : ' '}
+                  <a class="underline decoration-accent/40 underline-offset-2" href={`/gpus/${id}`}>
+                    {consumerShortName(id)}
+                  </a>
+                </>
+              ))}
+              .
+            </p>
+          )}
           <p class="mt-2 text-xs text-faint">
             {tier.usd_band.label}
             {tier.usd_band.usd_low != null && tier.usd_band.usd_high != null && (

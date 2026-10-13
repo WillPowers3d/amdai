@@ -1,0 +1,123 @@
+import { describe, it } from 'node:test';
+import assert from 'node:assert/strict';
+import { DIMM_KIT_GB, GPU_PRESETS, compute, formatGiB } from './calculator';
+import { gpuCardId } from './gpu-ids';
+import { RAM_FULL_LABEL, RAM_MIN_LABEL } from './ram-surfaces';
+import { readFileSync } from 'node:fs';
+import { parse } from 'yaml';
+import type { GpuDirectory } from './status';
+import { COMPARE_Q3, COMPARE_Q3_CITE } from './local-desktop-compare';
+import {
+  CONSUMER_ENGINE,
+  CONSUMER_FIT_CONTEXTS,
+  CONSUMER_MODEL,
+  CONSUMER_NAV_LINKS,
+  CONSUMER_PUBLISHED,
+  CONSUMER_RECIPE_IDS,
+  CONSUMER_SPEED,
+  REQUIRED_CONSUMER_HREFS,
+  assertConsumerGpuValid,
+  consumerBlob,
+  consumerCalcInput,
+  consumerHrefs,
+  consumerPath,
+  consumerRecipePage,
+  consumerRecipePages,
+  consumerShortName,
+  isConsumerRecipeGpu,
+} from './consumer-gpu';
+import { documentTitle, isSitemapExcluded, pageDescription, shouldNoindex } from './seo';
+
+describe('consumer GPU recipe sheets', () => {
+  it('covers only cited directory SKUs and keeps house rules', () => {
+    const pages = consumerRecipePages();
+    assert.deepEqual(assertConsumerGpuValid(pages), []);
+    assert.deepEqual([...CONSUMER_RECIPE_IDS], ['rx7900xtx', 'rx7900xt', 'rx7800xt']);
+    assert.equal(CONSUMER_PUBLISHED, '2026-10-13');
+    assert.equal(CONSUMER_MODEL, 'Qwen3.6-35B-A3B');
+    assert.equal(CONSUMER_ENGINE, 'llama.cpp');
+    assert.equal(COMPARE_Q3, 'UD-Q3_K_XL');
+    assert.match(COMPARE_Q3_CITE, /16\.8 GB/);
+
+    const gpuDirectory = parse(readFileSync(new URL('../data/gpus.yaml', import.meta.url), 'utf8')) as GpuDirectory;
+    const yamlIds = new Set(gpuDirectory.cards.map((card) => gpuCardId(card)));
+    const presetIds = new Set(GPU_PRESETS.map((gpu) => gpu.id));
+    for (const id of CONSUMER_RECIPE_IDS) {
+      assert.ok(yamlIds.has(id), id);
+      assert.ok(presetIds.has(id), id);
+      assert.equal(isConsumerRecipeGpu(id), true);
+      assert.equal(consumerPath(id), `/gpus/${id}`);
+    }
+    assert.equal(isConsumerRecipeGpu('r9700'), false);
+    assert.equal(isConsumerRecipeGpu('rx9070xt'), false);
+    assert.equal(isConsumerRecipeGpu('rx7900gre'), false);
+
+    assert.equal(consumerShortName('rx7900xtx'), 'RX 7900 XTX');
+    assert.equal(pages[0]?.vramLabel, '24 GB');
+    assert.equal(pages[1]?.vramLabel, '20 GB');
+    assert.equal(pages[2]?.vramLabel, '16 GB');
+    assert.equal(pages[0]?.gfx, 'gfx1100');
+    assert.equal(pages[1]?.gfx, 'gfx1100');
+    assert.equal(pages[2]?.gfx, 'gfx1101');
+  });
+
+  it('uses calculator estimates and leaves speed not measured', () => {
+    for (const page of consumerRecipePages()) {
+      assert.equal(page.fitRows.length, 4);
+      const q3 = page.fitRows.find((row) => row.quant === COMPARE_Q3);
+      assert.ok(q3);
+      assert.equal(q3.kind, 'q3-estimate');
+      assert.match(q3.kindLabel, /estimate/i);
+      assert.equal(q3.speed, CONSUMER_SPEED);
+      for (const row of page.fitRows) {
+        assert.equal(row.cells.length, CONSUMER_FIT_CONTEXTS.length);
+        for (const cell of row.cells) {
+          assert.equal(cell.speed, 'not measured');
+          const live = compute(consumerCalcInput(page.id, row.quantId, cell.context));
+          assert.equal(cell.totalGb, `${formatGiB(live.totalGiB)} GB`);
+          assert.equal(cell.verdict, live.verdict);
+          assert.equal(live.tested, null);
+        }
+      }
+      assert.equal(page.ramNeed.atSelected.label, 'estimate');
+      assert.equal(page.ramNeed.atFullContext.label, 'estimate');
+      assert.ok((DIMM_KIT_GB as readonly number[]).includes(page.ramNeed.atSelected.kitGb));
+      assert.ok((DIMM_KIT_GB as readonly number[]).includes(page.ramNeed.atFullContext.kitGb));
+      assert.equal(page.ramNeed.atSelected.measured, false);
+
+      const blob = consumerBlob(page);
+      assert.match(blob, /not measured on local-desktop/i);
+      assert.match(blob, /Radeon AI PRO R9700/);
+      assert.ok(blob.includes(RAM_MIN_LABEL));
+      assert.ok(blob.includes(RAM_FULL_LABEL));
+      assert.doesNotMatch(blob, /Qwen2\.5|Qwen3-8B/);
+      assert.doesNotMatch(blob, /\$\d|\bMSRP\b/);
+      assert.doesNotMatch(blob, /qwen-reliable|qwen-fast-agent/);
+      assert.doesNotMatch(blob, /\btok\/s\b/);
+
+      const hrefs = consumerHrefs(page);
+      for (const required of REQUIRED_CONSUMER_HREFS) {
+        assert.ok(hrefs.includes(required), `${page.id} ${required}`);
+      }
+      assert.ok(page.matrixHref.includes('compatibility-matrix'));
+    }
+
+    const xtx4kQ4 = compute(consumerCalcInput('rx7900xtx', 'q4_k_m', 4096));
+    const xt16Q4 = compute(consumerCalcInput('rx7800xt', 'q4_k_m', 4096));
+    assert.ok(xt16Q4.verdict === 'no');
+    assert.ok(xtx4kQ4.weightsGiB > 0);
+    assert.ok(CONSUMER_NAV_LINKS.every((link) => link.href.startsWith('/gpus/')));
+  });
+
+  it('has unique SEO without pretending the cards were measured', () => {
+    for (const page of consumerRecipePages()) {
+      assert.equal(shouldNoindex(page.path), false);
+      assert.equal(isSitemapExcluded(page.path), false);
+      assert.ok(documentTitle(page.path).endsWith(' · AMDai'));
+      const desc = pageDescription(page.path);
+      assert.match(desc, /estimate/i);
+      assert.match(desc, /not measured on local-desktop/i);
+      assert.doesNotMatch(desc, /tok\/s/);
+    }
+  });
+});

@@ -155,6 +155,9 @@ export const CRUMB_LABELS: Record<string, string> = {
   '/tutorials/serve-qwen': 'Serve Qwen',
   '/gpus': 'GPUs',
   '/gpus/r9700': 'R9700',
+  '/gpus/rx7900xtx': 'RX 7900 XTX',
+  '/gpus/rx7900xt': 'RX 7900 XT',
+  '/gpus/rx7800xt': 'RX 7800 XT',
   '/models': 'Models',
   '/recipes': 'Recipes',
   '/blog': 'Blog',
@@ -370,6 +373,24 @@ setMeta(
   'Measured 35B llama.cpp on the Radeon AI PRO R9700 — 32 GB VRAM, one GPU vs two, cited decode and prefill from local-desktop run cards.',
 );
 setDate('/gpus/r9700', '2026-10-13');
+setMeta(
+  '/gpus/rx7900xtx',
+  'RX 7900 XTX',
+  'RX 7900 XTX recipe sheet — 24 GB, gfx1100, cited ROCm matrix row. 35B Q6/Q5/Q4 VRAM fit estimates; UD-Q3_K_XL labeled estimate. Not measured on local-desktop.',
+);
+setDate('/gpus/rx7900xtx', '2026-10-13');
+setMeta(
+  '/gpus/rx7900xt',
+  'RX 7900 XT',
+  'RX 7900 XT recipe sheet — 20 GB, gfx1100, cited ROCm matrix row. 35B Q6/Q5/Q4 VRAM fit estimates; UD-Q3_K_XL labeled estimate. Not measured on local-desktop.',
+);
+setDate('/gpus/rx7900xt', '2026-10-13');
+setMeta(
+  '/gpus/rx7800xt',
+  'RX 7800 XT',
+  'RX 7800 XT recipe sheet — 16 GB, gfx1101, cited ROCm matrix row. 35B Q6/Q5/Q4 VRAM fit estimates; UD-Q3_K_XL labeled estimate. Not measured on local-desktop.',
+);
+setDate('/gpus/rx7800xt', '2026-10-13');
 setMeta(
   '/models',
   'House Qwen models',
