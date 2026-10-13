@@ -49,6 +49,9 @@ export type SeoPage = {
   description: string | null;
   canonical: string | null;
   ogImage: string | null;
+  ogImageAlt: string | null;
+  twitterCard: string | null;
+  twitterImage: string | null;
   robots: string | null;
   lang: string | null;
   noindex: boolean;
@@ -72,6 +75,18 @@ export function extractMeta(html: string): Omit<SeoPage, 'path' | 'file'> {
     html.match(/<meta\s[^>]*property=["']og:image["'][^>]*>/i)?.[0] ??
     html.match(/<meta\s[^>]*content=["'][^"']+["'][^>]*property=["']og:image["'][^>]*>/i)?.[0];
   const ogImage = ogTag ? ATTR(ogTag, 'content') : null;
+  const ogAltTag =
+    html.match(/<meta\s[^>]*property=["']og:image:alt["'][^>]*>/i)?.[0] ??
+    html.match(/<meta\s[^>]*content=["'][^"']+["'][^>]*property=["']og:image:alt["'][^>]*>/i)?.[0];
+  const ogImageAlt = ogAltTag ? ATTR(ogAltTag, 'content') : null;
+  const twitterCardTag =
+    html.match(/<meta\s[^>]*name=["']twitter:card["'][^>]*>/i)?.[0] ??
+    html.match(/<meta\s[^>]*content=["'][^"']+["'][^>]*name=["']twitter:card["'][^>]*>/i)?.[0];
+  const twitterCard = twitterCardTag ? ATTR(twitterCardTag, 'content') : null;
+  const twitterImageTag =
+    html.match(/<meta\s[^>]*name=["']twitter:image["'][^>]*>/i)?.[0] ??
+    html.match(/<meta\s[^>]*content=["'][^"']+["'][^>]*name=["']twitter:image["'][^>]*>/i)?.[0];
+  const twitterImage = twitterImageTag ? ATTR(twitterImageTag, 'content') : null;
   const robotsTag =
     html.match(/<meta\s[^>]*name=["']robots["'][^>]*>/i)?.[0] ??
     html.match(/<meta\s[^>]*content=["'][^"']+["'][^>]*name=["']robots["'][^>]*>/i)?.[0];
@@ -82,7 +97,7 @@ export function extractMeta(html: string): Omit<SeoPage, 'path' | 'file'> {
   for (const match of html.matchAll(/<script\s[^>]*type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi)) {
     jsonld.push(match[1]);
   }
-  return { title, description, canonical, ogImage, robots, lang, noindex, jsonld };
+  return { title, description, canonical, ogImage, ogImageAlt, twitterCard, twitterImage, robots, lang, noindex, jsonld };
 }
 
 export function listSeoPages(index: DistIndex): SeoPage[] {
@@ -256,8 +271,25 @@ export function checkSeoPage(page: SeoPage, root: string): SeoIssue[] {
     }
     if (!page.ogImage) {
       issues.push({ kind: 'og', path: page.path, message: 'missing og:image' });
+    } else if (!/^https:\/\//i.test(page.ogImage)) {
+      issues.push({ kind: 'og', path: page.path, message: `og:image must be an absolute https URL (${page.ogImage})` });
     } else if (!assetExists(root, page.ogImage)) {
       issues.push({ kind: 'og', path: page.path, message: `og:image missing on disk ${page.ogImage}` });
+    }
+    if (!page.ogImageAlt) {
+      issues.push({ kind: 'og', path: page.path, message: 'missing og:image:alt' });
+    }
+    if (!page.twitterCard) {
+      issues.push({ kind: 'og', path: page.path, message: 'missing twitter:card' });
+    } else if (page.twitterCard !== 'summary_large_image') {
+      issues.push({ kind: 'og', path: page.path, message: `twitter:card must be summary_large_image (${page.twitterCard})` });
+    }
+    if (!page.twitterImage) {
+      issues.push({ kind: 'og', path: page.path, message: 'missing twitter:image' });
+    } else if (!/^https:\/\//i.test(page.twitterImage)) {
+      issues.push({ kind: 'og', path: page.path, message: `twitter:image must be an absolute https URL (${page.twitterImage})` });
+    } else if (!assetExists(root, page.twitterImage)) {
+      issues.push({ kind: 'og', path: page.path, message: `twitter:image missing on disk ${page.twitterImage}` });
     }
     if (!page.jsonld.length) {
       issues.push({ kind: 'jsonld', path: page.path, message: 'missing JSON-LD' });

@@ -6,6 +6,7 @@ import { tmpdir } from 'node:os';
 import { indexDist } from './site-qa';
 import {
   checkSeoIndex,
+  checkSeoPage,
   extractMeta,
   formatSeoReport,
   requiredFieldsFor,
@@ -77,6 +78,9 @@ describe('SEO QA on dist HTML', () => {
       <title>Same · AMDai</title>
       <meta name="description" content="This description is long enough to pass the seventy character floor for AMDai pages." />
       <meta property="og:image" content="https://amdai.net/og/default.png" />
+      <meta property="og:image:alt" content="AMDai — independent Radeon AI notes. Not affiliated with AMD." />
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:image" content="https://amdai.net/og/default.png" />
       <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","name":"AMDai","url":"https://amdai.net","potentialAction":{"@type":"SearchAction"}}]}</script>
     </head><body><main id="main">ok</main></body></html>`;
     writeFileSync(join(root, 'index.html'), page.replace('Same', 'Home title here'));
@@ -104,6 +108,8 @@ describe('SEO QA on dist HTML', () => {
     );
     assert.equal(meta.title, 'FAQ · AMDai');
     assert.equal(meta.canonical, 'https://amdai.net/faq');
+    assert.equal(meta.ogImage, null);
+    assert.equal(meta.ogImageAlt, null);
     const report = formatSeoReport({
       asOf: '2026-10-13',
       pages: 2,
@@ -111,5 +117,51 @@ describe('SEO QA on dist HTML', () => {
     });
     assert.match(report, /SEO QA · 2026-10-13/);
     assert.match(report, /Issues: 1/);
+  });
+
+  it('fails relative og:image, missing alt, and 404 share assets', () => {
+    const root = join(tmpdir(), `amdai-seo-og-${Date.now()}`);
+    mkdirSync(join(root, 'og'), { recursive: true });
+    writeFileSync(join(root, 'og/default.png'), 'png');
+    const base = {
+      path: '/faq',
+      file: join(root, 'faq/index.html'),
+      title: 'FAQ · AMDai',
+      description:
+        'This description is long enough to pass the seventy character floor for AMDai pages.',
+      canonical: 'https://amdai.net/faq',
+      ogImage: 'https://amdai.net/og/default.png',
+      ogImageAlt: 'AMDai FAQ — first-time Radeon local-LLM answers',
+      twitterCard: 'summary_large_image',
+      twitterImage: 'https://amdai.net/og/default.png',
+      robots: null,
+      lang: 'en',
+      noindex: false,
+      jsonld: ['{"@type":"WebSite","name":"AMDai","url":"https://amdai.net","potentialAction":{}}'],
+    };
+    assert.equal(checkSeoPage(base, root).filter((row) => row.kind === 'og').length, 0);
+    assert.ok(
+      checkSeoPage({ ...base, ogImage: '/og/default.png' }, root).some((row) =>
+        row.message.includes('absolute https'),
+      ),
+    );
+    assert.ok(
+      checkSeoPage({ ...base, ogImage: 'https://amdai.net/og/missing.png' }, root).some((row) =>
+        row.message.includes('missing on disk'),
+      ),
+    );
+    assert.ok(
+      checkSeoPage({ ...base, ogImageAlt: null }, root).some((row) => row.message.includes('og:image:alt')),
+    );
+    assert.ok(
+      checkSeoPage({ ...base, twitterCard: 'summary' }, root).some((row) =>
+        row.message.includes('summary_large_image'),
+      ),
+    );
+    assert.ok(
+      checkSeoPage({ ...base, twitterImage: '/og/default.png' }, root).some((row) =>
+        row.message.includes('twitter:image must be an absolute https'),
+      ),
+    );
   });
 });
