@@ -44,6 +44,7 @@ export default defineConfig({
   ],
   redirects: {
     '/local-ai': '/software',
+    '/two-r9700': '/qwen36-dual',
   },
   markdown: {
     shikiConfig: {

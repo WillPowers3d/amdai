@@ -114,6 +114,7 @@ export const homeLink: NavItem = {
 
 export const primaryNav: NavItem[] = [
   { href: '/start', label: 'Getting started', description: 'GPU → ROCm → llama.cpp → optional harness', group: 'path' },
+  { href: '/setup', label: 'First-run setup', description: 'Ubuntu 24.04+ to first token, plus an honest Windows path', group: 'path' },
   { href: '/stacks', label: 'Stacks', description: 'Daily driver and fast-agent cards from our test rig', group: 'path' },
   { href: '/qwen', label: 'Qwen compare', description: 'Every current 3.6 / 3.8 model × quant — sortable, filterable, measured cells from run cards', group: 'path' },
   { href: '/compare', label: 'Compare 35B', description: 'One GPU vs split, and Q6 / Q5 / Q4 plus a labeled Q3 estimate — from local-desktop run cards', group: 'path' },

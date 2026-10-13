@@ -71,8 +71,9 @@ export const FAQ_ENTRIES: FaqItem[] = [
     group: 'getting-started',
     question: 'Ubuntu or Windows for a first local LLM box?',
     answer:
-      'Ubuntu LTS named on AMD’s current ROCm matrix is the path we write. Vulkan llama.cpp is the honest Windows path for tokens. Full ROCm userspace is a Linux product. ROCm 10.1 lists WSL2 as a technical preview — not a measured local-desktop daily driver. We do not have Windows tok/s cards.',
+      'Ubuntu LTS named on AMD’s current ROCm matrix is the path we write. First-run setup walks Ubuntu 24.04+ to the first token and an honest Windows path. Vulkan llama.cpp is the honest Windows path for tokens. Full ROCm userspace is a Linux product. ROCm 10.1 lists WSL2 as a technical preview — not a measured local-desktop daily driver. We do not have Windows tok/s cards.',
     links: [
+      { href: '/setup', label: 'First-run setup' },
       { href: '/start', label: 'Getting started' },
       { href: '/tutorials/install-rocm', label: 'Install ROCm' },
       { href: '/rocm-problems/windows-wsl-preview', label: 'Windows / WSL2 preview' },

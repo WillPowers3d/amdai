@@ -175,6 +175,7 @@ export const CRUMB_LABELS: Record<string, string> = {
   '/flash-daily': 'Flash daily',
   '/flash-ram-offload': 'Flash RAM offload',
   '/start': 'Getting started',
+  '/setup': 'First-run setup',
   '/stacks': 'Stacks',
   '/calculator': 'Calculator',
   '/budget': 'Budget',
@@ -258,6 +259,12 @@ setMeta(
   'Getting started',
   'GPU, then ROCm, then llama.cpp, then an optional harness — one path for a first home Radeon box.',
 );
+setMeta(
+  '/setup',
+  'First-run setup',
+  'Ubuntu 24.04+ first token on a Radeon, plus an honest Windows path. llama.cpp first. Measured local-desktop cards, no invented tok/s.',
+);
+setDate('/setup', '2026-10-13');
 setMeta(
   '/stacks',
   'Recommended stacks',

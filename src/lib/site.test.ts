@@ -44,6 +44,7 @@ describe('accessibility statement', () => {
     const page = readFileSync(join(here, '../pages/accessibility.astro'), 'utf8');
     assert.match(footer, /href="\/accessibility"/);
     assert.match(footer, /href="\/newsletter"/);
+    assert.match(footer, /href="\/setup"/);
     assert.match(page, /13 October 2026/);
     assert.match(page, /\/forum/);
     assert.match(page, /\/contribute/);

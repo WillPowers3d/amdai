@@ -1,0 +1,189 @@
+---
+import Base from '../layouts/Base.astro';
+import Callout from '../components/Callout.astro';
+import NewsletterSignup from '../components/NewsletterSignup.astro';
+import {
+  SETUP_INTRO_LINKS,
+  SETUP_NAME,
+  SETUP_NUMBERS,
+  SETUP_PATHS,
+  SETUP_SECTIONS,
+  SETUP_STACK_LAB,
+  SETUP_TROUBLE,
+} from '../lib/setup';
+---
+
+<Base
+  title="First-run setup"
+  description="Ubuntu 24.04+ first token on a Radeon, plus an honest Windows path. llama.cpp first. Measured local-desktop cards, no invented tok/s."
+>
+  <main id="main" class="mx-auto max-w-3xl px-4 py-10 sm:px-6">
+    <a class="skip-link skip-to-setup-nav" href="#setup-sections">Skip to section nav</a>
+    <p class="kicker">Zero to first token</p>
+    <h1 class="mt-3 font-serif text-4xl tracking-tight sm:text-5xl">{SETUP_NAME}</h1>
+    <p class="mt-4 text-lg leading-relaxed text-muted">
+      Two paths. Ubuntu 24.04+ is the recommended, measured one. Windows is honest about
+      what we have not run. Short answers stay on the
+      <a class="underline decoration-accent/40" href="/faq">FAQ</a>.
+      The longer map is
+      <a class="underline decoration-accent/40" href="/start">Getting started</a>.
+      We do not invent tok/s or prices.
+    </p>
+    <ul class="mt-4 flex flex-wrap gap-2">
+      {SETUP_INTRO_LINKS.map((link) => (
+        <li>
+          <a
+            class="inline-flex min-h-9 items-center rounded-full border border-line bg-canvas px-3 text-sm text-ink hover:border-accent/50 hover:text-accent-ink"
+            href={link.href}
+          >
+            {link.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+
+    <nav
+      id="setup-sections"
+      class="setup-sections sticky z-20 -mx-4 mt-8 border-y border-line bg-canvas/95 px-4 py-2 backdrop-blur-md sm:-mx-6 sm:px-6"
+      aria-label="Setup sections"
+    >
+      <p class="mb-2 font-mono text-[0.68rem] uppercase tracking-[0.16em] text-faint">Jump to section</p>
+      <ol class="flex flex-wrap gap-2">
+        {SETUP_SECTIONS.map((section) => (
+          <li>
+            <a
+              class="inline-flex min-h-11 items-center rounded-full border border-line bg-raised px-3 text-sm text-ink hover:border-accent/50 hover:text-accent-ink"
+              href={`#${section.id}`}
+            >
+              {section.label}
+            </a>
+          </li>
+        ))}
+      </ol>
+    </nav>
+
+    <section id="pick-a-path" class="mt-10 scroll-mt-36" aria-labelledby="pick-a-path-heading">
+      <h2 id="pick-a-path-heading" class="font-serif text-3xl tracking-tight">Pick a path</h2>
+      <div class="mt-6 grid gap-4 sm:grid-cols-2">
+        {SETUP_PATHS.map((path) => (
+          <a class="card p-5 hover:border-accent/40" href={`#${path.id}`}>
+            <p class="kicker">{path.kicker}</p>
+            <h3 class="mt-2 text-xl tracking-tight">{path.label}</h3>
+            <p class="mt-3 text-sm leading-relaxed text-muted">{path.summary}</p>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    {SETUP_PATHS.map((path) => (
+      <section id={path.id} class="mt-12 scroll-mt-36" aria-labelledby={`${path.id}-heading`}>
+        <h2 id={`${path.id}-heading`} class="font-serif text-3xl tracking-tight">{path.label}</h2>
+        <p class="mt-3 leading-relaxed text-muted">{path.summary}</p>
+        {path.id === 'ubuntu' ? (
+          <Callout type="linux" title="Recommended">
+            <p>
+              Official 10.1 Radeon OS rows include Ubuntu 24.04.5. Install ROCm and verify on
+              those pages — this guide only orders the work.
+            </p>
+          </Callout>
+        ) : (
+          <Callout type="warn" title="Not measured on local-desktop">
+            <p>
+              Every Windows step below is a labeled estimate. The tok/s on this site are
+              Ubuntu llama-bench cards.
+            </p>
+          </Callout>
+        )}
+        <ol class="mt-8 space-y-6">
+          {path.steps.map((step, index) => (
+            <li id={step.id} class="scroll-mt-36 rounded-2xl border border-line bg-raised/50 p-5">
+              <p class="kicker">
+                Step {index + 1}
+                {step.measured ? ' · measured' : ' · estimate'}
+              </p>
+              <h3 class="mt-2 font-serif text-2xl tracking-tight">{step.title}</h3>
+              <p class="mt-3 leading-relaxed text-ink">{step.body}</p>
+              <ul class="mt-4 flex flex-wrap gap-2">
+                {step.links.map((link) => (
+                  <li>
+                    <a
+                      class="inline-flex min-h-9 items-center rounded-full border border-line bg-canvas px-3 text-sm text-ink hover:border-accent/50 hover:text-accent-ink"
+                      href={link.href}
+                    >
+                      {link.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </li>
+          ))}
+        </ol>
+      </section>
+    ))}
+
+    <section id="stack-lab" class="mt-12 scroll-mt-36" aria-labelledby="stack-lab-heading">
+      <h2 id="stack-lab-heading" class="font-serif text-3xl tracking-tight">{SETUP_STACK_LAB.title}</h2>
+      <p class="mt-3 leading-relaxed text-muted">{SETUP_STACK_LAB.body}</p>
+      <ul class="mt-4 flex flex-wrap gap-2">
+        {SETUP_STACK_LAB.links.map((link) => (
+          <li>
+            <a
+              class="inline-flex min-h-9 items-center rounded-full border border-line bg-canvas px-3 text-sm text-ink hover:border-accent/50 hover:text-accent-ink"
+              href={link.href}
+            >
+              {link.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section id="read-the-numbers" class="mt-12 scroll-mt-36" aria-labelledby="read-the-numbers-heading">
+      <h2 id="read-the-numbers-heading" class="font-serif text-3xl tracking-tight">{SETUP_NUMBERS.title}</h2>
+      <p class="mt-3 leading-relaxed text-muted">{SETUP_NUMBERS.body}</p>
+      <ul class="mt-4 flex flex-wrap gap-2">
+        {SETUP_NUMBERS.links.map((link) => (
+          <li>
+            <a
+              class="inline-flex min-h-9 items-center rounded-full border border-line bg-canvas px-3 text-sm text-ink hover:border-accent/50 hover:text-accent-ink"
+              href={link.href}
+            >
+              {link.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section id="troubleshooting" class="mt-12 scroll-mt-36" aria-labelledby="troubleshooting-heading">
+      <h2 id="troubleshooting-heading" class="font-serif text-3xl tracking-tight">{SETUP_TROUBLE.title}</h2>
+      <p class="mt-3 leading-relaxed text-muted">{SETUP_TROUBLE.body}</p>
+      <ul class="mt-4 flex flex-wrap gap-2">
+        {SETUP_TROUBLE.links.map((link) => (
+          <li>
+            <a
+              class="inline-flex min-h-9 items-center rounded-full border border-line bg-canvas px-3 text-sm text-ink hover:border-accent/50 hover:text-accent-ink"
+              href={link.href}
+            >
+              {link.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <div class="not-prose mt-12">
+      <NewsletterSignup variant="article" />
+    </div>
+  </main>
+</Base>
+
+<style>
+  .skip-to-setup-nav:focus {
+    top: 3.5rem;
+  }
+
+  .setup-sections {
+    top: var(--header-h);
+  }
+</style>

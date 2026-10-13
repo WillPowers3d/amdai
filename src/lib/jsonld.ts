@@ -5,6 +5,7 @@
 
 import { GLOSSARY } from './glossary';
 import { FAQ_ITEMS } from './faq';
+import { SETUP_HOWTO_STEPS, SETUP_PUBLISHED } from './setup';
 import { ROCM_FAQ_ALL } from './rocm-faq';
 import { ROCM_GLOSSARY } from './rocm-glossary';
 import {
@@ -295,6 +296,20 @@ export function pageJsonLd(input: {
   }
 
   const dates = articleDates(path);
+  if (path === '/setup') {
+    nodes.push(
+      howToJsonLd({
+        name: input.title.replace(/ · AMDai$/, ''),
+        description: input.description,
+        url,
+        published: dates?.published ?? SETUP_PUBLISHED,
+        modified: dates?.modified ?? SETUP_PUBLISHED,
+        steps: SETUP_HOWTO_STEPS,
+      }),
+    );
+    return nodes;
+  }
+
   if (path === '/tutorials/install-rocm' && dates) {
     nodes.push(
       howToJsonLd({
