@@ -1,0 +1,272 @@
+---
+import Base from '../layouts/Base.astro';
+import Callout from '../components/Callout.astro';
+import HowWeTest from '../components/HowWeTest.astro';
+import NextSteps from '../components/NextSteps.astro';
+import {
+  SPEECH_ALONGSIDE,
+  SPEECH_CITED_LABEL,
+  SPEECH_DESCRIPTION,
+  SPEECH_ERRORS,
+  SPEECH_FIT_ROWS,
+  SPEECH_HUB_LINKS,
+  SPEECH_LEAD,
+  SPEECH_LINUX_STEPS,
+  SPEECH_MODELS,
+  SPEECH_SECTIONS,
+  SPEECH_SOURCES,
+  SPEECH_SPEED_LABEL,
+  SPEECH_TITLE,
+  SPEECH_WINDOWS_STEPS,
+} from '../lib/speech';
+import { RAM_FULL_LABEL, RAM_MIN_LABEL } from '../lib/ram-surfaces';
+---
+
+<Base title={SPEECH_TITLE} description={SPEECH_DESCRIPTION}>
+  <main id="main" class="mx-auto max-w-4xl px-4 py-10 sm:px-6">
+    <p class="kicker">{SPEECH_CITED_LABEL}</p>
+    <h1 class="display mt-3 text-4xl sm:text-5xl">{SPEECH_TITLE}</h1>
+    <p class="mt-4 max-w-3xl text-lg leading-relaxed text-muted">{SPEECH_LEAD}</p>
+    <ul class="mt-4 flex flex-wrap gap-2">
+      {SPEECH_HUB_LINKS.map((link) => (
+        <li>
+          <a
+            class="inline-flex min-h-11 items-center rounded-full border border-line bg-canvas px-3 text-sm text-ink hover:border-accent/50 hover:text-accent-ink"
+            href={link.href}
+          >
+            {link.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+    <div class="mt-4">
+      <HowWeTest />
+    </div>
+
+    <Callout type="note" title="whisper.cpp first, not a chat engine">
+      <p>
+        Speech-to-text on AMDai is whisper.cpp Vulkan. Text-to-speech is Piper.
+        llama.cpp stays first for local LLMs. whisper.cpp does not speak
+        llama-server /v1. Speech speeds are
+        <strong class="text-ink">{SPEECH_SPEED_LABEL}</strong> — the gap is on
+        <a class="underline decoration-accent/40" href="/wanted">/wanted</a>
+        as a first-party <code class="font-mono text-ink">amdai-bench/run@1</code> card.
+      </p>
+    </Callout>
+
+    <nav
+      class="sticky z-20 -mx-4 mt-8 border-y border-line bg-canvas/95 px-4 py-2 backdrop-blur-md sm:-mx-6 sm:px-6"
+      aria-label="Speech sections"
+    >
+      <p class="mb-2 font-mono text-[0.68rem] uppercase tracking-[0.16em] text-faint">Jump to section</p>
+      <ol class="flex flex-wrap gap-2">
+        {SPEECH_SECTIONS.map((section) => (
+          <li>
+            <a
+              class="inline-flex min-h-11 items-center rounded-full border border-line bg-raised px-3 text-sm text-ink hover:border-accent/50 hover:text-accent-ink"
+              href={`#${section.id}`}
+            >
+              {section.label}
+            </a>
+          </li>
+        ))}
+      </ol>
+    </nav>
+
+    <section id="what-it-is" class="mt-10 scroll-mt-36" aria-labelledby="what-it-is-heading">
+      <h2 id="what-it-is-heading" class="font-serif text-3xl tracking-tight">What local speech is</h2>
+      <p class="mt-3 max-w-3xl leading-relaxed text-muted">
+        STT: you feed a wav to whisper.cpp and get text. TTS: you feed a sentence
+        to Piper and get a wav. That is a different job from a local Qwen chat.
+        whisper.cpp files are the ggml models the README lists — not house 35B
+        Q4–Q6 GGUFs. Q3 stays a labeled estimate on the LLM side. Nothing below
+        Q3. We have no speech run card yet.
+      </p>
+    </section>
+
+    <section id="models" class="mt-12 scroll-mt-36" aria-labelledby="models-heading">
+      <h2 id="models-heading" class="font-serif text-3xl tracking-tight">Cited memory table</h2>
+      <p class="mt-3 max-w-3xl leading-relaxed text-muted">
+        Disk and mem cells copy the whisper.cpp README Memory usage table. They
+        are not AMDai measurements and not tok/s.
+      </p>
+      <div class="mt-6 overflow-x-auto">
+        <table class="min-w-full border-collapse text-left text-sm">
+          <caption class="sr-only">
+            whisper.cpp official Memory usage table. Speeds not yet measured by AMDai.
+          </caption>
+          <thead>
+            <tr class="border-b border-line">
+              <th scope="col" class="py-3 pr-4 font-medium text-ink">Model</th>
+              <th scope="col" class="py-3 pr-4 font-medium text-ink">Disk (cited)</th>
+              <th scope="col" class="py-3 pr-4 font-medium text-ink">Mem (cited)</th>
+              <th scope="col" class="py-3 font-medium text-ink">Note</th>
+            </tr>
+          </thead>
+          <tbody>
+            {SPEECH_MODELS.map((row) => (
+              <tr class="border-b border-line align-top">
+                <th scope="row" class="py-3 pr-4 font-medium text-ink">{row.name}</th>
+                <td class="py-3 pr-4 font-mono text-ink">{row.disk}</td>
+                <td class="py-3 pr-4 font-mono text-ink">{row.mem}</td>
+                <td class="py-3 text-muted">{row.note}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="fit" class="mt-12 scroll-mt-36" aria-labelledby="fit-heading">
+      <h2 id="fit-heading" class="font-serif text-3xl tracking-tight">Per-GPU-class fit</h2>
+      <p class="mt-3 max-w-3xl leading-relaxed text-muted">
+        Classes use AMD-published VRAM stickers from the GPU directory. Every fit
+        cell is an estimate against the official mem table. Every speed cell is
+        {SPEECH_SPEED_LABEL}.
+      </p>
+      <div class="mt-6 overflow-x-auto">
+        <table class="min-w-full border-collapse text-left text-sm">
+          <caption class="sr-only">
+            Estimated speech fit by published VRAM class. Speeds not yet measured by AMDai.
+          </caption>
+          <thead>
+            <tr class="border-b border-line">
+              <th scope="col" class="py-3 pr-4 font-medium text-ink">VRAM class</th>
+              <th scope="col" class="py-3 pr-4 font-medium text-ink">Directory pages</th>
+              <th scope="col" class="py-3 pr-4 font-medium text-ink">Fit (estimate)</th>
+              <th scope="col" class="py-3 font-medium text-ink">Speed</th>
+            </tr>
+          </thead>
+          <tbody>
+            {SPEECH_FIT_ROWS.map((row) => (
+              <tr class="border-b border-line align-top">
+                <th scope="row" class="py-3 pr-4 font-medium text-ink">{row.vramClass}</th>
+                <td class="py-3 pr-4">
+                  <ul class="flex flex-wrap gap-x-3 gap-y-1">
+                    {row.cards.map((card) => (
+                      <li>
+                        <a class="underline decoration-accent/40" href={card.href}>{card.label}</a>
+                      </li>
+                    ))}
+                  </ul>
+                </td>
+                <td class="py-3 pr-4 text-muted">{row.fit}</td>
+                <td class="py-3 text-muted">{row.speed}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="linux" class="mt-12 scroll-mt-36" aria-labelledby="linux-heading">
+      <h2 id="linux-heading" class="font-serif text-3xl tracking-tight">Linux path (try this)</h2>
+      <ol class="mt-6 space-y-6">
+        {SPEECH_LINUX_STEPS.map((step, index) => (
+          <li id={step.id} class="scroll-mt-28 rounded-2xl border border-line bg-raised/50 p-5">
+            <p class="font-mono text-[0.68rem] uppercase tracking-[0.14em] text-faint">
+              {index + 1} · {SPEECH_CITED_LABEL}
+            </p>
+            <h3 class="mt-2 font-serif text-2xl tracking-tight">{step.title}</h3>
+            <p class="mt-3 leading-relaxed text-ink">{step.body}</p>
+            <ul class="mt-4 flex flex-wrap gap-2">
+              {step.links.map((link) => (
+                <li>
+                  <a
+                    class="inline-flex min-h-11 items-center rounded-full border border-line bg-canvas px-3 text-sm text-ink hover:border-accent/50 hover:text-accent-ink"
+                    href={link.href}
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <section id="windows" class="mt-12 scroll-mt-36" aria-labelledby="windows-heading">
+      <h2 id="windows-heading" class="font-serif text-3xl tracking-tight">Windows path (cited second)</h2>
+      <p class="mt-3 max-w-3xl leading-relaxed text-muted">
+        Only steps whisper.cpp or Piper document. Everything else is marked unofficial.
+      </p>
+      <div class="mt-6 grid gap-4">
+        {SPEECH_WINDOWS_STEPS.map((step) => (
+          <article id={step.id} class="scroll-mt-28 rounded-2xl border border-line bg-raised/50 p-5">
+            <h3 class="font-serif text-2xl tracking-tight">{step.title}</h3>
+            <p class="mt-3 leading-relaxed text-ink">{step.body}</p>
+            <ul class="mt-4 flex flex-wrap gap-2">
+              {step.links.map((link) => (
+                <li>
+                  <a
+                    class="inline-flex min-h-11 items-center rounded-full border border-line bg-canvas px-3 text-sm text-ink hover:border-accent/50 hover:text-accent-ink"
+                    href={link.href}
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section id="alongside" class="mt-12 scroll-mt-36" aria-labelledby="alongside-heading">
+      <h2 id="alongside-heading" class="font-serif text-3xl tracking-tight">Speech alongside a local LLM</h2>
+      <p class="mt-3 max-w-3xl leading-relaxed text-muted">{SPEECH_ALONGSIDE}</p>
+      <p class="mt-4 max-w-3xl leading-relaxed text-muted">
+        Shopper RAM labels stay
+        <strong class="text-ink">{RAM_MIN_LABEL}</strong>
+        and
+        <strong class="text-ink">{RAM_FULL_LABEL}</strong>
+        for the LLM side. Open the calculator for that load. A second card is a
+        <a class="underline decoration-accent/40" href="/multi-gpu">/multi-gpu</a>
+        question, not an invented VRAM split.
+      </p>
+      <p class="mt-4 flex flex-wrap gap-3">
+        <a class="btn-secondary" href="/multi-gpu">Dual / multi-GPU</a>
+        <a class="btn-ghost" href="/calculator">Calculator</a>
+        <a class="btn-ghost" href="/stack-lab">Stack Lab</a>
+      </p>
+    </section>
+
+    <section id="errors" class="mt-12 scroll-mt-36" aria-labelledby="errors-heading">
+      <h2 id="errors-heading" class="font-serif text-3xl tracking-tight">Common errors</h2>
+      <ul class="mt-6 grid gap-4">
+        {SPEECH_ERRORS.map((row) => (
+          <li id={row.id} class="scroll-mt-28 rounded-2xl border border-line bg-raised/50 p-5">
+            <h3 class="font-serif text-2xl tracking-tight">{row.title}</h3>
+            <p class="mt-3 leading-relaxed text-muted">{row.body}</p>
+            <ul class="mt-4 flex flex-wrap gap-2">
+              {row.links.map((link) => (
+                <li>
+                  <a
+                    class="inline-flex min-h-11 items-center rounded-full border border-line bg-canvas px-3 text-sm text-ink hover:border-accent/50 hover:text-accent-ink"
+                    href={link.href}
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section id="sources" class="mt-12 scroll-mt-36" aria-labelledby="sources-heading">
+      <h2 id="sources-heading" class="font-serif text-3xl tracking-tight">Sources</h2>
+      <ul class="mt-4 list-disc space-y-2 pl-5 text-muted">
+        {SPEECH_SOURCES.map((source) => (
+          <li>
+            <a class="underline decoration-accent/40" href={source.href}>{source.title}</a>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <NextSteps path="/speech" />
+  </main>
+</Base>

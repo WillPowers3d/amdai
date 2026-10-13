@@ -32,3 +32,9 @@ items:
     model: ComfyUI SDXL / Flux-class
     why: ComfyUI already runs on local-desktop. AMDai has no first-party amdai-bench/run@1 image-gen card, so speeds stay not yet measured by AMDai.
     request: First-party image-gen card on one R9700. Log plus screenshot. Do not invent seconds-per-image or VRAM megabytes.
+  - id: r9700-whisper
+    card: r9700
+    card_name: Radeon AI PRO R9700
+    model: whisper.cpp STT / Piper TTS
+    why: whisper.cpp Vulkan and Piper are the AMDai first speech path. AMDai has no first-party amdai-bench/run@1 speech card, so speeds stay not yet measured by AMDai.
+    request: First-party whisper.cpp Vulkan card on one R9700. Log plus screenshot. Do not invent real-time factor or tok/s.
