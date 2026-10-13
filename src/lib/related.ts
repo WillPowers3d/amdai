@@ -14,7 +14,7 @@ import { urlPath } from './seo';
 
 export type RelatedLink = PathLink;
 
-const RELATED_MAX = 24;
+const RELATED_MAX = 28;
 
 const SKIP_RELATED = new Set([
   '/',
@@ -319,6 +319,7 @@ export function assertRelatedValid(
     '/gpus/rx7900xt',
     '/gpus/rx7800xt',
     '/gpus/rx-9070-xt',
+    '/gpus/rx-9060-xt',
     '/compare',
     '/compare/radeon-vs-nvidia',
     '/setup',
@@ -344,7 +345,7 @@ export function assertRelatedValid(
   if (!r9700.some((href) => href.startsWith('/recipes/'))) {
     errors.push('/gpus/r9700 missing recipe links');
   }
-  for (const href of ['/gpus/strix-halo', '/gpus/rx7900xtx', '/gpus/rx7900xt', '/gpus/rx7800xt', '/gpus/rx-9070-xt']) {
+  for (const href of ['/gpus/strix-halo', '/gpus/rx7900xtx', '/gpus/rx7900xt', '/gpus/rx7800xt', '/gpus/rx-9070-xt', '/gpus/rx-9060-xt']) {
     if (!r9700.includes(href)) errors.push(`/gpus/r9700 missing ${href}`);
   }
   const xtx = relatedFor('/gpus/rx7900xtx').map((link) => link.href);

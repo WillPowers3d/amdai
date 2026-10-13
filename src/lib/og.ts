@@ -86,6 +86,12 @@ export const OG_CARDS: OgCard[] = [
     alt: 'AMDai RX 9070 XT — 16 GB gfx1201 recipe sheet, not measured on local-desktop',
   },
   {
+    slug: 'gpus-rx-9060-xt',
+    title: 'Radeon RX 9060 XT',
+    lede: '16 GB gfx1200 estimates. Not measured on local-desktop',
+    alt: 'AMDai RX 9060 XT — 16 GB gfx1200 recipe sheet, not measured on local-desktop',
+  },
+  {
     slug: 'rocm',
     title: 'What is ROCm',
     lede: 'The open compute stack, in plain English',
@@ -336,6 +342,7 @@ export function ogSlug(pathname: string): string {
   if (slug === 'gpus-r9700') return 'gpus-r9700';
   if (slug === 'gpus-strix-halo') return 'gpus-strix-halo';
   if (slug === 'gpus-rx-9070-xt') return 'gpus-rx-9070-xt';
+  if (slug === 'gpus-rx-9060-xt') return 'gpus-rx-9060-xt';
   if (slug === 'models' || slug === 'models-qwen36' || slug === 'models-flash') return slug;
   if (slug.startsWith('models-') || slug.startsWith('gpus-') || slug.startsWith('recipes-')) {
     return 'gpus';

@@ -452,6 +452,7 @@ export function pageJsonLd(input: {
     path === '/gpus/r9700' ||
     path === '/gpus/strix-halo' ||
     path === '/gpus/rx-9070-xt' ||
+    path === '/gpus/rx-9060-xt' ||
     path === '/models/qwen36' ||
     path === '/models/flash' ||
     path === '/compare/radeon-vs-nvidia' ||

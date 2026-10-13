@@ -114,10 +114,11 @@ export const FAQ_ENTRIES: FaqItem[] = [
     group: 'getting-started',
     question: 'Which GPU should I start with?',
     answer:
-      'The measured house box is one AMD Radeon AI PRO R9700 (32 GB, gfx1201). There is no consumer RX 9700. A 16 GB RX 9070 XT is the same generation with half the VRAM — see the RX 9070 XT recipe sheet for calculator fit estimates, not local-desktop tok/s. A 7900 XTX (gfx1100) is still a practical home card on a different ROCm family package. Mini-PCs on Ryzen AI Max / Strix Halo (Radeon 8060S, gfx1151) are a shared-memory APU, not a discrete VRAM card — see that cited guide. Confirm the SKU on the R9700 measured page and the GPU directory, then size the file on the calculator before you buy a second card.',
+      'The measured house box is one AMD Radeon AI PRO R9700 (32 GB, gfx1201). There is no consumer RX 9700. A 16 GB RX 9070 XT is the same generation with half the VRAM — see the RX 9070 XT recipe sheet for calculator fit estimates, not local-desktop tok/s. The cheaper 16 GB RDNA 4 pick is the RX 9060 XT (gfx1200) — same estimate-sheet rules, different family package. A 7900 XTX (gfx1100) is still a practical home card on a different ROCm family package. Mini-PCs on Ryzen AI Max / Strix Halo (Radeon 8060S, gfx1151) are a shared-memory APU, not a discrete VRAM card — see that cited guide. Confirm the SKU on the R9700 measured page and the GPU directory, then size the file on the calculator before you buy a second card.',
     links: [
       { href: '/gpus/r9700', label: 'R9700 measured page' },
       { href: '/gpus/rx-9070-xt', label: 'RX 9070 XT sheet' },
+      { href: '/gpus/rx-9060-xt', label: 'RX 9060 XT sheet' },
       { href: '/gpus/strix-halo', label: 'Strix Halo / Ryzen AI Max' },
       { href: '/gpus/rx7900xtx', label: 'RX 7900 XTX sheet' },
       { href: '/gpus/rx7900xt', label: 'RX 7900 XT sheet' },
