@@ -16,6 +16,7 @@ export const GPU_NAME_IDS: Record<string, string> = {
   'AMD Radeon RX 7800 XT': 'rx7800xt',
   'AMD Radeon RX 7700 XT': 'rx7700xt',
   'AMD Radeon RX 7700': 'rx7700',
+  'AMD Radeon RX 7600 XT': 'rx7600xt',
   'AMD Radeon RX 7600': 'rx7600',
   'AMD Radeon RX 6950 XT / 6900 XT': 'rx6950xt',
   'AMD Radeon PRO W7900': 'w7900',

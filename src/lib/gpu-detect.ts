@@ -29,6 +29,7 @@ export const GPU_DETECT: GpuDetectCard[] = [
   { id: 'rx7900gre', name: 'Radeon RX 7900 GRE', gfx: ['gfx1100'], names: ['7900 gre'], vramGb: 16 },
   { id: 'rx7800xt', name: 'Radeon RX 7800 XT', gfx: ['gfx1101'], names: ['7800 xt'], vramGb: 16 },
   { id: 'rx7700xt', name: 'Radeon RX 7700 XT', gfx: ['gfx1101'], names: ['7700 xt'], vramGb: 12 },
+  { id: 'rx7600xt', name: 'Radeon RX 7600 XT', gfx: ['gfx1102'], names: ['rx 7600 xt', '7600 xt'], vramGb: 16 },
   { id: 'rx7600', name: 'Radeon RX 7600', gfx: ['gfx1102'], names: ['rx 7600', '7600'], vramGb: 8 },
   { id: 'w7900', name: 'Radeon PRO W7900', gfx: ['gfx1100'], names: ['w7900', 'pro w7900'], vramGb: 48 },
   { id: 'w7800', name: 'Radeon PRO W7800', gfx: ['gfx1100'], names: ['w7800', 'pro w7800'], vramGb: 32 },

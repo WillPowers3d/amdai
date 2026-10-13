@@ -123,6 +123,10 @@ describe('GPU detect and pages', () => {
     assert.equal(named?.confidence, 'name');
     const xt = detectPrimary('AMD Radeon RX 9070 XT');
     assert.equal(xt?.id, 'rx9070xt');
+    const xt7600 = detectPrimary('AMD Radeon RX 7600 XT');
+    assert.equal(xt7600?.id, 'rx7600xt');
+    const bare7600 = detectPrimary('AMD Radeon RX 7600');
+    assert.equal(bare7600?.id, 'rx7600');
     const gfxOnly = detectGpu('gfx1201');
     assert.ok(gfxOnly.some((hit) => hit.id === 'r9700'));
     assert.ok(gfxOnly.some((hit) => hit.id === 'rx9070xt'));

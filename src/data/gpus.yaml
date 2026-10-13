@@ -156,6 +156,15 @@ cards:
     rocm_note: gfx1101 on the 10.1 matrix. Confirm VRAM on the product page.
     hsa_override: Not needed when the build lists gfx1101.
 
+  - name: AMD Radeon RX 7600 XT
+    family: Radeon RX
+    arch: RDNA 3
+    gfx: gfx1102
+    vram_gb: 16
+    support: official
+    rocm_note: gfx1102, 16 GB. Same LLVM target as the 8 GB RX 7600 on the 10.1 matrix. Confirm the XT listing.
+    hsa_override: Not needed when the build lists gfx1102.
+
   - name: AMD Radeon RX 7600
     family: Radeon RX
     arch: RDNA 3
