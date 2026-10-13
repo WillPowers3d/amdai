@@ -71,6 +71,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/troubleshoot', label: 'Troubleshoot' },
       { href: '/stack-lab', label: 'Stack Lab' },
       { href: '/setup/windows', label: 'Windows setup' },
+      { href: '/image-gen', label: 'Image gen on Radeon' },
     ];
   }
   if (path === '/faq' || path === '/glossary') {
@@ -146,12 +147,16 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/labs/shannon', label: 'Shannon’s lab' },
     ];
   }
-  if (path.startsWith('/harnesses')) {
+  if (path === '/image-gen' || path.startsWith('/harnesses')) {
     return [
+      { href: '/image-gen', label: 'Image gen on Radeon' },
       { href: '/harnesses', label: 'Harnesses' },
+      { href: '/harnesses/image', label: 'ComfyUI harness' },
       { href: '/harnesses/compare', label: 'Compare harnesses' },
       { href: '/backends/llamacpp', label: 'llama.cpp' },
       { href: '/setup', label: 'First-run setup' },
+      { href: '/multi-gpu', label: 'Dual / multi-GPU' },
+      { href: '/gpus/r9700', label: 'R9700 measured page' },
     ];
   }
   if (path === '/forum' || path.startsWith('/forum/')) {
@@ -329,6 +334,7 @@ export function assertRelatedValid(
     '/faq',
     '/models/qwen36',
     '/models/flash',
+    '/image-gen',
   ],
 ): string[] {
   const errors: string[] = [];

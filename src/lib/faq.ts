@@ -190,6 +190,20 @@ export const FAQ_ENTRIES: FaqItem[] = [
     ],
   },
   {
+    id: 'local-image-gen',
+    group: 'getting-started',
+    question: 'Can I run Stable Diffusion or Flux on a Radeon, not just a local LLM?',
+    answer:
+      'Yes. ComfyUI is the AMDai first image-gen path — HIP/ROCm PyTorch, not llama.cpp Vulkan, and it does not speak llama-server /v1. The cited shopper guide is /image-gen. Linux Ubuntu 24.04+ first. Image-gen speeds are not yet measured by AMDai. llama.cpp stays first for LLMs. Q3 stays a labeled estimate. Nothing below Q3.',
+    links: [
+      { href: '/image-gen', label: 'Image gen on Radeon' },
+      { href: '/harnesses/image', label: 'ComfyUI harness' },
+      { href: '/setup', label: 'First-run setup' },
+      { href: '/gpus/r9700', label: 'R9700' },
+      { href: '/multi-gpu', label: 'Dual / multi-GPU' },
+    ],
+  },
+  {
     id: 'vulkan-or-hip',
     group: 'getting-started',
     question: 'Vulkan or ROCm HIP?',
@@ -536,6 +550,7 @@ export const REQUIRED_FAQ_HREFS = [
   '/amdai-bench',
   '/compare/radeon-vs-nvidia',
   '/troubleshoot',
+  '/image-gen',
 ] as const;
 
 const BANNED_VISIBLE = /Qwen2\.5|Qwen3-8B/i;

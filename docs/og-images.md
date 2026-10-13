@@ -38,6 +38,7 @@ Required slugs (must exist): `home`, `gpus-r9700`, `benchmarks`, `compare`, `cal
 | `compare-one-vs-two-gpu` | `/compare/one-vs-two-gpu` | 1× vs split |
 | `compare-q4-q5-q6` | `/compare/q4-q5-q6` | no (Q3 stays a labeled estimate) |
 | `multi-gpu` | `/multi-gpu` | no — cites measured pages; lede stays static |
+| `image-gen` | `/image-gen` | no — ComfyUI first; speeds not yet measured by AMDai |
 | `about` | `/about` | no |
 | `methodology` | `/methodology` | no |
 | `contact` | `/contact` | no |

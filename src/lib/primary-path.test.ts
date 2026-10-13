@@ -117,6 +117,7 @@ describe('primary path and nav IA', () => {
       '/models/qwen36': '../pages/models/[id].astro',
       '/models/flash': '../pages/models/[id].astro',
       '/troubleshoot': '../pages/troubleshoot/index.astro',
+      '/image-gen': '../pages/image-gen.astro',
     };
     assert.deepEqual(HIGH_TRAFFIC_PATHS.sort(), Object.keys(files).sort());
     for (const [path, rel] of Object.entries(files)) {

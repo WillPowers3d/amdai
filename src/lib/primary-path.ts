@@ -314,6 +314,15 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
     { href: '/bios', label: 'BIOS' },
     { href: '/faq', label: 'FAQ' },
   ],
+  '/image-gen': [
+    { href: '/harnesses/image', label: 'ComfyUI harness' },
+    { href: '/setup', label: 'First-run setup' },
+    { href: '/gpus/r9700', label: 'R9700 measured page' },
+    { href: '/multi-gpu', label: 'Dual / multi-GPU' },
+    { href: '/calculator', label: 'Calculator' },
+    { href: '/troubleshoot', label: 'Troubleshoot' },
+    { href: '/stack-lab', label: 'Stack Lab' },
+  ],
 };
 
 export const HIGH_TRAFFIC_PATHS = Object.keys(NEXT_STEPS);

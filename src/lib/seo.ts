@@ -192,6 +192,7 @@ export const CRUMB_LABELS: Record<string, string> = {
   '/flash-daily': 'Flash daily',
   '/flash-ram-offload': 'Flash RAM offload',
   '/start': 'Getting started',
+  '/image-gen': 'Image gen',
   '/setup': 'First-run setup',
   '/setup/windows': 'Windows setup',
   '/stack-lab': 'Stack Lab',
@@ -305,6 +306,12 @@ setMeta(
   'Cited Windows ROCm + llama.cpp Vulkan first-run on Radeon. Ubuntu 24.04+ stays the measured AMDai path. Not measured on local-desktop.',
 );
 setDate('/setup/windows', '2026-10-13');
+setMeta(
+  '/image-gen',
+  'Local image gen on Radeon',
+  'Cited ComfyUI-first guide for Stable Diffusion, SDXL, and Flux-class models on Radeon. Linux ROCm PyTorch first. Fit estimates, not measured on local-desktop.',
+);
+setDate('/image-gen', '2026-10-13');
 setMeta(
   '/stacks',
   'Recommended stacks',
@@ -812,7 +819,7 @@ setMeta(
 setMeta(
   '/harnesses/image',
   'Image harnesses',
-  'ComfyUI and friends on Radeon. Cite what you ran; this notebook’s measured work is text Qwen.',
+  'ComfyUI on Radeon. Shopper guide at /image-gen. Cite what you ran; this notebook’s measured work is text Qwen.',
 );
 
 setMeta(

@@ -258,6 +258,12 @@ export const OG_CARDS: OgCard[] = [
     alt: 'AMDai dual / multi-GPU — when a second R9700 helps',
   },
   {
+    slug: 'image-gen',
+    title: 'Local image gen on Radeon',
+    lede: 'ComfyUI first. Speeds not yet measured by AMDai',
+    alt: 'AMDai local image gen on Radeon — cited ComfyUI guide, not yet measured',
+  },
+  {
     slug: 'troubleshoot',
     title: 'Troubleshoot',
     lede: 'Symptom-first fixes. Cited commands only',

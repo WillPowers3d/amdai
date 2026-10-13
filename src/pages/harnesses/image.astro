@@ -18,6 +18,9 @@ const rows = harnessesByCategory(harnesses(), 'image');
     <Callout type="note">
       ComfyUI is HIP/ROCm PyTorch, not the llama.cpp Vulkan daily driver. It does not speak
       llama-server or Strata <code>/v1</code>. Instinct-oriented Docker tags are not R9700 pins.
+      Shopper path:
+      <a class="underline decoration-accent/40" href="/image-gen">/image-gen</a>
+      — Linux first, fit estimates, speeds not yet measured by AMDai.
     </Callout>
     <ul class="mt-8 grid gap-3">
       {rows.map((row) => (
