@@ -12,7 +12,7 @@ import {
   groupByLetter,
   parseGlossaryQuery,
 } from './glossary';
-import { primaryNav } from './site';
+import { allNav, primaryNav } from './site';
 
 const ALLOWED_HREFS = new Set([
   '/abliterated',
@@ -21,6 +21,7 @@ const ALLOWED_HREFS = new Set([
   '/backends/strata',
   '/backends/vllm',
   '/benchmarks',
+  '/bios',
   '/budget',
   '/calculator',
   '/credits',
@@ -33,6 +34,8 @@ const ALLOWED_HREFS = new Set([
   '/quants',
   '/qwen',
   '/qwen36-dual',
+  '/recipes/qwen36-35b.llamacpp-vulkan.262k',
+  '/recipes/qwen38-flash.strata.262k',
   '/results',
   '/rocm',
   '/rocm/glossary',
@@ -72,6 +75,10 @@ describe('consumer glossary', () => {
     assert.equal(filterGlossary('zzzz-no-such-term').length, 0);
     assert.equal(filterGlossary('').length, GLOSSARY.length);
     assert.ok(glossaryHaystack(entryById('quant')!).includes('q3'));
+    assert.ok(entryById('rebar'));
+    assert.ok(filterGlossary('resizable bar').some((row) => row.id === 'rebar'));
+    assert.ok(filterGlossary('mmio').some((row) => row.id === 'rebar'));
+    assert.ok((entryById('llamacpp')?.deeper ?? '').includes('c060ca974'));
     const groups = groupByLetter();
     assert.equal(groups.length, 26);
     assert.ok(groups.find((g) => g.letter === 'R')?.entries.some((e) => e.id === 'rocm'));
@@ -81,7 +88,7 @@ describe('consumer glossary', () => {
   });
 
   it('keeps house rules, brand, and measured-only figures', () => {
-    const blob = GLOSSARY.map((row) => `${row.term}\n${row.definition}\n${row.why}`).join('\n');
+    const blob = GLOSSARY.map((row) => `${row.term}\n${row.definition}\n${row.why}\n${row.deeper ?? ''}`).join('\n');
     assert.match(blob, /AMDai/);
     assert.match(blob, /amdai-bench\/run@1/);
     assert.doesNotMatch(blob, /AMDAI-BENCH|Amdai-Bench/);
@@ -96,9 +103,11 @@ describe('consumer glossary', () => {
     assert.match(blob, /42\.9/);
     assert.match(blob, /82\.78/);
     assert.ok(primaryNav.some((item) => item.href === '/glossary'));
+    assert.ok(allNav.some((item) => item.href === '/glossary'));
     assert.match(primaryNav.find((item) => item.href === '/glossary')?.description ?? '', /ROCm|jargon|KV/i);
+    assert.ok(GLOSSARY.filter((row) => row.deeper).length >= 12);
     for (const entry of GLOSSARY) {
-      const hits = gluedSentenceHits(`${entry.definition} ${entry.why}`);
+      const hits = gluedSentenceHits(`${entry.definition} ${entry.why} ${entry.deeper ?? ''}`);
       assert.deepEqual(hits, [], `${entry.id} glue ${hits[0]?.snippet ?? ''}`);
     }
   });
