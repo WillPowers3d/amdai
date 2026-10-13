@@ -1,0 +1,421 @@
+---
+import Base from '../layouts/Base.astro';
+import Callout from '../components/Callout.astro';
+import HowWeTest from '../components/HowWeTest.astro';
+import HouseRam from '../components/HouseRam.astro';
+import NextSteps from '../components/NextSteps.astro';
+import {
+  COMPARE_ENGINE,
+  COMPARE_MODEL,
+  COMPARE_Q3,
+  FLASH_OFFLOAD_CONTEXT_LABEL,
+  FLASH_OFFLOAD_CONTEXTS,
+  LONG_CONTEXT_DESCRIPTION,
+  LONG_CONTEXT_EMPTY,
+  LONG_CONTEXT_ENGINE,
+  LONG_CONTEXT_FAQ,
+  LONG_CONTEXT_FLASH_GAPS,
+  LONG_CONTEXT_GLOSSARY,
+  LONG_CONTEXT_HUB,
+  LONG_CONTEXT_KV,
+  LONG_CONTEXT_LEAD,
+  LONG_CONTEXT_QUANTS,
+  LONG_CONTEXT_RECALL,
+  LONG_CONTEXT_SECTIONS,
+  LONG_CONTEXT_SOURCES,
+  LONG_CONTEXT_TIERS,
+  LONG_CONTEXT_TITLE,
+  SWEEP_REVERIFY,
+  longContextDimmRows,
+  longContextFlashMeasuredRows,
+  longContextQuantRows,
+  type QuantColumn,
+} from '../lib/long-context';
+import { RAM_FULL_LABEL, RAM_MIN_LABEL } from '../lib/ram-surfaces';
+
+const rows = longContextQuantRows();
+const flash = longContextFlashMeasuredRows();
+const dimm = longContextDimmRows();
+
+function runCardHref(col: QuantColumn): string | null {
+  return col.runIds.length && col.href.startsWith('/results') ? col.href : null;
+}
+---
+
+<Base title={LONG_CONTEXT_TITLE} description={LONG_CONTEXT_DESCRIPTION}>
+  <main id="main" class="mx-auto max-w-6xl px-4 py-10 sm:px-6">
+    <p class="kicker">
+      {COMPARE_MODEL} · {COMPARE_ENGINE} · 128K–262K
+    </p>
+    <h1 class="display mt-3 text-4xl sm:text-5xl">{LONG_CONTEXT_TITLE}</h1>
+    <p class="mt-4 max-w-3xl text-lg leading-relaxed text-muted">{LONG_CONTEXT_LEAD}</p>
+    <ul class="mt-4 flex flex-wrap gap-2">
+      {LONG_CONTEXT_HUB.map((link) => (
+        <li>
+          <a
+            class="inline-flex min-h-11 items-center rounded-full border border-line bg-canvas px-3 text-sm text-ink hover:border-accent/50 hover:text-accent-ink"
+            href={link.href}
+          >
+            {link.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+    <div class="mt-4">
+      <HowWeTest />
+    </div>
+    <div class="mt-4">
+      <HouseRam which="daily" compact />
+    </div>
+
+    <Callout type="warn" title="Overnight sweep, 2026-10-12">
+      <p>{SWEEP_REVERIFY}</p>
+    </Callout>
+
+    <nav
+      class="sticky z-20 -mx-4 mt-8 border-y border-line bg-canvas/95 px-4 py-2 backdrop-blur-md sm:-mx-6 sm:px-6"
+      aria-label="Long-context sections"
+    >
+      <p class="mb-2 font-mono text-[0.68rem] uppercase tracking-[0.16em] text-faint">Jump to section</p>
+      <ol class="flex flex-wrap gap-2">
+        {LONG_CONTEXT_SECTIONS.map((section) => (
+          <li>
+            <a
+              class="inline-flex min-h-11 items-center rounded-full border border-line bg-raised px-3 text-sm text-ink hover:border-accent/50 hover:text-accent-ink"
+              href={`#${section.id}`}
+            >
+              {section.label}
+            </a>
+          </li>
+        ))}
+      </ol>
+    </nav>
+
+    <section id="what-it-is" class="mt-10 scroll-mt-36" aria-labelledby="what-it-is-heading">
+      <h2 id="what-it-is-heading" class="font-serif text-3xl tracking-tight">What context length and the KV cache are</h2>
+      <p class="mt-3 max-w-3xl leading-relaxed text-muted">
+        <a class="underline decoration-accent/40" href="/glossary#context-length">Context length</a>
+        is the token window. The
+        <a class="underline decoration-accent/40" href="/glossary#kv-cache">KV cache</a>
+        is the attention memory that grows with that window — separate from the GGUF.
+        <a class="underline decoration-accent/40" href="/glossary#prefill-decode">Prefill</a>
+        reads the prompt in a burst;
+        decode is the streaming rate people mean by “how fast.”
+        <a class="underline decoration-accent/40" href="/glossary#offload">Offload</a>
+        is what happens when weights or KV spill to DDR5.
+      </p>
+      <ul class="mt-4 flex flex-wrap gap-2">
+        {LONG_CONTEXT_GLOSSARY.map((link) => (
+          <li>
+            <a
+              class="inline-flex min-h-11 items-center rounded-full border border-line bg-canvas px-3 text-sm text-ink hover:border-accent/50 hover:text-accent-ink"
+              href={link.href}
+            >
+              {link.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section id="measured" class="mt-12 scroll-mt-36" aria-labelledby="measured-heading">
+      <h2 id="measured-heading" class="font-serif text-3xl tracking-tight">Measured 35B on local-desktop</h2>
+      <p class="mt-3 max-w-3xl leading-relaxed text-muted">
+        {COMPARE_MODEL} on {COMPARE_ENGINE} Vulkan, f16 KV. Every tok/s and measured GB
+        is from official amdai-bench/run@1 cards. A missing cell says
+        <strong class="text-ink">{LONG_CONTEXT_EMPTY}</strong>.
+        Shopper RAM lines stay <strong class="text-ink">{RAM_MIN_LABEL}</strong> and
+        <strong class="text-ink">{RAM_FULL_LABEL}</strong>.
+      </p>
+
+      <div class="mt-8 space-y-10">
+        {rows.map((row) => (
+          <article>
+            <h3 class="font-serif text-2xl">
+              {row.gpuCount === 1 ? 'One R9700' : 'Split'} · {row.contextLabel}
+            </h3>
+            <div class="mt-4 overflow-x-auto">
+              <table class="min-w-[64rem] border-collapse text-left text-sm">
+                <caption class="sr-only">
+                  {COMPARE_MODEL} {row.gpuCount === 1 ? 'one GPU' : 'split'} at {row.contextLabel}. Figures from local-desktop run cards.
+                </caption>
+                <thead>
+                  <tr class="border-b border-line">
+                    <th scope="col" class="py-3 pr-4 font-medium text-ink">Metric</th>
+                    {row.columns.map((col) => (
+                      <th scope="col" class="py-3 pr-4 font-medium text-ink">
+                        {col.quant}
+                        <span class="block text-[0.65rem] font-normal text-faint">
+                          {col.kind === 'estimate' ? 'estimate' : 'measured'}
+                        </span>
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="border-b border-line">
+                    <th scope="row" class="py-3 pr-4 font-medium text-ink">Decode</th>
+                    {row.columns.map((col) => (
+                      <td class="py-3 pr-4 tabular-nums text-muted">
+                        {runCardHref(col) ? <a class="underline decoration-accent/40" href={runCardHref(col)!}>{col.decode}</a> : col.decode}
+                      </td>
+                    ))}
+                  </tr>
+                  <tr class="border-b border-line">
+                    <th scope="row" class="py-3 pr-4 font-medium text-ink">Prefill</th>
+                    {row.columns.map((col) => (
+                      <td class="py-3 pr-4 tabular-nums text-muted">
+                        {runCardHref(col) ? <a class="underline decoration-accent/40" href={runCardHref(col)!}>{col.prefill}</a> : col.prefill}
+                      </td>
+                    ))}
+                  </tr>
+                  <tr class="border-b border-line">
+                    <th scope="row" class="py-3 pr-4 font-medium text-ink">VRAM / card</th>
+                    {row.columns.map((col) => (
+                      <td class="py-3 pr-4 tabular-nums text-muted">
+                        {runCardHref(col) ? <a class="underline decoration-accent/40" href={runCardHref(col)!}>{col.vramPerGpu}</a> : col.vramPerGpu}
+                      </td>
+                    ))}
+                  </tr>
+                  <tr class="border-b border-line">
+                    <th scope="row" class="py-3 pr-4 font-medium text-ink">VRAM total</th>
+                    {row.columns.map((col) => (
+                      <td class="py-3 pr-4 tabular-nums text-muted">
+                        {runCardHref(col) ? <a class="underline decoration-accent/40" href={runCardHref(col)!}>{col.vramTotal}</a> : col.vramTotal}
+                      </td>
+                    ))}
+                  </tr>
+                  <tr class="border-b border-line">
+                    <th scope="row" class="py-3 pr-4 font-medium text-ink">Peak system RAM</th>
+                    {row.columns.map((col) => (
+                      <td class="py-3 pr-4 tabular-nums text-muted">
+                        {runCardHref(col) ? <a class="underline decoration-accent/40" href={runCardHref(col)!}>{col.systemRam}</a> : col.systemRam}
+                      </td>
+                    ))}
+                  </tr>
+                  <tr class="border-b border-line">
+                    <th scope="row" class="py-3 pr-4 font-medium text-ink">{RAM_MIN_LABEL}</th>
+                    {row.columns.map((col) => (
+                      <td class="py-3 pr-4 tabular-nums text-muted">{col.ramMin.text}</td>
+                    ))}
+                  </tr>
+                  <tr class="border-b border-line">
+                    <th scope="row" class="py-3 pr-4 font-medium text-ink">{RAM_FULL_LABEL}</th>
+                    {row.columns.map((col) => (
+                      <td class="py-3 pr-4 tabular-nums text-muted">{col.ramFull.text}</td>
+                    ))}
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            {row.columns.some((col) => col.note) ? (
+              <ul class="mt-3 max-w-3xl space-y-1 text-xs text-faint">
+                {row.columns.filter((col) => col.note).map((col) => (
+                  <li>{col.quant}: {col.note}</li>
+                ))}
+              </ul>
+            ) : null}
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section id="flash" class="mt-12 scroll-mt-36" aria-labelledby="flash-heading">
+      <h2 id="flash-heading" class="font-serif text-3xl tracking-tight">Qwen 3.8 Flash where we have cards</h2>
+      <p class="mt-3 max-w-3xl leading-relaxed text-muted">
+        Decode from verified Flash run cards. Prefill, VRAM, and peak RAM stay {LONG_CONTEXT_EMPTY} unless a card recorded them — open the linked run card.
+        Empty cells stay {LONG_CONTEXT_EMPTY}. Do not map 100K onto 128K.
+        Shopper RAM lines stay <strong class="text-ink">{RAM_MIN_LABEL}</strong> and
+        <strong class="text-ink">{RAM_FULL_LABEL}</strong> on
+        <a class="underline decoration-accent/40" href="/flash-ram-offload">Flash RAM offload</a>
+        and the
+        <a class="underline decoration-accent/40" href="/models/flash">Flash model page</a>.
+      </p>
+      <div class="mt-6 overflow-x-auto">
+        <table class="min-w-[48rem] border-collapse text-left text-sm">
+          <caption class="sr-only">Flash decode at 4K / 32K / 128K / 256K from local-desktop cards. Rows with no measured cell are omitted.</caption>
+          <thead>
+            <tr class="border-b border-line">
+              <th scope="col" class="py-3 pr-4 font-medium text-ink">Quant · cards · engine</th>
+              {FLASH_OFFLOAD_CONTEXTS.map((ctx) => (
+                <th scope="col" class="py-3 pr-4 font-medium text-ink">{FLASH_OFFLOAD_CONTEXT_LABEL[ctx]}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {flash.map((row) => (
+              <tr class="border-b border-line">
+                <th scope="row" class="py-3 pr-4 font-medium text-ink">
+                  {row.quant} · {row.cards}× · {row.backend}
+                </th>
+                {FLASH_OFFLOAD_CONTEXTS.map((ctx) => (
+                  <td class="py-3 pr-4 tabular-nums text-muted">
+                    {row.cells[ctx].href ? (
+                      <a class="underline decoration-accent/40" href={row.cells[ctx].href}>{row.cells[ctx].text}</a>
+                    ) : (
+                      row.cells[ctx].text
+                    )}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <h3 class="mt-8 font-serif text-2xl">Flash Q6 two-card DIMM-speed cards (8K / 32K / 100K)</h3>
+      <p class="mt-3 max-w-3xl leading-relaxed text-muted">
+        These are the Flash cards that actually exist at 8K and 100K. 100K is not 128K.
+      </p>
+      <div class="mt-4 overflow-x-auto">
+        <table class="min-w-[40rem] border-collapse text-left text-sm">
+          <caption class="sr-only">Flash Q6 two-card decode at 3600 and 5200 MT/s. Speeds from local-desktop Flash cards.</caption>
+          <thead>
+            <tr class="border-b border-line">
+              <th scope="col" class="py-3 pr-4 font-medium text-ink">Engine · context</th>
+              <th scope="col" class="py-3 pr-4 font-medium text-ink">3600 MT/s</th>
+              <th scope="col" class="py-3 pr-4 font-medium text-ink">5200 MT/s</th>
+            </tr>
+          </thead>
+          <tbody>
+            {dimm.map((row) => (
+              <tr class="border-b border-line">
+                <th scope="row" class="py-3 pr-4 font-medium text-ink">
+                  {row.backend} · {row.contextLabel}
+                </th>
+                <td class="py-3 pr-4 tabular-nums text-muted">
+                  {row.at3600.href ? (
+                    <a class="underline decoration-accent/40" href={row.at3600.href}>{row.at3600.text}</a>
+                  ) : (
+                    row.at3600.text
+                  )}
+                </td>
+                <td class="py-3 pr-4 tabular-nums text-muted">
+                  {row.at5200.href ? (
+                    <a class="underline decoration-accent/40" href={row.at5200.href}>{row.at5200.text}</a>
+                  ) : (
+                    row.at5200.text
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <ul class="mt-4 max-w-3xl list-disc space-y-1 pl-5 text-sm text-muted">
+        {LONG_CONTEXT_FLASH_GAPS.map((note) => (
+          <li>{note}</li>
+        ))}
+      </ul>
+    </section>
+
+    <section id="kv" class="mt-12 scroll-mt-36" aria-labelledby="kv-heading">
+      <h2 id="kv-heading" class="font-serif text-3xl tracking-tight">f16 vs q8_0 KV</h2>
+      <p class="mt-3 max-w-3xl leading-relaxed text-muted">{LONG_CONTEXT_KV}</p>
+      <p class="mt-4">
+        <a class="btn-secondary" href="/quants">Quants · KV types</a>
+        <a class="btn-ghost ml-3" href="/calculator">Open calculator</a>
+      </p>
+    </section>
+
+    <section id="quants" class="mt-12 scroll-mt-36" aria-labelledby="quants-heading">
+      <h2 id="quants-heading" class="font-serif text-3xl tracking-tight">Q6 / Q5 / Q4, plus a Q3 estimate</h2>
+      <p class="mt-3 max-w-3xl leading-relaxed text-muted">{LONG_CONTEXT_QUANTS}</p>
+      <p class="mt-4">
+        <a class="btn-secondary" href="/compare/q4-q5-q6">Q6 vs Q5 vs Q4</a>
+        <a class="btn-ghost ml-3" href="/quants">Quant explainer</a>
+      </p>
+    </section>
+
+    <section id="engine" class="mt-12 scroll-mt-36" aria-labelledby="engine-heading">
+      <h2 id="engine-heading" class="font-serif text-3xl tracking-tight">Engine notes — llama.cpp first</h2>
+      <ul class="mt-6 grid gap-4">
+        {LONG_CONTEXT_ENGINE.map((row) => (
+          <li id={row.id} class="scroll-mt-28 rounded-2xl border border-line bg-raised/50 p-5">
+            <h3 class="font-serif text-2xl tracking-tight">{row.title}</h3>
+            <p class="mt-3 leading-relaxed text-muted">{row.body}</p>
+            <ul class="mt-4 flex flex-wrap gap-2">
+              {row.links.map((link) => (
+                <li>
+                  <a
+                    class="inline-flex min-h-11 items-center rounded-full border border-line bg-canvas px-3 text-sm text-ink hover:border-accent/50 hover:text-accent-ink"
+                    href={link.href}
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section id="tiers" class="mt-12 scroll-mt-36" aria-labelledby="tiers-heading">
+      <h2 id="tiers-heading" class="font-serif text-3xl tracking-tight">Practical picks by VRAM</h2>
+      <ul class="mt-6 grid gap-4 md:grid-cols-2">
+        {LONG_CONTEXT_TIERS.map((tier) => (
+          <li id={tier.id} class="scroll-mt-28 rounded-2xl border border-line bg-raised/50 p-5">
+            <h3 class="font-serif text-2xl tracking-tight">{tier.title}</h3>
+            <p class="mt-3 leading-relaxed text-muted">{tier.body}</p>
+            <ul class="mt-4 flex flex-wrap gap-2">
+              {tier.hrefs.map((link) => (
+                <li>
+                  <a
+                    class="inline-flex min-h-11 items-center rounded-full border border-line bg-canvas px-3 text-sm text-ink hover:border-accent/50 hover:text-accent-ink"
+                    href={link.href}
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section id="recall" class="mt-12 scroll-mt-36" aria-labelledby="recall-heading">
+      <h2 id="recall-heading" class="font-serif text-3xl tracking-tight">Long-context recall — honest note</h2>
+      <p class="mt-3 max-w-3xl leading-relaxed text-muted">{LONG_CONTEXT_RECALL}</p>
+    </section>
+
+    <section id="faq" class="mt-12 scroll-mt-36" aria-labelledby="faq-heading">
+      <h2 id="faq-heading" class="font-serif text-3xl tracking-tight">FAQ</h2>
+      <ul class="mt-6 grid gap-4">
+        {LONG_CONTEXT_FAQ.map((item) => (
+          <li id={item.id} class="scroll-mt-28 rounded-2xl border border-line bg-raised/50 p-5">
+            <h3 class="font-serif text-2xl tracking-tight">{item.question}</h3>
+            <p class="mt-3 leading-relaxed text-muted">{item.answer}</p>
+            {item.links?.length ? (
+              <ul class="mt-4 flex flex-wrap gap-2">
+                {item.links.map((link) => (
+                  <li>
+                    <a
+                      class="inline-flex min-h-11 items-center rounded-full border border-line bg-canvas px-3 text-sm text-ink hover:border-accent/50 hover:text-accent-ink"
+                      href={link.href}
+                    >
+                      {link.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            ) : null}
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section id="sources" class="mt-12 scroll-mt-36" aria-labelledby="sources-heading">
+      <h2 id="sources-heading" class="font-serif text-3xl tracking-tight">Sources</h2>
+      <ul class="mt-4 list-disc space-y-2 pl-5 text-muted">
+        {LONG_CONTEXT_SOURCES.map((source) => (
+          <li>
+            <a class="underline decoration-accent/40" href={source.href}>{source.title}</a>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <NextSteps path="/long-context" />
+  </main>
+</Base>
