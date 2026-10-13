@@ -387,6 +387,12 @@ export function compareHubCards() {
       title: 'Radeon vs NVIDIA',
       body: 'Cited specs and an honest software split for shoppers picking an R9700 / RX 7900-class card versus an RTX 5090, 4090, 3090, 5080, 5070 Ti, or 5060 Ti 16GB. Measured R9700 tok/s; NVIDIA speed stays empty until a cited figure exists.',
     },
+    {
+      href: '/long-context',
+      kicker: 'Context',
+      title: 'Long context on Radeon',
+      body: '128K–262K from local-desktop 35B llama.cpp cards. f16 KV default. Empty cells stay not measured yet. Q3 is a labeled estimate. No planted-token recall score.',
+    },
   ];
 }
 

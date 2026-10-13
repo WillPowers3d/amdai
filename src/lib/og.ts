@@ -276,6 +276,12 @@ export const OG_CARDS: OgCard[] = [
     alt: 'AMDai local speech on Radeon — cited whisper.cpp and Piper guide, not yet measured',
   },
   {
+    slug: 'long-context',
+    title: 'Long context on Radeon',
+    lede: '128K–262K from local-desktop cards. Empty stays not measured yet',
+    alt: 'AMDai long context on Radeon — measured 35B cards, f16 KV default',
+  },
+  {
     slug: 'troubleshoot',
     title: 'Troubleshoot',
     lede: 'Symptom-first fixes. Cited commands only',

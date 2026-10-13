@@ -341,6 +341,16 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
     { href: '/calculator', label: 'Calculator' },
     { href: '/stack-lab', label: 'Stack Lab' },
   ],
+  '/long-context': [
+    { href: '/calculator', label: 'Calculator' },
+    { href: '/compare/one-vs-two-gpu', label: 'One vs split' },
+    { href: '/compare/q4-q5-q6', label: 'Q6 vs Q5 vs Q4' },
+    { href: '/gpus/r9700', label: 'R9700 measured page' },
+    { href: '/multi-gpu', label: 'Dual / multi-GPU' },
+    { href: '/flash-ram-offload', label: 'Flash RAM offload' },
+    { href: '/troubleshoot#oom-context', label: 'Long-context OOM' },
+    { href: '/benchmarks', label: 'Benchmarks' },
+  ],
 };
 
 export const HIGH_TRAFFIC_PATHS = Object.keys(NEXT_STEPS);

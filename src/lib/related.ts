@@ -52,6 +52,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/multi-gpu', label: 'Dual / multi-GPU' },
       { href: '/qwen36-dual', label: '35B on two cards' },
       { href: '/calculator', label: 'Calculator' },
+      { href: '/long-context', label: 'Long context' },
     ];
   }
   if (path === '/benchmarks' || path === '/benchmarks/methodology') {
@@ -61,6 +62,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/gpus/r9700', label: 'R9700 measured page' },
       { href: '/methodology', label: 'How we test' },
       { href: '/amdai-bench', label: 'amdai-bench' },
+      { href: '/long-context', label: 'Long context' },
     ];
   }
   if (path === '/setup' || path === '/setup/windows' || path === '/start') {
@@ -73,6 +75,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/setup/windows', label: 'Windows setup' },
       { href: '/image-gen', label: 'Image gen on Radeon' },
       { href: '/speech', label: 'Speech on Radeon' },
+      { href: '/long-context', label: 'Long context' },
     ];
   }
   if (path === '/faq' || path === '/glossary') {
@@ -83,6 +86,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/troubleshoot', label: 'Troubleshoot' },
       { href: '/rocm/glossary', label: 'ROCm glossary' },
       { href: '/backends', label: 'Backends' },
+      { href: '/long-context', label: 'Long context' },
     ];
   }
   if (path === '/troubleshoot' || path === '/troubleshooting' || path.startsWith('/troubleshoot/')) {
@@ -94,6 +98,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/rocm-problems', label: 'ROCm problems' },
       { href: '/bios', label: 'BIOS' },
       { href: '/faq', label: 'FAQ' },
+      { href: '/long-context', label: 'Long context' },
     ];
   }
   if (path === '/multi-gpu' || path === '/qwen36-dual') {
@@ -102,6 +107,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/compare/one-vs-two-gpu', label: 'One vs split' },
       { href: '/flash-daily', label: 'Flash daily' },
       { href: '/setup', label: 'First-run setup' },
+      { href: '/long-context', label: 'Long context' },
     ];
   }
   if (path === '/flash-daily' || path === '/flash-ram-offload') {
@@ -110,6 +116,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/backends/strata', label: 'Strata' },
       { href: '/multi-gpu', label: 'Dual / multi-GPU' },
       { href: '/quants', label: 'Quants' },
+      { href: '/long-context', label: 'Long context' },
     ];
   }
   if (path.startsWith('/rocm') && !path.startsWith('/rocm-problems')) {
@@ -148,6 +155,19 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/labs/shannon', label: 'Shannon’s lab' },
     ];
   }
+  if (path === '/long-context') {
+    return [
+      { href: '/long-context', label: 'Long context' },
+      { href: '/compare', label: 'Compare 35B' },
+      { href: '/compare/one-vs-two-gpu', label: 'One vs split' },
+      { href: '/compare/q4-q5-q6', label: 'Q6 vs Q5 vs Q4' },
+      { href: '/calculator', label: 'Calculator' },
+      { href: '/benchmarks', label: 'Benchmarks' },
+      { href: '/multi-gpu', label: 'Dual / multi-GPU' },
+      { href: '/flash-ram-offload', label: 'Flash RAM offload' },
+      { href: '/gpus/r9700', label: 'R9700 measured page' },
+    ];
+  }
   if (path === '/speech') {
     return [
       { href: '/speech', label: 'Speech on Radeon' },
@@ -159,6 +179,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/gpus/r9700', label: 'R9700 measured page' },
       { href: '/calculator', label: 'Calculator' },
       { href: '/stack-lab', label: 'Stack Lab' },
+      { href: '/long-context', label: 'Long context' },
     ];
   }
   if (path === '/image-gen' || path.startsWith('/harnesses')) {
@@ -172,6 +193,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/multi-gpu', label: 'Dual / multi-GPU' },
       { href: '/gpus/r9700', label: 'R9700 measured page' },
       { href: '/speech', label: 'Speech on Radeon' },
+      { href: '/long-context', label: 'Long context' },
     ];
   }
   if (path === '/forum' || path.startsWith('/forum/')) {
@@ -274,6 +296,7 @@ export function relatedFor(pathname: string): RelatedLink[] {
       add(out, seen, '/benchmarks', 'Benchmarks');
       add(out, seen, '/calculator', 'Calculator');
       add(out, seen, '/gpus/r9700', 'R9700 measured page');
+      add(out, seen, '/long-context', 'Long context');
       add(out, seen, '/gpus/rx7900xtx', 'RX 7900 XTX');
       add(out, seen, '/stack-lab', 'Stack Lab');
       add(out, seen, '/abliterated', 'Abliterated');
@@ -352,6 +375,7 @@ export function assertRelatedValid(
     '/models/flash',
     '/image-gen',
     '/speech',
+    '/long-context',
   ],
 ): string[] {
   const errors: string[] = [];

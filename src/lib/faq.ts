@@ -423,6 +423,20 @@ export const FAQ_ENTRIES: FaqItem[] = [
     ],
   },
   {
+    id: 'long-context-radeon',
+    group: 'context-ram',
+    question: 'Can I run 128K–262K locally on a Radeon?',
+    answer:
+      'Yes on the measured house path: Qwen3.6-35B-A3B on llama.cpp Vulkan, f16 KV, one R9700 at 262144. Official UD-Q5_K_XL decode is 66.43 tok/s at 128K and 44.4 tok/s at 256K. The shopper guide is /long-context. Empty cells stay not measured yet. Q3 is a labeled estimate. We do not publish a planted-token recall score. llama.cpp first.',
+    links: [
+      { href: '/long-context', label: 'Long context on Radeon' },
+      { href: '/calculator', label: 'Calculator' },
+      { href: '/compare', label: 'Compare 35B' },
+      { href: '/gpus/r9700', label: 'R9700' },
+      { href: '/troubleshoot#oom-context', label: 'Long-context OOM' },
+    ],
+  },
+  {
     id: 'what-is-stack-lab',
     group: 'stack-lab',
     question: 'What is Radeon Stack Lab?',
@@ -567,6 +581,7 @@ export const REQUIRED_FAQ_HREFS = [
   '/troubleshoot',
   '/image-gen',
   '/speech',
+  '/long-context',
 ] as const;
 
 const BANNED_VISIBLE = /Qwen2\.5|Qwen3-8B/i;

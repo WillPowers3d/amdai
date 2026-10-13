@@ -9,6 +9,7 @@ import { SETUP_HOWTO_STEPS, SETUP_PUBLISHED } from './setup';
 import { SETUP_WINDOWS_HOWTO_STEPS, SETUP_WINDOWS_PUBLISHED } from './setup-windows';
 import { IMAGE_GEN_HOWTO_STEPS, IMAGE_GEN_PUBLISHED } from './image-gen';
 import { SPEECH_HOWTO_STEPS, SPEECH_PUBLISHED } from './speech';
+import { LONG_CONTEXT_FAQ, LONG_CONTEXT_PUBLISHED } from './long-context';
 import {
   TROUBLESHOOT_HOWTO_STEPS,
   TROUBLESHOOT_PUBLISHED,
@@ -432,6 +433,19 @@ export function pageJsonLd(input: {
         steps: SPEECH_HOWTO_STEPS,
       }),
     );
+    return nodes;
+  }
+  if (path === '/long-context') {
+    nodes.push(
+      techArticleJsonLd({
+        headline: input.title.replace(/ · AMDai$/, ''),
+        description: input.description,
+        url,
+        published: dates?.published ?? LONG_CONTEXT_PUBLISHED,
+        modified: dates?.modified ?? LONG_CONTEXT_PUBLISHED,
+      }),
+    );
+    nodes.push(faqPageJsonLd(LONG_CONTEXT_FAQ, url));
     return nodes;
   }
 

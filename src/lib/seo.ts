@@ -195,6 +195,7 @@ export const CRUMB_LABELS: Record<string, string> = {
   '/start': 'Getting started',
   '/image-gen': 'Image gen',
   '/speech': 'Speech',
+  '/long-context': 'Long context',
   '/setup': 'First-run setup',
   '/setup/windows': 'Windows setup',
   '/stack-lab': 'Stack Lab',
@@ -320,6 +321,12 @@ setMeta(
   'Cited whisper.cpp Vulkan STT plus Piper TTS on Radeon. Linux first. Memory from the official table. Speeds not yet measured by AMDai.',
 );
 setDate('/speech', '2026-10-13');
+setMeta(
+  '/long-context',
+  'Long context on Radeon',
+  'Run 128K–262K locally on Radeon. Measured 35B llama.cpp cards from local-desktop. f16 KV default. Empty cells stay not measured yet.',
+);
+setDate('/long-context', '2026-10-13');
 setMeta(
   '/stacks',
   'Recommended stacks',

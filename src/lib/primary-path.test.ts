@@ -120,6 +120,7 @@ describe('primary path and nav IA', () => {
       '/troubleshoot': '../pages/troubleshoot/index.astro',
       '/image-gen': '../pages/image-gen.astro',
       '/speech': '../pages/speech.astro',
+      '/long-context': '../pages/long-context.astro',
     };
     assert.deepEqual(HIGH_TRAFFIC_PATHS.sort(), Object.keys(files).sort());
     for (const [path, rel] of Object.entries(files)) {

@@ -37,6 +37,7 @@ export const RAM_OFFLOAD_SURFACES = [
   '/setup/windows',
   '/image-gen',
   '/speech',
+  '/long-context',
   '/benchmarks',
   '/stacks',
   '/harnesses/hermes',
@@ -77,6 +78,7 @@ export function assertRamSurfacesValid(): string[] {
   if (!RAM_OFFLOAD_SURFACES.includes('/calculator')) errors.push('missing /calculator');
   if (!RAM_OFFLOAD_SURFACES.includes('/image-gen')) errors.push('missing /image-gen');
   if (!RAM_OFFLOAD_SURFACES.includes('/speech')) errors.push('missing /speech');
+  if (!RAM_OFFLOAD_SURFACES.includes('/long-context')) errors.push('missing /long-context');
   if (!isRamOffloadSurface('/recipes/qwen36-35b.llamacpp-vulkan.262k')) {
     errors.push('recipe pages must be RAM surfaces');
   }
