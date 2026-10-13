@@ -1,0 +1,207 @@
+---
+import Base from '../layouts/Base.astro';
+import NewsletterSignup from '../components/NewsletterSignup.astro';
+import {
+  FAQ_ENTRIES,
+  FAQ_GROUPS,
+  FAQ_NAME,
+  faqHaystack,
+  groupFaq,
+} from '../lib/faq';
+
+const groups = groupFaq();
+const index = FAQ_ENTRIES.map((item) => ({
+  id: item.id,
+  group: item.group,
+  haystack: faqHaystack(item),
+}));
+---
+
+<Base
+  title="FAQ"
+  description="First-time Radeon local-LLM FAQ: GPU, Ubuntu vs Windows, 35B vs Flash, Q6/Q5/Q4, measured speed, RAM, Stack Lab, and ROCm problems."
+>
+  <main id="main" class="mx-auto max-w-3xl px-4 py-10 sm:px-6">
+    <a class="skip-link skip-to-faq-nav" href="#faq-sections">Skip to section nav</a>
+    <p class="kicker">First box</p>
+    <h1 class="mt-3 font-serif text-4xl tracking-tight sm:text-5xl">{FAQ_NAME}</h1>
+    <p class="mt-4 text-lg leading-relaxed text-muted">
+      Questions first-time Radeon local-LLM visitors actually ask. Short answers, then a link
+      into a measured page. Numbers come from official local-desktop <code class="font-mono text-ink">amdai-bench/run@1</code>
+      cards — we do not invent tok/s or prices. Q3 is a labeled estimate unless a card is measured.
+    </p>
+    <p class="mt-3 text-sm text-faint">
+      Longer how-tos stay on
+      <a class="underline decoration-accent/40 underline-offset-2" href="/start">Getting started</a>
+      and the
+      <a class="underline decoration-accent/40 underline-offset-2" href="/glossary">glossary</a>.
+      ROCm-only questions: <a class="underline decoration-accent/40 underline-offset-2" href="/rocm/faq">/rocm/faq</a>.
+    </p>
+
+    <search class="mt-8" aria-label="Filter FAQ">
+      <form class="flex flex-col gap-3 sm:flex-row" action="/faq" method="get" role="search" data-faq-form>
+        <label class="sr-only" for="faq-q">Filter questions</label>
+        <input
+          id="faq-q"
+          name="q"
+          type="search"
+          class="min-h-11 flex-1 rounded-full border border-line bg-raised px-4 text-ink"
+          placeholder="Vulkan, Q5, two GPUs, system RAM…"
+          autocomplete="off"
+        />
+        <button type="submit" class="btn-primary">Filter</button>
+      </form>
+      <p class="mt-3 text-sm text-muted" data-faq-status role="status" aria-live="polite">
+        {FAQ_ENTRIES.length} questions in {FAQ_GROUPS.length} groups. Share a filter with <code class="font-mono text-ink">?q=</code>.
+      </p>
+      <p class="mt-3 hidden text-sm text-muted" data-faq-empty role="status">
+        Nothing matches that filter. Clear the box or pick a section — we will not invent an answer.
+      </p>
+    </search>
+
+    <nav
+      id="faq-sections"
+      class="faq-sections sticky z-20 -mx-4 mt-8 border-y border-line bg-canvas/95 px-4 py-2 backdrop-blur-md sm:-mx-6 sm:px-6"
+      aria-label="FAQ sections"
+    >
+      <p class="mb-2 font-mono text-[0.68rem] uppercase tracking-[0.16em] text-faint">Jump to section</p>
+      <ol class="flex flex-wrap gap-2">
+        {FAQ_GROUPS.map((group) => (
+          <li>
+            <a
+              class="inline-flex min-h-11 items-center rounded-full border border-line bg-raised px-3 text-sm text-ink hover:border-accent/50 hover:text-accent-ink"
+              href={`#${group.id}`}
+              data-faq-section-link={group.id}
+            >
+              {group.label}
+            </a>
+          </li>
+        ))}
+      </ol>
+    </nav>
+
+    <div class="mt-10 space-y-12" data-faq-list>
+      {groups.map(({ group, items }) => (
+        <section
+          id={group.id}
+          class="scroll-mt-36"
+          data-faq-section={group.id}
+          aria-labelledby={`${group.id}-heading`}
+        >
+          <h2 id={`${group.id}-heading`} class="font-serif text-3xl tracking-tight">
+            {group.label}
+          </h2>
+          <p class="mt-2 text-sm leading-relaxed text-muted">{group.description}</p>
+          <div class="mt-6 space-y-6">
+            {items.map((item) => (
+              <article
+                id={item.id}
+                class="scroll-mt-36 rounded-2xl border border-line bg-raised/50 p-5"
+                data-faq-item={item.id}
+                data-faq-group={item.group}
+                aria-labelledby={`${item.id}-q`}
+              >
+                <h3 id={`${item.id}-q`} class="font-serif text-2xl tracking-tight">
+                  <a class="hover:text-accent-ink" href={`#${item.id}`}>{item.question}</a>
+                </h3>
+                <p class="mt-4 leading-relaxed text-ink">{item.answer}</p>
+                <ul class="mt-4 flex flex-wrap gap-2">
+                  {item.links.map((link) => (
+                    <li>
+                      <a
+                        class="inline-flex min-h-9 items-center rounded-full border border-line bg-canvas px-3 text-sm text-ink hover:border-accent/50 hover:text-accent-ink"
+                        href={link.href}
+                      >
+                        {link.label}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </article>
+            ))}
+          </div>
+        </section>
+      ))}
+    </div>
+
+    <div class="not-prose mt-12">
+      <NewsletterSignup variant="article" />
+    </div>
+  </main>
+</Base>
+
+<script is:inline define:vars={{ index, total: FAQ_ENTRIES.length }}>
+  const input = document.getElementById('faq-q');
+  const form = document.querySelector('[data-faq-form]');
+  const statusEl = document.querySelector('[data-faq-status]');
+  const emptyEl = document.querySelector('[data-faq-empty]');
+  const params = new URLSearchParams(window.location.search);
+  const initial = (params.get('q') ?? '').trim();
+  if (input && initial) input.value = initial;
+
+  function applyFilter(raw) {
+    const q = raw.trim().toLowerCase();
+    const next = new URL(window.location.href);
+    if (q) next.searchParams.set('q', raw.trim());
+    else next.searchParams.delete('q');
+    if (next.search !== window.location.search) {
+      window.history.replaceState({}, '', next);
+    }
+
+    const visibleIds = new Set();
+    for (const row of index) {
+      if (!q || row.haystack.includes(q)) visibleIds.add(row.id);
+    }
+
+    document.querySelectorAll('[data-faq-item]').forEach((node) => {
+      const id = node.getAttribute('data-faq-item');
+      node.hidden = !(!!id && visibleIds.has(id));
+    });
+
+    const used = new Set();
+    document.querySelectorAll('[data-faq-section]').forEach((section) => {
+      const group = section.getAttribute('data-faq-section');
+      const any = Array.from(section.querySelectorAll('[data-faq-item]')).some((el) => !el.hidden);
+      section.hidden = !any;
+      if (any && group) used.add(group);
+    });
+
+    document.querySelectorAll('[data-faq-section-link]').forEach((node) => {
+      const group = node.getAttribute('data-faq-section-link');
+      const live = !!group && used.has(group);
+      node.setAttribute('aria-disabled', live ? 'false' : 'true');
+      node.classList.toggle('pointer-events-none', !live);
+      node.classList.toggle('text-faint', !live);
+    });
+
+    const shown = visibleIds.size;
+    if (statusEl) {
+      statusEl.textContent = q
+        ? shown + ' of ' + total + ' for “' + raw.trim() + '”. Share this URL.'
+        : total + ' questions in 6 groups. Share a filter with ?q=.';
+    }
+    if (emptyEl) emptyEl.classList.toggle('hidden', shown > 0);
+  }
+
+  if (form && input) {
+    form.addEventListener('submit', function (event) {
+      event.preventDefault();
+      applyFilter(input.value);
+    });
+    input.addEventListener('input', function () {
+      applyFilter(input.value);
+    });
+  }
+
+  applyFilter(initial);
+</script>
+
+<style>
+  .skip-to-faq-nav:focus {
+    top: 3.5rem;
+  }
+
+  .faq-sections {
+    top: var(--header-h);
+  }
+</style>

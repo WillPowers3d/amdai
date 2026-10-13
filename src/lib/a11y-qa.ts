@@ -15,6 +15,7 @@ export const A11Y_SHOT_PAGES = [
   '/qwen',
   '/benchmarks',
   '/newsletter',
+  '/faq',
   '/backends',
   '/calculator',
   '/compare/one-vs-two-gpu',

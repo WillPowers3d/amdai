@@ -88,7 +88,7 @@ export function breadcrumbJsonLd(crumbs: Crumb[]): JsonLd {
   };
 }
 
-export function faqPageJsonLd(items: { question: string; answer: string }[], pageUrl: string): JsonLd {
+export function faqPageJsonLd(items: { question: string; answer: string; links?: { href: string; label: string }[] }[], pageUrl: string): JsonLd {
   return {
     '@type': 'FAQPage',
     '@id': `${pageUrl}#faq`,
@@ -98,7 +98,9 @@ export function faqPageJsonLd(items: { question: string; answer: string }[], pag
       name: item.question,
       acceptedAnswer: {
         '@type': 'Answer',
-        text: item.answer,
+        text: item.links?.length
+          ? `${item.answer} See ${item.links.map((link) => link.label).join(', ')}.`
+          : item.answer,
       },
     })),
   };

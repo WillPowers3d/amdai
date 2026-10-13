@@ -411,7 +411,7 @@ setMeta(
 setMeta(
   '/faq',
   'FAQ',
-  'Short answers for a first home Radeon box: ROCm, Qwen, llama.cpp, two cards, and affiliate links.',
+  'First-time Radeon local-LLM FAQ: GPU, Ubuntu vs Windows, 35B vs Flash, Q6/Q5/Q4, measured speed, RAM, Stack Lab, and ROCm problems.',
 );
 setMeta(
   '/glossary',
