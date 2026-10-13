@@ -1,0 +1,258 @@
+---
+import Base from '../layouts/Base.astro';
+import Callout from '../components/Callout.astro';
+import HowWeTest from '../components/HowWeTest.astro';
+import NextSteps from '../components/NextSteps.astro';
+import {
+  IMAGE_GEN_ALONGSIDE,
+  IMAGE_GEN_CITED_LABEL,
+  IMAGE_GEN_DESCRIPTION,
+  IMAGE_GEN_ERRORS,
+  IMAGE_GEN_FAMILIES,
+  IMAGE_GEN_FIT_ROWS,
+  IMAGE_GEN_HUB_LINKS,
+  IMAGE_GEN_LEAD,
+  IMAGE_GEN_LINUX_STEPS,
+  IMAGE_GEN_SECTIONS,
+  IMAGE_GEN_SOURCES,
+  IMAGE_GEN_SPEED_LABEL,
+  IMAGE_GEN_TITLE,
+  IMAGE_GEN_WINDOWS_STEPS,
+} from '../lib/image-gen';
+import { RAM_FULL_LABEL, RAM_MIN_LABEL } from '../lib/ram-surfaces';
+---
+
+<Base title={IMAGE_GEN_TITLE} description={IMAGE_GEN_DESCRIPTION}>
+  <main id="main" class="mx-auto max-w-4xl px-4 py-10 sm:px-6">
+    <p class="kicker">{IMAGE_GEN_CITED_LABEL}</p>
+    <h1 class="display mt-3 text-4xl sm:text-5xl">{IMAGE_GEN_TITLE}</h1>
+    <p class="mt-4 max-w-3xl text-lg leading-relaxed text-muted">{IMAGE_GEN_LEAD}</p>
+    <ul class="mt-4 flex flex-wrap gap-2">
+      {IMAGE_GEN_HUB_LINKS.map((link) => (
+        <li>
+          <a
+            class="inline-flex min-h-11 items-center rounded-full border border-line bg-canvas px-3 text-sm text-ink hover:border-accent/50 hover:text-accent-ink"
+            href={link.href}
+          >
+            {link.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+    <div class="mt-4">
+      <HowWeTest />
+    </div>
+
+    <Callout type="note" title="ComfyUI, not llama.cpp">
+      <p>
+        Image gen on AMDai is ComfyUI on HIP/ROCm PyTorch. llama.cpp stays first for
+        local LLMs. ComfyUI does not speak llama-server /v1. Image-gen speeds are
+        <strong class="text-ink">{IMAGE_GEN_SPEED_LABEL}</strong> — the gap is on
+        <a class="underline decoration-accent/40" href="/wanted">/wanted</a>
+        as a first-party <code class="font-mono text-ink">amdai-bench/run@1</code> card.
+      </p>
+    </Callout>
+
+    <nav
+      class="sticky z-20 -mx-4 mt-8 border-y border-line bg-canvas/95 px-4 py-2 backdrop-blur-md sm:-mx-6 sm:px-6"
+      aria-label="Image gen sections"
+    >
+      <p class="mb-2 font-mono text-[0.68rem] uppercase tracking-[0.16em] text-faint">Jump to section</p>
+      <ol class="flex flex-wrap gap-2">
+        {IMAGE_GEN_SECTIONS.map((section) => (
+          <li>
+            <a
+              class="inline-flex min-h-11 items-center rounded-full border border-line bg-raised px-3 text-sm text-ink hover:border-accent/50 hover:text-accent-ink"
+              href={`#${section.id}`}
+            >
+              {section.label}
+            </a>
+          </li>
+        ))}
+      </ol>
+    </nav>
+
+    <section id="what-it-is" class="mt-10 scroll-mt-36" aria-labelledby="what-it-is-heading">
+      <h2 id="what-it-is-heading" class="font-serif text-3xl tracking-tight">What local image generation is</h2>
+      <p class="mt-3 max-w-3xl leading-relaxed text-muted">
+        You download a diffusion checkpoint, load it in a graph, type a prompt, and the
+        GPU denoises latents into a picture. That is a different job from a local Qwen
+        chat. Weights are not GGUF Q4–Q6 files. The shopper question is which family
+        fits the VRAM sticker, not which tok/s you will see — we have no image-gen
+        run card yet.
+      </p>
+    </section>
+
+    <section id="vram" class="mt-12 scroll-mt-36" aria-labelledby="vram-heading">
+      <h2 id="vram-heading" class="font-serif text-3xl tracking-tight">VRAM limits the family</h2>
+      <p class="mt-3 max-w-3xl leading-relaxed text-muted">
+        Parameter count and dtype come from the publisher card. Fit on a Radeon is an
+        <strong class="text-ink">estimate</strong> unless a cell says measured. None
+        does. We do not invent a VRAM megabyte figure.
+      </p>
+      <ul class="mt-6 grid gap-4">
+        {IMAGE_GEN_FAMILIES.map((family) => (
+          <li class="rounded-2xl border border-line bg-raised/50 p-5">
+            <h3 class="font-serif text-2xl tracking-tight">{family.name}</h3>
+            <p class="mt-2 font-mono text-sm text-ink">{family.params}</p>
+            <p class="mt-3 leading-relaxed text-muted">{family.cardNote}</p>
+            <p class="mt-3">
+              <a class="underline decoration-accent/40" href={family.href}>{family.name} model card</a>
+            </p>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section id="fit" class="mt-12 scroll-mt-36" aria-labelledby="fit-heading">
+      <h2 id="fit-heading" class="font-serif text-3xl tracking-tight">Per-GPU-class fit</h2>
+      <p class="mt-3 max-w-3xl leading-relaxed text-muted">
+        Classes use AMD-published VRAM stickers from the GPU directory. Every fit
+        cell is an estimate. Every speed cell is {IMAGE_GEN_SPEED_LABEL}.
+      </p>
+      <div class="mt-6 overflow-x-auto">
+        <table class="min-w-full border-collapse text-left text-sm">
+          <caption class="sr-only">
+            Estimated image-gen fit by published VRAM class. Speeds not yet measured by AMDai.
+          </caption>
+          <thead>
+            <tr class="border-b border-line">
+              <th scope="col" class="py-3 pr-4 font-medium text-ink">VRAM class</th>
+              <th scope="col" class="py-3 pr-4 font-medium text-ink">Directory pages</th>
+              <th scope="col" class="py-3 pr-4 font-medium text-ink">Fit (estimate)</th>
+              <th scope="col" class="py-3 font-medium text-ink">Speed</th>
+            </tr>
+          </thead>
+          <tbody>
+            {IMAGE_GEN_FIT_ROWS.map((row) => (
+              <tr class="border-b border-line align-top">
+                <th scope="row" class="py-3 pr-4 font-medium text-ink">{row.vramClass}</th>
+                <td class="py-3 pr-4">
+                  <ul class="flex flex-wrap gap-x-3 gap-y-1">
+                    {row.cards.map((card) => (
+                      <li>
+                        <a class="underline decoration-accent/40" href={card.href}>{card.label}</a>
+                      </li>
+                    ))}
+                  </ul>
+                </td>
+                <td class="py-3 pr-4 text-muted">{row.fit}</td>
+                <td class="py-3 text-muted">{row.speed}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="linux" class="mt-12 scroll-mt-36" aria-labelledby="linux-heading">
+      <h2 id="linux-heading" class="font-serif text-3xl tracking-tight">Linux path (try this)</h2>
+      <ol class="mt-6 space-y-6">
+        {IMAGE_GEN_LINUX_STEPS.map((step, index) => (
+          <li id={step.id} class="scroll-mt-28 rounded-2xl border border-line bg-raised/50 p-5">
+            <p class="font-mono text-[0.68rem] uppercase tracking-[0.14em] text-faint">
+              {index + 1} · {IMAGE_GEN_CITED_LABEL}
+            </p>
+            <h3 class="mt-2 font-serif text-2xl tracking-tight">{step.title}</h3>
+            <p class="mt-3 leading-relaxed text-ink">{step.body}</p>
+            <ul class="mt-4 flex flex-wrap gap-2">
+              {step.links.map((link) => (
+                <li>
+                  <a
+                    class="inline-flex min-h-11 items-center rounded-full border border-line bg-canvas px-3 text-sm text-ink hover:border-accent/50 hover:text-accent-ink"
+                    href={link.href}
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <section id="windows" class="mt-12 scroll-mt-36" aria-labelledby="windows-heading">
+      <h2 id="windows-heading" class="font-serif text-3xl tracking-tight">Windows path (cited second)</h2>
+      <p class="mt-3 max-w-3xl leading-relaxed text-muted">
+        Only steps AMD, ComfyUI, or PyTorch document. Everything else is marked unofficial.
+      </p>
+      <div class="mt-6 grid gap-4">
+        {IMAGE_GEN_WINDOWS_STEPS.map((step) => (
+          <article id={step.id} class="scroll-mt-28 rounded-2xl border border-line bg-raised/50 p-5">
+            <h3 class="font-serif text-2xl tracking-tight">{step.title}</h3>
+            <p class="mt-3 leading-relaxed text-ink">{step.body}</p>
+            <ul class="mt-4 flex flex-wrap gap-2">
+              {step.links.map((link) => (
+                <li>
+                  <a
+                    class="inline-flex min-h-11 items-center rounded-full border border-line bg-canvas px-3 text-sm text-ink hover:border-accent/50 hover:text-accent-ink"
+                    href={link.href}
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section id="alongside" class="mt-12 scroll-mt-36" aria-labelledby="alongside-heading">
+      <h2 id="alongside-heading" class="font-serif text-3xl tracking-tight">Image gen alongside a local LLM</h2>
+      <p class="mt-3 max-w-3xl leading-relaxed text-muted">{IMAGE_GEN_ALONGSIDE}</p>
+      <p class="mt-4 max-w-3xl leading-relaxed text-muted">
+        Shopper RAM labels stay
+        <strong class="text-ink">{RAM_MIN_LABEL}</strong>
+        and
+        <strong class="text-ink">{RAM_FULL_LABEL}</strong>
+        for the LLM side. Open the calculator for that load. A second card is a
+        <a class="underline decoration-accent/40" href="/multi-gpu">/multi-gpu</a>
+        question, not an invented VRAM split.
+      </p>
+      <p class="mt-4 flex flex-wrap gap-3">
+        <a class="btn-secondary" href="/multi-gpu">Dual / multi-GPU</a>
+        <a class="btn-ghost" href="/calculator">Calculator</a>
+        <a class="btn-ghost" href="/stack-lab">Stack Lab</a>
+      </p>
+    </section>
+
+    <section id="errors" class="mt-12 scroll-mt-36" aria-labelledby="errors-heading">
+      <h2 id="errors-heading" class="font-serif text-3xl tracking-tight">Common errors</h2>
+      <ul class="mt-6 grid gap-4">
+        {IMAGE_GEN_ERRORS.map((row) => (
+          <li id={row.id} class="scroll-mt-28 rounded-2xl border border-line bg-raised/50 p-5">
+            <h3 class="font-serif text-2xl tracking-tight">{row.title}</h3>
+            <p class="mt-3 leading-relaxed text-muted">{row.body}</p>
+            <ul class="mt-4 flex flex-wrap gap-2">
+              {row.links.map((link) => (
+                <li>
+                  <a
+                    class="inline-flex min-h-11 items-center rounded-full border border-line bg-canvas px-3 text-sm text-ink hover:border-accent/50 hover:text-accent-ink"
+                    href={link.href}
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section id="sources" class="mt-12 scroll-mt-36" aria-labelledby="sources-heading">
+      <h2 id="sources-heading" class="font-serif text-3xl tracking-tight">Sources</h2>
+      <ul class="mt-4 list-disc space-y-2 pl-5 text-muted">
+        {IMAGE_GEN_SOURCES.map((source) => (
+          <li>
+            <a class="underline decoration-accent/40" href={source.href}>{source.title}</a>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <NextSteps path="/image-gen" />
+  </main>
+</Base>
