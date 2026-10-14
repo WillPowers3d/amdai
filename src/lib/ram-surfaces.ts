@@ -10,6 +10,7 @@ export const RAM_FULL_LABEL = 'RAM needed at full context';
 export const RAM_OFFLOAD_SURFACES = [
   '/gpus/r9700',
   '/gpus/strix-halo',
+  '/gpus/ryzen-igpu',
   '/gpus/rx-7900-xtx',
   '/gpus/rx-7900-xt',
   '/gpus/rx-7800-xt',
@@ -102,6 +103,7 @@ export function assertRamSurfacesValid(): string[] {
   if (RAM_FULL_LABEL !== 'RAM needed at full context') errors.push('full label drifted');
   if (RAM_OFFLOAD_SURFACES.length < 10) errors.push('surface list too short');
   if (!RAM_OFFLOAD_SURFACES.includes('/gpus/r9700')) errors.push('missing /gpus/r9700');
+  if (!RAM_OFFLOAD_SURFACES.includes('/gpus/ryzen-igpu')) errors.push('missing /gpus/ryzen-igpu');
   if (!RAM_OFFLOAD_SURFACES.includes('/gpus/rx-7900-xtx')) errors.push('missing /gpus/rx-7900-xtx');
   if (!RAM_OFFLOAD_SURFACES.includes('/gpus/rx-7900-xt')) errors.push('missing /gpus/rx-7900-xt');
   if (!RAM_OFFLOAD_SURFACES.includes('/gpus/rx-7800-xt')) errors.push('missing /gpus/rx-7800-xt');

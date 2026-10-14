@@ -1,0 +1,298 @@
+---
+import Base from '../../layouts/Base.astro';
+import Callout from '../../components/Callout.astro';
+import HowWeTest from '../../components/HowWeTest.astro';
+import GpuCompareLinks from '../../components/GpuCompareLinks.astro';
+import NextSteps from '../../components/NextSteps.astro';
+import GoDeeper from '../../components/rocm/GoDeeper.astro';
+import { gpuPageById } from '../../lib/gpu-pages';
+import { recipes } from '../../lib/recipes-data';
+import { RYZEN_IGPU_SECTIONS, ryzenIgpuPage } from '../../lib/ryzen-igpu';
+
+const directory = gpuPageById(recipes, 'ryzen-igpu');
+if (!directory) throw new Error('missing ryzen-igpu GPU directory row');
+const page = ryzenIgpuPage();
+const qwen36Rows = page.fitRows.filter((row) => row.modelId === 'qwen36');
+const flashRows = page.fitRows.filter((row) => row.modelId === 'flash');
+---
+
+<Base title={page.title} description={page.description}>
+  <main id="main" class="mx-auto max-w-6xl px-4 py-10 sm:px-6">
+    <p class="kicker">
+      <a class="underline decoration-accent/40" href="/gpus">GPU directory</a>
+      · {directory.family} · {directory.arch} · {directory.gfx}
+    </p>
+    <p class="mt-3 kicker">Cited, not measured on local-desktop</p>
+    <h1 class="display mt-3 text-4xl sm:text-5xl">{page.heading}</h1>
+    <p class="mt-4 max-w-3xl text-lg leading-relaxed text-muted">{page.lead}</p>
+    <p class="mt-3 max-w-3xl leading-relaxed text-muted">
+      {page.rocmNote}
+    </p>
+    <div class="mt-6 flex flex-wrap gap-3">
+      <a class="btn-primary" href={page.calc64}>Open 64 GB in calculator</a>
+      <a class="btn-secondary" href={page.calc32}>32 GB kit</a>
+      <a class="btn-secondary" href={page.calc96}>96 GB kit</a>
+      <a class="btn-ghost" href="/gpus/strix-halo">Strix Halo sheet</a>
+      <a class="btn-ghost" href="/gpus/r9700">R9700 measured page</a>
+    </div>
+    <div class="mt-4">
+      <HowWeTest />
+    </div>
+
+    <nav
+      class="sticky z-20 -mx-4 mt-8 border-y border-line bg-canvas/95 px-4 py-2 backdrop-blur-md sm:-mx-6 sm:px-6"
+      aria-label="Ryzen iGPU sections"
+    >
+      <p class="mb-2 font-mono text-[0.68rem] uppercase tracking-[0.16em] text-faint">Jump to section</p>
+      <ol class="flex flex-wrap gap-2">
+        {RYZEN_IGPU_SECTIONS.map((section) => (
+          <li>
+            <a
+              class="inline-flex min-h-11 items-center rounded-full border border-line bg-raised px-3 text-sm text-ink hover:border-accent/50 hover:text-accent-ink"
+              href={`#${section.id}`}
+            >
+              {section.label}
+            </a>
+          </li>
+        ))}
+      </ol>
+    </nav>
+
+    <section id="chips" class="mt-10 scroll-mt-36" aria-labelledby="chips-heading">
+      <h2 id="chips-heading" class="font-serif text-3xl tracking-tight">Which chips</h2>
+      <p class="mt-3 max-w-3xl leading-relaxed text-muted">{page.chipsBody}</p>
+      <div class="mt-6 overflow-x-auto rounded-xl border border-line">
+        <table class="min-w-[52rem] w-full text-left text-sm">
+          <caption>Official CU / gfx / memory rows. Not a tok/s card.</caption>
+          <thead class="bg-raised text-[0.72rem] uppercase tracking-[0.08em] text-muted">
+            <tr>
+              <th scope="col" class="px-3 py-2 font-medium">iGPU</th>
+              <th scope="col" class="px-3 py-2 font-medium">Typical CPU</th>
+              <th scope="col" class="px-3 py-2 font-medium">Arch</th>
+              <th scope="col" class="px-3 py-2 font-medium">gfx</th>
+              <th scope="col" class="px-3 py-2 font-medium">CUs</th>
+              <th scope="col" class="px-3 py-2 font-medium">Official memory</th>
+              <th scope="col" class="px-3 py-2 font-medium">ROCm 10.1</th>
+            </tr>
+          </thead>
+          <tbody>
+            {page.chips.map((row) => (
+              <tr class="border-t border-line align-top">
+                <th scope="row" class="px-3 py-2.5 font-medium">{row.igpu}</th>
+                <td class="px-3 py-2.5 text-muted">{row.cpus}</td>
+                <td class="px-3 py-2.5">{row.arch}</td>
+                <td class="px-3 py-2.5 font-mono text-xs">{row.gfx}</td>
+                <td class="px-3 py-2.5 tabular-nums">{row.cu}</td>
+                <td class="px-3 py-2.5 text-muted">{row.memory}</td>
+                <td class="px-3 py-2.5 text-muted">{row.rocm}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p class="mt-3 max-w-3xl text-sm text-muted">
+        Strix Halo is not in that table.
+        <a class="underline decoration-accent/40" href="/gpus/strix-halo">Ryzen AI Max / Strix Halo</a>
+        is Radeon 8060S, gfx1151.
+      </p>
+    </section>
+
+    <section id="memory" class="mt-12 scroll-mt-36" aria-labelledby="memory-heading">
+      <h2 id="memory-heading" class="font-serif text-3xl tracking-tight">Shared memory</h2>
+      <p class="mt-3 max-w-3xl leading-relaxed text-muted">{page.uma}</p>
+      <p class="mt-3 max-w-3xl leading-relaxed text-muted">{page.llamaMemory}</p>
+      <Callout type="note" title="One pool, not a 16 GB card">
+        <p>
+          The GPU drinks from the same kit the OS uses. Size the kit first.
+          <a class="underline decoration-accent/40" href="/bios">BIOS notes</a>
+          cover firmware menus; they are not an iGPU tok/s promise.
+        </p>
+      </Callout>
+      <div class="mt-6">
+        <GoDeeper title="UMA carve-out versus GTT">
+          <p>
+            {page.shareNote} Change the slice in the calculator if your BIOS printout
+            disagrees — do not invent a megabyte figure here.
+          </p>
+        </GoDeeper>
+      </div>
+    </section>
+
+    <section id="backend" class="mt-12 scroll-mt-36" aria-labelledby="backend-heading">
+      <h2 id="backend-heading" class="font-serif text-3xl tracking-tight">Backend</h2>
+      <p class="mt-3 max-w-3xl leading-relaxed text-muted">{page.supportBody}</p>
+      <ul class="mt-4 flex flex-wrap gap-2">
+        <li>
+          <a class="inline-flex min-h-9 items-center rounded-full border border-line bg-canvas px-3 text-sm" href={page.matrixHref} rel="noopener">ROCm 10.1 matrix</a>
+        </li>
+        <li>
+          <a class="inline-flex min-h-9 items-center rounded-full border border-line bg-canvas px-3 text-sm" href="/backends/llamacpp">llama.cpp</a>
+        </li>
+        <li>
+          <a class="inline-flex min-h-9 items-center rounded-full border border-line bg-canvas px-3 text-sm" href="/rocm/gfx">gfx IDs</a>
+        </li>
+        <li>
+          <a class="inline-flex min-h-9 items-center rounded-full border border-line bg-canvas px-3 text-sm" href="/setup">Ubuntu setup</a>
+        </li>
+      </ul>
+    </section>
+
+    <section id="what-fits" class="mt-12 scroll-mt-36" aria-labelledby="what-fits-heading">
+      <h2 id="what-fits-heading" class="font-serif text-3xl tracking-tight">What fits</h2>
+      <p class="mt-3 max-w-3xl leading-relaxed text-muted">
+        Qwen 3.6 and Qwen 3.8 only. Q6 / Q5 / Q4 are calculator estimates.
+        {page.q3} is a labeled estimate ({page.q3Cite}). Q1/Q2 stay off.
+        {page.ramNote}
+      </p>
+      <p class="mt-3 text-sm text-muted">{page.shareNote}</p>
+
+      <h3 class="mt-8 font-serif text-2xl tracking-tight">Qwen3.6-35B-A3B at {qwen36Rows[0]?.contextLabel}</h3>
+      <div class="mt-4 overflow-x-auto rounded-xl border border-line">
+        <table class="min-w-[56rem] w-full text-left text-sm">
+          <caption>35B calculator fit on 32 / 64 / 96 GB shared kits. Estimate.</caption>
+          <thead class="bg-raised text-[0.72rem] uppercase tracking-[0.08em] text-muted">
+            <tr>
+              <th scope="col" class="px-3 py-2 font-medium">Quant</th>
+              <th scope="col" class="px-3 py-2 font-medium">Kind</th>
+              <th scope="col" class="px-3 py-2 font-medium">Weights</th>
+              <th scope="col" class="px-3 py-2 font-medium">32 GB kit</th>
+              <th scope="col" class="px-3 py-2 font-medium">64 GB kit</th>
+              <th scope="col" class="px-3 py-2 font-medium">96 GB kit</th>
+              <th scope="col" class="px-3 py-2 font-medium">Speed</th>
+            </tr>
+          </thead>
+          <tbody>
+            {qwen36Rows.map((row) => (
+              <tr class="border-t border-line align-top">
+                <td class="px-3 py-2.5 font-medium">{row.quant}</td>
+                <td class="px-3 py-2.5 text-muted">{row.kindLabel}</td>
+                <td class="px-3 py-2.5 tabular-nums">{row.weightsGb}</td>
+                {row.kits.map((cell) => (
+                  <td class="px-3 py-2.5">
+                    <p class="tabular-nums">{cell.totalGb} · {cell.verdictLabel}</p>
+                    <p class="mt-1 text-xs text-muted">GPU slice {cell.sliceGb}. Left for OS {cell.leftoverGb}.</p>
+                    <p class="mt-1">
+                      <a class="underline decoration-accent/40" href={cell.calculatorHref}>Calculator</a>
+                    </p>
+                  </td>
+                ))}
+                <td class="px-3 py-2.5 text-muted">{row.speed}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="mt-10 font-serif text-2xl tracking-tight">Qwen 3.8 Flash at {flashRows[0]?.contextLabel}</h3>
+      <div class="mt-4 overflow-x-auto rounded-xl border border-line">
+        <table class="min-w-[56rem] w-full text-left text-sm">
+          <caption>Flash calculator fit on 32 / 64 / 96 GB shared kits. Estimate.</caption>
+          <thead class="bg-raised text-[0.72rem] uppercase tracking-[0.08em] text-muted">
+            <tr>
+              <th scope="col" class="px-3 py-2 font-medium">Quant</th>
+              <th scope="col" class="px-3 py-2 font-medium">Kind</th>
+              <th scope="col" class="px-3 py-2 font-medium">Weights</th>
+              <th scope="col" class="px-3 py-2 font-medium">32 GB kit</th>
+              <th scope="col" class="px-3 py-2 font-medium">64 GB kit</th>
+              <th scope="col" class="px-3 py-2 font-medium">96 GB kit</th>
+              <th scope="col" class="px-3 py-2 font-medium">Speed</th>
+            </tr>
+          </thead>
+          <tbody>
+            {flashRows.map((row) => (
+              <tr class="border-t border-line align-top">
+                <td class="px-3 py-2.5 font-medium">{row.quant}</td>
+                <td class="px-3 py-2.5 text-muted">{row.kindLabel}</td>
+                <td class="px-3 py-2.5 tabular-nums">{row.weightsGb}</td>
+                {row.kits.map((cell) => (
+                  <td class="px-3 py-2.5">
+                    <p class="tabular-nums">{cell.totalGb} · {cell.verdictLabel}</p>
+                    <p class="mt-1 text-xs text-muted">GPU slice {cell.sliceGb}. Left for OS {cell.leftoverGb}.</p>
+                    <p class="mt-1">
+                      <a class="underline decoration-accent/40" href={cell.calculatorHref}>Calculator</a>
+                    </p>
+                  </td>
+                ))}
+                <td class="px-3 py-2.5 text-muted">{row.speed}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <div class="mt-8 grid gap-4 sm:grid-cols-2">
+        <article class="rounded-2xl border border-line bg-raised/50 p-5">
+          <p class="kicker">Minimum system RAM needed</p>
+          <p class="mt-2 font-serif text-2xl tracking-tight">{page.ramMin.kitLabel}</p>
+          <p class="mt-2 text-sm leading-relaxed text-muted">
+            {page.ramMin.rawGiB} at {page.ramMin.contextLabel}. Left after the model:
+            {page.ramMin.leftover32} on 32 GB, {page.ramMin.leftover64} on 64 GB, {page.ramMin.leftover96} on 96 GB.
+          </p>
+        </article>
+        <article class="rounded-2xl border border-line bg-raised/50 p-5">
+          <p class="kicker">RAM needed at full context</p>
+          <p class="mt-2 font-serif text-2xl tracking-tight">{page.ramFull.kitLabel}</p>
+          <p class="mt-2 text-sm leading-relaxed text-muted">
+            {page.ramFull.rawGiB} at {page.ramFull.contextLabel}. Left after the model:
+            {page.ramFull.leftover32} on 32 GB, {page.ramFull.leftover64} on 64 GB, {page.ramFull.leftover96} on 96 GB.
+          </p>
+        </article>
+      </div>
+      <p class="mt-3 max-w-3xl text-sm text-muted">{page.ramMin.note}</p>
+    </section>
+
+    <section id="speeds" class="mt-12 scroll-mt-36" aria-labelledby="speeds-heading">
+      <h2 id="speeds-heading" class="font-serif text-3xl tracking-tight">Speeds</h2>
+      <p class="mt-3 max-w-3xl leading-relaxed text-muted">{page.speedsBody}</p>
+      <Callout type="warn" title="Cited, not measured on local-desktop">
+        <p>
+          Official 35B decode numbers on AMDai are Ubuntu llama-bench cards on the
+          R9700. They are not a 780M or 890M promise. Measure on
+          <a class="underline decoration-accent/40" href="/amdai-bench">amdai-bench</a>
+          or
+          <a class="underline decoration-accent/40" href="/stack-lab">Stack Lab</a>.
+        </p>
+      </Callout>
+    </section>
+
+    <section id="house" class="mt-12 scroll-mt-36" aria-labelledby="house-heading">
+      <h2 id="house-heading" class="font-serif text-3xl tracking-tight">House launch</h2>
+      <p class="mt-3 max-w-3xl leading-relaxed text-muted">
+        llama.cpp Vulkan, sane 32K context, f16 KV. Confirm
+        <code class="font-mono">--list-devices</code> before you paste this. A 35B Q5 file
+        wants a kit that the calculator says fits — the command is a shape, not a measured pin.
+      </p>
+      <pre class="mt-4 overflow-x-auto rounded-xl border border-line bg-raised p-4 text-sm leading-relaxed"><code>{page.launch}</code></pre>
+    </section>
+
+    <section id="upgrade" class="mt-12 scroll-mt-36" aria-labelledby="upgrade-heading">
+      <h2 id="upgrade-heading" class="font-serif text-3xl tracking-tight">When to add a dGPU</h2>
+      <p class="mt-3 max-w-3xl leading-relaxed text-muted">{page.upgrade}</p>
+      <p class="mt-3 max-w-3xl text-sm text-muted">{page.stackLab}</p>
+      <ul class="mt-4 flex flex-wrap gap-2">
+        <li><a class="inline-flex min-h-9 items-center rounded-full border border-line bg-canvas px-3 text-sm" href="/gpus">GPU directory</a></li>
+        <li><a class="inline-flex min-h-9 items-center rounded-full border border-line bg-canvas px-3 text-sm" href="/gpus/r9700">R9700</a></li>
+        <li><a class="inline-flex min-h-9 items-center rounded-full border border-line bg-canvas px-3 text-sm" href="/gpus/strix-halo">Strix Halo</a></li>
+        <li><a class="inline-flex min-h-9 items-center rounded-full border border-line bg-canvas px-3 text-sm" href="/budget">Budget</a></li>
+        <li><a class="inline-flex min-h-9 items-center rounded-full border border-line bg-canvas px-3 text-sm" href="/calculator">Calculator</a></li>
+        <li><a class="inline-flex min-h-9 items-center rounded-full border border-line bg-canvas px-3 text-sm" href="/can-run">Can my Radeon run it?</a></li>
+        <li><a class="inline-flex min-h-9 items-center rounded-full border border-line bg-canvas px-3 text-sm" href="/compare/gpus">Compare GPUs</a></li>
+      </ul>
+    </section>
+
+    <section id="sources" class="mt-12 scroll-mt-36" aria-labelledby="sources-heading">
+      <h2 id="sources-heading" class="font-serif text-3xl tracking-tight">Sources</h2>
+      <ul class="mt-4 list-disc space-y-2 pl-5 text-sm leading-relaxed text-muted">
+        {page.sources.map((source) => (
+          <li>
+            <a class="underline decoration-accent/40" href={source.href} rel="noopener">{source.title}</a>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <GpuCompareLinks heading="Compare with other sheets" />
+
+    <NextSteps path="/gpus/ryzen-igpu" />
+  </main>
+</Base>

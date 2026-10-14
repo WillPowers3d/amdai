@@ -283,12 +283,23 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
   '/gpus/strix-halo': [
     { href: '/calculator', label: 'Calculator' },
     { href: '/gpus/r9700', label: 'R9700 measured page' },
+    { href: '/gpus/ryzen-igpu', label: 'Ryzen iGPU' },
     { href: '/setup', label: 'First-run setup' },
     { href: '/compare/gpus', label: 'Compare GPUs' },
     { href: '/compare/radeon-vs-mac', label: 'Radeon vs Mac' },
     { href: '/compare', label: 'Compare 35B' },
     { href: '/bios', label: 'BIOS' },
     { href: '/rocm-problems/strix-halo-mes-remove-queue', label: 'MES hang' },
+  ],
+  '/gpus/ryzen-igpu': [
+    { href: '/calculator', label: 'Calculator' },
+    { href: '/can-run', label: 'Can my Radeon run it?' },
+    { href: '/gpus/strix-halo', label: 'Strix Halo' },
+    { href: '/gpus/r9700', label: 'R9700 measured page' },
+    { href: '/budget', label: 'Budget' },
+    { href: '/gpus', label: 'GPU directory' },
+    { href: '/setup', label: 'First-run setup' },
+    { href: '/bios', label: 'BIOS' },
   ],
   '/gpus/rx-7900-xtx': [
     { href: '/compare/gpus', label: 'Compare GPUs' },

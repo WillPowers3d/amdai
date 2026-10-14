@@ -109,7 +109,7 @@ export const GLOSSARY: GlossaryEntry[] = [
   {
     id: 'apu',
     term: 'APU',
-    aliases: ['Strix Halo', 'Ryzen AI Max', 'Ryzen AI Max+ 395', 'Radeon 8060S', 'gfx1151'],
+    aliases: ['Strix Halo', 'Ryzen AI Max', 'Ryzen AI Max+ 395', 'Radeon 8060S', 'gfx1151', '780M', '890M', 'Ryzen iGPU'],
     letter: 'A',
     definition:
       'A chip that combines CPU and GPU and shares one memory pool. There is no discrete VRAM sticker. The shopper box on AMDai is Ryzen AI Max+ 395 with Radeon 8060S (gfx1151) — Strix Halo in mini-PCs and laptops.',
@@ -118,6 +118,7 @@ export const GLOSSARY: GlossaryEntry[] = [
       'AMD’s ROCm 10.1.0 GPU table prints VRAM for this SKU as Dynamic + carveout. BIOS UMA reserves a slice; GTT / dynamic allocation grows into the rest of the same kit. llama.cpp Vulkan first. Not measured on local-desktop.',
     links: [
       { href: '/gpus/strix-halo', label: 'Strix Halo guide' },
+      { href: '/gpus/ryzen-igpu', label: 'Ryzen iGPU' },
       { href: '/calculator', label: 'Calculator' },
       { href: '/gpus', label: 'GPU directory' },
     ],
@@ -361,6 +362,7 @@ export const GLOSSARY: GlossaryEntry[] = [
       'AMD’s ROCm 10.1.0 APU table calls this Dynamic + carveout. Change the calculator usable percent if your BIOS printout disagrees. We do not invent a megabyte GTT cap.',
     links: [
       { href: '/gpus/strix-halo', label: 'Strix Halo guide' },
+      { href: '/gpus/ryzen-igpu', label: 'Ryzen iGPU' },
       { href: '/calculator', label: 'Calculator' },
       { href: '/bios', label: 'BIOS' },
     ],
@@ -872,9 +874,10 @@ export const GLOSSARY: GlossaryEntry[] = [
       'A BIOS reserve that hands the iGPU a fixed slice of system memory at boot. The rest of the kit stays with the OS unless GTT / dynamic allocation grows into it.',
     why: 'A huge carve-out on a 64 GB Strix Halo box leaves little for the desktop. A tiny carve-out leans on GTT. Check the board menu; AMDai does not pin a megabyte number.',
     deeper:
-      'Same pool as system RAM. The two shopper labels stay Minimum system RAM needed and RAM needed at full context, adapted for what is left after the GPU share. Link /bios and /gpus/strix-halo.',
+      'Same pool as system RAM. The two shopper labels stay Minimum system RAM needed and RAM needed at full context, adapted for what is left after the GPU share. Link /bios, /gpus/strix-halo, and /gpus/ryzen-igpu.',
     links: [
       { href: '/gpus/strix-halo', label: 'Strix Halo guide' },
+      { href: '/gpus/ryzen-igpu', label: 'Ryzen iGPU' },
       { href: '/compare/radeon-vs-mac', label: 'Radeon vs Mac' },
       { href: '/bios', label: 'BIOS' },
       { href: '/calculator', label: 'Calculator' },

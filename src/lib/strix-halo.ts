@@ -119,6 +119,7 @@ export const REQUIRED_STRIX_HALO_HREFS = [
   '/glossary',
   '/setup',
   '/stack-lab',
+  '/gpus/ryzen-igpu',
 ] as const;
 
 function readSrcData(name: string): string {
@@ -316,7 +317,7 @@ export function strixHaloPage() {
     linuxReqsHref: gpuDirectory.linux_reqs,
     citedLabel: STRIX_HALO_CITED_LABEL,
     lead:
-      'Strix Halo is an APU: CPU and GPU live on one chip and share one memory pool. There is no discrete VRAM sticker. Mini-PCs and laptops built on Ryzen AI Max+ 395 with Radeon 8060S (gfx1151) are the shopper box. AMD lists max system memory 128 GB (256-bit LPDDR5x). We size two kits — 64 GB and 128 GB — as calculator estimates.',
+      'Strix Halo is an APU: CPU and GPU live on one chip and share one memory pool. There is no discrete VRAM sticker. Mini-PCs and laptops built on Ryzen AI Max+ 395 with Radeon 8060S (gfx1151) are the shopper box. AMD lists max system memory 128 GB (256-bit LPDDR5x). We size two kits — 64 GB and 128 GB — as calculator estimates. Phoenix / Hawk Point 780M and Strix Point 880M / 890M are a different sheet at /gpus/ryzen-igpu.',
     uma:
       'BIOS UMA / VRAM carve-out is a reserved slice the firmware hands the iGPU at boot. GTT / dynamic allocation lets the driver grow into the rest of the same kit. AMD’s ROCm 10.1.0 GPU table prints VRAM for this SKU as Dynamic + carveout — not a 32 GB card. A large carve-out leaves less for the OS; a tiny carve-out leans on GTT. Check the board menu on /bios. We do not pin a megabyte number.',
     supportBody:

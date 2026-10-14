@@ -215,6 +215,20 @@ export const FAQ_ENTRIES: FaqItem[] = [
     ],
   },
   {
+    id: 'ryzen-igpu-local',
+    group: 'getting-started',
+    question: 'Can I run a local Qwen on a Ryzen 780M or 890M iGPU?',
+    answer:
+      'Yes as a cited path, not a measured local-desktop card. Radeon 780M / 760M are gfx1103 (Phoenix / Hawk Point). Radeon 880M / 890M are gfx1150 (Strix Point). The iGPU uses system RAM — size a 32 / 64 / 96 GB kit on the calculator. llama.cpp Vulkan is first and does not need ROCm. Hawk Point and Strix Point are named on the ROCm 10.1 matrix; desktop 8700G is not named there. HSA_OVERRIDE_GFX_VERSION is unofficial. We do not invent tok/s. Strix Halo (8060S, gfx1151) is a different sheet.',
+    links: [
+      { href: '/gpus/ryzen-igpu', label: 'Ryzen iGPU guide' },
+      { href: '/gpus/strix-halo', label: 'Strix Halo' },
+      { href: '/calculator', label: 'Calculator' },
+      { href: '/can-run', label: 'Can my Radeon run it?' },
+      { href: '/bios', label: 'BIOS' },
+    ],
+  },
+  {
     id: 'ubuntu-or-windows',
     group: 'getting-started',
     question: 'Ubuntu or Windows for a first local LLM box?',
@@ -867,6 +881,7 @@ export const REQUIRED_FAQ_HREFS = [
   '/setup/comfyui',
   '/setup/multi-gpu',
   '/guides/buying-used-radeon',
+  '/gpus/ryzen-igpu',
 ] as const;
 
 const BANNED_VISIBLE = /Qwen2\.5|Qwen3-8B/i;

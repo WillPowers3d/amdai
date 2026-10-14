@@ -245,3 +245,12 @@ cards:
     support: official
     rocm_note: Strix Halo APU. Official on the ROCm 10.1.0 Ryzen table as gfx1151. VRAM is Dynamic + carveout — shared system memory, not a discrete sticker.
     hsa_override: Not needed when the build lists gfx1151.
+
+  - name: AMD Ryzen iGPU (Radeon 780M / 890M)
+    family: Ryzen iGPU
+    arch: RDNA 3 / 3.5
+    gfx: gfx1103 / gfx1150
+    vram_gb: null
+    support: official
+    rocm_note: Hawk Point 780M/760M (gfx1103) and Strix Point 880M/890M (gfx1150) are named on the ROCm 10.1 Ryzen table. Desktop Phoenix 8700G is the same 780M marketing name but is not named on that matrix. llama.cpp Vulkan first. VRAM is Dynamic + carveout.
+    hsa_override: Unofficial. Do not spoof gfx1100 on gfx1103. Vulkan does not need the override.

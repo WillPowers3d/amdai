@@ -80,6 +80,12 @@ export const OG_CARDS: OgCard[] = [
     alt: 'AMDai Strix Halo — cited Ryzen AI Max+ 395 guide, not measured on local-desktop',
   },
   {
+    slug: 'gpus-ryzen-igpu',
+    title: 'Local AI on a Ryzen iGPU',
+    lede: 'Cited 780M / 890M. Not measured on local-desktop',
+    alt: 'AMDai Ryzen iGPU — cited 780M / 760M / 880M / 890M guide, not measured on local-desktop',
+  },
+  {
     slug: 'gpus-rx-9070-xt',
     title: 'Radeon RX 9070 XT',
     lede: '16 GB gfx1201 estimates. Not measured on local-desktop',
@@ -614,6 +620,7 @@ export function ogSlug(pathname: string): string {
   }
   if (slug === 'gpus-r9700') return 'gpus-r9700';
   if (slug === 'gpus-strix-halo') return 'gpus-strix-halo';
+  if (slug === 'gpus-ryzen-igpu') return 'gpus-ryzen-igpu';
   if (slug === 'gpus-rx-9070-xt') return 'gpus-rx-9070-xt';
   if (slug === 'gpus-rx-9070-gre') return 'gpus-rx-9070-gre';
   if (slug === 'gpus-rx-9070') return 'gpus-rx-9070';

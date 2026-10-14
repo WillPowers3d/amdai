@@ -168,6 +168,7 @@ export const CRUMB_LABELS: Record<string, string> = {
   '/gpus': 'GPUs',
   '/gpus/r9700': 'R9700',
   '/gpus/strix-halo': 'Strix Halo',
+  '/gpus/ryzen-igpu': 'Ryzen iGPU',
   '/gpus/rx-7900-xtx': 'RX 7900 XTX',
   '/gpus/rx-7900-xt': 'RX 7900 XT',
   '/gpus/rx-7800-xt': 'RX 7800 XT',
@@ -595,6 +596,12 @@ setMeta(
   'Cited Ryzen AI Max+ 395 (Radeon 8060S, gfx1151) local-AI guide. Shared system memory, llama.cpp Vulkan first. Not measured on local-desktop.',
 );
 setDate('/gpus/strix-halo', '2026-10-13');
+setMeta(
+  '/gpus/ryzen-igpu',
+  'Local AI on a Ryzen iGPU',
+  'Cited Ryzen 780M / 760M (gfx1103) and 880M / 890M (gfx1150) local-AI guide. Shared system RAM, llama.cpp Vulkan first. Not measured on local-desktop.',
+);
+setDate('/gpus/ryzen-igpu', '2026-10-14');
 setMeta(
   '/gpus/rx-7900-xtx',
   'RX 7900 XTX',

@@ -453,6 +453,7 @@ export function relatedFor(pathname: string): RelatedLink[] {
       }
     }
     add(out, seen, '/gpus/strix-halo', 'Strix Halo');
+    add(out, seen, '/gpus/ryzen-igpu', 'Ryzen iGPU');
     for (const link of WORKSTATION_NAV_LINKS) add(out, seen, link.href, link.label);
     for (const link of CONSUMER_NAV_LINKS) add(out, seen, link.href, link.label);
     add(out, seen, '/calculator', 'Calculator');
@@ -687,7 +688,7 @@ export function assertRelatedValid(
   if (!r9700.some((href) => href.startsWith('/recipes/'))) {
     errors.push('/gpus/r9700 missing recipe links');
   }
-  for (const href of ['/gpus/strix-halo', '/gpus/w7900', '/gpus/w7800', '/gpus/w7700', '/gpus/w6800', '/gpus/rx-7900-xtx', '/gpus/rx-7900-xt', '/gpus/rx-7800-xt', '/gpus/rx-9070-xt', '/gpus/rx-9070', '/gpus/rx-9070-gre', '/gpus/rx-9060-xt', '/gpus/rx-7900-gre', '/gpus/rx-7700-xt', '/gpus/rx-7600-xt', '/gpus/rx-7600', '/gpus/rx-6800-xt', '/gpus/rx-6950-xt', '/gpus/rx-6700-xt']) {
+  for (const href of ['/gpus/strix-halo', '/gpus/ryzen-igpu', '/gpus/w7900', '/gpus/w7800', '/gpus/w7700', '/gpus/w6800', '/gpus/rx-7900-xtx', '/gpus/rx-7900-xt', '/gpus/rx-7800-xt', '/gpus/rx-9070-xt', '/gpus/rx-9070', '/gpus/rx-9070-gre', '/gpus/rx-9060-xt', '/gpus/rx-7900-gre', '/gpus/rx-7700-xt', '/gpus/rx-7600-xt', '/gpus/rx-7600', '/gpus/rx-6800-xt', '/gpus/rx-6950-xt', '/gpus/rx-6700-xt']) {
     if (!r9700.includes(href)) errors.push(`/gpus/r9700 missing ${href}`);
   }
   const xtx = relatedFor('/gpus/rx-7900-xtx').map((link) => link.href);

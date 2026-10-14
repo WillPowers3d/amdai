@@ -97,6 +97,7 @@ export const primaryNav: NavItem[] = [
   { href: '/setup/multi-gpu', label: 'Multi-GPU llama.cpp', description: 'Cited llama.cpp on two Radeon GPUs. Layer split or two pinned servers. 35B split measured on local-desktop', group: 'path' },
   { href: '/gpus/r9700', label: 'R9700', description: 'Measured 35B on the 32 GB Radeon AI PRO R9700 — one GPU vs two, cited run cards', group: 'path' },
   { href: '/gpus/strix-halo', label: 'Strix Halo', description: 'Cited Ryzen AI Max+ 395 / Radeon 8060S APU guide. Shared memory. Not measured on local-desktop', group: 'path' },
+  { href: '/gpus/ryzen-igpu', label: 'Ryzen iGPU', description: 'Cited 780M / 760M / 880M / 890M guide. Shared system RAM. Not measured on local-desktop', group: 'path' },
   { href: '/gpus/rx-9070-xt', label: 'RX 9070 XT', description: '16 GB gfx1201 gaming sibling of the R9700. Calculator estimates. Not measured on local-desktop', group: 'path' },
   { href: '/gpus/rx-9070', label: 'RX 9070', description: '16 GB gfx1201 non-XT RDNA 4. Calculator estimates. Not measured on local-desktop', group: 'path' },
   { href: '/gpus/rx-9070-gre', label: 'RX 9070 GRE', description: '12 GB gfx1201 GRE. Calculator estimates. Not measured on local-desktop', group: 'path' },
