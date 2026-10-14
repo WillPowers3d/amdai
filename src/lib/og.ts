@@ -242,6 +242,12 @@ export const OG_CARDS: OgCard[] = [
     alt: 'AMDai LM Studio — cited llama.cpp runtime on Radeon, not measured on local-desktop',
   },
   {
+    slug: 'setup-coding-assistant',
+    title: 'Local coding assistant',
+    lede: 'Aider, Cline, Continue on llama-server /v1',
+    alt: 'AMDai coding assistant — cited Aider Cline Continue on llama-server /v1',
+  },
+  {
     slug: 'stack-lab',
     title: 'Radeon Stack Lab',
     lede: 'Packages not published yet',

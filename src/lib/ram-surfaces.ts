@@ -50,6 +50,7 @@ export const RAM_OFFLOAD_SURFACES = [
   '/setup/arch',
   '/setup/docker',
   '/setup/lm-studio',
+  '/setup/coding-assistant',
   '/image-gen',
   '/speech',
   '/long-context',

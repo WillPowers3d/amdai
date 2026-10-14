@@ -251,6 +251,22 @@ export const FAQ_ENTRIES: FaqItem[] = [
     ],
   },
   {
+    id: 'local-coding-assistant',
+    group: 'getting-started',
+    question: 'Can I run Aider, Cline, or Continue on a Radeon GPU?',
+    answer:
+      'Yes. Start llama.cpp llama-server first (Vulkan on Ubuntu 24.04+), then point the tool at http://127.0.0.1:8080/v1. House file is Qwen3.6-35B-A3B UD-Q5_K_XL at 262K on one R9700. Aider prefixes the model with openai/ and needs a non-empty API key. Cline uses the OpenAI Compatible provider — do not append /chat/completions to the base URL. Continue sets apiBase including /v1. LM Studio :1234 is a secondary path. Q6/Q5/Q4 first; Q3 stays a labeled estimate. Decode numbers on this site are Ubuntu llama.cpp llama-bench, not Aider/Cline/Continue tok/s. We do not invent a harness speed.',
+    links: [
+      { href: '/setup/coding-assistant', label: 'Coding assistant' },
+      { href: '/setup', label: 'Ubuntu setup (measured)' },
+      { href: '/harnesses/aider', label: 'Aider' },
+      { href: '/harnesses/cline', label: 'Cline' },
+      { href: '/harnesses/continue', label: 'Continue' },
+      { href: '/backends/llamacpp', label: 'llama.cpp' },
+      { href: '/setup/lm-studio', label: 'LM Studio' },
+    ],
+  },
+  {
     id: 'local-image-gen',
     group: 'getting-started',
     question: 'Can I run Stable Diffusion or Flux on a Radeon, not just a local LLM?',
@@ -717,6 +733,7 @@ export const REQUIRED_FAQ_HREFS = [
   '/setup/arch',
   '/setup/docker',
   '/setup/lm-studio',
+  '/setup/coding-assistant',
 ] as const;
 
 const BANNED_VISIBLE = /Qwen2\.5|Qwen3-8B/i;

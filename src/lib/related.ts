@@ -87,6 +87,7 @@ function topicLinks(path: string): RelatedLink[] {
     path === '/setup/arch' ||
     path === '/setup/docker' ||
     path === '/setup/lm-studio' ||
+    path === '/setup/coding-assistant' ||
     path === '/start'
   ) {
     return [
@@ -100,6 +101,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/setup/arch', label: 'Arch setup' },
       { href: '/setup/docker', label: 'Docker / Podman' },
       { href: '/setup/lm-studio', label: 'LM Studio' },
+      { href: '/setup/coding-assistant', label: 'Coding assistant' },
       { href: '/image-gen', label: 'Image gen on Radeon' },
       { href: '/vision', label: 'Vision on Radeon' },
       { href: '/speech', label: 'Speech on Radeon' },
@@ -321,6 +323,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/backends/llamacpp', label: 'llama.cpp' },
       { href: '/setup', label: 'First-run setup' },
       { href: '/setup/lm-studio', label: 'LM Studio' },
+      { href: '/setup/coding-assistant', label: 'Coding assistant' },
       { href: '/multi-gpu', label: 'Dual / multi-GPU' },
       { href: '/gpus/r9700', label: 'R9700 measured page' },
       { href: '/speech', label: 'Speech on Radeon' },
@@ -485,6 +488,7 @@ export function relatedFor(pathname: string): RelatedLink[] {
     add(out, seen, '/tuning', 'Speed up llama.cpp');
     add(out, seen, '/setup/docker', 'Docker / Podman');
     add(out, seen, '/setup/lm-studio', 'LM Studio');
+    add(out, seen, '/setup/coding-assistant', 'Coding assistant');
     if (id) {
       for (const recipe of liveRecipes(recipes).filter((row) => row.backend === id)) {
         add(out, seen, `/recipes/${recipe.id}`, recipeLabel(recipe));
@@ -569,6 +573,7 @@ export function assertRelatedValid(
     '/setup/arch',
     '/setup/docker',
     '/setup/lm-studio',
+    '/setup/coding-assistant',
     '/faq',
     '/models/qwen36',
     '/models/flash',

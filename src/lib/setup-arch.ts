@@ -231,6 +231,7 @@ export const SETUP_ARCH_HUB_LINKS: SetupArchLink[] = [
   { href: '/setup/windows', label: 'Windows setup' },
   { href: '/setup/docker', label: 'Docker / Podman' },
   { href: '/setup/lm-studio', label: 'LM Studio' },
+  { href: '/setup/coding-assistant', label: 'Coding assistant' },
   { href: '/gpus/r9700', label: 'R9700' },
   { href: '/benchmarks', label: 'Benchmarks' },
   { href: '/start', label: 'Getting started' },

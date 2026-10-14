@@ -103,6 +103,8 @@ harnesses:
         href: https://aider.chat/docs/llms/openai-compat.html
       - title: Aider — advanced model settings
         href: https://aider.chat/docs/config/adv-model-settings.html
+      - title: This site — Run a local coding assistant on a Radeon GPU
+        href: https://amdai.net/setup/coding-assistant
 
   - id: cline
     title: Cline
@@ -129,6 +131,8 @@ harnesses:
     sources:
       - title: Cline — OpenAI Compatible
         href: https://docs.cline.bot/provider-config/openai-compatible
+      - title: This site — Run a local coding assistant on a Radeon GPU
+        href: https://amdai.net/setup/coding-assistant
 
   - id: roo
     title: Roo Code
@@ -188,6 +192,8 @@ harnesses:
         href: https://docs.continue.dev/customize/model-providers/top-level/openai
       - title: Continue — llama.cpp provider
         href: https://docs.continue.dev/customize/model-providers/more/llamacpp
+      - title: This site — Run a local coding assistant on a Radeon GPU
+        href: https://amdai.net/setup/coding-assistant
 
   - id: opencode
     title: OpenCode

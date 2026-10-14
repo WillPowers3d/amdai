@@ -228,6 +228,7 @@ export const CRUMB_LABELS: Record<string, string> = {
   '/setup/arch': 'Arch setup',
   '/setup/docker': 'Docker / Podman',
   '/setup/lm-studio': 'LM Studio',
+  '/setup/coding-assistant': 'Coding assistant',
   '/stack-lab': 'Stack Lab',
   '/stacks': 'Stacks',
   '/calculator': 'Calculator',
@@ -363,6 +364,12 @@ setMeta(
   'Cited LM Studio Vulkan or ROCm llama.cpp runtime on Radeon. Local OpenAI /v1 on :1234. Not measured on local-desktop.',
 );
 setDate('/setup/lm-studio', '2026-10-14');
+setMeta(
+  '/setup/coding-assistant',
+  'Run a local coding assistant on a Radeon GPU',
+  'Cited Aider, Cline, and Continue on llama-server /v1. Vulkan first. Measured 35B llama.cpp speeds, not harness tok/s.',
+);
+setDate('/setup/coding-assistant', '2026-10-14');
 setMeta(
   '/image-gen',
   'Local image gen on Radeon',

@@ -448,7 +448,26 @@ export const GLOSSARY: GlossaryEntry[] = [
       { href: '/harnesses/lm-studio', label: 'LM Studio harness' },
       { href: '/setup', label: 'Ubuntu setup (measured)' },
     ],
-    seeAlso: ['llamacpp', 'vulkan', 'offload'],
+    seeAlso: ['llamacpp', 'vulkan', 'offload', 'coding-assistant'],
+  },
+  {
+    id: 'coding-assistant',
+    term: 'Coding assistant',
+    aliases: ['Aider', 'Cline', 'Continue', 'local coding agent'],
+    letter: 'C',
+    definition:
+      'An editor or CLI agent that talks to a local OpenAI-compatible /v1. On AMDai that server is llama.cpp llama-server on 127.0.0.1:8080. Aider, Cline, and Continue are the cited first three.',
+    why: 'People search “aider llama.cpp radeon” and “cline local model.” The cited walk is /setup/coding-assistant. Decode numbers on this site are Ubuntu llama.cpp llama-bench, not Aider tok/s. Vulkan llama-server first; LM Studio :1234 is secondary.',
+    deeper:
+      'Aider prefixes the model with openai/ and requires a non-empty API key. Cline uses the OpenAI Compatible provider — do not append /chat/completions. Continue openai provider wants apiBase including /v1. House file is still Qwen3.6-35B-A3B UD-Q5_K_XL. Hermes is the house agent on local-desktop against the same :8080.',
+    links: [
+      { href: '/setup/coding-assistant', label: 'Coding assistant' },
+      { href: '/harnesses/aider', label: 'Aider' },
+      { href: '/harnesses/cline', label: 'Cline' },
+      { href: '/harnesses/continue', label: 'Continue' },
+      { href: '/backends/llamacpp', label: 'llama.cpp' },
+    ],
+    seeAlso: ['llamacpp', 'lm-studio', 'context-length'],
   },
   {
     id: 'lora',

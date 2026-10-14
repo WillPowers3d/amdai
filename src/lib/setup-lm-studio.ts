@@ -273,6 +273,7 @@ export const SETUP_LM_STUDIO_HUB_LINKS: SetupLmStudioLink[] = [
   { href: '/setup/fedora', label: 'Fedora setup' },
   { href: '/setup/arch', label: 'Arch setup' },
   { href: '/setup/docker', label: 'Docker / Podman' },
+  { href: '/setup/coding-assistant', label: 'Coding assistant' },
   { href: '/backends/lmstudio', label: 'LM Studio backend' },
   { href: '/harnesses/lm-studio', label: 'LM Studio harness' },
   { href: '/gpus/r9700', label: 'R9700' },

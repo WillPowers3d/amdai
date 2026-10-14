@@ -11,6 +11,7 @@ import { SETUP_FEDORA_HOWTO_STEPS, SETUP_FEDORA_PUBLISHED } from './setup-fedora
 import { SETUP_ARCH_HOWTO_STEPS, SETUP_ARCH_PUBLISHED } from './setup-arch';
 import { SETUP_DOCKER_HOWTO_STEPS, SETUP_DOCKER_PUBLISHED } from './setup-docker';
 import { SETUP_LM_STUDIO_HOWTO_STEPS, SETUP_LM_STUDIO_PUBLISHED } from './setup-lm-studio';
+import { SETUP_CODING_HOWTO_STEPS, SETUP_CODING_PUBLISHED } from './setup-coding-assistant';
 import { IMAGE_GEN_HOWTO_STEPS, IMAGE_GEN_PUBLISHED } from './image-gen';
 import { SPEECH_HOWTO_STEPS, SPEECH_PUBLISHED } from './speech';
 import { LONG_CONTEXT_FAQ, LONG_CONTEXT_PUBLISHED } from './long-context';
@@ -467,6 +468,19 @@ export function pageJsonLd(input: {
         published: dates?.published ?? SETUP_LM_STUDIO_PUBLISHED,
         modified: dates?.modified ?? SETUP_LM_STUDIO_PUBLISHED,
         steps: SETUP_LM_STUDIO_HOWTO_STEPS,
+      }),
+    );
+    return nodes;
+  }
+  if (path === '/setup/coding-assistant') {
+    nodes.push(
+      howToJsonLd({
+        name: input.title.replace(/ · AMDai$/, ''),
+        description: input.description,
+        url,
+        published: dates?.published ?? SETUP_CODING_PUBLISHED,
+        modified: dates?.modified ?? SETUP_CODING_PUBLISHED,
+        steps: SETUP_CODING_HOWTO_STEPS,
       }),
     );
     return nodes;
