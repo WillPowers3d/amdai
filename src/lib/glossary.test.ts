@@ -113,6 +113,7 @@ const ALLOWED_HREFS = new Set([
   '/kv-cache',
   '/constrained-decoding',
   '/thinking',
+  '/concurrency-ab',
   '/moe',
   '/can-run',
 ]);
