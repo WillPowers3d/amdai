@@ -526,7 +526,7 @@ export const GLOSSARY: GlossaryEntry[] = [
       { href: '/tuning', label: 'Speed up llama.cpp' },
       { href: '/results', label: 'Run cards' },
     ],
-    seeAlso: ['context-length', 'vram', 'quant', 'parallel-slots', 'flash-attention'],
+    seeAlso: ['context-length', 'vram', 'quant', 'parallel-slots', 'flash-attention', 'prompt-cache'],
   },
   {
     id: 'parallel-slots',
@@ -544,7 +544,7 @@ export const GLOSSARY: GlossaryEntry[] = [
       { href: '/kv-cache', label: 'KV cache' },
       { href: '/stack-lab', label: 'Stack Lab' },
     ],
-    seeAlso: ['kv-cache', 'llamacpp', 'context-length', 'flash-attention'],
+    seeAlso: ['kv-cache', 'llamacpp', 'context-length', 'flash-attention', 'prompt-cache', 'slot-save-restore'],
   },
   {
     id: 'flash-attention',
@@ -562,7 +562,94 @@ export const GLOSSARY: GlossaryEntry[] = [
       { href: '/kv-cache', label: 'KV cache' },
       { href: '/stack-lab', label: 'Stack Lab' },
     ],
-    seeAlso: ['kv-cache', 'llamacpp', 'prefill-decode', 'vulkan'],
+    seeAlso: ['kv-cache', 'llamacpp', 'prefill-decode', 'vulkan', 'prompt-cache'],
+  },
+  {
+    id: 'prompt-cache',
+    term: 'Prompt cache',
+    aliases: ['prompt caching', '--cache-prompt', 'cache_prompt', 'LLAMA_ARG_CACHE_PROMPT'],
+    letter: 'P',
+    definition:
+      'llama-server keeps processed prompt tokens so a later request that shares a prefix skips that prefill. Official --cache-prompt / --no-cache-prompt (default on; env LLAMA_ARG_CACHE_PROMPT). The completion API field cache_prompt does the same per request (default true).',
+    why: 'Hermes, coding tools, and chat UIs resend a long system prompt every turn. The cache helps when that prefix stays put. AMDai has not measured TTFT with versus without the cache on local-desktop — not yet measured. Run Stack Lab prompt-cache-ab/1.',
+    deeper:
+      'Official docs warn logits are not guaranteed bit-for-bit identical across batch sizes, so cache_prompt can be nondeterministic. House llama-server does not record a --cache-reuse, --cache-ram, or --slot-save-path pin. The shopper page is /prompt-cache.',
+    links: [
+      { href: '/prompt-cache', label: 'Prompt cache' },
+      { href: '/kv-cache', label: 'KV cache' },
+      { href: '/harnesses', label: 'Harnesses' },
+      { href: '/stack-lab', label: 'Stack Lab' },
+    ],
+    seeAlso: ['prefix-cache', 'cache-reuse', 'slot-save-restore', 'ttft', 'kv-cache'],
+  },
+  {
+    id: 'prefix-cache',
+    term: 'Prefix cache',
+    aliases: ['cached prefix', 'common prefix', 'prefix reuse'],
+    letter: 'P',
+    definition:
+      'Another name for llama.cpp prompt cache: the shared leading tokens of two requests. Official cache_prompt skips that prefix and prefills only the new suffix.',
+    why: 'A stable Hermes system prompt, thinking instructions, or a RAG preamble can reuse the prefix. A one-shot prompt or a prefix that changes every turn cannot. Cache-hit TTFT stays not yet measured.',
+    deeper:
+      'Shoppers search llama.cpp prompt cache AMD and llama-server cache-reuse. The dedicated page is /prompt-cache. Do not copy an overnight llama-bench decode cell as a cache-hit first-token figure.',
+    links: [
+      { href: '/prompt-cache', label: 'Prompt cache' },
+      { href: '/prefill', label: 'Prefill' },
+      { href: '/rag', label: 'RAG' },
+    ],
+    seeAlso: ['prompt-cache', 'cache-reuse', 'ttft', 'prefill-decode'],
+  },
+  {
+    id: 'cache-reuse',
+    term: 'Cache-reuse (--cache-reuse)',
+    aliases: ['--cache-reuse', 'n_cache_reuse', 'KV-shift reuse', 'LLAMA_ARG_CACHE_REUSE'],
+    letter: 'C',
+    definition:
+      'Official llama-server min chunk size for reuse via KV shifting. --cache-reuse N (default 0 = disabled; env LLAMA_ARG_CACHE_REUSE). Requires prompt caching to be on. n_cache_reuse on the API matches that flag.',
+    why: 'Default 0 means KV-shift reuse is off even when --cache-prompt is on. House recipes do not record a --cache-reuse pin. Do not invent 256. Measure prompt-cache-ab/1 before you keep a new value.',
+    deeper:
+      'llama.cpp server README is the cite. --cache-ram (default 8192 MiB; PR #16391) is the system-RAM ceiling for cached prefixes, not VRAM. Extra cache RAM on top of the measured 37.32 / 42.9 GB peaks is a labeled estimate.',
+    links: [
+      { href: '/prompt-cache', label: 'Prompt cache' },
+      { href: '/kv-cache', label: 'KV cache' },
+      { href: '/stack-lab', label: 'Stack Lab' },
+    ],
+    seeAlso: ['prompt-cache', 'prefix-cache', 'kv-cache', 'ttft'],
+  },
+  {
+    id: 'slot-save-restore',
+    term: 'Slot save/restore',
+    aliases: ['--slot-save-path', 'POST /slots save', 'slot restore', 'LLAMA_ARG_SLOT_SAVE_PATH'],
+    letter: 'S',
+    definition:
+      'Official --slot-save-path PATH enables saving a slot’s KV / prompt cache to disk (default disabled; env LLAMA_ARG_SLOT_SAVE_PATH). POST /slots/{id_slot}?action=save and action=restore take a filename under that directory.',
+    why: 'Useful when you want a parked prefix on disk instead of only in RAM. House llama-server does not record the flag. Slot TTFT stays not yet measured. -np sizes the slot count; --kv-unified shares one KV buffer.',
+    deeper:
+      '--cache-idle-slots (default on; requires --cache-ram) parks an idle slot into the prompt cache so a unified buffer can take the next task. The shopper pages are /prompt-cache and /concurrency-ab.',
+    links: [
+      { href: '/prompt-cache', label: 'Prompt cache' },
+      { href: '/concurrency-ab', label: 'Parallel slots' },
+      { href: '/setup/server', label: 'Always-on server' },
+    ],
+    seeAlso: ['prompt-cache', 'parallel-slots', 'kv-cache', 'ttft'],
+  },
+  {
+    id: 'ttft',
+    term: 'TTFT',
+    aliases: ['time to first token', 'first token', 'cache-hit TTFT', 'cache-miss TTFT'],
+    letter: 'T',
+    definition:
+      'Time to first token — how long the user waits after send before the first decode token. Prompt / prefix cache aims to cut that wait when a long system prompt is resent.',
+    why: 'Shoppers search why is time to first token slow. AMDai has not measured llama-server TTFT with versus without the cache on local-desktop. Every cache-hit, miss, and first-token cell on /prompt-cache stays not yet measured.',
+    deeper:
+      'Do not copy the overnight 102.39 tok/s 4K decode cell as a cache-hit TTFT. That number is llama-bench, one client, not a prefix-cache A/B. Run amdai-bench ab-prompt-cache and ingest a lab-notes-report/1 pack.',
+    links: [
+      { href: '/prompt-cache', label: 'Prompt cache' },
+      { href: '/prefill', label: 'Prefill' },
+      { href: '/amdai-bench', label: 'amdai-bench' },
+      { href: '/results', label: 'Run cards' },
+    ],
+    seeAlso: ['prompt-cache', 'prefix-cache', 'prefill-decode', 'toks'],
   },
   {
     id: 'kl-divergence',
@@ -799,7 +886,7 @@ export const GLOSSARY: GlossaryEntry[] = [
       { href: '/flash-attention', label: 'Flash Attention' },
       { href: '/qwen', label: 'Qwen compare' },
     ],
-    seeAlso: ['toks', 'context-length', 'amdai-bench', 'flash-attention', 'batch', 'ubatch'],
+    seeAlso: ['toks', 'context-length', 'amdai-bench', 'flash-attention', 'batch', 'ubatch', 'prompt-cache', 'ttft'],
   },
   {
     id: 'batch',

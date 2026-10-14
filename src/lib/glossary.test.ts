@@ -117,6 +117,8 @@ const ALLOWED_HREFS = new Set([
   '/concurrency-ab',
   '/flash-attention',
   '/prefill',
+  '/prompt-cache',
+  '/rag',
   '/out-of-vram',
   '/moe',
   '/can-run',

@@ -79,6 +79,7 @@ export const RAM_OFFLOAD_SURFACES = [
   '/concurrency-ab',
   '/flash-attention',
   '/prefill',
+  '/prompt-cache',
   '/out-of-vram',
   '/moe',
   '/can-run',
@@ -165,6 +166,7 @@ export function assertRamSurfacesValid(): string[] {
   if (!RAM_OFFLOAD_SURFACES.includes('/concurrency-ab')) errors.push('missing /concurrency-ab');
   if (!RAM_OFFLOAD_SURFACES.includes('/flash-attention')) errors.push('missing /flash-attention');
   if (!RAM_OFFLOAD_SURFACES.includes('/prefill')) errors.push('missing /prefill');
+  if (!RAM_OFFLOAD_SURFACES.includes('/prompt-cache')) errors.push('missing /prompt-cache');
   if (!RAM_OFFLOAD_SURFACES.includes('/out-of-vram')) errors.push('missing /out-of-vram');
   if (!RAM_OFFLOAD_SURFACES.includes('/moe')) errors.push('missing /moe');
   if (!RAM_OFFLOAD_SURFACES.includes('/can-run')) errors.push('missing /can-run');

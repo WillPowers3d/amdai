@@ -576,6 +576,12 @@ export const OG_CARDS: OgCard[] = [
     alt: 'AMDai faster prompt processing (prefill) on a Radeon GPU with llama.cpp — cited -b / -ub, llama-server batch not measured',
   },
   {
+    slug: 'prompt-cache',
+    title: 'Prompt cache on Radeon',
+    lede: 'Cited --cache-reuse and slot save. TTFT not yet measured',
+    alt: 'AMDai prompt / prefix cache on a Radeon GPU with llama.cpp — cited --cache-reuse and slot save, TTFT not yet measured',
+  },
+  {
     slug: 'out-of-vram',
     title: 'Out of VRAM on Radeon',
     lede: 'Cited ErrorOutOfDeviceMemory. Cheapest fix first',

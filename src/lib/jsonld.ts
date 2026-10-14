@@ -37,6 +37,7 @@ import { THINK_FAQ, THINK_HOWTO_STEPS, THINK_PUBLISHED } from './thinking';
 import { NP_FAQ, NP_HOWTO_STEPS, NP_PUBLISHED } from './concurrency-ab';
 import { FA_FAQ, FA_HOWTO_STEPS, FA_PUBLISHED } from './flash-attention';
 import { PP_FAQ, PP_HOWTO_STEPS, PP_PUBLISHED } from './prefill';
+import { PC_FAQ, PC_HOWTO_STEPS, PC_PUBLISHED } from './prompt-cache';
 import { OOM_FAQ, OOM_HOWTO_STEPS, OOM_PUBLISHED } from './out-of-vram';
 import { MOE_FAQ, MOE_HOWTO_STEPS, MOE_PUBLISHED } from './moe';
 import { VULKAN_VS_ROCM_FAQ, VULKAN_VS_ROCM_HOWTO_STEPS, VULKAN_VS_ROCM_PUBLISHED } from './vulkan-vs-rocm';
@@ -854,6 +855,20 @@ export function pageJsonLd(input: {
       }),
     );
     nodes.push(faqPageJsonLd(PP_FAQ, url));
+    return nodes;
+  }
+  if (path === '/prompt-cache') {
+    nodes.push(
+      howToJsonLd({
+        name: input.title.replace(/ · AMDai$/, ''),
+        description: input.description,
+        url,
+        published: dates?.published ?? PC_PUBLISHED,
+        modified: dates?.modified ?? PC_PUBLISHED,
+        steps: PC_HOWTO_STEPS,
+      }),
+    );
+    nodes.push(faqPageJsonLd(PC_FAQ, url));
     return nodes;
   }
   if (path === '/out-of-vram') {

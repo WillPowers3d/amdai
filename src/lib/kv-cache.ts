@@ -185,9 +185,10 @@ export const KV_CACHE_FAQ = [
     id: 'parallel-slots',
     question: 'Does --parallel multiply the KV cache?',
     answer:
-      'Yes on llama-server. Official --parallel / -np sizes a slot cache per concurrent sequence. Two slots at the same -c is two KV pools. House path is one interactive user. Size a second slot on the calculator before you raise -np. The shopper page is /concurrency-ab.',
+      'Yes on llama-server. Official --parallel / -np sizes a slot cache per concurrent sequence. Two slots at the same -c is two KV pools. House path is one interactive user. Size a second slot on the calculator before you raise -np. The shopper page is /concurrency-ab. Prompt / prefix cache (cached prefixes, --cache-reuse, slot save/restore) is /prompt-cache.',
     links: [
       { href: '/concurrency-ab', label: 'Parallel slots' },
+      { href: '/prompt-cache', label: 'Prompt cache' },
       { href: '/calculator', label: 'Calculator' },
       { href: '/tuning', label: 'Tuning flags' },
       { href: '/harnesses/connect', label: 'Connect a harness' },
@@ -199,6 +200,7 @@ export const KV_CACHE_HUB: KvCacheLink[] = [
   { href: '/long-context', label: 'Long context' },
   { href: '/flash-attention', label: 'Flash Attention' },
   { href: '/prefill', label: 'Prefill' },
+  { href: '/prompt-cache', label: 'Prompt cache' },
   { href: '/tuning', label: 'Speed up llama.cpp' },
   { href: '/quants', label: 'Quants · KV types' },
   { href: '/calculator', label: 'Calculator' },
@@ -227,6 +229,7 @@ export const REQUIRED_KV_CACHE_HREFS = [
   '/long-context',
   '/flash-attention',
   '/prefill',
+  '/prompt-cache',
   '/tuning',
   '/quants',
   '/calculator',

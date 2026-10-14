@@ -73,6 +73,7 @@ const hubs = [
   { href: '/concurrency-ab', label: 'Parallel slots (-np)', body: 'Cited llama.cpp -np / --parallel on Radeon. Measure Stack Lab concurrency-ab/1. Slots not measured on local-desktop. Q3 is a labeled estimate.' },
   { href: '/flash-attention', label: 'Flash Attention (-fa)', body: 'Cited llama.cpp -fa / --flash-attn on Radeon. Overnight -fa 1. llama-server FA deltas not measured. Q3 is a labeled estimate.' },
   { href: '/prefill', label: 'Faster prompt processing (prefill)', body: 'Cited llama.cpp -b / -ub on Radeon. Measure Stack Lab prefill-ab/1. llama-server batch not measured. Q3 is a labeled estimate.' },
+  { href: '/prompt-cache', label: 'Prompt / prefix cache', body: 'Cited llama.cpp --cache-reuse and slot save on Radeon. Measure Stack Lab prompt-cache-ab/1. TTFT not yet measured. Q3 is a labeled estimate.' },
   { href: '/out-of-vram', label: 'Out of VRAM', body: 'Cited llama.cpp Vulkan / HIP OOM strings on Radeon. Cheapest fix first. Q3 is a labeled estimate.' },
   { href: '/can-run', label: 'Can my Radeon run it?', body: 'Cited GPU × model fit. Q6/Q5/Q4 plus a labeled Q3 estimate. Measured 35B cells only on R9700.' },
   { href: '/compare/gpus', label: 'Compare GPUs', body: 'Pick two cited Radeon sheets. Q6/Q5/Q4 plus a labeled Q3 estimate. No invented tok/s.' },

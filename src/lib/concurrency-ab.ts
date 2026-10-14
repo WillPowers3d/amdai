@@ -277,10 +277,11 @@ export const NP_FAQ: NpFaq[] = [
     id: 'fewer-win',
     question: 'When do fewer parallel slots win on a Radeon?',
     answer:
-      'When one interactive user owns the GPU — one Hermes chat, one coding tool, or thinking mode. Extra slots raise aggregate decode only if several clients stream at once, and they usually worsen per-client TTFT. Measure concurrency-ab/1. Do not copy a one-client 35B tok/s as an -np 4 figure.',
+      'When one interactive user owns the GPU — one Hermes chat, one coding tool, or thinking mode. Extra slots raise aggregate decode only if several clients stream at once, and they usually worsen per-client TTFT. Prompt / prefix cache is the other TTFT lever — see /prompt-cache. Measure concurrency-ab/1. Do not copy a one-client 35B tok/s as an -np 4 figure.',
     links: [
       { href: '/thinking', label: 'Thinking mode' },
       { href: '/harnesses', label: 'Harnesses' },
+      { href: '/prompt-cache', label: 'Prompt cache' },
       { href: '/tuning', label: 'Speed up llama.cpp' },
     ],
   },
@@ -293,6 +294,7 @@ export const NP_HUB_LINKS: NpLink[] = [
   { href: '/tuning', label: 'Speed up llama.cpp' },
   { href: '/flash-attention', label: 'Flash Attention' },
   { href: '/prefill', label: 'Prefill' },
+  { href: '/prompt-cache', label: 'Prompt cache' },
   { href: '/thinking', label: 'Thinking mode' },
   { href: '/guides/tool-calling', label: 'Tool calling' },
   { href: '/constrained-decoding', label: 'Constrained decoding' },
@@ -314,6 +316,7 @@ export const REQUIRED_NP_HREFS = [
   '/tuning',
   '/flash-attention',
   '/prefill',
+  '/prompt-cache',
   '/thinking',
   '/guides/tool-calling',
   '/constrained-decoding',

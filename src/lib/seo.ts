@@ -233,6 +233,7 @@ export const CRUMB_LABELS: Record<string, string> = {
   '/concurrency-ab': 'Parallel slots',
   '/flash-attention': 'Flash Attention',
   '/prefill': 'Prefill',
+  '/prompt-cache': 'Prompt cache',
   '/out-of-vram': 'Out of VRAM',
   '/moe': 'MoE',
   '/can-run': 'Can my Radeon run it?',
@@ -543,6 +544,12 @@ setMeta(
   'Faster prompt processing (prefill) on a Radeon GPU with llama.cpp. Cited -b / -ub. Measure Stack Lab prefill-ab/1. Q3 is a labeled estimate.',
 );
 setDate('/prefill', '2026-10-14');
+setMeta(
+  '/prompt-cache',
+  'Prompt / prefix cache on a Radeon GPU',
+  'Prompt / prefix cache on a Radeon GPU with llama.cpp. Cited --cache-reuse and slot save. Measure Stack Lab prompt-cache-ab/1. Q3 is a labeled estimate.',
+);
+setDate('/prompt-cache', '2026-10-14');
 setMeta(
   '/out-of-vram',
   'Out of VRAM? Fix llama.cpp memory errors',

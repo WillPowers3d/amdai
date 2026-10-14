@@ -40,6 +40,8 @@ const categories = (Object.keys(CATEGORY_COPY) as HarnessCategory[]).map((id) =>
       <code>/v1</code> is down, the harness is a very expensive timeout.
       Reliable tool calls and JSON from llama-server live on
       <a class="underline decoration-accent/40" href="/guides/tool-calling">tool calling</a>.
+      Multi-turn agents that resend a long system prompt every turn belong on
+      <a class="underline decoration-accent/40" href="/prompt-cache">prompt / prefix cache</a>.
     </p>
     <p class="mt-4 text-sm text-faint">
       Cited from official repos and docs, checked {harnessesFile.as_of}. We do not invent features —

@@ -155,10 +155,11 @@ export const LONG_CONTEXT_ENGINE = [
   {
     id: 'flash-attn',
     title: '-fa 1 on the overnight cards',
-    body: 'The same llama-bench line recorded -fa 1 (flash attention). llama-server flags are not on that card — do not invent a server pin. Copy -fa only when your build documents it. The shopper page is /flash-attention. Prefill / batch (-b / -ub) is /prefill.',
+    body: 'The same llama-bench line recorded -fa 1 (flash attention). llama-server flags are not on that card — do not invent a server pin. Copy -fa only when your build documents it. The shopper page is /flash-attention. Prefill / batch (-b / -ub) is /prefill. Prompt / prefix cache is /prompt-cache.',
     links: [
       { href: '/flash-attention', label: 'Flash Attention' },
       { href: '/prefill', label: 'Prefill' },
+      { href: '/prompt-cache', label: 'Prompt cache' },
       { href: '/results', label: 'Run cards' },
       { href: '/backends/llamacpp', label: 'llama.cpp' },
     ],
@@ -259,6 +260,7 @@ export const LONG_CONTEXT_HUB: LongContextLink[] = [
   { href: '/kv-cache', label: 'KV cache' },
   { href: '/flash-attention', label: 'Flash Attention' },
   { href: '/prefill', label: 'Prefill' },
+  { href: '/prompt-cache', label: 'Prompt cache' },
   { href: '/compare', label: 'Compare 35B' },
   { href: '/compare/one-vs-two-gpu', label: 'One vs split' },
   { href: '/compare/q4-q5-q6', label: 'Q6 vs Q5 vs Q4' },
@@ -284,6 +286,7 @@ export const REQUIRED_LONG_CONTEXT_HREFS = [
   '/kv-cache',
   '/flash-attention',
   '/prefill',
+  '/prompt-cache',
   '/glossary#context-length',
   '/glossary#kv-cache',
   '/glossary#prefill-decode',

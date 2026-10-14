@@ -669,6 +669,21 @@ export const FAQ_ENTRIES: FaqItem[] = [
     ],
   },
   {
+    id: 'prompt-cache',
+    group: 'speed-vram',
+    question: 'What does llama.cpp prompt / prefix cache do on a Radeon, and when does it help TTFT?',
+    answer:
+      'Official llama-server reuses processed prefix tokens so a later request only prefills the new suffix. --cache-prompt is on by default. --cache-reuse N is KV-shift reuse (default 0 = off). --cache-ram is the MiB ceiling (default 8192). --slot-save-path enables POST /slots save/restore. AMDai has not measured TTFT with versus without the cache on local-desktop — not yet measured. Run Stack Lab prompt-cache-ab/1 (amdai-bench ab-prompt-cache). The shopper page is /prompt-cache. House recipes stay Q4 and up. Q3 is a labeled estimate. llama.cpp first.',
+    links: [
+      { href: '/prompt-cache', label: 'Prompt cache' },
+      { href: '/kv-cache', label: 'KV cache' },
+      { href: '/harnesses', label: 'Harnesses' },
+      { href: '/concurrency-ab', label: 'Parallel slots' },
+      { href: '/stack-lab', label: 'Stack Lab' },
+      { href: '/amdai-bench', label: 'amdai-bench' },
+    ],
+  },
+  {
     id: 'thinking-mode',
     group: 'models-quants',
     question: 'How do I turn thinking / reasoning mode off on llama.cpp?',
@@ -1071,6 +1086,7 @@ export const REQUIRED_FAQ_HREFS = [
   '/concurrency-ab',
   '/flash-attention',
   '/prefill',
+  '/prompt-cache',
   '/out-of-vram',
   '/moe',
   '/can-run',
