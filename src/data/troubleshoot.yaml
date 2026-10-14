@@ -258,6 +258,8 @@ symptoms:
     links:
       - href: /flash-ram-offload
         label: Flash RAM offload
+      - href: /mmap
+        label: mmap / mlock
       - href: /calculator
         label: Calculator
       - href: /glossary

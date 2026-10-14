@@ -211,6 +211,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/flash-attention', label: 'Flash Attention' },
       { href: '/prefill', label: 'Prefill' },
       { href: '/prompt-cache', label: 'Prompt cache' },
+      { href: '/mmap', label: 'mmap / mlock' },
       { href: '/out-of-vram', label: 'Out of VRAM' },
       { href: '/long-context', label: 'Long context' },
       { href: '/multi-gpu', label: 'Dual / multi-GPU' },
@@ -355,6 +356,22 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/rocm-problems', label: 'ROCm problems' },
       { href: '/stack-lab', label: 'Stack Lab' },
       { href: '/amdai-bench', label: 'amdai-bench' },
+      { href: '/mmap', label: 'mmap / mlock' },
+    ];
+  }
+  if (path === '/mmap') {
+    return [
+      { href: '/out-of-vram', label: 'Out of VRAM' },
+      { href: '/kv-cache', label: 'KV cache' },
+      { href: '/flash-ram-offload', label: 'Flash RAM offload' },
+      { href: '/calculator', label: 'Calculator' },
+      { href: '/tuning', label: 'Speed up llama.cpp' },
+      { href: '/stack-lab', label: 'Stack Lab' },
+      { href: '/gpus/r9700', label: 'R9700 measured page' },
+      { href: '/setup/server', label: 'Always-on server' },
+      { href: '/backends/llamacpp', label: 'llama.cpp' },
+      { href: '/troubleshoot', label: 'Troubleshoot' },
+      { href: '/amdai-bench', label: 'amdai-bench' },
     ];
   }
   if (path === '/moe') {
@@ -428,6 +445,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/quants', label: 'Quants' },
       { href: '/long-context', label: 'Long context' },
       { href: '/tuning', label: 'Speed up llama.cpp' },
+      { href: '/mmap', label: 'mmap / mlock' },
     ];
   }
   if (path === '/fine-tuning') {
@@ -545,6 +563,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/flash-attention', label: 'Flash Attention' },
       { href: '/prefill', label: 'Prefill' },
       { href: '/prompt-cache', label: 'Prompt cache' },
+      { href: '/mmap', label: 'mmap / mlock' },
       { href: '/out-of-vram', label: 'Out of VRAM' },
     ];
   }
@@ -556,6 +575,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/long-context', label: 'Long context' },
       { href: '/tuning', label: 'Speed up llama.cpp' },
       { href: '/out-of-vram', label: 'Out of VRAM' },
+      { href: '/mmap', label: 'mmap / mlock' },
       { href: '/gpus/r9700', label: 'R9700 measured page' },
     ];
   }
@@ -682,6 +702,7 @@ export function relatedFor(pathname: string): RelatedLink[] {
     add(out, seen, '/setup', 'First-run setup');
     add(out, seen, '/stack-lab', 'Stack Lab');
     add(out, seen, '/out-of-vram', 'Out of VRAM');
+    add(out, seen, '/mmap', 'mmap / mlock');
     add(out, seen, '/gpus/r9700', 'R9700 measured page');
     if (id) {
       const compareId = gpuCompareIdFromInput(id);
@@ -801,6 +822,7 @@ export function relatedFor(pathname: string): RelatedLink[] {
     add(out, seen, '/flash-attention', 'Flash Attention');
     add(out, seen, '/prefill', 'Prefill');
     add(out, seen, '/prompt-cache', 'Prompt cache');
+    add(out, seen, '/mmap', 'mmap / mlock');
     add(out, seen, '/out-of-vram', 'Out of VRAM');
     add(out, seen, '/setup/docker', 'Docker / Podman');
     add(out, seen, '/setup/lm-studio', 'LM Studio');
@@ -932,6 +954,7 @@ export function assertRelatedValid(
     '/flash-attention',
     '/prefill',
     '/prompt-cache',
+    '/mmap',
     '/out-of-vram',
     '/moe',
     '/can-run',

@@ -1,0 +1,213 @@
+---
+import Base from '../layouts/Base.astro';
+import Callout from '../components/Callout.astro';
+import HouseRam from '../components/HouseRam.astro';
+import HowWeTest from '../components/HowWeTest.astro';
+import NextSteps from '../components/NextSteps.astro';
+import OpenInStackLab from '../components/OpenInStackLab.astro';
+import { HOUSE_STACK_LAB } from '../lib/stack-lab-open';
+import { COMPARE_Q3 } from '../lib/local-desktop-compare';
+import {
+  MM_CITED_LABEL,
+  MM_DESCRIPTION,
+  MM_DOCS,
+  MM_H1,
+  MM_HOUSE,
+  MM_HUB_LINKS,
+  MM_LEAD,
+  MM_MLOCK,
+  MM_MODES,
+  MM_NO_MMAP,
+  MM_PACK,
+  MM_QUANTS,
+  MM_RAM,
+  MM_RUN_IT,
+  MM_SOURCES,
+  MM_STEPS,
+  MM_TITLE,
+  MM_UNMEASURED,
+  MM_WHAT,
+  MM_WHEN,
+} from '../lib/mmap';
+---
+
+<Base title={MM_TITLE} description={MM_DESCRIPTION}>
+  <main id="main" class="mx-auto max-w-3xl px-4 py-10 sm:px-6">
+    <p class="kicker">{MM_CITED_LABEL}</p>
+    <h1 class="mt-3 font-serif text-4xl tracking-tight sm:text-5xl">
+      {MM_H1}
+    </h1>
+    <p class="mt-4 text-lg leading-relaxed text-muted">{MM_LEAD}</p>
+    <ul class="mt-4 flex flex-wrap gap-2">
+      {MM_HUB_LINKS.map((link) => (
+        <li>
+          <a
+            class="inline-flex min-h-9 items-center rounded-full border border-line bg-canvas px-3 text-sm text-ink hover:border-accent/50 hover:text-accent-ink"
+            href={link.href}
+          >
+            {link.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+
+    <Callout type="linux" title="Model loading A/B is not yet ingested">
+      <p>
+        House overnight 35B cards recorded llama-bench RAM, not llama-server
+        mmap versus <code>--no-mmap</code> versus <code>--mlock</code>. Load
+        time, TTFT, and extra RSS stay {MM_UNMEASURED} — open the
+        <a class="underline decoration-accent/40" href="/stack-lab">planner</a>.
+        Pack {MM_PACK} is the A/B.
+      </p>
+    </Callout>
+
+    <section id="what" class="mt-12 scroll-mt-28" aria-labelledby="what-heading">
+      <h2 id="what-heading" class="font-serif text-3xl tracking-tight">What mmap, --no-mmap, and --mlock do</h2>
+      <p class="mt-3 leading-relaxed text-muted">{MM_WHAT}</p>
+    </section>
+
+    <section id="when" class="mt-12 scroll-mt-28" aria-labelledby="when-heading">
+      <h2 id="when-heading" class="font-serif text-3xl tracking-tight">When each arm helps</h2>
+      <p class="mt-3 leading-relaxed text-muted">{MM_WHEN}</p>
+    </section>
+
+    <section id="modes" class="mt-12 scroll-mt-28" aria-labelledby="modes-heading">
+      <h2 id="modes-heading" class="font-serif text-3xl tracking-tight">The three A/B arms</h2>
+      <p class="mt-3 leading-relaxed text-muted">
+        Stack Lab {MM_PACK} is mmap default versus <code>--no-mmap</code> versus
+        <code>--mlock</code>. Official llama.cpp now spells those as
+        <code>--load-mode</code> auto / none / mlock (or mmap+mlock). Every
+        measured cell stays {MM_UNMEASURED} until a card is ingested.
+      </p>
+      <ul class="mt-4 space-y-3">
+        {MM_MODES.map((row) => (
+          <li id={row.id} class="scroll-mt-28 rounded-2xl border border-line bg-raised/50 p-4">
+            <p class="font-mono text-sm text-ink">{row.shopper}</p>
+            <p class="mt-1 text-sm text-muted">{row.flag}</p>
+            <p class="mt-2 text-sm text-ink">Load time: {row.load}</p>
+            <p class="mt-1 text-sm text-ink">TTFT: {row.ttft}</p>
+            <p class="mt-1 text-sm text-muted">{row.ram}</p>
+            <p class="mt-2 text-sm text-muted">{row.note}</p>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section id="flags" class="mt-12 scroll-mt-28" aria-labelledby="flags-heading">
+      <h2 id="flags-heading" class="font-serif text-3xl tracking-tight">Cited flags</h2>
+      <p class="mt-3 leading-relaxed text-muted">
+        Vulkan house path. The first block is the recorded llama-server line — no
+        <code>--load-mode</code>. The rest are official server-README mappings,
+        not local-desktop pins. Replace the binary and GGUF paths.
+      </p>
+      <pre class="mt-4 overflow-x-auto rounded-2xl border border-line bg-raised/50 p-4 text-sm leading-relaxed text-ink"><code>{MM_HOUSE.trim()}</code></pre>
+      <pre class="mt-4 overflow-x-auto rounded-2xl border border-line bg-raised/50 p-4 text-sm leading-relaxed text-ink"><code>{MM_DOCS.trim()}</code></pre>
+      <pre class="mt-4 overflow-x-auto rounded-2xl border border-line bg-raised/50 p-4 text-sm leading-relaxed text-ink"><code>{MM_NO_MMAP.trim()}</code></pre>
+      <pre class="mt-4 overflow-x-auto rounded-2xl border border-line bg-raised/50 p-4 text-sm leading-relaxed text-ink"><code>{MM_MLOCK.trim()}</code></pre>
+    </section>
+
+    <section id="quants" class="mt-12 scroll-mt-28" aria-labelledby="quants-heading">
+      <h2 id="quants-heading" class="font-serif text-3xl tracking-tight">Q6 / Q5 / Q4 plus a labeled Q3</h2>
+      <p class="mt-3 leading-relaxed text-muted">
+        Load mode is a mapping knob, not a smaller GGUF. House recipes stay Q4
+        and up. {COMPARE_Q3} is a labeled estimate — do not download it to run.
+        Both RAM lines appear. Load-mode RSS stays {MM_UNMEASURED}.
+      </p>
+      <ul class="mt-4 space-y-3">
+        {MM_QUANTS.map((row) => (
+          <li class="rounded-2xl border border-line bg-raised/50 p-4">
+            <p class="font-mono text-sm text-ink">
+              {row.quant}
+              {row.estimate ? ' · labeled estimate' : ''}
+            </p>
+            <p class="mt-1 text-sm text-muted">{row.file}</p>
+            <p class="mt-2 text-sm text-ink">Load time: {row.load}</p>
+            <p class="mt-1 text-sm text-muted">{row.ramMin}</p>
+            <p class="mt-1 text-sm text-muted">{row.ramFull}</p>
+            <p class="mt-2 text-sm text-muted">{row.note}</p>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section id="run-it" class="mt-12 scroll-mt-28" aria-labelledby="run-it-heading">
+      <h2 id="run-it-heading" class="font-serif text-3xl tracking-tight">Run it yourself</h2>
+      <Callout type="linux" title="Run it yourself">
+        <p>
+          Stack Lab {MM_PACK} is mmap default versus <code>--no-mmap</code>
+          versus <code>--mlock</code>. Export a
+          <code>lab-notes-report/1</code> pack, then ingest into Lab Notes. Each
+          row must be a validating <code>amdai-bench/run@1</code> card. Do not
+          hand-type tok/s. The pack is not an allowlisted Open-in-Stack-Lab deep
+          link — open the planner.
+        </p>
+      </Callout>
+      <pre class="mt-4 overflow-x-auto rounded-2xl border border-line bg-raised/50 p-4 text-sm leading-relaxed text-ink"><code>{MM_RUN_IT.trim()}</code></pre>
+    </section>
+
+    <section id="checklist" class="mt-12 scroll-mt-28" aria-labelledby="checklist-heading">
+      <h2 id="checklist-heading" class="font-serif text-3xl tracking-tight">Zero to a measured load-mode pin</h2>
+      <ol class="mt-8 space-y-6">
+        {MM_STEPS.map((step, index) => (
+          <li id={step.id} class="scroll-mt-28 rounded-2xl border border-line bg-raised/50 p-5">
+            <p class="font-mono text-[0.68rem] uppercase tracking-[0.14em] text-faint">
+              {index + 1} · {MM_CITED_LABEL}
+            </p>
+            <h3 class="mt-2 font-serif text-2xl tracking-tight">{step.title}</h3>
+            <p class="mt-3 leading-relaxed text-ink">{step.body}</p>
+            <ul class="mt-4 flex flex-wrap gap-2">
+              {step.links.map((link) => (
+                <li>
+                  <a
+                    class="inline-flex min-h-9 items-center rounded-full border border-line bg-canvas px-3 text-sm text-ink hover:border-accent/50 hover:text-accent-ink"
+                    href={link.href}
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <section id="fit-ram" class="mt-12 scroll-mt-28" aria-labelledby="fit-ram-heading">
+      <h2 id="fit-ram-heading" class="font-serif text-3xl tracking-tight">RAM lines (Ubuntu-measured)</h2>
+      <p class="mt-3 leading-relaxed text-muted">{MM_RAM}</p>
+      <div class="mt-4">
+        <HouseRam which="daily" compact />
+      </div>
+    </section>
+
+    <section id="stack-lab-cta" class="mt-12 scroll-mt-28" aria-labelledby="stack-lab-cta-heading">
+      <h2 id="stack-lab-cta-heading" class="font-serif text-3xl tracking-tight">Open in Stack Lab</h2>
+      <p class="mt-3 leading-relaxed text-muted">
+        {MM_PACK} is the mmap / --no-mmap / --mlock A/B. It is not an
+        allowlisted deep link on this site. Use the planner. Packages are not
+        published yet and there is no public download. Anything unmeasured stays
+        {MM_UNMEASURED}.
+      </p>
+      <div class="mt-4">
+        <OpenInStackLab {...HOUSE_STACK_LAB.planner} compact />
+      </div>
+    </section>
+
+    <section id="sources" class="mt-12 scroll-mt-28" aria-labelledby="sources-heading">
+      <h2 id="sources-heading" class="font-serif text-3xl tracking-tight">Sources</h2>
+      <ul class="mt-4 list-disc space-y-2 pl-5 text-sm leading-relaxed text-muted">
+        {MM_SOURCES.map((source) => (
+          <li>
+            <a class="underline decoration-accent/40" href={source.href} rel="noopener">{source.title}</a>
+            {source.official ? '' : ' — unofficial for llama.cpp'}
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <div class="mt-8">
+      <HowWeTest />
+    </div>
+    <NextSteps path="/mmap" />
+  </main>
+</Base>

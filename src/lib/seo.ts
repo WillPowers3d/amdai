@@ -235,6 +235,7 @@ export const CRUMB_LABELS: Record<string, string> = {
   '/prefill': 'Prefill',
   '/prompt-cache': 'Prompt cache',
   '/out-of-vram': 'Out of VRAM',
+  '/mmap': 'mmap / mlock',
   '/moe': 'MoE',
   '/can-run': 'Can my Radeon run it?',
   '/setup': 'First-run setup',
@@ -556,6 +557,12 @@ setMeta(
   'Out of VRAM on a Radeon GPU with llama.cpp. Cited ErrorOutOfDeviceMemory and hipErrorOutOfMemory. Cheapest fix first. Q3 is a labeled estimate.',
 );
 setDate('/out-of-vram', '2026-10-14');
+setMeta(
+  '/mmap',
+  'mmap vs --no-mmap vs --mlock on a Radeon GPU',
+  'mmap vs --no-mmap vs --mlock on a Radeon GPU with llama.cpp. Cited --load-mode. Measure Stack Lab Model loading A/B. Q3 is a labeled estimate.',
+);
+setDate('/mmap', '2026-10-14');
 setMeta(
   '/moe',
   'Mixture-of-Experts on a Radeon GPU',

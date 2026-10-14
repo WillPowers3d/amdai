@@ -170,6 +170,7 @@ export const primaryNav: NavItem[] = [
   { href: '/prefill', label: 'Prefill', description: 'Cited llama.cpp -b / -ub on Radeon. Measure Stack Lab prefill-ab/1. llama-server batch not measured. Q3 is a labeled estimate', group: 'learn' },
   { href: '/prompt-cache', label: 'Prompt cache', description: 'Cited llama.cpp --cache-reuse and slot save on Radeon. Measure Stack Lab prompt-cache-ab/1. TTFT not yet measured. Q3 is a labeled estimate', group: 'learn' },
   { href: '/out-of-vram', label: 'Out of VRAM', description: 'Cited llama.cpp Vulkan / HIP OOM strings on Radeon. Cheapest fix first. Q3 is a labeled estimate', group: 'learn' },
+  { href: '/mmap', label: 'mmap / mlock', description: 'Cited llama.cpp --load-mode on Radeon. mmap vs --no-mmap vs --mlock. Measure Stack Lab Model loading A/B. Q3 is a labeled estimate', group: 'learn' },
   { href: '/moe', label: 'MoE', description: 'Mixture-of-Experts on a Radeon GPU. Why 35B-A3B fits one 32 GB R9700 while dense 27B and Flash differ. llama.cpp first', group: 'learn' },
   { href: '/bios', label: 'BIOS', description: 'Above 4G, ReBAR/SAM, CSM, x8/x8 vs x16/x4 — cited chipset notes', group: 'learn' },
   { href: '/flash-ram-offload', label: 'Flash RAM offload', description: 'Run Flash with experts on DDR5 — kits, measured DIMM speed, launch shape', group: 'learn' },

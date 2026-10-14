@@ -481,6 +481,7 @@ export const TUNING_HUB_LINKS: TuningLink[] = [
   { href: '/calculator', label: 'Calculator' },
   { href: '/out-of-vram', label: 'Out of VRAM' },
   { href: '/prefill', label: 'Prefill' },
+  { href: '/mmap', label: 'mmap / mlock' },
 ];
 
 export const REQUIRED_TUNING_HREFS = [
@@ -501,6 +502,7 @@ export const REQUIRED_TUNING_HREFS = [
   '/calculator',
   '/out-of-vram',
   '/prefill',
+  '/mmap',
   '/quants',
   '/compare/one-vs-two-gpu',
   '/compare/q4-q5-q6',

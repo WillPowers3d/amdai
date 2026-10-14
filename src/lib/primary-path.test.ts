@@ -170,6 +170,7 @@ describe('primary path and nav IA', () => {
       '/prefill': '../pages/prefill.astro',
       '/prompt-cache': '../pages/prompt-cache.astro',
       '/out-of-vram': '../pages/out-of-vram.astro',
+      '/mmap': '../pages/mmap.astro',
       '/moe': '../pages/moe.astro',
       '/can-run': '../pages/can-run/index.astro',
     };

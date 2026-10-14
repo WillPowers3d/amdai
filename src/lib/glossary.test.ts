@@ -120,6 +120,7 @@ const ALLOWED_HREFS = new Set([
   '/prompt-cache',
   '/rag',
   '/out-of-vram',
+  '/mmap',
   '/moe',
   '/can-run',
 ]);

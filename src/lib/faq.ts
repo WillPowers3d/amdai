@@ -684,6 +684,20 @@ export const FAQ_ENTRIES: FaqItem[] = [
     ],
   },
   {
+    id: 'mmap-mlock',
+    group: 'context-ram',
+    question: 'What is llama.cpp mmap versus --no-mmap versus --mlock on a Radeon?',
+    answer:
+      'Official --load-mode auto memory-maps the GGUF (mmap default). --load-mode none replaces deprecated --no-mmap. --load-mode mlock locks a non-mapped copy; mmap+mlock locks a mapped copy. AMDai has not measured load time or extra RSS on local-desktop — not yet measured. Run Stack Lab Model loading A/B. The shopper page is /mmap. House recipes stay Q4 and up. Q3 is a labeled estimate. llama.cpp first.',
+    links: [
+      { href: '/mmap', label: 'mmap / mlock' },
+      { href: '/out-of-vram', label: 'Out of VRAM' },
+      { href: '/flash-ram-offload', label: 'Flash RAM offload' },
+      { href: '/calculator', label: 'Calculator' },
+      { href: '/stack-lab', label: 'Stack Lab' },
+    ],
+  },
+  {
     id: 'thinking-mode',
     group: 'models-quants',
     question: 'How do I turn thinking / reasoning mode off on llama.cpp?',
@@ -1088,6 +1102,7 @@ export const REQUIRED_FAQ_HREFS = [
   '/prefill',
   '/prompt-cache',
   '/out-of-vram',
+  '/mmap',
   '/moe',
   '/can-run',
   '/setup/fedora',

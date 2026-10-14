@@ -50,6 +50,7 @@ export const STACK_LAB_INTRO_LINKS: StackLabLink[] = [
   { href: '/prefill', label: 'Prefill' },
   { href: '/prompt-cache', label: 'Prompt cache' },
   { href: '/out-of-vram', label: 'Out of VRAM' },
+  { href: '/mmap', label: 'mmap / mlock' },
 ];
 
 export const STACK_LAB_JOBS: StackLabJob[] = [
@@ -244,6 +245,12 @@ export const STACK_LAB_HANDOFFS: StackLabHandoff[] = [
       'Cited llama.cpp --cache-prompt, --cache-reuse, --cache-ram, and --slot-save-path. House llama-server does not record a cache pin. Measure Stack Lab prompt-cache-ab/1 (amdai-bench ab-prompt-cache) from the planner. TTFT stays not yet measured on this site.',
   },
   {
+    href: '/mmap',
+    label: 'mmap / mlock',
+    body:
+      'Cited llama.cpp --load-mode (mmap default vs --no-mmap vs --mlock). House llama-server does not record a load-mode pin. Measure Stack Lab Model loading A/B from the planner. Load time and extra RSS stay not yet measured on this site.',
+  },
+  {
     href: '/speech',
     label: 'Speech on Radeon',
     body:
@@ -308,6 +315,7 @@ export const REQUIRED_STACK_LAB_HREFS = [
   '/flash-attention',
   '/prefill',
   '/prompt-cache',
+  '/mmap',
 ] as const;
 
 const BANNED_VISIBLE = /Qwen2\.5|Qwen3-8B/i;

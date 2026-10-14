@@ -588,6 +588,12 @@ export const OG_CARDS: OgCard[] = [
     alt: 'AMDai out of VRAM troubleshooter for llama.cpp on a Radeon GPU — cited ErrorOutOfDeviceMemory and hipErrorOutOfMemory',
   },
   {
+    slug: 'mmap',
+    title: 'mmap vs mlock on Radeon',
+    lede: 'Cited --load-mode. mmap / --no-mmap / --mlock RAM not yet measured',
+    alt: 'AMDai mmap vs --no-mmap vs --mlock on a Radeon GPU with llama.cpp — cited --load-mode, Model loading A/B not yet measured',
+  },
+  {
     slug: 'moe',
     title: 'Mixture-of-Experts on a Radeon GPU',
     lede: 'Why 35B-A3B fits one 32 GB R9700. Dense 27B and Flash differ',

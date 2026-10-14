@@ -39,6 +39,7 @@ import { FA_FAQ, FA_HOWTO_STEPS, FA_PUBLISHED } from './flash-attention';
 import { PP_FAQ, PP_HOWTO_STEPS, PP_PUBLISHED } from './prefill';
 import { PC_FAQ, PC_HOWTO_STEPS, PC_PUBLISHED } from './prompt-cache';
 import { OOM_FAQ, OOM_HOWTO_STEPS, OOM_PUBLISHED } from './out-of-vram';
+import { MM_FAQ, MM_HOWTO_STEPS, MM_PUBLISHED } from './mmap';
 import { MOE_FAQ, MOE_HOWTO_STEPS, MOE_PUBLISHED } from './moe';
 import { VULKAN_VS_ROCM_FAQ, VULKAN_VS_ROCM_HOWTO_STEPS, VULKAN_VS_ROCM_PUBLISHED } from './vulkan-vs-rocm';
 import { ROCM_UPGRADE_FAQ, ROCM_UPGRADE_HOWTO_STEPS, ROCM_UPGRADE_PUBLISHED } from './rocm-upgrade';
@@ -883,6 +884,20 @@ export function pageJsonLd(input: {
       }),
     );
     nodes.push(faqPageJsonLd(OOM_FAQ, url));
+    return nodes;
+  }
+  if (path === '/mmap') {
+    nodes.push(
+      howToJsonLd({
+        name: input.title.replace(/ · AMDai$/, ''),
+        description: input.description,
+        url,
+        published: dates?.published ?? MM_PUBLISHED,
+        modified: dates?.modified ?? MM_PUBLISHED,
+        steps: MM_HOWTO_STEPS,
+      }),
+    );
+    nodes.push(faqPageJsonLd(MM_FAQ, url));
     return nodes;
   }
   if (path === '/guides/tool-calling') {

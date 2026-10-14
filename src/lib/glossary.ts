@@ -866,7 +866,75 @@ export const GLOSSARY: GlossaryEntry[] = [
       { href: '/tuning', label: 'Speed up llama.cpp' },
       { href: '/hardware', label: 'Hardware' },
     ],
-    seeAlso: ['expert-offload', 'system-ram', 'vram'],
+    seeAlso: ['expert-offload', 'system-ram', 'vram', 'mmap', 'mlock'],
+  },
+  {
+    id: 'mmap',
+    term: 'mmap',
+    aliases: ['memory-map', '--mmap', '--load-mode mmap', '--load-mode auto'],
+    letter: 'M',
+    definition:
+      'Official llama.cpp default model load. --load-mode auto memory-maps the GGUF unless a device cannot (env LLAMA_ARG_LOAD_MODE). The kernel pages the file from NVMe instead of copying the whole weight blob into anonymous RAM.',
+    why: 'Shoppers search llama.cpp mlock and why is system RAM full after load. mmap still faults pages into RSS as you run. AMDai has not measured mmap versus --no-mmap RSS on local-desktop — not yet measured. Run Stack Lab Model loading A/B.',
+    deeper:
+      'PR #20834 folded --mmap / --no-mmap / --mlock into --load-mode. --lazy-mode can leave huge tensors on disk and requires mmap. House llama-server does not record a load-mode pin. The shopper page is /mmap.',
+    links: [
+      { href: '/mmap', label: 'mmap / mlock' },
+      { href: '/out-of-vram', label: 'Out of VRAM' },
+      { href: '/stack-lab', label: 'Stack Lab' },
+    ],
+    seeAlso: ['no-mmap', 'mlock', 'load-mode', 'system-ram'],
+  },
+  {
+    id: 'no-mmap',
+    term: '--no-mmap',
+    aliases: ['no mmap', '--load-mode none', 'LLAMA_ARG_MMAP'],
+    letter: 'N',
+    definition:
+      'Deprecated llama.cpp flag that copies the GGUF into process RAM instead of mapping it. Official replacement is --load-mode none (discussion #26469).',
+    why: 'Can help when mmap progress looks stuck or a platform pages the map out. Extra RSS for the weight copy stays not yet measured. Do not combine --no-mmap with --load-mode — only the last flag wins.',
+    deeper:
+      'Lemonade renamed a deprecated --no-mmap option to --load-mode none for llama.cpp. House recipes do not record either flag. Measure Model loading A/B from the planner.',
+    links: [
+      { href: '/mmap', label: 'mmap / mlock' },
+      { href: '/setup/lemonade', label: 'Lemonade' },
+      { href: '/calculator', label: 'Calculator' },
+    ],
+    seeAlso: ['mmap', 'mlock', 'load-mode', 'system-ram'],
+  },
+  {
+    id: 'mlock',
+    term: '--mlock',
+    aliases: ['mlock', '--load-mode mlock', 'mmap+mlock', 'LLAMA_ARG_MLOCK'],
+    letter: 'M',
+    definition:
+      'Deprecated llama.cpp flag that asks the OS to keep model pages in RAM. Official replacements: --load-mode mlock (no mmap + lock, old --no-mmap --mlock) and --load-mode mmap+mlock (map + lock).',
+    why: 'Use it when the box is swapping the weight file. It does not free VRAM and does not fix ErrorOutOfDeviceMemory. Locked-resident peak RAM stays not yet measured.',
+    deeper:
+      'Discussion #27912: mlock does not mmap; mmap+mlock does. House llama-server does not record --mlock. Print both Minimum system RAM needed and RAM needed at full context.',
+    links: [
+      { href: '/mmap', label: 'mmap / mlock' },
+      { href: '/out-of-vram', label: 'Out of VRAM' },
+      { href: '/flash-ram-offload', label: 'Flash RAM offload' },
+    ],
+    seeAlso: ['mmap', 'no-mmap', 'load-mode', 'system-ram'],
+  },
+  {
+    id: 'load-mode',
+    term: '--load-mode',
+    aliases: ['-lm', 'LLAMA_ARG_LOAD_MODE', 'load mode'],
+    letter: 'L',
+    definition:
+      'Official llama.cpp model-loading switch. Values: auto (default), none, mmap, mlock, mmap+mlock, dio. Env LLAMA_ARG_LOAD_MODE. Replaces --mmap / --no-mmap / --mlock (PR #20834).',
+    why: 'Shopper A/B is mmap default vs --no-mmap vs --mlock. Map those onto auto / none / mlock. House recipes do not record the flag. Load time and RSS stay not yet measured.',
+    deeper:
+      'auto = mmap unless a device cannot. none = no special loading. dio = Direct I/O when available. --lazy-mode requires mmap. Do not invent a house pin.',
+    links: [
+      { href: '/mmap', label: 'mmap / mlock' },
+      { href: '/tuning', label: 'Speed up llama.cpp' },
+      { href: '/backends/llamacpp', label: 'llama.cpp' },
+    ],
+    seeAlso: ['mmap', 'no-mmap', 'mlock', 'llamacpp'],
   },
   {
     id: 'prefill-decode',
