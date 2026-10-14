@@ -290,6 +290,7 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
   ],
   '/gpus/rx-7900-xtx': [
     { href: '/compare/gpus', label: 'Compare GPUs' },
+    { href: '/guides/buying-used-radeon', label: 'Buying a used Radeon' },
     { href: '/calculator', label: 'Calculator' },
     { href: '/budget', label: 'Budget' },
     { href: '/gpus/r9700', label: 'R9700 measured page' },
@@ -300,6 +301,7 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
   ],
   '/gpus/rx-7900-xt': [
     { href: '/compare/gpus', label: 'Compare GPUs' },
+    { href: '/guides/buying-used-radeon', label: 'Buying a used Radeon' },
     { href: '/calculator', label: 'Calculator' },
     { href: '/budget', label: 'Budget' },
     { href: '/gpus/r9700', label: 'R9700 measured page' },
@@ -310,6 +312,7 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
   ],
   '/gpus/rx-7800-xt': [
     { href: '/compare/gpus', label: 'Compare GPUs' },
+    { href: '/guides/buying-used-radeon', label: 'Buying a used Radeon' },
     { href: '/calculator', label: 'Calculator' },
     { href: '/budget', label: 'Budget' },
     { href: '/gpus/r9700', label: 'R9700 measured page' },
@@ -369,6 +372,7 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
   ],
   '/gpus/rx-6800-xt': [
     { href: '/calculator', label: 'Calculator' },
+    { href: '/guides/buying-used-radeon', label: 'Buying a used Radeon' },
     { href: '/gpus/rx-7800-xt', label: 'RX 7800 XT sheet' },
     { href: '/gpus/rx-7600-xt', label: 'RX 7600 XT sheet' },
     { href: '/gpus/r9700', label: 'R9700 measured page' },
@@ -377,6 +381,7 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
   ],
   '/gpus/rx-6700-xt': [
     { href: '/calculator', label: 'Calculator' },
+    { href: '/guides/buying-used-radeon', label: 'Buying a used Radeon' },
     { href: '/gpus/rx-6800-xt', label: 'RX 6800 XT sheet' },
     { href: '/gpus/rx-7700-xt', label: 'RX 7700 XT sheet' },
     { href: '/gpus/r9700', label: 'R9700 measured page' },
@@ -403,6 +408,7 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
   ],
   '/gpus/rx-6950-xt': [
     { href: '/calculator', label: 'Calculator' },
+    { href: '/guides/buying-used-radeon', label: 'Buying a used Radeon' },
     { href: '/gpus/rx-6800-xt', label: 'RX 6800 XT sheet' },
     { href: '/gpus/w6800', label: 'PRO W6800 sheet' },
     { href: '/gpus/r9700', label: 'R9700 measured page' },
@@ -482,10 +488,22 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
     { href: '/compare', label: 'Compare 35B' },
     { href: '/compare/r9700-vs-rx-9070-xt', label: 'R9700 vs 9070 XT' },
     { href: '/gpus/r9700', label: 'R9700 measured page' },
+    { href: '/guides/buying-used-radeon', label: 'Buying a used Radeon' },
     { href: '/compare/radeon-vs-nvidia', label: 'Radeon vs NVIDIA' },
     { href: '/compare/models', label: 'Compare models' },
     { href: '/calculator', label: 'Calculator' },
     { href: '/gpus', label: 'GPU directory' },
+  ],
+  '/guides/buying-used-radeon': [
+    { href: '/budget', label: 'Budget' },
+    { href: '/compare/gpus', label: 'Compare GPUs' },
+    { href: '/gpus/r9700', label: 'R9700 measured page' },
+    { href: '/gpus/rx-7900-xtx', label: 'RX 7900 XTX sheet' },
+    { href: '/gpus/rx-6800-xt', label: 'RX 6800 XT sheet' },
+    { href: '/calculator', label: 'Calculator' },
+    { href: '/power', label: 'Power and PSU' },
+    { href: '/multi-gpu', label: 'Dual / multi-GPU' },
+    { href: '/setup', label: 'First-run setup' },
   ],
   '/compare/models': [
     { href: '/compare/models/qwen36-vs-glm-53-flash', label: 'Qwen3.6-35B vs GLM 5.3 Flash' },

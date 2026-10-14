@@ -16,6 +16,7 @@ const SHOPPER = [
   '/budget',
   '/can-run',
   '/compare/gpus',
+  '/guides/buying-used-radeon',
   '/compare/models',
   '/gpus/r9700',
   '/gpus/rx-9070-xt',

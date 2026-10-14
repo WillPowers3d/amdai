@@ -68,6 +68,22 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/qwen36-dual', label: '35B on two cards' },
       { href: '/calculator', label: 'Calculator' },
       { href: '/long-context', label: 'Long context' },
+      { href: '/guides/buying-used-radeon', label: 'Buying a used Radeon' },
+    ];
+  }
+  if (path === '/guides/buying-used-radeon' || path === '/budget' || path === '/hardware') {
+    return [
+      { href: '/guides/buying-used-radeon', label: 'Buying a used Radeon' },
+      { href: '/budget', label: 'Budget' },
+      { href: '/compare/gpus', label: 'Compare GPUs' },
+      { href: '/gpus', label: 'GPU directory' },
+      { href: '/gpus/r9700', label: 'R9700 measured page' },
+      { href: '/gpus/rx-7900-xtx', label: 'RX 7900 XTX' },
+      { href: '/gpus/rx-6800-xt', label: 'RX 6800 XT' },
+      { href: '/calculator', label: 'Calculator' },
+      { href: '/power', label: 'Power and PSU' },
+      { href: '/multi-gpu', label: 'Dual / multi-GPU' },
+      { href: '/hardware', label: 'Hardware' },
     ];
   }
   if (path === '/benchmarks' || path === '/benchmarks/methodology') {
@@ -394,6 +410,7 @@ export function relatedFor(pathname: string): RelatedLink[] {
     const id = path === '/gpus' ? '' : path.slice('/gpus/'.length);
     add(out, seen, '/compare', 'Compare 35B');
     add(out, seen, '/compare/gpus', 'Compare GPUs');
+    add(out, seen, '/guides/buying-used-radeon', 'Buying a used Radeon');
     add(out, seen, '/compare/radeon-vs-nvidia', 'Radeon vs NVIDIA');
     add(out, seen, '/benchmarks', 'Benchmarks');
     add(out, seen, '/multi-gpu', 'Dual / multi-GPU');
@@ -601,6 +618,7 @@ export function assertRelatedValid(
     '/setup/wsl',
     '/setup/comfyui',
     '/setup/multi-gpu',
+    '/guides/buying-used-radeon',
     '/faq',
     '/models/qwen36',
     '/models/flash',

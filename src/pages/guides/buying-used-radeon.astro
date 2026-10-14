@@ -1,0 +1,307 @@
+---
+import Base from '../../layouts/Base.astro';
+import AffiliateDisclosure from '../../components/AffiliateDisclosure.astro';
+import BuyButtons from '../../components/BuyButtons.astro';
+import Callout from '../../components/Callout.astro';
+import HowWeTest from '../../components/HowWeTest.astro';
+import NextSteps from '../../components/NextSteps.astro';
+import SystemRamNeed from '../../components/SystemRamNeed.astro';
+import { RAM_FULL_LABEL, RAM_MIN_LABEL } from '../../lib/ram-surfaces';
+import { COMPARE_Q3, COMPARE_Q3_CITE } from '../../lib/local-desktop-compare';
+import {
+  BUYING_USED_AMDSMI,
+  BUYING_USED_CITED_LABEL,
+  BUYING_USED_DESCRIPTION,
+  BUYING_USED_FAQ,
+  BUYING_USED_GENERATIONS,
+  BUYING_USED_GO_PRODUCTS,
+  BUYING_USED_HUB_LINKS,
+  BUYING_USED_LSPCI,
+  BUYING_USED_ROCMINFO,
+  BUYING_USED_ROCMSMI,
+  BUYING_USED_SOURCES,
+  BUYING_USED_SPEED_LABEL,
+  BUYING_USED_STEPS,
+  BUYING_USED_TITLE,
+  BUYING_USED_VULKANINFO,
+  buyingUsedVramClasses,
+} from '../../lib/buying-used-radeon';
+
+const classes = buyingUsedVramClasses();
+---
+
+<Base title={BUYING_USED_TITLE} description={BUYING_USED_DESCRIPTION}>
+  <main id="main" class="mx-auto max-w-3xl px-4 py-10 sm:px-6">
+    <p class="kicker">{BUYING_USED_CITED_LABEL}</p>
+    <h1 class="mt-3 font-serif text-4xl tracking-tight sm:text-5xl">Buying a used Radeon for local AI</h1>
+    <p class="mt-4 text-lg leading-relaxed text-muted">
+      Used 6000- and 7000-series Radeons show up next to the measured
+      <a class="underline decoration-accent/40" href="/gpus/r9700">R9700</a>
+      all day. This page is the shopper checklist — not a copy of
+      <a class="underline decoration-accent/40" href="/budget">/budget</a>
+      or the
+      <a class="underline decoration-accent/40" href="/gpus">/gpus</a>
+      sheets. llama.cpp first. Vulkan always works. Official ROCm follows the
+      cited matrix; community
+      <code>HSA_OVERRIDE_GFX_VERSION</code>
+      does not. Fit numbers reuse the calculator. Speed on used SKUs stays
+      <strong class="text-ink">{BUYING_USED_SPEED_LABEL}</strong>.
+      We do not invent a price, a tok/s, or a failure rate.
+    </p>
+    <ul class="mt-4 flex flex-wrap gap-2">
+      {BUYING_USED_HUB_LINKS.map((link) => (
+        <li>
+          <a
+            class="inline-flex min-h-9 items-center rounded-full border border-line bg-canvas px-3 text-sm text-ink hover:border-accent/50 hover:text-accent-ink"
+            href={link.href}
+          >
+            {link.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+
+    <Callout type="note" title="Sheets stay on /gpus. This is the how-to-vet page.">
+      <p>
+        Open the card sheet for full Q6 / Q5 / Q4 tables and both RAM lines.
+        Pair pages live on
+        <a class="underline decoration-accent/40" href="/compare/gpus">/compare/gpus</a>.
+        Check-price buttons hop through
+        <a class="underline decoration-accent/40" href="/disclosure">/go/</a>
+        — no live or stale prices.
+      </p>
+    </Callout>
+
+    <section id="generations" class="mt-12 scroll-mt-28" aria-labelledby="generations-heading">
+      <h2 id="generations-heading" class="font-serif text-3xl tracking-tight">Which generations make sense</h2>
+      <p class="mt-3 leading-relaxed text-muted">
+        gfx is the LLVM target ROCm and HIP care about. llama.cpp Vulkan
+        (<code>GGML_VULKAN</code>) is the first path on every row.
+      </p>
+      <div class="mt-6 overflow-x-auto">
+        <table class="w-full min-w-[36rem] border-collapse text-left text-sm">
+          <caption class="sr-only">
+            RDNA 4, RDNA 3, and RDNA 2 gfx targets, official ROCm versus community HSA_OVERRIDE, and llama.cpp Vulkan.
+          </caption>
+          <thead>
+            <tr class="border-b border-line">
+              <th scope="col" class="py-2 pr-3 font-medium">Generation</th>
+              <th scope="col" class="py-2 pr-3 font-medium">gfx</th>
+              <th scope="col" class="py-2 pr-3 font-medium">ROCm</th>
+              <th scope="col" class="py-2 font-medium">llama.cpp</th>
+            </tr>
+          </thead>
+          <tbody>
+            {BUYING_USED_GENERATIONS.map((row) => (
+              <tr class="border-b border-line/70 align-top">
+                <th scope="row" class="py-3 pr-3 font-serif text-base text-ink">{row.title}</th>
+                <td class="py-3 pr-3 text-muted">{row.gfx}</td>
+                <td class="py-3 pr-3 text-ink">{row.rocm}</td>
+                <td class="py-3 text-ink">{row.vulkan}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <ul class="mt-4 flex flex-wrap gap-2">
+        {BUYING_USED_GENERATIONS.flatMap((row) => row.examples).map((link) => (
+          <li>
+            <a
+              class="inline-flex min-h-9 items-center rounded-full border border-line bg-canvas px-3 text-sm text-ink hover:border-accent/50 hover:text-accent-ink"
+              href={link.href}
+            >
+              {link.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section id="vram" class="mt-12 scroll-mt-28" aria-labelledby="vram-heading">
+      <h2 id="vram-heading" class="font-serif text-3xl tracking-tight">VRAM-first picker</h2>
+      <p class="mt-3 leading-relaxed text-muted">
+        Same calculator as the GPU sheets:
+        <strong class="text-ink">Qwen3.6-35B-A3B</strong>
+        on llama.cpp, f16 KV, one GPU, 4K context shown.
+        Q6_K / Q5_K_M / Q4_K_M plus
+        <strong class="text-ink">{COMPARE_Q3}</strong>
+        ({COMPARE_Q3_CITE}) labeled estimate. Speed stays {BUYING_USED_SPEED_LABEL}.
+        Open the sheet for the full table.
+      </p>
+      <div class="mt-6 overflow-x-auto">
+        <table class="w-full min-w-[40rem] border-collapse text-left text-sm">
+          <caption class="sr-only">
+            12, 16, 20, 24, and 32 GB used-Radeon classes with calculator fit for Q6, Q5, Q4, and a labeled Q3 estimate.
+          </caption>
+          <thead>
+            <tr class="border-b border-line">
+              <th scope="col" class="py-2 pr-3 font-medium">VRAM</th>
+              <th scope="col" class="py-2 pr-3 font-medium">Example sheets</th>
+              <th scope="col" class="py-2 pr-3 font-medium">Q6 / Q5 / Q4 / Q3 at 4K</th>
+              <th scope="col" class="py-2 font-medium">Note</th>
+            </tr>
+          </thead>
+          <tbody>
+            {classes.map((row) => (
+              <tr class="border-b border-line/70 align-top">
+                <th scope="row" class="py-3 pr-3 font-serif text-base text-ink">
+                  {row.vramLabel}
+                  <span class="mt-1 block font-sans text-xs font-normal text-faint">{row.gfx} · {row.support}</span>
+                </th>
+                <td class="py-3 pr-3">
+                  <ul class="space-y-1">
+                    {row.cards.map((card) => (
+                      <li>
+                        <a class="underline decoration-accent/40" href={card.href}>{card.label}</a>
+                      </li>
+                    ))}
+                  </ul>
+                </td>
+                <td class="py-3 pr-3">
+                  <ul class="space-y-1">
+                    {row.quants.map((cell) => (
+                      <li>
+                        <span class="font-mono text-ink">{cell.quant}</span>
+                        {cell.estimate ? <span class="text-faint"> (estimate)</span> : null}
+                        {' · '}
+                        <span class="text-muted">{cell.totalGb}</span>
+                        {' · '}
+                        <span class="text-ink">{cell.verdictLabel}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </td>
+                <td class="py-3 text-muted">{row.note}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="fit-ram" class="mt-12 scroll-mt-28" aria-labelledby="fit-ram-heading">
+      <h2 id="fit-ram-heading" class="font-serif text-3xl tracking-tight">RAM lines where offload appears</h2>
+      <p class="mt-3 leading-relaxed text-muted">
+        <strong class="text-ink">{RAM_MIN_LABEL}</strong>
+        and
+        <strong class="text-ink">{RAM_FULL_LABEL}</strong>
+        for the representative card in each class at Q4_K_M, 32K selected.
+        Used-card kits stay labeled estimate. The 64 GB shopper default on
+        consumer sheets is an estimate, not a measured peak.
+      </p>
+      <div class="mt-6 grid gap-4">
+        {classes.filter((row) => row.offloadAppears).map((row) => (
+          <article id={`${row.id}-ram`} class="scroll-mt-28 rounded-2xl border border-line bg-raised/50 p-5">
+            <h3 class="font-serif text-2xl tracking-tight">
+              {row.vramLabel}
+              {' · '}
+              <a class="underline decoration-accent/40" href={row.representativeHref}>{row.representativeName}</a>
+            </h3>
+            <div class="mt-3">
+              <SystemRamNeed need={row.ramNeed} compact />
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section id="checklist" class="mt-12 scroll-mt-28" aria-labelledby="checklist-heading">
+      <h2 id="checklist-heading" class="font-serif text-3xl tracking-tight">Vet the card before you pay</h2>
+      <ol class="mt-8 space-y-6">
+        {BUYING_USED_STEPS.map((step, index) => (
+          <li id={step.id} class="scroll-mt-28 rounded-2xl border border-line bg-raised/50 p-5">
+            <p class="font-mono text-[0.68rem] uppercase tracking-[0.14em] text-faint">
+              {index + 1} · {BUYING_USED_CITED_LABEL}
+            </p>
+            <h3 class="mt-2 font-serif text-2xl tracking-tight">{step.title}</h3>
+            <p class="mt-3 leading-relaxed text-ink">{step.body}</p>
+            <ul class="mt-4 flex flex-wrap gap-2">
+              {step.links.map((link) => (
+                <li>
+                  <a
+                    class="inline-flex min-h-9 items-center rounded-full border border-line bg-canvas px-3 text-sm text-ink hover:border-accent/50 hover:text-accent-ink"
+                    href={link.href}
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <section id="commands" class="mt-12 scroll-mt-28" aria-labelledby="commands-heading">
+      <h2 id="commands-heading" class="font-serif text-3xl tracking-tight">Linux identity commands</h2>
+      <p class="mt-3 leading-relaxed text-muted">
+        Same tools as
+        <a class="underline decoration-accent/40" href="/tutorials/install-rocm">/tutorials/install-rocm</a>
+        and
+        <a class="underline decoration-accent/40" href="/tutorials/verify-rocm">/tutorials/verify-rocm</a>.
+        <code>amd-smi</code>
+        is the ROCm 10.1 successor to
+        <code>rocm-smi</code>.
+      </p>
+      <pre class="mt-3 overflow-x-auto rounded-2xl border border-line bg-raised/50 p-4 text-sm leading-relaxed text-ink"><code>{BUYING_USED_LSPCI}</code></pre>
+      <pre class="mt-3 overflow-x-auto rounded-2xl border border-line bg-raised/50 p-4 text-sm leading-relaxed text-ink"><code>{BUYING_USED_ROCMINFO}</code></pre>
+      <pre class="mt-3 overflow-x-auto rounded-2xl border border-line bg-raised/50 p-4 text-sm leading-relaxed text-ink"><code>{BUYING_USED_ROCMSMI}</code></pre>
+      <pre class="mt-3 overflow-x-auto rounded-2xl border border-line bg-raised/50 p-4 text-sm leading-relaxed text-ink"><code>{BUYING_USED_AMDSMI}</code></pre>
+      <pre class="mt-3 overflow-x-auto rounded-2xl border border-line bg-raised/50 p-4 text-sm leading-relaxed text-ink"><code>{BUYING_USED_VULKANINFO}</code></pre>
+    </section>
+
+    <section id="buy" class="mt-12 scroll-mt-28" aria-labelledby="buy-heading">
+      <h2 id="buy-heading" class="font-serif text-3xl tracking-tight">Check price — no prices on this page</h2>
+      <p class="mt-3 leading-relaxed text-muted">
+        Existing /go/ routes only. Buttons say “Check price.” We do not print
+        a live or stale number. Affiliate disclosure sits with the buttons and
+        on
+        <a class="underline decoration-accent/40" href="/disclosure">/disclosure</a>.
+      </p>
+      <div class="mt-4">
+        <AffiliateDisclosure />
+      </div>
+      <BuyButtons products={[...BUYING_USED_GO_PRODUCTS]} disclose={false} />
+    </section>
+
+    <section id="faq" class="mt-12 scroll-mt-28" aria-labelledby="faq-heading">
+      <h2 id="faq-heading" class="font-serif text-3xl tracking-tight">FAQ</h2>
+      <ul class="mt-6 grid gap-4">
+        {BUYING_USED_FAQ.map((item) => (
+          <li id={item.id} class="scroll-mt-28 rounded-2xl border border-line bg-raised/50 p-5">
+            <h3 class="font-serif text-2xl tracking-tight">{item.question}</h3>
+            <p class="mt-3 leading-relaxed text-muted">{item.answer}</p>
+            <ul class="mt-4 flex flex-wrap gap-2">
+              {item.links.map((link) => (
+                <li>
+                  <a
+                    class="inline-flex min-h-9 items-center rounded-full border border-line bg-canvas px-3 text-sm text-ink hover:border-accent/50 hover:text-accent-ink"
+                    href={link.href}
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section id="sources" class="mt-12 scroll-mt-28" aria-labelledby="sources-heading">
+      <h2 id="sources-heading" class="font-serif text-3xl tracking-tight">Sources</h2>
+      <ul class="mt-4 list-disc space-y-2 pl-5 text-sm leading-relaxed text-muted">
+        {BUYING_USED_SOURCES.map((source) => (
+          <li>
+            <a class="underline decoration-accent/40" href={source.href} rel="noopener">{source.title}</a>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <div class="mt-8">
+      <HowWeTest />
+    </div>
+    <NextSteps path="/guides/buying-used-radeon" />
+  </main>
+</Base>

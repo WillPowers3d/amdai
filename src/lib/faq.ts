@@ -358,6 +358,21 @@ export const FAQ_ENTRIES: FaqItem[] = [
     ],
   },
   {
+    id: 'buying-used-radeon',
+    group: 'getting-started',
+    question: 'How do I pick and vet a used Radeon for local AI?',
+    answer:
+      'Cited shopper guide is /guides/buying-used-radeon. Buy VRAM first (12 / 16 / 20 / 24 / 32 GB) using the existing /gpus sheets and calculator — Q6/Q5/Q4 plus a labeled UD-Q3_K_XL estimate. llama.cpp Vulkan is the always-works path. Official ROCm follows the 10.1 matrix; consumer RDNA 2 and gfx1031 HSA_OVERRIDE_GFX_VERSION stay unofficial. Confirm lspci, rocminfo, rocm-smi or amd-smi, and vulkaninfo before you pay. No invented prices, tok/s, or failure rates. Both RAM lines print where the file spills.',
+    links: [
+      { href: '/guides/buying-used-radeon', label: 'Buying a used Radeon' },
+      { href: '/budget', label: 'Budget' },
+      { href: '/compare/gpus', label: 'Compare GPUs' },
+      { href: '/gpus/rx-7900-xtx', label: 'RX 7900 XTX' },
+      { href: '/gpus/rx-6800-xt', label: 'RX 6800 XT' },
+      { href: '/power', label: 'Power and PSU' },
+    ],
+  },
+  {
     id: 'local-speech',
     group: 'getting-started',
     question: 'Can I run speech-to-text or TTS on a Radeon, not just a local LLM?',
@@ -818,6 +833,7 @@ export const REQUIRED_FAQ_HREFS = [
   '/setup/wsl',
   '/setup/comfyui',
   '/setup/multi-gpu',
+  '/guides/buying-used-radeon',
 ] as const;
 
 const BANNED_VISIBLE = /Qwen2\.5|Qwen3-8B/i;

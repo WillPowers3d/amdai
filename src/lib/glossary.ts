@@ -722,7 +722,7 @@ export const GLOSSARY: GlossaryEntry[] = [
       { href: '/gpus/rx-7800-xt', label: 'RX 7800 XT sheet' },
       { href: '/tutorials/install-rocm', label: 'Install ROCm' },
     ],
-    seeAlso: ['gfx1201', 'r9700', 'rocm'],
+    seeAlso: ['gfx1201', 'r9700', 'rocm', 'used-radeon'],
   },
   {
     id: 'rebar',
@@ -908,10 +908,30 @@ export const GLOSSARY: GlossaryEntry[] = [
       { href: '/calculator', label: 'Calculator' },
       { href: '/can-run', label: 'Can my Radeon run it?' },
       { href: '/compare/gpus', label: 'Compare GPUs' },
+      { href: '/guides/buying-used-radeon', label: 'Buying a used Radeon' },
       { href: '/hardware', label: 'Hardware' },
       { href: '/gpus', label: 'GPU directory' },
     ],
-    seeAlso: ['system-ram', 'kv-cache', 'offload', 'apu'],
+    seeAlso: ['system-ram', 'kv-cache', 'offload', 'apu', 'used-radeon'],
+  },
+  {
+    id: 'used-radeon',
+    term: 'Used Radeon',
+    aliases: ['used GPU', 'used 7900 XTX', 'buying used Radeon'],
+    letter: 'U',
+    definition:
+      'A second-hand consumer or workstation Radeon bought for local LLMs. AMDai sizes it by VRAM and gfx first — not by a street price — and vets it with lspci, rocminfo, rocm-smi or amd-smi, and vulkaninfo.',
+    why: 'Shoppers search “used 7900 XTX for llama.cpp.” The cited how-to is /guides/buying-used-radeon. Sheets stay on /gpus. llama.cpp Vulkan is the always-works path. Official ROCm follows the 10.1 matrix; consumer RDNA 2 and gfx1031 HSA_OVERRIDE stay unofficial. No invented prices or failure rates.',
+    deeper:
+      'Used-market sheets on this site include RX 6800 XT, 6700 XT, 6950 XT / 6900 XT, 7900 XTX / XT, and 7800 XT. 32 GB measured recipes stay on the R9700. Q6/Q5/Q4 plus a labeled UD-Q3_K_XL estimate. Both RAM lines print where the file spills.',
+    links: [
+      { href: '/guides/buying-used-radeon', label: 'Buying a used Radeon' },
+      { href: '/budget', label: 'Budget' },
+      { href: '/compare/gpus', label: 'Compare GPUs' },
+      { href: '/gpus/rx-7900-xtx', label: 'RX 7900 XTX' },
+      { href: '/gpus/rx-6800-xt', label: 'RX 6800 XT' },
+    ],
+    seeAlso: ['vram', 'rdna4', 'vulkan', 'r9700'],
   },
   {
     id: 'vulkan',

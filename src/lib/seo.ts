@@ -234,6 +234,7 @@ export const CRUMB_LABELS: Record<string, string> = {
   '/setup/wsl': 'WSL2',
   '/setup/comfyui': 'ComfyUI',
   '/setup/multi-gpu': 'Multi-GPU llama.cpp',
+  '/guides/buying-used-radeon': 'Buying a used Radeon',
   '/stack-lab': 'Stack Lab',
   '/stacks': 'Stacks',
   '/calculator': 'Calculator',
@@ -266,7 +267,7 @@ export const CRUMB_LABELS: Record<string, string> = {
 export type Crumb = { name: string; href: string };
 
 /** Intermediate segments that are not real pages. */
-const SKIP_CRUMB = new Set(['/forum/c', '/forum/t', '/recipes', '/go']);
+const SKIP_CRUMB = new Set(['/forum/c', '/forum/t', '/recipes', '/go', '/guides']);
 
 const CRUMB_HREF: Record<string, string> = {
   '/forum/c': '/forum',
@@ -405,6 +406,12 @@ setMeta(
   'Cited llama.cpp multi-GPU on Radeon: Vulkan and HIP device pins, --split-mode layer, --tensor-split, two-server combo. 35B split measured on local-desktop. No invented tok/s.',
 );
 setDate('/setup/multi-gpu', '2026-10-14');
+setMeta(
+  '/guides/buying-used-radeon',
+  'Buying a used Radeon for local AI',
+  'Cited used-Radeon shopper guide: RDNA4 / RDNA3 / RDNA2 gfx and ROCm notes, VRAM-first 12–32 GB picker from existing fit data, Linux vetting checklist. llama.cpp first. No invented prices.',
+);
+setDate('/guides/buying-used-radeon', '2026-10-14');
 setMeta(
   '/image-gen',
   'Local image gen on Radeon',
