@@ -52,6 +52,9 @@ export const RAM_OFFLOAD_SURFACES = [
   '/models/gpt-oss-20b',
   '/models/gemma3-27b',
   '/models/llama33-70b',
+  '/models/glm-53-flash',
+  '/models/qwen36-27b',
+  '/models/qwen38-27b',
 ] as const;
 
 export function isRamOffloadSurface(path: string): boolean {
@@ -92,6 +95,9 @@ export function assertRamSurfacesValid(): string[] {
   if (!RAM_OFFLOAD_SURFACES.includes('/models/gpt-oss-20b')) errors.push('missing /models/gpt-oss-20b');
   if (!RAM_OFFLOAD_SURFACES.includes('/models/gemma3-27b')) errors.push('missing /models/gemma3-27b');
   if (!RAM_OFFLOAD_SURFACES.includes('/models/llama33-70b')) errors.push('missing /models/llama33-70b');
+  if (!RAM_OFFLOAD_SURFACES.includes('/models/glm-53-flash')) errors.push('missing /models/glm-53-flash');
+  if (!RAM_OFFLOAD_SURFACES.includes('/models/qwen36-27b')) errors.push('missing /models/qwen36-27b');
+  if (!RAM_OFFLOAD_SURFACES.includes('/models/qwen38-27b')) errors.push('missing /models/qwen38-27b');
   if (!RAM_OFFLOAD_SURFACES.includes('/calculator')) errors.push('missing /calculator');
   if (!RAM_OFFLOAD_SURFACES.includes('/image-gen')) errors.push('missing /image-gen');
   if (!RAM_OFFLOAD_SURFACES.includes('/speech')) errors.push('missing /speech');

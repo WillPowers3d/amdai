@@ -405,6 +405,9 @@ export const GLOSSARY: GlossaryEntry[] = [
     links: [
       { href: '/qwen', label: 'Qwen compare' },
       { href: '/models', label: 'Models' },
+      { href: '/models/qwen36-27b', label: 'Qwen3.6 27B' },
+      { href: '/models/qwen38-27b', label: 'Qwen3.8 27B' },
+      { href: '/models/glm-53-flash', label: 'GLM 5.3 Flash' },
       { href: '/flash-ram-offload', label: 'Flash RAM offload' },
     ],
     seeAlso: ['expert-offload', 'qwen36', 'quant'],

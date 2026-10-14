@@ -64,6 +64,9 @@ describe('OG catalog', () => {
     assert.equal(ogSlug('/models/gpt-oss-20b'), 'models-gpt-oss-20b');
     assert.equal(ogSlug('/models/gemma3-27b'), 'models-gemma3-27b');
     assert.equal(ogSlug('/models/llama33-70b'), 'models-llama33-70b');
+    assert.equal(ogSlug('/models/glm-53-flash'), 'models-glm-53-flash');
+    assert.equal(ogSlug('/models/qwen36-27b'), 'models-qwen36-27b');
+    assert.equal(ogSlug('/models/qwen38-27b'), 'models-qwen38-27b');
     assert.equal(ogSlug('/multi-gpu'), 'multi-gpu');
     assert.equal(ogSlug('/image-gen'), 'image-gen');
     assert.equal(ogSlug('/speech'), 'speech');

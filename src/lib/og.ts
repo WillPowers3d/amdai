@@ -306,9 +306,27 @@ export const OG_CARDS: OgCard[] = [
     alt: 'AMDai Llama 3.3 70B — cited GGUF sizes, not yet measured on our R9700s',
   },
   {
+    slug: 'models-glm-53-flash',
+    title: 'GLM 5.3 Flash',
+    lede: 'Cited Unsloth GGUF. Not yet measured on our R9700s',
+    alt: 'AMDai GLM 5.3 Flash — cited GGUF sizes, not yet measured on our R9700s',
+  },
+  {
+    slug: 'models-qwen36-27b',
+    title: 'Qwen3.6 27B',
+    lede: 'Cited Unsloth GGUF. Not yet measured on our R9700s',
+    alt: 'AMDai Qwen3.6 27B — cited GGUF sizes, not yet measured on our R9700s',
+  },
+  {
+    slug: 'models-qwen38-27b',
+    title: 'Qwen3.8 27B',
+    lede: 'Cited Unsloth GGUF. Not yet measured on our R9700s',
+    alt: 'AMDai Qwen3.8 27B — cited GGUF sizes, not yet measured on our R9700s',
+  },
+  {
     slug: 'models',
     title: 'Models',
-    lede: 'House Qwen plus cited gpt-oss, Gemma 3, Llama 3.3',
+    lede: 'House Qwen plus cited open-weight pages',
     alt: 'AMDai models — house Qwen plus cited open-weight pages',
   },
   {
@@ -462,7 +480,10 @@ export function ogSlug(pathname: string): string {
     slug === 'models-flash' ||
     slug === 'models-gpt-oss-20b' ||
     slug === 'models-gemma3-27b' ||
-    slug === 'models-llama33-70b'
+    slug === 'models-llama33-70b' ||
+    slug === 'models-glm-53-flash' ||
+    slug === 'models-qwen36-27b' ||
+    slug === 'models-qwen38-27b'
   ) {
     return slug;
   }

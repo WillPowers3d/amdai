@@ -123,6 +123,18 @@ describe('calculator catalog guards', () => {
     assert.equal(llama?.publisherFiles.q6_k?.decimalGb, 57.89);
     assert.equal(llama?.publisherFiles.q4_k_m?.decimalGb, 42.52);
     assert.equal(llama?.publisherFiles.q3_k_m?.decimalGb, 34.27);
+    const glm = MODEL_PRESETS.find((m) => m.id === 'glm-53-flash');
+    assert.equal(glm?.publisherFiles.q6_k?.decimalGb, 291.83);
+    assert.equal(glm?.publisherFiles.q4_k_m?.decimalGb, 199.71);
+    assert.equal(glm?.publisherFiles.q3_k_m?.decimalGb, 147.54);
+    const qwen36Dense = MODEL_PRESETS.find((m) => m.id === 'qwen36-27b');
+    assert.equal(qwen36Dense?.publisherFiles.q6_k?.decimalGb, 22.52);
+    assert.equal(qwen36Dense?.publisherFiles.q4_k_m?.decimalGb, 16.82);
+    assert.equal(qwen36Dense?.publisherFiles.q3_k_m?.decimalGb, 13.59);
+    const qwen38Dense = MODEL_PRESETS.find((m) => m.id === 'qwen38-27b');
+    assert.equal(qwen38Dense?.publisherFiles.q6_k?.decimalGb, 21.98);
+    assert.equal(qwen38Dense?.publisherFiles.q4_k_m?.decimalGb, 16.46);
+    assert.equal(qwen38Dense?.publisherFiles.q3_k_m?.decimalGb, 13.15);
   });
 
   it('keeps house models and a custom row', () => {
@@ -131,6 +143,8 @@ describe('calculator catalog guards', () => {
     assert.ok(ids.includes('flash'));
     assert.ok(ids.includes('custom'));
     assert.ok(ids.includes('qwen38-27b'));
+    assert.ok(ids.includes('qwen36-27b'));
+    assert.ok(ids.includes('glm-53-flash'));
     assert.ok(ids.includes('llama33-70b'));
   });
 });

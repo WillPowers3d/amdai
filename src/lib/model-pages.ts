@@ -63,7 +63,14 @@ import {
 export const HOUSE_MODEL_IDS = ['qwen36', 'flash'] as const;
 export type HouseModelId = (typeof HOUSE_MODEL_IDS)[number];
 
-export const CITED_MODEL_IDS = ['gpt-oss-20b', 'gemma3-27b', 'llama33-70b'] as const;
+export const CITED_MODEL_IDS = [
+  'gpt-oss-20b',
+  'gemma3-27b',
+  'llama33-70b',
+  'glm-53-flash',
+  'qwen36-27b',
+  'qwen38-27b',
+] as const;
 export type CitedModelId = (typeof CITED_MODEL_IDS)[number];
 
 export const MODEL_PAGE_IDS = [...HOUSE_MODEL_IDS, ...CITED_MODEL_IDS] as const;
@@ -76,26 +83,7 @@ export const NO_DATA_CONTRIBUTE = 'no data — contribute';
 export const NOT_ON_CARD = 'not on the card';
 export const NOT_YET_MEASURED = 'not yet measured on our R9700s';
 
-export const CONTRIBUTE_MODELS = [
-  {
-    id: 'glm-53-flash',
-    name: 'GLM 5.3 Flash',
-    why: 'No cited local-desktop run card or house recipe yet. AMDai will not invent an HF URL, a license, or tok/s.',
-    href: '/contribute',
-  },
-  {
-    id: 'qwen36-27b',
-    name: 'Qwen3.6 27B',
-    why: 'Publisher file sizes live on /qwen. No house recipe or local-desktop tok/s yet.',
-    href: '/qwen',
-  },
-  {
-    id: 'qwen38-27b',
-    name: 'Qwen3.8 27B',
-    why: 'Publisher file sizes live on /qwen. No house recipe or local-desktop tok/s yet.',
-    href: '/qwen',
-  },
-] as const;
+export const CONTRIBUTE_MODELS = [] as const;
 
 export const MODEL_FIT_GPUS = ['r9700', 'rx7900xtx', 'rx7900xt', 'rx7800xt'] as const;
 
@@ -168,6 +156,9 @@ const NATIVE_CONTEXT: Record<ModelPageId, { tokens: number; label: string }> = {
   'gpt-oss-20b': { tokens: 131072, label: '131,072 tokens' },
   'gemma3-27b': { tokens: 128000, label: '128K tokens' },
   'llama33-70b': { tokens: 128000, label: '128K tokens' },
+  'glm-53-flash': { tokens: 1048576, label: '1,048,576 tokens' },
+  'qwen36-27b': { tokens: 262144, label: '262,144 tokens' },
+  'qwen38-27b': { tokens: 262144, label: '262,144 tokens' },
 };
 
 const OFFICIAL_HF: Record<ModelPageId, string> = {
@@ -176,6 +167,9 @@ const OFFICIAL_HF: Record<ModelPageId, string> = {
   'gpt-oss-20b': officialLinks.gptOss20b,
   'gemma3-27b': officialLinks.gemma327b,
   'llama33-70b': officialLinks.llama3370b,
+  'glm-53-flash': officialLinks.glm53Flash,
+  'qwen36-27b': officialLinks.qwen36Dense,
+  'qwen38-27b': officialLinks.qwen38,
 };
 
 const OFFICIAL_GGUF: Record<ModelPageId, string> = {
@@ -184,9 +178,14 @@ const OFFICIAL_GGUF: Record<ModelPageId, string> = {
   'gpt-oss-20b': officialLinks.gptOss20bGguf,
   'gemma3-27b': officialLinks.gemma327bGguf,
   'llama33-70b': officialLinks.llama3370bGguf,
+  'glm-53-flash': officialLinks.glm53FlashGguf,
+  'qwen36-27b': officialLinks.qwen36DenseGguf,
+  'qwen38-27b': officialLinks.qwen38Gguf,
 };
 
-const GGUF_FILENAMES: Record<CitedModelId, Record<'q6_k' | 'q5_k_m' | 'q4_k_m' | 'q3_k_m', string>> = {
+type CitedQuantKey = 'q6_k' | 'q5_k_m' | 'q4_k_m' | 'q3_k_m';
+
+const GGUF_FILENAMES: Record<CitedModelId, Record<CitedQuantKey, string>> = {
   'gpt-oss-20b': {
     q6_k: 'gpt-oss-20b-Q6_K.gguf',
     q5_k_m: 'gpt-oss-20b-Q5_K_M.gguf',
@@ -205,14 +204,56 @@ const GGUF_FILENAMES: Record<CitedModelId, Record<'q6_k' | 'q5_k_m' | 'q4_k_m' |
     q4_k_m: 'Llama-3.3-70B-Instruct-Q4_K_M.gguf',
     q3_k_m: 'Llama-3.3-70B-Instruct-Q3_K_M.gguf',
   },
+  'glm-53-flash': {
+    q6_k: 'UD-Q6_K_XL/GLM-5.3-Flash-UD-Q6_K_XL-00001-of-00007.gguf',
+    q5_k_m: 'UD-Q5_K_XL/GLM-5.3-Flash-UD-Q5_K_XL-00001-of-00006.gguf',
+    q4_k_m: 'UD-Q4_K_XL/GLM-5.3-Flash-UD-Q4_K_XL-00001-of-00006.gguf',
+    q3_k_m: 'UD-Q3_K_XL/GLM-5.3-Flash-UD-Q3_K_XL-00001-of-00004.gguf',
+  },
+  'qwen36-27b': {
+    q6_k: 'Qwen3.6-27B-Q6_K.gguf',
+    q5_k_m: 'Qwen3.6-27B-Q5_K_M.gguf',
+    q4_k_m: 'Qwen3.6-27B-Q4_K_M.gguf',
+    q3_k_m: 'Qwen3.6-27B-Q3_K_M.gguf',
+  },
+  'qwen38-27b': {
+    q6_k: 'Qwen3.8-27B-UD-Q6_K.gguf',
+    q5_k_m: 'Qwen3.8-27B-UD-Q5_K_M.gguf',
+    q4_k_m: 'Qwen3.8-27B-UD-Q4_K_M.gguf',
+    q3_k_m: 'Qwen3.8-27B-UD-Q3_K_XL.gguf',
+  },
 };
 
-const QUANT_FILE_ORDER = [
+const STANDARD_QUANT_FILES = [
   { id: 'q6_k' as const, label: 'Q6_K' },
   { id: 'q5_k_m' as const, label: 'Q5_K_M' },
   { id: 'q4_k_m' as const, label: 'Q4_K_M' },
   { id: 'q3_k_m' as const, label: 'Q3_K_M' },
 ];
+
+function quantFileOrder(id: CitedModelId): { id: CitedQuantKey; label: string }[] {
+  if (id === 'glm-53-flash') {
+    return [
+      { id: 'q6_k', label: 'UD-Q6_K_XL' },
+      { id: 'q5_k_m', label: 'UD-Q5_K_XL' },
+      { id: 'q4_k_m', label: 'UD-Q4_K_XL' },
+      { id: 'q3_k_m', label: 'UD-Q3_K_XL' },
+    ];
+  }
+  if (id === 'qwen38-27b') {
+    return [
+      { id: 'q6_k', label: 'UD-Q6_K' },
+      { id: 'q5_k_m', label: 'UD-Q5_K_M' },
+      { id: 'q4_k_m', label: 'UD-Q4_K_M' },
+      { id: 'q3_k_m', label: 'UD-Q3_K_XL' },
+    ];
+  }
+  return STANDARD_QUANT_FILES;
+}
+
+function citedQ4Label(id: CitedModelId): string {
+  return quantFileOrder(id).find((row) => row.id === 'q4_k_m')?.label ?? 'Q4_K_M';
+}
 
 export type ModelCardCite = {
   official: string;
@@ -369,7 +410,7 @@ function launchesFor(id: ModelPageId): ModelLaunch[] {
       href: '/backends/llamacpp',
       backend: 'llamacpp',
       backendLabel: 'llama.cpp',
-      quant: 'Q4_K_M',
+      quant: citedQ4Label(id),
       ctxLabel: formatCtx(preset.defaultCtx),
       recipe: null,
       command: [
@@ -449,7 +490,7 @@ function fitBadges(id: ModelPageId): ModelFitBadge[] {
 function quantFilesFor(id: ModelPageId): ModelQuantFile[] {
   if (!isCitedModelId(id)) return [];
   const { preset } = identity(id);
-  return QUANT_FILE_ORDER.map((row) => {
+  return quantFileOrder(id).map((row) => {
     const listed = preset.publisherFiles[row.id];
     if (!listed) throw new Error(`${id} missing publisher file for ${row.id}`);
     return {
@@ -467,7 +508,7 @@ function citedConfigRows(id: CitedModelId): ModelConfigRow[] {
   const { preset } = identity(id);
   const context = preset.defaultCtx;
   const rows: ModelConfigRow[] = [];
-  for (const quant of QUANT_FILE_ORDER) {
+  for (const quant of quantFileOrder(id)) {
     const q3 = quant.id === 'q3_k_m';
     for (const gpuCount of [1, 2] as const) {
       const input = citedCalcInput(id, 'r9700', gpuCount, quant.id, context);
@@ -522,13 +563,43 @@ function citedCopy(id: CitedModelId): { title: string; description: string; lead
         'Google’s 27B instruct file for 16–24 GB Radeon boxes. Official card: 27B parameters, 128K input context. Q6 / Q5 / Q4 file sizes come from unsloth/gemma-3-27b-it-GGUF. Q3 is a labeled estimate. Decode is not yet measured on our R9700s. llama.cpp first.',
     };
   }
+  if (id === 'llama33-70b') {
+    return {
+      title: 'Llama 3.3 70B',
+      engine: 'llama.cpp first',
+      description:
+        'Llama 3.3 70B on Radeon — cited bartowski Q6/Q5/Q4 GGUF sizes, llama.cpp first. Not yet measured on our R9700s. Q3 is a labeled estimate.',
+      lead:
+        'Meta’s 70B instruct file for 32–64 GB cards, or RAM offload on 16–24 GB. Official card context is 128K tokens. Q6 / Q5 / Q4 file sizes come from bartowski/Llama-3.3-70B-Instruct-GGUF. Q3 is a labeled estimate. Decode is not yet measured on our R9700s. llama.cpp first.',
+    };
+  }
+  if (id === 'glm-53-flash') {
+    return {
+      title: 'GLM 5.3 Flash',
+      engine: 'llama.cpp first',
+      description:
+        'GLM 5.3 Flash (320B / 18B active) on Radeon — cited Unsloth UD-Q6/Q5/Q4 GGUF sizes, llama.cpp first. Not yet measured on our R9700s. Q3 is a labeled estimate.',
+      lead:
+        'Z.ai’s 320B / 18B active multimodal MoE. Official card and config.json list 1,048,576 tokens. Q6 / Q5 / Q4 folder sizes come from unsloth/GLM-5.3-Flash-GGUF. Q3 is a labeled estimate. Consumer cards offload. Decode is not yet measured on our R9700s. llama.cpp first.',
+    };
+  }
+  if (id === 'qwen36-27b') {
+    return {
+      title: 'Qwen3.6 27B',
+      engine: 'llama.cpp first',
+      description:
+        'Qwen3.6 27B on Radeon — cited Unsloth Q6/Q5/Q4 GGUF sizes, 262K card context, llama.cpp first. Not yet measured on our R9700s. Q3 is a labeled estimate.',
+      lead:
+        'Qwen’s dense 27B file for 16–24 GB Radeon boxes. Official card lists 262,144 tokens. Q6 / Q5 / Q4 file sizes come from unsloth/Qwen3.6-27B-GGUF. Q3 is a labeled estimate. Decode is not yet measured on our R9700s. llama.cpp first.',
+    };
+  }
   return {
-    title: 'Llama 3.3 70B',
+    title: 'Qwen3.8 27B',
     engine: 'llama.cpp first',
     description:
-      'Llama 3.3 70B on Radeon — cited bartowski Q6/Q5/Q4 GGUF sizes, llama.cpp first. Not yet measured on our R9700s. Q3 is a labeled estimate.',
+      'Qwen3.8 27B on Radeon — cited Unsloth UD-Q6/Q5/Q4 GGUF sizes, 262K card context, llama.cpp first. Not yet measured on our R9700s. Q3 is a labeled estimate.',
     lead:
-      'Meta’s 70B instruct file for 32–64 GB cards, or RAM offload on 16–24 GB. Official card context is 128K tokens. Q6 / Q5 / Q4 file sizes come from bartowski/Llama-3.3-70B-Instruct-GGUF. Q3 is a labeled estimate. Decode is not yet measured on our R9700s. llama.cpp first.',
+      'Qwen’s dense 27B file for 16–24 GB Radeon boxes. Official card lists 262,144 tokens. Q6 / Q5 / Q4 file sizes come from unsloth/Qwen3.8-27B-GGUF. Q3 is a labeled estimate. Decode is not yet measured on our R9700s. llama.cpp first.',
   };
 }
 
@@ -810,7 +881,7 @@ export function houseModelPage(id: ModelPageId, cards: RunCard[] = runs): HouseM
   const cited = isCitedModelId(id);
   const flashFile = id === 'flash' ? loadFlashDaily() : null;
   const copy = cited ? citedCopy(id) : houseCopy(id as HouseModelId);
-  const recommendedQuant = cited ? 'Q4_K_M' : id === 'qwen36' ? 'UD-Q5_K_XL' : 'UD-Q6_K_XL';
+  const recommendedQuant = cited ? citedQ4Label(id) : id === 'qwen36' ? 'UD-Q5_K_XL' : 'UD-Q6_K_XL';
   const recommendedContext = cited ? preset.defaultCtx : 262144;
   const ramKind: HouseRamKind | null = cited ? null : id === 'flash' ? 'flash' : 'daily';
   const q3 = cited
@@ -941,13 +1012,15 @@ export function assertModelPagesValid(pages: HouseModelPage[] = houseModelPages(
   if (pages[2]?.id !== 'gpt-oss-20b') errors.push('gpt-oss 20B must be the first cited page');
   if (pages[3]?.id !== 'gemma3-27b') errors.push('Gemma 3 27B must be the second cited page');
   if (pages[4]?.id !== 'llama33-70b') errors.push('Llama 3.3 70B must be the third cited page');
+  if (pages[5]?.id !== 'glm-53-flash') errors.push('GLM 5.3 Flash must be the fourth cited page');
+  if (pages[6]?.id !== 'qwen36-27b') errors.push('Qwen3.6 27B must be the fifth cited page');
+  if (pages[7]?.id !== 'qwen38-27b') errors.push('Qwen3.8 27B must be the sixth cited page');
   for (const extra of CONTRIBUTE_MODELS) {
     if (HOUSE_MODEL_IDS.includes(extra.id as HouseModelId)) errors.push(`${extra.id} must not have a shopper page`);
     if (/https:\/\/huggingface\.co\//i.test(`${extra.why} ${extra.href}`)) {
       errors.push(`${extra.id} invented an HF URL`);
     }
   }
-  if (!CONTRIBUTE_MODELS.some((row) => row.id === 'glm-53-flash')) errors.push('GLM 5.3 Flash must stay contribute');
 
   for (const page of pages) {
     if (!MODEL_PAGES.some((row) => row.id === page.id)) errors.push(`${page.id} missing from MODEL_PAGES`);

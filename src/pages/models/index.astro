@@ -13,14 +13,14 @@ const contribute = contributeModels();
 
 <Base
   title="Models"
-  description="House Qwen recipes plus cited gpt-oss 20B, Gemma 3 27B, and Llama 3.3 70B pages. Reverse view of the GPU directory. Q3 is a labeled estimate."
+  description="House Qwen recipes plus cited open-weight pages — gpt-oss, Gemma 3, Llama 3.3, GLM 5.3 Flash, Qwen 27B. Reverse view of the GPU directory. Q3 is a labeled estimate."
 >
   <main id="main" class="mx-auto max-w-6xl px-4 py-10 sm:px-6">
     <p class="kicker">House recipes and cited cards</p>
     <h1 class="display mt-3 text-4xl sm:text-5xl">Models</h1>
     <p class="mt-4 max-w-2xl text-lg leading-relaxed text-muted">
       The reverse of the GPU pages: pick a model, see the cited card and which Radeon setups fit.
-      amdai’s two daily drivers first, then three cited open-weight pages for 16–64 GB Radeon boxes.
+      amdai’s two daily drivers first, then cited open-weight pages for 16–64 GB Radeon boxes and the 320B / 18B GLM offload case.
       Those older 2.5-class and 8B names stay off this site.
       Q3 appears only as estimate/community unless we measured it.
       A name with no official card and GGUF listing stays contribute — we do not invent a shopper page.
@@ -74,22 +74,29 @@ const contribute = contributeModels();
     <section id="contribute" class="mt-12" aria-labelledby="contribute-heading">
       <h2 id="contribute-heading" class="font-serif text-3xl">Contribute — no cited row yet</h2>
       <p class="mt-3 max-w-2xl text-sm leading-relaxed text-muted">
-        These names show up in shopper questions. AMDai publishes a cited estimate page only when the official card and a GGUF listing already exist.
+        AMDai publishes a cited estimate page only when the official card and a GGUF listing already exist.
         Names without that stay contribute. Abliterated files stay on <a class="underline decoration-accent/40" href="/abliterated">/abliterated</a>.
+        Send a measured <code>amdai-bench/run@1</code> card if you have one of these on a Radeon.
       </p>
-      <ul class="mt-6 grid gap-4">
-        {contribute.map((row) => (
-          <li class="rounded-2xl border border-line bg-raised/40 p-5">
-            <h3 class="text-xl tracking-tight">{row.name}</h3>
-            <p class="mt-2 text-sm leading-relaxed text-muted">{row.why}</p>
-            <p class="mt-3 text-sm">
-              <a class="underline decoration-accent/40" href={row.href}>
-                {row.href === '/contribute' ? 'Contribute a card' : 'See Qwen compare'}
-              </a>
-            </p>
-          </li>
-        ))}
-      </ul>
+      {contribute.length > 0 ? (
+        <ul class="mt-6 grid gap-4">
+          {contribute.map((row) => (
+            <li class="rounded-2xl border border-line bg-raised/40 p-5">
+              <h3 class="text-xl tracking-tight">{row.name}</h3>
+              <p class="mt-2 text-sm leading-relaxed text-muted">{row.why}</p>
+              <p class="mt-3 text-sm">
+                <a class="underline decoration-accent/40" href={row.href}>
+                  {row.href === '/contribute' ? 'Contribute a card' : 'See Qwen compare'}
+                </a>
+              </p>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p class="mt-6">
+          <a class="btn-secondary" href="/contribute">Contribute a card</a>
+        </p>
+      )}
     </section>
     <NextSteps path="/models" />
   </main>

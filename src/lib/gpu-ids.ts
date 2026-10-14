@@ -76,4 +76,28 @@ export const MODEL_PAGES = [
     role: '32–64 GB dense — cited, not measured',
     hf: 'https://huggingface.co/meta-llama/Llama-3.3-70B-Instruct',
   },
+  {
+    id: 'glm-53-flash',
+    name: 'GLM 5.3 Flash',
+    official: 'zai-org/GLM-5.3-Flash',
+    gguf: 'unsloth/GLM-5.3-Flash-GGUF',
+    role: '320B / 18B MoE — cited, not measured',
+    hf: 'https://huggingface.co/zai-org/GLM-5.3-Flash',
+  },
+  {
+    id: 'qwen36-27b',
+    name: 'Qwen3.6 27B',
+    official: 'Qwen/Qwen3.6-27B',
+    gguf: 'unsloth/Qwen3.6-27B-GGUF',
+    role: 'Dense 27B — cited, not measured',
+    hf: 'https://huggingface.co/Qwen/Qwen3.6-27B',
+  },
+  {
+    id: 'qwen38-27b',
+    name: 'Qwen3.8 27B',
+    official: 'Qwen/Qwen3.8-27B',
+    gguf: 'unsloth/Qwen3.8-27B-GGUF',
+    role: 'Dense 27B — cited, not measured',
+    hf: 'https://huggingface.co/Qwen/Qwen3.8-27B',
+  },
 ] as const;

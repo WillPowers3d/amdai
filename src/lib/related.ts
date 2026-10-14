@@ -443,6 +443,9 @@ export function assertRelatedValid(
     '/models/gpt-oss-20b',
     '/models/gemma3-27b',
     '/models/llama33-70b',
+    '/models/glm-53-flash',
+    '/models/qwen36-27b',
+    '/models/qwen38-27b',
     '/image-gen',
     '/vision',
     '/speech',
@@ -484,7 +487,14 @@ export function assertRelatedValid(
   for (const href of ['/flash-daily', '/benchmarks', '/calculator', '/gpus/r9700']) {
     if (!flash.includes(href)) errors.push(`/models/flash missing ${href}`);
   }
-  for (const path of ['/models/gpt-oss-20b', '/models/gemma3-27b', '/models/llama33-70b'] as const) {
+  for (const path of [
+    '/models/gpt-oss-20b',
+    '/models/gemma3-27b',
+    '/models/llama33-70b',
+    '/models/glm-53-flash',
+    '/models/qwen36-27b',
+    '/models/qwen38-27b',
+  ] as const) {
     const hrefs = relatedFor(path).map((link) => link.href);
     for (const href of ['/calculator', '/gpus/r9700', '/gpus/rx-7900-xtx', '/amdai-bench']) {
       if (!hrefs.includes(href)) errors.push(`${path} missing ${href}`);

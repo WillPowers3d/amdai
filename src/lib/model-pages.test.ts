@@ -27,26 +27,38 @@ import {
 } from './model-pages';
 
 describe('per-model recipe pages', () => {
-  it('covers house models plus three cited pages and lists the rest as contribute', () => {
+  it('covers house models plus cited pages and keeps contribute empty', () => {
     const pages = houseModelPages(runs);
     assert.deepEqual(assertModelPagesValid(pages), []);
     assert.deepEqual([...HOUSE_MODEL_IDS], ['qwen36', 'flash']);
-    assert.deepEqual([...CITED_MODEL_IDS], ['gpt-oss-20b', 'gemma3-27b', 'llama33-70b']);
-    assert.deepEqual([...MODEL_PAGE_IDS], ['qwen36', 'flash', 'gpt-oss-20b', 'gemma3-27b', 'llama33-70b']);
+    assert.deepEqual(
+      [...CITED_MODEL_IDS],
+      ['gpt-oss-20b', 'gemma3-27b', 'llama33-70b', 'glm-53-flash', 'qwen36-27b', 'qwen38-27b'],
+    );
+    assert.deepEqual(
+      [...MODEL_PAGE_IDS],
+      ['qwen36', 'flash', 'gpt-oss-20b', 'gemma3-27b', 'llama33-70b', 'glm-53-flash', 'qwen36-27b', 'qwen38-27b'],
+    );
     assert.equal(MODEL_PUBLISHED, '2026-10-13');
     assert.equal(pages[0]?.name, 'Qwen3.6-35B-A3B');
     assert.equal(pages[1]?.name, 'Qwen 3.8 Flash');
     assert.equal(pages[2]?.name, 'gpt-oss 20B');
     assert.equal(pages[3]?.name, 'Gemma 3 27B');
     assert.equal(pages[4]?.name, 'Llama 3.3 70B');
+    assert.equal(pages[5]?.name, 'GLM 5.3 Flash');
+    assert.equal(pages[6]?.name, 'Qwen3.6 27B');
+    assert.equal(pages[7]?.name, 'Qwen3.8 27B');
     assert.equal(isHouseModelId('qwen36'), true);
     assert.equal(isCitedModelId('gpt-oss-20b'), true);
+    assert.equal(isCitedModelId('glm-53-flash'), true);
     assert.equal(isHouseModelId('glm-53-flash'), false);
     assert.equal(modelPath('qwen36'), '/models/qwen36');
     assert.equal(modelPath('flash'), '/models/flash');
     assert.equal(modelPath('gpt-oss-20b'), '/models/gpt-oss-20b');
-    assert.ok(CONTRIBUTE_MODELS.some((row) => row.id === 'glm-53-flash'));
-    assert.ok(CONTRIBUTE_MODELS.every((row) => !isHouseModelId(row.id)));
+    assert.equal(modelPath('glm-53-flash'), '/models/glm-53-flash');
+    assert.equal(modelPath('qwen36-27b'), '/models/qwen36-27b');
+    assert.equal(modelPath('qwen38-27b'), '/models/qwen38-27b');
+    assert.equal(CONTRIBUTE_MODELS.length, 0);
     assert.deepEqual(
       MODEL_PAGES.map((row) => row.id),
       [...MODEL_PAGE_IDS],

@@ -19,6 +19,7 @@ export type ModelId =
   | 'flash'
   | 'qwen38-27b'
   | 'qwen36-27b'
+  | 'glm-53-flash'
   | 'qwen35-27b'
   | 'qwen35-9b'
   | 'qwen3-32b'
@@ -476,7 +477,7 @@ export const MODEL_PRESETS: ModelPreset[] = [
     group: 'Qwen',
     name: 'Qwen3.8 27B',
     official: 'Qwen/Qwen3.8-27B',
-    gguf: '',
+    gguf: 'unsloth/Qwen3.8-27B-GGUF',
     totalParamsB: 27.8,
     activeParamsB: 27.8,
     layers: 64,
@@ -496,14 +497,35 @@ export const MODEL_PRESETS: ModelPreset[] = [
     defaultCtx: 8192,
     defaultKv: 'f16',
     archNote: 'Official card: 16 of 64 layers are full attention (GQA 4×256). The rest hold a fixed recurrent state, so KV grows on those 16 layers. 262K native.',
-    publisherFiles: {},
+    publisherFiles: {
+      q6_k: {
+        decimalGb: 21.98,
+        label: 'Hugging Face LFS size for unsloth/Qwen3.8-27B-GGUF Qwen3.8-27B-UD-Q6_K.gguf (21.98 GB)',
+      },
+      q5_k_m: {
+        decimalGb: 19.77,
+        label: 'Hugging Face LFS size for unsloth/Qwen3.8-27B-GGUF Qwen3.8-27B-UD-Q5_K_M.gguf (19.77 GB)',
+      },
+      q4_k_m: {
+        decimalGb: 16.46,
+        label: 'Hugging Face LFS size for unsloth/Qwen3.8-27B-GGUF Qwen3.8-27B-UD-Q4_K_M.gguf (16.46 GB)',
+      },
+      q3_k_m: {
+        decimalGb: 13.15,
+        label: 'Hugging Face LFS size for unsloth/Qwen3.8-27B-GGUF Qwen3.8-27B-UD-Q3_K_XL.gguf (13.15 GB). Q3 is a labeled estimate — not a local-desktop run',
+      },
+      q3_k_xl: {
+        decimalGb: 13.15,
+        label: 'Hugging Face LFS size for unsloth/Qwen3.8-27B-GGUF Qwen3.8-27B-UD-Q3_K_XL.gguf (13.15 GB). Q3 is a labeled estimate — not a local-desktop run',
+      },
+    },
   },
   {
     id: 'qwen36-27b',
     group: 'Qwen',
     name: 'Qwen3.6 27B',
     official: 'Qwen/Qwen3.6-27B',
-    gguf: '',
+    gguf: 'unsloth/Qwen3.6-27B-GGUF',
     totalParamsB: 27.78,
     activeParamsB: 27.78,
     layers: 64,
@@ -523,7 +545,28 @@ export const MODEL_PRESETS: ModelPreset[] = [
     defaultCtx: 8192,
     defaultKv: 'f16',
     archNote: 'Official card: 16 of 64 layers full attention. Same hybrid KV idea as Qwen3.8 27B.',
-    publisherFiles: {},
+    publisherFiles: {
+      q6_k: {
+        decimalGb: 22.52,
+        label: 'Hugging Face LFS size for unsloth/Qwen3.6-27B-GGUF Qwen3.6-27B-Q6_K.gguf (22.52 GB)',
+      },
+      q5_k_m: {
+        decimalGb: 19.51,
+        label: 'Hugging Face LFS size for unsloth/Qwen3.6-27B-GGUF Qwen3.6-27B-Q5_K_M.gguf (19.51 GB)',
+      },
+      q4_k_m: {
+        decimalGb: 16.82,
+        label: 'Hugging Face LFS size for unsloth/Qwen3.6-27B-GGUF Qwen3.6-27B-Q4_K_M.gguf (16.82 GB)',
+      },
+      q3_k_m: {
+        decimalGb: 13.59,
+        label: 'Hugging Face LFS size for unsloth/Qwen3.6-27B-GGUF Qwen3.6-27B-Q3_K_M.gguf (13.59 GB). Q3 is a labeled estimate — not a local-desktop run',
+      },
+      q3_k_xl: {
+        decimalGb: 14.47,
+        label: 'Hugging Face LFS size for unsloth/Qwen3.6-27B-GGUF Qwen3.6-27B-UD-Q3_K_XL.gguf (14.47 GB). Q3 is a labeled estimate — not a local-desktop run',
+      },
+    },
   },
   {
     id: 'qwen35-27b',
@@ -925,6 +968,51 @@ export const MODEL_PRESETS: ModelPreset[] = [
       q3_k_m: {
         decimalGb: 11.51,
         label: 'Hugging Face LFS size for unsloth/gpt-oss-20b-GGUF gpt-oss-20b-Q3_K_M.gguf (11.51 GB). Q3 is a labeled estimate — not a local-desktop run',
+      },
+    },
+  },
+  {
+    id: 'glm-53-flash',
+    group: 'GLM',
+    name: 'GLM 5.3 Flash',
+    official: 'zai-org/GLM-5.3-Flash',
+    gguf: 'unsloth/GLM-5.3-Flash-GGUF',
+    totalParamsB: 320,
+    activeParamsB: 18,
+    layers: 45,
+    kvLayers: 45,
+    kvHeads: 64,
+    headDim: 256,
+    kvKind: 'mla',
+    mlaDim: 512,
+    mlaTensors: 1,
+    windowLayers: null,
+    windowTokens: null,
+    embedVocab: 154880,
+    embedHidden: 4096,
+    embedTied: false,
+    separableParamsB: null,
+    defaultQuant: 'q4_k_m',
+    defaultCtx: 8192,
+    defaultKv: 'f16',
+    archNote:
+      'Official card: 320B total / 18B active. config.json text_config lists 45 layers, MLA kv_lora_rank 512, and max_position_embeddings 1,048,576. 288 routed experts + 1 shared, 8 per token. Consumer cards offload; both RAM lines are estimates until measured.',
+    publisherFiles: {
+      q6_k: {
+        decimalGb: 291.83,
+        label: 'Hugging Face LFS shard sum for unsloth/GLM-5.3-Flash-GGUF UD-Q6_K_XL (291.83 GB across 7 shards)',
+      },
+      q5_k_m: {
+        decimalGb: 240.31,
+        label: 'Hugging Face LFS shard sum for unsloth/GLM-5.3-Flash-GGUF UD-Q5_K_XL (240.31 GB across 6 shards)',
+      },
+      q4_k_m: {
+        decimalGb: 199.71,
+        label: 'Hugging Face LFS shard sum for unsloth/GLM-5.3-Flash-GGUF UD-Q4_K_XL (199.71 GB across 6 shards)',
+      },
+      q3_k_m: {
+        decimalGb: 147.54,
+        label: 'Hugging Face LFS shard sum for unsloth/GLM-5.3-Flash-GGUF UD-Q3_K_XL (147.54 GB across 4 shards). Q3 is a labeled estimate — not a local-desktop run',
       },
     },
   },

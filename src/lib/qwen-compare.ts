@@ -388,7 +388,8 @@ function dense27bSpecs(opts: {
     nativeContext: QWEN_COMPARE_NATIVE_CTX,
     edition: 'original' as const,
     hfUrl: opts.hfUrl,
-    ggufUrl: opts.hfUrl,
+    ggufUrl:
+      opts.calcModelId === 'qwen36-27b' ? officialLinks.qwen36DenseGguf : officialLinks.qwen38Gguf,
     note: `${opts.short}. Official card lists 262K native. Default calculator context is 8K; this table uses native 262K for “full”.`,
   };
   const quants: Array<{ slug: string; quant: string; quantId: QuantId; runQuant: string }> = [
@@ -400,16 +401,21 @@ function dense27bSpecs(opts: {
     { slug: 'q6k', quant: 'Q6_K', quantId: 'q6_k', runQuant: 'Q6_K' },
     { slug: 'q80', quant: 'Q8_0', quantId: 'q8_0', runQuant: 'Q8_0' },
   ];
-  return quants.map((row) => ({
-    id: `${opts.slug}-${row.slug}`,
-    ...base,
-    quant: row.quant,
-    quantId: row.quantId,
-    runQuant: row.runQuant,
-    citedDecimalGb: null,
-    sizeCite: `Estimate: ${base.totalParamsB}B × ${quantById(row.quantId).label} nominal bpw. No publisher GGUF GB on this official card.`,
-    skipPublisher: true,
-  }));
+  return quants.map((row) => {
+    const listed = preset.publisherFiles[row.quantId];
+    return {
+      id: `${opts.slug}-${row.slug}`,
+      ...base,
+      quant: row.quant,
+      quantId: row.quantId,
+      runQuant: row.runQuant,
+      citedDecimalGb: listed?.decimalGb ?? null,
+      sizeCite: listed
+        ? listed.label
+        : `Estimate: ${base.totalParamsB}B × ${quantById(row.quantId).label} nominal bpw. No publisher GGUF GB on this official card.`,
+      skipPublisher: !listed,
+    };
+  });
 }
 
 function flashSpecs(): QwenSpec[] {
