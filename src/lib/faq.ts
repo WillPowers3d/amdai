@@ -319,13 +319,28 @@ export const FAQ_ENTRIES: FaqItem[] = [
     group: 'getting-started',
     question: 'Can I run Stable Diffusion or Flux on a Radeon, not just a local LLM?',
     answer:
-      'Yes. ComfyUI is the AMDai first image-gen path — HIP/ROCm PyTorch, not llama.cpp Vulkan, and it does not speak llama-server /v1. The cited shopper guide is /image-gen. Linux Ubuntu 24.04+ first. Image-gen speeds are not yet measured by AMDai. llama.cpp stays first for LLMs. Q3 stays a labeled estimate. Nothing below Q3.',
+      'Yes. ComfyUI is the AMDai first image-gen path — HIP/ROCm PyTorch, not llama.cpp Vulkan, and it does not speak llama-server /v1. First-run install is /setup/comfyui. Fit tables stay on /image-gen. Linux Ubuntu 24.04+ first. Image-gen speeds are not yet measured by AMDai. llama.cpp stays first for LLMs. Q3 stays a labeled estimate. Nothing below Q3.',
     links: [
+      { href: '/setup/comfyui', label: 'ComfyUI on Radeon' },
       { href: '/image-gen', label: 'Image gen on Radeon' },
       { href: '/harnesses/image', label: 'ComfyUI harness' },
       { href: '/setup', label: 'First-run setup' },
       { href: '/gpus/r9700', label: 'R9700' },
       { href: '/multi-gpu', label: 'Dual / multi-GPU' },
+    ],
+  },
+  {
+    id: 'comfyui-on-radeon',
+    group: 'getting-started',
+    question: 'How do I install ComfyUI on a Radeon GPU?',
+    answer:
+      'Cited walk is /setup/comfyui: Ubuntu 24.04+ git clone, a ROCm PyTorch venv, pip install -r requirements.txt, then python ComfyUI/main.py at http://127.0.0.1:8188. Fit and family tables stay on /image-gen. ComfyUI does not speak llama-server /v1. Image-gen speeds are not yet measured by AMDai. Q3 stays a labeled estimate on any LLM that shares the box. Nothing below Q3.',
+    links: [
+      { href: '/setup/comfyui', label: 'ComfyUI on Radeon' },
+      { href: '/image-gen', label: 'Image gen on Radeon' },
+      { href: '/harnesses/image', label: 'ComfyUI harness' },
+      { href: '/setup', label: 'Ubuntu setup (measured)' },
+      { href: '/rocm-problems', label: 'ROCm problems' },
     ],
   },
   {
@@ -785,6 +800,7 @@ export const REQUIRED_FAQ_HREFS = [
   '/setup/ollama',
   '/setup/open-webui',
   '/setup/wsl',
+  '/setup/comfyui',
 ] as const;
 
 const BANNED_VISIBLE = /Qwen2\.5|Qwen3-8B/i;

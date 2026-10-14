@@ -273,6 +273,7 @@ export const SETUP_OPEN_WEBUI_HUB_LINKS: SetupOpenWebuiLink[] = [
   { href: '/calculator', label: 'Calculator' },
   { href: '/gpus/r9700', label: 'R9700' },
   { href: '/setup/wsl', label: 'WSL2' },
+  { href: '/setup/comfyui', label: 'ComfyUI' },
 ];
 
 export const REQUIRED_SETUP_OPEN_WEBUI_HREFS = [

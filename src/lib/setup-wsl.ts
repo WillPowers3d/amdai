@@ -331,6 +331,7 @@ export const SETUP_WSL_HUB_LINKS: SetupWslLink[] = [
   { href: '/backends/llamacpp', label: 'llama.cpp' },
   { href: '/calculator', label: 'Calculator' },
   { href: '/gpus/r9700', label: 'R9700' },
+  { href: '/setup/comfyui', label: 'ComfyUI' },
 ];
 
 export const REQUIRED_SETUP_WSL_HREFS = [

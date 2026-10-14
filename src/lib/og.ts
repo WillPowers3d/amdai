@@ -266,6 +266,12 @@ export const OG_CARDS: OgCard[] = [
     alt: 'AMDai WSL2 — cited ROCm preview on Radeon, not measured on local-desktop',
   },
   {
+    slug: 'setup-comfyui',
+    title: 'ComfyUI on Radeon',
+    lede: 'Cited HIP/ROCm PyTorch. Speeds not yet measured by AMDai',
+    alt: 'AMDai ComfyUI — cited Radeon image-gen setup, not yet measured by AMDai',
+  },
+  {
     slug: 'stack-lab',
     title: 'Radeon Stack Lab',
     lede: 'Packages not published yet',

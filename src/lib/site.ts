@@ -93,6 +93,7 @@ export const primaryNav: NavItem[] = [
   { href: '/setup/ollama', label: 'Ollama', description: 'Cited Ollama on Radeon. llama.cpp stays the daily driver. Not measured on local-desktop', group: 'path' },
   { href: '/setup/open-webui', label: 'Open WebUI', description: 'Cited Open WebUI against llama-server /v1. Not measured on local-desktop', group: 'path' },
   { href: '/setup/wsl', label: 'WSL2 setup', description: 'Cited ROCm WSL2 preview on Radeon. llama.cpp HIP in the guest. Not measured on local-desktop', group: 'path' },
+  { href: '/setup/comfyui', label: 'ComfyUI', description: 'Cited ComfyUI on Radeon. HIP/ROCm PyTorch. Fit on /image-gen. Not measured on local-desktop', group: 'path' },
   { href: '/gpus/r9700', label: 'R9700', description: 'Measured 35B on the 32 GB Radeon AI PRO R9700 — one GPU vs two, cited run cards', group: 'path' },
   { href: '/gpus/strix-halo', label: 'Strix Halo', description: 'Cited Ryzen AI Max+ 395 / Radeon 8060S APU guide. Shared memory. Not measured on local-desktop', group: 'path' },
   { href: '/gpus/rx-9070-xt', label: 'RX 9070 XT', description: '16 GB gfx1201 gaming sibling of the R9700. Calculator estimates. Not measured on local-desktop', group: 'path' },

@@ -192,6 +192,23 @@ export const GLOSSARY: GlossaryEntry[] = [
     seeAlso: ['llamacpp', 'device-passthrough', 'nvme'],
   },
   {
+    id: 'comfyui',
+    term: 'ComfyUI',
+    aliases: ['Comfy', 'image gen UI'],
+    letter: 'C',
+    definition:
+      'A node-graph UI for local diffusion checkpoints on HIP/ROCm PyTorch. On AMDai it is the first image-gen path. It does not speak llama-server /v1.',
+    why: 'People search “ComfyUI ROCm Radeon.” First-run install is /setup/comfyui. Fit tables stay on /image-gen. Speeds are not yet measured by AMDai. llama.cpp stays first for LLMs. Q3 stays a labeled estimate on any LLM that shares the box.',
+    deeper:
+      'AMD documents git clone, pip install -r ComfyUI/requirements.txt, then python ComfyUI/main.py → http://127.0.0.1:8188. Checkpoints go in models/checkpoints. The official Windows AMD portable is ComfyUI_windows_portable_amd.7z; the Nvidia zip is not a Radeon path. Instinct Docker tags are not R9700 pins.',
+    links: [
+      { href: '/setup/comfyui', label: 'ComfyUI on Radeon' },
+      { href: '/image-gen', label: 'Image gen' },
+      { href: '/harnesses/image', label: 'ComfyUI harness' },
+    ],
+    seeAlso: ['hip', 'rocm', 'nvme'],
+  },
+  {
     id: 'daily-driver',
     term: 'Daily driver',
     aliases: ['qwen-reliable', 'house default'],

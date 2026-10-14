@@ -211,6 +211,7 @@ export const SETUP_WINDOWS_HUB_LINKS: SetupWindowsLink[] = [
   { href: '/setup/ollama', label: 'Ollama' },
   { href: '/setup/open-webui', label: 'Open WebUI' },
   { href: '/setup/wsl', label: 'WSL2' },
+  { href: '/setup/comfyui', label: 'ComfyUI' },
 ];
 
 export const REQUIRED_SETUP_WINDOWS_HREFS = [

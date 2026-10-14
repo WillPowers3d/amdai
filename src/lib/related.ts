@@ -91,6 +91,7 @@ function topicLinks(path: string): RelatedLink[] {
     path === '/setup/ollama' ||
     path === '/setup/open-webui' ||
     path === '/setup/wsl' ||
+    path === '/setup/comfyui' ||
     path === '/start'
   ) {
     return [
@@ -108,6 +109,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/setup/ollama', label: 'Ollama' },
       { href: '/setup/open-webui', label: 'Open WebUI' },
       { href: '/setup/wsl', label: 'WSL2 setup' },
+      { href: '/setup/comfyui', label: 'ComfyUI' },
       { href: '/image-gen', label: 'Image gen on Radeon' },
       { href: '/vision', label: 'Vision on Radeon' },
       { href: '/speech', label: 'Speech on Radeon' },
@@ -337,6 +339,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/setup/coding-assistant', label: 'Coding assistant' },
       { href: '/setup/ollama', label: 'Ollama' },
       { href: '/setup/open-webui', label: 'Open WebUI' },
+      { href: '/setup/comfyui', label: 'ComfyUI' },
       { href: '/multi-gpu', label: 'Dual / multi-GPU' },
       { href: '/gpus/r9700', label: 'R9700 measured page' },
       { href: '/speech', label: 'Speech on Radeon' },
@@ -593,6 +596,7 @@ export function assertRelatedValid(
     '/setup/ollama',
     '/setup/open-webui',
     '/setup/wsl',
+    '/setup/comfyui',
     '/faq',
     '/models/qwen36',
     '/models/flash',

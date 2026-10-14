@@ -33,7 +33,7 @@ describe('local image-gen guide', () => {
     assert.doesNotMatch(blob, /TODO|TBD|FIXME|coming soon/i);
     assert.doesNotMatch(blob, /\$\d|\bMSRP\b/);
     const hrefs = imageGenHrefs();
-    for (const href of ['/gpus/r9700', '/gpus/strix-halo', '/harnesses/image', '/multi-gpu', '/calculator', '/stack-lab']) {
+    for (const href of ['/gpus/r9700', '/gpus/strix-halo', '/harnesses/image', '/setup/comfyui', '/multi-gpu', '/calculator', '/stack-lab']) {
       assert.ok(hrefs.includes(href), href);
     }
     assert.ok(IMAGE_GEN_FIT_ROWS.every((row) => row.speed === IMAGE_GEN_SPEED_LABEL));

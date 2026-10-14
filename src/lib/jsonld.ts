@@ -15,6 +15,7 @@ import { SETUP_CODING_HOWTO_STEPS, SETUP_CODING_PUBLISHED } from './setup-coding
 import { SETUP_OLLAMA_HOWTO_STEPS, SETUP_OLLAMA_PUBLISHED } from './setup-ollama';
 import { SETUP_OPEN_WEBUI_HOWTO_STEPS, SETUP_OPEN_WEBUI_PUBLISHED } from './setup-open-webui';
 import { SETUP_WSL_HOWTO_STEPS, SETUP_WSL_PUBLISHED } from './setup-wsl';
+import { SETUP_COMFYUI_HOWTO_STEPS, SETUP_COMFYUI_PUBLISHED } from './setup-comfyui';
 import { IMAGE_GEN_HOWTO_STEPS, IMAGE_GEN_PUBLISHED } from './image-gen';
 import { SPEECH_HOWTO_STEPS, SPEECH_PUBLISHED } from './speech';
 import { LONG_CONTEXT_FAQ, LONG_CONTEXT_PUBLISHED } from './long-context';
@@ -523,6 +524,19 @@ export function pageJsonLd(input: {
         published: dates?.published ?? SETUP_WSL_PUBLISHED,
         modified: dates?.modified ?? SETUP_WSL_PUBLISHED,
         steps: SETUP_WSL_HOWTO_STEPS,
+      }),
+    );
+    return nodes;
+  }
+  if (path === '/setup/comfyui') {
+    nodes.push(
+      howToJsonLd({
+        name: input.title.replace(/ · AMDai$/, ''),
+        description: input.description,
+        url,
+        published: dates?.published ?? SETUP_COMFYUI_PUBLISHED,
+        modified: dates?.modified ?? SETUP_COMFYUI_PUBLISHED,
+        steps: SETUP_COMFYUI_HOWTO_STEPS,
       }),
     );
     return nodes;

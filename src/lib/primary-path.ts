@@ -130,6 +130,7 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
     { href: '/setup/ollama', label: 'Ollama' },
     { href: '/setup/open-webui', label: 'Open WebUI' },
     { href: '/setup/wsl', label: 'WSL2 setup' },
+    { href: '/setup/comfyui', label: 'ComfyUI' },
   ],
   '/setup/windows': [
     { href: '/setup', label: 'First-run setup' },
@@ -145,6 +146,7 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
     { href: '/setup/ollama', label: 'Ollama' },
     { href: '/setup/open-webui', label: 'Open WebUI' },
     { href: '/setup/wsl', label: 'WSL2 setup' },
+    { href: '/setup/comfyui', label: 'ComfyUI' },
   ],
   '/setup/fedora': [
     { href: '/setup', label: 'First-run setup' },
@@ -243,6 +245,16 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
     { href: '/setup/arch', label: 'Arch setup' },
     { href: '/backends/llamacpp', label: 'llama.cpp' },
     { href: '/rocm-problems/windows-wsl-preview', label: 'WSL2 preview' },
+    { href: '/troubleshoot', label: 'Troubleshoot' },
+    { href: '/calculator', label: 'Calculator' },
+  ],
+  '/setup/comfyui': [
+    { href: '/image-gen', label: 'Image gen on Radeon' },
+    { href: '/setup', label: 'First-run setup' },
+    { href: '/harnesses/image', label: 'ComfyUI harness' },
+    { href: '/rocm/versions', label: 'ROCm versions' },
+    { href: '/gpus/r9700', label: 'R9700 measured page' },
+    { href: '/multi-gpu', label: 'Dual / multi-GPU' },
     { href: '/troubleshoot', label: 'Troubleshoot' },
     { href: '/calculator', label: 'Calculator' },
   ],
@@ -595,6 +607,7 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
     { href: '/faq', label: 'FAQ' },
   ],
   '/image-gen': [
+    { href: '/setup/comfyui', label: 'ComfyUI setup' },
     { href: '/harnesses/image', label: 'ComfyUI harness' },
     { href: '/setup', label: 'First-run setup' },
     { href: '/gpus/r9700', label: 'R9700 measured page' },

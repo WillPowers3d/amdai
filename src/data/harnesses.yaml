@@ -645,7 +645,7 @@ harnesses:
     summary: >-
       Node-based image (and video) graphs. AMD documents install on ROCm-enabled
       PyTorch, then python ComfyUI/main.py → http://127.0.0.1:8188. Already
-      runs on local-desktop — shopper guide at /image-gen. Speeds not yet measured by AMDai.
+      runs on local-desktop — first-run at /setup/comfyui, fit tables at /image-gen. Speeds not yet measured by AMDai.
     what_for: Diffusion workflows on the Radeon — not an LLM harness. Does not speak llama-server /v1.
     homepage: https://github.com/comfyanonymous/ComfyUI
     docs: https://rocm.docs.amd.com/projects/ai-ecosystem/en/latest/inference/comfy.html

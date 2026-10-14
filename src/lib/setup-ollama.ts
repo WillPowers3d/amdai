@@ -267,6 +267,7 @@ export const SETUP_OLLAMA_HUB_LINKS: SetupOllamaLink[] = [
   { href: '/setup/lm-studio', label: 'LM Studio' },
   { href: '/setup/open-webui', label: 'Open WebUI' },
   { href: '/setup/wsl', label: 'WSL2' },
+  { href: '/setup/comfyui', label: 'ComfyUI' },
   { href: '/rocm/vulkan-hip', label: 'Vulkan vs HIP' },
   { href: '/rocm-problems', label: 'ROCm problems' },
   { href: '/calculator', label: 'Calculator' },

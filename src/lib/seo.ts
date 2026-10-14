@@ -232,6 +232,7 @@ export const CRUMB_LABELS: Record<string, string> = {
   '/setup/ollama': 'Ollama',
   '/setup/open-webui': 'Open WebUI',
   '/setup/wsl': 'WSL2',
+  '/setup/comfyui': 'ComfyUI',
   '/stack-lab': 'Stack Lab',
   '/stacks': 'Stacks',
   '/calculator': 'Calculator',
@@ -391,6 +392,12 @@ setMeta(
   'Cited ROCm WSL2 preview on Radeon: listed cards, Ubuntu guest, llama.cpp HIP. Native Linux stays measured. Not measured on local-desktop.',
 );
 setDate('/setup/wsl', '2026-10-14');
+setMeta(
+  '/setup/comfyui',
+  'Run ComfyUI on a Radeon GPU',
+  'Cited ComfyUI on Radeon: Ubuntu git clone, ROCm PyTorch, first workflow. llama.cpp stays first for LLMs. No ComfyUI speeds on AMDai.',
+);
+setDate('/setup/comfyui', '2026-10-14');
 setMeta(
   '/image-gen',
   'Local image gen on Radeon',

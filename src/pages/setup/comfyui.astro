@@ -1,0 +1,202 @@
+---
+import Base from '../../layouts/Base.astro';
+import Callout from '../../components/Callout.astro';
+import HouseRam from '../../components/HouseRam.astro';
+import HowWeTest from '../../components/HowWeTest.astro';
+import NextSteps from '../../components/NextSteps.astro';
+import OpenInStackLab from '../../components/OpenInStackLab.astro';
+import { HOUSE_STACK_LAB } from '../../lib/stack-lab-open';
+import { RAM_FULL_LABEL, RAM_MIN_LABEL } from '../../lib/ram-surfaces';
+import {
+  SETUP_COMFYUI_CITED_LABEL,
+  SETUP_COMFYUI_CLONE,
+  SETUP_COMFYUI_HUB_LINKS,
+  SETUP_COMFYUI_LINUX_TORCH,
+  SETUP_COMFYUI_PIP,
+  SETUP_COMFYUI_QUANTS,
+  SETUP_COMFYUI_RUN,
+  SETUP_COMFYUI_SOURCES,
+  SETUP_COMFYUI_SPEED_LABEL,
+  SETUP_COMFYUI_STEPS,
+  SETUP_COMFYUI_TRACKS,
+  SETUP_COMFYUI_UI,
+} from '../../lib/setup-comfyui';
+---
+
+<Base
+  title="Run ComfyUI on a Radeon GPU"
+  description="Cited ComfyUI on Radeon: Ubuntu git clone, ROCm PyTorch, first workflow. llama.cpp stays first for LLMs. No ComfyUI speeds on AMDai."
+>
+  <main id="main" class="mx-auto max-w-3xl px-4 py-10 sm:px-6">
+    <p class="kicker">{SETUP_COMFYUI_CITED_LABEL}</p>
+    <h1 class="mt-3 font-serif text-4xl tracking-tight sm:text-5xl">Run ComfyUI on a Radeon GPU</h1>
+    <p class="mt-4 text-lg leading-relaxed text-muted">
+      ComfyUI is the AMDai first image-gen path — a node graph on
+      HIP/ROCm PyTorch. It does not speak llama-server
+      <code>/v1</code>.
+      llama.cpp stays first for local LLMs. Ubuntu 24.04+ is the first try —
+      <a class="underline decoration-accent/40" href="/setup">/setup</a>.
+      Fit tables stay on
+      <a class="underline decoration-accent/40" href="/image-gen">/image-gen</a>.
+      Speeds are
+      <strong class="text-ink">{SETUP_COMFYUI_SPEED_LABEL}</strong>.
+      We do not invent a seconds-per-image or a price.
+    </p>
+    <ul class="mt-4 flex flex-wrap gap-2">
+      {SETUP_COMFYUI_HUB_LINKS.map((link) => (
+        <li>
+          <a
+            class="inline-flex min-h-9 items-center rounded-full border border-line bg-canvas px-3 text-sm text-ink hover:border-accent/50 hover:text-accent-ink"
+            href={link.href}
+          >
+            {link.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+
+    <Callout type="warn" title="Image gen, not llama.cpp">
+      <p>
+        Official 35B decode numbers are Ubuntu llama-bench cards. ComfyUI cannot
+        claim those tok/s. Point a chat UI at llama-server; point a diffusion
+        graph at
+        <code>{SETUP_COMFYUI_UI}</code>.
+      </p>
+    </Callout>
+
+    <section id="tracks" class="mt-12 scroll-mt-28" aria-labelledby="tracks-heading">
+      <h2 id="tracks-heading" class="font-serif text-3xl tracking-tight">Linux first</h2>
+      <div class="mt-6 grid gap-4">
+        {SETUP_COMFYUI_TRACKS.map((track) => (
+          <article id={track.id} class="scroll-mt-28 rounded-2xl border border-line bg-raised/50 p-5">
+            <p class="kicker">{track.recommend ? 'Try this' : 'Secondary path'}</p>
+            <h3 class="mt-2 font-serif text-2xl tracking-tight">{track.title}</h3>
+            <p class="mt-3 leading-relaxed text-ink">{track.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section id="checklist" class="mt-12 scroll-mt-28" aria-labelledby="checklist-heading">
+      <h2 id="checklist-heading" class="font-serif text-3xl tracking-tight">Zero to first image</h2>
+      <ol class="mt-8 space-y-6">
+        {SETUP_COMFYUI_STEPS.map((step, index) => (
+          <li id={step.id} class="scroll-mt-28 rounded-2xl border border-line bg-raised/50 p-5">
+            <p class="font-mono text-[0.68rem] uppercase tracking-[0.14em] text-faint">
+              {index + 1} · {SETUP_COMFYUI_CITED_LABEL}
+            </p>
+            <h3 class="mt-2 font-serif text-2xl tracking-tight">{step.title}</h3>
+            <p class="mt-3 leading-relaxed text-ink">{step.body}</p>
+            <ul class="mt-4 flex flex-wrap gap-2">
+              {step.links.map((link) => (
+                <li>
+                  <a
+                    class="inline-flex min-h-9 items-center rounded-full border border-line bg-canvas px-3 text-sm text-ink hover:border-accent/50 hover:text-accent-ink"
+                    href={link.href}
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <section id="commands" class="mt-12 scroll-mt-28" aria-labelledby="commands-heading">
+      <h2 id="commands-heading" class="font-serif text-3xl tracking-tight">Cited commands</h2>
+      <p class="mt-3 leading-relaxed text-muted">
+        Official AMD clone, ComfyUI README Linux ROCm 7.2 wheel, then
+        <code>{SETUP_COMFYUI_PIP}</code>
+        and
+        <code>{SETUP_COMFYUI_RUN}</code>.
+        UI is
+        <code>{SETUP_COMFYUI_UI}</code>.
+      </p>
+      <pre class="mt-3 overflow-x-auto rounded-2xl border border-line bg-raised/50 p-4 text-sm leading-relaxed text-ink"><code>{SETUP_COMFYUI_CLONE}</code></pre>
+      <pre class="mt-3 overflow-x-auto rounded-2xl border border-line bg-raised/50 p-4 text-sm leading-relaxed text-ink"><code>{SETUP_COMFYUI_LINUX_TORCH}</code></pre>
+      <pre class="mt-3 overflow-x-auto rounded-2xl border border-line bg-raised/50 p-4 text-sm leading-relaxed text-ink"><code>{SETUP_COMFYUI_PIP}</code></pre>
+      <pre class="mt-3 overflow-x-auto rounded-2xl border border-line bg-raised/50 p-4 text-sm leading-relaxed text-ink"><code>{SETUP_COMFYUI_RUN}</code></pre>
+    </section>
+
+    <section id="quants" class="mt-12 scroll-mt-28" aria-labelledby="quants-heading">
+      <h2 id="quants-heading" class="font-serif text-3xl tracking-tight">If an LLM shares the box</h2>
+      <p class="mt-3 leading-relaxed text-muted">
+        Diffusion checkpoints are not GGUF Q6/Q5/Q4. These rows are
+        <strong class="text-ink">llama.cpp LLM picks only</strong>.
+        Q3 stays a labeled estimate. Nothing below Q3.
+      </p>
+      <div class="mt-6 overflow-x-auto">
+        <table class="w-full min-w-[32rem] border-collapse text-left text-sm">
+          <caption class="sr-only">
+            LLM GGUF quants if llama.cpp shares a Radeon with ComfyUI. Not ComfyUI speeds.
+          </caption>
+          <thead>
+            <tr class="border-b border-line">
+              <th scope="col" class="py-2 pr-3 font-medium">Quant</th>
+              <th scope="col" class="py-2 pr-3 font-medium">Role</th>
+              <th scope="col" class="py-2 font-medium">LLM note (not ComfyUI)</th>
+            </tr>
+          </thead>
+          <tbody>
+            {SETUP_COMFYUI_QUANTS.map((row) => (
+              <tr class="border-b border-line/70 align-top">
+                <th scope="row" class="py-3 pr-3 font-mono text-ink">
+                  {row.quant}
+                  {row.estimate ? (
+                    <span class="mt-1 block font-sans text-xs font-normal text-faint">Estimate</span>
+                  ) : null}
+                </th>
+                <td class="py-3 pr-3 text-muted">{row.role}</td>
+                <td class="py-3 text-ink">{row.note}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="fit-ram" class="mt-12 scroll-mt-28" aria-labelledby="fit-ram-heading">
+      <h2 id="fit-ram-heading" class="font-serif text-3xl tracking-tight">RAM lines</h2>
+      <p class="mt-3 leading-relaxed text-muted">
+        <strong class="text-ink">{RAM_MIN_LABEL}</strong>
+        is the kit estimate for the box.
+        <strong class="text-ink">{RAM_FULL_LABEL}</strong>
+        is the llama.cpp KV line — omit it for image-gen-only. House 35B peaks
+        below are Ubuntu llama.cpp, not ComfyUI.
+      </p>
+      <div class="mt-4">
+        <HouseRam which="daily" compact />
+      </div>
+    </section>
+
+    <section id="stack-lab-cta" class="mt-12 scroll-mt-28" aria-labelledby="stack-lab-cta-heading">
+      <h2 id="stack-lab-cta-heading" class="font-serif text-3xl tracking-tight">Open in Stack Lab</h2>
+      <p class="mt-3 leading-relaxed text-muted">
+        Stack Lab remains Ubuntu llama.cpp-first. There is no ComfyUI or
+        image-gen package and no public download. Doctor still checks the
+        box you already have.
+      </p>
+      <div class="mt-4">
+        <OpenInStackLab {...HOUSE_STACK_LAB.doctor} compact />
+      </div>
+    </section>
+
+    <section id="sources" class="mt-12 scroll-mt-28" aria-labelledby="sources-heading">
+      <h2 id="sources-heading" class="font-serif text-3xl tracking-tight">Sources</h2>
+      <ul class="mt-4 list-disc space-y-2 pl-5 text-sm leading-relaxed text-muted">
+        {SETUP_COMFYUI_SOURCES.map((source) => (
+          <li>
+            <a class="underline decoration-accent/40" href={source.href} rel="noopener">{source.title}</a>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <div class="mt-8">
+      <HowWeTest />
+    </div>
+    <NextSteps path="/setup/comfyui" />
+  </main>
+</Base>

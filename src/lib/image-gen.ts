@@ -210,6 +210,7 @@ export const IMAGE_GEN_LINUX_STEPS: ImageGenStep[] = [
       'Bare-metal Ubuntu 24.04+ is the AMDai measured path for ROCm on local-desktop. Image-gen follows that OS even though we have no first-party image-gen card yet. See the GPU in rocminfo before you download a checkpoint. Windows is a cited second path, not the first try.',
     links: [
       { href: '/setup', label: 'First-run setup' },
+      { href: '/setup/comfyui', label: 'ComfyUI setup' },
       { href: '/gpus/r9700', label: 'R9700 measured page' },
       { href: '/gpus', label: 'GPU directory' },
     ],
@@ -233,6 +234,7 @@ export const IMAGE_GEN_LINUX_STEPS: ImageGenStep[] = [
     links: [
       { href: 'https://rocm.docs.amd.com/projects/ai-ecosystem/en/latest/inference/comfy.html', label: 'AMD ComfyUI on ROCm' },
       { href: 'https://github.com/comfyanonymous/ComfyUI', label: 'ComfyUI repo' },
+      { href: '/setup/comfyui', label: 'ComfyUI setup' },
       { href: '/harnesses/image', label: 'ComfyUI harness card' },
     ],
   },
@@ -333,6 +335,7 @@ export const IMAGE_GEN_SECTIONS = [
 ] as const;
 
 export const IMAGE_GEN_HUB_LINKS: ImageGenLink[] = [
+  { href: '/setup/comfyui', label: 'ComfyUI setup' },
   { href: '/harnesses/image', label: 'ComfyUI harness' },
   { href: '/setup', label: 'Ubuntu setup' },
   { href: '/gpus/r9700', label: 'R9700' },
@@ -345,6 +348,7 @@ export const IMAGE_GEN_HUB_LINKS: ImageGenLink[] = [
 export const REQUIRED_IMAGE_GEN_HREFS = [
   '/harnesses/image',
   '/setup',
+  '/setup/comfyui',
   '/setup/windows',
   '/gpus/r9700',
   '/gpus/strix-halo',

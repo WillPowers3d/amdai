@@ -230,6 +230,7 @@ export const SETUP_FEDORA_HUB_LINKS: SetupFedoraLink[] = [
   { href: '/setup/ollama', label: 'Ollama' },
   { href: '/setup/open-webui', label: 'Open WebUI' },
   { href: '/setup/wsl', label: 'WSL2' },
+  { href: '/setup/comfyui', label: 'ComfyUI' },
   { href: '/gpus/r9700', label: 'R9700' },
   { href: '/benchmarks', label: 'Benchmarks' },
   { href: '/start', label: 'Getting started' },

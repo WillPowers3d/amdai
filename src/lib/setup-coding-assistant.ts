@@ -351,6 +351,7 @@ export const SETUP_CODING_HUB_LINKS: SetupCodingLink[] = [
   { href: '/setup/ollama', label: 'Ollama' },
   { href: '/setup/open-webui', label: 'Open WebUI' },
   { href: '/setup/wsl', label: 'WSL2' },
+  { href: '/setup/comfyui', label: 'ComfyUI' },
   { href: '/backends/llamacpp', label: 'llama.cpp' },
   { href: '/harnesses', label: 'Harnesses' },
   { href: '/models/qwen36', label: 'Qwen3.6-35B' },
