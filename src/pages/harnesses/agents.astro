@@ -22,7 +22,9 @@ const rows = harnessesByCategory(harnesses(), 'agent');
       <code>/v1</code> chat clients and are not used on our rig. Claude Code and Codex CLI attach
       only where the local server implements their native APIs (Anthropic Messages / OpenAI
       Responses) — not a drop-in <code>/v1/chat/completions</code> assumption. Cursor’s override
-      is not a first-class localhost path.
+      is not a first-class localhost path. OpenAI-style tools and structured JSON on
+      llama-server are on
+      <a class="underline decoration-accent/40" href="/guides/tool-calling">tool calling</a>.
     </p>
     <ul class="mt-8 grid gap-3">
       {rows.map((row) => (

@@ -219,6 +219,7 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
     { href: '/setup/ollama', label: 'Ollama' },
     { href: '/setup/open-webui', label: 'Open WebUI' },
     { href: '/long-context', label: 'Long context' },
+    { href: '/guides/tool-calling', label: 'Tool calling' },
   ],
   '/setup/ollama': [
     { href: '/setup', label: 'First-run setup' },
@@ -240,6 +241,7 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
     { href: '/setup/ollama', label: 'Ollama' },
     { href: '/setup/lm-studio', label: 'LM Studio' },
     { href: '/calculator', label: 'Calculator' },
+    { href: '/guides/tool-calling', label: 'Tool calling' },
   ],
   '/setup/wsl': [
     { href: '/setup', label: 'First-run setup' },
@@ -755,6 +757,18 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
     { href: '/moe', label: 'MoE on Radeon' },
     { href: '/multi-gpu', label: 'Dual / multi-GPU' },
     { href: '/benchmarks', label: 'Benchmarks' },
+  ],
+  '/guides/tool-calling': [
+    { href: '/setup/coding-assistant', label: 'Coding assistant' },
+    { href: '/harnesses', label: 'Harnesses' },
+    { href: '/harnesses/hermes', label: 'Hermes' },
+    { href: '/setup/open-webui', label: 'Open WebUI' },
+    { href: '/backends/llamacpp', label: 'llama.cpp' },
+    { href: '/speculative-decoding', label: 'Speculative decoding' },
+    { href: '/long-context', label: 'Long context' },
+    { href: '/stack-lab', label: 'Stack Lab' },
+    { href: '/amdai-bench', label: 'amdai-bench' },
+    { href: '/calculator', label: 'Calculator' },
   ],
   '/moe': [
     { href: '/flash-ram-offload', label: 'Flash RAM offload' },
