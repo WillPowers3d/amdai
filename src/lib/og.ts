@@ -498,6 +498,12 @@ export const OG_CARDS: OgCard[] = [
     alt: 'AMDai speed up llama.cpp on Radeon — cited flags, measured 35B cells only',
   },
   {
+    slug: 'constrained-decoding',
+    title: 'Constrained decoding on Radeon',
+    lede: 'Cited GBNF and JSON schema. Measure Stack Lab grammar-ab/1',
+    alt: 'AMDai constrained decoding on Radeon — cited llama.cpp GBNF and JSON schema',
+  },
+  {
     slug: 'moe',
     title: 'Mixture-of-Experts on a Radeon GPU',
     lede: 'Why 35B-A3B fits one 32 GB R9700. Dense 27B and Flash differ',

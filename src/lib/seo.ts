@@ -223,6 +223,7 @@ export const CRUMB_LABELS: Record<string, string> = {
   '/power': 'Power',
   '/fine-tuning': 'Fine-tuning',
   '/tuning': 'Tuning',
+  '/constrained-decoding': 'Constrained decoding',
   '/moe': 'MoE',
   '/can-run': 'Can my Radeon run it?',
   '/setup': 'First-run setup',
@@ -463,6 +464,12 @@ setMeta(
   'Speed up llama.cpp on Radeon. Cited -ngl, threads, batch, -fa, KV, split, draft, power. Measured 35B cells only. Q3 is a labeled estimate.',
 );
 setDate('/tuning', '2026-10-14');
+setMeta(
+  '/constrained-decoding',
+  'Constrained decoding on a Radeon GPU',
+  'Constrained decoding on Radeon with llama.cpp. Cited GBNF and JSON schema. Measure decode vs free-form on Stack Lab grammar-ab/1. Q3 is a labeled estimate.',
+);
+setDate('/constrained-decoding', '2026-10-14');
 setMeta(
   '/moe',
   'Mixture-of-Experts on a Radeon GPU',

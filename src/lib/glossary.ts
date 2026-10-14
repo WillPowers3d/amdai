@@ -175,6 +175,23 @@ export const GLOSSARY: GlossaryEntry[] = [
     seeAlso: ['kv-cache', 'prefill-decode', 'quant'],
   },
   {
+    id: 'constrained-decoding',
+    term: 'Constrained decoding',
+    aliases: ['grammar sampling', 'JSON schema decode', 'structured JSON'],
+    letter: 'C',
+    definition:
+      'llama.cpp grammar sampling so every next token still matches a GBNF grammar or a JSON Schema converted to GBNF. Used for tool args, calculator output, and recipe export.',
+    why: 'Hermes and coding tools need JSON that parses. Official flags are --grammar / --json-schema and response_format. Grammar decode versus free-form is not measured on local-desktop — run Stack Lab grammar-ab/1. The schema is not injected into the prompt except during tool calling.',
+    deeper:
+      'llama.cpp server README (checked 2026-10-14): --grammar, --grammar-file, -j / --json-schema, -jf / --json-schema-file, plus grammar / json_schema body fields. grammars/README.md: JSON Schemas → GBNF; performance gotchas on issue #4218. Shopper how-to: /constrained-decoding.',
+    links: [
+      { href: '/constrained-decoding', label: 'Constrained decoding' },
+      { href: '/setup/coding-assistant', label: 'Coding assistant' },
+      { href: '/tuning', label: 'Speed up llama.cpp' },
+    ],
+    seeAlso: ['gbnf', 'llamacpp', 'instruct'],
+  },
+  {
     id: 'container',
     term: 'Container (Docker / Podman)',
     aliases: ['Docker', 'Podman', 'container image'],
@@ -330,6 +347,23 @@ export const GLOSSARY: GlossaryEntry[] = [
       { href: '/tutorials/verify-rocm', label: 'Verify GPU and ROCm' },
     ],
     seeAlso: ['rdna4', 'r9700', 'rocm'],
+  },
+  {
+    id: 'gbnf',
+    term: 'GBNF',
+    aliases: ['GGML BNF', '.gbnf', 'grammar file'],
+    letter: 'G',
+    definition:
+      'GGML Backus–Naur Form — the grammar language llama.cpp uses to constrain decode. A JSON Schema is converted to GBNF. Samples live in llama.cpp grammars/.',
+    why: 'Use GBNF when the output is not JSON, or the official schema subset cannot express the shape. Use a JSON Schema when the output is a JSON object. Shopper how-to: /constrained-decoding.',
+    deeper:
+      'Official grammars/README.md: production rules, a root rule, and --grammar / --grammar-file. Server README also accepts -j / --json-schema. Do not invent a tok/s cost; measure Stack Lab grammar-ab/1.',
+    links: [
+      { href: '/constrained-decoding', label: 'Constrained decoding' },
+      { href: '/backends/llamacpp', label: 'llama.cpp' },
+      { href: '/setup/coding-assistant', label: 'Coding assistant' },
+    ],
+    seeAlso: ['constrained-decoding', 'llamacpp', 'instruct'],
   },
   {
     id: 'gguf',

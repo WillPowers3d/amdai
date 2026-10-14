@@ -436,6 +436,17 @@ export const TUNING_FAQ: TuningFaq[] = [
       { href: '/compare/q4-q5-q6', label: 'Q6 / Q5 / Q4 + Q3 estimate' },
     ],
   },
+  {
+    id: 'structured-json',
+    question: 'How do I force valid JSON from llama.cpp?',
+    answer:
+      'That is constrained decoding, not a speed knob. Official --grammar / --json-schema and response_format live on /constrained-decoding. Grammar decode versus free-form is not measured on local-desktop — run Stack Lab grammar-ab/1.',
+    links: [
+      { href: '/constrained-decoding', label: 'Constrained decoding' },
+      { href: '/setup/coding-assistant', label: 'Coding assistant' },
+      { href: '/stack-lab', label: 'Stack Lab' },
+    ],
+  },
 ];
 
 export const TUNING_SECTIONS = [
@@ -449,6 +460,7 @@ export const TUNING_SECTIONS = [
 
 export const TUNING_HUB_LINKS: TuningLink[] = [
   { href: '/backends/llamacpp', label: 'llama.cpp' },
+  { href: '/constrained-decoding', label: 'Constrained decoding' },
   { href: '/long-context', label: 'Long context' },
   { href: '/multi-gpu', label: 'Dual / multi-GPU' },
   { href: '/power', label: 'Power' },
@@ -481,6 +493,7 @@ export const REQUIRED_TUNING_HREFS = [
   '/recipes/qwen36-35b.llamacpp-vulkan.262k',
   '/gpus/r9700',
   '/faq',
+  '/constrained-decoding',
 ] as const;
 
 export function tuningOffloadRamNeed(): SystemRamNeed {

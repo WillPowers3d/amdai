@@ -60,7 +60,7 @@ export const CATEGORY_COPY: Record<HarnessCategory, { label: string; href: strin
   agent: {
     label: 'Agent harnesses',
     href: '/harnesses/agents',
-    lede: 'Tool loops on top of an OpenAI-compatible /v1. Coding agents, CLIs, and IDE extensions.',
+    lede: 'Tool loops on top of an OpenAI-compatible /v1. Coding agents, CLIs, and IDE extensions. Structured JSON: /constrained-decoding.',
   },
   chat: {
     label: 'Chat UIs',

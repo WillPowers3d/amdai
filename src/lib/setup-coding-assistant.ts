@@ -305,7 +305,7 @@ export const SETUP_CODING_STEPS: SetupCodingStep[] = [
   {
     id: 'clients',
     title: 'Point Aider, Cline, and Continue at :8080/v1',
-    body: `Copy the blocks below. Base URL is ${SETUP_CODING_SERVER}. Model id must match GET /v1/models (house placeholder ${SETUP_CODING_MODEL}; llama-server --alias sets it). API key is the non-empty placeholder ${SETUP_CODING_API_KEY} — Aider requires it even locally. LM Studio is :1234 if you already followed /setup/lm-studio. House Hermes on local-desktop uses this same :8080. Attach is cited, not measured on local-desktop.`,
+    body: `Copy the blocks below. Base URL is ${SETUP_CODING_SERVER}. Model id must match GET /v1/models (house placeholder ${SETUP_CODING_MODEL}; llama-server --alias sets it). API key is the non-empty placeholder ${SETUP_CODING_API_KEY} — Aider requires it even locally. LM Studio is :1234 if you already followed /setup/lm-studio. House Hermes on local-desktop uses this same :8080. Attach is cited, not measured on local-desktop. For reliable tool-arg JSON, cite llama.cpp --json-schema / GBNF on /constrained-decoding — grammar decode is not a harness tok/s.`,
     links: [
       { href: '/harnesses', label: 'Harnesses' },
       { href: '/harnesses/aider', label: 'Aider' },
@@ -313,6 +313,7 @@ export const SETUP_CODING_STEPS: SetupCodingStep[] = [
       { href: '/harnesses/continue', label: 'Continue' },
       { href: '/harnesses/hermes', label: 'Hermes' },
       { href: '/harnesses/connect', label: 'Connect a harness' },
+      { href: '/constrained-decoding', label: 'Constrained decoding' },
     ],
   },
   {
@@ -355,6 +356,7 @@ export const SETUP_CODING_HUB_LINKS: SetupCodingLink[] = [
   { href: '/setup/multi-gpu', label: 'Multi-GPU llama.cpp' },
   { href: '/backends/llamacpp', label: 'llama.cpp' },
   { href: '/harnesses', label: 'Harnesses' },
+  { href: '/constrained-decoding', label: 'Constrained decoding' },
   { href: '/models/qwen36', label: 'Qwen3.6-35B' },
   { href: '/gpus/r9700', label: 'R9700' },
   { href: '/calculator', label: 'Calculator' },
@@ -371,6 +373,7 @@ export const REQUIRED_SETUP_CODING_HREFS = [
   '/backends',
   '/backends/llamacpp',
   '/harnesses',
+  '/constrained-decoding',
   '/harnesses/aider',
   '/harnesses/cline',
   '/harnesses/continue',
