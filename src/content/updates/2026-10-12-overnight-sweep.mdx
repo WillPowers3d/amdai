@@ -14,6 +14,6 @@ Read the cards on [`/results`](/results). The [35B measured table](/stacks#bench
 Caveats, on every card and in the table footnote:
 
 - **Measured, pending re-verify after RAM fix.** DDR5-5200 later proved unstable. A kernel oops at 00:14 CT aborted the sweep. All 33 cards predate that oops. Each card already notes one transient bad read in earlier sha256 passes.
-- **Q6_K single-GPU 4K disagrees.** 23:26 = 82.62 tok/s decode; 23:55 = 103.23 tok/s. Both cards stay up. Neither is averaged or dropped. Flagged for re-run.
+- **Q6_K single-GPU 4K table cell is 103.23 tok/s** from the 23:55 card (the 4K point in the complete Q6_K single-GPU series). The earlier 23:26 card at 82.62 tok/s stays on /results and is not averaged into the cell.
 
 Flash rows listed only in the human summary were **not** ingested. Q3 comparison rows stay cited estimates. Nothing below Q4 ran on local-desktop in this drop.

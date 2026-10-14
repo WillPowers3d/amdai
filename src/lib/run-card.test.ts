@@ -71,7 +71,10 @@ describe('amdai-bench/run@1', () => {
       (card) => card.model.quant === 'Q6_K' && card.config.context_tokens === 4096 && card.hardware.gpu_count_used === 1,
     );
     assert.equal(q6pair.length, 2);
-    assert.ok(q6pair.every((card) => (card.notes ?? '').includes(Q6_4K_VARIANCE_NOTE)));
+    const superseded = q6pair.find((card) => card.run_id === 'local-desktop-20261012-2326-35b-q6k-1gpu-4k-llamacpp-f16');
+    const canonical = q6pair.find((card) => card.run_id === 'local-desktop-20261012-2355-35b-q6k-1gpu-4k-llamacpp-f16');
+    assert.equal(superseded?.results.decode_tps, 82.62);
+    assert.equal(canonical?.results.decode_tps, 103.23);
     assert.ok(!sweep.some((card) => /flash/i.test(card.model.name)));
     assert.ok(runs.every((card) => card.software.launch_command.trim().length > 0));
     assert.equal(flashQ3FromRuns(runs), null);
@@ -100,7 +103,7 @@ describe('amdai-bench/run@1', () => {
     assert.equal(table.rows[2]?.decode_short, '117.69 tok/s');
     assert.equal(table.rows[2]?.prefill_32k, '1902.1 tok/s');
     assert.equal(table.rows[3]?.quant, 'Q6_K');
-    assert.equal(table.rows[3]?.decode_short, '82.62 / 103.23 tok/s');
+    assert.equal(table.rows[3]?.decode_short, '103.23 tok/s');
     assert.match(table.rows[3]?.flag ?? '', /DDR5/);
     assert.ok(table.notes.some((note) => /pending a rerun/i.test(note)));
     assert.ok(table.notes.some((note) => /pending re-verify after RAM fix/i.test(note)));
@@ -115,8 +118,10 @@ describe('amdai-bench/run@1', () => {
     assert.equal(ud4k?.both.vramPerGpu, '13.28 / 13.11 GB');
     assert.ok(ud4k?.one.runIds.length);
     const q6short = table.compare.find((row) => row.quant === 'Q6_K' && row.context === 4096);
-    assert.equal(q6short?.one.decode, '82.62 / 103.23 tok/s');
-    assert.equal(q6short?.one.systemRam, '40.91 / 40.15 GB');
+    assert.equal(q6short?.one.decode, '103.23 tok/s');
+    assert.equal(q6short?.one.systemRam, '40.15 GB');
+    assert.deepEqual(q6short?.one.runIds, ['local-desktop-20261012-2355-35b-q6k-1gpu-4k-llamacpp-f16']);
+    assert.ok(table.notes.some((note) => note.includes(Q6_4K_VARIANCE_NOTE)));
     const ramHits = measuredRamHitsFromRuns(runs);
     assert.ok(ramHits.length >= 33);
     assert.ok(ramHits.every((hit) => hit.peakGb > 0 && hit.runId));

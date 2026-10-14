@@ -119,6 +119,7 @@ describe('primary path and nav IA', () => {
       '/models/flash': '../pages/models/[id].astro',
       '/troubleshoot': '../pages/troubleshoot/index.astro',
       '/image-gen': '../pages/image-gen.astro',
+      '/vision': '../pages/vision.astro',
       '/speech': '../pages/speech.astro',
       '/long-context': '../pages/long-context.astro',
       '/rag': '../pages/rag.astro',

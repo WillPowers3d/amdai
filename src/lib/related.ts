@@ -74,6 +74,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/stack-lab', label: 'Stack Lab' },
       { href: '/setup/windows', label: 'Windows setup' },
       { href: '/image-gen', label: 'Image gen on Radeon' },
+      { href: '/vision', label: 'Vision on Radeon' },
       { href: '/speech', label: 'Speech on Radeon' },
       { href: '/long-context', label: 'Long context' },
       { href: '/rag', label: 'RAG on Radeon' },
@@ -195,7 +196,22 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/long-context', label: 'Long context' },
       { href: '/speech', label: 'Speech on Radeon' },
       { href: '/image-gen', label: 'Image gen on Radeon' },
+      { href: '/vision', label: 'Vision on Radeon' },
       { href: '/gpus/r9700', label: 'R9700 measured page' },
+    ];
+  }
+  if (path === '/vision') {
+    return [
+      { href: '/backends/llamacpp', label: 'llama.cpp' },
+      { href: '/image-gen', label: 'Image gen on Radeon' },
+      { href: '/setup', label: 'First-run setup' },
+      { href: '/setup/windows', label: 'Windows setup' },
+      { href: '/gpus/r9700', label: 'R9700 measured page' },
+      { href: '/calculator', label: 'Calculator' },
+      { href: '/models', label: 'House models' },
+      { href: '/wanted', label: 'Wanted' },
+      { href: '/speech', label: 'Speech on Radeon' },
+      { href: '/rag', label: 'RAG on Radeon' },
     ];
   }
   if (path === '/speech') {
@@ -211,6 +227,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/stack-lab', label: 'Stack Lab' },
       { href: '/long-context', label: 'Long context' },
       { href: '/rag', label: 'RAG on Radeon' },
+      { href: '/vision', label: 'Vision on Radeon' },
     ];
   }
   if (path === '/image-gen' || path.startsWith('/harnesses')) {
@@ -224,6 +241,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/multi-gpu', label: 'Dual / multi-GPU' },
       { href: '/gpus/r9700', label: 'R9700 measured page' },
       { href: '/speech', label: 'Speech on Radeon' },
+      { href: '/vision', label: 'Vision on Radeon' },
       { href: '/long-context', label: 'Long context' },
       { href: '/rag', label: 'RAG on Radeon' },
     ];
@@ -406,6 +424,7 @@ export function assertRelatedValid(
     '/models/qwen36',
     '/models/flash',
     '/image-gen',
+    '/vision',
     '/speech',
     '/long-context',
     '/rag',

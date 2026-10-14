@@ -35,8 +35,13 @@ export const FLASH_RERUN_NOTE =
 export const SWEEP_REVERIFY =
   'Measured, pending re-verify after RAM fix. DDR5-5200 later proved unstable; a kernel oops at 00:14 CT aborted the sweep. All 33 cards predate the oops. Each card already notes one transient bad read in earlier sha256 passes.';
 
+/** Earlier isolated 4K pass. Kept on /results. Not the 35B table cell. */
+export const Q6_4K_SUPERSEDED_RUN_ID = 'local-desktop-20261012-2326-35b-q6k-1gpu-4k-llamacpp-f16';
+/** 4K point in the complete Q6_K single-GPU series (4K → 32K → 128K → 256K). */
+export const Q6_4K_CANONICAL_RUN_ID = 'local-desktop-20261012-2355-35b-q6k-1gpu-4k-llamacpp-f16';
+
 export const Q6_4K_VARIANCE_NOTE =
-  'Q6_K single-GPU 4K has two runs that disagree (23:26 = 82.62 tok/s decode, 23:55 = 103.23 tok/s). Both are shown; neither is averaged or dropped. Flagged for re-run.';
+  'Q6_K single-GPU 4K table cell is 103.23 tok/s from the 23:55 card (the 4K point in the complete Q6_K single-GPU series). The earlier 23:26 card at 82.62 tok/s stays on /results and is not averaged into the cell.';
 
 export const Q6_DDR5_NOTE =
   'Partly offloaded to DDR5 on one GPU (llama.cpp --fit-target 1024). Decode is not an in-VRAM figure.';
@@ -584,6 +589,14 @@ export function measuredRamHitsFromRuns(cards: RunCard[]): MeasuredRamHit[] {
   return hits;
 }
 
+export function isSupersededQ6k4k(card: RunCard): boolean {
+  return card.run_id === Q6_4K_SUPERSEDED_RUN_ID;
+}
+
+export function tableMeasured(cards: RunCard[]): RunCard[] {
+  return verifiedMeasured(cards).filter((card) => !isSupersededQ6k4k(card));
+}
+
 export function q6OneGpu4kPair(cards: RunCard[]): { low: number; high: number } | null {
   const hits = matchRuns(verifiedMeasured(cards), {
     model: 'qwen36',
@@ -596,7 +609,7 @@ export function q6OneGpu4kPair(cards: RunCard[]): { low: number; high: number } 
     .map((card) => card.results.decode_tps)
     .filter((n): n is number => n != null)
     .sort((a, b) => a - b);
-  if (hits.length < 2) return null;
+  if (!hits.length) return null;
   return { low: hits[0]!, high: hits[hits.length - 1]! };
 }
 
@@ -609,7 +622,7 @@ export function qwen36TableFromRuns(cards: RunCard[]): {
   rows: Qwen36Row[];
   compare: Qwen36CompareRow[];
 } {
-  const pool = verifiedMeasured(cards);
+  const pool = tableMeasured(cards);
   const hitsFor = (quant: string, context: number, layout: RunLayout, gpus: number) =>
     matchRuns(pool, {
       model: 'qwen36',
@@ -644,7 +657,7 @@ export function qwen36TableFromRuns(cards: RunCard[]): {
         contextLabel: contextLabel(context),
         one: sideCell(oneHits),
         both: sideCell(bothHits),
-        flag: quant === 'Q6_K' && context >= 32768 ? q6off(context) : quant === 'Q6_K' && context === 4096 ? 'two 4K repeats' : undefined,
+        flag: quant === 'Q6_K' && context >= 32768 ? q6off(context) : undefined,
       });
     }
   }

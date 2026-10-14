@@ -191,7 +191,7 @@ export function winnerSummary(rows: Qwen36CompareRow[]): { one: number; two: num
       ? 'On this sweep, one R9700 usually decodes faster than a split of the same 35B. Split still cuts VRAM per card.'
       : two > one
         ? 'On this sweep, split decode wins more cells than one card. Still read the caveats — Q6 1-GPU is partly on DDR5 at 32K and up.'
-        : 'Decode winners are mixed or incomplete. Read each row and the run card; do not average Q6 4K repeats.';
+        : 'Decode winners are mixed or incomplete. Read each row and the run card.';
   return { one, two, tie, incomplete, headline };
 }
 

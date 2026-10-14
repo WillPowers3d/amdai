@@ -126,7 +126,7 @@ export const METHODOLOGY = {
   corrections: {
     title: 'Corrections',
     body:
-      'If a card or sentence is wrong, send a sourced recipe or note through Contribute — attach the log, do not invent a replacement tok/s. Official cards can be withdrawn. The 2026-10-12 35B sweep is labeled measured, pending re-verify after the DDR5-5200 oops. Both Q6 4K repeats stay up; we do not average them.',
+      'If a card or sentence is wrong, send a sourced recipe or note through Contribute — attach the log, do not invent a replacement tok/s. Official cards can be withdrawn. The 2026-10-12 35B sweep is labeled measured, pending re-verify after the DDR5-5200 oops. Q6_K 1-GPU 4K uses the 23:55 card (103.23 tok/s); the earlier 82.62 card stays on /results and is not averaged.',
   },
 };
 

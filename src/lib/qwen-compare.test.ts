@@ -79,7 +79,8 @@ describe('/qwen measured vs estimate', () => {
     assert.equal(q4?.prefill.llamacpp.value, 2733.9);
 
     const q6 = rows.find((r) => r.spec.modelKey === '35b-a3b' && r.spec.quant === 'Q6_K');
-    assert.match(q6?.decode.llamacpp.text ?? '', /82\.62 \/ 103\.23 @ 4K \(two repeats\)/);
+    assert.match(q6?.decode.llamacpp.text ?? '', /103\.23 @ 4K/);
+    assert.doesNotMatch(q6?.decode.llamacpp.text ?? '', /82\.62/);
 
     const coder = rows.filter((r) => r.spec.modelKey === 'coder390');
     assert.ok(coder.length >= 3);

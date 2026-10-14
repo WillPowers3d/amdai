@@ -373,7 +373,24 @@ export const GLOSSARY: GlossaryEntry[] = [
       { href: '/tutorials/run-local-llm', label: 'Run a local Qwen' },
       { href: '/tutorials/serve-qwen', label: 'Serve Qwen' },
     ],
-    seeAlso: ['vulkan', 'hip', 'gguf'],
+    seeAlso: ['vulkan', 'hip', 'gguf', 'mmproj'],
+  },
+  {
+    id: 'mmproj',
+    term: 'mmproj',
+    aliases: ['multimodal projector', 'libmtmd', 'llama-mtmd-cli'],
+    letter: 'M',
+    definition:
+      'The multimodal projector GGUF that llama.cpp uses to encode an image into embeddings the text model can read. You typically need two files: the text GGUF and a matching mmproj. libmtmd is the current llama.cpp path.',
+    why: 'Local vision on AMDai is image in, text out — not ComfyUI. Pairing is architecture-specific. Speeds are not yet measured by AMDai. The house 35B daily driver is text-only; do not invent an mmproj for that file. Q3 stays a labeled estimate.',
+    deeper:
+      'Cited tools: llama-mtmd-cli -m model.gguf --mmproj mmproj.gguf --image file.jpg, or llama-server --mmproj. --no-mmproj-offload keeps the projector off the GPU. ggml-org publishes ready multimodal GGUFs. Start from that collection, not a retired Qwen family.',
+    links: [
+      { href: '/vision', label: 'Local vision' },
+      { href: '/backends/llamacpp', label: 'llama.cpp' },
+      { href: '/models', label: 'House models' },
+    ],
+    seeAlso: ['llamacpp', 'gguf', 'quant'],
   },
   {
     id: 'moe',
@@ -556,7 +573,7 @@ export const GLOSSARY: GlossaryEntry[] = [
       'One official amdai-bench/run@1 measurement published on /results: who ran it, which GPU layout, the exact launch command, prefill/decode tok/s, VRAM, and peak system RAM when recorded.',
     why: 'AMDai does not invent a number to fill a table cell. If the 35B page shows 102.39 or 42.9 GB, click through to the card. The 2026-10-12 overnight sweep is 33 cards from local-desktop — measured, pending re-verify after the DDR5 oops.',
     deeper:
-      'Each /results page shows the launch command and pins. The 35B table links cells to cards instead of inventing a missing figure. Q6_K 1-GPU 4K keeps both repeats (82.62 and 103.23); neither is averaged.',
+      'Each /results page shows the launch command and pins. The 35B table links cells to cards instead of inventing a missing figure. Q6_K 1-GPU 4K uses the 23:55 card (103.23 tok/s). The earlier 82.62 card stays on /results and is not averaged.',
     links: [
       { href: '/results', label: 'Results' },
       { href: '/qwen', label: 'Qwen compare' },

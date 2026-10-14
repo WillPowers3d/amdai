@@ -24,6 +24,7 @@ import {
 } from './calculator';
 import {
   contextLabel,
+  isSupersededQ6k4k,
   matchRuns,
   runPath,
   verifiedMeasured,
@@ -623,6 +624,7 @@ function pickMeasured(cards: RunCard[], spec: QwenSpec, backend: QwenBackendId, 
     quant: spec.runQuant,
     backend: BACKEND_RUN_NAME[backend],
   }).filter((card) => {
+    if (isSupersededQ6k4k(card)) return false;
     const name = card.model.name;
     if (spec.modelKey === '35b-a3b') return /35B/i.test(name) && !/flash/i.test(name);
     if (spec.modelKey === 'flash') return /flash/i.test(name);
@@ -646,20 +648,9 @@ function pickMeasured(cards: RunCard[], spec: QwenSpec, backend: QwenBackendId, 
     });
   const hit = scored[0];
   if (!hit || hit.value == null) return emptyMeasured();
-  const q6pair =
-    spec.modelKey === '35b-a3b' &&
-    spec.runQuant === 'Q6_K' &&
-    kind === 'decode' &&
-    hit.card.config.context_tokens === 4096
-      ? scored
-          .filter((row) => row.card.config.context_tokens === 4096 && row.card.hardware.gpu_count_used === 1)
-          .map((row) => row.value)
-          .filter((n): n is number => n != null)
-          .sort((a, b) => a - b)
-      : [];
   const text =
-    q6pair.length > 1
-      ? `${q6pair.join(' / ')} @ 4K (two repeats)`
+    spec.modelKey === '35b-a3b' && spec.runQuant === 'Q6_K' && kind === 'decode' && hit.card.config.context_tokens === 4096
+      ? `${hit.value} @ 4K`
       : `${hit.value} @ ${contextLabel(hit.card.config.context_tokens)}`;
   return {
     value: hit.value,

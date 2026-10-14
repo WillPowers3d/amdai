@@ -1417,7 +1417,7 @@ export function testedBadge(input: CalcInput): TestedBadge | null {
   if (input.quantId === 'q6_k') {
     return {
       id: 'q6',
-      label: `${MEASURED_ON_OUR_RIG} — Q6_K 4K decode 82.62 / 103.23 tok/s (two repeats, flagged for re-run). 32K+ is partly offloaded to DDR5. One R9700, llama.cpp, f16 KV.`,
+      label: `${MEASURED_ON_OUR_RIG} — Q6_K 4K decode 103.23 tok/s (23:55 card). 32K+ is partly offloaded to DDR5. One R9700, llama.cpp, f16 KV.`,
     };
   }
 

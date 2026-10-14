@@ -24,8 +24,7 @@ single_card:
   - { quant: UD-Q5_K_XL, tok_s: 44.4, context: 256K, note: Official 2026-10-12 }
   - { quant: Q5_K_M, tok_s: 109.73, context: 4K, note: Official 2026-10-12 }
   - { quant: Q4_K_M, tok_s: 117.69, context: 4K, note: Official 2026-10-12 }
-  - { quant: Q6_K, tok_s: 82.62, context: 4K, note: One of two 4K repeats }
-  - { quant: Q6_K, tok_s: 103.23, context: 4K, note: One of two 4K repeats }
+  - { quant: Q6_K, tok_s: 103.23, context: 4K, note: Official 2026-10-12 Q6_K single-GPU 4K cell }
 
 split:
   title: One server split across both cards

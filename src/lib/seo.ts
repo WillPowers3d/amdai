@@ -197,6 +197,7 @@ export const CRUMB_LABELS: Record<string, string> = {
   '/speech': 'Speech',
   '/long-context': 'Long context',
   '/rag': 'RAG',
+  '/vision': 'Vision',
   '/power': 'Power',
   '/setup': 'First-run setup',
   '/setup/windows': 'Windows setup',
@@ -335,6 +336,12 @@ setMeta(
   'Chat with your own PDFs and notes on Radeon. llama.cpp embeddings first. Linux first. Fit estimates, not measured on local-desktop.',
 );
 setDate('/rag', '2026-10-13');
+setMeta(
+  '/vision',
+  'Local vision on Radeon',
+  'Cited llama.cpp mmproj path for image-in text-out on Radeon. Linux first. Speeds not yet measured by AMDai. Q3 is a labeled estimate.',
+);
+setDate('/vision', '2026-10-14');
 setMeta(
   '/power',
   'Board power and PSU on Radeon',

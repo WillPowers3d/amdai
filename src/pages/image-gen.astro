@@ -46,7 +46,9 @@ import { RAM_FULL_LABEL, RAM_MIN_LABEL } from '../lib/ram-surfaces';
     <Callout type="note" title="ComfyUI, not llama.cpp">
       <p>
         Image gen on AMDai is ComfyUI on HIP/ROCm PyTorch. llama.cpp stays first for
-        local LLMs. ComfyUI does not speak llama-server /v1. Image-gen speeds are
+        local LLMs. ComfyUI does not speak llama-server /v1. Image-in text-out is
+        <a class="underline decoration-accent/40" href="/vision">/vision</a>.
+        Image-gen speeds are
         <strong class="text-ink">{IMAGE_GEN_SPEED_LABEL}</strong> — the gap is on
         <a class="underline decoration-accent/40" href="/wanted">/wanted</a>
         as a first-party <code class="font-mono text-ink">amdai-bench/run@1</code> card.

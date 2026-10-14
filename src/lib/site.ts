@@ -108,6 +108,7 @@ export const primaryNav: NavItem[] = [
   { href: '/software', label: 'AI software', description: 'llama.cpp first; vLLM and Strata as tries', group: 'learn' },
   { href: '/abliterated', label: 'Abliterated', description: 'Hub: what it is, how to vet files, catalog — educational only', group: 'learn' },
   { href: '/image-gen', label: 'Image gen', description: 'Cited ComfyUI-first Radeon guide for SD / SDXL / Flux-class. Linux first. Not measured on local-desktop', group: 'learn' },
+  { href: '/vision', label: 'Vision', description: 'Cited llama.cpp mmproj path for image-in text-out. Linux first. Speeds not yet measured by AMDai', group: 'learn' },
   { href: '/speech', label: 'Speech', description: 'Cited whisper.cpp Vulkan STT plus Piper TTS. Linux first. Not measured on local-desktop', group: 'learn' },
   { href: '/long-context', label: 'Long context', description: '128K–262K on Radeon. Measured 35B llama.cpp cards. f16 KV default. Empty cells stay not measured yet', group: 'learn' },
   { href: '/rag', label: 'RAG', description: 'Cited llama.cpp-first local RAG on Radeon. Embed plus a Q4+ LLM. Linux first. Not measured on local-desktop', group: 'learn' },

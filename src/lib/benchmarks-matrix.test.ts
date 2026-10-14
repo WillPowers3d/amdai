@@ -32,8 +32,7 @@ describe('benchmarks matrix from run cards', () => {
     const split = rows.find((row) => row.quant === 'UD-Q5_K_XL' && row.context === 4096 && row.gpuCount === 2);
     assert.equal(split?.decode, '82.78 tok/s');
     const q6 = rows.find((row) => row.quant === 'Q6_K' && row.context === 4096 && row.gpuCount === 1);
-    assert.match(q6?.decode ?? '', /82\.62/);
-    assert.match(q6?.decode ?? '', /103\.23/);
+    assert.equal(q6?.decode, '103.23 tok/s');
     assert.doesNotMatch(q6?.decode ?? '', /92\.|93\./);
     assert.ok(!rows.some((row) => row.quant === COMPARE_Q3));
     assert.ok(rows.every((row) => row.decode !== 'not measured'));

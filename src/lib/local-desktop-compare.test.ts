@@ -26,7 +26,8 @@ describe('local-desktop compare tables', () => {
     assert.equal(ud4k?.both.decode, '82.78 tok/s');
     assert.equal(decodeWinner(ud4k!).winner, 'one');
     const q6 = rows.find((row) => row.quant === 'Q6_K' && row.context === 4096);
-    assert.equal(decodeWinner(q6!).winner, 'incomplete');
+    assert.equal(decodeWinner(q6!).winner, 'one');
+    assert.equal(q6?.one.decode, '103.23 tok/s');
     const summary = winnerSummary(rows);
     assert.ok(summary.one >= 1);
     assert.match(summary.headline, /one R9700|split|mixed/i);

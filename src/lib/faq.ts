@@ -248,6 +248,20 @@ export const FAQ_ENTRIES: FaqItem[] = [
     ],
   },
   {
+    id: 'local-vision',
+    group: 'getting-started',
+    question: 'Can I pass a picture to a local LLM on a Radeon?',
+    answer:
+      'Yes. Local vision on AMDai is llama.cpp multimodal: a text GGUF plus a matching mmproj GGUF, served by llama-mtmd-cli or llama-server --mmproj. That is image in, text out — not ComfyUI image gen. The cited shopper guide is /vision. Linux Ubuntu 24.04+ first. Speeds are not yet measured by AMDai. The house 35B daily driver is text-only; we do not invent an mmproj for that file. Q3 stays a labeled estimate. Nothing below Q3.',
+    links: [
+      { href: '/vision', label: 'Vision on Radeon' },
+      { href: '/backends/llamacpp', label: 'llama.cpp' },
+      { href: '/image-gen', label: 'Image gen' },
+      { href: '/setup', label: 'First-run setup' },
+      { href: '/gpus/r9700', label: 'R9700' },
+    ],
+  },
+  {
     id: 'vulkan-or-hip',
     group: 'getting-started',
     question: 'Vulkan or ROCm HIP?',
@@ -418,7 +432,7 @@ export const FAQ_ENTRIES: FaqItem[] = [
     group: 'speed-vram',
     question: 'Why does Q6_K 1-GPU 4K show 82.62 and 103.23 tok/s?',
     answer:
-      'Two official cards disagree. 23:26 = 82.62 tok/s decode; 23:55 = 103.23 tok/s. Both stay up. Neither is averaged or dropped. Flagged for re-run. The whole 33-card sweep is measured, pending re-verify after the DDR5-5200 oops. Read both cards on /results and the caveat on /benchmarks.',
+      'The 35B table cell is 103.23 tok/s from the 23:55 card — the 4K point in the complete Q6_K single-GPU series. The earlier 23:26 card at 82.62 tok/s stays on /results and is not averaged into the cell. The whole sweep is measured, pending re-verify after the DDR5-5200 oops. Read both cards on /results and the caveat on /benchmarks.',
     links: [
       { href: '/benchmarks', label: 'Benchmarks' },
       { href: '/results', label: 'Run cards' },
@@ -612,6 +626,7 @@ export const REQUIRED_FAQ_HREFS = [
   '/speech',
   '/long-context',
   '/rag',
+  '/vision',
   '/power',
 ] as const;
 

@@ -270,8 +270,8 @@ export function assertMatrixValid(cards: RunCard[]): string[] {
     }
   }
   const q6 = rows.find((row) => row.quant === 'Q6_K' && row.context === 4096 && row.gpuCount === 1);
-  if (!q6?.decode.includes('82.62') || !q6.decode.includes('103.23')) {
-    errors.push('Q6 4K 1-GPU must show both 82.62 and 103.23');
+  if (!q6?.decode.includes('103.23') || q6.decode.includes('82.62')) {
+    errors.push('Q6 4K 1-GPU must show the 103.23 cell, not the superseded 82.62 pass');
   }
   if (q6 && /92\.9|93\./.test(q6.decode)) errors.push('Q6 4K 1-GPU looks averaged');
   if (rows.some((row) => row.quant === COMPARE_Q3 || /Q3/i.test(row.quant))) {

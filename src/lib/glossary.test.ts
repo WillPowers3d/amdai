@@ -54,6 +54,7 @@ const ALLOWED_HREFS = new Set([
   '/tutorials/run-local-llm',
   '/tutorials/serve-qwen',
   '/tutorials/verify-rocm',
+  '/vision',
 ]);
 
 describe('consumer glossary', () => {
