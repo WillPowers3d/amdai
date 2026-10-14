@@ -216,11 +216,14 @@ symptoms:
       - Hybrid Qwen cards only grow KV on full-attention layers. A 262K f16 KV on Qwen3.6-35B-A3B is a large add on top of the publisher GGUF.
       - Partial offload plus a long context overflows the card you actually picked.
     fix: >
-      Open the calculator. Prefer a smaller context or q8_0/q4_0 KV before you
-      drop the weight quant. House recipes start at Q4. Q3 is a labeled estimate
-      on the calculator — do not invent a Q3 to “make it fit.” Daily driver on
-      our rig is 262K f16 KV with 0% RAM offload on one 32 GB card.
+      Open /out-of-vram, then the calculator. Prefer a smaller context or
+      q8_0/q4_0 KV before you drop the weight quant. House recipes start at Q4.
+      Q3 is a labeled estimate on the calculator — do not invent a Q3 to “make
+      it fit.” Daily driver on our rig is 262K f16 KV with 0% RAM offload on
+      one 32 GB card.
     links:
+      - href: /out-of-vram
+        label: Out of VRAM shopper ladder
       - href: /calculator
         label: Calculator
       - href: /glossary

@@ -397,6 +397,7 @@ export const SETUP_MULTI_GPU_HUB_LINKS: SetupMultiGpuLink[] = [
   { href: '/gpus/r9700', label: 'R9700' },
   { href: '/flash-daily', label: 'Flash daily' },
   { href: '/calculator', label: 'Calculator' },
+  { href: '/out-of-vram', label: 'Out of VRAM' },
   { href: '/amdai-bench', label: 'amdai-bench' },
 ];
 
@@ -414,6 +415,7 @@ export const REQUIRED_SETUP_MULTI_GPU_HREFS = [
   '/flash-daily',
   '/flash-ram-offload',
   '/calculator',
+  '/out-of-vram',
   '/benchmarks',
   '/amdai-bench',
   '/stack-lab',

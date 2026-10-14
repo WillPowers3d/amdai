@@ -1135,6 +1135,7 @@ export const GLOSSARY: GlossaryEntry[] = [
     deeper:
       'Official UD-Q5_K_XL 1-GPU VRAM: 25.97 GB at 4K, 26.7 at 32K, 28.82 at 128K, 29.34 at 256K. Peak system RAM at 256K is 42.9 GB. Size a different file on the calculator; do not reuse these as a universal 32 GB rule.',
     links: [
+      { href: '/out-of-vram', label: 'Out of VRAM' },
       { href: '/calculator', label: 'Calculator' },
       { href: '/can-run', label: 'Can my Radeon run it?' },
       { href: '/compare/gpus', label: 'Compare GPUs' },
@@ -1142,7 +1143,26 @@ export const GLOSSARY: GlossaryEntry[] = [
       { href: '/hardware', label: 'Hardware' },
       { href: '/gpus', label: 'GPU directory' },
     ],
-    seeAlso: ['system-ram', 'kv-cache', 'offload', 'apu', 'used-radeon'],
+    seeAlso: ['system-ram', 'kv-cache', 'offload', 'out-of-vram', 'apu', 'used-radeon'],
+  },
+  {
+    id: 'out-of-vram',
+    term: 'Out of VRAM',
+    aliases: ['OOM', 'ErrorOutOfDeviceMemory', 'hipErrorOutOfMemory', 'failed to allocate'],
+    letter: 'O',
+    definition:
+      'llama.cpp could not allocate GPU memory. Vulkan prints ErrorOutOfDeviceMemory or failed to allocate Vulkan0 buffer. HIP prints hipErrorOutOfMemory or failed to allocate ROCm0 buffer. Those strings are quoted from upstream issues.',
+    why: 'The shopper ladder is /out-of-vram: cheapest first, then size the file on the calculator. Prefer a smaller -c or q8_0 KV before you drop the weight quant. House recipes stay Q4 and up. Q3 is a labeled estimate.',
+    deeper:
+      'Cited strings: llama.cpp #14836 / #15120 / #9271 (Vulkan), #16725 / #8618 (HIP), Ollama #8734 (system memory). LM Studio wraps llama.cpp — AMD shoppers still see the Vulkan or HIP strings. House 35B UD-Q5 on one R9700 is in-VRAM at 262144 f16 KV.',
+    links: [
+      { href: '/out-of-vram', label: 'Out of VRAM' },
+      { href: '/troubleshoot#oom-context', label: 'Long-context OOM' },
+      { href: '/calculator', label: 'Calculator' },
+      { href: '/kv-cache', label: 'KV cache' },
+      { href: '/flash-attention', label: 'Flash Attention' },
+    ],
+    seeAlso: ['vram', 'kv-cache', 'offload', 'llamacpp'],
   },
   {
     id: 'used-radeon',

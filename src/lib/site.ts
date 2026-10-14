@@ -167,6 +167,7 @@ export const primaryNav: NavItem[] = [
   { href: '/thinking', label: 'Thinking mode', description: 'Cited llama.cpp --reasoning on Radeon. Official Qwen3.6 thinks by default. Tokens not measured on local-desktop', group: 'learn' },
   { href: '/concurrency-ab', label: 'Parallel slots', description: 'Cited llama.cpp -np / --parallel on Radeon. Measure Stack Lab concurrency-ab/1. Slots not measured on local-desktop', group: 'learn' },
   { href: '/flash-attention', label: 'Flash Attention', description: 'Cited llama.cpp -fa / --flash-attn on Radeon. Overnight -fa 1. llama-server FA deltas not measured. Q3 is a labeled estimate', group: 'learn' },
+  { href: '/out-of-vram', label: 'Out of VRAM', description: 'Cited llama.cpp Vulkan / HIP OOM strings on Radeon. Cheapest fix first. Q3 is a labeled estimate', group: 'learn' },
   { href: '/moe', label: 'MoE', description: 'Mixture-of-Experts on a Radeon GPU. Why 35B-A3B fits one 32 GB R9700 while dense 27B and Flash differ. llama.cpp first', group: 'learn' },
   { href: '/bios', label: 'BIOS', description: 'Above 4G, ReBAR/SAM, CSM, x8/x8 vs x16/x4 — cited chipset notes', group: 'learn' },
   { href: '/flash-ram-offload', label: 'Flash RAM offload', description: 'Run Flash with experts on DDR5 — kits, measured DIMM speed, launch shape', group: 'learn' },

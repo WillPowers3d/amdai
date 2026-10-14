@@ -570,6 +570,12 @@ export const OG_CARDS: OgCard[] = [
     alt: 'AMDai Flash Attention (-fa) on a Radeon GPU with llama.cpp — cited on|off|auto, llama-server FA deltas not measured',
   },
   {
+    slug: 'out-of-vram',
+    title: 'Out of VRAM on Radeon',
+    lede: 'Cited ErrorOutOfDeviceMemory. Cheapest fix first',
+    alt: 'AMDai out of VRAM troubleshooter for llama.cpp on a Radeon GPU — cited ErrorOutOfDeviceMemory and hipErrorOutOfMemory',
+  },
+  {
     slug: 'moe',
     title: 'Mixture-of-Experts on a Radeon GPU',
     lede: 'Why 35B-A3B fits one 32 GB R9700. Dense 27B and Flash differ',

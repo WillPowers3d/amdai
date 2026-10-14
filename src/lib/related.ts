@@ -208,6 +208,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/thinking', label: 'Thinking mode' },
       { href: '/concurrency-ab', label: 'Parallel slots' },
       { href: '/flash-attention', label: 'Flash Attention' },
+      { href: '/out-of-vram', label: 'Out of VRAM' },
       { href: '/long-context', label: 'Long context' },
       { href: '/multi-gpu', label: 'Dual / multi-GPU' },
       { href: '/power', label: 'Power and PSU' },
@@ -293,9 +294,26 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/setup/server', label: 'Always-on server' },
       { href: '/setup/multi-gpu', label: 'Multi-GPU llama.cpp' },
       { href: '/backends/llamacpp', label: 'llama.cpp' },
+      { href: '/out-of-vram', label: 'Out of VRAM' },
       { href: '/stack-lab', label: 'Stack Lab' },
       { href: '/amdai-bench', label: 'amdai-bench' },
       { href: '/calculator', label: 'Calculator' },
+    ];
+  }
+  if (path === '/out-of-vram') {
+    return [
+      { href: '/calculator', label: 'Calculator' },
+      { href: '/kv-cache', label: 'KV cache' },
+      { href: '/moe', label: 'MoE' },
+      { href: '/tuning', label: 'Speed up llama.cpp' },
+      { href: '/flash-attention', label: 'Flash Attention' },
+      { href: '/setup/multi-gpu', label: 'Multi-GPU llama.cpp' },
+      { href: '/long-context', label: 'Long context' },
+      { href: '/troubleshoot', label: 'Troubleshoot' },
+      { href: '/gpus/r9700', label: 'R9700 measured page' },
+      { href: '/rocm-problems', label: 'ROCm problems' },
+      { href: '/stack-lab', label: 'Stack Lab' },
+      { href: '/amdai-bench', label: 'amdai-bench' },
     ];
   }
   if (path === '/moe') {
@@ -308,6 +326,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/glossary', label: 'Glossary' },
       { href: '/multi-gpu', label: 'Dual / multi-GPU' },
       { href: '/setup/multi-gpu', label: 'Multi-GPU llama.cpp how-to' },
+      { href: '/out-of-vram', label: 'Out of VRAM' },
       { href: '/tuning', label: 'Speed up llama.cpp' },
       { href: '/constrained-decoding', label: 'Constrained decoding' },
       { href: '/can-run', label: 'Can my Radeon run it?' },
@@ -340,6 +359,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/setup/ollama', label: 'Ollama' },
       { href: '/setup/lemonade', label: 'Lemonade' },
       { href: '/rocm-problems', label: 'ROCm problems' },
+      { href: '/out-of-vram', label: 'Out of VRAM' },
       { href: '/bios', label: 'BIOS' },
       { href: '/faq', label: 'FAQ' },
       { href: '/long-context', label: 'Long context' },
@@ -403,6 +423,7 @@ function topicLinks(path: string): RelatedLink[] {
   if (path.startsWith('/rocm-problems')) {
     return [
       { href: '/rocm-problems', label: 'ROCm problems' },
+      { href: '/out-of-vram', label: 'Out of VRAM' },
       { href: '/rocm/upgrade', label: 'Upgrade or reinstall ROCm' },
       { href: '/setup/ollama', label: 'Ollama' },
       { href: '/setup/lemonade', label: 'Lemonade' },
@@ -461,6 +482,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/rag', label: 'RAG on Radeon' },
       { href: '/tuning', label: 'Speed up llama.cpp' },
       { href: '/flash-attention', label: 'Flash Attention' },
+      { href: '/out-of-vram', label: 'Out of VRAM' },
     ];
   }
   if (path === '/kv-cache') {
@@ -478,6 +500,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/amdai-bench', label: 'amdai-bench' },
       { href: '/concurrency-ab', label: 'Parallel slots' },
       { href: '/flash-attention', label: 'Flash Attention' },
+      { href: '/out-of-vram', label: 'Out of VRAM' },
     ];
   }
   if (path === '/calculator' || path === '/quants') {
@@ -487,6 +510,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/quants', label: 'Quants' },
       { href: '/long-context', label: 'Long context' },
       { href: '/tuning', label: 'Speed up llama.cpp' },
+      { href: '/out-of-vram', label: 'Out of VRAM' },
       { href: '/gpus/r9700', label: 'R9700 measured page' },
     ];
   }
@@ -610,6 +634,7 @@ export function relatedFor(pathname: string): RelatedLink[] {
     add(out, seen, '/multi-gpu', 'Dual / multi-GPU');
     add(out, seen, '/setup', 'First-run setup');
     add(out, seen, '/stack-lab', 'Stack Lab');
+    add(out, seen, '/out-of-vram', 'Out of VRAM');
     add(out, seen, '/gpus/r9700', 'R9700 measured page');
     if (id) {
       const compareId = gpuCompareIdFromInput(id);
@@ -727,6 +752,7 @@ export function relatedFor(pathname: string): RelatedLink[] {
     add(out, seen, '/guides/tool-calling', 'Tool calling');
     add(out, seen, '/concurrency-ab', 'Parallel slots');
     add(out, seen, '/flash-attention', 'Flash Attention');
+    add(out, seen, '/out-of-vram', 'Out of VRAM');
     add(out, seen, '/setup/docker', 'Docker / Podman');
     add(out, seen, '/setup/lm-studio', 'LM Studio');
     add(out, seen, '/setup/coding-assistant', 'Coding assistant');
@@ -855,6 +881,7 @@ export function assertRelatedValid(
     '/thinking',
     '/concurrency-ab',
     '/flash-attention',
+    '/out-of-vram',
     '/moe',
     '/can-run',
     '/hardware',

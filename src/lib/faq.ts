@@ -931,6 +931,21 @@ export const FAQ_ENTRIES: FaqItem[] = [
     ],
   },
   {
+    id: 'out-of-vram',
+    group: 'troubleshooting',
+    question: 'llama.cpp says out of memory / ErrorOutOfDeviceMemory / hipErrorOutOfMemory — what do I change first?',
+    answer:
+      'The shopper ladder is /out-of-vram. Cheapest first: lower -c, then q8_0 KV with -fa on, then -fa on, then a smaller -ub/-b, then MoE --n-cpu-moe / -ot if the file is MoE (do not invent N or the regex), then partial -ngl, then -ts / --split-mode, then close other VRAM users, then Q6 → Q5 → Q4. Cited strings come from llama.cpp #14836 / #9271 / #16725 / #8618 and Ollama #8734. LM Studio wraps llama.cpp — AMD shoppers still see the Vulkan or HIP strings. House recipes stay Q4 and up. Q3 is a labeled estimate. The existing /troubleshoot#oom-context row points here.',
+    links: [
+      { href: '/out-of-vram', label: 'Out of VRAM' },
+      { href: '/troubleshoot#oom-context', label: 'Long-context OOM' },
+      { href: '/calculator', label: 'Calculator' },
+      { href: '/kv-cache', label: 'KV cache' },
+      { href: '/flash-attention', label: 'Flash Attention' },
+      { href: '/tuning', label: 'Speed up llama.cpp' },
+    ],
+  },
+  {
     id: 'gpu-not-seen',
     group: 'troubleshooting',
     question: 'The GPU is not seen or HIP configure is a mess — where do I start?',
@@ -1040,6 +1055,7 @@ export const REQUIRED_FAQ_HREFS = [
   '/thinking',
   '/concurrency-ab',
   '/flash-attention',
+  '/out-of-vram',
   '/moe',
   '/can-run',
   '/setup/fedora',

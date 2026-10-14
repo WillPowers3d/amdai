@@ -319,6 +319,7 @@ export const FA_HUB_LINKS: FaLink[] = [
   { href: '/amdai-bench', label: 'amdai-bench' },
   { href: '/stack-lab', label: 'Stack Lab' },
   { href: '/calculator', label: 'Calculator' },
+  { href: '/out-of-vram', label: 'Out of VRAM' },
   { href: '/quants', label: 'Quants · KV types' },
   { href: '/start', label: 'Getting started' },
 ];
@@ -338,6 +339,7 @@ export const REQUIRED_FA_HREFS = [
   '/amdai-bench',
   '/stack-lab',
   '/calculator',
+  '/out-of-vram',
   '/quants',
   '/results',
 ] as const;

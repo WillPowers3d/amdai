@@ -477,6 +477,7 @@ export const TUNING_HUB_LINKS: TuningLink[] = [
   { href: '/amdai-bench', label: 'amdai-bench' },
   { href: '/benchmarks', label: 'Benchmarks' },
   { href: '/calculator', label: 'Calculator' },
+  { href: '/out-of-vram', label: 'Out of VRAM' },
 ];
 
 export const REQUIRED_TUNING_HREFS = [
@@ -495,6 +496,7 @@ export const REQUIRED_TUNING_HREFS = [
   '/benchmarks',
   '/results',
   '/calculator',
+  '/out-of-vram',
   '/quants',
   '/compare/one-vs-two-gpu',
   '/compare/q4-q5-q6',

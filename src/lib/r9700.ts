@@ -211,6 +211,11 @@ export const R9700_MORE: R9700MoreLink[] = [
     body: 'f16 vs q8_0 vs q4_0. Measured 35B VRAM on this card. Estimates labeled.',
   },
   {
+    href: '/out-of-vram',
+    label: 'Out of VRAM',
+    body: 'Cited llama.cpp Vulkan / HIP OOM strings. Cheapest fix first. Q3 is a labeled estimate.',
+  },
+  {
     href: '/calculator',
     label: 'Calculator',
     body: 'Size a GGUF against 32 GB. Client-side, no prices.',
@@ -243,6 +248,7 @@ export const REQUIRED_R9700_HREFS = [
   '/flash-daily',
   '/qwen',
   '/kv-cache',
+  '/out-of-vram',
   '/calculator',
   '/budget',
   '/gpus',

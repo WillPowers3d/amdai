@@ -99,6 +99,7 @@ const ALLOWED_HREFS = new Set([
   '/harnesses/cline',
   '/harnesses/continue',
   '/stack-lab',
+  '/troubleshoot',
   '/troubleshoot/errors',
   '/stacks',
   '/start',
@@ -115,6 +116,7 @@ const ALLOWED_HREFS = new Set([
   '/thinking',
   '/concurrency-ab',
   '/flash-attention',
+  '/out-of-vram',
   '/moe',
   '/can-run',
 ]);

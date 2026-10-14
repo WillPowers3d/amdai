@@ -167,6 +167,7 @@ describe('primary path and nav IA', () => {
       '/thinking': '../pages/thinking.astro',
       '/concurrency-ab': '../pages/concurrency-ab.astro',
       '/flash-attention': '../pages/flash-attention.astro',
+      '/out-of-vram': '../pages/out-of-vram.astro',
       '/moe': '../pages/moe.astro',
       '/can-run': '../pages/can-run/index.astro',
     };

@@ -206,6 +206,7 @@ export const KV_CACHE_HUB: KvCacheLink[] = [
   { href: '/results', label: 'Run cards' },
   { href: '/flash-ram-offload', label: 'Flash RAM offload' },
   { href: '/troubleshoot#oom-context', label: 'Long-context OOM' },
+  { href: '/out-of-vram', label: 'Out of VRAM' },
 ];
 
 export const KV_CACHE_SECTIONS = [
@@ -232,6 +233,7 @@ export const REQUIRED_KV_CACHE_HREFS = [
   '/results',
   '/flash-ram-offload',
   '/troubleshoot#oom-context',
+  '/out-of-vram',
   '/stack-lab',
   '/amdai-bench',
 ] as const;

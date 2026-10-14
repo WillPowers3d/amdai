@@ -268,6 +268,7 @@ export const LONG_CONTEXT_HUB: LongContextLink[] = [
   { href: '/multi-gpu', label: 'Dual / multi-GPU' },
   { href: '/flash-ram-offload', label: 'Flash RAM offload' },
   { href: '/troubleshoot#oom-context', label: 'Long-context OOM' },
+  { href: '/out-of-vram', label: 'Out of VRAM' },
 ];
 
 export const LONG_CONTEXT_FLASH_GAPS = [
@@ -292,6 +293,7 @@ export const REQUIRED_LONG_CONTEXT_HREFS = [
   '/benchmarks',
   '/benchmarks/methodology',
   '/troubleshoot#oom-context',
+  '/out-of-vram',
   '/compare/one-vs-two-gpu',
   '/compare/q4-q5-q6',
   '/gpus/r9700',

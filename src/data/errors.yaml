@@ -195,10 +195,10 @@ errors:
       Qwen cards only grow KV on full-attention layers. A 262K f16 KV on
       Qwen3.6-35B-A3B is a large add on top of the 26.6 GB publisher GGUF.
     fix: >
-      Open the calculator. Stay at or above Q4. Prefer a smaller context or
-      q8_0/q4_0 KV before you drop the weight quant. Daily driver on our
-      rig is 262K f16 KV with 0% RAM offload on one 32 GB card — if your
-      estimate overflows, do not invent a Q3 to “make it fit.”
+      Open /out-of-vram, then the calculator. Stay at or above Q4. Prefer a
+      smaller context or q8_0/q4_0 KV before you drop the weight quant. Daily
+      driver on our rig is 262K f16 KV with 0% RAM offload on one 32 GB card —
+      if your estimate overflows, do not invent a Q3 to “make it fit.”
     source: https://amdai.net/calculator
     source_label: Quant + Hardware Calculator (KV formula; estimates only)
     tags: [vram, context, calculator]

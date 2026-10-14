@@ -47,6 +47,7 @@ export const STACK_LAB_INTRO_LINKS: StackLabLink[] = [
   { href: '/recipes.json', label: 'recipes.json' },
   { href: '/start', label: 'Getting started' },
   { href: '/flash-attention', label: 'Flash Attention' },
+  { href: '/out-of-vram', label: 'Out of VRAM' },
 ];
 
 export const STACK_LAB_JOBS: StackLabJob[] = [

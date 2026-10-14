@@ -1,0 +1,174 @@
+---
+import Base from '../layouts/Base.astro';
+import Callout from '../components/Callout.astro';
+import HouseRam from '../components/HouseRam.astro';
+import HowWeTest from '../components/HowWeTest.astro';
+import NextSteps from '../components/NextSteps.astro';
+import OpenInStackLab from '../components/OpenInStackLab.astro';
+import { HOUSE_STACK_LAB } from '../lib/stack-lab-open';
+import { COMPARE_Q3 } from '../lib/local-desktop-compare';
+import {
+  OOM_CITED_LABEL,
+  OOM_DESCRIPTION,
+  OOM_H1,
+  OOM_HUB_LINKS,
+  OOM_LEAD,
+  OOM_QUANTS,
+  OOM_RAM,
+  OOM_SERVER,
+  OOM_SOURCES,
+  OOM_STEPS,
+  OOM_SYMPTOMS,
+  OOM_TITLE,
+  OOM_VRAM_CHECK,
+  OOM_WHAT,
+} from '../lib/out-of-vram';
+---
+
+<Base title={OOM_TITLE} description={OOM_DESCRIPTION}>
+  <main id="main" class="mx-auto max-w-3xl px-4 py-10 sm:px-6">
+    <p class="kicker">{OOM_CITED_LABEL}</p>
+    <h1 class="mt-3 font-serif text-4xl tracking-tight sm:text-5xl">
+      {OOM_H1}
+    </h1>
+    <p class="mt-4 text-lg leading-relaxed text-muted">{OOM_LEAD}</p>
+    <ul class="mt-4 flex flex-wrap gap-2">
+      {OOM_HUB_LINKS.map((link) => (
+        <li>
+          <a
+            class="inline-flex min-h-9 items-center rounded-full border border-line bg-canvas px-3 text-sm text-ink hover:border-accent/50 hover:text-accent-ink"
+            href={link.href}
+          >
+            {link.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+
+    <Callout type="linux" title="Cheapest change first">
+      <p>
+        Prefer a smaller <code>-c</code> or q8_0 KV before you drop the weight
+        quant. House recipes stay Q4 and up. {COMPARE_Q3} is a labeled estimate
+        — do not download it to run. The existing
+        <a class="underline decoration-accent/40" href="/troubleshoot#oom-context">Out of VRAM at long context</a>
+        row points here.
+      </p>
+    </Callout>
+
+    <section id="symptoms" class="mt-12 scroll-mt-28" aria-labelledby="symptoms-heading">
+      <h2 id="symptoms-heading" class="font-serif text-3xl tracking-tight">Match the log</h2>
+      <p class="mt-3 leading-relaxed text-muted">{OOM_WHAT}</p>
+      <ul class="mt-4 space-y-3">
+        {OOM_SYMPTOMS.map((row) => (
+          <li id={row.id} class="scroll-mt-28 rounded-2xl border border-line bg-raised/50 p-4">
+            <p class="font-mono text-[0.68rem] uppercase tracking-[0.14em] text-faint">{row.backend}</p>
+            <p class="mt-2 font-mono text-sm leading-relaxed text-ink">“{row.quote}”</p>
+            <p class="mt-2 text-sm text-muted">
+              <a class="underline decoration-accent/40" href={row.href} rel="noopener">{row.cite}</a>
+            </p>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section id="check-vram" class="mt-12 scroll-mt-28" aria-labelledby="check-vram-heading">
+      <h2 id="check-vram-heading" class="font-serif text-3xl tracking-tight">How to check VRAM</h2>
+      <div class="mt-4 rounded-2xl border border-line bg-raised/50 p-5">
+        <p class="leading-relaxed text-ink">{OOM_VRAM_CHECK}</p>
+      </div>
+    </section>
+
+    <section id="ladder" class="mt-12 scroll-mt-28" aria-labelledby="ladder-heading">
+      <h2 id="ladder-heading" class="font-serif text-3xl tracking-tight">Fix ladder — cheapest first</h2>
+      <ol class="mt-8 space-y-6">
+        {OOM_STEPS.map((step, index) => (
+          <li id={step.id} class="scroll-mt-28 rounded-2xl border border-line bg-raised/50 p-5">
+            <p class="font-mono text-[0.68rem] uppercase tracking-[0.14em] text-faint">
+              {index + 1} · {step.flag}
+            </p>
+            <h3 class="mt-2 font-serif text-2xl tracking-tight">{step.title}</h3>
+            <p class="mt-3 leading-relaxed text-ink">{step.body}</p>
+            <ul class="mt-4 flex flex-wrap gap-2">
+              {step.links.map((link) => (
+                <li>
+                  <a
+                    class="inline-flex min-h-9 items-center rounded-full border border-line bg-canvas px-3 text-sm text-ink hover:border-accent/50 hover:text-accent-ink"
+                    href={link.href}
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <section id="flags" class="mt-12 scroll-mt-28" aria-labelledby="flags-heading">
+      <h2 id="flags-heading" class="font-serif text-3xl tracking-tight">Copy-paste after a cited OOM</h2>
+      <p class="mt-3 leading-relaxed text-muted">
+        Vulkan house path. This block is a cheaper-context, q8_0 KV start — not
+        a measured card. Replace the binary and GGUF paths. House recipes stay
+        Q4 and up.
+      </p>
+      <pre class="mt-4 overflow-x-auto rounded-2xl border border-line bg-raised/50 p-4 text-sm leading-relaxed text-ink"><code>{OOM_SERVER.trim()}</code></pre>
+    </section>
+
+    <section id="quants" class="mt-12 scroll-mt-28" aria-labelledby="quants-heading">
+      <h2 id="quants-heading" class="font-serif text-3xl tracking-tight">Q6 / Q5 / Q4 plus a labeled Q3</h2>
+      <p class="mt-3 leading-relaxed text-muted">
+        Step down the weight quant only after the cheaper flags. House recipes
+        stay Q4 and up. {COMPARE_Q3} is a labeled estimate — do not download it
+        to run.
+      </p>
+      <ul class="mt-4 space-y-3">
+        {OOM_QUANTS.map((row) => (
+          <li class="rounded-2xl border border-line bg-raised/50 p-4">
+            <p class="font-mono text-sm text-ink">
+              {row.quant}
+              {row.estimate ? ' · labeled estimate' : ''}
+            </p>
+            <p class="mt-1 text-sm text-muted">{row.file}. {row.note}</p>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section id="fit-ram" class="mt-12 scroll-mt-28" aria-labelledby="fit-ram-heading">
+      <h2 id="fit-ram-heading" class="font-serif text-3xl tracking-tight">RAM lines (Ubuntu-measured)</h2>
+      <p class="mt-3 leading-relaxed text-muted">{OOM_RAM}</p>
+      <div class="mt-4">
+        <HouseRam which="daily" compact />
+      </div>
+    </section>
+
+    <section id="stack-lab-cta" class="mt-12 scroll-mt-28" aria-labelledby="stack-lab-cta-heading">
+      <h2 id="stack-lab-cta-heading" class="font-serif text-3xl tracking-tight">Open in Stack Lab</h2>
+      <p class="mt-3 leading-relaxed text-muted">
+        There is no allowlisted out-of-VRAM deep link. Use the planner. Packages
+        are not published yet and there is no public download.
+      </p>
+      <div class="mt-4">
+        <OpenInStackLab {...HOUSE_STACK_LAB.planner} compact />
+      </div>
+    </section>
+
+    <section id="sources" class="mt-12 scroll-mt-28" aria-labelledby="sources-heading">
+      <h2 id="sources-heading" class="font-serif text-3xl tracking-tight">Sources</h2>
+      <ul class="mt-4 list-disc space-y-2 pl-5 text-sm leading-relaxed text-muted">
+        {OOM_SOURCES.map((source) => (
+          <li>
+            <a class="underline decoration-accent/40" href={source.href} rel="noopener">{source.title}</a>
+            {source.official ? '' : ' — unofficial for llama.cpp'}
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <div class="mt-8">
+      <HowWeTest />
+    </div>
+    <NextSteps path="/out-of-vram" />
+  </main>
+</Base>
