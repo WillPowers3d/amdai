@@ -174,11 +174,12 @@ export const SETUP_COMFYUI_STEPS: SetupComfyuiStep[] = [
   {
     id: 'venv',
     title: 'Python venv + ROCm PyTorch — cite the wheel, do not invent a pin',
-    body: `ComfyUI runs in its own Python environment. Official docs recommend Python 3.13, with 3.12 as a fallback if a custom-node dep fails. Create a venv: ${SETUP_COMFYUI_VENV}. ComfyUI’s README Linux AMD command is ${SETUP_COMFYUI_LINUX_TORCH}. AMD’s Install PyTorch for ROCm page and PyTorch’s Get started locally matrix (Linux, Python, pip, ROCm) are the official AMD/PyTorch pickers. House /rocm/versions is the 10.1 line for this site’s llama.cpp path — we do not invent a 10.1 ComfyUI wheel. Instinct-oriented Docker tags are not R9700 pins. If PyTorch reports no GPU, stop.`,
+    body: `ComfyUI runs in its own Python environment. Official docs recommend Python 3.13, with 3.12 as a fallback if a custom-node dep fails. Create a venv: ${SETUP_COMFYUI_VENV}. ComfyUI’s README Linux AMD command is ${SETUP_COMFYUI_LINUX_TORCH}. AMD’s Install PyTorch for ROCm page and PyTorch’s Get started locally matrix (Linux, Python, pip, ROCm) are the official AMD/PyTorch pickers. House /rocm/versions is the 10.1 line for this site’s llama.cpp path — we do not invent a 10.1 ComfyUI wheel. After a ROCm version move, reinstall the matching wheel — /rocm/upgrade. Instinct-oriented Docker tags are not R9700 pins. If PyTorch reports no GPU, stop.`,
     links: [
       { href: 'https://rocm.docs.amd.com/projects/ai-ecosystem/en/latest/frameworks/pytorch/install.html', label: 'AMD PyTorch for ROCm' },
       { href: 'https://pytorch.org/get-started/locally/', label: 'PyTorch get started' },
       { href: '/rocm/versions', label: 'ROCm versions' },
+      { href: '/rocm/upgrade', label: 'Upgrade or reinstall ROCm' },
       { href: '/tutorials/install-rocm', label: 'Install ROCm' },
     ],
   },
@@ -308,6 +309,7 @@ export const REQUIRED_SETUP_COMFYUI_HREFS = [
   '/harnesses/image',
   '/backends/llamacpp',
   '/rocm/versions',
+  '/rocm/upgrade',
   '/rocm-problems',
   '/troubleshoot',
   '/gpus/r9700',

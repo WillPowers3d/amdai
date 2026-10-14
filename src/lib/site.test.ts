@@ -107,6 +107,7 @@ describe('accessibility statement', () => {
     assert.equal(ogSlug('/gpus/w6800'), 'gpus-w6800');
     assert.equal(ogSlug('/gpus'), 'gpus');
     assert.equal(ogSlug('/rocm/faq'), 'rocm');
+    assert.equal(ogSlug('/rocm/upgrade'), 'rocm-upgrade');
     assert.equal(ogSlug('/setup'), 'setup');
     assert.equal(ogSlug('/setup/windows'), 'setup-windows');
     assert.equal(ogSlug('/setup/fedora'), 'setup-fedora');

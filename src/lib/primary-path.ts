@@ -134,6 +134,7 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
     { href: '/setup/wsl', label: 'WSL2 setup' },
     { href: '/setup/comfyui', label: 'ComfyUI' },
     { href: '/setup/multi-gpu', label: 'Multi-GPU llama.cpp' },
+    { href: '/rocm/upgrade', label: 'Upgrade or reinstall ROCm' },
   ],
   '/setup/windows': [
     { href: '/setup', label: 'First-run setup' },
@@ -168,6 +169,7 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
     { href: '/backends/llamacpp', label: 'llama.cpp' },
     { href: '/troubleshoot', label: 'Troubleshoot' },
     { href: '/stack-lab', label: 'Stack Lab' },
+    { href: '/rocm/upgrade', label: 'Upgrade or reinstall ROCm' },
   ],
   '/setup/arch': [
     { href: '/setup', label: 'First-run setup' },
@@ -184,6 +186,7 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
     { href: '/backends/llamacpp', label: 'llama.cpp' },
     { href: '/troubleshoot', label: 'Troubleshoot' },
     { href: '/stack-lab', label: 'Stack Lab' },
+    { href: '/rocm/upgrade', label: 'Upgrade or reinstall ROCm' },
   ],
   '/setup/docker': [
     { href: '/setup', label: 'First-run setup' },
@@ -788,6 +791,7 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
     { href: '/setup', label: 'First-run setup' },
     { href: '/setup/windows', label: 'Windows setup' },
     { href: '/rocm/versions', label: 'ROCm versions' },
+    { href: '/rocm/upgrade', label: 'Upgrade or reinstall ROCm' },
     { href: '/rocm-problems/rocm-10-0-finetune-reset', label: 'Fine-tune reset' },
     { href: '/gpus/r9700', label: 'R9700 measured page' },
     { href: '/quants', label: 'Quants' },

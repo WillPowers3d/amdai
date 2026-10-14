@@ -34,6 +34,7 @@ import { CD_FAQ, CD_HOWTO_STEPS, CD_PUBLISHED } from './constrained-decoding';
 import { TC_FAQ, TC_HOWTO_STEPS, TC_PUBLISHED } from './tool-calling';
 import { MOE_FAQ, MOE_HOWTO_STEPS, MOE_PUBLISHED } from './moe';
 import { VULKAN_VS_ROCM_FAQ, VULKAN_VS_ROCM_HOWTO_STEPS, VULKAN_VS_ROCM_PUBLISHED } from './vulkan-vs-rocm';
+import { ROCM_UPGRADE_FAQ, ROCM_UPGRADE_HOWTO_STEPS, ROCM_UPGRADE_PUBLISHED } from './rocm-upgrade';
 import { CAN_RUN_HUB_FAQ, CAN_RUN_PUBLISHED, canRunPairPage, parseCanRunSlug } from './can-run';
 import {
   TROUBLESHOOT_HOWTO_STEPS,
@@ -748,6 +749,7 @@ export function pageJsonLd(input: {
         modified: dates?.modified ?? CD_PUBLISHED,
       }),
     );
+  if (path === '/rocm/upgrade') {
     nodes.push(
       howToJsonLd({
         name: input.title.replace(/ · AMDai$/, ''),
@@ -779,6 +781,12 @@ export function pageJsonLd(input: {
       }),
     );
     nodes.push(faqPageJsonLd(TC_FAQ, url));
+        published: dates?.published ?? ROCM_UPGRADE_PUBLISHED,
+        modified: dates?.modified ?? ROCM_UPGRADE_PUBLISHED,
+        steps: ROCM_UPGRADE_HOWTO_STEPS,
+      }),
+    );
+    nodes.push(faqPageJsonLd(ROCM_UPGRADE_FAQ, url));
     return nodes;
   }
   if (path === '/compare/vulkan-vs-rocm') {

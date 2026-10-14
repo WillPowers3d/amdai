@@ -200,6 +200,12 @@ export const OG_CARDS: OgCard[] = [
     alt: 'AMDai — what is ROCm',
   },
   {
+    slug: 'rocm-upgrade',
+    title: 'Upgrade or reinstall ROCm',
+    lede: 'Cited Linux path. Pin, upgrade, or recover',
+    alt: 'AMDai — upgrade, pin, or cleanly reinstall ROCm on a Radeon GPU',
+  },
+  {
     slug: 'forum',
     title: 'Forum',
     lede: 'Community threads — off on this static build',
@@ -640,6 +646,7 @@ export function ogCardBySlug(slug: string): OgCard {
 export function ogSlug(pathname: string): string {
   if (!pathname || pathname === '/') return 'home';
   const slug = pathname.replace(/^\//, '').replace(/\/+$/, '').replace(/\//g, '-') || 'home';
+  if (slug === 'rocm-upgrade') return 'rocm-upgrade';
   if (slug === 'rocm' || slug.startsWith('rocm-')) return 'rocm';
   if (slug === 'forum' || slug.startsWith('forum-')) return 'forum';
   if (slug === 'harnesses' || slug.startsWith('harnesses-')) return 'stacks';

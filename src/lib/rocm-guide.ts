@@ -6,6 +6,7 @@ export type RocmPageId =
   | 'gfx'
   | 'vulkan-hip'
   | 'versions'
+  | 'upgrade'
   | 'history'
   | 'glossary'
   | 'faq';
@@ -53,6 +54,14 @@ export const rocmPages: RocmPage[] = [
     title: 'Versions and support policy',
     nav: 'Versions',
     description: 'Release cadence, official vs “works,” distro rows, ROCm 10.1 and the R9700, and the ROCm CLI.',
+  },
+  {
+    id: 'upgrade',
+    href: '/rocm/upgrade',
+    title: 'Upgrade, pin, or reinstall ROCm',
+    nav: 'Upgrade',
+    description:
+      'Upgrade, pin, or cleanly reinstall ROCm on a Radeon GPU (Linux). Ubuntu 24.04 first. Cited AMD install docs only.',
   },
   {
     id: 'history',
@@ -140,6 +149,38 @@ export const citations = {
     href: 'https://rocm.docs.amd.com/en/docs-10.1.0/install/rocm.html',
     title: 'Install ROCm 10.1.0',
     publisher: 'AMD',
+  },
+  radeonInstall: {
+    href: 'https://rocm.docs.amd.com/projects/radeon-ryzen/en/latest/docs/install/installrad/native_linux/install-radeon.html',
+    title: 'Install Radeon software for Linux with ROCm',
+    publisher: 'AMD',
+    note: 'States Radeon Software for Linux does not support in-place upgrades.',
+  },
+  theRock101: {
+    href: 'https://rocm.docs.amd.com/en/docs-10.1.0/about/transition-guide-TheRock.html',
+    title: 'TheRock transition guide (ROCm 10.1.0 docs)',
+    publisher: 'AMD',
+  },
+  rocmRunfile: {
+    href: 'https://rocm.docs.amd.com/en/docs-10.1.0/install/rocm-runfile-installer.html',
+    title: 'ROCm runfile installer (10.1.0)',
+    publisher: 'AMD',
+  },
+  llamaBuild: {
+    href: 'https://github.com/ggml-org/llama.cpp/blob/master/docs/build.md',
+    title: 'llama.cpp — build.md (GGML_VULKAN / GGML_HIP)',
+    publisher: 'ggml-org',
+  },
+  mesaRadv: {
+    href: 'https://docs.mesa3d.org/drivers/radv.html',
+    title: 'Mesa RADV Vulkan driver',
+    publisher: 'Mesa',
+  },
+  aptMark: {
+    href: 'https://manpages.ubuntu.com/manpages/noble/man8/apt-mark.8.html',
+    title: 'apt-mark (Ubuntu 24.04 man-page)',
+    publisher: 'Ubuntu',
+    note: 'Distro package hold. Not an AMD-published ROCm pin.',
   },
   rocm10Matrix: {
     href: officialLinks.rocm10Matrix,
@@ -271,6 +312,7 @@ export function citeNumber(used: readonly CiteKey[], id: CiteKey): number {
 export const rocmRelated = [
   { href: '/rocm-problems', label: 'Open problems', blurb: 'Cited consumer gaps and how you can help.' },
   { href: '/tutorials/install-rocm', label: 'Install ROCm', blurb: 'Linux-first walkthrough for 10.1 on a listed Ubuntu.' },
+  { href: '/rocm/upgrade', label: 'Upgrade or reinstall', blurb: 'Move between versions, pin, or recover a half-upgraded box.' },
   { href: '/troubleshoot', label: 'Troubleshoot', blurb: 'Symptom-first checks for a broken or slow Radeon box.' },
   { href: '/troubleshoot/errors', label: 'Error paste', blurb: 'Match a log against cited ROCm / Ollama patterns.' },
   { href: '/troubleshooting', label: 'Troubleshooting', blurb: 'GPU not seen, wrong wheel, CPU fallback.' },
@@ -279,4 +321,4 @@ export const rocmRelated = [
   { href: '/gpus', label: 'GPU directory', blurb: 'Radeon cards, gfx IDs, official vs unofficial rows.' },
 ] as const;
 
-export const GUIDE_UPDATED = new Date('2026-10-12T00:00:00Z');
+export const GUIDE_UPDATED = new Date('2026-10-14T00:00:00Z');

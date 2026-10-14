@@ -898,10 +898,11 @@ export const GLOSSARY: GlossaryEntry[] = [
       'AMD’s open GPU compute platform: compilers, runtimes, and libraries for Linux (and a thinner Windows story). Historically Radeon Open Compute. It is not CUDA, and Canonical’s archive rocm is not the current Core SDK.',
     why: 'You need a current AMD pin for gfx1201 — Core SDK 10.x / ROCm CLI, not a mixed apt install. Vulkan llama.cpp can generate before HIP userspace is perfect; still verify rocminfo when you want HIP.',
     deeper:
-      'Core SDK 10.x (ROCm CLI v0.2.0 or AMD’s 10.1 repo) is the current consumer pin for gfx1201. Do not mix those with Ubuntu archive rocm. The ROCm-guide glossary cites AMD sentences for HIP, ROCr, and TheRock.',
+      'Core SDK 10.x (ROCm CLI v0.2.0 or AMD’s 10.1 repo) is the current consumer pin for gfx1201. Do not mix those with Ubuntu archive rocm. Moving versions, pinning, or recovering a half-upgraded box is /rocm/upgrade. The ROCm-guide glossary cites AMD sentences for HIP, ROCr, and TheRock.',
     links: [
       { href: '/rocm', label: 'What is ROCm' },
       { href: '/tutorials/install-rocm', label: 'Install ROCm' },
+      { href: '/rocm/upgrade', label: 'Upgrade or reinstall' },
       { href: '/rocm/glossary', label: 'ROCm-guide terms' },
       { href: '/setup/fedora', label: 'Fedora setup' },
       { href: '/setup/arch', label: 'Arch setup' },

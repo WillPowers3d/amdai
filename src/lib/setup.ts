@@ -345,10 +345,11 @@ export const SETUP_NUMBERS = {
 export const SETUP_TROUBLE = {
   title: 'When it breaks',
   body:
-    'Do not duplicate those pages here. Start from a symptom on /troubleshoot. Paste a log in the error matcher. Cited rows live on /rocm-problems (HIP no binary, archive shadow, MODE1 reset, unofficial HSA overrides). Firmware misses: /bios. Common failures: /troubleshooting.',
+    'Do not duplicate those pages here. Start from a symptom on /troubleshoot. Paste a log in the error matcher. Cited rows live on /rocm-problems (HIP no binary, archive shadow, MODE1 reset, unofficial HSA overrides). Half-upgraded ROCm: /rocm/upgrade. Firmware misses: /bios. Common failures: /troubleshooting.',
   links: [
     { href: '/troubleshoot', label: 'Troubleshoot' },
     { href: '/rocm-problems', label: 'ROCm problems' },
+    { href: '/rocm/upgrade', label: 'Upgrade or reinstall ROCm' },
     { href: '/bios', label: 'BIOS' },
     { href: '/troubleshooting', label: 'Troubleshooting' },
     { href: '/troubleshoot/errors', label: 'Error paste' },
@@ -379,6 +380,7 @@ export const REQUIRED_SETUP_HREFS = [
   '/results',
   '/calculator',
   '/rocm-problems',
+  '/rocm/upgrade',
   '/bios',
   '/troubleshooting',
   '/troubleshoot',

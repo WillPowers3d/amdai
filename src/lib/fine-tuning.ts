@@ -212,10 +212,11 @@ export const FINE_TUNING_STEPS: FineTuningStep[] = [
     id: 'ubuntu',
     title: 'Start on Ubuntu 24.04+ with the site ROCm pin',
     body:
-      'Ubuntu 24.04+ is the measured AMDai OS. Install ROCm from the pin already on /rocm/versions — do not invent a new version. Confirm the GPU with rocminfo / amd-smi before you download a base model. The install walkthrough is /tutorials/install-rocm.',
+      'Ubuntu 24.04+ is the measured AMDai OS. Install ROCm from the pin already on /rocm/versions — do not invent a new version. Confirm the GPU with rocminfo / amd-smi before you download a base model. The install walkthrough is /tutorials/install-rocm. After a version move, rebuild the matching PyTorch ROCm wheel — /rocm/upgrade.',
     links: [
       { href: '/setup', label: 'Ubuntu setup' },
       { href: '/rocm/versions', label: 'ROCm versions' },
+      { href: '/rocm/upgrade', label: 'Upgrade or reinstall ROCm' },
       { href: '/tutorials/install-rocm', label: 'Install ROCm' },
     ],
   },
@@ -397,6 +398,7 @@ export const REQUIRED_FINE_TUNING_HREFS = [
   '/setup/windows',
   '/setup/wsl',
   '/rocm/versions',
+  '/rocm/upgrade',
   '/rocm-problems/rocm-10-0-finetune-reset',
   '/tutorials/install-rocm',
   '/backends/llamacpp',
