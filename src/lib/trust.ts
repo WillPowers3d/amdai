@@ -116,7 +116,7 @@ export const METHODOLOGY = {
   submit: {
     title: 'How to send a result',
     body:
-      'Contribute a recipe JSON plus a log. Stack Lab records amdai-bench cards when packages ship. Do not invent a tok/s to fill a cell.',
+      'Contribute a recipe JSON plus a log. Stack Lab exports a lab-notes-report/1 pack — each row is an amdai-bench/run@1 card. Ingest with npx tsx src/scripts/amdai-bench.ts ingest pack.json. Verified Q4+ measured rows merge into data/runs/. Q3 stays a labeled estimate. Do not invent a tok/s to fill a cell.',
   },
   citations: {
     title: 'Citations and as-of dates',
@@ -231,6 +231,7 @@ export function trustHrefs(): string[] {
     { href: '/contribute', label: 'Contribute' },
     { href: '/amdai-bench', label: 'amdai-bench' },
     { href: '/amdai-bench/run@1.schema.json', label: 'Schema' },
+    { href: '/amdai-bench/lab-notes-report@1.schema.json', label: 'lab-notes-report schema' },
     { href: '/amdai-bench/runs.json', label: 'Runs JSON' },
     { href: '/rocm-problems', label: 'ROCm problems' },
     { href: '/calculator', label: 'Calculator' },

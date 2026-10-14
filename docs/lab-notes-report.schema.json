@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://amdai.net/amdai-bench/lab-notes-report@1.schema.json",
+  "title": "lab-notes-report/1",
+  "description": "Stack Lab shareable measured-run pack. Envelope only — each row is an amdai-bench/run@1 card (decode, prefill, peak VRAM per card + total, peak system RAM, context size, one GPU or all GPUs). Do not invent a second measurement schema, tok/s, or prices. Q3 is a labeled estimate unless an approved measured exception. Q1/Q2 stay off.",
+  "type": "object",
+  "required": ["schema", "runs"],
+  "properties": {
+    "schema": { "const": "lab-notes-report/1" },
+    "exported_at": { "type": ["string", "null"] },
+    "source": { "type": ["string", "null"] },
+    "runs": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "https://amdai.net/amdai-bench/run@1.schema.json" }
+    },
+    "cards": {
+      "description": "Alias for runs. The parser accepts either key.",
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "https://amdai.net/amdai-bench/run@1.schema.json" }
+    },
+    "run": {
+      "description": "Single-card alias. The parser accepts one amdai-bench/run@1 object here.",
+      "$ref": "https://amdai.net/amdai-bench/run@1.schema.json"
+    }
+  }
+}

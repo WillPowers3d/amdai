@@ -4,6 +4,8 @@
  * Do not invent a download URL, version, query scheme, or tok/s.
  */
 
+import { REPORT_HOWTO, REPORT_SCHEMA, REPORT_SCHEMA_HREF } from './lab-notes-report';
+
 export const STACK_LAB_NAME = 'Radeon Stack Lab';
 export const STACK_LAB_PUBLISHED = '2026-10-13';
 export const STACK_LAB_DIGEST =
@@ -30,6 +32,7 @@ export const STACK_LAB_SECTIONS = [
   { id: 'install', label: 'Install' },
   { id: 'handoffs', label: 'Handoffs' },
   { id: 'amdai-bench', label: 'amdai-bench' },
+  { id: 'import', label: 'Import from Stack Lab' },
   { id: 'profiles', label: 'Profiles' },
 ] as const;
 
@@ -127,7 +130,7 @@ export const STACK_LAB_JOBS: StackLabJob[] = [
     id: 'share-contribute',
     title: 'Share / Contribute',
     body:
-      'Send cards back to Lab Notes. /results publishes validating cards. /contribute is the recipe form. /benchmarks is the 33-card matrix built only from those cards.',
+      'Send cards back to Lab Notes. Export a lab-notes-report/1 pack (each row is amdai-bench/run@1). /results publishes validating cards. /contribute is the recipe form. /benchmarks is the 33-card matrix built only from those cards.',
     links: [
       { href: '/contribute', label: 'Contribute a recipe' },
       { href: '/results', label: 'Run cards' },
@@ -229,10 +232,15 @@ export const STACK_LAB_HANDOFFS: StackLabHandoff[] = [
 export const STACK_LAB_CLI = {
   schemaHref: '/amdai-bench/run@1.schema.json',
   schemaId: 'amdai-bench/run@1',
+  packSchemaHref: REPORT_SCHEMA_HREF,
+  packSchemaId: REPORT_SCHEMA,
+  howto: REPORT_HOWTO,
   commands: [
     'npx tsx src/scripts/amdai-bench.ts validate',
     'npx tsx src/scripts/amdai-bench.ts emit < card.json',
     'npx tsx src/scripts/amdai-bench.ts append data/runs/local-desktop-amdai.jsonl < card.json',
+    'npx tsx src/scripts/amdai-bench.ts ingest --dry-run pack.json',
+    'npx tsx src/scripts/amdai-bench.ts ingest pack.json',
   ],
 };
 
@@ -270,6 +278,7 @@ export const REQUIRED_STACK_LAB_HREFS = [
   '/backends',
   '/stacks',
   '/amdai-bench/run@1.schema.json',
+  '/amdai-bench/lab-notes-report@1.schema.json',
   '/disclosure',
   '/recipes.json',
   '/start',
@@ -296,6 +305,10 @@ export function stackLabBlob(): string {
     ...STACK_LAB_HANDOFFS.map((row) => `${row.label} ${row.body}`),
     ...STACK_LAB_PROFILES.map((row) => `${row.title} ${row.body}`),
     ...STACK_LAB_CLI.commands,
+    REPORT_HOWTO.title,
+    REPORT_HOWTO.lead,
+    ...REPORT_HOWTO.steps,
+    REPORT_SCHEMA,
   ];
   return parts.join('\n');
 }
@@ -307,6 +320,7 @@ export function stackLabHrefs(): string[] {
     ...STACK_LAB_HANDOFFS.map((row) => ({ href: row.href, label: row.label })),
     ...STACK_LAB_PROFILES.flatMap((row) => row.links),
     { href: STACK_LAB_CLI.schemaHref, label: 'schema' },
+    { href: STACK_LAB_CLI.packSchemaHref, label: 'lab-notes-report schema' },
     { href: '/disclosure', label: 'Disclosure' },
   ];
   return [
@@ -338,6 +352,10 @@ export function assertStackLabValid(): string[] {
   if (!STACK_LAB_CLI.commands.some((cmd) => cmd.includes('amdai-bench.ts'))) {
     errors.push('must document the in-repo amdai-bench CLI');
   }
+  if (!STACK_LAB_CLI.commands.some((cmd) => cmd.includes('ingest'))) {
+    errors.push('must document lab-notes-report ingest');
+  }
+  if (!blob.includes(REPORT_SCHEMA)) errors.push('must name lab-notes-report/1');
   if (/stacklab:\/\//i.test(blob)) errors.push('do not invent a URI scheme');
   if (/(?:^|[^a-z-])amdai:\/\//i.test(blob)) errors.push('do not invent a URI scheme');
   if (!/amdai-stack-lab:/.test(blob)) errors.push('must document the amdai-stack-lab handoff');
