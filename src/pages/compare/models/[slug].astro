@@ -202,7 +202,7 @@ const sides = [page.left, page.right] as const;
       </p>
       <div class="mt-6 grid gap-4 md:grid-cols-2">
         {sides.map((side) => (
-          <article class="rounded-2xl border border-line bg-raised/50 p-5">
+          <article class="min-w-0 max-w-full rounded-2xl border border-line bg-raised/50 p-5">
             <h3 class="font-serif text-2xl tracking-tight">{side.shortName}</h3>
             <ul class="mt-4 grid gap-3 text-sm">
               {side.launches.map((launch) => (

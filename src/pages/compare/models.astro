@@ -59,7 +59,7 @@ const pickedLabel =
         <div class="mt-5 grid gap-4 sm:grid-cols-2">
           <label class="block text-sm">
             <span class="text-faint">Model A</span>
-            <select name="a" class="mt-1 w-full rounded-xl border border-line bg-canvas px-3 py-2 text-ink">
+            <select name="a" class="field mt-1">
               {sides.map((side) => (
                 <option value={side.id} selected={picked.a === side.id}>{side.shortName}</option>
               ))}
@@ -67,7 +67,7 @@ const pickedLabel =
           </label>
           <label class="block text-sm">
             <span class="text-faint">Model B</span>
-            <select name="b" class="mt-1 w-full rounded-xl border border-line bg-canvas px-3 py-2 text-ink">
+            <select name="b" class="field mt-1">
               {sides.map((side) => (
                 <option value={side.id} selected={picked.b === side.id || (!picked.b && side.id === 'glm-53-flash')}>
                   {side.shortName}

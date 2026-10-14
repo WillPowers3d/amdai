@@ -123,9 +123,17 @@ body {
   max-width: 100%;
 }
 
+#main .grid > *,
+#main article,
+#main .card {
+  min-width: 0;
+  max-width: 100%;
+}
+
 pre,
 .code-wrap {
   max-width: 100%;
+  min-width: 0;
   overflow-x: auto;
 }
 
