@@ -232,6 +232,7 @@ export const CRUMB_LABELS: Record<string, string> = {
   '/thinking': 'Thinking mode',
   '/concurrency-ab': 'Parallel slots',
   '/flash-attention': 'Flash Attention',
+  '/prefill': 'Prefill',
   '/out-of-vram': 'Out of VRAM',
   '/moe': 'MoE',
   '/can-run': 'Can my Radeon run it?',
@@ -536,6 +537,12 @@ setMeta(
   'Flash Attention (-fa) on a Radeon GPU with llama.cpp. Cited on|off|auto. Overnight -fa 1. Server FA deltas not measured. Q3 is a labeled estimate.',
 );
 setDate('/flash-attention', '2026-10-14');
+setMeta(
+  '/prefill',
+  'Faster prompt processing (prefill) on a Radeon GPU',
+  'Faster prompt processing (prefill) on a Radeon GPU with llama.cpp. Cited -b / -ub. Measure Stack Lab prefill-ab/1. Q3 is a labeled estimate.',
+);
+setDate('/prefill', '2026-10-14');
 setMeta(
   '/out-of-vram',
   'Out of VRAM? Fix llama.cpp memory errors',

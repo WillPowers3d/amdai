@@ -792,13 +792,48 @@ export const GLOSSARY: GlossaryEntry[] = [
     deeper:
       'Official UD-Q5_K_XL 4K: 2761.6 tok/s prefill, 102.39 decode. At 256K: 519.2 / 44.4. Q4_K_M 32K sibling: 1902.1 prefill, 117.69 decode. Quote the card, not a blended average.',
     links: [
+      { href: '/prefill', label: 'Prefill' },
       { href: '/benchmarks', label: 'Benchmarks' },
       { href: '/results', label: 'Run cards' },
       { href: '/tuning', label: 'Speed up llama.cpp' },
       { href: '/flash-attention', label: 'Flash Attention' },
       { href: '/qwen', label: 'Qwen compare' },
     ],
-    seeAlso: ['toks', 'context-length', 'amdai-bench', 'flash-attention'],
+    seeAlso: ['toks', 'context-length', 'amdai-bench', 'flash-attention', 'batch', 'ubatch'],
+  },
+  {
+    id: 'batch',
+    term: 'Batch (-b)',
+    aliases: ['-b', '--batch-size', 'logical batch', 'LLAMA_ARG_BATCH'],
+    letter: 'B',
+    definition:
+      'Official llama.cpp logical maximum batch size. llama-server README: -b / --batch-size N (default 2048; env LLAMA_ARG_BATCH). How much prompt the engine plans for. The GPU still computes in -ub-sized chunks.',
+    why: 'Long Hermes, coding-tool, and RAG prompts are prefill-bound. House llama-server does not record a -b pin. Overnight llama-bench prefill cells are not a llama-server batch A/B. Measure Stack Lab prefill-ab/1.',
+    deeper:
+      'The CLI README documents the same -b / --batch-size flag. A larger -b with a smaller -ub still processes the prompt in physical micro-batches. llama.cpp #14836 failed compute pp buffers at -b 4096 -ub 4096. Do not invent a house pin.',
+    links: [
+      { href: '/prefill', label: 'Prefill' },
+      { href: '/tuning', label: 'Speed up llama.cpp' },
+      { href: '/stack-lab', label: 'Stack Lab' },
+    ],
+    seeAlso: ['ubatch', 'prefill-decode', 'flash-attention', 'llamacpp'],
+  },
+  {
+    id: 'ubatch',
+    term: 'Micro-batch (-ub)',
+    aliases: ['-ub', '--ubatch-size', 'ubatch', 'physical batch', 'LLAMA_ARG_UBATCH'],
+    letter: 'U',
+    definition:
+      'Official llama.cpp physical maximum batch size. llama-server README: -ub / --ubatch-size N (default 512; env LLAMA_ARG_UBATCH). The chunk that actually hits the GPU during prefill.',
+    why: 'Larger -ub can raise prefill when unused VRAM remains for the compute buffer. Smaller -ub can fit a tight card. House llama-server does not record a pin. llama-server -ub stays not measured yet — run amdai-bench ab-prefill.',
+    deeper:
+      'Unused VRAM after weights + KV is the shopper headroom. House 32 GB R9700 at 256K UD-Q5 leaves about 2.7 GB after the measured 29.34 GB peak. llama.cpp #14836 failed to allocate Vulkan compute pp buffers at -b 4096 -ub 4096. Cut -ub when that allocate appears.',
+    links: [
+      { href: '/prefill', label: 'Prefill' },
+      { href: '/out-of-vram', label: 'Out of VRAM' },
+      { href: '/gpus/r9700', label: 'R9700' },
+    ],
+    seeAlso: ['batch', 'prefill-decode', 'vram', 'flash-attention'],
   },
   {
     id: 'quant',

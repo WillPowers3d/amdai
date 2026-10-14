@@ -52,6 +52,7 @@ describe('shopper RAM labels', () => {
     assert.ok(RAM_OFFLOAD_SURFACES.includes('/thinking'));
     assert.ok(RAM_OFFLOAD_SURFACES.includes('/concurrency-ab'));
     assert.ok(RAM_OFFLOAD_SURFACES.includes('/flash-attention'));
+    assert.ok(RAM_OFFLOAD_SURFACES.includes('/prefill'));
     assert.ok(RAM_OFFLOAD_SURFACES.includes('/out-of-vram'));
     assert.ok(RAM_OFFLOAD_SURFACES.includes('/moe'));
     assert.ok(RAM_OFFLOAD_SURFACES.includes('/can-run'));

@@ -310,10 +310,11 @@ export const RAG_LINUX_STEPS: RagStep[] = [
     id: 'ask',
     title: 'Ask a question against the daily-driver LLM',
     body:
-      'Embed the question the same way you embedded the chunks. Retrieve the nearest chunks. Send those chunks plus the question to the measured llama.cpp Vulkan chat server — house daily driver is Qwen3.6-35B-A3B, -c 262144, f16 KV. Size -c for the retrieved window; a stuffed prompt can OOM the same way a long chat does. Do not invent a recall score. The long-context gate means the stated window ran, not that the model found a fact in the middle.',
+      'Embed the question the same way you embedded the chunks. Retrieve the nearest chunks. Send those chunks plus the question to the measured llama.cpp Vulkan chat server — house daily driver is Qwen3.6-35B-A3B, -c 262144, f16 KV. Size -c for the retrieved window; a stuffed prompt can OOM the same way a long chat does. Long RAG prompts are prefill-bound — see /prefill for cited -b / -ub. Do not invent a recall score. The long-context gate means the stated window ran, not that the model found a fact in the middle.',
     links: [
       { href: '/models/qwen36', label: '35B model page' },
       { href: '/long-context', label: 'Long context' },
+      { href: '/prefill', label: 'Prefill' },
       { href: '/calculator', label: 'Calculator' },
     ],
   },
@@ -433,6 +434,7 @@ export const RAG_HUB: RagLink[] = [
   { href: '/speech', label: 'Speech' },
   { href: '/image-gen', label: 'Image gen' },
   { href: '/long-context', label: 'Long context' },
+  { href: '/prefill', label: 'Prefill' },
   { href: '/calculator', label: 'Calculator' },
   { href: '/stack-lab', label: 'Stack Lab' },
 ];
@@ -456,6 +458,7 @@ export const REQUIRED_RAG_HREFS = [
   '/speech',
   '/image-gen',
   '/long-context',
+  '/prefill',
   '/models/qwen36',
   '/quants',
 ] as const;

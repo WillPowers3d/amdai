@@ -208,6 +208,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/thinking', label: 'Thinking mode' },
       { href: '/concurrency-ab', label: 'Parallel slots' },
       { href: '/flash-attention', label: 'Flash Attention' },
+      { href: '/prefill', label: 'Prefill' },
       { href: '/out-of-vram', label: 'Out of VRAM' },
       { href: '/long-context', label: 'Long context' },
       { href: '/multi-gpu', label: 'Dual / multi-GPU' },
@@ -276,6 +277,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/long-context', label: 'Long context' },
       { href: '/tuning', label: 'Speed up llama.cpp' },
       { href: '/flash-attention', label: 'Flash Attention' },
+      { href: '/prefill', label: 'Prefill' },
       { href: '/thinking', label: 'Thinking mode' },
       { href: '/guides/tool-calling', label: 'Tool calling' },
       { href: '/qwen36-dual', label: '35B on two cards' },
@@ -295,9 +297,26 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/setup/multi-gpu', label: 'Multi-GPU llama.cpp' },
       { href: '/backends/llamacpp', label: 'llama.cpp' },
       { href: '/out-of-vram', label: 'Out of VRAM' },
+      { href: '/prefill', label: 'Prefill' },
       { href: '/stack-lab', label: 'Stack Lab' },
       { href: '/amdai-bench', label: 'amdai-bench' },
       { href: '/calculator', label: 'Calculator' },
+    ];
+  }
+  if (path === '/prefill') {
+    return [
+      { href: '/tuning', label: 'Speed up llama.cpp' },
+      { href: '/flash-attention', label: 'Flash Attention' },
+      { href: '/concurrency-ab', label: 'Parallel slots' },
+      { href: '/kv-cache', label: 'KV cache' },
+      { href: '/long-context', label: 'Long context' },
+      { href: '/rag', label: 'RAG' },
+      { href: '/out-of-vram', label: 'Out of VRAM' },
+      { href: '/backends/llamacpp', label: 'llama.cpp' },
+      { href: '/stack-lab', label: 'Stack Lab' },
+      { href: '/amdai-bench', label: 'amdai-bench' },
+      { href: '/calculator', label: 'Calculator' },
+      { href: '/gpus/r9700', label: 'R9700 measured page' },
     ];
   }
   if (path === '/out-of-vram') {
@@ -482,6 +501,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/rag', label: 'RAG on Radeon' },
       { href: '/tuning', label: 'Speed up llama.cpp' },
       { href: '/flash-attention', label: 'Flash Attention' },
+      { href: '/prefill', label: 'Prefill' },
       { href: '/out-of-vram', label: 'Out of VRAM' },
     ];
   }
@@ -500,6 +520,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/amdai-bench', label: 'amdai-bench' },
       { href: '/concurrency-ab', label: 'Parallel slots' },
       { href: '/flash-attention', label: 'Flash Attention' },
+      { href: '/prefill', label: 'Prefill' },
       { href: '/out-of-vram', label: 'Out of VRAM' },
     ];
   }
@@ -527,6 +548,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/image-gen', label: 'Image gen on Radeon' },
       { href: '/vision', label: 'Vision on Radeon' },
       { href: '/gpus/r9700', label: 'R9700 measured page' },
+      { href: '/prefill', label: 'Prefill' },
     ];
   }
   if (path === '/vision') {
@@ -752,6 +774,7 @@ export function relatedFor(pathname: string): RelatedLink[] {
     add(out, seen, '/guides/tool-calling', 'Tool calling');
     add(out, seen, '/concurrency-ab', 'Parallel slots');
     add(out, seen, '/flash-attention', 'Flash Attention');
+    add(out, seen, '/prefill', 'Prefill');
     add(out, seen, '/out-of-vram', 'Out of VRAM');
     add(out, seen, '/setup/docker', 'Docker / Podman');
     add(out, seen, '/setup/lm-studio', 'LM Studio');
@@ -881,6 +904,7 @@ export function assertRelatedValid(
     '/thinking',
     '/concurrency-ab',
     '/flash-attention',
+    '/prefill',
     '/out-of-vram',
     '/moe',
     '/can-run',

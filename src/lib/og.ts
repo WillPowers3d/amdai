@@ -570,6 +570,12 @@ export const OG_CARDS: OgCard[] = [
     alt: 'AMDai Flash Attention (-fa) on a Radeon GPU with llama.cpp — cited on|off|auto, llama-server FA deltas not measured',
   },
   {
+    slug: 'prefill',
+    title: 'Prefill on Radeon',
+    lede: 'Cited -b / -ub. Measure Stack Lab prefill-ab/1',
+    alt: 'AMDai faster prompt processing (prefill) on a Radeon GPU with llama.cpp — cited -b / -ub, llama-server batch not measured',
+  },
+  {
     slug: 'out-of-vram',
     title: 'Out of VRAM on Radeon',
     lede: 'Cited ErrorOutOfDeviceMemory. Cheapest fix first',

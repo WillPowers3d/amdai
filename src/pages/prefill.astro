@@ -1,0 +1,246 @@
+---
+import Base from '../layouts/Base.astro';
+import Callout from '../components/Callout.astro';
+import HouseRam from '../components/HouseRam.astro';
+import HowWeTest from '../components/HowWeTest.astro';
+import NextSteps from '../components/NextSteps.astro';
+import OpenInStackLab from '../components/OpenInStackLab.astro';
+import { HOUSE_STACK_LAB } from '../lib/stack-lab-open';
+import { COMPARE_Q3 } from '../lib/local-desktop-compare';
+import {
+  PP_BENCH,
+  PP_CARDS,
+  PP_CITED_LABEL,
+  PP_CTX,
+  PP_DESCRIPTION,
+  PP_DOCS,
+  PP_FA,
+  PP_FLASH,
+  PP_HOUSE,
+  PP_HUB_LINKS,
+  PP_KV,
+  PP_LEAD,
+  PP_PACK,
+  PP_PREFILL_CELLS,
+  PP_QUANTS,
+  PP_RAM,
+  PP_SOURCES,
+  PP_STEPS,
+  PP_TITLE,
+  PP_TRADEOFF,
+  PP_UNMEASURED,
+  PP_VRAM,
+  PP_WHAT,
+} from '../lib/prefill';
+---
+
+<Base title={PP_TITLE} description={PP_DESCRIPTION}>
+  <main id="main" class="mx-auto max-w-3xl px-4 py-10 sm:px-6">
+    <p class="kicker">{PP_CITED_LABEL}</p>
+    <h1 class="mt-3 font-serif text-4xl tracking-tight sm:text-5xl">
+      Faster prompt processing (prefill) on a Radeon GPU with llama.cpp: batch (-b) and micro-batch (-ub)
+    </h1>
+    <p class="mt-4 text-lg leading-relaxed text-muted">{PP_LEAD}</p>
+    <ul class="mt-4 flex flex-wrap gap-2">
+      {PP_HUB_LINKS.map((link) => (
+        <li>
+          <a
+            class="inline-flex min-h-9 items-center rounded-full border border-line bg-canvas px-3 text-sm text-ink hover:border-accent/50 hover:text-accent-ink"
+            href={link.href}
+          >
+            {link.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+
+    <Callout type="linux" title="llama-bench prefill is not a -b / -ub A/B">
+      <p>
+        Overnight 35B Vulkan cards recorded llama-bench pp, not llama-server
+        <code>-b</code> / <code>-ub</code>. Server batch deltas stay {PP_UNMEASURED} —
+        open the <a class="underline decoration-accent/40" href="/stack-lab">planner</a>.
+        Pack {PP_PACK} is the A/B.
+      </p>
+    </Callout>
+
+    <section id="what" class="mt-12 scroll-mt-28" aria-labelledby="what-heading">
+      <h2 id="what-heading" class="font-serif text-3xl tracking-tight">What -b and -ub do</h2>
+      <p class="mt-3 leading-relaxed text-muted">{PP_WHAT}</p>
+    </section>
+
+    <section id="flash-attention" class="mt-12 scroll-mt-28" aria-labelledby="fa-heading">
+      <h2 id="fa-heading" class="font-serif text-3xl tracking-tight">How they meet Flash Attention</h2>
+      <p class="mt-3 leading-relaxed text-muted">{PP_FA}</p>
+    </section>
+
+    <section id="kv" class="mt-12 scroll-mt-28" aria-labelledby="kv-heading">
+      <h2 id="kv-heading" class="font-serif text-3xl tracking-tight">KV type and leftover VRAM</h2>
+      <p class="mt-3 leading-relaxed text-muted">{PP_KV}</p>
+    </section>
+
+    <section id="context" class="mt-12 scroll-mt-28" aria-labelledby="context-heading">
+      <h2 id="context-heading" class="font-serif text-3xl tracking-tight">Context size shrinks headroom</h2>
+      <p class="mt-3 leading-relaxed text-muted">{PP_CTX}</p>
+    </section>
+
+    <section id="tradeoff" class="mt-12 scroll-mt-28" aria-labelledby="tradeoff-heading">
+      <h2 id="tradeoff-heading" class="font-serif text-3xl tracking-tight">What we have measured</h2>
+      <p class="mt-3 leading-relaxed text-muted">{PP_TRADEOFF}</p>
+      <div class="mt-4 overflow-x-auto rounded-2xl border border-line">
+        <table class="min-w-full text-left text-sm">
+          <caption class="sr-only">
+            Measured 35B llama-bench prefill tok/s on one R9700. Not a llama-server -b / -ub A/B.
+          </caption>
+          <thead class="bg-raised/60 text-faint">
+            <tr>
+              <th scope="col" class="px-3 py-2 font-medium">Quant</th>
+              <th scope="col" class="px-3 py-2 font-medium">4K</th>
+              <th scope="col" class="px-3 py-2 font-medium">32K</th>
+              <th scope="col" class="px-3 py-2 font-medium">128K</th>
+              <th scope="col" class="px-3 py-2 font-medium">256K</th>
+            </tr>
+          </thead>
+          <tbody>
+            {PP_PREFILL_CELLS.map((row) => (
+              <tr class="border-t border-line">
+                <th scope="row" class="px-3 py-2 font-mono text-ink">{row.quant}</th>
+                <td class="px-3 py-2 tabular-nums">{row.at4k}</td>
+                <td class="px-3 py-2 tabular-nums">{row.at32k}</td>
+                <td class="px-3 py-2 tabular-nums">{row.at128k}</td>
+                <td class="px-3 py-2 tabular-nums">{row.at256k}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <ul class="mt-3 space-y-1 text-sm text-muted">
+        {PP_PREFILL_CELLS.map((row) => (
+          <li>
+            <span class="font-mono text-ink">{row.quant}</span>
+            {' — '}
+            {row.note}
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section id="flags" class="mt-12 scroll-mt-28" aria-labelledby="flags-heading">
+      <h2 id="flags-heading" class="font-serif text-3xl tracking-tight">Cited flags</h2>
+      <p class="mt-3 leading-relaxed text-muted">
+        Vulkan house path. The first block is the recorded llama-server line — no
+        <code>-b</code> / <code>-ub</code>. The second is the official server-README
+        default pair, not a local-desktop pin. The bench line is recorded. Flash does not
+        record <code>-b</code> / <code>-ub</code>. Replace the binary and GGUF paths.
+      </p>
+      <pre class="mt-4 overflow-x-auto rounded-2xl border border-line bg-raised/50 p-4 text-sm leading-relaxed text-ink"><code>{PP_HOUSE.trim()}</code></pre>
+      <pre class="mt-4 overflow-x-auto rounded-2xl border border-line bg-raised/50 p-4 text-sm leading-relaxed text-ink"><code>{PP_DOCS.trim()}</code></pre>
+      <pre class="mt-4 overflow-x-auto rounded-2xl border border-line bg-raised/50 p-4 text-sm leading-relaxed text-ink"><code>{PP_BENCH.trim()}</code></pre>
+      <pre class="mt-4 overflow-x-auto rounded-2xl border border-line bg-raised/50 p-4 text-sm leading-relaxed text-ink"><code>{PP_FLASH.trim()}</code></pre>
+    </section>
+
+    <section id="quants" class="mt-12 scroll-mt-28" aria-labelledby="quants-heading">
+      <h2 id="quants-heading" class="font-serif text-3xl tracking-tight">Q6 / Q5 / Q4 plus a labeled Q3</h2>
+      <p class="mt-3 leading-relaxed text-muted">
+        Batch size is a compute-buffer knob, not a smaller GGUF. House recipes stay
+        Q4 and up. {COMPARE_Q3} is a labeled estimate — do not download it to run.
+        Both RAM lines appear when RAM offload appears (Q6 at 32K and up).
+      </p>
+      <ul class="mt-4 space-y-3">
+        {PP_QUANTS.map((row) => (
+          <li class="rounded-2xl border border-line bg-raised/50 p-4">
+            <p class="font-mono text-sm text-ink">
+              {row.quant}
+              {row.estimate ? ' · labeled estimate' : ''}
+            </p>
+            <p class="mt-1 text-sm text-muted">{row.file}</p>
+            <p class="mt-2 text-sm text-ink">{row.prefill}</p>
+            <p class="mt-1 text-sm text-muted">Peak VRAM: {row.vram}</p>
+            <p class="mt-1 text-sm text-muted">{row.ramMin}</p>
+            <p class="mt-1 text-sm text-muted">{row.ramFull}</p>
+            <p class="mt-2 text-sm text-muted">{row.note}</p>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section id="cards" class="mt-12 scroll-mt-28" aria-labelledby="cards-heading">
+      <h2 id="cards-heading" class="font-serif text-3xl tracking-tight">VRAM headroom by published card</h2>
+      <p class="mt-3 leading-relaxed text-muted">{PP_VRAM}</p>
+      <ul class="mt-4 space-y-3">
+        {PP_CARDS.map((row) => (
+          <li class="rounded-2xl border border-line bg-raised/50 p-4">
+            <p class="text-ink">
+              <a class="underline decoration-accent/40" href={row.href}>{row.name}</a>
+              <span class="text-muted"> · {row.vramGb} GB published</span>
+            </p>
+            <p class="mt-1 text-sm text-muted">{row.note}</p>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section id="checklist" class="mt-12 scroll-mt-28" aria-labelledby="checklist-heading">
+      <h2 id="checklist-heading" class="font-serif text-3xl tracking-tight">Zero to a measured -b / -ub pin</h2>
+      <ol class="mt-8 space-y-6">
+        {PP_STEPS.map((step, index) => (
+          <li id={step.id} class="scroll-mt-28 rounded-2xl border border-line bg-raised/50 p-5">
+            <p class="font-mono text-[0.68rem] uppercase tracking-[0.14em] text-faint">
+              {index + 1} · {PP_CITED_LABEL}
+            </p>
+            <h3 class="mt-2 font-serif text-2xl tracking-tight">{step.title}</h3>
+            <p class="mt-3 leading-relaxed text-ink">{step.body}</p>
+            <ul class="mt-4 flex flex-wrap gap-2">
+              {step.links.map((link) => (
+                <li>
+                  <a
+                    class="inline-flex min-h-9 items-center rounded-full border border-line bg-canvas px-3 text-sm text-ink hover:border-accent/50 hover:text-accent-ink"
+                    href={link.href}
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <section id="fit-ram" class="mt-12 scroll-mt-28" aria-labelledby="fit-ram-heading">
+      <h2 id="fit-ram-heading" class="font-serif text-3xl tracking-tight">RAM lines (Ubuntu-measured)</h2>
+      <p class="mt-3 leading-relaxed text-muted">{PP_RAM}</p>
+      <div class="mt-4">
+        <HouseRam which="daily" compact />
+      </div>
+    </section>
+
+    <section id="stack-lab-cta" class="mt-12 scroll-mt-28" aria-labelledby="stack-lab-cta-heading">
+      <h2 id="stack-lab-cta-heading" class="font-serif text-3xl tracking-tight">Open in Stack Lab</h2>
+      <p class="mt-3 leading-relaxed text-muted">
+        Pack {PP_PACK} is the prefill A/B. It is not an allowlisted deep link on
+        this site. Use the planner. Packages are not published yet and there is
+        no public download. Anything unmeasured stays {PP_UNMEASURED}.
+      </p>
+      <div class="mt-4">
+        <OpenInStackLab {...HOUSE_STACK_LAB.planner} compact />
+      </div>
+    </section>
+
+    <section id="sources" class="mt-12 scroll-mt-28" aria-labelledby="sources-heading">
+      <h2 id="sources-heading" class="font-serif text-3xl tracking-tight">Sources</h2>
+      <ul class="mt-4 list-disc space-y-2 pl-5 text-sm leading-relaxed text-muted">
+        {PP_SOURCES.map((source) => (
+          <li>
+            <a class="underline decoration-accent/40" href={source.href} rel="noopener">{source.title}</a>
+            {source.official ? '' : ' — unofficial for llama.cpp'}
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <div class="mt-8">
+      <HowWeTest />
+    </div>
+    <NextSteps path="/prefill" />
+  </main>
+</Base>

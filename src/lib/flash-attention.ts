@@ -227,6 +227,7 @@ export const FA_STEPS: FaStep[] = [
       { href: '/backends/llamacpp', label: 'llama.cpp' },
       { href: '/setup/server', label: 'Always-on server' },
       { href: '/concurrency-ab', label: 'Parallel slots' },
+      { href: '/prefill', label: 'Prefill' },
     ],
   },
   {
@@ -320,6 +321,7 @@ export const FA_HUB_LINKS: FaLink[] = [
   { href: '/stack-lab', label: 'Stack Lab' },
   { href: '/calculator', label: 'Calculator' },
   { href: '/out-of-vram', label: 'Out of VRAM' },
+  { href: '/prefill', label: 'Prefill' },
   { href: '/quants', label: 'Quants · KV types' },
   { href: '/start', label: 'Getting started' },
 ];
@@ -340,6 +342,7 @@ export const REQUIRED_FA_HREFS = [
   '/stack-lab',
   '/calculator',
   '/out-of-vram',
+  '/prefill',
   '/quants',
   '/results',
 ] as const;

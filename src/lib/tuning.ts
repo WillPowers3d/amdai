@@ -182,6 +182,7 @@ export const TUNING_KNOBS: TuningKnob[] = [
     exampleNote: 'Measure prefill tuning on your box. Do not copy a prefill figure we did not record.',
     stackLab: 'Stack Lab A/B: prefill tuning. Measure it on your box via /stack-lab planner and /amdai-bench.',
     links: [
+      { href: '/prefill', label: 'Prefill' },
       { href: '/glossary#prefill-decode', label: 'Prefill vs decode' },
       { href: '/long-context', label: 'Long context' },
       { href: '/backends/llamacpp', label: 'llama.cpp' },
@@ -211,8 +212,9 @@ export const TUNING_KNOBS: TuningKnob[] = [
       '  --host 127.0.0.1 --port 8080',
     ].join('\n'),
     exampleNote: 'Copy from llama.cpp --help, then measure. Empty prefill cells stay not measured yet.',
-    stackLab: 'Stack Lab A/B: prefill tuning. Measure it on your box via /stack-lab planner and /amdai-bench.',
+    stackLab: 'Stack Lab A/B: prefill-ab/1 (amdai-bench ab-prefill). Measure it on your box via /stack-lab planner and /amdai-bench. Shopper page: /prefill.',
     links: [
+      { href: '/prefill', label: 'Prefill' },
       { href: '/long-context', label: 'Long context' },
       { href: '/benchmarks', label: 'Benchmarks' },
       { href: '/backends/llamacpp', label: 'llama.cpp' },
@@ -478,6 +480,7 @@ export const TUNING_HUB_LINKS: TuningLink[] = [
   { href: '/benchmarks', label: 'Benchmarks' },
   { href: '/calculator', label: 'Calculator' },
   { href: '/out-of-vram', label: 'Out of VRAM' },
+  { href: '/prefill', label: 'Prefill' },
 ];
 
 export const REQUIRED_TUNING_HREFS = [
@@ -497,6 +500,7 @@ export const REQUIRED_TUNING_HREFS = [
   '/results',
   '/calculator',
   '/out-of-vram',
+  '/prefill',
   '/quants',
   '/compare/one-vs-two-gpu',
   '/compare/q4-q5-q6',

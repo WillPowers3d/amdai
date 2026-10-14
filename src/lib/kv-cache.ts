@@ -161,9 +161,10 @@ export const KV_CACHE_FAQ = [
     id: 'f16-vs-q8-q4',
     question: 'Should I switch from f16 KV to q8_0 or q4_0 to fit more context?',
     answer:
-      'House daily driver stays f16 — overnight 35B cards recorded -ctk f16 -ctv f16, and 29.34 GB at 256K still fits one R9700. q8_0 and q4_0 shrink the estimated cache. Quality and tok/s for those types are not measured yet. llama.cpp multi-gpu.md requires flash attention for a quantized V cache. Do not confuse a KV type with a weight quant.',
+      'House daily driver stays f16 — overnight 35B cards recorded -ctk f16 -ctv f16, and 29.34 GB at 256K still fits one R9700. q8_0 and q4_0 shrink the estimated cache and can free VRAM for a bigger -ub — see /prefill. Quality and tok/s for those types are not measured yet. llama.cpp multi-gpu.md requires flash attention for a quantized V cache. Do not confuse a KV type with a weight quant.',
     links: [
       { href: '/flash-attention', label: 'Flash Attention' },
+      { href: '/prefill', label: 'Prefill' },
       { href: '/quants', label: 'Quants · KV types' },
       { href: '/tuning', label: 'Speed up llama.cpp' },
       { href: '/calculator', label: 'Calculator' },
@@ -197,6 +198,7 @@ export const KV_CACHE_FAQ = [
 export const KV_CACHE_HUB: KvCacheLink[] = [
   { href: '/long-context', label: 'Long context' },
   { href: '/flash-attention', label: 'Flash Attention' },
+  { href: '/prefill', label: 'Prefill' },
   { href: '/tuning', label: 'Speed up llama.cpp' },
   { href: '/quants', label: 'Quants · KV types' },
   { href: '/calculator', label: 'Calculator' },
@@ -224,6 +226,7 @@ export const KV_CACHE_SECTIONS = [
 export const REQUIRED_KV_CACHE_HREFS = [
   '/long-context',
   '/flash-attention',
+  '/prefill',
   '/tuning',
   '/quants',
   '/calculator',

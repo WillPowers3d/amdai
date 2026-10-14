@@ -47,6 +47,7 @@ export const STACK_LAB_INTRO_LINKS: StackLabLink[] = [
   { href: '/recipes.json', label: 'recipes.json' },
   { href: '/start', label: 'Getting started' },
   { href: '/flash-attention', label: 'Flash Attention' },
+  { href: '/prefill', label: 'Prefill' },
   { href: '/out-of-vram', label: 'Out of VRAM' },
 ];
 
@@ -230,6 +231,12 @@ export const STACK_LAB_HANDOFFS: StackLabHandoff[] = [
       'Cited llama.cpp -fa / --flash-attn. Overnight 35B Vulkan llama-bench recorded -fa 1. Measure Stack Lab Flash Attention A/B and Prefill tuning A/B from the planner. llama-server FA on/off stays not measured on this site.',
   },
   {
+    href: '/prefill',
+    label: 'Prefill',
+    body:
+      'Cited llama.cpp -b / --batch-size and -ub / --ubatch-size. House llama-server does not record a pin. Measure Stack Lab prefill-ab/1 (amdai-bench ab-prefill) from the planner. llama-server batch stays not measured on this site.',
+  },
+  {
     href: '/speech',
     label: 'Speech on Radeon',
     body:
@@ -292,6 +299,7 @@ export const REQUIRED_STACK_LAB_HREFS = [
   '/start',
   '/speech',
   '/flash-attention',
+  '/prefill',
 ] as const;
 
 const BANNED_VISIBLE = /Qwen2\.5|Qwen3-8B/i;

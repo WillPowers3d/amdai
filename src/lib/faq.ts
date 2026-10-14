@@ -572,10 +572,11 @@ export const FAQ_ENTRIES: FaqItem[] = [
     group: 'models-quants',
     question: 'How do I speed up llama.cpp on Radeon?',
     answer:
-      'Fit the file first, then turn one cited knob at a time: -ngl, --threads, --threads-batch, -b / -ub, -fa, KV type, --split-mode, a Q4+ draft, or a vendor power cap. The shopper guide is /tuning. Flash Attention has its own page at /flash-attention. Measured decode is the official local-desktop 35B llama.cpp Vulkan sweep. Everything else stays not measured yet. Q3 is a labeled estimate. Draft models stay Q4 and up. llama.cpp first.',
+      'Fit the file first, then turn one cited knob at a time: -ngl, --threads, --threads-batch, -b / -ub, -fa, KV type, --split-mode, a Q4+ draft, or a vendor power cap. The shopper guide is /tuning. Flash Attention has its own page at /flash-attention. Prefill / batch has its own page at /prefill. Measured decode is the official local-desktop 35B llama.cpp Vulkan sweep. Everything else stays not measured yet. Q3 is a labeled estimate. Draft models stay Q4 and up. llama.cpp first.',
     links: [
       { href: '/tuning', label: 'Speed up llama.cpp' },
       { href: '/flash-attention', label: 'Flash Attention' },
+      { href: '/prefill', label: 'Prefill' },
       { href: '/speculative-decoding', label: 'Speculative decoding' },
       { href: '/backends/llamacpp', label: 'llama.cpp' },
       { href: '/benchmarks', label: 'Benchmarks' },
@@ -649,6 +650,20 @@ export const FAQ_ENTRIES: FaqItem[] = [
       { href: '/flash-attention', label: 'Flash Attention' },
       { href: '/tuning', label: 'Speed up llama.cpp' },
       { href: '/kv-cache', label: 'KV cache' },
+      { href: '/stack-lab', label: 'Stack Lab' },
+      { href: '/amdai-bench', label: 'amdai-bench' },
+    ],
+  },
+  {
+    id: 'prefill',
+    group: 'speed-vram',
+    question: 'How do I speed up llama.cpp prompt processing (prefill) on a Radeon?',
+    answer:
+      'Official flags are -b / --batch-size (logical, default 2048) and -ub / --ubatch-size (physical, default 512). House llama-server does not record a pin. Overnight llama-bench prefill cells are not a llama-server -b / -ub A/B. AMDai has not measured server batch on local-desktop — run Stack Lab prefill-ab/1 (amdai-bench ab-prefill). The shopper page is /prefill. House recipes stay Q4 and up. Q3 is a labeled estimate. llama.cpp first.',
+    links: [
+      { href: '/prefill', label: 'Prefill' },
+      { href: '/tuning', label: 'Speed up llama.cpp' },
+      { href: '/flash-attention', label: 'Flash Attention' },
       { href: '/stack-lab', label: 'Stack Lab' },
       { href: '/amdai-bench', label: 'amdai-bench' },
     ],
@@ -1055,6 +1070,7 @@ export const REQUIRED_FAQ_HREFS = [
   '/thinking',
   '/concurrency-ab',
   '/flash-attention',
+  '/prefill',
   '/out-of-vram',
   '/moe',
   '/can-run',
