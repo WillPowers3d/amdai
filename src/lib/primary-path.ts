@@ -136,6 +136,7 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
     { href: '/disclosure', label: 'Affiliate disclosure' },
   ],
   '/gpus/r9700': [
+    { href: '/compare/gpus', label: 'Compare GPUs' },
     { href: '/setup', label: 'First-run setup' },
     { href: DAILY_RECIPE, label: 'Daily-driver recipe' },
     { href: '/benchmarks', label: 'Benchmarks' },
@@ -147,6 +148,7 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
     { href: '/calculator', label: 'Calculator' },
     { href: '/gpus/r9700', label: 'R9700 measured page' },
     { href: '/setup', label: 'First-run setup' },
+    { href: '/compare/gpus', label: 'Compare GPUs' },
     { href: '/compare', label: 'Compare 35B' },
     { href: '/bios', label: 'BIOS' },
     { href: '/rocm-problems/strix-halo-mes-remove-queue', label: 'MES hang' },
@@ -176,6 +178,7 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
     { href: '/stack-lab', label: 'Stack Lab' },
   ],
   '/gpus/rx-9070-xt': [
+    { href: '/compare/gpus', label: 'Compare GPUs' },
     { href: '/calculator', label: 'Calculator' },
     { href: '/gpus/r9700', label: 'R9700 measured page' },
     { href: '/compare/radeon-vs-nvidia', label: 'Radeon vs NVIDIA' },
@@ -255,11 +258,20 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
   ],
   '/compare': [
     { href: '/gpus/r9700', label: 'R9700 measured page' },
+    { href: '/compare/gpus', label: 'Compare GPUs' },
     { href: '/compare/radeon-vs-nvidia', label: 'Radeon vs NVIDIA' },
     { href: '/benchmarks', label: 'Benchmarks' },
     { href: '/results', label: 'Run cards' },
     { href: '/calculator', label: 'Calculator' },
     { href: '/glossary', label: 'Glossary' },
+  ],
+  '/compare/gpus': [
+    { href: '/compare', label: 'Compare 35B' },
+    { href: '/compare/r9700-vs-rx-9070-xt', label: 'R9700 vs 9070 XT' },
+    { href: '/gpus/r9700', label: 'R9700 measured page' },
+    { href: '/compare/radeon-vs-nvidia', label: 'Radeon vs NVIDIA' },
+    { href: '/calculator', label: 'Calculator' },
+    { href: '/gpus', label: 'GPU directory' },
   ],
   '/compare/radeon-vs-nvidia': [
     { href: '/gpus/r9700', label: 'R9700 measured page' },
@@ -405,7 +417,9 @@ export const HIGH_TRAFFIC_PATHS = Object.keys(NEXT_STEPS);
 
 export function nextStepsFor(pathname: string): PathLink[] {
   const path = pathname === '/' ? '/' : pathname.replace(/\/+$/, '') || '/';
-  return NEXT_STEPS[path] ?? NEXT_STEPS['/']!;
+  if (NEXT_STEPS[path]) return NEXT_STEPS[path]!;
+  if (path.startsWith('/compare/') && path.includes('-vs-')) return NEXT_STEPS['/compare/gpus']!;
+  return NEXT_STEPS['/']!;
 }
 
 /** Curated next-step list for a path, or undefined — never falls back to the homepage list. */

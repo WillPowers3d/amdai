@@ -1,0 +1,184 @@
+---
+import Base from '../../layouts/Base.astro';
+import Callout from '../../components/Callout.astro';
+import HowWeTest from '../../components/HowWeTest.astro';
+import NewsletterSignup from '../../components/NewsletterSignup.astro';
+import NextSteps from '../../components/NextSteps.astro';
+import {
+  GPU_COMPARE_ENGINE,
+  GPU_COMPARE_HUB_LEAD,
+  GPU_COMPARE_IDS,
+  GPU_COMPARE_MODEL,
+  GPU_COMPARE_SHORT,
+  gpuCompareHubCards,
+  gpuCompareLinksFor,
+  gpuCompareSide,
+  parseGpuComparePicker,
+} from '../../lib/gpu-compare';
+import { COMPARE_Q3, COMPARE_Q3_CITE } from '../../lib/local-desktop-compare';
+
+const cards = gpuCompareHubCards();
+const sides = GPU_COMPARE_IDS.map((id) => gpuCompareSide(id));
+const picked = parseGpuComparePicker(Astro.url.search);
+const pickedHref = picked.href;
+const pickedLabel =
+  picked.a && picked.b
+    ? `${GPU_COMPARE_SHORT[picked.a]} vs ${GPU_COMPARE_SHORT[picked.b]}`
+    : null;
+---
+
+<Base
+  title="Compare AMD GPUs"
+  description="Pick two Radeon GPUs that already have AMDai sheets. Compare VRAM, bandwidth, 35B Q6/Q5/Q4 fit estimates, and a labeled Q3 estimate. No invented prices."
+>
+  <main id="main" class="mx-auto max-w-3xl px-4 py-10 sm:px-6">
+    <p class="font-mono text-[0.72rem] uppercase tracking-[0.18em] text-accent">
+      <a class="underline decoration-accent/40" href="/compare">Compare</a>
+      · {GPU_COMPARE_MODEL} · {GPU_COMPARE_ENGINE}
+    </p>
+    <h1 class="mt-3 font-serif text-4xl tracking-tight sm:text-5xl">Compare two Radeon GPUs</h1>
+    <p class="mt-4 text-lg leading-relaxed text-muted">{GPU_COMPARE_HUB_LEAD}</p>
+    <div class="mt-4">
+      <HowWeTest />
+    </div>
+    <Callout type="note" title="Q3 is an estimate">
+      <p>
+        Every pair lists Q6_K, Q5_K_M, and Q4_K_M plus <strong class="text-ink">{COMPARE_Q3}</strong>
+        ({COMPARE_Q3_CITE}). That Q3 row is labeled estimate. Q1/Q2 stay off. Check-price buttons
+        hop through the existing <a class="underline decoration-accent/40" href="/disclosure">/go/</a> routes — we do not print a price.
+      </p>
+    </Callout>
+
+    <form id="gpu-compare-picker" class="mt-10 rounded-2xl border border-line bg-raised/50 p-5" method="get" action="/compare/gpus">
+      <fieldset>
+        <legend class="font-serif text-2xl tracking-tight">Pick GPU A vs GPU B</legend>
+        <p class="mt-2 text-sm text-muted">
+          The form works without JavaScript: submit to land on this page with a link to the pair.
+          With JS, the same controls open the shareable pair URL directly.
+        </p>
+        <div class="mt-5 grid gap-4 sm:grid-cols-2">
+          <label class="block text-sm">
+            <span class="text-faint">GPU A</span>
+            <select name="a" class="mt-1 w-full rounded-xl border border-line bg-canvas px-3 py-2 text-ink">
+              {sides.map((side) => (
+                <option value={side.id} selected={picked.a === side.id}>{side.shortName}</option>
+              ))}
+            </select>
+          </label>
+          <label class="block text-sm">
+            <span class="text-faint">GPU B</span>
+            <select name="b" class="mt-1 w-full rounded-xl border border-line bg-canvas px-3 py-2 text-ink">
+              {sides.map((side) => (
+                <option value={side.id} selected={picked.b === side.id || (!picked.b && side.id === 'rx9070xt')}>
+                  {side.shortName}
+                </option>
+              ))}
+            </select>
+          </label>
+        </div>
+        <button class="btn-primary mt-5" type="submit">Compare</button>
+      </fieldset>
+    </form>
+
+    {pickedHref && pickedLabel && (
+      <p class="mt-6 rounded-2xl border border-accent/40 bg-raised/50 p-5">
+        Open the static pair page:
+        <a class="ml-1 underline decoration-accent/40 underline-offset-2" href={pickedHref}>{pickedLabel}</a>
+      </p>
+    )}
+
+    <section id="featured" class="mt-12" aria-labelledby="featured-heading">
+      <h2 id="featured-heading" class="font-serif text-3xl tracking-tight">Useful pairs</h2>
+      <p class="mt-3 text-sm text-muted">
+        Pre-rendered, shareable URLs. Every other catalog pair is also a static page — use the picker or the lists below.
+      </p>
+      <ul class="mt-6 grid gap-4">
+        {cards.map((card) => (
+          <li>
+            <a class="block rounded-2xl border border-line bg-raised/50 p-5 hover:border-accent/50" href={card.href}>
+              <p class="font-mono text-[0.68rem] uppercase tracking-[0.14em] text-faint">{card.kicker}</p>
+              <h3 class="mt-2 font-serif text-2xl">{card.title}</h3>
+              <p class="mt-2 text-sm leading-relaxed text-muted">{card.body}</p>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section id="all-pairs" class="mt-12" aria-labelledby="all-pairs-heading">
+      <h2 id="all-pairs-heading" class="font-serif text-3xl tracking-tight">Every sheet vs every other</h2>
+      <p class="mt-3 text-sm text-muted">
+        Works with JavaScript disabled. Each heading is one GPU; the links are static pair pages.
+      </p>
+      {sides.map((side) => (
+        <div id={`gpu-${side.slug}`} class="mt-8 scroll-mt-28">
+          <h3 class="font-serif text-2xl tracking-tight">
+            <a class="hover:text-accent-ink" href={side.path}>{side.shortName}</a>
+            <span class="ml-2 font-sans text-sm font-normal text-faint">{side.vramLabel} · {side.gfx}</span>
+          </h3>
+          <ul class="mt-3 flex flex-wrap gap-2">
+            {gpuCompareLinksFor(side.id).map((link) => (
+              <li>
+                <a class="inline-flex min-h-9 items-center rounded-full border border-line bg-canvas px-3 text-sm" href={link.href}>
+                  vs {link.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </section>
+
+    <p class="mt-10 text-sm text-muted">
+      Also:
+      <a class="underline decoration-accent/40 underline-offset-2" href="/compare">Compare 35B</a>
+      ·
+      <a class="underline decoration-accent/40 underline-offset-2" href="/compare/radeon-vs-nvidia">Radeon vs NVIDIA</a>
+      ·
+      <a class="underline decoration-accent/40 underline-offset-2" href="/gpus">GPU directory</a>
+      ·
+      <a class="underline decoration-accent/40 underline-offset-2" href="/calculator">Calculator</a>
+      ·
+      <a class="underline decoration-accent/40 underline-offset-2" href="/gpus/r9700">R9700 measured page</a>
+    </p>
+    <NextSteps path="/compare/gpus" />
+    <div class="mt-12">
+      <NewsletterSignup variant="article" />
+    </div>
+  </main>
+</Base>
+
+<script>
+  const form = document.getElementById('gpu-compare-picker');
+  if (form instanceof HTMLFormElement) {
+    const slugs: Record<string, string> = {
+      r9700: 'r9700',
+      rx9070xt: 'rx-9070-xt',
+      rx9060xt: 'rx-9060-xt',
+      rx7900gre: 'rx-7900-gre',
+      rx7700xt: 'rx-7700-xt',
+      rx7600xt: 'rx-7600-xt',
+      rx7600: 'rx-7600',
+      rx6800xt: 'rx-6800-xt',
+      rx6700xt: 'rx-6700-xt',
+      'strix-halo': 'strix-halo',
+    };
+    const order = Object.keys(slugs);
+    form.addEventListener('submit', (event) => {
+      const data = new FormData(form);
+      const a = String(data.get('a') ?? '');
+      const b = String(data.get('b') ?? '');
+      if (!a || !b || a === b) return;
+      const ia = order.indexOf(a);
+      const ib = order.indexOf(b);
+      if (ia < 0 || ib < 0) return;
+      const left = ia < ib ? a : b;
+      const right = ia < ib ? b : a;
+      const leftSlug = slugs[left];
+      const rightSlug = slugs[right];
+      if (!leftSlug || !rightSlug) return;
+      event.preventDefault();
+      window.location.href = `/compare/${leftSlug}-vs-${rightSlug}`;
+    });
+  }
+</script>

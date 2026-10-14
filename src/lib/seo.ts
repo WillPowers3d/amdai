@@ -12,6 +12,7 @@ import { BRAND, site } from './site';
 import { GUIDE_UPDATED, rocmPages } from './rocm-guide';
 import { amdai, amdai, type RunCard } from './run-card';
 import { forumCategories } from './forum-categories';
+import { gpuCompareSeoRows } from './gpu-compare';
 
 export const SITE_ORIGIN = 'https://amdai.net';
 export const TITLE_SUFFIX = ` · ${BRAND}`;
@@ -130,6 +131,7 @@ export const CRUMB_LABELS: Record<string, string> = {
   '/rocm/glossary': 'ROCm glossary',
   '/rocm/faq': 'ROCm FAQ',
   '/compare': 'Compare',
+  '/compare/gpus': 'Compare GPUs',
   '/compare/one-vs-two-gpu': 'One vs two GPUs',
   '/compare/q4-q5-q6': 'Q6 Q5 Q4',
   '/compare/radeon-vs-nvidia': 'Radeon vs NVIDIA',
@@ -381,6 +383,11 @@ setMeta(
   'Cited Radeon vs NVIDIA for a local LLM: vendor specs, measured R9700 35B, and an honest CUDA vs ROCm software split. No invented prices.',
 );
 setDate('/compare/radeon-vs-nvidia', '2026-10-13');
+for (const row of gpuCompareSeoRows()) {
+  CRUMB_LABELS[row.path] = row.title;
+  setMeta(row.path, row.title, row.description);
+  setDate(row.path, row.published);
+}
 setMeta(
   '/qwen36-dual',
   '35B on two R9700s',

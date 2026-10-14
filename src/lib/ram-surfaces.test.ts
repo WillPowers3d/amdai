@@ -36,6 +36,8 @@ describe('shopper RAM labels', () => {
     assert.ok(RAM_OFFLOAD_SURFACES.includes('/vision'));
     assert.ok(RAM_OFFLOAD_SURFACES.includes('/power'));
     assert.ok(RAM_OFFLOAD_SURFACES.includes('/compare/radeon-vs-nvidia'));
+    assert.ok(RAM_OFFLOAD_SURFACES.includes('/compare/gpus'));
+    assert.ok(isRamOffloadSurface('/compare/r9700-vs-rx-9070-xt'));
     assert.ok(RAM_OFFLOAD_SURFACES.includes('/models/qwen36'));
     assert.ok(RAM_OFFLOAD_SURFACES.includes('/models/flash'));
     assert.ok(isRamOffloadSurface('/recipes/qwen36-35b.llamacpp-vulkan.262k'));

@@ -23,6 +23,7 @@ export const RAM_OFFLOAD_SURFACES = [
   '/gpus/rx-6700-xt',
   '/multi-gpu',
   '/compare',
+  '/compare/gpus',
   '/compare/one-vs-two-gpu',
   '/compare/q4-q5-q6',
   '/compare/radeon-vs-nvidia',
@@ -52,7 +53,8 @@ export const RAM_OFFLOAD_SURFACES = [
 
 export function isRamOffloadSurface(path: string): boolean {
   if ((RAM_OFFLOAD_SURFACES as readonly string[]).includes(path)) return true;
-  return path.startsWith('/recipes/');
+  if (path.startsWith('/recipes/')) return true;
+  return path.startsWith('/compare/') && path.includes('-vs-');
 }
 
 export function missingRamLabels(html: string): string[] {
@@ -80,6 +82,8 @@ export function assertRamSurfacesValid(): string[] {
   if (!RAM_OFFLOAD_SURFACES.includes('/gpus/rx-6800-xt')) errors.push('missing /gpus/rx-6800-xt');
   if (!RAM_OFFLOAD_SURFACES.includes('/gpus/rx-6700-xt')) errors.push('missing /gpus/rx-6700-xt');
   if (!RAM_OFFLOAD_SURFACES.includes('/compare/radeon-vs-nvidia')) errors.push('missing /compare/radeon-vs-nvidia');
+  if (!RAM_OFFLOAD_SURFACES.includes('/compare/gpus')) errors.push('missing /compare/gpus');
+  if (!isRamOffloadSurface('/compare/r9700-vs-rx-9070-xt')) errors.push('pair pages must be RAM surfaces');
   if (!RAM_OFFLOAD_SURFACES.includes('/models/qwen36')) errors.push('missing /models/qwen36');
   if (!RAM_OFFLOAD_SURFACES.includes('/models/flash')) errors.push('missing /models/flash');
   if (!RAM_OFFLOAD_SURFACES.includes('/calculator')) errors.push('missing /calculator');

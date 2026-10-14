@@ -7,6 +7,7 @@ import node from '@astrojs/node';
 import { htmlSeparators } from './src/lib/html-separators.ts';
 import { canonicalUrl, isSitemapExcluded, lastmodFor, urlPath } from './src/lib/seo.ts';
 import { sitemapFromDist } from './src/lib/sitemap-from-dist.ts';
+import { gpuCompareRedirects } from './src/lib/gpu-compare.ts';
 
 const accountsOn = process.env.ACCOUNTS_ENABLED === '1' || process.env.ACCOUNTS_ENABLED === 'true';
 const newsletterOn = process.env.NEWSLETTER_ENABLED === '1' || process.env.NEWSLETTER_ENABLED === 'true';
@@ -67,6 +68,7 @@ export default defineConfig({
     '/gpus/rx6700-xt': '/gpus/rx-6700-xt',
     '/gpus/rx-6700xt': '/gpus/rx-6700-xt',
     '/embeddings': '/rag',
+    ...gpuCompareRedirects(),
   },
   markdown: {
     shikiConfig: {

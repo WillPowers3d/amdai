@@ -121,6 +121,7 @@ export const REQUIRED_CONSUMER_HREFS = [
   '/stack-lab',
   '/gpus',
   '/gpus/r9700',
+  '/compare/gpus',
   '/compare/radeon-vs-nvidia',
   '/backends/llamacpp',
   '/contribute',

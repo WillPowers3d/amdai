@@ -117,6 +117,7 @@ export const FAQ_ENTRIES: FaqItem[] = [
       'The measured house box is one AMD Radeon AI PRO R9700 (32 GB, gfx1201). There is no consumer RX 9700. A 16 GB RX 9070 XT is the same generation with half the VRAM — see the RX 9070 XT recipe sheet for calculator fit estimates, not local-desktop tok/s. The cheaper 16 GB RDNA 4 pick is the RX 9060 XT (gfx1200) — same estimate-sheet rules, different family package. A 7900 XTX (gfx1100) is still a practical home card on a different ROCm family package; the 16 GB 7900 GRE sits between the 7900 XT and 7800 XT on that same gfx1100 pin. The 12 GB 7700 XT is the next smaller gfx1101 sheet after the 7800 XT. The 16 GB 7600 XT is the gfx1102 budget 16 GB sheet — not the 8 GB RX 7600, which has its own estimate sheet. The 16 GB RX 6800 XT is the RDNA 2 gfx1030 estimate sheet — unofficial on the current Radeon ROCm row, Vulkan first. The 12 GB RX 6700 XT is the RDNA 2 gfx1031 used-card sheet — not the 6800 XT and not the 10 GB non-XT 6700; AMD cites 12 GB GDDR6 and 230 W typical board power. Mini-PCs on Ryzen AI Max / Strix Halo (Radeon 8060S, gfx1151) are a shared-memory APU, not a discrete VRAM card — see that cited guide. Confirm the SKU on the R9700 measured page and the GPU directory, then size the file on the calculator before you buy a second card.',
     links: [
       { href: '/gpus/r9700', label: 'R9700 measured page' },
+      { href: '/compare/gpus', label: 'Compare GPUs' },
       { href: '/gpus/rx-9070-xt', label: 'RX 9070 XT sheet' },
       { href: '/gpus/rx-9060-xt', label: 'RX 9060 XT sheet' },
       { href: '/gpus/strix-halo', label: 'Strix Halo / Ryzen AI Max' },
@@ -602,6 +603,7 @@ export const FAQ_ITEMS: FaqItem[] = FAQ_ENTRIES;
 export const REQUIRED_FAQ_HREFS = [
   '/glossary',
   '/compare',
+  '/compare/gpus',
   '/benchmarks',
   '/results',
   '/calculator',

@@ -215,6 +215,12 @@ export const OG_CARDS: OgCard[] = [
     measured: true,
   },
   {
+    slug: 'compare-gpus',
+    title: 'Compare AMD GPUs',
+    lede: 'VRAM, 35B Q6/Q5/Q4 fit estimates, labeled Q3',
+    alt: 'AMDai compare AMD GPUs — VRAM and labeled 35B estimates',
+  },
+  {
     slug: 'results',
     title: 'Official run cards',
     lede: 'amdai-bench/run@1 from amdai on local-desktop',
@@ -397,7 +403,9 @@ export function ogSlug(pathname: string): string {
   if (slug === 'results' || slug.startsWith('results-')) return 'results';
   if (slug === 'benchmarks' || slug.startsWith('benchmarks-')) return 'benchmarks';
   if (slug === 'compare' || slug.startsWith('compare-')) {
-    return SLUGS.has(slug) ? slug : 'compare';
+    if (SLUGS.has(slug)) return slug;
+    if (slug === 'compare-gpus' || slug.includes('-vs-')) return 'compare-gpus';
+    return 'compare';
   }
   if (slug === 'gpus-r9700') return 'gpus-r9700';
   if (slug === 'gpus-strix-halo') return 'gpus-strix-halo';

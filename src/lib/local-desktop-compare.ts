@@ -364,6 +364,12 @@ export function filterQuantRows(rows: QuantCompareRow[], state: CompareState): Q
 export function compareHubCards() {
   return [
     {
+      href: '/compare/gpus',
+      kicker: 'GPUs',
+      title: 'R9700 vs 9070 XT (and other cards)',
+      body: 'Head-to-head from the published sheets: VRAM, bandwidth, which 35B Q6/Q5/Q4 files fit, a labeled Q3 estimate, and a plain-English pick per job. No invented prices or tok/s.',
+    },
+    {
       href: '/gpus/r9700',
       kicker: 'This card',
       title: 'Radeon AI PRO R9700',

@@ -1,5 +1,6 @@
 ---
 import Callout from './Callout.astro';
+import GpuCompareLinks from './GpuCompareLinks.astro';
 import SystemRamNeed from './SystemRamNeed.astro';
 import type { ConsumerRecipePage } from '../lib/consumer-gpu';
 
@@ -129,6 +130,7 @@ const { sheet } = Astro.props;
     <li><a class="btn-ghost" href="/setup">First-run setup</a></li>
     <li><a class="btn-ghost" href="/stack-lab">Stack Lab</a></li>
     <li><a class="btn-ghost" href="/gpus/r9700">R9700 measured page</a></li>
+    <li><a class="btn-ghost" href="/compare/gpus">Compare GPUs</a></li>
     <li><a class="btn-ghost" href="/compare/radeon-vs-nvidia">Radeon vs NVIDIA</a></li>
     <li><a class="btn-ghost" href="/faq">FAQ</a></li>
     <li><a class="btn-ghost" href="/models">Models</a></li>
@@ -152,3 +154,5 @@ const { sheet } = Astro.props;
     ))}
   </p>
 </nav>
+
+<GpuCompareLinks id={sheet.id} />

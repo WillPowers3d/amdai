@@ -69,6 +69,7 @@ const gpuRuns = officialAmdaiRuns(verifiedMeasured(runsForGpu(runs, page.id)));
     <div class="mt-6 flex flex-wrap gap-3">
       <a class="btn-secondary" href="/gpus">All cards</a>
       {page.id === 'r9700' && <a class="btn-secondary" href="/compare">Compare 35B</a>}
+      <a class="btn-secondary" href="/compare/gpus">Compare GPUs</a>
       <a class="btn-secondary" href="/compare/radeon-vs-nvidia">Radeon vs NVIDIA</a>
       {(sheet || page.calcId) && (
         <a class="btn-primary" href={sheet?.calculatorHref ?? `/calculator?gpu=${page.calcId}`}>

@@ -9,7 +9,7 @@ describe('related links', () => {
     assert.deepEqual(assertRelatedValid(), []);
     const r9700 = relatedFor('/gpus/r9700');
     const hrefs = r9700.map((link) => link.href);
-    for (const href of ['/compare', '/compare/radeon-vs-nvidia', '/benchmarks', '/multi-gpu', '/setup']) {
+    for (const href of ['/compare', '/compare/gpus', '/compare/r9700-vs-rx-9070-xt', '/compare/radeon-vs-nvidia', '/benchmarks', '/multi-gpu', '/setup']) {
       assert.ok(hrefs.includes(href), href);
     }
     const recipeIds = recipesForCard(recipes, 'r9700').map((row) => `/recipes/${row.id}`);

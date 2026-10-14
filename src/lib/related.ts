@@ -10,6 +10,7 @@ import { stepsFor, type PathLink } from './primary-path';
 import { liveRecipes, recipesForCard, recipesForModel } from './recipes';
 import { recipes } from './recipes-data';
 import { CONSUMER_NAV_LINKS } from './consumer-gpu';
+import { gpuCompareIdFromInput, gpuCompareLinksFor } from './gpu-compare';
 import { urlPath } from './seo';
 
 export type RelatedLink = PathLink;
@@ -46,6 +47,7 @@ function topicLinks(path: string): RelatedLink[] {
   if (path === '/compare' || path.startsWith('/compare/')) {
     return [
       { href: '/gpus/r9700', label: 'R9700 measured page' },
+      { href: '/compare/gpus', label: 'Compare GPUs' },
       { href: '/compare/radeon-vs-nvidia', label: 'Radeon vs NVIDIA' },
       { href: '/benchmarks', label: 'Benchmarks' },
       { href: '/results', label: 'Run cards' },
@@ -288,6 +290,7 @@ export function relatedFor(pathname: string): RelatedLink[] {
   if (path === '/gpus' || path.startsWith('/gpus/')) {
     const id = path === '/gpus' ? '' : path.slice('/gpus/'.length);
     add(out, seen, '/compare', 'Compare 35B');
+    add(out, seen, '/compare/gpus', 'Compare GPUs');
     add(out, seen, '/compare/radeon-vs-nvidia', 'Radeon vs NVIDIA');
     add(out, seen, '/benchmarks', 'Benchmarks');
     add(out, seen, '/multi-gpu', 'Dual / multi-GPU');
@@ -295,6 +298,12 @@ export function relatedFor(pathname: string): RelatedLink[] {
     add(out, seen, '/stack-lab', 'Stack Lab');
     add(out, seen, '/gpus/r9700', 'R9700 measured page');
     if (id) {
+      const compareId = gpuCompareIdFromInput(id);
+      if (compareId) {
+        for (const link of gpuCompareLinksFor(compareId).filter((row) => row.featured)) {
+          add(out, seen, link.href, `vs ${link.label}`);
+        }
+      }
       for (const recipe of recipesForCard(recipes, id)) {
         add(out, seen, `/recipes/${recipe.id}`, recipeLabel(recipe));
       }
@@ -420,6 +429,7 @@ export function assertRelatedValid(
     '/gpus/rx-6800-xt',
     '/gpus/rx-6700-xt',
     '/compare',
+    '/compare/gpus',
     '/compare/radeon-vs-nvidia',
     '/setup',
     '/faq',
@@ -445,7 +455,7 @@ export function assertRelatedValid(
     if (links.some((link) => link.href === path)) errors.push(`${path}: self-link`);
   }
   const r9700 = relatedFor('/gpus/r9700').map((link) => link.href);
-  for (const href of ['/compare', '/compare/radeon-vs-nvidia', '/benchmarks', '/multi-gpu', '/setup']) {
+  for (const href of ['/compare', '/compare/gpus', '/compare/radeon-vs-nvidia', '/benchmarks', '/multi-gpu', '/setup']) {
     if (!r9700.includes(href)) errors.push(`/gpus/r9700 missing ${href}`);
   }
   if (!r9700.some((href) => href.startsWith('/recipes/'))) {

@@ -15,6 +15,7 @@ import { gpuPageById } from '../../lib/gpu-pages';
 import { measuredRamHits } from '../../lib/measured-ram-data';
 import { runs } from '../../lib/run-card-data';
 import { officialLinks } from '../../lib/site';
+import GpuCompareLinks from '../../components/GpuCompareLinks.astro';
 import OpenInStackLab from '../../components/OpenInStackLab.astro';
 import { HOUSE_STACK_LAB } from '../../lib/stack-lab-open';
 import {
@@ -88,6 +89,7 @@ const dailyRam = dailyRecipe ? recipeSystemRam(dailyRecipe, measuredRamHits) : n
       <a class="btn-primary" href="/setup">First-run setup</a>
       <a class="btn-secondary" href="/recipes/qwen36-35b.llamacpp-vulkan.262k">Measured recipe</a>
       <a class="btn-ghost" href="/stack-lab">Stack Lab</a>
+      <a class="btn-ghost" href="/compare/gpus">Compare GPUs</a>
       <a class="btn-ghost" href="/compare/radeon-vs-nvidia">Radeon vs NVIDIA</a>
       {page.calcId && <a class="btn-ghost" href={`/calculator?gpu=${page.calcId}`}>Open in calculator</a>}
       <a class="btn-ghost" href="/models/qwen36">35B model page</a>
@@ -475,6 +477,8 @@ const dailyRam = dailyRecipe ? recipeSystemRam(dailyRecipe, measuredRamHits) : n
         <a class="underline decoration-accent/40" href="/disclosure">disclosure</a> path.
       </p>
     </section>
+
+    <GpuCompareLinks id="r9700" heading="Compare with other sheets" />
 
     <NextSteps path="/gpus/r9700" />
 

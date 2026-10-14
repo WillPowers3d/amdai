@@ -1,0 +1,56 @@
+---
+import {
+  GPU_COMPARE_HUB,
+  GPU_COMPARE_SHORT,
+  gpuCompareIdFromInput,
+  gpuCompareLinksFor,
+  type GpuCompareId,
+} from '../lib/gpu-compare';
+
+interface Props {
+  id?: string;
+  heading?: string;
+}
+
+const rawId = Astro.props.id;
+const heading = Astro.props.heading ?? 'Compare with…';
+const compareId = gpuCompareIdFromInput(rawId ?? '') as GpuCompareId | null;
+const links = compareId ? gpuCompareLinksFor(compareId) : [];
+const featured = links.filter((link) => link.featured);
+const rest = links.filter((link) => !link.featured);
+const name = compareId ? GPU_COMPARE_SHORT[compareId] : 'this GPU';
+---
+
+<section id="compare-gpus" class="mt-12 scroll-mt-28" aria-labelledby="compare-gpus-heading">
+  <h2 id="compare-gpus-heading" class="font-serif text-3xl tracking-tight">{heading}</h2>
+  <p class="mt-3 max-w-3xl leading-relaxed text-muted">
+    Head-to-head pages use the same VRAM, bandwidth, and calculator fit already on the sheets.
+    Q3 is a labeled estimate. No invented prices.
+    {compareId ? `${name} against the other published sheets:` : 'Open the GPU picker to choose two sheets.'}
+  </p>
+  <ul class="mt-4 flex flex-wrap gap-2">
+    <li>
+      <a class="inline-flex min-h-9 items-center rounded-full border border-accent/50 bg-raised px-3 text-sm" href={GPU_COMPARE_HUB}>
+        Compare GPUs
+      </a>
+    </li>
+    {featured.map((link) => (
+      <li>
+        <a class="inline-flex min-h-9 items-center rounded-full border border-line bg-canvas px-3 text-sm" href={link.href}>
+          vs {link.label}
+        </a>
+      </li>
+    ))}
+  </ul>
+  {rest.length > 0 && (
+    <p class="mt-3 text-sm text-muted">
+      Also:
+      {rest.map((link, index) => (
+        <>
+          {index > 0 ? ' · ' : ''}
+          <a class="underline decoration-accent/40 underline-offset-2" href={link.href}>{link.label}</a>
+        </>
+      ))}
+    </p>
+  )}
+</section>

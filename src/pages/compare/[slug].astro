@@ -1,0 +1,231 @@
+---
+import Base from '../../layouts/Base.astro';
+import BuyButtons from '../../components/BuyButtons.astro';
+import Callout from '../../components/Callout.astro';
+import HowWeTest from '../../components/HowWeTest.astro';
+import NewsletterSignup from '../../components/NewsletterSignup.astro';
+import NextSteps from '../../components/NextSteps.astro';
+import SystemRamNeed from '../../components/SystemRamNeed.astro';
+import { runs } from '../../lib/run-card-data';
+import { runPath } from '../../lib/run-card';
+import {
+  GPU_COMPARE_HUB,
+  gpuComparePairPages,
+  parseGpuCompareSlug,
+  gpuComparePairPage,
+} from '../../lib/gpu-compare';
+import { COMPARE_Q3 } from '../../lib/local-desktop-compare';
+import { RAM_FULL_LABEL, RAM_MIN_LABEL } from '../../lib/ram-surfaces';
+
+export function getStaticPaths() {
+  return gpuComparePairPages().map((page) => ({ params: { slug: page.slug } }));
+}
+
+const slug = Astro.params.slug ?? '';
+const parsed = parseGpuCompareSlug(slug);
+if (!parsed) throw new Error(`unknown GPU compare slug ${slug}`);
+const page = gpuComparePairPage(parsed[0], parsed[1], runs);
+const sides = [page.left, page.right] as const;
+---
+
+<Base title={page.title} description={page.description}>
+  <main id="main" class="mx-auto max-w-6xl px-4 py-10 sm:px-6">
+    <p class="kicker">
+      <a class="underline decoration-accent/40" href="/compare">Compare</a>
+      ·
+      <a class="underline decoration-accent/40" href={GPU_COMPARE_HUB}>GPUs</a>
+      · {page.model} · {page.engine}
+    </p>
+    <h1 class="display mt-3 text-4xl sm:text-5xl">{page.heading}</h1>
+    <p class="mt-4 max-w-3xl text-lg leading-relaxed text-muted">{page.lead}</p>
+    <div class="mt-4">
+      <HowWeTest />
+    </div>
+    <Callout type="note" title="What is measured">
+      <p>
+        VRAM stickers and gfx rows come from the existing GPU sheets.
+        Fit totals are calculator estimates.
+        <strong class="text-ink">{COMPARE_Q3}</strong> is a labeled estimate ({page.q3Cite}).
+        Measured tok/s appear only where a local-desktop card exists — today that is the R9700 35B table.
+        Check-price buttons use the existing <a class="underline decoration-accent/40" href="/disclosure">/go/</a> routes. We do not print a price.
+      </p>
+    </Callout>
+
+    <section id="specs" class="mt-10" aria-labelledby="specs-heading">
+      <h2 id="specs-heading" class="font-serif text-3xl tracking-tight">VRAM, bandwidth, gfx</h2>
+      <div class="mt-6 grid gap-4 md:grid-cols-2">
+        {sides.map((side) => (
+          <article class="rounded-2xl border border-line bg-raised/50 p-5">
+            <p class="kicker">{side.measured ? 'Measured on local-desktop' : 'Cited, not measured on local-desktop'}</p>
+            <h3 class="mt-2 font-serif text-2xl tracking-tight">
+              <a class="hover:text-accent-ink" href={side.path}>{side.shortName}</a>
+            </h3>
+            <dl class="mt-4 grid gap-3 text-sm">
+              <div>
+                <dt class="text-faint">Published VRAM</dt>
+                <dd class="mt-1 font-serif text-2xl tabular-nums">{side.vramLabel}</dd>
+                <dd class="mt-1 text-xs text-muted">{side.vramNote}</dd>
+              </div>
+              <div>
+                <dt class="text-faint">Memory bandwidth</dt>
+                <dd class="mt-1 font-serif text-2xl tabular-nums">{side.bandwidthLabel}</dd>
+                <dd class="mt-1 text-xs text-muted">{side.bandwidthNote}</dd>
+              </div>
+              <div>
+                <dt class="text-faint">gfx / arch</dt>
+                <dd class="mt-1 font-mono text-lg text-accent-ink">{side.gfx}</dd>
+                <dd class="mt-1 text-xs text-muted">{side.arch} · {side.family} · {side.support}</dd>
+              </div>
+            </dl>
+            <p class="mt-4 text-sm">
+              <a class="underline decoration-accent/40" href={side.path}>Full sheet</a>
+              {' · '}
+              <a class="underline decoration-accent/40" href={side.calculatorHref}>Open in calculator</a>
+            </p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section id="fit" class="mt-12" aria-labelledby="fit-heading">
+      <h2 id="fit-heading" class="font-serif text-3xl tracking-tight">Which 35B quants fit</h2>
+      <p class="mt-3 max-w-3xl text-sm leading-relaxed text-muted">
+        {page.model} on {page.engine}, f16 KV. Totals are calculator estimates.
+        Speed is measured only on the R9700 cells that already exist; everything else stays not measured.
+        {COMPARE_Q3} is always a labeled estimate.
+      </p>
+      <div class="mt-6 overflow-x-auto">
+        <table class="min-w-full text-left text-sm">
+          <caption class="sr-only">{page.model} fit on {page.left.shortName} vs {page.right.shortName}</caption>
+          <thead>
+            <tr class="border-b border-line text-faint">
+              <th class="py-2 pr-3 font-normal" scope="col">Quant</th>
+              <th class="py-2 pr-3 font-normal" scope="col">Kind</th>
+              <th class="py-2 pr-3 font-normal" scope="col">{page.left.shortName} 4K</th>
+              <th class="py-2 pr-3 font-normal" scope="col">{page.left.shortName} 32K</th>
+              <th class="py-2 pr-3 font-normal" scope="col">{page.right.shortName} 4K</th>
+              <th class="py-2 pr-3 font-normal" scope="col">{page.right.shortName} 32K</th>
+            </tr>
+          </thead>
+          <tbody>
+            {page.fitRows.map((row) => (
+              <tr class="border-b border-line/70 align-top">
+                <th class="py-3 pr-3 font-medium" scope="row">{row.quant}</th>
+                <td class="py-3 pr-3 text-muted">{row.kindLabel}</td>
+                {[...row.left, ...row.right].map((cell) => (
+                  <td class="py-3 pr-3">
+                    <p class="tabular-nums">{cell.totalGb}</p>
+                    <p class="text-xs text-muted">{cell.verdictLabel}</p>
+                    <p class="text-xs">
+                      {cell.speedKind === 'measured' ? (
+                        <span class="text-accent-ink">{cell.speed}</span>
+                      ) : (
+                        <span class="text-faint">{cell.speed}</span>
+                      )}
+                    </p>
+                    {cell.runIds.length > 0 && (
+                      <p class="mt-1 text-xs">
+                        {cell.runIds.map((id) => (
+                          <a class="mr-2 underline decoration-accent/40" href={runPath(id)}>{id}</a>
+                        ))}
+                      </p>
+                    )}
+                    <p class="mt-1 text-xs text-faint">{cell.note}</p>
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p class="mt-3 text-xs text-faint">Weights file {page.fitRows[0]?.weightsNote}. Same GGUF on both cards.</p>
+    </section>
+
+    <section id="ram" class="mt-12" aria-labelledby="ram-heading">
+      <h2 id="ram-heading" class="font-serif text-3xl tracking-tight">System RAM</h2>
+      <p class="mt-3 max-w-3xl leading-relaxed text-muted">
+        When a house 35B Q4 file does not fit, the spill is system RAM.
+        Shopper lines stay <strong class="text-ink">{RAM_MIN_LABEL}</strong> and
+        <strong class="text-ink">{RAM_FULL_LABEL}</strong> for {page.model} at {page.engine},
+        Q4_K_M, 32K selected and the model’s full context. Estimate unless a measured R9700 card overlays the kit.
+        If both sides fit, those labels still name the calculator lines if you raise context or a larger quant.
+      </p>
+      <div class="mt-6 grid gap-4 md:grid-cols-2">
+        {sides.map((side) => (
+          <article class="rounded-2xl border border-line bg-raised/40 p-5">
+            <h3 class="font-serif text-2xl tracking-tight">{side.shortName}</h3>
+            <p class="mt-2 text-sm text-muted">
+              {side.offload
+                ? `Q4_K_M at 4K or 32K does not fit this ${side.vramLabel} pool on the calculator.`
+                : `Q4_K_M at 4K and 32K fits this ${side.vramLabel} pool on the calculator.`}
+            </p>
+            <div class="mt-4">
+              <SystemRamNeed need={side.ramNeed} />
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section id="rocm" class="mt-12" aria-labelledby="rocm-heading">
+      <h2 id="rocm-heading" class="font-serif text-3xl tracking-tight">ROCm and Vulkan</h2>
+      <ol class="mt-6 grid gap-4 md:grid-cols-3">
+        {page.supportNotes.map((note, index) => (
+          <li class="rounded-2xl border border-line bg-raised/50 p-5">
+            <p class="kicker">Note {index + 1}</p>
+            <h3 class="mt-2 font-serif text-2xl tracking-tight">{note.title}</h3>
+            <p class="mt-3 leading-relaxed text-muted">{note.body}</p>
+          </li>
+        ))}
+      </ol>
+      <p class="mt-4 text-sm text-muted">
+        Cited rows:
+        <a class="underline decoration-accent/40" href={page.left.matrixHref} rel="noopener">ROCm 10.1.0 compatibility matrix</a>
+        and
+        <a class="underline decoration-accent/40" href={page.left.linuxReqsHref} rel="noopener">Linux system requirements</a>.
+        More gfx notes on <a class="underline decoration-accent/40" href="/rocm/gfx">/rocm/gfx</a>.
+      </p>
+    </section>
+
+    <section id="verdict" class="mt-12" aria-labelledby="verdict-heading">
+      <h2 id="verdict-heading" class="font-serif text-3xl tracking-tight">Plain-English pick</h2>
+      <ul class="mt-6 grid gap-4 md:grid-cols-2">
+        {page.useCases.map((row) => (
+          <li class="rounded-2xl border border-line bg-raised/50 p-5">
+            <h3 class="font-serif text-2xl tracking-tight">{row.title}</h3>
+            <p class="mt-3 leading-relaxed text-muted">{row.body}</p>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section id="buy" class="mt-12" aria-labelledby="buy-heading">
+      <h2 id="buy-heading" class="font-serif text-3xl tracking-tight">Check price</h2>
+      <p class="mt-3 max-w-3xl text-sm text-muted">
+        Affiliate hops only. No live or invented street price. Same disclosure as every other sheet.
+      </p>
+      <div class="mt-6">
+        <BuyButtons products={page.productIds} />
+      </div>
+    </section>
+
+    <p class="mt-10 text-sm text-muted">
+      Sheets:
+      <a class="underline decoration-accent/40" href={page.left.path}>{page.left.shortName}</a>
+      ·
+      <a class="underline decoration-accent/40" href={page.right.path}>{page.right.shortName}</a>
+      ·
+      <a class="underline decoration-accent/40" href={GPU_COMPARE_HUB}>All GPU compares</a>
+      ·
+      <a class="underline decoration-accent/40" href="/compare">Compare 35B</a>
+      ·
+      <a class="underline decoration-accent/40" href="/long-context">Long context</a>
+      ·
+      <a class="underline decoration-accent/40" href="/image-gen">Image gen</a>
+    </p>
+    <NextSteps path={page.path} />
+    <div class="mt-12">
+      <NewsletterSignup variant="article" />
+    </div>
+  </main>
+</Base>

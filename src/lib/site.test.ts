@@ -56,6 +56,8 @@ describe('accessibility statement', () => {
     assert.equal(ogSlug('/contact'), 'contact');
     assert.equal(ogSlug('/terms'), 'terms');
     assert.equal(ogSlug('/compare'), 'compare');
+    assert.equal(ogSlug('/compare/gpus'), 'compare-gpus');
+    assert.equal(ogSlug('/compare/r9700-vs-rx-9070-xt'), 'compare-gpus');
     assert.equal(ogSlug('/compare/q4-q5-q6'), 'compare-q4-q5-q6');
     assert.equal(ogSlug('/results'), 'results');
     assert.equal(ogSlug('/bios'), 'bios');

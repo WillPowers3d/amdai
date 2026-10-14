@@ -109,6 +109,7 @@ export const REQUIRED_STRIX_HALO_HREFS = [
   '/gpus',
   '/gpus/r9700',
   '/compare',
+  '/compare/gpus',
   '/multi-gpu',
   '/budget',
   '/rocm-problems/strix-halo-mes-remove-queue',

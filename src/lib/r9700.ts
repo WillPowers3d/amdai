@@ -125,6 +125,11 @@ export const R9700_MORE: R9700MoreLink[] = [
     body: 'Cited decisions from the overnight cards — layout and quant.',
   },
   {
+    href: '/compare/gpus',
+    label: 'Compare GPUs',
+    body: 'R9700 vs 9070 XT and the other published sheets. VRAM, fit estimates, labeled Q3. No invented prices.',
+  },
+  {
     href: '/compare/radeon-vs-nvidia',
     label: 'Radeon vs NVIDIA',
     body: 'Cited specs versus RTX 5090 / 4090 / 3090 / 5080 / 5070 Ti / 5060 Ti 16GB. NVIDIA speed stays empty until cited.',
@@ -208,6 +213,7 @@ export const REQUIRED_R9700_HREFS = [
   '/stack-lab',
   '/benchmarks',
   '/compare',
+  '/compare/gpus',
   '/compare/radeon-vs-nvidia',
   '/compare/one-vs-two-gpu',
   '/compare/q4-q5-q6',
