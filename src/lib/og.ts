@@ -284,6 +284,12 @@ export const OG_CARDS: OgCard[] = [
     alt: 'AMDai — Buying a used Radeon for local AI. Cited shopper guide, no invented prices',
   },
   {
+    slug: 'guides-quantize-gguf',
+    title: 'Make your own GGUF quants',
+    lede: 'Cited llama.cpp how-to. Unsloth UD is the house default',
+    alt: 'AMDai — Make your own GGUF quants for a Radeon GPU with llama.cpp. Cited how-to, no invented tok/s',
+  },
+  {
     slug: 'stack-lab',
     title: 'Radeon Stack Lab',
     lede: 'Packages not published yet',

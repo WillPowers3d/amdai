@@ -77,6 +77,7 @@ const ALLOWED_HREFS = new Set([
   '/setup/comfyui',
   '/setup/multi-gpu',
   '/guides/buying-used-radeon',
+  '/guides/quantize-gguf',
   '/image-gen',
   '/harnesses/image',
   '/rocm-problems/windows-wsl-preview',

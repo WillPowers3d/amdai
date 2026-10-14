@@ -582,6 +582,20 @@ export const FAQ_ENTRIES: FaqItem[] = [
     ],
   },
   {
+    id: 'quantize-gguf',
+    group: 'models-quants',
+    question: 'How do I make my own GGUF quant for a Radeon GPU?',
+    answer:
+      'Cited how-to is /guides/quantize-gguf. Ubuntu 24.04+ first: convert_hf_to_gguf.py to f16 or bf16, optional llama-imatrix, then llama-quantize to Q6_K, Q5_K_M, or Q4_K_M. Unsloth UD-*_XL stays the house default — stock llama-quantize does not reproduce those files. Q3 is a labeled estimate, not a house-rig quantize command. Verify with llama-perplexity or KL-divergence, then an amdai-bench run. Both RAM lines print on the guide.',
+    links: [
+      { href: '/guides/quantize-gguf', label: 'Make GGUF quants' },
+      { href: '/quants', label: 'Quants' },
+      { href: '/compare/q4-q5-q6', label: 'Q6 vs Q5 vs Q4' },
+      { href: '/fine-tuning', label: 'Fine-tuning' },
+      { href: '/amdai-bench', label: 'amdai-bench' },
+    ],
+  },
+  {
     id: 'q6-q5-q4',
     group: 'models-quants',
     question: 'Q6, Q5, or Q4 — what should I pick?',
@@ -885,6 +899,7 @@ export const REQUIRED_FAQ_HREFS = [
   '/setup/comfyui',
   '/setup/multi-gpu',
   '/guides/buying-used-radeon',
+  '/guides/quantize-gguf',
 ] as const;
 
 const BANNED_VISIBLE = /Qwen2\.5|Qwen3-8B/i;

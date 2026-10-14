@@ -1,0 +1,226 @@
+---
+import Base from '../../layouts/Base.astro';
+import Callout from '../../components/Callout.astro';
+import HowWeTest from '../../components/HowWeTest.astro';
+import HouseRam from '../../components/HouseRam.astro';
+import NewsletterSignup from '../../components/NewsletterSignup.astro';
+import NextSteps from '../../components/NextSteps.astro';
+import SystemRamNeed from '../../components/SystemRamNeed.astro';
+import { runs } from '../../lib/run-card-data';
+import { RAM_FULL_LABEL, RAM_MIN_LABEL } from '../../lib/ram-surfaces';
+import { COMPARE_MODEL, COMPARE_Q3, COMPARE_Q3_CITE } from '../../lib/local-desktop-compare';
+import {
+  BF16_CITE,
+  HF_SAFETENSORS_CITE,
+  QUANTIZE_GGUF_CITED_LABEL,
+  QUANTIZE_GGUF_DESCRIPTION,
+  QUANTIZE_GGUF_FAQ,
+  QUANTIZE_GGUF_HUB_LINKS,
+  QUANTIZE_GGUF_LEAD,
+  QUANTIZE_GGUF_NAME,
+  QUANTIZE_GGUF_PATH,
+  QUANTIZE_GGUF_SOURCES,
+  QUANTIZE_GGUF_STEPS,
+  QUANTIZE_GGUF_TITLE,
+  QUANTIZE_GGUF_UD,
+  QUANTIZE_GGUF_UNMEASURED,
+  quantizeConvertRamNote,
+  quantizeDailyRamNeed,
+  quantizeDiskRows,
+  quantizeQualityRows,
+} from '../../lib/quantize-gguf';
+
+const quality = quantizeQualityRows(runs);
+const disk = quantizeDiskRows();
+const dailyRam = quantizeDailyRamNeed();
+---
+
+<Base title={QUANTIZE_GGUF_NAME} description={QUANTIZE_GGUF_DESCRIPTION}>
+  <main id="main" class="mx-auto max-w-3xl px-4 py-10 sm:px-6">
+    <p class="kicker">{QUANTIZE_GGUF_CITED_LABEL}</p>
+    <h1 class="mt-3 font-serif text-4xl tracking-tight sm:text-5xl">{QUANTIZE_GGUF_TITLE}</h1>
+    <p class="mt-4 text-lg leading-relaxed text-muted">{QUANTIZE_GGUF_LEAD}</p>
+    <ul class="mt-4 flex flex-wrap gap-2">
+      {QUANTIZE_GGUF_HUB_LINKS.map((link) => (
+        <li>
+          <a
+            class="inline-flex min-h-9 items-center rounded-full border border-line bg-canvas px-3 text-sm text-ink hover:border-accent/50 hover:text-accent-ink"
+            href={link.href}
+          >
+            {link.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+    <div class="mt-4">
+      <HowWeTest />
+    </div>
+    {dailyRam && (
+      <div class="mt-6">
+        <HouseRam which="daily" compact />
+      </div>
+    )}
+
+    <Callout type="note" title="Download Unsloth UD-*_XL when it already exists">
+      <p>{QUANTIZE_GGUF_UD}</p>
+    </Callout>
+
+    <section id="disk-ram" class="mt-12 scroll-mt-28" aria-labelledby="disk-ram-heading">
+      <h2 id="disk-ram-heading" class="font-serif text-3xl tracking-tight">Disk and RAM for a 35B MoE</h2>
+      <p class="mt-3 leading-relaxed text-muted">
+        Worked example is {COMPARE_MODEL} — official card 35B total / 3B active.
+        Source sizes come from Hugging Face listings. Computed sums stay labeled estimate.
+        {HF_SAFETENSORS_CITE}. {BF16_CITE}.
+      </p>
+      <p class="mt-3 leading-relaxed text-muted">{quantizeConvertRamNote()}</p>
+      {dailyRam && (
+        <div class="mt-4">
+          <p class="text-sm text-faint">
+            {RAM_FULL_LABEL} below is the house UD-Q5 inference line, not the convert.
+          </p>
+          <SystemRamNeed need={dailyRam} compact />
+        </div>
+      )}
+      <div class="mt-6 overflow-x-auto">
+        <table class="w-full min-w-[36rem] border-collapse text-left text-sm">
+          <caption class="sr-only">
+            Disk and RAM per convert, imatrix, quantize, and KL-divergence step for Qwen3.6-35B-A3B. Listing sums labeled estimate.
+          </caption>
+          <thead>
+            <tr class="border-b border-line">
+              <th scope="col" class="py-2 pr-3 font-medium">Step</th>
+              <th scope="col" class="py-2 pr-3 font-medium">Disk</th>
+              <th scope="col" class="py-2 pr-3 font-medium">RAM</th>
+              <th scope="col" class="py-2 font-medium">Label</th>
+            </tr>
+          </thead>
+          <tbody>
+            {disk.map((row) => (
+              <tr class="border-b border-line/70 align-top">
+                <th scope="row" class="py-3 pr-3 font-serif text-base text-ink">{row.step}</th>
+                <td class="py-3 pr-3 text-muted">{row.disk}</td>
+                <td class="py-3 pr-3 text-ink">{row.ram}</td>
+                <td class="py-3 text-faint">{row.label}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="quality" class="mt-12 scroll-mt-28" aria-labelledby="quality-heading">
+      <h2 id="quality-heading" class="font-serif text-3xl tracking-tight">Quality and speed (Q6 / Q5 / Q4, Q3 estimate)</h2>
+      <p class="mt-3 leading-relaxed text-muted">
+        Decode cells are official local-desktop {COMPARE_MODEL} llama.cpp Vulkan cards on one R9700 — same numbers as
+        <a class="underline decoration-accent/40" href="/compare/q4-q5-q6">/compare/q4-q5-q6</a>.
+        <strong class="text-ink">{COMPARE_Q3}</strong> is a labeled estimate ({COMPARE_Q3_CITE}).
+        PPL / KLD stay {QUANTIZE_GGUF_UNMEASURED}. Prefer Q5 over Q4 when the file still fits.
+      </p>
+      <div class="mt-6 overflow-x-auto">
+        <table class="w-full min-w-[40rem] border-collapse text-left text-sm">
+          <caption class="sr-only">
+            Q6, Q5, and Q4 measured decode versus a labeled Q3 estimate. File sizes from Hugging Face listings or marked as no listing.
+          </caption>
+          <thead>
+            <tr class="border-b border-line">
+              <th scope="col" class="py-2 pr-3 font-medium">Quant</th>
+              <th scope="col" class="py-2 pr-3 font-medium">File size</th>
+              <th scope="col" class="py-2 pr-3 font-medium">4K decode</th>
+              <th scope="col" class="py-2 pr-3 font-medium">32K decode</th>
+              <th scope="col" class="py-2 font-medium">Quality</th>
+            </tr>
+          </thead>
+          <tbody>
+            {quality.map((row) => (
+              <tr class="border-b border-line/70 align-top">
+                <th scope="row" class="py-3 pr-3 font-serif text-base text-ink">
+                  <a class="underline decoration-accent/40" href={row.href}>{row.quant}</a>
+                  {row.estimate && <span class="mt-1 block font-sans text-xs font-normal text-faint">estimate</span>}
+                </th>
+                <td class="py-3 pr-3 text-muted">{row.size}</td>
+                <td class="py-3 pr-3 text-ink">{row.decode4k}</td>
+                <td class="py-3 pr-3 text-ink">{row.decode32k}</td>
+                <td class="py-3 text-muted">{row.quality}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="howto" class="mt-12 scroll-mt-28" aria-labelledby="howto-heading">
+      <h2 id="howto-heading" class="font-serif text-3xl tracking-tight">How-to</h2>
+      <p class="mt-3 leading-relaxed text-muted">
+        Linux first. Build llama.cpp, then stay in that tree for convert, imatrix, quantize, and perplexity.
+        {RAM_MIN_LABEL} and {RAM_FULL_LABEL} print above.
+      </p>
+      <ol class="mt-6 grid gap-6">
+        {QUANTIZE_GGUF_STEPS.map((step, index) => (
+          <li id={step.id} class="scroll-mt-28 rounded-2xl border border-line bg-raised/50 p-5">
+            <p class="font-mono text-[0.68rem] uppercase tracking-[0.12em] text-faint">Step {index + 1}</p>
+            <h3 class="mt-1 font-serif text-2xl tracking-tight">{step.title}</h3>
+            <p class="mt-3 leading-relaxed text-muted">{step.body}</p>
+            {step.command && (
+              <pre class="mt-4 overflow-x-auto rounded-2xl border border-line bg-canvas p-4 text-sm leading-relaxed text-ink"><code>{step.command}</code></pre>
+            )}
+            <ul class="mt-4 flex flex-wrap gap-2">
+              {step.links.map((link) => (
+                <li>
+                  <a
+                    class="inline-flex min-h-9 items-center rounded-full border border-line bg-canvas px-3 text-sm text-ink hover:border-accent/50 hover:text-accent-ink"
+                    href={link.href}
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <section id="faq" class="mt-12 scroll-mt-28" aria-labelledby="faq-heading">
+      <h2 id="faq-heading" class="font-serif text-3xl tracking-tight">FAQ</h2>
+      <ul class="mt-6 grid gap-4">
+        {QUANTIZE_GGUF_FAQ.map((item) => (
+          <li id={item.id} class="scroll-mt-28 rounded-2xl border border-line bg-raised/50 p-5">
+            <h3 class="font-serif text-2xl tracking-tight">{item.question}</h3>
+            <p class="mt-3 leading-relaxed text-muted">{item.answer}</p>
+            <ul class="mt-4 flex flex-wrap gap-2">
+              {item.links.map((link) => (
+                <li>
+                  <a
+                    class="inline-flex min-h-9 items-center rounded-full border border-line bg-canvas px-3 text-sm text-ink hover:border-accent/50 hover:text-accent-ink"
+                    href={link.href}
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section id="sources" class="mt-12 scroll-mt-28" aria-labelledby="sources-heading">
+      <h2 id="sources-heading" class="font-serif text-3xl tracking-tight">Sources</h2>
+      <ul class="mt-4 list-disc space-y-2 pl-5 text-sm leading-relaxed text-muted">
+        {QUANTIZE_GGUF_SOURCES.map((source) => (
+          <li>
+            <a class="underline decoration-accent/40" href={source.href} rel="noopener">{source.title}</a>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <div class="mt-8">
+      <HowWeTest />
+    </div>
+    <NextSteps path={QUANTIZE_GGUF_PATH} />
+    <div class="mt-12">
+      <NewsletterSignup variant="article" />
+    </div>
+  </main>
+</Base>

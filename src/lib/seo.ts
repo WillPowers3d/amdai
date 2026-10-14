@@ -239,6 +239,7 @@ export const CRUMB_LABELS: Record<string, string> = {
   '/setup/comfyui': 'ComfyUI',
   '/setup/multi-gpu': 'Multi-GPU llama.cpp',
   '/guides/buying-used-radeon': 'Buying a used Radeon',
+  '/guides/quantize-gguf': 'Make GGUF quants',
   '/stack-lab': 'Stack Lab',
   '/stacks': 'Stacks',
   '/calculator': 'Calculator',
@@ -416,6 +417,12 @@ setMeta(
   'Cited used-Radeon shopper guide: RDNA4 / RDNA3 / RDNA2 gfx and ROCm notes, VRAM-first 12–32 GB picker from existing fit data, Linux vetting checklist. llama.cpp first. No invented prices.',
 );
 setDate('/guides/buying-used-radeon', '2026-10-14');
+setMeta(
+  '/guides/quantize-gguf',
+  'Make your own GGUF quants for a Radeon GPU with llama.cpp',
+  'Make your own GGUF quants for a Radeon GPU with llama.cpp. Convert, optional imatrix, then Q6/Q5/Q4. Unsloth UD is the house default.',
+);
+setDate('/guides/quantize-gguf', '2026-10-14');
 setMeta(
   '/image-gen',
   'Local image gen on Radeon',

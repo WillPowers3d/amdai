@@ -507,6 +507,17 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
     { href: '/multi-gpu', label: 'Dual / multi-GPU' },
     { href: '/setup', label: 'First-run setup' },
   ],
+  '/guides/quantize-gguf': [
+    { href: '/quants', label: 'Quants' },
+    { href: '/compare/q4-q5-q6', label: 'Q6 vs Q5 vs Q4' },
+    { href: '/models', label: 'Models' },
+    { href: '/fine-tuning', label: 'Fine-tuning' },
+    { href: '/tuning', label: 'Speed up llama.cpp' },
+    { href: '/calculator', label: 'Calculator' },
+    { href: '/amdai-bench', label: 'amdai-bench' },
+    { href: '/benchmarks/methodology', label: 'How we test' },
+    { href: '/backends/llamacpp', label: 'llama.cpp' },
+  ],
   '/compare/models': [
     { href: '/compare/models/qwen36-vs-glm-53-flash', label: 'Qwen3.6-35B vs GLM 5.3 Flash' },
     { href: '/compare/models/qwen36-vs-flash', label: '35B vs Flash' },
@@ -586,6 +597,7 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
     { href: '/about', label: 'About' },
   ],
   '/models': [
+    { href: '/guides/quantize-gguf', label: 'Make GGUF quants' },
     { href: '/models/qwen36', label: 'Qwen3.6-35B-A3B' },
     { href: '/models/flash', label: 'Qwen 3.8 Flash' },
     { href: '/models/gpt-oss-20b', label: 'gpt-oss 20B' },
@@ -725,6 +737,7 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
     { href: '/flash-ram-offload', label: 'Flash RAM offload' },
   ],
   '/fine-tuning': [
+    { href: '/guides/quantize-gguf', label: 'Make GGUF quants' },
     { href: '/setup', label: 'First-run setup' },
     { href: '/setup/windows', label: 'Windows setup' },
     { href: '/rocm/versions', label: 'ROCm versions' },
@@ -737,6 +750,7 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
   ],
   '/tuning': [
     { href: '/speculative-decoding', label: 'Speculative decoding' },
+    { href: '/guides/quantize-gguf', label: 'Make GGUF quants' },
     { href: '/backends/llamacpp', label: 'llama.cpp' },
     { href: '/long-context', label: 'Long context' },
     { href: '/multi-gpu', label: 'Dual / multi-GPU' },

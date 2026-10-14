@@ -18,6 +18,7 @@ import { SETUP_WSL_HOWTO_STEPS, SETUP_WSL_PUBLISHED } from './setup-wsl';
 import { SETUP_COMFYUI_HOWTO_STEPS, SETUP_COMFYUI_PUBLISHED } from './setup-comfyui';
 import { SETUP_MULTI_GPU_HOWTO_STEPS, SETUP_MULTI_GPU_PUBLISHED } from './setup-multi-gpu';
 import { BUYING_USED_FAQ, BUYING_USED_HOWTO_STEPS, BUYING_USED_PUBLISHED } from './buying-used-radeon';
+import { QUANTIZE_GGUF_FAQ, QUANTIZE_GGUF_HOWTO_STEPS, QUANTIZE_GGUF_PUBLISHED } from './quantize-gguf';
 import { IMAGE_GEN_HOWTO_STEPS, IMAGE_GEN_PUBLISHED } from './image-gen';
 import { SPEECH_HOWTO_STEPS, SPEECH_PUBLISHED } from './speech';
 import { LONG_CONTEXT_FAQ, LONG_CONTEXT_PUBLISHED } from './long-context';
@@ -571,6 +572,20 @@ export function pageJsonLd(input: {
       }),
     );
     nodes.push(faqPageJsonLd(BUYING_USED_FAQ, url));
+    return nodes;
+  }
+  if (path === '/guides/quantize-gguf') {
+    nodes.push(
+      howToJsonLd({
+        name: input.title.replace(/ · AMDai$/, ''),
+        description: input.description,
+        url,
+        published: dates?.published ?? QUANTIZE_GGUF_PUBLISHED,
+        modified: dates?.modified ?? QUANTIZE_GGUF_PUBLISHED,
+        steps: QUANTIZE_GGUF_HOWTO_STEPS,
+      }),
+    );
+    nodes.push(faqPageJsonLd(QUANTIZE_GGUF_FAQ, url));
     return nodes;
   }
   if (path === '/image-gen') {
