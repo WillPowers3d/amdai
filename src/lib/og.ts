@@ -526,6 +526,12 @@ export const OG_CARDS: OgCard[] = [
     alt: 'AMDai constrained decoding on Radeon — cited llama.cpp GBNF and JSON schema',
   },
   {
+    slug: 'guides-tool-calling',
+    title: 'Tool calling on Radeon',
+    lede: 'Cited --jinja, tools, JSON schema. Success not measured',
+    alt: 'AMDai tool calling and structured JSON with llama.cpp on a Radeon GPU — cited flags, success not measured',
+  },
+  {
     slug: 'moe',
     title: 'Mixture-of-Experts on a Radeon GPU',
     lede: 'Why 35B-A3B fits one 32 GB R9700. Dense 27B and Flash differ',

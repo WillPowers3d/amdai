@@ -314,6 +314,7 @@ export const SETUP_CODING_STEPS: SetupCodingStep[] = [
       { href: '/harnesses/hermes', label: 'Hermes' },
       { href: '/harnesses/connect', label: 'Connect a harness' },
       { href: '/constrained-decoding', label: 'Constrained decoding' },
+      { href: '/guides/tool-calling', label: 'Tool calling' },
     ],
   },
   {
@@ -363,6 +364,7 @@ export const SETUP_CODING_HUB_LINKS: SetupCodingLink[] = [
   { href: '/gpus/r9700', label: 'R9700' },
   { href: '/calculator', label: 'Calculator' },
   { href: '/long-context', label: 'Long context' },
+  { href: '/guides/tool-calling', label: 'Tool calling' },
 ];
 
 export const REQUIRED_SETUP_CODING_HREFS = [

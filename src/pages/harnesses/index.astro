@@ -38,6 +38,8 @@ const categories = (Object.keys(CATEGORY_COPY) as HarnessCategory[]).map((id) =>
       vLLM, and Ollama run the weights. The harness talks to them over an
       <strong class="text-ink">OpenAI-compatible API</strong>. It is not the GPU stack. If
       <code>/v1</code> is down, the harness is a very expensive timeout.
+      Reliable tool calls and JSON from llama-server live on
+      <a class="underline decoration-accent/40" href="/guides/tool-calling">tool calling</a>.
     </p>
     <p class="mt-4 text-sm text-faint">
       Cited from official repos and docs, checked {harnessesFile.as_of}. We do not invent features —

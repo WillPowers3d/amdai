@@ -143,6 +143,25 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/tuning', label: 'Speed up llama.cpp' },
       { href: '/constrained-decoding', label: 'Constrained decoding' },
       { href: '/can-run', label: 'Can my Radeon run it?' },
+      { href: '/guides/tool-calling', label: 'Tool calling' },
+    ];
+  }
+  if (path === '/guides/tool-calling') {
+    return [
+      { href: '/setup/coding-assistant', label: 'Coding assistant' },
+      { href: '/harnesses', label: 'Harnesses' },
+      { href: '/harnesses/hermes', label: 'Hermes' },
+      { href: '/setup/open-webui', label: 'Open WebUI' },
+      { href: '/backends', label: 'Backends' },
+      { href: '/backends/llamacpp', label: 'llama.cpp' },
+      { href: '/backends/strata', label: 'Strata' },
+      { href: '/speculative-decoding', label: 'Speculative decoding' },
+      { href: '/long-context', label: 'Long context' },
+      { href: '/tuning', label: 'Speed up llama.cpp' },
+      { href: '/stack-lab', label: 'Stack Lab' },
+      { href: '/amdai-bench', label: 'amdai-bench' },
+      { href: '/calculator', label: 'Calculator' },
+      { href: '/glossary', label: 'Glossary' },
     ];
   }
   if (path === '/can-run' || path.startsWith('/can-run/')) {
@@ -216,6 +235,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/amdai-bench', label: 'amdai-bench' },
       { href: '/calculator', label: 'Calculator' },
       { href: '/glossary', label: 'Glossary' },
+      { href: '/guides/tool-calling', label: 'Tool calling' },
     ];
   }
   if (path === '/moe') {
@@ -470,6 +490,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/vision', label: 'Vision on Radeon' },
       { href: '/long-context', label: 'Long context' },
       { href: '/rag', label: 'RAG on Radeon' },
+      { href: '/guides/tool-calling', label: 'Tool calling' },
     ];
   }
   if (path === '/forum' || path.startsWith('/forum/')) {
@@ -634,6 +655,7 @@ export function relatedFor(pathname: string): RelatedLink[] {
     add(out, seen, '/tuning', 'Speed up llama.cpp');
     add(out, seen, '/speculative-decoding', 'Speculative decoding');
     add(out, seen, '/constrained-decoding', 'Constrained decoding');
+    add(out, seen, '/guides/tool-calling', 'Tool calling');
     add(out, seen, '/setup/docker', 'Docker / Podman');
     add(out, seen, '/setup/lm-studio', 'LM Studio');
     add(out, seen, '/setup/coding-assistant', 'Coding assistant');
@@ -756,6 +778,7 @@ export function assertRelatedValid(
     '/tuning',
     '/speculative-decoding',
     '/constrained-decoding',
+    '/guides/tool-calling',
     '/moe',
     '/can-run',
     '/hardware',

@@ -229,6 +229,23 @@ export const GLOSSARY: GlossaryEntry[] = [
     seeAlso: ['hip', 'rocm', 'nvme'],
   },
   {
+    id: 'chat-template',
+    term: 'Chat template',
+    aliases: ['--jinja', '--chat-template', '--chat-template-file', 'chat_template_tool_use'],
+    letter: 'C',
+    definition:
+      'The Jinja string llama-server uses to wrap messages, tools, and reasoning. It usually ships in the GGUF metadata. --jinja turns the engine on; --chat-template and --chat-template-file override the file.',
+    why: 'OpenAI-style tool calls need a tools-aware template. Inspect GET /props for chat_template and chat_template_tool_use. A mismatch is the usual “tools ignored” or “markup in content” cause. House pin still passes --jinja.',
+    deeper:
+      'llama.cpp function-calling.md: native handlers exist for several families (Llama 3.1 / 3.3, GPT-OSS Harmony, Hermes 2/3, …). Unrecognized templates log Chat format: Generic. --chat-template chatml is the documented YMMV fallback. --skip-chat-parsing dumps markup into content.',
+    links: [
+      { href: '/guides/tool-calling', label: 'Tool calling' },
+      { href: '/setup/coding-assistant', label: 'Coding assistant' },
+      { href: '/backends/llamacpp', label: 'llama.cpp' },
+    ],
+    seeAlso: ['tool-calling', 'instruct', 'llamacpp', 'gbnf'],
+  },
+  {
     id: 'daily-driver',
     term: 'Daily driver',
     aliases: ['qwen-reliable', 'house default'],
@@ -388,6 +405,23 @@ export const GLOSSARY: GlossaryEntry[] = [
     seeAlso: ['quant', 'unsloth-ud', 'nvme', 'imatrix'],
   },
   {
+    id: 'gbnf',
+    term: 'GBNF',
+    aliases: ['GBNF grammar', '--grammar', '--grammar-file', 'constrained decoding'],
+    letter: 'G',
+    definition:
+      'llama.cpp’s grammar language. A GBNF file (or --grammar string) forces the next tokens to match a shape. JSON Schema converts to GBNF via json-schema-to-grammar.',
+    why: 'Use a grammar when the whole reply must parse — a calculator object, a recipe export — and you are not in a tool loop. Tool calling injects the tool schema; a free-form JSON shape still needs to be described in the prompt. Grammar cost stays not measured yet — run Stack Lab grammar-ab/1.',
+    deeper:
+      'Official grammars/README.md: the schema is not injected except during tool calling. Server README also accepts response_format json_object / json_schema and -j / --json-schema. A grammar can stall (llama.cpp issue #4218). Do not invent an overhead tok/s.',
+    links: [
+      { href: '/guides/tool-calling', label: 'Tool calling' },
+      { href: '/glossary#json-schema', label: 'JSON schema' },
+      { href: '/stack-lab', label: 'Stack Lab' },
+    ],
+    seeAlso: ['json-schema', 'tool-calling', 'llamacpp', 'chat-template'],
+  },
+  {
     id: 'gtt',
     term: 'GTT',
     aliases: ['Graphics Translation Table', 'dynamic allocation', 'dynamic VRAM'],
@@ -452,7 +486,24 @@ export const GLOSSARY: GlossaryEntry[] = [
       { href: '/tutorials/serve-qwen', label: 'Serve Qwen' },
       { href: '/models', label: 'Models' },
     ],
-    seeAlso: ['abliterated', 'qwen36', 'gguf'],
+    seeAlso: ['abliterated', 'qwen36', 'gguf', 'chat-template'],
+  },
+  {
+    id: 'json-schema',
+    term: 'JSON schema',
+    aliases: ['json_schema', '--json-schema', 'response_format', 'json_object'],
+    letter: 'J',
+    definition:
+      'A JSON Schema object that llama-server can turn into a GBNF grammar. Send it as response_format or -j / --json-schema when the whole reply must be one JSON object.',
+    why: 'Different from a tools array. Tools + --jinja produce tool_calls for Hermes, Cline, and Continue. Schema / GBNF constrain the message body. Official grammars/README.md: the schema is not injected except during tool calling, so describe the fields in the prompt.',
+    deeper:
+      'Server README: {"type":"json_object"} or a schema-constrained object. Measure free-form versus grammar on Stack Lab grammar-ab/1. Do not copy a free-form 35B tok/s as a grammar figure.',
+    links: [
+      { href: '/guides/tool-calling', label: 'Tool calling' },
+      { href: '/glossary#gbnf', label: 'GBNF' },
+      { href: '/amdai-bench', label: 'amdai-bench' },
+    ],
+    seeAlso: ['gbnf', 'tool-calling', 'chat-template', 'llamacpp'],
   },
   {
     id: 'imatrix',
@@ -955,6 +1006,24 @@ export const GLOSSARY: GlossaryEntry[] = [
       { href: '/qwen', label: 'Qwen compare' },
     ],
     seeAlso: ['prefill-decode', 'run-card', 'amdai-bench'],
+  },
+  {
+    id: 'tool-calling',
+    term: 'Tool calling',
+    aliases: ['function calling', 'tools array', 'tool_calls', 'parallel_tool_calls'],
+    letter: 'T',
+    definition:
+      'An OpenAI-shaped /v1/chat/completions request that includes a tools array. The model returns tool_calls when --jinja is on and the chat template understands tools.',
+    why: 'Hermes, Cline, Continue, and Roo need this path. Official docs are llama.cpp function-calling.md and the server README. Parallel / multiple tool calls stay off unless the payload sets parallel_tool_calls: true. Success is not measured on local-desktop.',
+    deeper:
+      'Native handlers exist for several families; unrecognized templates fall back to Generic. House 35B: start llama-server with --jinja on :8080. Strata :8083 tool calls are not verified here. Structured JSON is a different knob — response_format / GBNF. Measure grammar-ab/1.',
+    links: [
+      { href: '/guides/tool-calling', label: 'Tool calling' },
+      { href: '/setup/coding-assistant', label: 'Coding assistant' },
+      { href: '/harnesses', label: 'Harnesses' },
+      { href: '/harnesses/hermes', label: 'Hermes' },
+    ],
+    seeAlso: ['chat-template', 'gbnf', 'json-schema', 'llamacpp'],
   },
   {
     id: 'unsloth-ud',

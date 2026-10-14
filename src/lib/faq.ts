@@ -565,6 +565,20 @@ export const FAQ_ENTRIES: FaqItem[] = [
     ],
   },
   {
+    id: 'tool-calling',
+    group: 'models-quants',
+    question: 'How do I get OpenAI-style tool calls from llama-server on a Radeon?',
+    answer:
+      'Start llama-server with --jinja and send a tools array on /v1/chat/completions. The shopper page is /guides/tool-calling. Official docs are llama.cpp function-calling.md and the server README. Native handlers exist for several families; unrecognized templates fall back to Generic. Structured JSON uses response_format, a JSON Schema, or GBNF — measure grammar cost on Stack Lab grammar-ab/1. Tool-call success is not measured on local-desktop. Q3 is a labeled estimate. llama.cpp first.',
+    links: [
+      { href: '/guides/tool-calling', label: 'Tool calling' },
+      { href: '/setup/coding-assistant', label: 'Coding assistant' },
+      { href: '/harnesses', label: 'Harnesses' },
+      { href: '/stack-lab', label: 'Stack Lab' },
+      { href: '/amdai-bench', label: 'amdai-bench' },
+    ],
+  },
+  {
     id: 'moe-on-radeon',
     group: 'models-quants',
     question: 'Why does a 35B MoE fit one 32 GB R9700 when dense 27B and Flash look different?',
@@ -948,6 +962,7 @@ export const REQUIRED_FAQ_HREFS = [
   '/setup/multi-gpu',
   '/guides/buying-used-radeon',
   '/guides/quantize-gguf',
+  '/guides/tool-calling',
 ] as const;
 
 const BANNED_VISIBLE = /Qwen2\.5|Qwen3-8B/i;
@@ -1032,6 +1047,7 @@ export function assertFaqValid(items: FaqItem[] = FAQ_ENTRIES): string[] {
     'radeon-vs-nvidia',
     'radeon-vs-mac',
     'speculative-decoding',
+    'tool-calling',
   ]) {
     if (!items.some((item) => item.id === required)) errors.push(`missing ${required}`);
   }
