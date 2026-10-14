@@ -33,6 +33,8 @@ describe('Radeon Stack Lab', () => {
     assert.match(blob, /Check my rig/);
     assert.match(blob, /Setup doctor/);
     assert.match(blob, /amdai-bench\.ts/);
+    assert.match(blob, /lab-notes-report\/1/);
+    assert.match(blob, /ingest/);
     assert.doesNotMatch(blob, /Qwen2\.5|Qwen3-8B/);
     assert.doesNotMatch(blob, /stacklab:\/\//i);
     assert.match(blob, /amdai-stack-lab:/);

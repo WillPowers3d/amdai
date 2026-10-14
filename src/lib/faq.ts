@@ -728,13 +728,14 @@ export const FAQ_ENTRIES: FaqItem[] = [
     group: 'stack-lab',
     question: 'How do recipes and amdai-bench connect?',
     answer:
-      'A recipe is a pinned launch on a named GPU — model, quant, engine, context, gates. Stack Lab’s amdai-bench emitter writes one official test-run card per line (schema amdai-bench/run@1). Lab Notes ingests those cards onto /results. The 35B matrix on /benchmarks is built only from those cards. Do not invent tok/s in a recipe; attach a log.',
+      'A recipe is a pinned launch on a named GPU — model, quant, engine, context, gates. Stack Lab’s amdai-bench emitter writes one official test-run card per line (schema amdai-bench/run@1). A shareable sweep is pack lab-notes-report/1 — Lab Notes ingests that pack onto data/runs/ and /results. The 35B matrix on /benchmarks is built only from those cards. Do not invent tok/s in a recipe; attach a log.',
     links: [
       { href: '/recipes/qwen36-35b.llamacpp-vulkan.262k', label: '35B recipe' },
       { href: '/results', label: 'Run cards' },
       { href: '/benchmarks', label: 'Benchmarks' },
       { href: '/stack-lab', label: 'Stack Lab' },
       { href: '/amdai-bench', label: 'amdai-bench' },
+      { href: '/amdai-bench/lab-notes-report@1.schema.json', label: 'lab-notes-report/1' },
       { href: '/contribute', label: 'Contribute a recipe' },
     ],
   },
@@ -842,6 +843,7 @@ export const REQUIRED_FAQ_HREFS = [
   '/budget',
   '/multi-gpu',
   '/amdai-bench',
+  '/amdai-bench/lab-notes-report@1.schema.json',
   '/compare/radeon-vs-nvidia',
   '/compare/radeon-vs-mac',
   '/compare/vulkan-vs-rocm',
