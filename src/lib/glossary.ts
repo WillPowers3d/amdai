@@ -520,12 +520,13 @@ export const GLOSSARY: GlossaryEntry[] = [
     links: [
       { href: '/kv-cache', label: 'KV cache on a Radeon GPU' },
       { href: '/concurrency-ab', label: 'Parallel slots' },
+      { href: '/flash-attention', label: 'Flash Attention' },
       { href: '/quants', label: 'Quants · KV types' },
       { href: '/calculator', label: 'Calculator' },
       { href: '/tuning', label: 'Speed up llama.cpp' },
       { href: '/results', label: 'Run cards' },
     ],
-    seeAlso: ['context-length', 'vram', 'quant', 'parallel-slots'],
+    seeAlso: ['context-length', 'vram', 'quant', 'parallel-slots', 'flash-attention'],
   },
   {
     id: 'parallel-slots',
@@ -543,7 +544,25 @@ export const GLOSSARY: GlossaryEntry[] = [
       { href: '/kv-cache', label: 'KV cache' },
       { href: '/stack-lab', label: 'Stack Lab' },
     ],
-    seeAlso: ['kv-cache', 'llamacpp', 'context-length'],
+    seeAlso: ['kv-cache', 'llamacpp', 'context-length', 'flash-attention'],
+  },
+  {
+    id: 'flash-attention',
+    term: 'Flash Attention (-fa)',
+    aliases: ['-fa', '--flash-attn', 'flash attn', 'flash-attn'],
+    letter: 'F',
+    definition:
+      'A fused attention kernel in llama.cpp. Official flag is -fa / --flash-attn on|off|auto (default auto). Overnight house 35B Vulkan llama-bench recorded -fa 1.',
+    why: 'Usually cuts attention VRAM and can help long context. llama.cpp multi-gpu.md requires it for tensor split and/or a quantized V cache. llama-server FA on versus off is not measured on local-desktop — run Stack Lab Flash Attention A/B.',
+    deeper:
+      'House default KV is f16. Turn -fa on before -ctv q8_0 or -ctv q4_0. HIP / ROCm documents the same flag; HIP FA deltas stay not measured. That A/B is not an allowlisted Open-in-Stack-Lab deep link. House recipes stay Q4 and up.',
+    links: [
+      { href: '/flash-attention', label: 'Flash Attention' },
+      { href: '/tuning', label: 'Speed up llama.cpp' },
+      { href: '/kv-cache', label: 'KV cache' },
+      { href: '/stack-lab', label: 'Stack Lab' },
+    ],
+    seeAlso: ['kv-cache', 'llamacpp', 'prefill-decode', 'vulkan'],
   },
   {
     id: 'kl-divergence',
@@ -578,8 +597,9 @@ export const GLOSSARY: GlossaryEntry[] = [
       { href: '/tutorials/run-local-llm', label: 'Run a local Qwen' },
       { href: '/tutorials/serve-qwen', label: 'Serve Qwen' },
       { href: '/setup/server', label: 'Always-on llama-server' },
+      { href: '/flash-attention', label: 'Flash Attention' },
     ],
-    seeAlso: ['vulkan', 'hip', 'gguf', 'mmproj', 'lm-studio', 'lemonade'],
+    seeAlso: ['vulkan', 'hip', 'gguf', 'mmproj', 'lm-studio', 'lemonade', 'flash-attention'],
   },
   {
     id: 'lm-studio',
@@ -775,9 +795,10 @@ export const GLOSSARY: GlossaryEntry[] = [
       { href: '/benchmarks', label: 'Benchmarks' },
       { href: '/results', label: 'Run cards' },
       { href: '/tuning', label: 'Speed up llama.cpp' },
+      { href: '/flash-attention', label: 'Flash Attention' },
       { href: '/qwen', label: 'Qwen compare' },
     ],
-    seeAlso: ['toks', 'context-length', 'amdai-bench'],
+    seeAlso: ['toks', 'context-length', 'amdai-bench', 'flash-attention'],
   },
   {
     id: 'quant',
@@ -1160,7 +1181,7 @@ export const GLOSSARY: GlossaryEntry[] = [
       { href: '/setup/fedora', label: 'Fedora setup' },
       { href: '/setup/arch', label: 'Arch setup' },
     ],
-    seeAlso: ['llamacpp', 'hip', 'gfx1201'],
+    seeAlso: ['llamacpp', 'hip', 'gfx1201', 'flash-attention'],
   },
   {
     id: 'wsl2',

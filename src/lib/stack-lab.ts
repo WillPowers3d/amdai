@@ -46,6 +46,7 @@ export const STACK_LAB_INTRO_LINKS: StackLabLink[] = [
   { href: '/benchmarks', label: 'Benchmarks' },
   { href: '/recipes.json', label: 'recipes.json' },
   { href: '/start', label: 'Getting started' },
+  { href: '/flash-attention', label: 'Flash Attention' },
 ];
 
 export const STACK_LAB_JOBS: StackLabJob[] = [
@@ -222,6 +223,12 @@ export const STACK_LAB_HANDOFFS: StackLabHandoff[] = [
     body: 'llama.cpp first. Stack Lab selects a profile; it does not replace the engine.',
   },
   {
+    href: '/flash-attention',
+    label: 'Flash Attention',
+    body:
+      'Cited llama.cpp -fa / --flash-attn. Overnight 35B Vulkan llama-bench recorded -fa 1. Measure Stack Lab Flash Attention A/B and Prefill tuning A/B from the planner. llama-server FA on/off stays not measured on this site.',
+  },
+  {
     href: '/speech',
     label: 'Speech on Radeon',
     body:
@@ -283,6 +290,7 @@ export const REQUIRED_STACK_LAB_HREFS = [
   '/recipes.json',
   '/start',
   '/speech',
+  '/flash-attention',
 ] as const;
 
 const BANNED_VISIBLE = /Qwen2\.5|Qwen3-8B/i;

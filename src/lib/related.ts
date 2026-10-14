@@ -71,6 +71,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/qwen36-dual', label: '35B on two cards' },
       { href: '/calculator', label: 'Calculator' },
       { href: '/long-context', label: 'Long context' },
+      { href: '/flash-attention', label: 'Flash Attention' },
       { href: '/guides/buying-used-radeon', label: 'Buying a used Radeon' },
     ];
   }
@@ -148,6 +149,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/can-run', label: 'Can my Radeon run it?' },
       { href: '/guides/tool-calling', label: 'Tool calling' },
       { href: '/concurrency-ab', label: 'Parallel slots' },
+      { href: '/flash-attention', label: 'Flash Attention' },
     ];
   }
   if (path === '/guides/tool-calling') {
@@ -205,10 +207,12 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/constrained-decoding', label: 'Constrained decoding' },
       { href: '/thinking', label: 'Thinking mode' },
       { href: '/concurrency-ab', label: 'Parallel slots' },
+      { href: '/flash-attention', label: 'Flash Attention' },
       { href: '/long-context', label: 'Long context' },
       { href: '/multi-gpu', label: 'Dual / multi-GPU' },
       { href: '/power', label: 'Power and PSU' },
       { href: '/flash-ram-offload', label: 'Flash RAM offload' },
+      { href: '/flash-attention', label: 'Flash Attention' },
       { href: '/moe', label: 'MoE on Radeon' },
       { href: '/rocm/vulkan-hip', label: 'Vulkan vs HIP' },
       { href: '/stack-lab', label: 'Stack Lab' },
@@ -270,9 +274,25 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/harnesses', label: 'Harnesses' },
       { href: '/long-context', label: 'Long context' },
       { href: '/tuning', label: 'Speed up llama.cpp' },
+      { href: '/flash-attention', label: 'Flash Attention' },
       { href: '/thinking', label: 'Thinking mode' },
       { href: '/guides/tool-calling', label: 'Tool calling' },
       { href: '/qwen36-dual', label: '35B on two cards' },
+      { href: '/stack-lab', label: 'Stack Lab' },
+      { href: '/amdai-bench', label: 'amdai-bench' },
+      { href: '/calculator', label: 'Calculator' },
+    ];
+  }
+  if (path === '/flash-attention') {
+    return [
+      { href: '/tuning', label: 'Speed up llama.cpp' },
+      { href: '/kv-cache', label: 'KV cache' },
+      { href: '/long-context', label: 'Long context' },
+      { href: '/compare/vulkan-vs-rocm', label: 'Vulkan vs ROCm' },
+      { href: '/concurrency-ab', label: 'Parallel slots' },
+      { href: '/setup/server', label: 'Always-on server' },
+      { href: '/setup/multi-gpu', label: 'Multi-GPU llama.cpp' },
+      { href: '/backends/llamacpp', label: 'llama.cpp' },
       { href: '/stack-lab', label: 'Stack Lab' },
       { href: '/amdai-bench', label: 'amdai-bench' },
       { href: '/calculator', label: 'Calculator' },
@@ -440,6 +460,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/gpus/r9700', label: 'R9700 measured page' },
       { href: '/rag', label: 'RAG on Radeon' },
       { href: '/tuning', label: 'Speed up llama.cpp' },
+      { href: '/flash-attention', label: 'Flash Attention' },
     ];
   }
   if (path === '/kv-cache') {
@@ -456,6 +477,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/stack-lab', label: 'Stack Lab' },
       { href: '/amdai-bench', label: 'amdai-bench' },
       { href: '/concurrency-ab', label: 'Parallel slots' },
+      { href: '/flash-attention', label: 'Flash Attention' },
     ];
   }
   if (path === '/calculator' || path === '/quants') {
@@ -536,6 +558,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/rag', label: 'RAG on Radeon' },
       { href: '/guides/tool-calling', label: 'Tool calling' },
       { href: '/concurrency-ab', label: 'Parallel slots' },
+      { href: '/flash-attention', label: 'Flash Attention' },
     ];
   }
   if (path === '/forum' || path.startsWith('/forum/')) {
@@ -703,6 +726,7 @@ export function relatedFor(pathname: string): RelatedLink[] {
     add(out, seen, '/constrained-decoding', 'Constrained decoding');
     add(out, seen, '/guides/tool-calling', 'Tool calling');
     add(out, seen, '/concurrency-ab', 'Parallel slots');
+    add(out, seen, '/flash-attention', 'Flash Attention');
     add(out, seen, '/setup/docker', 'Docker / Podman');
     add(out, seen, '/setup/lm-studio', 'LM Studio');
     add(out, seen, '/setup/coding-assistant', 'Coding assistant');
@@ -830,6 +854,7 @@ export function assertRelatedValid(
     '/guides/tool-calling',
     '/thinking',
     '/concurrency-ab',
+    '/flash-attention',
     '/moe',
     '/can-run',
     '/hardware',

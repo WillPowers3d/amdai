@@ -564,6 +564,12 @@ export const OG_CARDS: OgCard[] = [
     alt: 'AMDai parallel slots (-np) on a Radeon GPU with llama.cpp — cited flags, slots not measured on local-desktop',
   },
   {
+    slug: 'flash-attention',
+    title: 'Flash Attention on Radeon',
+    lede: 'Cited -fa / --flash-attn. Overnight -fa 1. Server FA not measured',
+    alt: 'AMDai Flash Attention (-fa) on a Radeon GPU with llama.cpp — cited on|off|auto, llama-server FA deltas not measured',
+  },
+  {
     slug: 'moe',
     title: 'Mixture-of-Experts on a Radeon GPU',
     lede: 'Why 35B-A3B fits one 32 GB R9700. Dense 27B and Flash differ',

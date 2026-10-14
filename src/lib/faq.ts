@@ -572,9 +572,10 @@ export const FAQ_ENTRIES: FaqItem[] = [
     group: 'models-quants',
     question: 'How do I speed up llama.cpp on Radeon?',
     answer:
-      'Fit the file first, then turn one cited knob at a time: -ngl, --threads, --threads-batch, -b / -ub, -fa, KV type, --split-mode, a Q4+ draft, or a vendor power cap. The shopper guide is /tuning. Measured decode is the official local-desktop 35B llama.cpp Vulkan sweep. Everything else stays not measured yet. Q3 is a labeled estimate. Draft models stay Q4 and up. llama.cpp first.',
+      'Fit the file first, then turn one cited knob at a time: -ngl, --threads, --threads-batch, -b / -ub, -fa, KV type, --split-mode, a Q4+ draft, or a vendor power cap. The shopper guide is /tuning. Flash Attention has its own page at /flash-attention. Measured decode is the official local-desktop 35B llama.cpp Vulkan sweep. Everything else stays not measured yet. Q3 is a labeled estimate. Draft models stay Q4 and up. llama.cpp first.',
     links: [
       { href: '/tuning', label: 'Speed up llama.cpp' },
+      { href: '/flash-attention', label: 'Flash Attention' },
       { href: '/speculative-decoding', label: 'Speculative decoding' },
       { href: '/backends/llamacpp', label: 'llama.cpp' },
       { href: '/benchmarks', label: 'Benchmarks' },
@@ -633,6 +634,20 @@ export const FAQ_ENTRIES: FaqItem[] = [
     links: [
       { href: '/concurrency-ab', label: 'Parallel slots' },
       { href: '/setup/server', label: 'Always-on server' },
+      { href: '/kv-cache', label: 'KV cache' },
+      { href: '/stack-lab', label: 'Stack Lab' },
+      { href: '/amdai-bench', label: 'amdai-bench' },
+    ],
+  },
+  {
+    id: 'flash-attention',
+    group: 'speed-vram',
+    question: 'Should I turn Flash Attention (-fa) on for llama.cpp on a Radeon?',
+    answer:
+      'Overnight 35B Vulkan llama-bench recorded -fa 1. Official values are on|off|auto (default auto). llama.cpp multi-gpu.md requires FA for tensor split and/or a quantized V cache. llama-server FA on versus off is not measured on local-desktop — run Stack Lab Flash Attention A/B. The shopper page is /flash-attention. House recipes stay Q4 and up. Q3 is a labeled estimate. llama.cpp first.',
+    links: [
+      { href: '/flash-attention', label: 'Flash Attention' },
+      { href: '/tuning', label: 'Speed up llama.cpp' },
       { href: '/kv-cache', label: 'KV cache' },
       { href: '/stack-lab', label: 'Stack Lab' },
       { href: '/amdai-bench', label: 'amdai-bench' },
@@ -851,9 +866,10 @@ export const FAQ_ENTRIES: FaqItem[] = [
     group: 'context-ram',
     question: 'How much VRAM does the KV cache cost on a Radeon, and should I switch to q8_0?',
     answer:
-      'The shopper guide is /kv-cache. House daily driver stays f16 KV at 262144 on one R9700 — measured UD-Q5 peak is 25.97 GB at 4K and 29.34 GB at 256K. q8_0 and q4_0 shrink the estimated cache. Quality and tok/s for those types are not measured yet. llama.cpp multi-gpu.md requires flash attention for a quantized V cache. Print both RAM lines when the window spills.',
+      'The shopper guide is /kv-cache. House daily driver stays f16 KV at 262144 on one R9700 — measured UD-Q5 peak is 25.97 GB at 4K and 29.34 GB at 256K. q8_0 and q4_0 shrink the estimated cache. Quality and tok/s for those types are not measured yet. llama.cpp multi-gpu.md requires flash attention for a quantized V cache — see /flash-attention. Print both RAM lines when the window spills.',
     links: [
       { href: '/kv-cache', label: 'KV cache on a Radeon GPU' },
+      { href: '/flash-attention', label: 'Flash Attention' },
       { href: '/long-context', label: 'Long context' },
       { href: '/calculator', label: 'Calculator' },
       { href: '/tuning', label: 'Speed up llama.cpp' },
@@ -1023,6 +1039,7 @@ export const REQUIRED_FAQ_HREFS = [
   '/constrained-decoding',
   '/thinking',
   '/concurrency-ab',
+  '/flash-attention',
   '/moe',
   '/can-run',
   '/setup/fedora',

@@ -131,9 +131,9 @@ export const VULKAN_VS_ROCM_AXES: VulkanVsRocmAxis[] = [
     title: 'Flash attention and KV type',
     kind: 'cited',
     vulkan:
-      'Overnight 35B llama-bench cards recorded -fa 1 and -ctk f16 -ctv f16. That is the house Vulkan pin. llama-server flags are not on that card — copy -fa only when your build documents it. q8_0 KV is listed on the calculator; quality and tok/s stay not measured yet.',
+      'Overnight 35B llama-bench cards recorded -fa 1 and -ctk f16 -ctv f16. That is the house Vulkan pin. llama-server flags are not on that card — copy -fa only when your build documents it. The shopper page is /flash-attention. q8_0 KV is listed on the calculator; quality and tok/s stay not measured yet.',
     hip:
-      'llama.cpp documents the same --cache-type-k/v and -fa flags on the HIP build. HIP -fa / q8_0 KV for the house 35B sweep stay pending — not measured on local-desktop. Do not invent a HIP flash-attn delta.',
+      'llama.cpp documents the same --cache-type-k/v and -fa flags on the HIP build. HIP -fa / q8_0 KV for the house 35B sweep stay pending — not measured on local-desktop. Do not invent a HIP flash-attn delta. Shopper page: /flash-attention.',
   },
   {
     id: 'windows',
@@ -303,6 +303,7 @@ export const VULKAN_VS_ROCM_HUB: VulkanVsRocmLink[] = [
   { href: '/multi-gpu', label: 'Dual / multi-GPU' },
   { href: '/stack-lab', label: 'Stack Lab' },
   { href: '/amdai-bench', label: 'amdai-bench' },
+  { href: '/flash-attention', label: 'Flash Attention' },
 ];
 
 export const REQUIRED_VULKAN_VS_ROCM_HREFS = [
@@ -329,6 +330,7 @@ export const REQUIRED_VULKAN_VS_ROCM_HREFS = [
   '/compare/q4-q5-q6',
   '/tutorials/run-local-llm',
   '/backends',
+  '/flash-attention',
 ] as const;
 
 export const VULKAN_VS_ROCM_HOWTO_STEPS = [

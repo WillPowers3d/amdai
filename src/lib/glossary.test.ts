@@ -114,6 +114,7 @@ const ALLOWED_HREFS = new Set([
   '/constrained-decoding',
   '/thinking',
   '/concurrency-ab',
+  '/flash-attention',
   '/moe',
   '/can-run',
 ]);

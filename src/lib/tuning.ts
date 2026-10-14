@@ -241,8 +241,9 @@ export const TUNING_KNOBS: TuningKnob[] = [
       '  --host 127.0.0.1 --port 8080',
     ].join('\n'),
     exampleNote: 'Read Long context before you treat -fa as a server pin. Measure if your build differs.',
-    stackLab: 'Stack Lab A/B: prefill tuning / long-context. Measure it on your box via /stack-lab planner and /amdai-bench.',
+    stackLab: 'Stack Lab Flash Attention A/B and Prefill tuning A/B. Measure on your box via /stack-lab planner and /amdai-bench. Shopper page: /flash-attention.',
     links: [
+      { href: '/flash-attention', label: 'Flash Attention' },
       { href: '/long-context', label: 'Long context' },
       { href: '/results', label: 'Run cards' },
       { href: '/backends/llamacpp', label: 'llama.cpp' },

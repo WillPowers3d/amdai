@@ -231,6 +231,7 @@ export const CRUMB_LABELS: Record<string, string> = {
   '/guides/tool-calling': 'Tool calling',
   '/thinking': 'Thinking mode',
   '/concurrency-ab': 'Parallel slots',
+  '/flash-attention': 'Flash Attention',
   '/moe': 'MoE',
   '/can-run': 'Can my Radeon run it?',
   '/setup': 'First-run setup',
@@ -528,6 +529,12 @@ setMeta(
   'Parallel slots (-np) on a Radeon GPU with llama.cpp. Cited --parallel. Measure Stack Lab concurrency-ab/1. Q3 is a labeled estimate.',
 );
 setDate('/concurrency-ab', '2026-10-14');
+setMeta(
+  '/flash-attention',
+  'Flash Attention (-fa) on a Radeon GPU',
+  'Flash Attention (-fa) on a Radeon GPU with llama.cpp. Cited on|off|auto. Overnight -fa 1. Server FA deltas not measured. Q3 is a labeled estimate.',
+);
+setDate('/flash-attention', '2026-10-14');
 setMeta(
   '/moe',
   'Mixture-of-Experts on a Radeon GPU',
