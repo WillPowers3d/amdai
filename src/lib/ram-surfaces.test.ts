@@ -53,6 +53,7 @@ describe('shopper RAM labels', () => {
     assert.ok(RAM_OFFLOAD_SURFACES.includes('/setup/lm-studio'));
     assert.ok(RAM_OFFLOAD_SURFACES.includes('/setup/coding-assistant'));
     assert.ok(RAM_OFFLOAD_SURFACES.includes('/setup/ollama'));
+    assert.ok(RAM_OFFLOAD_SURFACES.includes('/setup/lemonade'));
     assert.ok(RAM_OFFLOAD_SURFACES.includes('/setup/open-webui'));
     assert.ok(RAM_OFFLOAD_SURFACES.includes('/setup/wsl'));
     assert.ok(RAM_OFFLOAD_SURFACES.includes('/setup/comfyui'));

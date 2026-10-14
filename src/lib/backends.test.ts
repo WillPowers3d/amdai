@@ -28,6 +28,7 @@ describe('inference engine catalog', () => {
       'vllm',
       'ollama',
       'lmstudio',
+      'lemonade',
       'sglang',
       'exllama',
       'mlc',

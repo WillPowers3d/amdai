@@ -488,7 +488,7 @@ export const GLOSSARY: GlossaryEntry[] = [
       { href: '/tutorials/run-local-llm', label: 'Run a local Qwen' },
       { href: '/tutorials/serve-qwen', label: 'Serve Qwen' },
     ],
-    seeAlso: ['vulkan', 'hip', 'gguf', 'mmproj', 'lm-studio'],
+    seeAlso: ['vulkan', 'hip', 'gguf', 'mmproj', 'lm-studio', 'lemonade'],
   },
   {
     id: 'lm-studio',
@@ -524,7 +524,25 @@ export const GLOSSARY: GlossaryEntry[] = [
       { href: '/backends/llamacpp', label: 'llama.cpp' },
       { href: '/rocm-problems/ollama-gfx1201-tensile', label: 'gfx1201 tensiles' },
     ],
-    seeAlso: ['llamacpp', 'lm-studio', 'open-webui', 'context-length'],
+    seeAlso: ['llamacpp', 'lm-studio', 'lemonade', 'open-webui', 'context-length'],
+  },
+  {
+    id: 'lemonade',
+    term: 'Lemonade Server',
+    aliases: ['lemonade', ':13305', 'lemonade-server', '/api/v1'],
+    letter: 'L',
+    definition:
+      'AMD’s own local AI server. The primary LLM recipe wraps llama.cpp (Vulkan or ROCm). OpenAI-compatible API on 127.0.0.1:13305/api/v1 — note /api/v1, not /v1.',
+    why: 'People search “Lemonade AMD GPU.” The cited first-run is /setup/lemonade. It is not a measured local-desktop card. Decode numbers on this site are Ubuntu llama.cpp llama-bench, not measured inside Lemonade. llama.cpp you compile stays the daily driver. Vulkan first; ROCm only on the gfx their docs name.',
+    deeper:
+      'Ubuntu 24.04+ PPA is ppa:lemonade-team/stable; Windows is the MSI. Latest GitHub tag we checked is v2026.41.1 (2026-10-07) — ROCm backends move to ROCm 10. lemonade backends install llamacpp:vulkan or llamacpp:rocm. Nightly ROCm bins: gfx1150, gfx1151, gfx103X, gfx110X, gfx120X. House family is still Qwen3.6-35B-A3B. amdai runs Lemonade on local-desktop; there is still no Lemonade tok/s card.',
+    links: [
+      { href: '/setup/lemonade', label: 'Lemonade on Radeon' },
+      { href: '/backends/lemonade', label: 'Lemonade backend' },
+      { href: '/backends/llamacpp', label: 'llama.cpp' },
+      { href: '/rocm/gfx', label: 'gfx targets' },
+    ],
+    seeAlso: ['llamacpp', 'ollama', 'lm-studio', 'open-webui'],
   },
   {
     id: 'open-webui',

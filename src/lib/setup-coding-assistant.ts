@@ -318,9 +318,10 @@ export const SETUP_CODING_STEPS: SetupCodingStep[] = [
   {
     id: 'secondary',
     title: 'LM Studio and Ollama stay secondary',
-    body: 'If the desktop app is already serving /v1, Aider/Cline/Continue can use that base URL instead. LM Studio: http://127.0.0.1:1234/v1 — /setup/lm-studio. Ollama is a wrapper, not the measured path; prefer llama-server when you want this site’s flags and cards. Do not present llama.cpp tok/s as an Ollama or LM Studio result.',
+    body: 'If the desktop app is already serving /v1, Aider/Cline/Continue can use that base URL instead. LM Studio: http://127.0.0.1:1234/v1 — /setup/lm-studio. Lemonade: http://127.0.0.1:13305/api/v1 — /setup/lemonade (note /api/v1). Ollama is a wrapper, not the measured path; prefer llama-server when you want this site’s flags and cards. Do not present llama.cpp tok/s as an Ollama, LM Studio, or Lemonade result.',
     links: [
       { href: '/setup/lm-studio', label: 'LM Studio on Radeon' },
+      { href: '/setup/lemonade', label: 'Lemonade on Radeon' },
       { href: '/backends', label: 'Backends' },
       { href: '/backends/llamacpp', label: 'llama.cpp' },
       { href: '/setup/docker', label: 'Docker / Podman' },
@@ -349,6 +350,7 @@ export const SETUP_CODING_HUB_LINKS: SetupCodingLink[] = [
   { href: '/setup', label: 'Ubuntu setup (measured)' },
   { href: '/setup/lm-studio', label: 'LM Studio' },
   { href: '/setup/ollama', label: 'Ollama' },
+  { href: '/setup/lemonade', label: 'Lemonade' },
   { href: '/setup/open-webui', label: 'Open WebUI' },
   { href: '/setup/wsl', label: 'WSL2' },
   { href: '/setup/comfyui', label: 'ComfyUI' },

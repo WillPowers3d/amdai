@@ -89,6 +89,7 @@ const REQUIRED_IDS = [
   'vllm',
   'ollama',
   'lmstudio',
+  'lemonade',
   'sglang',
   'exllama',
   'mlc',

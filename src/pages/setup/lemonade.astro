@@ -1,0 +1,201 @@
+---
+import Base from '../../layouts/Base.astro';
+import Callout from '../../components/Callout.astro';
+import HouseRam from '../../components/HouseRam.astro';
+import HowWeTest from '../../components/HowWeTest.astro';
+import NextSteps from '../../components/NextSteps.astro';
+import OpenInStackLab from '../../components/OpenInStackLab.astro';
+import { HOUSE_STACK_LAB } from '../../lib/stack-lab-open';
+import {
+  SETUP_LEMONADE_CITED_LABEL,
+  SETUP_LEMONADE_HOUSE_FILE,
+  SETUP_LEMONADE_HUB_LINKS,
+  SETUP_LEMONADE_INSTALL,
+  SETUP_LEMONADE_PULL_Q5,
+  SETUP_LEMONADE_QUANTS,
+  SETUP_LEMONADE_RELEASE,
+  SETUP_LEMONADE_SOURCES,
+  SETUP_LEMONADE_STEPS,
+  SETUP_LEMONADE_TITLE,
+  SETUP_LEMONADE_TRACKS,
+  SETUP_LEMONADE_V1,
+} from '../../lib/setup-lemonade';
+---
+
+<Base
+  title={SETUP_LEMONADE_TITLE}
+  description="Cited Lemonade Server on consumer Radeon. Ubuntu first. llama.cpp stays the daily driver. No Lemonade tok/s on AMDai."
+>
+  <main id="main" class="mx-auto max-w-3xl px-4 py-10 sm:px-6">
+    <p class="kicker">{SETUP_LEMONADE_CITED_LABEL}</p>
+    <h1 class="mt-3 font-serif text-4xl tracking-tight sm:text-5xl">{SETUP_LEMONADE_TITLE}</h1>
+    <p class="mt-4 text-lg leading-relaxed text-muted">
+      Lemonade is AMD’s own local AI server. The primary LLM path wraps
+      <a class="underline decoration-accent/40" href="/backends/llamacpp">llama.cpp</a>
+      (Vulkan or ROCm) and serves an OpenAI-compatible API on
+      <code>{SETUP_LEMONADE_V1}</code>.
+      Ubuntu 24.04+ llama.cpp you compile is still the measured AMDai path —
+      <a class="underline decoration-accent/40" href="/setup">/setup</a>.
+      This page is the cited AMD wrapper: PPA or MSI, house family
+      <code>{SETUP_LEMONADE_HOUSE_FILE}</code>
+      via
+      <code>{SETUP_LEMONADE_PULL_Q5}</code>.
+      Latest GitHub tag we checked is
+      <code>{SETUP_LEMONADE_RELEASE}</code>.
+      We do not invent a Lemonade tok/s.
+    </p>
+    <ul class="mt-4 flex flex-wrap gap-2">
+      {SETUP_LEMONADE_HUB_LINKS.map((link) => (
+        <li>
+          <a
+            class="inline-flex min-h-9 items-center rounded-full border border-line bg-canvas px-3 text-sm text-ink hover:border-accent/50 hover:text-accent-ink"
+            href={link.href}
+          >
+            {link.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+
+    <Callout type="warn" title="Measured on llama.cpp, not inside Lemonade">
+      <p>
+        Official 35B decode numbers are Ubuntu llama-bench cards (102.39 tok/s at
+        4K on one R9700, UD-Q5). Lemonade can load a sibling file. It cannot claim
+        those tok/s. amdai runs Lemonade on local-desktop; there is still no Lemonade
+        speed card.
+      </p>
+    </Callout>
+
+    <section id="tracks" class="mt-12 scroll-mt-28" aria-labelledby="tracks-heading">
+      <h2 id="tracks-heading" class="font-serif text-3xl tracking-tight">llama.cpp first</h2>
+      <div class="mt-6 grid gap-4">
+        {SETUP_LEMONADE_TRACKS.map((track) => (
+          <article id={track.id} class="scroll-mt-28 rounded-2xl border border-line bg-raised/50 p-5">
+            <p class="kicker">{track.recommend ? 'Try this' : 'AMD wrapper, not the measured path'}</p>
+            <h3 class="mt-2 font-serif text-2xl tracking-tight">{track.title}</h3>
+            <p class="mt-3 leading-relaxed text-ink">{track.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section id="checklist" class="mt-12 scroll-mt-28" aria-labelledby="checklist-heading">
+      <h2 id="checklist-heading" class="font-serif text-3xl tracking-tight">Zero to first token</h2>
+      <ol class="mt-8 space-y-6">
+        {SETUP_LEMONADE_STEPS.map((step, index) => (
+          <li id={step.id} class="scroll-mt-28 rounded-2xl border border-line bg-raised/50 p-5">
+            <p class="font-mono text-[0.68rem] uppercase tracking-[0.14em] text-faint">
+              {index + 1} · {SETUP_LEMONADE_CITED_LABEL}
+            </p>
+            <h3 class="mt-2 font-serif text-2xl tracking-tight">{step.title}</h3>
+            <p class="mt-3 leading-relaxed text-ink">{step.body}</p>
+            <ul class="mt-4 flex flex-wrap gap-2">
+              {step.links.map((link) => (
+                <li>
+                  <a
+                    class="inline-flex min-h-9 items-center rounded-full border border-line bg-canvas px-3 text-sm text-ink hover:border-accent/50 hover:text-accent-ink"
+                    href={link.href}
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <section id="install-cmd" class="mt-12 scroll-mt-28" aria-labelledby="install-cmd-heading">
+      <h2 id="install-cmd-heading" class="font-serif text-3xl tracking-tight">Cited Ubuntu PPA</h2>
+      <p class="mt-3 leading-relaxed text-muted">
+        Official Lemonade Ubuntu docs, tested on Ubuntu 24.04 LTS. Then
+        <code>lemonade backends install llamacpp:vulkan</code>
+        and prove a GPU meter moves.
+      </p>
+      <pre class="mt-3 overflow-x-auto rounded-2xl border border-line bg-raised/50 p-4 text-sm leading-relaxed text-ink"><code>{SETUP_LEMONADE_INSTALL}</code></pre>
+    </section>
+
+    <section id="quants" class="mt-12 scroll-mt-28" aria-labelledby="quants-heading">
+      <h2 id="quants-heading" class="font-serif text-3xl tracking-tight">35B quant picker</h2>
+      <p class="mt-3 leading-relaxed text-muted">
+        Speeds are
+        <strong class="text-ink">measured on llama.cpp directly, not inside Lemonade</strong>.
+        Pull shape is the documented
+        <code>owner/repo[:variant]</code>
+        form. Confirm the stem on Hugging Face.
+      </p>
+      <div class="mt-6 overflow-x-auto">
+        <table class="w-full min-w-[32rem] border-collapse text-left text-sm">
+          <caption class="sr-only">
+            35B GGUF quants for Lemonade on Radeon, with llama.cpp measurements labeled as not from Lemonade
+          </caption>
+          <thead>
+            <tr class="border-b border-line">
+              <th scope="col" class="py-2 pr-3 font-medium">Quant</th>
+              <th scope="col" class="py-2 pr-3 font-medium">Role</th>
+              <th scope="col" class="py-2 pr-3 font-medium">Lemonade path</th>
+              <th scope="col" class="py-2 font-medium">llama.cpp on local-desktop (not Lemonade)</th>
+            </tr>
+          </thead>
+          <tbody>
+            {SETUP_LEMONADE_QUANTS.map((row) => (
+              <tr class="border-b border-line/70 align-top">
+                <th scope="row" class="py-3 pr-3 font-mono text-ink">
+                  {row.quant}
+                  {row.estimate ? (
+                    <span class="mt-1 block font-sans text-xs font-normal text-faint">Estimate</span>
+                  ) : null}
+                </th>
+                <td class="py-3 pr-3 text-muted">{row.role}</td>
+                <td class="py-3 pr-3 text-ink">{row.lemonade}</td>
+                <td class="py-3 text-ink">{row.note}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="fit-ram" class="mt-12 scroll-mt-28" aria-labelledby="fit-ram-heading">
+      <h2 id="fit-ram-heading" class="font-serif text-3xl tracking-tight">RAM lines (llama.cpp-measured)</h2>
+      <p class="mt-3 leading-relaxed text-muted">
+        Wherever a file spills off the GPU, the two labels stay
+        <strong class="text-ink">Minimum system RAM needed</strong>
+        and
+        <strong class="text-ink">RAM needed at full context</strong>.
+        House 35B peaks below are Ubuntu llama.cpp, not Lemonade.
+      </p>
+      <div class="mt-4">
+        <HouseRam which="daily" compact />
+      </div>
+    </section>
+
+    <section id="stack-lab-cta" class="mt-12 scroll-mt-28" aria-labelledby="stack-lab-cta-heading">
+      <h2 id="stack-lab-cta-heading" class="font-serif text-3xl tracking-tight">Open in Stack Lab</h2>
+      <p class="mt-3 leading-relaxed text-muted">
+        Stack Lab remains Ubuntu llama.cpp-first. There is no Lemonade package and no
+        public download.
+      </p>
+      <div class="mt-4">
+        <OpenInStackLab {...HOUSE_STACK_LAB.doctor} compact />
+      </div>
+    </section>
+
+    <section id="sources" class="mt-12 scroll-mt-28" aria-labelledby="sources-heading">
+      <h2 id="sources-heading" class="font-serif text-3xl tracking-tight">Sources</h2>
+      <ul class="mt-4 list-disc space-y-2 pl-5 text-sm leading-relaxed text-muted">
+        {SETUP_LEMONADE_SOURCES.map((source) => (
+          <li>
+            <a class="underline decoration-accent/40" href={source.href} rel="noopener">{source.title}</a>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <div class="mt-8">
+      <HowWeTest />
+    </div>
+    <NextSteps path="/setup/lemonade" />
+  </main>
+</Base>

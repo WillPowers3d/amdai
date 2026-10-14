@@ -38,6 +38,7 @@ export const SETUP_INTRO_LINKS: SetupLink[] = [
   { href: '/setup/lm-studio', label: 'LM Studio' },
   { href: '/setup/coding-assistant', label: 'Coding assistant' },
   { href: '/setup/ollama', label: 'Ollama' },
+  { href: '/setup/lemonade', label: 'Lemonade' },
   { href: '/setup/open-webui', label: 'Open WebUI' },
   { href: '/setup/wsl', label: 'WSL2' },
   { href: '/setup/comfyui', label: 'ComfyUI' },
@@ -101,6 +102,13 @@ export const SETUP_MORE_PATHS = [
       'Easy on-ramp. llama.cpp stays the daily driver. Local /v1 on :11434. No Ollama tok/s on AMDai.',
   },
   {
+    href: '/setup/lemonade',
+    label: 'Lemonade',
+    kicker: 'Cited, not measured on local-desktop',
+    summary:
+      'AMD llama.cpp wrapper. Vulkan first on Radeon. Local /api/v1 on :13305. No Lemonade tok/s on AMDai.',
+  },
+  {
     href: '/setup/open-webui',
     label: 'Open WebUI',
     kicker: 'Cited, not measured on local-desktop',
@@ -133,7 +141,7 @@ export const SETUP_MORE_PATHS = [
 export const SETUP_UBUNTU_BASED = {
   title: 'Ubuntu-based distros',
   body:
-    'Linux Mint, Pop!_OS, and Kubuntu are Ubuntu-based. AMD’s ROCm 10.1.0 compatibility matrix lists Ubuntu 26.04.1, 24.04.5, and 22.04.5 by name — not Mint, Pop!_OS, or Kubuntu. Official docs do not put those derivatives on the 10.1 OS row, so we do not invent official AMD support. Follow the Ubuntu steps on this page only as unofficial; that path is not verified on our rig.     Prefer stock Ubuntu 24.04.5 if you want the measured local-desktop cards to match the box. Fedora, Arch, Docker / Podman, LM Studio, the coding-assistant guide, Ollama, Open WebUI, WSL2, ComfyUI, and the multi-GPU llama.cpp how-to have their own cited pages.',
+    'Linux Mint, Pop!_OS, and Kubuntu are Ubuntu-based. AMD’s ROCm 10.1.0 compatibility matrix lists Ubuntu 26.04.1, 24.04.5, and 22.04.5 by name — not Mint, Pop!_OS, or Kubuntu. Official docs do not put those derivatives on the 10.1 OS row, so we do not invent official AMD support. Follow the Ubuntu steps on this page only as unofficial; that path is not verified on our rig.     Prefer stock Ubuntu 24.04.5 if you want the measured local-desktop cards to match the box. Fedora, Arch, Docker / Podman, LM Studio, the coding-assistant guide, Ollama, Lemonade, Open WebUI, WSL2, ComfyUI, and the multi-GPU llama.cpp how-to have their own cited pages.',
   links: [
     { href: '/setup/fedora', label: 'Fedora setup' },
     { href: '/setup/arch', label: 'Arch setup' },
@@ -142,6 +150,7 @@ export const SETUP_UBUNTU_BASED = {
     { href: '/setup/lm-studio', label: 'LM Studio' },
     { href: '/setup/coding-assistant', label: 'Coding assistant' },
     { href: '/setup/ollama', label: 'Ollama' },
+    { href: '/setup/lemonade', label: 'Lemonade' },
     { href: '/setup/open-webui', label: 'Open WebUI' },
     { href: '/setup/wsl', label: 'WSL2' },
     { href: '/setup/comfyui', label: 'ComfyUI' },
@@ -380,6 +389,7 @@ export const REQUIRED_SETUP_HREFS = [
   '/setup/lm-studio',
   '/setup/coding-assistant',
   '/setup/ollama',
+  '/setup/lemonade',
   '/setup/open-webui',
   '/setup/wsl',
   '/setup/comfyui',

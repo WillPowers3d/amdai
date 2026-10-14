@@ -234,6 +234,7 @@ export const CRUMB_LABELS: Record<string, string> = {
   '/setup/lm-studio': 'LM Studio',
   '/setup/coding-assistant': 'Coding assistant',
   '/setup/ollama': 'Ollama',
+  '/setup/lemonade': 'Lemonade',
   '/setup/open-webui': 'Open WebUI',
   '/setup/wsl': 'WSL2',
   '/setup/comfyui': 'ComfyUI',
@@ -387,6 +388,12 @@ setMeta(
   'Cited Ollama on consumer Radeon. Linux first. llama.cpp stays the daily driver. No Ollama tok/s on AMDai.',
 );
 setDate('/setup/ollama', '2026-10-14');
+setMeta(
+  '/setup/lemonade',
+  'Lemonade Server on a Radeon GPU',
+  'Cited Lemonade Server on consumer Radeon. Ubuntu first. llama.cpp stays the daily driver. No Lemonade tok/s on AMDai.',
+);
+setDate('/setup/lemonade', '2026-10-14');
 setMeta(
   '/setup/open-webui',
   'Run Open WebUI on a Radeon GPU',
