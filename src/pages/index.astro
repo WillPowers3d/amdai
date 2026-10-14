@@ -21,6 +21,12 @@ const updates = (await getCollection('updates')).sort((a, b) => b.data.date.valu
 <Base>
   <main id="main">
     <section class="relative overflow-hidden border-b border-line">
+      <style is:inline>
+        .silicon{position:absolute;top:0;left:0;right:0;height:40rem;overflow:hidden;pointer-events:none}
+        .silicon-glow{position:absolute;width:28rem;height:28rem;right:4%;top:5rem}
+        .silicon-grid{position:absolute;inset:0}
+        .silicon-die{position:absolute;right:8%;top:6rem;width:min(22rem,46vw);aspect-ratio:1/1}
+      </style>
       <SiliconGrid />
       <div class="relative mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:px-6 lg:grid-cols-[1.05fr_0.95fr] lg:py-20">
         <div>
