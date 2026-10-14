@@ -551,6 +551,7 @@ export const GLOSSARY: GlossaryEntry[] = [
     links: [
       { href: '/models/qwen36', label: '35B model page' },
       { href: '/qwen', label: 'Qwen compare' },
+      { href: '/compare/models', label: 'Compare models' },
       { href: '/models', label: 'Models' },
       { href: '/tutorials/serve-qwen', label: 'Serve Qwen' },
     ],
@@ -568,6 +569,8 @@ export const GLOSSARY: GlossaryEntry[] = [
       '32 GB workstation SKU, gfx1201. Official product name is AMD Radeon AI PRO R9700. One card is the daily driver; two cards are copies or Flash offload, not automatic 2× decode. Size a PSU on /hardware — we do not invent a wattage.',
     links: [
       { href: '/gpus/r9700', label: 'R9700 measured page' },
+      { href: '/gpus/rx-9070-xt', label: 'RX 9070 XT sheet' },
+      { href: '/compare/gpus', label: 'Compare GPUs' },
       { href: '/gpus', label: 'GPU directory' },
       { href: '/hardware', label: 'Hardware' },
       { href: '/budget', label: 'Budget' },
@@ -587,6 +590,8 @@ export const GLOSSARY: GlossaryEntry[] = [
     links: [
       { href: '/rocm', label: 'What is ROCm' },
       { href: '/gpus', label: 'GPU directory' },
+      { href: '/gpus/rx-9070-xt', label: 'RX 9070 XT sheet' },
+      { href: '/compare/gpus', label: 'Compare GPUs' },
       { href: '/gpus/rx-7900-xtx', label: 'RX 7900 XTX sheet' },
       { href: '/gpus/rx-7900-xt', label: 'RX 7900 XT sheet' },
       { href: '/gpus/rx-7800-xt', label: 'RX 7800 XT sheet' },
@@ -777,6 +782,7 @@ export const GLOSSARY: GlossaryEntry[] = [
     links: [
       { href: '/calculator', label: 'Calculator' },
       { href: '/can-run', label: 'Can my Radeon run it?' },
+      { href: '/compare/gpus', label: 'Compare GPUs' },
       { href: '/hardware', label: 'Hardware' },
       { href: '/gpus', label: 'GPU directory' },
     ],

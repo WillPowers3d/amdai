@@ -91,6 +91,8 @@ export const REQUIRED_HOME_START_HREFS = [
   '/faq',
   '/glossary',
   '/compare',
+  '/compare/gpus',
+  '/compare/models',
   '/troubleshoot',
 ] as const;
 
@@ -108,6 +110,8 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
     { href: '/recipes/qwen36-35b.llamacpp-vulkan.262k', label: 'Daily-driver recipe' },
     { href: '/gpus/r9700', label: 'R9700 measured page' },
     { href: '/benchmarks', label: 'Benchmarks' },
+    { href: '/compare/gpus', label: 'Compare GPUs' },
+    { href: '/compare/models', label: 'Compare models' },
     { href: '/newsletter', label: 'Digest' },
     { href: '/troubleshoot', label: 'Troubleshoot' },
   ],
@@ -346,6 +350,7 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
   '/compare': [
     { href: '/gpus/r9700', label: 'R9700 measured page' },
     { href: '/compare/gpus', label: 'Compare GPUs' },
+    { href: '/compare/models', label: 'Compare models' },
     { href: '/compare/radeon-vs-nvidia', label: 'Radeon vs NVIDIA' },
     { href: '/benchmarks', label: 'Benchmarks' },
     { href: '/results', label: 'Run cards' },
