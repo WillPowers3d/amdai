@@ -7,6 +7,7 @@ import node from '@astrojs/node';
 import { htmlSeparators } from './src/lib/html-separators.ts';
 import { canonicalUrl, isSitemapExcluded, lastmodFor, urlPath } from './src/lib/seo.ts';
 import { sitemapFromDist } from './src/lib/sitemap-from-dist.ts';
+import { canRunRedirects } from './src/lib/can-run.ts';
 import { gpuCompareRedirects } from './src/lib/gpu-compare.ts';
 import { modelCompareRedirects } from './src/lib/model-compare.ts';
 
@@ -92,6 +93,7 @@ export default defineConfig({
     '/embeddings': '/rag',
     ...gpuCompareRedirects(),
     ...modelCompareRedirects(),
+    ...canRunRedirects(),
   },
   markdown: {
     shikiConfig: {

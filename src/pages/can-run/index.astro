@@ -1,0 +1,229 @@
+---
+import Base from '../../layouts/Base.astro';
+import Callout from '../../components/Callout.astro';
+import HowWeTest from '../../components/HowWeTest.astro';
+import NewsletterSignup from '../../components/NewsletterSignup.astro';
+import NextSteps from '../../components/NextSteps.astro';
+import OpenInStackLab from '../../components/OpenInStackLab.astro';
+import {
+  CAN_RUN_ENGINE,
+  CAN_RUN_GPU_IDS,
+  CAN_RUN_GPU_SHORT,
+  CAN_RUN_HUB_LEAD,
+  CAN_RUN_MODEL_IDS,
+  CAN_RUN_MODEL_SHORT,
+  CAN_RUN_UNMEASURED,
+  CAN_RUN_VERDICT_LABEL,
+  canRunGpuColumns,
+  canRunHubFaq,
+  canRunHubRows,
+  parseCanRunPicker,
+} from '../../lib/can-run';
+import { RAM_FULL_LABEL, RAM_MIN_LABEL } from '../../lib/ram-surfaces';
+import { HOUSE_STACK_LAB } from '../../lib/stack-lab-open';
+
+const rows = canRunHubRows();
+const gpus = canRunGpuColumns();
+const faq = canRunHubFaq();
+const picked = parseCanRunPicker(Astro.url.search);
+const pickedHref = picked.href;
+const pickedLabel =
+  picked.model && picked.gpu
+    ? `${CAN_RUN_GPU_SHORT[picked.gpu]} × ${CAN_RUN_MODEL_SHORT[picked.model]}`
+    : null;
+---
+
+<Base
+  title="Can my Radeon run it?"
+  description="Pick a cited Radeon sheet and a cited /models page. Q6/Q5/Q4 fit plus a labeled Q3 estimate. No invented speeds."
+>
+  <main id="main" class="mx-auto max-w-6xl px-4 py-10 sm:px-6">
+    <p class="kicker">Cited GPU sheets × cited /models · {CAN_RUN_ENGINE}</p>
+    <h1 class="display mt-3 text-4xl sm:text-5xl">Can my Radeon run it?</h1>
+    <p class="mt-4 max-w-3xl text-lg leading-relaxed text-muted">{CAN_RUN_HUB_LEAD}</p>
+    <div class="mt-4">
+      <HowWeTest />
+    </div>
+    <Callout type="note" title="Same calculator, no second engine">
+      <p>
+        Fit comes from the existing
+        <a class="underline decoration-accent/40" href="/calculator">calculator</a>
+        — VRAM, KV, and RAM offload already used on the GPU sheets and /models pages.
+        Pair pages that spill list <strong class="text-ink">{RAM_MIN_LABEL}</strong> and
+        <strong class="text-ink">{RAM_FULL_LABEL}</strong>, rounded up to a real kit.
+        Q3 is a labeled estimate. Measured decode stays {CAN_RUN_UNMEASURED} except official
+        local-desktop 35B cells on the R9700. We do not invent a price.
+      </p>
+    </Callout>
+
+    <form id="can-run-picker" class="mt-10 rounded-2xl border border-line bg-raised/50 p-5" method="get" action="/can-run">
+      <fieldset>
+        <legend class="font-serif text-2xl tracking-tight">Pick a GPU and a model</legend>
+        <p class="mt-2 text-sm text-muted">
+          The form works without JavaScript: submit to land here with a link to the pair.
+          With JS, the same controls open the shareable pair URL directly.
+        </p>
+        <div class="mt-5 grid gap-4 sm:grid-cols-2">
+          <label class="block text-sm">
+            <span class="text-faint">GPU</span>
+            <select name="gpu" class="mt-1 w-full rounded-xl border border-line bg-canvas px-3 py-2 text-ink">
+              {CAN_RUN_GPU_IDS.map((id) => (
+                <option value={id} selected={picked.gpu === id || (!picked.gpu && id === 'rx7900xtx')}>
+                  {CAN_RUN_GPU_SHORT[id]}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label class="block text-sm">
+            <span class="text-faint">Model</span>
+            <select name="model" class="mt-1 w-full rounded-xl border border-line bg-canvas px-3 py-2 text-ink">
+              {CAN_RUN_MODEL_IDS.map((id) => (
+                <option value={id} selected={picked.model === id || (!picked.model && id === 'qwen36')}>
+                  {CAN_RUN_MODEL_SHORT[id]}
+                </option>
+              ))}
+            </select>
+          </label>
+        </div>
+        <button class="btn-primary mt-5" type="submit">Open pair</button>
+      </fieldset>
+    </form>
+
+    {pickedHref && pickedLabel && (
+      <p class="mt-6 rounded-2xl border border-accent/40 bg-raised/50 p-5">
+        Open the static pair page:
+        <a class="ml-1 underline decoration-accent/40 underline-offset-2" href={pickedHref}>{pickedLabel}</a>
+      </p>
+    )}
+
+    <section id="grid" class="mt-12" aria-labelledby="grid-heading">
+      <h2 id="grid-heading" class="font-serif text-3xl tracking-tight">Every cited pair</h2>
+      <p class="mt-3 max-w-3xl text-sm leading-relaxed text-muted">
+        One cell per GPU × model. Verdicts: {CAN_RUN_VERDICT_LABEL['fits-fully']},
+        {CAN_RUN_VERDICT_LABEL['ram-offload']}, {CAN_RUN_VERDICT_LABEL['needs-2-gpus']},
+        or {CAN_RUN_VERDICT_LABEL['does-not-fit']}. Shopper files stay Q4 and up at 4K on the calculator.
+      </p>
+      <div class="mt-6 overflow-x-auto">
+        <table class="min-w-full text-left text-sm">
+          <caption class="sr-only">Can this cited Radeon run this cited model?</caption>
+          <thead>
+            <tr class="border-b border-line text-faint">
+              <th class="py-2 pr-3 font-normal" scope="col">Model</th>
+              {gpus.map((gpu) => (
+                <th class="py-2 px-2 font-normal" scope="col">
+                  <a class="hover:text-accent-ink" href={gpu.href}>{gpu.label}</a>
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((row) => (
+              <tr class="border-b border-line/70 align-top">
+                <th class="py-3 pr-3 font-medium" scope="row">
+                  <a class="hover:text-accent-ink" href={row.modelPath}>{row.modelName}</a>
+                </th>
+                {row.cells.map((cell) => (
+                  <td class="py-3 px-2">
+                    <a
+                      class="inline-flex min-h-11 items-center text-xs leading-snug underline decoration-accent/40"
+                      href={cell.href}
+                    >
+                      {cell.label}
+                    </a>
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="faq" class="mt-12" aria-labelledby="faq-heading">
+      <h2 id="faq-heading" class="font-serif text-3xl tracking-tight">FAQ</h2>
+      <dl class="mt-6 grid gap-6">
+        {faq.map((item) => (
+          <div>
+            <dt class="font-serif text-2xl tracking-tight">{item.question}</dt>
+            <dd class="mt-2 leading-relaxed text-muted">{item.answer}</dd>
+            <dd class="mt-2 text-sm">
+              {item.links.map((link, index) => (
+                <>
+                  {index > 0 ? ' · ' : ''}
+                  <a class="underline decoration-accent/40" href={link.href}>{link.label}</a>
+                </>
+              ))}
+            </dd>
+          </div>
+        ))}
+      </dl>
+    </section>
+
+    <div class="mt-10">
+      <OpenInStackLab {...HOUSE_STACK_LAB.doctor} compact />
+    </div>
+    <p class="mt-10 text-sm text-muted">
+      Also:
+      <a class="underline decoration-accent/40" href="/calculator">Calculator</a>
+      ·
+      <a class="underline decoration-accent/40" href="/gpus">GPUs</a>
+      ·
+      <a class="underline decoration-accent/40" href="/models">Models</a>
+      ·
+      <a class="underline decoration-accent/40" href="/compare/gpus">Compare GPUs</a>
+      ·
+      <a class="underline decoration-accent/40" href="/compare/models">Compare models</a>
+      ·
+      <a class="underline decoration-accent/40" href="/tuning">Speed up llama.cpp</a>
+    </p>
+    <NextSteps path="/can-run" />
+    <div class="mt-12">
+      <NewsletterSignup variant="article" />
+    </div>
+  </main>
+</Base>
+
+<script>
+  const form = document.getElementById('can-run-picker');
+  if (form instanceof HTMLFormElement) {
+    const modelSlugs: Record<string, string> = {
+      qwen36: 'qwen36-35b',
+      flash: 'flash',
+      'gpt-oss-20b': 'gpt-oss-20b',
+      'gemma3-27b': 'gemma3-27b',
+      'llama33-70b': 'llama33-70b',
+      'glm-53-flash': 'glm-53-flash',
+      'qwen36-27b': 'qwen36-27b',
+      'qwen38-27b': 'qwen38-27b',
+    };
+    const gpuSlugs: Record<string, string> = {
+      r9700: 'r9700',
+      w7900: 'w7900',
+      w7800: 'w7800',
+      w7700: 'w7700',
+      w6800: 'w6800',
+      rx7900xtx: 'rx-7900-xtx',
+      rx7900xt: 'rx-7900-xt',
+      rx9070xt: 'rx-9070-xt',
+      rx9060xt: 'rx-9060-xt',
+      rx7900gre: 'rx-7900-gre',
+      rx7800xt: 'rx-7800-xt',
+      rx7700xt: 'rx-7700-xt',
+      rx7600xt: 'rx-7600-xt',
+      rx7600: 'rx-7600',
+      rx6800xt: 'rx-6800-xt',
+      rx6700xt: 'rx-6700-xt',
+      'strix-halo': 'strix-halo',
+    };
+    form.addEventListener('submit', (event) => {
+      const data = new FormData(form);
+      const model = String(data.get('model') ?? '');
+      const gpu = String(data.get('gpu') ?? '');
+      const modelSlug = modelSlugs[model];
+      const gpuSlug = gpuSlugs[gpu];
+      if (!modelSlug || !gpuSlug) return;
+      event.preventDefault();
+      window.location.href = `/can-run/${modelSlug}-on-${gpuSlug}`;
+    });
+  }
+</script>

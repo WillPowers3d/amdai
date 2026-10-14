@@ -80,6 +80,8 @@ describe('OG catalog', () => {
     assert.equal(ogSlug('/rag'), 'rag');
     assert.equal(ogSlug('/fine-tuning'), 'fine-tuning');
     assert.equal(ogSlug('/tuning'), 'tuning');
+    assert.equal(ogSlug('/can-run'), 'can-run');
+    assert.equal(ogSlug('/can-run/qwen36-35b-on-rx-7900-xtx'), 'can-run');
     assert.equal(ogSlug('/troubleshoot'), 'troubleshoot');
     assert.equal(ogSlug('/labs'), 'labs');
     assert.equal(ogSlug('/labs/shannon'), 'labs-shannon');

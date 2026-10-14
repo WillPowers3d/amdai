@@ -402,6 +402,12 @@ export const OG_CARDS: OgCard[] = [
     alt: 'AMDai speed up llama.cpp on Radeon — cited flags, measured 35B cells only',
   },
   {
+    slug: 'can-run',
+    title: 'Can my Radeon run it?',
+    lede: 'Cited GPU × model fit. Q3 is a labeled estimate',
+    alt: 'AMDai can my Radeon run it — cited GPU × model fit, Q3 is a labeled estimate',
+  },
+  {
     slug: 'troubleshoot',
     title: 'Troubleshoot',
     lede: 'Symptom-first fixes. Cited commands only',
@@ -537,6 +543,7 @@ export function ogSlug(pathname: string): string {
   if (slug.startsWith('models-') || slug.startsWith('gpus-') || slug.startsWith('recipes-')) {
     return 'gpus';
   }
+  if (slug === 'can-run' || slug.startsWith('can-run-')) return 'can-run';
   return SLUGS.has(slug) ? slug : 'default';
 }
 

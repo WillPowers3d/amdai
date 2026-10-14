@@ -327,6 +327,20 @@ export const FAQ_ENTRIES: FaqItem[] = [
       { href: '/software', label: 'AI software' },
       { href: '/updates/matrix', label: 'Version matrix' },
       { href: '/tuning', label: 'Speed up llama.cpp' },
+      { href: '/can-run', label: 'Can my Radeon run it?' },
+    ],
+  },
+  {
+    id: 'can-radeon-run-it',
+    group: 'models-quants',
+    question: 'Can my Radeon run this model?',
+    answer:
+      'Use /can-run. Each cited GPU sheet × cited /models page has a calculator verdict: fits fully on GPU, fits with RAM offload, needs 2 GPUs, or does not fit. Q6 / Q5 / Q4 plus a labeled Q3 estimate. Measured decode is only the official local-desktop 35B llama.cpp Vulkan sweep on R9700. Everything else stays not measured yet. llama.cpp first.',
+    links: [
+      { href: '/can-run', label: 'Can my Radeon run it?' },
+      { href: '/calculator', label: 'Calculator' },
+      { href: '/gpus', label: 'GPU directory' },
+      { href: '/models', label: 'Models' },
     ],
   },
   {
@@ -660,6 +674,7 @@ export const REQUIRED_FAQ_HREFS = [
   '/power',
   '/fine-tuning',
   '/tuning',
+  '/can-run',
 ] as const;
 
 const BANNED_VISIBLE = /Qwen2\.5|Qwen3-8B/i;

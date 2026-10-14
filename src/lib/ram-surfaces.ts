@@ -51,6 +51,7 @@ export const RAM_OFFLOAD_SURFACES = [
   '/power',
   '/fine-tuning',
   '/tuning',
+  '/can-run',
   '/benchmarks',
   '/stacks',
   '/harnesses/hermes',
@@ -67,6 +68,7 @@ export const RAM_OFFLOAD_SURFACES = [
 export function isRamOffloadSurface(path: string): boolean {
   if ((RAM_OFFLOAD_SURFACES as readonly string[]).includes(path)) return true;
   if (path.startsWith('/recipes/')) return true;
+  if (path.startsWith('/can-run/')) return true;
   return path.startsWith('/compare/') && path.includes('-vs-');
 }
 
@@ -120,6 +122,8 @@ export function assertRamSurfacesValid(): string[] {
   if (!RAM_OFFLOAD_SURFACES.includes('/power')) errors.push('missing /power');
   if (!RAM_OFFLOAD_SURFACES.includes('/fine-tuning')) errors.push('missing /fine-tuning');
   if (!RAM_OFFLOAD_SURFACES.includes('/tuning')) errors.push('missing /tuning');
+  if (!RAM_OFFLOAD_SURFACES.includes('/can-run')) errors.push('missing /can-run');
+  if (!isRamOffloadSurface('/can-run/qwen36-35b-on-rx-7900-xtx')) errors.push('can-run pair pages must be RAM surfaces');
   if (!isRamOffloadSurface('/recipes/qwen36-35b.llamacpp-vulkan.262k')) {
     errors.push('recipe pages must be RAM surfaces');
   }

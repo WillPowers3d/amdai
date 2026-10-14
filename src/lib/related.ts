@@ -12,12 +12,22 @@ import { recipes } from './recipes-data';
 import { CONSUMER_NAV_LINKS } from './consumer-gpu';
 import { WORKSTATION_NAV_LINKS } from './workstation-gpu';
 import { gpuCompareIdFromInput, gpuCompareLinksFor } from './gpu-compare';
+import {
+  CAN_RUN_GPU_PATH,
+  CAN_RUN_GPU_SHORT,
+  CAN_RUN_MODEL_SHORT,
+  canRunGpuIdFromInput,
+  canRunLinksForGpu,
+  canRunLinksForModel,
+  canRunModelIdFromInput,
+  parseCanRunSlug,
+} from './can-run';
 import { modelCompareIdFromInput, modelCompareLinksFor } from './model-compare';
 import { urlPath } from './seo';
 
 export type RelatedLink = PathLink;
 
-const RELATED_MAX = 36;
+const RELATED_MAX = 42;
 
 const SKIP_RELATED = new Set([
   '/',
@@ -85,6 +95,20 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/rag', label: 'RAG on Radeon' },
       { href: '/fine-tuning', label: 'Fine-tuning on Radeon' },
       { href: '/tuning', label: 'Speed up llama.cpp' },
+      { href: '/can-run', label: 'Can my Radeon run it?' },
+    ];
+  }
+  if (path === '/can-run' || path.startsWith('/can-run/')) {
+    return [
+      { href: '/calculator', label: 'Calculator' },
+      { href: '/gpus', label: 'GPU directory' },
+      { href: '/models', label: 'Models' },
+      { href: '/compare/gpus', label: 'Compare GPUs' },
+      { href: '/compare/models', label: 'Compare models' },
+      { href: '/backends/llamacpp', label: 'llama.cpp' },
+      { href: '/tuning', label: 'Speed up llama.cpp' },
+      { href: '/stack-lab', label: 'Stack Lab' },
+      { href: '/amdai-bench', label: 'amdai-bench' },
     ];
   }
   if (path === '/tuning') {
@@ -112,6 +136,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/long-context', label: 'Long context' },
       { href: '/fine-tuning', label: 'Fine-tuning on Radeon' },
       { href: '/tuning', label: 'Speed up llama.cpp' },
+      { href: '/can-run', label: 'Can my Radeon run it?' },
     ];
   }
   if (path === '/troubleshoot' || path === '/troubleshooting' || path.startsWith('/troubleshoot/')) {
@@ -354,6 +379,13 @@ export function relatedFor(pathname: string): RelatedLink[] {
     add(out, seen, '/budget', 'Budget');
     add(out, seen, '/fine-tuning', 'Fine-tuning on Radeon');
     add(out, seen, '/tuning', 'Speed up llama.cpp');
+    add(out, seen, '/can-run', 'Can my Radeon run it?');
+    if (id) {
+      const canGpu = canRunGpuIdFromInput(id);
+      if (canGpu) {
+        for (const link of canRunLinksForGpu(canGpu)) add(out, seen, link.href, link.label);
+      }
+    }
     for (const model of MODEL_PAGES) add(out, seen, `/models/${model.id}`, model.name);
     if (id) {
       add(out, seen, '/results', 'Run cards');
@@ -397,7 +429,12 @@ export function relatedFor(pathname: string): RelatedLink[] {
       add(out, seen, '/compare', 'Compare 35B');
       add(out, seen, '/compare/gpus', 'Compare GPUs');
       add(out, seen, '/compare/models', 'Compare models');
+      add(out, seen, '/can-run', 'Can my Radeon run it?');
       if (id) {
+        const canModel = canRunModelIdFromInput(id);
+        if (canModel) {
+          for (const link of canRunLinksForModel(canModel)) add(out, seen, link.href, link.label);
+        }
         const compareId = modelCompareIdFromInput(id);
         if (compareId) {
           for (const link of modelCompareLinksFor(compareId).filter((row) => row.featured)) {
@@ -437,6 +474,17 @@ export function relatedFor(pathname: string): RelatedLink[] {
       if (id !== 'llamacpp') add(out, seen, '/backends/llamacpp', 'llama.cpp');
     } else {
       for (const row of loadBackendsFromFs()) add(out, seen, `/backends/${row.id}`, row.name);
+    }
+  }
+
+  if (path.startsWith('/can-run/')) {
+    const parsed = parseCanRunSlug(path.slice('/can-run/'.length));
+    if (parsed) {
+      add(out, seen, '/can-run', 'Can my Radeon run it?');
+      add(out, seen, CAN_RUN_GPU_PATH[parsed.gpuId], CAN_RUN_GPU_SHORT[parsed.gpuId]);
+      add(out, seen, `/models/${parsed.modelId}`, CAN_RUN_MODEL_SHORT[parsed.modelId]);
+      for (const link of canRunLinksForModel(parsed.modelId)) add(out, seen, link.href, link.label);
+      for (const link of canRunLinksForGpu(parsed.gpuId)) add(out, seen, link.href, link.label);
     }
   }
 
@@ -511,6 +559,7 @@ export function assertRelatedValid(
     '/power',
     '/fine-tuning',
     '/tuning',
+    '/can-run',
     '/hardware',
   ],
 ): string[] {

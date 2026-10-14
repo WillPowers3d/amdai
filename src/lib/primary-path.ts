@@ -529,6 +529,17 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
     { href: '/benchmarks', label: 'Benchmarks' },
     { href: '/calculator', label: 'Calculator' },
   ],
+  '/can-run': [
+    { href: '/calculator', label: 'Calculator' },
+    { href: '/gpus', label: 'GPU directory' },
+    { href: '/models', label: 'Models' },
+    { href: '/compare/gpus', label: 'Compare GPUs' },
+    { href: '/compare/models', label: 'Compare models' },
+    { href: '/backends/llamacpp', label: 'llama.cpp' },
+    { href: '/tuning', label: 'Speed up llama.cpp' },
+    { href: '/stack-lab', label: 'Stack Lab' },
+    { href: '/amdai-bench', label: 'amdai-bench' },
+  ],
 };
 
 export const HIGH_TRAFFIC_PATHS = Object.keys(NEXT_STEPS);
@@ -536,6 +547,7 @@ export const HIGH_TRAFFIC_PATHS = Object.keys(NEXT_STEPS);
 export function nextStepsFor(pathname: string): PathLink[] {
   const path = pathname === '/' ? '/' : pathname.replace(/\/+$/, '') || '/';
   if (NEXT_STEPS[path]) return NEXT_STEPS[path]!;
+  if (path.startsWith('/can-run')) return NEXT_STEPS['/can-run']!;
   if (path.startsWith('/compare/models')) return NEXT_STEPS['/compare/models']!;
   if (path.startsWith('/compare/') && path.includes('-vs-')) return NEXT_STEPS['/compare/gpus']!;
   return NEXT_STEPS['/']!;

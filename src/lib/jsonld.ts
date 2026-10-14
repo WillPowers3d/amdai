@@ -15,6 +15,7 @@ import { POWER_FAQ, POWER_HOWTO_STEPS, POWER_PUBLISHED } from './power';
 import { VISION_FAQ, VISION_HOWTO_STEPS, VISION_PUBLISHED } from './vision';
 import { FINE_TUNING_FAQ, FINE_TUNING_HOWTO_STEPS, FINE_TUNING_PUBLISHED } from './fine-tuning';
 import { TUNING_FAQ, TUNING_HOWTO_STEPS, TUNING_PUBLISHED } from './tuning';
+import { CAN_RUN_HUB_FAQ, CAN_RUN_PUBLISHED, canRunPairPage, parseCanRunSlug } from './can-run';
 import {
   TROUBLESHOOT_HOWTO_STEPS,
   TROUBLESHOOT_PUBLISHED,
@@ -521,6 +522,18 @@ export function pageJsonLd(input: {
       }),
     );
     nodes.push(faqPageJsonLd(TUNING_FAQ, url));
+    return nodes;
+  }
+  if (path === '/can-run') {
+    nodes.push(faqPageJsonLd(CAN_RUN_HUB_FAQ, url));
+    return nodes;
+  }
+  if (path.startsWith('/can-run/')) {
+    const parsed = parseCanRunSlug(path.slice('/can-run/'.length));
+    if (parsed) {
+      const page = canRunPairPage(parsed.modelId, parsed.gpuId);
+      nodes.push(faqPageJsonLd(page.faq, url));
+    }
     return nodes;
   }
 

@@ -12,6 +12,7 @@ import { BRAND, site } from './site';
 import { GUIDE_UPDATED, rocmPages } from './rocm-guide';
 import { amdai, amdai, type RunCard } from './run-card';
 import { forumCategories } from './forum-categories';
+import { canRunSeoRows } from './can-run';
 import { gpuCompareSeoRows } from './gpu-compare';
 import { modelCompareSeoRows } from './model-compare';
 
@@ -217,6 +218,7 @@ export const CRUMB_LABELS: Record<string, string> = {
   '/power': 'Power',
   '/fine-tuning': 'Fine-tuning',
   '/tuning': 'Tuning',
+  '/can-run': 'Can my Radeon run it?',
   '/setup': 'First-run setup',
   '/setup/windows': 'Windows setup',
   '/stack-lab': 'Stack Lab',
@@ -415,6 +417,11 @@ for (const row of gpuCompareSeoRows()) {
   setDate(row.path, row.published);
 }
 for (const row of modelCompareSeoRows()) {
+  CRUMB_LABELS[row.path] = row.title;
+  setMeta(row.path, row.title, row.description);
+  setDate(row.path, row.published);
+}
+for (const row of canRunSeoRows()) {
   CRUMB_LABELS[row.path] = row.title;
   setMeta(row.path, row.title, row.description);
   setDate(row.path, row.published);

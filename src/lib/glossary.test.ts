@@ -66,6 +66,7 @@ const ALLOWED_HREFS = new Set([
   '/vision',
   '/fine-tuning',
   '/tuning',
+  '/can-run',
   '/setup/windows',
 ]);
 

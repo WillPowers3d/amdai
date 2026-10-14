@@ -290,6 +290,7 @@ export const GLOSSARY: GlossaryEntry[] = [
       'Daily-driver file: unsloth/Qwen3.6-35B-A3B-GGUF · Qwen3.6-35B-A3B-UD-Q5_K_XL.gguf (publisher 26.6 GB). Pin a revision. vLLM does not want GGUF as its default path.',
     links: [
       { href: '/quants', label: 'Quants' },
+      { href: '/can-run', label: 'Can my Radeon run it?' },
       { href: '/tutorials/run-local-llm', label: 'Run a local Qwen' },
       { href: '/models', label: 'Models' },
     ],
@@ -773,6 +774,7 @@ export const GLOSSARY: GlossaryEntry[] = [
       'Official UD-Q5_K_XL 1-GPU VRAM: 25.97 GB at 4K, 26.7 at 32K, 28.82 at 128K, 29.34 at 256K. Peak system RAM at 256K is 42.9 GB. Size a different file on the calculator; do not reuse these as a universal 32 GB rule.',
     links: [
       { href: '/calculator', label: 'Calculator' },
+      { href: '/can-run', label: 'Can my Radeon run it?' },
       { href: '/hardware', label: 'Hardware' },
       { href: '/gpus', label: 'GPU directory' },
     ],

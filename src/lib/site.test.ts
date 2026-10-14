@@ -74,6 +74,8 @@ describe('accessibility statement', () => {
     assert.equal(ogSlug('/rag'), 'rag');
     assert.equal(ogSlug('/fine-tuning'), 'fine-tuning');
     assert.equal(ogSlug('/tuning'), 'tuning');
+    assert.equal(ogSlug('/can-run'), 'can-run');
+    assert.equal(ogSlug('/can-run/qwen36-35b-on-rx-7900-xtx'), 'can-run');
     assert.equal(ogSlug('/benchmarks'), 'benchmarks');
     assert.equal(ogSlug('/gpus/r9700'), 'gpus-r9700');
     assert.equal(ogSlug('/gpus/strix-halo'), 'gpus-strix-halo');
