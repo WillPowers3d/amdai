@@ -262,8 +262,9 @@ export const FINE_TUNING_STEPS: FineTuningStep[] = [
   {
     id: 'export',
     title: 'Merge, convert to GGUF, quantize, serve',
-    body: `AMD’s playbook merges with PEFT merge_and_unload and save_pretrained. Then llama.cpp: python convert_hf_to_gguf.py ./merged --outfile merged-f16.gguf. Quantize with llama-quantize to Q6_K, Q5_K_M, or Q4_K_M. A Q3_K_M row is a labeled estimate — cite /quants; do not run Q2 or Q1. Serve: llama-server -m merged-q5_k_m.gguf --host 127.0.0.1 --port 8080. Size the GGUF on /calculator. Where RAM offload appears, the shopper lines are ${RAM_MIN_LABEL} and ${RAM_FULL_LABEL}.`,
+    body: `AMD’s playbook merges with PEFT merge_and_unload and save_pretrained. Then llama.cpp: python convert_hf_to_gguf.py ./merged --outfile merged-f16.gguf. Quantize with llama-quantize to Q6_K, Q5_K_M, or Q4_K_M. A Q3_K_M row is a labeled estimate — cite /quants; do not run Q2 or Q1. The convert / imatrix / quantize walk is /guides/quantize-gguf. Serve: llama-server -m merged-q5_k_m.gguf --host 127.0.0.1 --port 8080. Size the GGUF on /calculator. Where RAM offload appears, the shopper lines are ${RAM_MIN_LABEL} and ${RAM_FULL_LABEL}.`,
     links: [
+      { href: '/guides/quantize-gguf', label: 'Make GGUF quants' },
       { href: '/quants', label: 'Quants' },
       { href: '/calculator', label: 'Calculator' },
       { href: '/models', label: 'House models' },
@@ -418,6 +419,7 @@ export const REQUIRED_FINE_TUNING_HREFS = [
   '/models/gemma3-27b',
   '/models/llama33-70b',
   '/quants',
+  '/guides/quantize-gguf',
   '/wanted',
   '/amdai-bench',
   '/image-gen',

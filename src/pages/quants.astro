@@ -62,6 +62,8 @@ import Base from '../layouts/Base.astro';
         lists a file size, the calculator uses that size instead of <code class="text-ink">params × bpw</code>.
         Prefer the UD-Q5_K_XL / UD-Q6_K_XL files we name on <a class="underline decoration-accent/40 underline-offset-2" href="/stacks">/stacks</a>
         when you want the daily-driver or Flash path. UD-Q3_K_XL is the Q3 size step on the same card.
+        To convert a Hugging Face folder and quantize with llama.cpp, use
+        <a class="underline decoration-accent/40 underline-offset-2" href="/guides/quantize-gguf">/guides/quantize-gguf</a>.
       </p>
     </section>
 
@@ -89,8 +91,9 @@ import Base from '../layouts/Base.astro';
       </p>
     </section>
 
-    <p class="mt-10">
+    <p class="mt-10 flex flex-wrap gap-3">
       <a class="btn-primary" href="/calculator">Open the Quant + Hardware Calculator</a>
+      <a class="btn-ghost" href="/guides/quantize-gguf">Make your own GGUF</a>
     </p>
   </main>
 </Base>

@@ -64,6 +64,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/compare/radeon-vs-nvidia', label: 'Radeon vs NVIDIA' },
       { href: '/compare/radeon-vs-mac', label: 'Radeon vs Mac' },
       { href: '/compare/vulkan-vs-rocm', label: 'Vulkan vs ROCm' },
+      { href: '/guides/quantize-gguf', label: 'Make GGUF quants' },
       { href: '/benchmarks', label: 'Benchmarks' },
       { href: '/results', label: 'Run cards' },
       { href: '/multi-gpu', label: 'Dual / multi-GPU' },
@@ -155,8 +156,23 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/amdai-bench', label: 'amdai-bench' },
     ];
   }
+  if (path === '/guides/quantize-gguf' || path === '/quants' || path === '/compare/q4-q5-q6') {
+    return [
+      { href: '/guides/quantize-gguf', label: 'Make GGUF quants' },
+      { href: '/quants', label: 'Quants' },
+      { href: '/compare/q4-q5-q6', label: 'Q6 vs Q5 vs Q4' },
+      { href: '/fine-tuning', label: 'Fine-tuning' },
+      { href: '/tuning', label: 'Speed up llama.cpp' },
+      { href: '/models', label: 'Models' },
+      { href: '/calculator', label: 'Calculator' },
+      { href: '/amdai-bench', label: 'amdai-bench' },
+      { href: '/benchmarks/methodology', label: 'How we test' },
+      { href: '/backends/llamacpp', label: 'llama.cpp' },
+    ];
+  }
   if (path === '/tuning') {
     return [
+      { href: '/guides/quantize-gguf', label: 'Make GGUF quants' },
       { href: '/backends/llamacpp', label: 'llama.cpp' },
       { href: '/long-context', label: 'Long context' },
       { href: '/multi-gpu', label: 'Dual / multi-GPU' },
@@ -241,6 +257,7 @@ function topicLinks(path: string): RelatedLink[] {
   }
   if (path === '/fine-tuning') {
     return [
+      { href: '/guides/quantize-gguf', label: 'Make GGUF quants' },
       { href: '/setup', label: 'First-run setup' },
       { href: '/setup/windows', label: 'Windows setup' },
       { href: '/setup/wsl', label: 'WSL2 setup' },
@@ -648,6 +665,7 @@ export function assertRelatedValid(
     '/setup/comfyui',
     '/setup/multi-gpu',
     '/guides/buying-used-radeon',
+    '/guides/quantize-gguf',
     '/faq',
     '/models/qwen36',
     '/models/flash',

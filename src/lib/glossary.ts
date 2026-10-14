@@ -54,6 +54,8 @@ export const REQUIRED_GLOSSARY_IDS = [
   'lora',
   'qlora',
   'adapter',
+  'imatrix',
+  'kl-divergence',
 ] as const;
 
 export const GLOSSARY: GlossaryEntry[] = [
@@ -86,10 +88,11 @@ export const GLOSSARY: GlossaryEntry[] = [
       'AMD’s Radeon playbook merges with merge_and_unload then save_pretrained. llama.cpp convert_hf_to_gguf.py turns that folder into a GGUF. Quantize Q6_K / Q5_K_M / Q4_K_M; Q3_K_M is a labeled estimate.',
     links: [
       { href: '/fine-tuning', label: 'Fine-tuning on Radeon' },
+      { href: '/guides/quantize-gguf', label: 'Make GGUF quants' },
       { href: '/quants', label: 'Quants' },
       { href: '/backends/llamacpp', label: 'llama.cpp' },
     ],
-    seeAlso: ['lora', 'qlora', 'gguf'],
+    seeAlso: ['lora', 'qlora', 'gguf', 'imatrix'],
   },
   {
     id: 'amdai',
@@ -343,11 +346,12 @@ export const GLOSSARY: GlossaryEntry[] = [
       'Daily-driver file: unsloth/Qwen3.6-35B-A3B-GGUF · Qwen3.6-35B-A3B-UD-Q5_K_XL.gguf (publisher 26.6 GB). Pin a revision. vLLM does not want GGUF as its default path.',
     links: [
       { href: '/quants', label: 'Quants' },
+      { href: '/guides/quantize-gguf', label: 'Make GGUF quants' },
       { href: '/can-run', label: 'Can my Radeon run it?' },
       { href: '/tutorials/run-local-llm', label: 'Run a local Qwen' },
       { href: '/models', label: 'Models' },
     ],
-    seeAlso: ['quant', 'unsloth-ud', 'nvme'],
+    seeAlso: ['quant', 'unsloth-ud', 'nvme', 'imatrix'],
   },
   {
     id: 'gtt',
@@ -417,6 +421,23 @@ export const GLOSSARY: GlossaryEntry[] = [
     seeAlso: ['abliterated', 'qwen36', 'gguf'],
   },
   {
+    id: 'imatrix',
+    term: 'imatrix',
+    aliases: ['importance matrix', 'llama-imatrix'],
+    letter: 'I',
+    definition:
+      'An importance matrix llama.cpp builds from a model and a calibration text, then feeds to llama-quantize to reduce quality loss versus a naive quant.',
+    why: 'Use it when you convert a new GGUF and want your own calibration text. It does not turn a stock Q5_K_M into an Unsloth UD-Q5_K_XL file. The how-to is /guides/quantize-gguf.',
+    deeper:
+      'Official llama-imatrix needs -m and -f. Default output is imatrix.gguf. Unsloth Dynamic docs describe a different calibration set and per-layer mix — download UD-*_XL; do not claim stock tools reproduce it.',
+    links: [
+      { href: '/guides/quantize-gguf', label: 'Make GGUF quants' },
+      { href: '/quants', label: 'Quants' },
+      { href: '/fine-tuning', label: 'Fine-tuning' },
+    ],
+    seeAlso: ['quant', 'unsloth-ud', 'kl-divergence', 'gguf'],
+  },
+  {
     id: 'kv-cache',
     term: 'KV cache',
     aliases: ['f16 KV', 'q8_0 KV', 'cache-type-k', 'cache-type-v'],
@@ -433,6 +454,23 @@ export const GLOSSARY: GlossaryEntry[] = [
       { href: '/results', label: 'Run cards' },
     ],
     seeAlso: ['context-length', 'vram', 'quant'],
+  },
+  {
+    id: 'kl-divergence',
+    term: 'KL-divergence',
+    aliases: ['KLD', 'Kullback–Leibler', 'kl-divergence-base'],
+    letter: 'K',
+    definition:
+      'A llama.cpp perplexity metric that compares a quantized model’s token distribution to an f16 / bf16 baseline. Zero means the distributions match.',
+    why: 'Use it after you make a GGUF to measure accuracy loss. Record baseline logits with --kl-divergence-base, then rerun the quant with --kl-divergence. AMDai has no house KLD score — run the tool.',
+    deeper:
+      'The llama.cpp perplexity README also reports PPL. The logit file is very large (11 GiB for LLaMA 2, 37 GiB for LLaMA 3 on Wikitext-2). Stage leftover on NVMe. Then record an amdai-bench card for speed.',
+    links: [
+      { href: '/guides/quantize-gguf', label: 'Make GGUF quants' },
+      { href: '/quants', label: 'Quants' },
+      { href: '/compare/q4-q5-q6', label: 'Q6 vs Q5 vs Q4' },
+    ],
+    seeAlso: ['quant', 'imatrix', 'amdai-bench'],
   },
   {
     id: 'llamacpp',
@@ -644,10 +682,11 @@ export const GLOSSARY: GlossaryEntry[] = [
       'Nominal llama.cpp-family bits in the calculator: Q3_K_S 3.50, Q3_K_M / UD-Q3_K_XL 3.91, Q4_K_M 4.85, Q5 family 5.69, Q6 family 6.56, Q8_0 8.5, BF16 16. Q3 file sizes are Unsloth listings, not local-desktop quality scores. Q1/Q2 stay off.',
     links: [
       { href: '/quants', label: 'Quant explainer' },
+      { href: '/guides/quantize-gguf', label: 'Make GGUF quants' },
       { href: '/compare/q4-q5-q6', label: 'Q6 vs Q5 vs Q4' },
       { href: '/budget', label: 'Budget' },
     ],
-    seeAlso: ['gguf', 'unsloth-ud', 'kv-cache'],
+    seeAlso: ['gguf', 'unsloth-ud', 'kv-cache', 'imatrix'],
   },
   {
     id: 'qlora',
@@ -858,10 +897,11 @@ export const GLOSSARY: GlossaryEntry[] = [
       'When Unsloth lists a file size, the calculator uses that instead of params × bits. UD-Q3_K_XL 35B listing 16.8 GB is a size step, labeled estimate. Prefer the UD-Q5_K_XL / UD-Q6_K_XL names on /stacks.',
     links: [
       { href: '/quants', label: 'Quants' },
+      { href: '/guides/quantize-gguf', label: 'Make GGUF quants' },
       { href: '/stacks', label: 'Stacks' },
       { href: '/calculator', label: 'Calculator' },
     ],
-    seeAlso: ['quant', 'gguf', 'qwen36'],
+    seeAlso: ['quant', 'gguf', 'qwen36', 'imatrix'],
   },
   {
     id: 'uma',

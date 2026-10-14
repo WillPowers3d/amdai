@@ -103,6 +103,7 @@ describe('primary path and nav IA', () => {
       '/setup/comfyui': '../pages/setup/comfyui.astro',
       '/setup/multi-gpu': '../pages/setup/multi-gpu.astro',
       '/guides/buying-used-radeon': '../pages/guides/buying-used-radeon.astro',
+      '/guides/quantize-gguf': '../pages/guides/quantize-gguf.astro',
       '/faq': '../pages/faq.astro',
       '/gpus/r9700': '../pages/gpus/r9700.astro',
       '/gpus/strix-halo': '../pages/gpus/strix-halo.astro',
