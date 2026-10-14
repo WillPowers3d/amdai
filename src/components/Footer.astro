@@ -1,6 +1,7 @@
 ---
 import { AMAZON_ASSOCIATE_DISCLOSURE } from '../lib/affiliates';
 import { CONSUMER_NAV_LINKS } from '../lib/consumer-gpu';
+import { WORKSTATION_NAV_LINKS } from '../lib/workstation-gpu';
 import { navGroups, primaryNav, site } from '../lib/site';
 import { TRUST_FOOTER_LINKS } from '../lib/trust';
 import Logo from './Logo.astro';
@@ -50,6 +51,13 @@ import NewsletterSignup from './NewsletterSignup.astro';
         <a class="underline decoration-accent/40 underline-offset-2" href="/setup">Setup</a>.
         Consumer GPU sheets:
         {CONSUMER_NAV_LINKS.map((link, index) => (
+          <>
+            {index > 0 ? ' · ' : ' '}
+            <a class="underline decoration-accent/40 underline-offset-2" href={link.href}>{link.label}</a>
+          </>
+        ))}
+        . Workstation PRO sheets:
+        {WORKSTATION_NAV_LINKS.map((link, index) => (
           <>
             {index > 0 ? ' · ' : ' '}
             <a class="underline decoration-accent/40 underline-offset-2" href={link.href}>{link.label}</a>

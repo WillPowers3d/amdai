@@ -4,6 +4,7 @@ import { recipes } from '../lib/recipes-data';
 import { gpuCardId } from '../lib/gpu-pages';
 import { recipesForCard } from '../lib/recipes';
 import { gpuDirectoryHref, isConsumerRecipeGpu } from '../lib/consumer-gpu';
+import { isWorkstationRecipeGpu } from '../lib/workstation-gpu';
 
 const families = [...new Set(gpuDirectory.cards.map((card) => card.family))];
 ---
@@ -61,7 +62,7 @@ const families = [...new Set(gpuDirectory.cards.map((card) => card.family))];
                     <a class="text-ok underline decoration-accent/40" href={href}>{count} tested</a>
                   ) : id === 'strix-halo' ? (
                     <a class="underline decoration-accent/40" href={href}>Cited APU guide — not measured</a>
-                  ) : isConsumerRecipeGpu(id) ? (
+                  ) : isConsumerRecipeGpu(id) || isWorkstationRecipeGpu(id) ? (
                     <a class="underline decoration-accent/40" href={href}>Estimate sheet — no tested recipe</a>
                   ) : (
                     <span class="text-muted">No tested recipe yet — contribute</span>

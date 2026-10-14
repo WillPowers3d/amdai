@@ -21,6 +21,10 @@ export const RAM_OFFLOAD_SURFACES = [
   '/gpus/rx-7600',
   '/gpus/rx-6800-xt',
   '/gpus/rx-6700-xt',
+  '/gpus/w7900',
+  '/gpus/w7800',
+  '/gpus/w7700',
+  '/gpus/w6800',
   '/multi-gpu',
   '/compare',
   '/compare/gpus',
@@ -87,6 +91,10 @@ export function assertRamSurfacesValid(): string[] {
   if (!RAM_OFFLOAD_SURFACES.includes('/gpus/rx-7600')) errors.push('missing /gpus/rx-7600');
   if (!RAM_OFFLOAD_SURFACES.includes('/gpus/rx-6800-xt')) errors.push('missing /gpus/rx-6800-xt');
   if (!RAM_OFFLOAD_SURFACES.includes('/gpus/rx-6700-xt')) errors.push('missing /gpus/rx-6700-xt');
+  if (!RAM_OFFLOAD_SURFACES.includes('/gpus/w7900')) errors.push('missing /gpus/w7900');
+  if (!RAM_OFFLOAD_SURFACES.includes('/gpus/w7800')) errors.push('missing /gpus/w7800');
+  if (!RAM_OFFLOAD_SURFACES.includes('/gpus/w7700')) errors.push('missing /gpus/w7700');
+  if (!RAM_OFFLOAD_SURFACES.includes('/gpus/w6800')) errors.push('missing /gpus/w6800');
   if (!RAM_OFFLOAD_SURFACES.includes('/compare/radeon-vs-nvidia')) errors.push('missing /compare/radeon-vs-nvidia');
   if (!RAM_OFFLOAD_SURFACES.includes('/compare/gpus')) errors.push('missing /compare/gpus');
   if (!isRamOffloadSurface('/compare/r9700-vs-rx-9070-xt')) errors.push('pair pages must be RAM surfaces');

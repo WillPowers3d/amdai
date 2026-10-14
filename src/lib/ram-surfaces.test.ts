@@ -29,6 +29,10 @@ describe('shopper RAM labels', () => {
     assert.ok(RAM_OFFLOAD_SURFACES.includes('/gpus/rx-7600'));
     assert.ok(RAM_OFFLOAD_SURFACES.includes('/gpus/rx-6800-xt'));
     assert.ok(RAM_OFFLOAD_SURFACES.includes('/gpus/rx-6700-xt'));
+    assert.ok(RAM_OFFLOAD_SURFACES.includes('/gpus/w7900'));
+    assert.ok(RAM_OFFLOAD_SURFACES.includes('/gpus/w7800'));
+    assert.ok(RAM_OFFLOAD_SURFACES.includes('/gpus/w7700'));
+    assert.ok(RAM_OFFLOAD_SURFACES.includes('/gpus/w6800'));
     assert.ok(RAM_OFFLOAD_SURFACES.includes('/image-gen'));
     assert.ok(RAM_OFFLOAD_SURFACES.includes('/speech'));
     assert.ok(RAM_OFFLOAD_SURFACES.includes('/long-context'));

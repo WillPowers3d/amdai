@@ -544,8 +544,15 @@ export function pageJsonLd(input: {
     path === '/gpus/rx-7700-xt' ||
     path === '/gpus/rx-7600-xt' ||
     path === '/gpus/rx-7600' ||
+    path === '/gpus/rx-7900-xtx' ||
+    path === '/gpus/rx-7900-xt' ||
+    path === '/gpus/rx-7800-xt' ||
     path === '/gpus/rx-6800-xt' ||
     path === '/gpus/rx-6700-xt' ||
+    path === '/gpus/w7900' ||
+    path === '/gpus/w7800' ||
+    path === '/gpus/w7700' ||
+    path === '/gpus/w6800' ||
     path.startsWith('/models/') ||
     path === '/compare/radeon-vs-nvidia' ||
     path === '/multi-gpu' ||

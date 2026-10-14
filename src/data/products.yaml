@@ -175,6 +175,58 @@ products:
       microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=AMD+Radeon+RX+7600
       amd: https://www.amd.com/en/products/graphics/desktops/radeon/7000-series/amd-radeon-rx-7600.html
 
+  - id: w7900
+    name: AMD Radeon PRO W7900
+    kind: gpu
+    vram_gb: 48
+    calculator_gpu: w7900
+    note: 48 GB workstation listing. AMD also lists a Dual Slot sibling. No live or invented price.
+    urls:
+      amazon: https://www.amazon.com/s?k=AMD+Radeon+PRO+W7900
+      newegg: https://www.newegg.com/p/pl?d=AMD+Radeon+PRO+W7900
+      bhphoto: https://www.bhphotovideo.com/c/search?Ntt=AMD+Radeon+PRO+W7900
+      microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=AMD+Radeon+PRO+W7900
+      amd: https://www.amd.com/en/products/graphics/workstations/radeon-pro/w7900.html
+
+  - id: w7800
+    name: AMD Radeon PRO W7800
+    kind: gpu
+    vram_gb: 32
+    calculator_gpu: w7800
+    note: 32 GB workstation listing. AMD also lists a separate 48 GB W7800 SKU. No live or invented price.
+    urls:
+      amazon: https://www.amazon.com/s?k=AMD+Radeon+PRO+W7800
+      newegg: https://www.newegg.com/p/pl?d=AMD+Radeon+PRO+W7800
+      bhphoto: https://www.bhphotovideo.com/c/search?Ntt=AMD+Radeon+PRO+W7800
+      microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=AMD+Radeon+PRO+W7800
+      amd: https://www.amd.com/en/products/graphics/workstations/radeon-pro/w7800.html
+
+  - id: w7700
+    name: AMD Radeon PRO W7700
+    kind: gpu
+    vram_gb: 16
+    calculator_gpu: w7700
+    note: 16 GB workstation listing. Not the 12 GB consumer 7700 XT. No live or invented price.
+    urls:
+      amazon: https://www.amazon.com/s?k=AMD+Radeon+PRO+W7700
+      newegg: https://www.newegg.com/p/pl?d=AMD+Radeon+PRO+W7700
+      bhphoto: https://www.bhphotovideo.com/c/search?Ntt=AMD+Radeon+PRO+W7700
+      microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=AMD+Radeon+PRO+W7700
+      amd: https://www.amd.com/en/products/graphics/workstations/radeon-pro/w7700.html
+
+  - id: w6800
+    name: AMD Radeon PRO W6800
+    kind: gpu
+    vram_gb: 32
+    calculator_gpu: w6800
+    note: 32 GB RDNA 2 workstation listing. Not the 16 GB consumer 6800 XT. No live or invented price.
+    urls:
+      amazon: https://www.amazon.com/s?k=AMD+Radeon+PRO+W6800
+      newegg: https://www.newegg.com/p/pl?d=AMD+Radeon+PRO+W6800
+      bhphoto: https://www.bhphotovideo.com/c/search?Ntt=AMD+Radeon+PRO+W6800
+      microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=AMD+Radeon+PRO+W6800
+      amd: https://www.amd.com/en/products/graphics/workstations/radeon-pro/w6800.html
+
   - id: rtx5090
     name: NVIDIA GeForce RTX 5090
     kind: gpu

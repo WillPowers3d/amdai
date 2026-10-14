@@ -84,6 +84,10 @@ describe('accessibility statement', () => {
     assert.equal(ogSlug('/gpus/rx-7600'), 'gpus-rx-7600');
     assert.equal(ogSlug('/gpus/rx-6800-xt'), 'gpus-rx-6800-xt');
     assert.equal(ogSlug('/gpus/rx-6700-xt'), 'gpus-rx-6700-xt');
+    assert.equal(ogSlug('/gpus/w7900'), 'gpus-w7900');
+    assert.equal(ogSlug('/gpus/w7800'), 'gpus-w7800');
+    assert.equal(ogSlug('/gpus/w7700'), 'gpus-w7700');
+    assert.equal(ogSlug('/gpus/w6800'), 'gpus-w6800');
     assert.equal(ogSlug('/gpus'), 'gpus');
     assert.equal(ogSlug('/rocm/faq'), 'rocm');
     assert.equal(ogSlug('/setup'), 'setup');

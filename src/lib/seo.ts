@@ -174,6 +174,10 @@ export const CRUMB_LABELS: Record<string, string> = {
   '/gpus/rx-7600': 'RX 7600',
   '/gpus/rx-6800-xt': 'RX 6800 XT',
   '/gpus/rx-6700-xt': 'RX 6700 XT',
+  '/gpus/w7900': 'PRO W7900',
+  '/gpus/w7800': 'PRO W7800',
+  '/gpus/w7700': 'PRO W7700',
+  '/gpus/w6800': 'PRO W6800',
   '/models': 'Models',
   '/models/qwen36': 'Qwen3.6-35B-A3B',
   '/models/flash': 'Qwen 3.8 Flash',
@@ -528,6 +532,30 @@ setMeta(
   'RX 6700 XT recipe sheet — 12 GB, gfx1031, cited RDNA 2 directory row. 35B Q6/Q5/Q4 VRAM fit estimates; UD-Q3_K_XL labeled estimate. Not measured on local-desktop.',
 );
 setDate('/gpus/rx-6700-xt', '2026-10-14');
+setMeta(
+  '/gpus/w7900',
+  'PRO W7900',
+  'PRO W7900 recipe sheet — 48 GB, gfx1100, cited ROCm matrix row. Q6/Q5/Q4 plus labeled UD-Q3_K_XL; 1 and 2 GPU estimates. Not measured on local-desktop.',
+);
+setDate('/gpus/w7900', '2026-10-14');
+setMeta(
+  '/gpus/w7800',
+  'PRO W7800',
+  'PRO W7800 recipe sheet — 32 GB, gfx1100, cited ROCm matrix row. Q6/Q5/Q4 plus labeled UD-Q3_K_XL; 1 and 2 GPU estimates. Not measured on local-desktop.',
+);
+setDate('/gpus/w7800', '2026-10-14');
+setMeta(
+  '/gpus/w7700',
+  'PRO W7700',
+  'PRO W7700 recipe sheet — 16 GB, gfx1101, cited ROCm matrix row. Q6/Q5/Q4 plus labeled UD-Q3_K_XL; 1 and 2 GPU estimates. Not measured on local-desktop.',
+);
+setDate('/gpus/w7700', '2026-10-14');
+setMeta(
+  '/gpus/w6800',
+  'PRO W6800',
+  'PRO W6800 recipe sheet — 32 GB, gfx1030, cited ROCm matrix row. Q6/Q5/Q4 plus labeled UD-Q3_K_XL; 1 and 2 GPU estimates. Not measured on local-desktop.',
+);
+setDate('/gpus/w6800', '2026-10-14');
 setMeta(
   '/models',
   'Models',

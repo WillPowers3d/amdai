@@ -1,0 +1,67 @@
+---
+import Base from '../../layouts/Base.astro';
+import BuyButtons from '../../components/BuyButtons.astro';
+import HowWeTest from '../../components/HowWeTest.astro';
+import NextSteps from '../../components/NextSteps.astro';
+import OpenInStackLab from '../../components/OpenInStackLab.astro';
+import RecipeTable from '../../components/RecipeTable.astro';
+import WorkstationGpuSheet from '../../components/WorkstationGpuSheet.astro';
+import { gpuPageById } from '../../lib/gpu-pages';
+import { recipes } from '../../lib/recipes-data';
+import { HOUSE_STACK_LAB } from '../../lib/stack-lab-open';
+import { workstationRecipePage } from '../../lib/workstation-gpu';
+
+const sheet = workstationRecipePage('w7800');
+const directory = gpuPageById(recipes, 'w7800');
+if (!directory) throw new Error('missing PRO W7800 GPU directory row');
+---
+
+<Base title={sheet.title} description={sheet.description}>
+  <main id="main" class="mx-auto max-w-6xl px-4 py-10 sm:px-6">
+    <p class="kicker">
+      <a class="underline decoration-accent/40" href="/gpus">GPU directory</a>
+      · {directory.family} · {directory.arch} · {directory.gfx}
+    </p>
+    <p class="mt-3 kicker">Cited, not yet measured on our R9700s</p>
+    <h1 class="display mt-3 text-4xl sm:text-5xl">{sheet.name}</h1>
+    <p class="mt-4 max-w-3xl text-lg leading-relaxed text-muted">{sheet.lead}</p>
+    <div class="mt-6 flex flex-wrap gap-3">
+      <a class="btn-primary" href={sheet.calculatorHref}>Open in calculator</a>
+      <a class="btn-secondary" href="/gpus/r9700">R9700 measured page</a>
+      <a class="btn-secondary" href="/gpus/w7900">PRO W7900 sheet</a>
+      <a class="btn-secondary" href="/gpus/w7700">PRO W7700 sheet</a>
+      <a class="btn-secondary" href="/compare/gpus">Compare GPUs</a>
+      <a class="btn-secondary" href="/compare/radeon-vs-nvidia">Radeon vs NVIDIA</a>
+      <a class="btn-ghost" href="/gpus">All cards</a>
+      <a class="btn-ghost" href="/setup">First-run setup</a>
+      <a class="btn-ghost" href="/models">Models</a>
+      <a class="btn-ghost" href="/faq">FAQ</a>
+      <a class="btn-ghost" href="/contribute">Contribute a recipe</a>
+    </div>
+    <div class="mt-4">
+      <OpenInStackLab {...HOUSE_STACK_LAB.doctor} />
+    </div>
+    <div class="mt-4">
+      <HowWeTest />
+    </div>
+    <WorkstationGpuSheet sheet={sheet} />
+    <BuyButtons product="w7800" />
+
+    <section class="mt-12" aria-labelledby="config-heading">
+      <h2 id="config-heading" class="font-serif text-3xl">Configurations we have</h2>
+      <p class="mt-3 max-w-2xl text-sm text-muted">
+        No first-party amdai-bench/run@1 card exists for this SKU. llama.cpp first.
+        Empty cells stay empty. Fit numbers on this page are calculator estimates.
+        Shopper RAM lines stay <strong>Minimum system RAM needed</strong> and
+        <strong>RAM needed at full context</strong> — labeled estimate until measured.
+      </p>
+      <div class="mt-6">
+        <RecipeTable
+          recipes={directory.recipes}
+          empty="No tested recipe yet — contribute. This card stays listed so the gap is visible."
+        />
+      </div>
+    </section>
+    <NextSteps path="/gpus/w7800" />
+  </main>
+</Base>

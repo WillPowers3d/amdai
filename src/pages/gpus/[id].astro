@@ -15,12 +15,13 @@ import { officialAmdaiRuns, runsForGpu, verifiedMeasured } from '../../lib/run-c
 import { runs } from '../../lib/run-card-data';
 import { measuredRamHits } from '../../lib/measured-ram-data';
 import HowWeTest from '../../components/HowWeTest.astro';
-import { consumerRecipeIdFromPage, consumerRecipePage } from '../../lib/consumer-gpu';
+import { consumerRecipeIdFromPage, consumerRecipePage, isConsumerRecipeGpu } from '../../lib/consumer-gpu';
 import { gpuDirectory } from '../../lib/status';
+import { isWorkstationRecipeGpu } from '../../lib/workstation-gpu';
 
 export function getStaticPaths() {
   return gpuPages(recipes)
-    .filter((page) => page.id !== 'r9700' && page.id !== 'strix-halo' && page.id !== 'rx7900xtx' && page.id !== 'rx7900xt' && page.id !== 'rx7800xt' && page.id !== 'rx9070xt' && page.id !== 'rx9060xt' && page.id !== 'rx7900gre' && page.id !== 'rx7700xt' && page.id !== 'rx7600xt' && page.id !== 'rx7600' && page.id !== 'rx6800xt' && page.id !== 'rx6700xt')
+    .filter((page) => page.id !== 'r9700' && page.id !== 'strix-halo' && !isConsumerRecipeGpu(page.id) && !isWorkstationRecipeGpu(page.id))
     .map((page) => ({ params: { id: page.id }, props: { id: page.id } }));
 }
 

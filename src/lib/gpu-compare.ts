@@ -28,6 +28,12 @@ import {
   consumerPath,
   type ConsumerRecipeId,
 } from './consumer-gpu';
+import {
+  isWorkstationRecipeGpu,
+  workstationCalcInput,
+  workstationPath,
+  type WorkstationRecipeId,
+} from './workstation-gpu';
 import { existsSync, readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -62,6 +68,10 @@ export const GPU_COMPARE_RAM_CONTEXT = 32768;
 
 export const GPU_COMPARE_IDS = [
   'r9700',
+  'w7900',
+  'w7800',
+  'w7700',
+  'w6800',
   'rx7900xtx',
   'rx7900xt',
   'rx9070xt',
@@ -80,6 +90,10 @@ export type GpuCompareId = (typeof GPU_COMPARE_IDS)[number];
 
 export const GPU_COMPARE_SLUG: Record<GpuCompareId, string> = {
   r9700: 'r9700',
+  w7900: 'w7900',
+  w7800: 'w7800',
+  w7700: 'w7700',
+  w6800: 'w6800',
   rx7900xtx: 'rx-7900-xtx',
   rx7900xt: 'rx-7900-xt',
   rx9070xt: 'rx-9070-xt',
@@ -96,6 +110,10 @@ export const GPU_COMPARE_SLUG: Record<GpuCompareId, string> = {
 
 export const GPU_COMPARE_SHORT: Record<GpuCompareId, string> = {
   r9700: 'R9700',
+  w7900: 'PRO W7900',
+  w7800: 'PRO W7800',
+  w7700: 'PRO W7700',
+  w6800: 'PRO W6800',
   rx7900xtx: 'RX 7900 XTX',
   rx7900xt: 'RX 7900 XT',
   rx9070xt: 'RX 9070 XT',
@@ -112,6 +130,10 @@ export const GPU_COMPARE_SHORT: Record<GpuCompareId, string> = {
 
 export const GPU_COMPARE_PRODUCT: Record<GpuCompareId, string> = {
   r9700: 'r9700',
+  w7900: 'w7900',
+  w7800: 'w7800',
+  w7700: 'w7700',
+  w6800: 'w6800',
   rx7900xtx: 'rx7900xtx',
   rx7900xt: 'rx7900xt',
   rx9070xt: 'rx9070xt',
@@ -128,6 +150,13 @@ export const GPU_COMPARE_PRODUCT: Record<GpuCompareId, string> = {
 
 /** Shopper-useful pairs highlighted on the picker. Canonical href still uses catalog order. */
 export const GPU_COMPARE_FEATURED_PAIRS = [
+  ['r9700', 'w7900'],
+  ['r9700', 'w7800'],
+  ['w7900', 'rx7900xtx'],
+  ['w7900', 'w7800'],
+  ['w7800', 'w6800'],
+  ['w7700', 'rx7700xt'],
+  ['w6800', 'rx6800xt'],
   ['r9700', 'rx9070xt'],
   ['r9700', 'rx7900xtx'],
   ['rx7900xtx', 'rx7900xt'],
@@ -150,6 +179,10 @@ export const GPU_COMPARE_FEATURED_PAIRS = [
 
 export const GPU_COMPARE_SHEET_PATH: Record<GpuCompareId, string> = {
   r9700: '/gpus/r9700',
+  w7900: workstationPath('w7900'),
+  w7800: workstationPath('w7800'),
+  w7700: workstationPath('w7700'),
+  w6800: workstationPath('w6800'),
   rx7900xtx: consumerPath('rx7900xtx'),
   rx7900xt: consumerPath('rx7900xt'),
   rx9070xt: consumerPath('rx9070xt'),
@@ -335,6 +368,9 @@ export function gpuCompareRedirects(): Record<string, string> {
 
 export function gpuCompareCalcInput(id: GpuCompareId, quant: QuantId, context: number): CalcInput {
   if (id === 'strix-halo') return strixCalcInput('qwen36', quant, context, 64);
+  if (isWorkstationRecipeGpu(id)) {
+    return workstationCalcInput(id as WorkstationRecipeId, 'qwen36', quant, context, 1);
+  }
   if (id === 'r9700') {
     let input = applyGpuPreset('r9700', {
       ...DEFAULT_INPUT,
@@ -374,6 +410,10 @@ function vramNoteFor(id: GpuCompareId): string {
     return `Unified LPDDR5x, not a discrete sticker. ${STRIX_HALO_USABLE_PCT}% usable is a house estimate so the OS keeps a slice. A 128 GB kit exists — size it on the Strix Halo sheet.`;
   }
   if (id === 'r9700') return 'Cited 32 GB workstation sticker. Measured north star on local-desktop.';
+  if (id === 'w7900') return 'Cited 48 GB workstation sticker. AMD also lists a Dual Slot sibling in the same 48 GB class.';
+  if (id === 'w7800') return 'Cited 32 GB workstation sticker. AMD also lists a separate 48 GB W7800 SKU — read the sticker.';
+  if (id === 'w7700') return 'Cited 16 GB workstation sticker. Not the 12 GB consumer 7700 XT.';
+  if (id === 'w6800') return 'Cited 32 GB workstation sticker. Official gfx1030 row — not the 16 GB 6800 XT.';
   return 'Cited AMD-published SKU size, not a bench.';
 }
 
@@ -728,7 +768,7 @@ export function gpuCompareBlob(page: GpuComparePairPage): string {
 }
 
 export const GPU_COMPARE_HUB_LEAD =
-  `Pick two Radeon GPUs that already have AMDai sheets — R9700, RX 9070 XT, RX 9060 XT, RX 7900 GRE, RX 7700 XT, RX 7600 XT, RX 7600, RX 6800 XT, RX 6700 XT, and Strix Halo. Each pair page uses VRAM and bandwidth from the existing GPU data, calculator fit for ${COMPARE_MODEL} on ${COMPARE_ENGINE} at Q6 / Q5 / Q4 plus a labeled ${COMPARE_Q3} estimate, and ROCm notes from the cited gfx rows. Measured tok/s appear only on the R9700 side. We do not invent a price. ${RAM_MIN_LABEL} and ${RAM_FULL_LABEL} print wherever a file spills to system RAM.`;
+  `Pick two Radeon GPUs that already have AMDai sheets — R9700, PRO W7900 / W7800 / W7700 / W6800, RX 9070 XT, RX 9060 XT, RX 7900 GRE, RX 7700 XT, RX 7600 XT, RX 7600, RX 6800 XT, RX 6700 XT, and Strix Halo. Each pair page uses VRAM and bandwidth from the existing GPU data, calculator fit for ${COMPARE_MODEL} on ${COMPARE_ENGINE} at Q6 / Q5 / Q4 plus a labeled ${COMPARE_Q3} estimate, and ROCm notes from the cited gfx rows. Measured tok/s appear only on the R9700 side. We do not invent a price. ${RAM_MIN_LABEL} and ${RAM_FULL_LABEL} print wherever a file spills to system RAM.`;
 
 export function gpuCompareHrefs(page: GpuComparePairPage): string[] {
   return [
@@ -762,7 +802,7 @@ export function assertGpuCompareValid(cards: RunCard[] = []): string[] {
   if (pages.length !== expected) errors.push(`expected ${expected} pair pages; got ${pages.length}`);
 
   const ids = [...GPU_COMPARE_IDS];
-  if (ids.join(',') !== 'r9700,rx7900xtx,rx7900xt,rx9070xt,rx9060xt,rx7900gre,rx7800xt,rx7700xt,rx7600xt,rx7600,rx6800xt,rx6700xt,strix-halo') {
+  if (ids.join(',') !== 'r9700,w7900,w7800,w7700,w6800,rx7900xtx,rx7900xt,rx9070xt,rx9060xt,rx7900gre,rx7800xt,rx7700xt,rx7600xt,rx7600,rx6800xt,rx6700xt,strix-halo') {
     errors.push(`catalog drifted: ${ids.join(', ')}`);
   }
 
@@ -855,6 +895,9 @@ export function assertGpuCompareValid(cards: RunCard[] = []): string[] {
   }
   for (const href of [
     '/compare/r9700-vs-rx-9070-xt',
+    '/compare/r9700-vs-w7900',
+    '/compare/w7900-vs-rx-7900-xtx',
+    '/compare/w6800-vs-rx-6800-xt',
     '/compare/rx-9070-xt-vs-rx-9060-xt',
     '/compare/r9700-vs-strix-halo',
     '/compare/rx-9070-xt-vs-rx-7900-gre',

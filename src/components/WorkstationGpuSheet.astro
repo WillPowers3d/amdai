@@ -1,0 +1,242 @@
+---
+import Callout from './Callout.astro';
+import GpuCompareLinks from './GpuCompareLinks.astro';
+import SystemRamNeed from './SystemRamNeed.astro';
+import type { WorkstationRecipePage } from '../lib/workstation-gpu';
+
+interface Props {
+  sheet: WorkstationRecipePage;
+}
+
+const { sheet } = Astro.props;
+const house = sheet.models[0];
+---
+
+<section id="identity" class="mt-10 scroll-mt-28" aria-labelledby="identity-heading">
+  <h2 id="identity-heading" class="font-serif text-3xl tracking-tight">Official identity</h2>
+  <dl class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    <div class="rounded-2xl border border-line bg-raised/40 p-4">
+      <dt class="text-xs uppercase tracking-[0.14em] text-faint">Card</dt>
+      <dd class="mt-2 font-serif text-2xl tracking-tight">{sheet.name}</dd>
+    </div>
+    <div class="rounded-2xl border border-line bg-raised/40 p-4">
+      <dt class="text-xs uppercase tracking-[0.14em] text-faint">gfx</dt>
+      <dd class="mt-2 font-mono text-2xl text-accent-ink">{sheet.gfx}</dd>
+      <dd class="mt-1 text-xs text-faint">{sheet.arch}</dd>
+    </div>
+    <div class="rounded-2xl border border-line bg-raised/40 p-4">
+      <dt class="text-xs uppercase tracking-[0.14em] text-faint">Published VRAM</dt>
+      <dd class="mt-2 font-serif text-2xl tracking-tight tabular-nums">{sheet.vramLabel}</dd>
+      <dd class="mt-1 text-xs text-faint">Hardware label, not a bench</dd>
+    </div>
+    <div class="rounded-2xl border border-line bg-raised/40 p-4">
+      <dt class="text-xs uppercase tracking-[0.14em] text-faint">Peak bandwidth</dt>
+      <dd class="mt-2 font-serif text-2xl tracking-tight tabular-nums">{sheet.bandwidthLabel}</dd>
+      <dd class="mt-1 text-xs text-faint">{sheet.bandwidthCite}</dd>
+    </div>
+    <div class="rounded-2xl border border-line bg-raised/40 p-4">
+      <dt class="text-xs uppercase tracking-[0.14em] text-faint">Board power</dt>
+      <dd class="mt-2 font-serif text-2xl tracking-tight">{sheet.tbp}</dd>
+      <dd class="mt-1 text-xs text-faint">{sheet.tbpCite}</dd>
+    </div>
+    <div class="rounded-2xl border border-line bg-raised/40 p-4">
+      <dt class="text-xs uppercase tracking-[0.14em] text-faint">ROCm matrix</dt>
+      <dd class="mt-2 text-lg font-medium">{sheet.support === 'official' ? 'Official' : 'Unofficial'}</dd>
+      <dd class="mt-1 text-xs text-muted">{sheet.rocmNote}</dd>
+    </div>
+  </dl>
+  <p class="mt-4 text-sm leading-relaxed text-muted">
+    Form factor: {sheet.form}. {sheet.formCite}.
+    {sheet.variantNote}
+  </p>
+  <p class="mt-3 text-sm leading-relaxed text-muted">
+    Cited support row:
+    <a class="underline decoration-accent/40" href={sheet.matrixHref} rel="noopener">ROCm 10.1.0 compatibility matrix</a>
+    and
+    <a class="underline decoration-accent/40" href={sheet.linuxReqsHref} rel="noopener">Linux system requirements</a>.
+    We do not invent a support claim past that listing.
+    AMD product page:
+    <a class="underline decoration-accent/40" href={sheet.productHref} rel="noopener">{sheet.shortName}</a>.
+    {sheet.datasheetHref && (
+      <>
+        {' '}Datasheet:
+        <a class="underline decoration-accent/40" href={sheet.datasheetHref} rel="noopener">{sheet.shortName} datasheet</a>.
+      </>
+    )}
+    {sheet.variantHref && (
+      <>
+        {' '}48 GB SKU:
+        <a class="underline decoration-accent/40" href={sheet.variantHref} rel="noopener">W7800 48 GB</a>.
+      </>
+    )}
+  </p>
+  <p class="mt-2 text-sm text-muted">HSA_OVERRIDE: {sheet.hsaOverride}</p>
+</section>
+
+<Callout type="note" title="Not yet measured on our R9700s">
+  <p>{sheet.notMeasured}</p>
+  <p class="mt-2">
+    <a class="underline decoration-accent/40" href="/amdai-bench">amdai-bench</a>
+    {' · '}
+    <a class="underline decoration-accent/40" href="/stack-lab">Open in Stack Lab</a>
+    (doctor).
+  </p>
+</Callout>
+
+<section id="vs-consumer" class="mt-12 scroll-mt-28" aria-labelledby="vs-consumer-heading">
+  <h2 id="vs-consumer-heading" class="font-serif text-3xl tracking-tight">Workstation vs consumer</h2>
+  <p class="mt-3 max-w-3xl leading-relaxed text-muted">
+    Built only from cited AMD product-page specs already on this sheet and the consumer /gpus pages.
+    We do not invent a decode number or a street price.
+  </p>
+  <ol class="mt-6 grid gap-4 md:grid-cols-3">
+    {sheet.vsConsumer.map((row) => (
+      <li class="rounded-2xl border border-line bg-raised/50 p-5">
+        <h3 class="font-serif text-2xl tracking-tight">{row.title}</h3>
+        <p class="mt-3 leading-relaxed text-muted">{row.body}</p>
+      </li>
+    ))}
+  </ol>
+</section>
+
+<section id="fit" class="mt-12 scroll-mt-28" aria-labelledby="fit-heading">
+  <h2 id="fit-heading" class="font-serif text-3xl tracking-tight">What fits in VRAM</h2>
+  <p class="mt-3 max-w-3xl leading-relaxed text-muted">
+    llama.cpp, f16 KV, 1 GPU and 2 GPUs (split). Q6 / Q5 / Q4 rows are calculator estimates.
+    <strong class="text-ink">{sheet.q3}</strong> is a labeled estimate — not a local-desktop run.
+    Speed stays not yet measured on our R9700s. Tables cover house 35B, Flash, and every cited
+    <a class="underline decoration-accent/40" href="/models">/models</a> page.
+    Change quant or context in the
+    <a class="underline decoration-accent/40" href={sheet.calculatorHref}>calculator</a>.
+  </p>
+  {sheet.models.map((model) => (
+    <div class="mt-10" id={`fit-${model.modelId}`}>
+      <h3 class="font-serif text-2xl tracking-tight">
+        <a class="underline decoration-accent/40" href={model.href}>{model.model}</a>
+      </h3>
+      <p class="mt-2 text-sm text-muted">
+        {sheet.engine} on {sheet.shortName} at {sheet.vramLabel}.
+        {model.modelId === 'qwen36' ? ` ${sheet.q3} cite: ${sheet.q3Cite}.` : ` Q3 weights note: ${model.q3Cite}.`}
+      </p>
+      <div class="mt-4 overflow-x-auto">
+        <table class="table-lab min-w-[72rem]">
+          <caption>
+            Estimated VRAM fit for {model.model} on {sheet.shortName}. Speed is not yet measured on our R9700s.
+          </caption>
+          <thead>
+            <tr>
+              <th scope="col">Quant</th>
+              <th scope="col">Kind</th>
+              <th scope="col">Weights</th>
+              {house?.rows[0]?.cells.map((cell) => (
+                <th scope="col">{cell.layoutLabel} {cell.contextLabel}</th>
+              ))}
+              <th scope="col">Speed</th>
+            </tr>
+          </thead>
+          <tbody>
+            {model.rows.map((row) => (
+              <tr>
+                <th scope="row">{row.quant}</th>
+                <td>{row.kindLabel}</td>
+                <td class="tabular-nums">{row.weightsGb}</td>
+                {row.cells.map((cell) => (
+                  <td>
+                    <span class="tabular-nums">{cell.gpuCount === 2 ? `${cell.perGpuGb} / GPU` : cell.totalGb}</span>
+                    <span class="mt-1 block text-xs text-muted">{cell.verdictLabel}</span>
+                  </td>
+                ))}
+                <td>{row.speed}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      {(model.offload || model.offloadSplit) && (
+        <div class="mt-4 space-y-4">
+          {model.offload && (
+            <div>
+              <p class="text-sm text-muted">
+                RAM offload on 1 GPU — <strong>Minimum system RAM needed</strong> and
+                <strong> RAM needed at full context</strong>, labeled estimate, rounded up to a real kit.
+              </p>
+              <div class="mt-3">
+                <SystemRamNeed need={model.ramNeed} />
+              </div>
+            </div>
+          )}
+          {model.offloadSplit && (
+            <div>
+              <p class="text-sm text-muted">
+                RAM offload on 2 GPUs — same two labels, labeled estimate.
+              </p>
+              <div class="mt-3">
+                <SystemRamNeed need={model.ramNeedSplit} />
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  ))}
+  <p class="mt-4 text-xs leading-relaxed text-faint">
+    House 35B Q3 cite: {sheet.q3Cite}. Other Q3 rows use the calculator publisher-file note for that model.
+  </p>
+</section>
+
+<section id="ram" class="mt-12 scroll-mt-28" aria-labelledby="ram-heading">
+  <h2 id="ram-heading" class="font-serif text-3xl tracking-tight">System RAM</h2>
+  <p class="mt-3 max-w-3xl leading-relaxed text-muted">{sheet.ramNote}</p>
+  <div class="mt-6">
+    <SystemRamNeed need={sheet.ramNeed} />
+  </div>
+</section>
+
+<section id="stack" class="mt-12 scroll-mt-28" aria-labelledby="stack-heading">
+  <h2 id="stack-heading" class="font-serif text-3xl tracking-tight">llama.cpp-first stack</h2>
+  <ol class="mt-6 grid gap-4 md:grid-cols-2">
+    {sheet.stack.map((tip, index) => (
+      <li class="rounded-2xl border border-line bg-raised/50 p-5">
+        <p class="kicker">Step {index + 1}</p>
+        <h3 class="mt-2 font-serif text-2xl tracking-tight">{tip.title}</h3>
+        <p class="mt-3 leading-relaxed text-muted">{tip.body}</p>
+      </li>
+    ))}
+  </ol>
+</section>
+
+<nav class="mt-10" aria-label="Shopper tools">
+  <ul class="flex flex-wrap gap-3">
+    <li><a class="btn-primary" href={sheet.calculatorHref}>Open in calculator</a></li>
+    <li><a class="btn-secondary" href={sheet.budget.href}>{sheet.budget.label}</a></li>
+    <li><a class="btn-ghost" href="/benchmarks">Benchmarks</a></li>
+    <li><a class="btn-ghost" href="/setup">First-run setup</a></li>
+    <li><a class="btn-ghost" href="/stack-lab">Stack Lab</a></li>
+    <li><a class="btn-ghost" href="/amdai-bench">amdai-bench</a></li>
+    <li><a class="btn-ghost" href="/gpus/r9700">R9700 measured page</a></li>
+    <li><a class="btn-ghost" href="/compare/gpus">Compare GPUs</a></li>
+    <li><a class="btn-ghost" href="/compare/radeon-vs-nvidia">Radeon vs NVIDIA</a></li>
+    <li><a class="btn-ghost" href="/faq">FAQ</a></li>
+    <li><a class="btn-ghost" href="/models">Models</a></li>
+  </ul>
+  <p class="mt-4 text-sm text-muted">
+    Also:
+    <a class="underline decoration-accent/40" href="/gpus">GPU directory</a>
+    {' · '}
+    <a class="underline decoration-accent/40" href="/start">Getting started</a>
+    {' · '}
+    <a class="underline decoration-accent/40" href="/backends/llamacpp">llama.cpp</a>
+    {' · '}
+    <a class="underline decoration-accent/40" href="/methodology">How we test</a>
+    {' · '}
+    <a class="underline decoration-accent/40" href="/contribute">Contribute a recipe</a>
+    {sheet.siblings.map((link) => (
+      <>
+        {' · '}
+        <a class="underline decoration-accent/40" href={link.href}>{link.label}</a>
+      </>
+    ))}
+  </p>
+</nav>
+
+<GpuCompareLinks id={sheet.id} />

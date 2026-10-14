@@ -5,6 +5,7 @@
  */
 
 import { CONSUMER_NAV_LINKS, gpuDirectoryHref } from './consumer-gpu';
+import { WORKSTATION_NAV_LINKS } from './workstation-gpu';
 import { RAM_FULL_LABEL, RAM_MIN_LABEL } from './ram-surfaces';
 import {
   AMD_7800XT_SPEC,
@@ -194,6 +195,50 @@ export const POWER_CITED_EXTRA: PowerBoardRow[] = [
     sourceHref: 'https://www.amd.com/en/products/graphics/desktops/radeon/6000-series/amd-radeon-rx-6700-xt.html',
     kind: 'cited',
   },
+  {
+    id: 'w7900',
+    name: 'Radeon PRO W7900',
+    href: '/gpus/w7900',
+    tbp: '295 W TBP',
+    psu: '750 W minimum (AMD product page)',
+    connector: '2×8-pin (AMD W7900 product page)',
+    source: 'AMD W7900 product page (Total Board Power)',
+    sourceHref: 'https://www.amd.com/en/products/graphics/workstations/radeon-pro/w7900.html',
+    kind: 'cited',
+  },
+  {
+    id: 'w7800',
+    name: 'Radeon PRO W7800',
+    href: '/gpus/w7800',
+    tbp: '260 W TBP',
+    psu: POWER_PSU_EMPTY,
+    connector: '2×8-pin (AMD W7800 product page)',
+    source: 'AMD W7800 product page (Total Board Power)',
+    sourceHref: 'https://www.amd.com/en/products/graphics/workstations/radeon-pro/w7800.html',
+    kind: 'cited',
+  },
+  {
+    id: 'w7700',
+    name: 'Radeon PRO W7700',
+    href: '/gpus/w7700',
+    tbp: '190 W TBP',
+    psu: POWER_PSU_EMPTY,
+    connector: '1×8-pin (AMD W7700 product page)',
+    source: 'AMD W7700 product page (Total Board Power)',
+    sourceHref: 'https://www.amd.com/en/products/graphics/workstations/radeon-pro/w7700.html',
+    kind: 'cited',
+  },
+  {
+    id: 'w6800',
+    name: 'Radeon PRO W6800',
+    href: '/gpus/w6800',
+    tbp: '250 W TBP',
+    psu: POWER_PSU_EMPTY,
+    connector: POWER_EMPTY,
+    source: 'AMD W6800 product page (Total Board Power)',
+    sourceHref: 'https://www.amd.com/en/products/graphics/workstations/radeon-pro/w6800.html',
+    kind: 'cited',
+  },
 ];
 
 export const POWER_BOARD_ROWS: PowerBoardRow[] = [...citedRadeonPower(), ...POWER_CITED_EXTRA, ...POWER_UNRECORDED_ROWS];
@@ -357,6 +402,10 @@ export const REQUIRED_POWER_HREFS = [
   '/gpus/rx-7600',
   '/gpus/rx-6800-xt',
   '/gpus/rx-6700-xt',
+  '/gpus/w7900',
+  '/gpus/w7800',
+  '/gpus/w7700',
+  '/gpus/w6800',
   '/gpus/strix-halo',
   '/compare/radeon-vs-nvidia',
   '/budget',
@@ -397,6 +446,7 @@ export function powerHrefs(): string[] {
     ...POWER_FAQ.flatMap((row) => row.links),
     ...POWER_SOURCES.map((source) => ({ href: source.href, label: source.title })),
     ...CONSUMER_NAV_LINKS,
+    ...WORKSTATION_NAV_LINKS,
   ];
   return [...new Set(links.map((link) => (link.href.split('?')[0] ?? link.href).split('#')[0] ?? link.href))];
 }

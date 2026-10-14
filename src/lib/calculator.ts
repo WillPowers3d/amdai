@@ -52,6 +52,7 @@ export type GpuId =
   | 'rx6700xt'
   | 'w7900'
   | 'w7800'
+  | 'w7700'
   | 'w6800'
   | 'unified'
   | 'strix-halo'
@@ -383,8 +384,9 @@ export const GPU_PRESETS: GpuPreset[] = [
   { id: 'rx7600', name: 'Radeon RX 7600', vramGb: 8, gfx: 'gfx1102', kind: 'discrete', bandwidthGBs: 288, bandwidthNote: AMD_BW },
   { id: 'rx6800xt', name: 'Radeon RX 6800 XT', vramGb: 16, gfx: 'gfx1030', kind: 'discrete', bandwidthGBs: 512, bandwidthNote: AMD_BW },
   { id: 'rx6700xt', name: 'Radeon RX 6700 XT', vramGb: 12, gfx: 'gfx1031', kind: 'discrete', bandwidthGBs: 0, bandwidthNote: 'Confirm the SKU page — AMD cites 12 GB GDDR6, not a GB/s figure here.' },
-  { id: 'w7900', name: 'Radeon PRO W7900', vramGb: 48, gfx: 'gfx1100', kind: 'discrete', bandwidthGBs: 0, bandwidthNote: 'Workstation 48 GB. Enter bandwidth if you want a speed floor.' },
-  { id: 'w7800', name: 'Radeon PRO W7800', vramGb: 32, gfx: 'gfx1100', kind: 'discrete', bandwidthGBs: 0, bandwidthNote: 'Confirm 32 GB vs 48 GB sticker.' },
+  { id: 'w7900', name: 'Radeon PRO W7900', vramGb: 48, gfx: 'gfx1100', kind: 'discrete', bandwidthGBs: 864, bandwidthNote: AMD_BW },
+  { id: 'w7800', name: 'Radeon PRO W7800', vramGb: 32, gfx: 'gfx1100', kind: 'discrete', bandwidthGBs: 576, bandwidthNote: 'AMD-published 32 GB SKU peak. A separate 48 GB W7800 lists 864 GB/s — read the sticker.' },
+  { id: 'w7700', name: 'Radeon PRO W7700', vramGb: 16, gfx: 'gfx1101', kind: 'discrete', bandwidthGBs: 576, bandwidthNote: AMD_BW },
   { id: 'w6800', name: 'Radeon PRO W6800', vramGb: 32, gfx: 'gfx1030', kind: 'discrete', bandwidthGBs: 512, bandwidthNote: AMD_BW },
   { id: 'unified', name: 'Unified memory (APU / iGPU)', vramGb: 32, gfx: '', kind: 'unified', bandwidthGBs: 0, bandwidthNote: 'macOS / Ryzen AI lend the GPU a slice of one pool. Default usable is 70% — an estimate, not a Metal reading.' },
   { id: 'strix-halo', name: 'Ryzen AI Max+ 395 / Strix Halo', vramGb: 64, gfx: 'gfx1151', kind: 'unified', bandwidthGBs: 0, bandwidthNote: 'Shared LPDDR5x. Confirm the OEM kit — we do not invent a GB/s figure.' },

@@ -146,6 +146,30 @@ export const OG_CARDS: OgCard[] = [
     alt: 'AMDai RX 6700 XT — 12 GB gfx1031 recipe sheet, not measured on local-desktop',
   },
   {
+    slug: 'gpus-w7900',
+    title: 'Radeon PRO W7900',
+    lede: '48 GB gfx1100 estimates. Not measured on local-desktop',
+    alt: 'AMDai PRO W7900 — 48 GB gfx1100 recipe sheet, not measured on local-desktop',
+  },
+  {
+    slug: 'gpus-w7800',
+    title: 'Radeon PRO W7800',
+    lede: '32 GB gfx1100 estimates. Not measured on local-desktop',
+    alt: 'AMDai PRO W7800 — 32 GB gfx1100 recipe sheet, not measured on local-desktop',
+  },
+  {
+    slug: 'gpus-w7700',
+    title: 'Radeon PRO W7700',
+    lede: '16 GB gfx1101 estimates. Not measured on local-desktop',
+    alt: 'AMDai PRO W7700 — 16 GB gfx1101 recipe sheet, not measured on local-desktop',
+  },
+  {
+    slug: 'gpus-w6800',
+    title: 'Radeon PRO W6800',
+    lede: '32 GB gfx1030 estimates. Not measured on local-desktop',
+    alt: 'AMDai PRO W6800 — 32 GB gfx1030 recipe sheet, not measured on local-desktop',
+  },
+  {
     slug: 'rocm',
     title: 'What is ROCm',
     lede: 'The open compute stack, in plain English',
@@ -474,6 +498,10 @@ export function ogSlug(pathname: string): string {
   if (slug === 'gpus-rx-7600') return 'gpus-rx-7600';
   if (slug === 'gpus-rx-6800-xt') return 'gpus-rx-6800-xt';
   if (slug === 'gpus-rx-6700-xt') return 'gpus-rx-6700-xt';
+  if (slug === 'gpus-w7900') return 'gpus-w7900';
+  if (slug === 'gpus-w7800') return 'gpus-w7800';
+  if (slug === 'gpus-w7700') return 'gpus-w7700';
+  if (slug === 'gpus-w6800') return 'gpus-w6800';
   if (
     slug === 'models' ||
     slug === 'models-qwen36' ||
