@@ -173,6 +173,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/calculator', label: 'Calculator' },
       { href: '/glossary', label: 'Glossary' },
       { href: '/sampling', label: 'Sampling' },
+      { href: '/chat-templates', label: 'Chat templates' },
     ];
   }
   if (path === '/can-run' || path.startsWith('/can-run/')) {
@@ -259,6 +260,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/glossary', label: 'Glossary' },
       { href: '/guides/tool-calling', label: 'Tool calling' },
       { href: '/sampling', label: 'Sampling' },
+      { href: '/chat-templates', label: 'Chat templates' },
     ];
   }
   if (path === '/thinking') {
@@ -277,6 +279,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/calculator', label: 'Calculator' },
       { href: '/prompt-cache', label: 'Prompt cache' },
       { href: '/sampling', label: 'Sampling' },
+      { href: '/chat-templates', label: 'Chat templates' },
     ];
   }
   if (path === '/sampling') {
@@ -295,6 +298,25 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/stack-lab', label: 'Stack Lab' },
       { href: '/amdai-bench', label: 'amdai-bench' },
       { href: '/calculator', label: 'Calculator' },
+      { href: '/chat-templates', label: 'Chat templates' },
+    ];
+  }
+  if (path === '/chat-templates') {
+    return [
+      { href: '/thinking', label: 'Thinking mode' },
+      { href: '/guides/tool-calling', label: 'Tool calling' },
+      { href: '/sampling', label: 'Sampling' },
+      { href: '/constrained-decoding', label: 'Constrained decoding' },
+      { href: '/harnesses', label: 'Harnesses' },
+      { href: '/harnesses/hermes', label: 'Hermes' },
+      { href: '/setup/open-webui', label: 'Open WebUI' },
+      { href: '/setup/coding-assistant', label: 'Coding assistant' },
+      { href: '/backends', label: 'Backends' },
+      { href: '/backends/llamacpp', label: 'llama.cpp' },
+      { href: '/qwen', label: 'Qwen compare' },
+      { href: '/models/qwen36', label: 'Qwen3.6-35B' },
+      { href: '/troubleshoot', label: 'Troubleshoot' },
+      { href: '/rocm-problems', label: 'ROCm problems' },
     ];
   }
   if (path === '/concurrency-ab') {
@@ -407,6 +429,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/models/qwen36-27b', label: 'Qwen3.6 27B' },
       { href: '/models/qwen38-27b', label: 'Qwen3.8 27B' },
       { href: '/sampling', label: 'Sampling' },
+      { href: '/chat-templates', label: 'Chat templates' },
       { href: '/thinking', label: 'Thinking mode' },
       { href: '/moe', label: 'MoE on Radeon' },
       { href: '/compare/models', label: 'Compare models' },
@@ -856,6 +879,7 @@ export function relatedFor(pathname: string): RelatedLink[] {
       add(out, seen, '/long-context', 'Long context');
       add(out, seen, '/kv-cache', 'KV cache');
       add(out, seen, '/sampling', 'Sampling');
+      add(out, seen, '/chat-templates', 'Chat templates');
       add(out, seen, '/gpus/rx-7900-xtx', 'RX 7900 XTX');
       add(out, seen, '/gpus/rx-7900-xt', 'RX 7900 XT');
       add(out, seen, '/gpus/rx-7800-xt', 'RX 7800 XT');
@@ -882,6 +906,7 @@ export function relatedFor(pathname: string): RelatedLink[] {
     add(out, seen, '/constrained-decoding', 'Constrained decoding');
     add(out, seen, '/guides/tool-calling', 'Tool calling');
     add(out, seen, '/sampling', 'Sampling');
+    add(out, seen, '/chat-templates', 'Chat templates');
     add(out, seen, '/concurrency-ab', 'Parallel slots');
     add(out, seen, '/flash-attention', 'Flash Attention');
     add(out, seen, '/prefill', 'Prefill');
@@ -1017,6 +1042,7 @@ export function assertRelatedValid(
     '/guides/tool-calling',
     '/thinking',
     '/sampling',
+    '/chat-templates',
     '/concurrency-ab',
     '/flash-attention',
     '/prefill',

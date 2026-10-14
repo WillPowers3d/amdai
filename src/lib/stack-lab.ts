@@ -52,6 +52,7 @@ export const STACK_LAB_INTRO_LINKS: StackLabLink[] = [
   { href: '/out-of-vram', label: 'Out of VRAM' },
   { href: '/mmap', label: 'mmap / mlock' },
   { href: '/sampling', label: 'Sampling' },
+  { href: '/chat-templates', label: 'Chat templates' },
   { href: '/context-ceiling', label: 'Context ceiling' },
 ];
 
@@ -259,6 +260,12 @@ export const STACK_LAB_HANDOFFS: StackLabHandoff[] = [
       'Cited llama.cpp --temp, --top-p, --min-p, penalties, DRY, XTC, and --samplers. House llama-server does not record a sampler pin. Sampler speed stays not measured yet on this site. Open the planner.',
   },
   {
+    href: '/chat-templates',
+    label: 'Chat templates',
+    body:
+      'Cited llama.cpp --jinja and GGUF tokenizer.chat_template. House recipes pass --jinja and do not record a --chat-template override. Template quality stays not yet measured on this site.',
+  },
+  {
     href: '/context-ceiling',
     label: 'Context ceiling',
     body:
@@ -331,6 +338,7 @@ export const REQUIRED_STACK_LAB_HREFS = [
   '/prompt-cache',
   '/mmap',
   '/sampling',
+  '/chat-templates',
   '/context-ceiling',
 ] as const;
 

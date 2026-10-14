@@ -117,6 +117,7 @@ const ALLOWED_HREFS = new Set([
   '/constrained-decoding',
   '/thinking',
   '/sampling',
+  '/chat-templates',
   '/concurrency-ab',
   '/flash-attention',
   '/prefill',

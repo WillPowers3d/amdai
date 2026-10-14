@@ -299,6 +299,7 @@ export const TC_HUB_LINKS: TcLink[] = [
   { href: '/stack-lab', label: 'Stack Lab' },
   { href: '/amdai-bench', label: 'amdai-bench' },
   { href: '/sampling', label: 'Sampling' },
+  { href: '/chat-templates', label: 'Chat templates' },
 ];
 
 export const REQUIRED_TC_HREFS = [
@@ -315,6 +316,7 @@ export const REQUIRED_TC_HREFS = [
   '/stack-lab',
   '/amdai-bench',
   '/sampling',
+  '/chat-templates',
   '/calculator',
   '/quants',
   '/compare/q4-q5-q6',

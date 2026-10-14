@@ -698,6 +698,34 @@ export const FAQ_ENTRIES: FaqItem[] = [
     ],
   },
   {
+    id: 'chat-templates',
+    group: 'models-quants',
+    question: 'What is a llama.cpp chat template, and do I need --jinja?',
+    answer:
+      'The Jinja string that wraps messages, tools, and reasoning. Official default is GGUF tokenizer.chat_template. llama-server README (checked 2026-10-14): --jinja default enabled; --chat-template / --chat-template-file override the metadata. House recipes still pass --jinja. Inspect GET /props. The shopper page is /chat-templates. Q3 is a labeled estimate. llama.cpp first.',
+    links: [
+      { href: '/chat-templates', label: 'Chat templates' },
+      { href: '/thinking', label: 'Thinking mode' },
+      { href: '/guides/tool-calling', label: 'Tool calling' },
+      { href: '/harnesses', label: 'Harnesses' },
+      { href: '/troubleshoot/errors', label: 'Error paste' },
+    ],
+  },
+  {
+    id: 'chat-template-garbled',
+    group: 'troubleshooting',
+    question: 'Why does the model talk to itself or leak think tags?',
+    answer:
+      'Usually a wrong or missing chat template, not the Radeon or the quant. Confirm --jinja, then GET /props and POST /apply-template. Leaked thoughts are --reasoning-format or enable_thinking — see /thinking. Tools ignored are /guides/tool-calling. Start from /troubleshoot/errors (jinja-template). The shopper page is /chat-templates. Q3 is a labeled estimate. llama.cpp first.',
+    links: [
+      { href: '/chat-templates', label: 'Chat templates' },
+      { href: '/thinking', label: 'Thinking mode' },
+      { href: '/guides/tool-calling', label: 'Tool calling' },
+      { href: '/troubleshoot/errors', label: 'Error paste' },
+      { href: '/rocm-problems', label: 'ROCm problems' },
+    ],
+  },
+  {
     id: 'sampling',
     group: 'models-quants',
     question: 'What llama.cpp sampling flags should I set on a Radeon?',
@@ -1129,6 +1157,7 @@ export const REQUIRED_FAQ_HREFS = [
   '/constrained-decoding',
   '/thinking',
   '/sampling',
+  '/chat-templates',
   '/concurrency-ab',
   '/flash-attention',
   '/prefill',

@@ -570,6 +570,12 @@ export const OG_CARDS: OgCard[] = [
     alt: 'AMDai sampling settings on a Radeon GPU with llama.cpp — cited --temp --top-p --min-p, sampler speed not measured',
   },
   {
+    slug: 'chat-templates',
+    title: 'Chat templates on Radeon',
+    lede: 'Cited --jinja and tokenizer.chat_template. House recipes pass --jinja',
+    alt: 'AMDai chat templates and --jinja on a Radeon GPU with llama.cpp — cited GGUF tokenizer.chat_template',
+  },
+  {
     slug: 'concurrency-ab',
     title: 'Parallel slots on Radeon',
     lede: 'Cited -np / --parallel. Measure Stack Lab concurrency-ab/1',

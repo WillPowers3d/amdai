@@ -278,6 +278,7 @@ export const CD_HUB_LINKS: CdLink[] = [
   { href: '/stack-lab', label: 'Stack Lab' },
   { href: '/amdai-bench', label: 'amdai-bench' },
   { href: '/sampling', label: 'Sampling' },
+  { href: '/chat-templates', label: 'Chat templates' },
 ];
 
 export const REQUIRED_CD_HREFS = [
@@ -294,6 +295,7 @@ export const REQUIRED_CD_HREFS = [
   '/stack-lab',
   '/amdai-bench',
   '/sampling',
+  '/chat-templates',
   '/benchmarks',
   '/results',
   '/gpus/r9700',

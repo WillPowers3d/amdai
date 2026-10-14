@@ -875,6 +875,7 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
     { href: '/calculator', label: 'Calculator' },
     { href: '/glossary', label: 'Glossary' },
     { href: '/sampling', label: 'Sampling' },
+    { href: '/chat-templates', label: 'Chat templates' },
   ],
   '/guides/tool-calling': [
     { href: '/setup/coding-assistant', label: 'Coding assistant' },
@@ -888,6 +889,7 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
     { href: '/amdai-bench', label: 'amdai-bench' },
     { href: '/calculator', label: 'Calculator' },
     { href: '/sampling', label: 'Sampling' },
+    { href: '/chat-templates', label: 'Chat templates' },
   ],
   '/thinking': [
     { href: '/tutorials/serve-qwen', label: 'Serve Qwen' },
@@ -901,6 +903,7 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
     { href: '/amdai-bench', label: 'amdai-bench' },
     { href: '/prompt-cache', label: 'Prompt cache' },
     { href: '/sampling', label: 'Sampling' },
+    { href: '/chat-templates', label: 'Chat templates' },
     { href: '/troubleshoot', label: 'Troubleshoot' },
   ],
   '/sampling': [
@@ -918,6 +921,24 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
     { href: '/stack-lab', label: 'Stack Lab' },
     { href: '/amdai-bench', label: 'amdai-bench' },
     { href: '/calculator', label: 'Calculator' },
+    { href: '/chat-templates', label: 'Chat templates' },
+  ],
+  '/chat-templates': [
+    { href: '/thinking', label: 'Thinking mode' },
+    { href: '/guides/tool-calling', label: 'Tool calling' },
+    { href: '/sampling', label: 'Sampling' },
+    { href: '/constrained-decoding', label: 'Constrained decoding' },
+    { href: '/harnesses', label: 'Harnesses' },
+    { href: '/harnesses/hermes', label: 'Hermes' },
+    { href: '/setup/open-webui', label: 'Open WebUI' },
+    { href: '/setup/coding-assistant', label: 'Coding assistant' },
+    { href: '/backends', label: 'Backends' },
+    { href: '/backends/llamacpp', label: 'llama.cpp' },
+    { href: '/qwen', label: 'Qwen compare' },
+    { href: '/models/qwen36', label: 'Qwen3.6-35B' },
+    { href: '/troubleshoot', label: 'Troubleshoot' },
+    { href: '/troubleshoot/errors', label: 'Error paste' },
+    { href: '/rocm-problems', label: 'ROCm problems' },
   ],
   '/concurrency-ab': [
     { href: '/setup/server', label: 'Always-on server' },

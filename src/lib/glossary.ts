@@ -56,6 +56,9 @@ export const REQUIRED_GLOSSARY_IDS = [
   'adapter',
   'imatrix',
   'kl-divergence',
+  'chat-template',
+  'jinja',
+  'special-tokens',
 ] as const;
 
 export const GLOSSARY: GlossaryEntry[] = [
@@ -258,11 +261,46 @@ export const GLOSSARY: GlossaryEntry[] = [
     deeper:
       'llama.cpp function-calling.md: native handlers exist for several families (Llama 3.1 / 3.3, GPT-OSS Harmony, Hermes 2/3, …). Unrecognized templates log Chat format: Generic. --chat-template chatml is the documented YMMV fallback. --skip-chat-parsing dumps markup into content.',
     links: [
+      { href: '/chat-templates', label: 'Chat templates' },
       { href: '/guides/tool-calling', label: 'Tool calling' },
       { href: '/setup/coding-assistant', label: 'Coding assistant' },
       { href: '/backends/llamacpp', label: 'llama.cpp' },
     ],
-    seeAlso: ['tool-calling', 'instruct', 'llamacpp', 'gbnf'],
+    seeAlso: ['jinja', 'special-tokens', 'tool-calling', 'instruct', 'llamacpp', 'gbnf'],
+  },
+  {
+    id: 'jinja',
+    term: 'Jinja',
+    aliases: ['--jinja', 'Jinja2', 'LLAMA_ARG_JINJA'],
+    letter: 'J',
+    definition:
+      'The template engine llama-server uses to wrap chat messages. Official --jinja / --no-jinja (default enabled). House recipes still pass --jinja.',
+    why: 'Without it, roles, tools, and thinking tags leak as raw text. function-calling.md requires --jinja for OpenAI-style tools. Inspect GET /props.',
+    deeper:
+      'llama-server README (checked 2026-10-14): --chat-template and --chat-template-file override GGUF tokenizer.chat_template. --chat-template-kwargs passes JSON into the parser. The shopper page is /chat-templates.',
+    links: [
+      { href: '/chat-templates', label: 'Chat templates' },
+      { href: '/guides/tool-calling', label: 'Tool calling' },
+      { href: '/thinking', label: 'Thinking mode' },
+    ],
+    seeAlso: ['chat-template', 'special-tokens', 'tool-calling'],
+  },
+  {
+    id: 'special-tokens',
+    term: 'Special tokens',
+    aliases: ['im_start', 'im_end', 'bos', 'eos', 'think tags'],
+    letter: 'S',
+    definition:
+      'Control tokens the chat template inserts for roles, stops, and thinking blocks. They live in the GGUF tokenizer, not in the GGUF weights.',
+    why: 'A missing or wrong template drops those wrappers, so the model talks as the user or never stops thinking. Do not swap the quant to “fix” them.',
+    deeper:
+      'Official inspect path is GET /props and POST /apply-template. Leaked think tags are /thinking. The shopper page is /chat-templates.',
+    links: [
+      { href: '/chat-templates', label: 'Chat templates' },
+      { href: '/thinking', label: 'Thinking mode' },
+      { href: '/glossary#chat-template', label: 'Chat template' },
+    ],
+    seeAlso: ['chat-template', 'jinja', 'gguf'],
   },
   {
     id: 'daily-driver',
@@ -1254,11 +1292,12 @@ export const GLOSSARY: GlossaryEntry[] = [
       'Server README (checked 2026-10-14): reasoning_effort none disables thinking when the template honors it. Official Qwen3.6 card does not support /think or /nothink. --reasoning-format deepseek fills message.reasoning_content. Strata Flash thinking is not verified here.',
     links: [
       { href: '/thinking', label: 'Thinking mode' },
+      { href: '/chat-templates', label: 'Chat templates' },
       { href: '/tuning', label: 'Speed up llama.cpp' },
       { href: '/tutorials/serve-qwen', label: 'Serve Qwen' },
       { href: '/stack-lab', label: 'Stack Lab' },
     ],
-    seeAlso: ['instruct', 'llamacpp', 'prefill-decode', 'toks', 'temperature'],
+    seeAlso: ['chat-template', 'jinja', 'instruct', 'llamacpp', 'prefill-decode', 'toks', 'temperature'],
   },
   {
     id: 'temperature',

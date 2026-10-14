@@ -232,6 +232,7 @@ export const CRUMB_LABELS: Record<string, string> = {
   '/guides/tool-calling': 'Tool calling',
   '/thinking': 'Thinking mode',
   '/sampling': 'Sampling',
+  '/chat-templates': 'Chat templates',
   '/concurrency-ab': 'Parallel slots',
   '/flash-attention': 'Flash Attention',
   '/prefill': 'Prefill',
@@ -541,6 +542,12 @@ setMeta(
   'Sampling settings on a Radeon GPU with llama.cpp. Cited --temp, --top-p, --min-p. House recipes do not pin samplers. Q3 is a labeled estimate.',
 );
 setDate('/sampling', '2026-10-14');
+setMeta(
+  '/chat-templates',
+  'Chat templates and --jinja on a Radeon GPU',
+  'Chat templates and --jinja on a Radeon GPU with llama.cpp. Cited GGUF tokenizer.chat_template. House recipes pass --jinja. Q3 is a labeled estimate.',
+);
+setDate('/chat-templates', '2026-10-14');
 setMeta(
   '/concurrency-ab',
   'Parallel slots (-np) on a Radeon GPU',
