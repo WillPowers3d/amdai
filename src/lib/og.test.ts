@@ -79,6 +79,7 @@ describe('OG catalog', () => {
     assert.equal(ogSlug('/long-context'), 'long-context');
     assert.equal(ogSlug('/rag'), 'rag');
     assert.equal(ogSlug('/fine-tuning'), 'fine-tuning');
+    assert.equal(ogSlug('/tuning'), 'tuning');
     assert.equal(ogSlug('/troubleshoot'), 'troubleshoot');
     assert.equal(ogSlug('/labs'), 'labs');
     assert.equal(ogSlug('/labs/shannon'), 'labs-shannon');

@@ -14,6 +14,7 @@ import { RAG_FAQ, RAG_HOWTO_STEPS, RAG_PUBLISHED } from './rag';
 import { POWER_FAQ, POWER_HOWTO_STEPS, POWER_PUBLISHED } from './power';
 import { VISION_FAQ, VISION_HOWTO_STEPS, VISION_PUBLISHED } from './vision';
 import { FINE_TUNING_FAQ, FINE_TUNING_HOWTO_STEPS, FINE_TUNING_PUBLISHED } from './fine-tuning';
+import { TUNING_FAQ, TUNING_HOWTO_STEPS, TUNING_PUBLISHED } from './tuning';
 import {
   TROUBLESHOOT_HOWTO_STEPS,
   TROUBLESHOOT_PUBLISHED,
@@ -506,6 +507,20 @@ export function pageJsonLd(input: {
       }),
     );
     nodes.push(faqPageJsonLd(FINE_TUNING_FAQ, url));
+    return nodes;
+  }
+  if (path === '/tuning') {
+    nodes.push(
+      howToJsonLd({
+        name: input.title.replace(/ · AMDai$/, ''),
+        description: input.description,
+        url,
+        published: dates?.published ?? TUNING_PUBLISHED,
+        modified: dates?.modified ?? TUNING_PUBLISHED,
+        steps: TUNING_HOWTO_STEPS,
+      }),
+    );
+    nodes.push(faqPageJsonLd(TUNING_FAQ, url));
     return nodes;
   }
 

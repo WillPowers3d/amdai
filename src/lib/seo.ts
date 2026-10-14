@@ -216,6 +216,7 @@ export const CRUMB_LABELS: Record<string, string> = {
   '/vision': 'Vision',
   '/power': 'Power',
   '/fine-tuning': 'Fine-tuning',
+  '/tuning': 'Tuning',
   '/setup': 'First-run setup',
   '/setup/windows': 'Windows setup',
   '/stack-lab': 'Stack Lab',
@@ -371,6 +372,12 @@ setMeta(
   'Cited LoRA / QLoRA on consumer Radeon. PyTorch ROCm, Unsloth, PEFT/TRL. Not yet measured on our R9700s. Q3 is a labeled estimate.',
 );
 setDate('/fine-tuning', '2026-10-14');
+setMeta(
+  '/tuning',
+  'Speed up llama.cpp on Radeon',
+  'Speed up llama.cpp on Radeon. Cited -ngl, threads, batch, -fa, KV, split, draft, power. Measured 35B cells only. Q3 is a labeled estimate.',
+);
+setDate('/tuning', '2026-10-14');
 setMeta(
   '/stacks',
   'Recommended stacks',

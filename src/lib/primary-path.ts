@@ -518,6 +518,17 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
     { href: '/models', label: 'House models' },
     { href: '/amdai-bench', label: 'amdai-bench' },
   ],
+  '/tuning': [
+    { href: '/backends/llamacpp', label: 'llama.cpp' },
+    { href: '/long-context', label: 'Long context' },
+    { href: '/multi-gpu', label: 'Dual / multi-GPU' },
+    { href: '/power', label: 'Power and PSU' },
+    { href: '/flash-ram-offload', label: 'Flash RAM offload' },
+    { href: '/stack-lab', label: 'Stack Lab' },
+    { href: '/amdai-bench', label: 'amdai-bench' },
+    { href: '/benchmarks', label: 'Benchmarks' },
+    { href: '/calculator', label: 'Calculator' },
+  ],
 };
 
 export const HIGH_TRAFFIC_PATHS = Object.keys(NEXT_STEPS);

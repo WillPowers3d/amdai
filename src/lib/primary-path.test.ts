@@ -139,6 +139,7 @@ describe('primary path and nav IA', () => {
       '/rag': '../pages/rag.astro',
       '/power': '../pages/power.astro',
       '/fine-tuning': '../pages/fine-tuning.astro',
+      '/tuning': '../pages/tuning.astro',
     };
     assert.deepEqual(HIGH_TRAFFIC_PATHS.sort(), Object.keys(files).sort());
     for (const [path, rel] of Object.entries(files)) {

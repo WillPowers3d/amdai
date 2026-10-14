@@ -326,6 +326,21 @@ export const FAQ_ENTRIES: FaqItem[] = [
       { href: '/backends', label: 'Backends' },
       { href: '/software', label: 'AI software' },
       { href: '/updates/matrix', label: 'Version matrix' },
+      { href: '/tuning', label: 'Speed up llama.cpp' },
+    ],
+  },
+  {
+    id: 'speed-up-llamacpp',
+    group: 'models-quants',
+    question: 'How do I speed up llama.cpp on Radeon?',
+    answer:
+      'Fit the file first, then turn one cited knob at a time: -ngl, --threads, --threads-batch, -b / -ub, -fa, KV type, --split-mode, a Q4+ draft, or a vendor power cap. The shopper guide is /tuning. Measured decode is the official local-desktop 35B llama.cpp Vulkan sweep. Everything else stays not measured yet. Q3 is a labeled estimate. Draft models stay Q4 and up. llama.cpp first.',
+    links: [
+      { href: '/tuning', label: 'Speed up llama.cpp' },
+      { href: '/backends/llamacpp', label: 'llama.cpp' },
+      { href: '/benchmarks', label: 'Benchmarks' },
+      { href: '/stack-lab', label: 'Stack Lab' },
+      { href: '/amdai-bench', label: 'amdai-bench' },
     ],
   },
   {
@@ -644,6 +659,7 @@ export const REQUIRED_FAQ_HREFS = [
   '/vision',
   '/power',
   '/fine-tuning',
+  '/tuning',
 ] as const;
 
 const BANNED_VISIBLE = /Qwen2\.5|Qwen3-8B/i;

@@ -84,6 +84,21 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/long-context', label: 'Long context' },
       { href: '/rag', label: 'RAG on Radeon' },
       { href: '/fine-tuning', label: 'Fine-tuning on Radeon' },
+      { href: '/tuning', label: 'Speed up llama.cpp' },
+    ];
+  }
+  if (path === '/tuning') {
+    return [
+      { href: '/backends/llamacpp', label: 'llama.cpp' },
+      { href: '/long-context', label: 'Long context' },
+      { href: '/multi-gpu', label: 'Dual / multi-GPU' },
+      { href: '/power', label: 'Power and PSU' },
+      { href: '/flash-ram-offload', label: 'Flash RAM offload' },
+      { href: '/rocm/vulkan-hip', label: 'Vulkan vs HIP' },
+      { href: '/stack-lab', label: 'Stack Lab' },
+      { href: '/amdai-bench', label: 'amdai-bench' },
+      { href: '/benchmarks', label: 'Benchmarks' },
+      { href: '/calculator', label: 'Calculator' },
     ];
   }
   if (path === '/faq' || path === '/glossary') {
@@ -96,6 +111,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/backends', label: 'Backends' },
       { href: '/long-context', label: 'Long context' },
       { href: '/fine-tuning', label: 'Fine-tuning on Radeon' },
+      { href: '/tuning', label: 'Speed up llama.cpp' },
     ];
   }
   if (path === '/troubleshoot' || path === '/troubleshooting' || path.startsWith('/troubleshoot/')) {
@@ -118,6 +134,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/flash-daily', label: 'Flash daily' },
       { href: '/setup', label: 'First-run setup' },
       { href: '/long-context', label: 'Long context' },
+      { href: '/tuning', label: 'Speed up llama.cpp' },
     ];
   }
   if (path === '/flash-daily' || path === '/flash-ram-offload') {
@@ -127,6 +144,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/multi-gpu', label: 'Dual / multi-GPU' },
       { href: '/quants', label: 'Quants' },
       { href: '/long-context', label: 'Long context' },
+      { href: '/tuning', label: 'Speed up llama.cpp' },
     ];
   }
   if (path === '/fine-tuning') {
@@ -190,6 +208,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/compare/radeon-vs-nvidia', label: 'Radeon vs NVIDIA' },
       { href: '/flash-ram-offload', label: 'Flash RAM offload' },
       { href: '/setup', label: 'First-run setup' },
+      { href: '/tuning', label: 'Speed up llama.cpp' },
     ];
   }
   if (path === '/long-context') {
@@ -204,6 +223,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/flash-ram-offload', label: 'Flash RAM offload' },
       { href: '/gpus/r9700', label: 'R9700 measured page' },
       { href: '/rag', label: 'RAG on Radeon' },
+      { href: '/tuning', label: 'Speed up llama.cpp' },
     ];
   }
   if (path === '/rag') {
@@ -333,6 +353,7 @@ export function relatedFor(pathname: string): RelatedLink[] {
     add(out, seen, '/calculator', 'Calculator');
     add(out, seen, '/budget', 'Budget');
     add(out, seen, '/fine-tuning', 'Fine-tuning on Radeon');
+    add(out, seen, '/tuning', 'Speed up llama.cpp');
     for (const model of MODEL_PAGES) add(out, seen, `/models/${model.id}`, model.name);
     if (id) {
       add(out, seen, '/results', 'Run cards');
@@ -407,6 +428,7 @@ export function relatedFor(pathname: string): RelatedLink[] {
   if (path === '/backends' || path.startsWith('/backends/')) {
     const id = path === '/backends' ? '' : path.slice('/backends/'.length);
     add(out, seen, '/backends', 'Backends');
+    add(out, seen, '/tuning', 'Speed up llama.cpp');
     if (id) {
       for (const recipe of liveRecipes(recipes).filter((row) => row.backend === id)) {
         add(out, seen, `/recipes/${recipe.id}`, recipeLabel(recipe));
@@ -488,6 +510,7 @@ export function assertRelatedValid(
     '/rag',
     '/power',
     '/fine-tuning',
+    '/tuning',
     '/hardware',
   ],
 ): string[] {

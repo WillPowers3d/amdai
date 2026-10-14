@@ -65,6 +65,7 @@ const ALLOWED_HREFS = new Set([
   '/tutorials/verify-rocm',
   '/vision',
   '/fine-tuning',
+  '/tuning',
   '/setup/windows',
 ]);
 

@@ -138,6 +138,7 @@ export const primaryNav: NavItem[] = [
   { href: '/hardware', label: 'Hardware', description: 'PSU, cooling, noise, VRAM vs model size', group: 'learn' },
   { href: '/power', label: 'Power', description: 'Cited AMD TBP per Radeon and PSU sizing, including dual R9700. No invented watts', group: 'learn' },
   { href: '/fine-tuning', label: 'Fine-tuning', description: 'Cited LoRA / QLoRA on consumer Radeon. PyTorch ROCm, Unsloth, PEFT/TRL. Not yet measured on our R9700s', group: 'learn' },
+  { href: '/tuning', label: 'Speed up llama.cpp', description: 'Cited llama.cpp flags on Radeon — -ngl, threads, batch, -fa, KV, split, draft, power. Measured 35B cells only', group: 'learn' },
   { href: '/bios', label: 'BIOS', description: 'Above 4G, ReBAR/SAM, CSM, x8/x8 vs x16/x4 — cited chipset notes', group: 'learn' },
   { href: '/flash-ram-offload', label: 'Flash RAM offload', description: 'Run Flash with experts on DDR5 — kits, measured DIMM speed, launch shape', group: 'learn' },
   { href: '/tutorials', label: 'Tutorials', description: 'Practical how-tos for this stack', group: 'learn' },

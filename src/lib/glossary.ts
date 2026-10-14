@@ -374,6 +374,7 @@ export const GLOSSARY: GlossaryEntry[] = [
     links: [
       { href: '/quants', label: 'Quants · KV types' },
       { href: '/calculator', label: 'Calculator' },
+      { href: '/tuning', label: 'Speed up llama.cpp' },
       { href: '/results', label: 'Run cards' },
     ],
     seeAlso: ['context-length', 'vram', 'quant'],
@@ -390,6 +391,7 @@ export const GLOSSARY: GlossaryEntry[] = [
       'Official 35B sweep: llama.cpp c060ca974, Vulkan, f16 KV. llama-server is the same process as llama-cli plus HTTP on 127.0.0.1:8080. Do not let a desktop app download a CUDA llama.cpp on a Radeon.',
     links: [
       { href: '/backends', label: 'Backends' },
+      { href: '/tuning', label: 'Speed up llama.cpp' },
       { href: '/tutorials/run-local-llm', label: 'Run a local Qwen' },
       { href: '/tutorials/serve-qwen', label: 'Serve Qwen' },
     ],
@@ -478,6 +480,7 @@ export const GLOSSARY: GlossaryEntry[] = [
     links: [
       { href: '/calculator', label: 'Calculator' },
       { href: '/flash-ram-offload', label: 'Flash RAM offload' },
+      { href: '/tuning', label: 'Speed up llama.cpp' },
       { href: '/hardware', label: 'Hardware' },
     ],
     seeAlso: ['expert-offload', 'system-ram', 'vram'],
@@ -495,6 +498,7 @@ export const GLOSSARY: GlossaryEntry[] = [
     links: [
       { href: '/benchmarks', label: 'Benchmarks' },
       { href: '/results', label: 'Run cards' },
+      { href: '/tuning', label: 'Speed up llama.cpp' },
       { href: '/qwen', label: 'Qwen compare' },
     ],
     seeAlso: ['toks', 'context-length', 'amdai-bench'],

@@ -396,6 +396,12 @@ export const OG_CARDS: OgCard[] = [
     alt: 'AMDai fine-tuning on Radeon — cited LoRA / QLoRA guide, not yet measured on our R9700s',
   },
   {
+    slug: 'tuning',
+    title: 'Speed up llama.cpp',
+    lede: 'Cited flags. Measured 35B cells only. Q3 is a labeled estimate',
+    alt: 'AMDai speed up llama.cpp on Radeon — cited flags, measured 35B cells only',
+  },
+  {
     slug: 'troubleshoot',
     title: 'Troubleshoot',
     lede: 'Symptom-first fixes. Cited commands only',
