@@ -48,6 +48,7 @@ export type GpuId =
   | 'rx7600xt'
   | 'rx7600'
   | 'rx6800xt'
+  | 'rx6700xt'
   | 'w7900'
   | 'w7800'
   | 'w6800'
@@ -380,6 +381,7 @@ export const GPU_PRESETS: GpuPreset[] = [
   { id: 'rx7600xt', name: 'Radeon RX 7600 XT', vramGb: 16, gfx: 'gfx1102', kind: 'discrete', bandwidthGBs: 288, bandwidthNote: AMD_BW },
   { id: 'rx7600', name: 'Radeon RX 7600', vramGb: 8, gfx: 'gfx1102', kind: 'discrete', bandwidthGBs: 288, bandwidthNote: AMD_BW },
   { id: 'rx6800xt', name: 'Radeon RX 6800 XT', vramGb: 16, gfx: 'gfx1030', kind: 'discrete', bandwidthGBs: 512, bandwidthNote: AMD_BW },
+  { id: 'rx6700xt', name: 'Radeon RX 6700 XT', vramGb: 12, gfx: 'gfx1031', kind: 'discrete', bandwidthGBs: 0, bandwidthNote: 'Confirm the SKU page — AMD cites 12 GB GDDR6, not a GB/s figure here.' },
   { id: 'w7900', name: 'Radeon PRO W7900', vramGb: 48, gfx: 'gfx1100', kind: 'discrete', bandwidthGBs: 0, bandwidthNote: 'Workstation 48 GB. Enter bandwidth if you want a speed floor.' },
   { id: 'w7800', name: 'Radeon PRO W7800', vramGb: 32, gfx: 'gfx1100', kind: 'discrete', bandwidthGBs: 0, bandwidthNote: 'Confirm 32 GB vs 48 GB sticker.' },
   { id: 'w6800', name: 'Radeon PRO W6800', vramGb: 32, gfx: 'gfx1030', kind: 'discrete', bandwidthGBs: 512, bandwidthNote: AMD_BW },

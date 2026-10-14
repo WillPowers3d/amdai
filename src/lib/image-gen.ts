@@ -176,7 +176,10 @@ export const IMAGE_GEN_FIT_ROWS: ImageGenFitRow[] = [
   {
     id: '12gb',
     vramClass: '12 GB discrete',
-    cards: [{ href: '/gpus/rx-7700-xt', label: 'RX 7700 XT' }],
+    cards: [
+      { href: '/gpus/rx-7700-xt', label: 'RX 7700 XT' },
+      { href: '/gpus/rx-6700-xt', label: 'RX 6700 XT' },
+    ],
     fit: 'Estimate. SD 1.5 is the more likely family. SDXL is tighter. Flux-class is unlikely without the offload the Flux card documents. Confirm the 12 GB sticker.',
     speed: IMAGE_GEN_SPEED_LABEL,
   },
@@ -352,6 +355,7 @@ export const REQUIRED_IMAGE_GEN_HREFS = [
   '/gpus/rx-7600-xt',
   '/gpus/rx-7600',
   '/gpus/rx-6800-xt',
+  '/gpus/rx-6700-xt',
   '/multi-gpu',
   '/calculator',
   '/troubleshoot',
@@ -466,6 +470,7 @@ export function assertImageGenValid(): string[] {
     '/gpus/rx-7600-xt',
     '/gpus/rx-7600',
     '/gpus/rx-6800-xt',
+    '/gpus/rx-6700-xt',
     '/gpus/strix-halo',
   ]) {
     if (!fitHrefs.includes(href)) errors.push(`fit table missing ${href}`);

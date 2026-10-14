@@ -182,6 +182,16 @@ export const LONG_CONTEXT_ENGINE = [
 
 export const LONG_CONTEXT_TIERS = [
   {
+    id: '12gb',
+    title: '12 GB discrete',
+    body: 'Tighter than the 16 GB class. House 35B Q4–Q6 files do not sit in 12 GB on the calculator at long context. Expect RAM offload or a shorter window. Q3 is a labeled estimate. Size the file before you set -c 131072.',
+    hrefs: [
+      { href: '/calculator?model=qwen36&quant=q4_k_m&ctx=131072&gpu=rx7700xt', label: 'Calculator · 12 GB · 128K' },
+      { href: '/gpus/rx-7700-xt', label: 'RX 7700 XT sheet' },
+      { href: '/gpus/rx-6700-xt', label: 'RX 6700 XT sheet' },
+    ],
+  },
+  {
     id: '16gb',
     title: '16 GB discrete',
     body: 'House 35B Q4–Q6 files do not sit in 16 GB on the calculator at long context. Expect RAM offload or a shorter window. Q3 is a labeled estimate, not runnable advice. Size the file before you set -c 131072.',

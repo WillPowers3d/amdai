@@ -71,6 +71,7 @@ export const POWER_SOURCES: PowerSource[] = [
   { id: 'rx7900xtx', title: 'AMD Radeon RX 7900 XTX product page', href: AMD_7900XTX_SPEC },
   { id: 'rx7900xt', title: 'AMD Radeon RX 7900 XT product page', href: AMD_7900XT_SPEC },
   { id: 'rx7800xt', title: 'AMD Radeon RX 7800 XT product page', href: AMD_7800XT_SPEC },
+  { id: 'rx6700xt', title: 'AMD Radeon RX 6700 XT product page', href: 'https://www.amd.com/en/products/graphics/desktops/radeon/6000-series/amd-radeon-rx-6700-xt.html' },
   { id: 'rocm', title: 'AMD ROCm documentation', href: officialLinks.rocm },
 ];
 
@@ -181,7 +182,21 @@ export const POWER_UNRECORDED_ROWS: PowerBoardRow[] = [
   },
 ];
 
-export const POWER_BOARD_ROWS: PowerBoardRow[] = [...citedRadeonPower(), ...POWER_UNRECORDED_ROWS];
+export const POWER_CITED_EXTRA: PowerBoardRow[] = [
+  {
+    id: 'rx-6700-xt',
+    name: 'Radeon RX 6700 XT',
+    href: '/gpus/rx-6700-xt',
+    tbp: '230 W TBP',
+    psu: POWER_PSU_EMPTY,
+    connector: POWER_EMPTY,
+    source: 'AMD RX 6700 XT product page (Typical Board Power)',
+    sourceHref: 'https://www.amd.com/en/products/graphics/desktops/radeon/6000-series/amd-radeon-rx-6700-xt.html',
+    kind: 'cited',
+  },
+];
+
+export const POWER_BOARD_ROWS: PowerBoardRow[] = [...citedRadeonPower(), ...POWER_CITED_EXTRA, ...POWER_UNRECORDED_ROWS];
 
 export const POWER_STEPS: PowerStep[] = [
   {
@@ -341,6 +356,7 @@ export const REQUIRED_POWER_HREFS = [
   '/gpus/rx-7600-xt',
   '/gpus/rx-7600',
   '/gpus/rx-6800-xt',
+  '/gpus/rx-6700-xt',
   '/gpus/strix-halo',
   '/compare/radeon-vs-nvidia',
   '/budget',

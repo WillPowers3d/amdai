@@ -84,6 +84,7 @@ export const primaryNav: NavItem[] = [
   { href: '/gpus/rx-7600-xt', label: 'RX 7600 XT', description: '16 GB gfx1102 budget RDNA 3. Calculator estimates. Not measured on local-desktop', group: 'path' },
   { href: '/gpus/rx-7600', label: 'RX 7600', description: '8 GB gfx1102 non-XT budget RDNA 3. Calculator estimates. Not measured on local-desktop', group: 'path' },
   { href: '/gpus/rx-6800-xt', label: 'RX 6800 XT', description: '16 GB gfx1030 RDNA 2. Calculator estimates. Not measured on local-desktop', group: 'path' },
+  { href: '/gpus/rx-6700-xt', label: 'RX 6700 XT', description: '12 GB gfx1031 RDNA 2. Calculator estimates. Not measured on local-desktop', group: 'path' },
   { href: '/stacks', label: 'Stacks', description: 'Daily driver and fast-agent cards from our test rig', group: 'path' },
   { href: '/flash-daily', label: 'Flash daily driver', description: 'Qwen 3.8 Flash VRAM + DDR5 offload at Q3–Q6, full 262K', group: 'path' },
   { href: '/qwen36-dual', label: '35B on two cards', description: 'Split vs two copies of UD-Q5_K_XL on two R9700s — measured on local-desktop', group: 'path' },

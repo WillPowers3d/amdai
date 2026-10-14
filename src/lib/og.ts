@@ -122,6 +122,12 @@ export const OG_CARDS: OgCard[] = [
     alt: 'AMDai RX 6800 XT — 16 GB gfx1030 recipe sheet, not measured on local-desktop',
   },
   {
+    slug: 'gpus-rx-6700-xt',
+    title: 'Radeon RX 6700 XT',
+    lede: '12 GB gfx1031 estimates. Not measured on local-desktop',
+    alt: 'AMDai RX 6700 XT — 12 GB gfx1031 recipe sheet, not measured on local-desktop',
+  },
+  {
     slug: 'rocm',
     title: 'What is ROCm',
     lede: 'The open compute stack, in plain English',
@@ -402,6 +408,7 @@ export function ogSlug(pathname: string): string {
   if (slug === 'gpus-rx-7600-xt') return 'gpus-rx-7600-xt';
   if (slug === 'gpus-rx-7600') return 'gpus-rx-7600';
   if (slug === 'gpus-rx-6800-xt') return 'gpus-rx-6800-xt';
+  if (slug === 'gpus-rx-6700-xt') return 'gpus-rx-6700-xt';
   if (slug === 'models' || slug === 'models-qwen36' || slug === 'models-flash') return slug;
   if (slug.startsWith('models-') || slug.startsWith('gpus-') || slug.startsWith('recipes-')) {
     return 'gpus';

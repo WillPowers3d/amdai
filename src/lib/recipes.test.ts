@@ -129,6 +129,8 @@ describe('GPU detect and pages', () => {
     assert.equal(bare7600?.id, 'rx7600');
     const xt6800 = detectPrimary('AMD Radeon RX 6800 XT');
     assert.equal(xt6800?.id, 'rx6800xt');
+    const xt6700 = detectPrimary('AMD Radeon RX 6700 XT');
+    assert.equal(xt6700?.id, 'rx6700xt');
     const w6800 = detectPrimary('Radeon PRO W6800');
     assert.equal(w6800?.id, 'w6800');
     const gfxOnly = detectGpu('gfx1201');

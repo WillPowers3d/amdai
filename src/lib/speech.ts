@@ -161,7 +161,10 @@ export const SPEECH_FIT_ROWS: SpeechFitRow[] = [
   {
     id: '12gb',
     vramClass: '12 GB discrete',
-    cards: [{ href: '/gpus/rx-7700-xt', label: 'RX 7700 XT' }],
+    cards: [
+      { href: '/gpus/rx-7700-xt', label: 'RX 7700 XT' },
+      { href: '/gpus/rx-6700-xt', label: 'RX 6700 XT' },
+    ],
     fit: 'Estimate. Official large ~3.9 GB mem is under 12 GB. Confirm the sticker. Do not stack a house 35B Q4–Q6 file on the same VRAM without the calculator.',
     speed: SPEECH_SPEED_LABEL,
   },
@@ -337,6 +340,7 @@ export const REQUIRED_SPEECH_HREFS = [
   '/gpus/rx-7600-xt',
   '/gpus/rx-7600',
   '/gpus/rx-6800-xt',
+  '/gpus/rx-6700-xt',
   '/multi-gpu',
   '/calculator',
   '/troubleshoot',
@@ -458,6 +462,7 @@ export function assertSpeechValid(): string[] {
     '/gpus/rx-7600-xt',
     '/gpus/rx-7600',
     '/gpus/rx-6800-xt',
+    '/gpus/rx-6700-xt',
     '/gpus/strix-halo',
   ]) {
     if (!fitHrefs.includes(href)) errors.push(`fit table missing ${href}`);

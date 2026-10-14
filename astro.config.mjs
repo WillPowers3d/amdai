@@ -63,6 +63,9 @@ export default defineConfig({
     '/gpus/rx6800xt': '/gpus/rx-6800-xt',
     '/gpus/rx6800-xt': '/gpus/rx-6800-xt',
     '/gpus/rx-6800xt': '/gpus/rx-6800-xt',
+    '/gpus/rx6700xt': '/gpus/rx-6700-xt',
+    '/gpus/rx6700-xt': '/gpus/rx-6700-xt',
+    '/gpus/rx-6700xt': '/gpus/rx-6700-xt',
     '/embeddings': '/rag',
   },
   markdown: {

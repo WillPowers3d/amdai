@@ -249,7 +249,10 @@ export const RAG_FIT_ROWS: RagFitRow[] = [
   {
     id: '12gb',
     vramClass: '12 GB discrete',
-    cards: [{ href: '/gpus/rx-7700-xt', label: 'RX 7700 XT' }],
+    cards: [
+      { href: '/gpus/rx-7700-xt', label: 'RX 7700 XT' },
+      { href: '/gpus/rx-6700-xt', label: 'RX 6700 XT' },
+    ],
     pick: 'Q5_K_M or Q4_K_M (95 / 81 MiB official).',
     fit: `Estimate. Official nomic Q5_K_M is 95 MiB. Do not stack a house 35B Q4–Q6 file on the same 12 GB sticker without the calculator. Keep the LLM on DDR5 offload if needed, and read ${RAM_MIN_LABEL} and ${RAM_FULL_LABEL}. Q3 chat sidecar is a labeled estimate.`,
     speed: RAG_SPEED_LABEL,
