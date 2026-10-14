@@ -35,6 +35,7 @@ describe('first-run setup', () => {
     assert.ok(hrefs.includes('/setup/fedora'));
     assert.ok(hrefs.includes('/setup/arch'));
     assert.ok(hrefs.includes('/setup/docker'));
+    assert.ok(hrefs.includes('/setup/lm-studio'));
   });
 
   it('builds HowTo JSON-LD from the Ubuntu steps and stays in the sitemap', () => {

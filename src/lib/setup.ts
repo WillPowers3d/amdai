@@ -35,6 +35,7 @@ export const SETUP_INTRO_LINKS: SetupLink[] = [
   { href: '/setup/fedora', label: 'Fedora guide' },
   { href: '/setup/arch', label: 'Arch guide' },
   { href: '/setup/docker', label: 'Docker / Podman' },
+  { href: '/setup/lm-studio', label: 'LM Studio' },
   { href: '/fine-tuning', label: 'Fine-tuning' },
 ];
 
@@ -71,17 +72,25 @@ export const SETUP_MORE_PATHS = [
     summary:
       'Official llama.cpp Vulkan or ROCm images. Localhost /v1. No container tok/s on AMDai.',
   },
+  {
+    href: '/setup/lm-studio',
+    label: 'LM Studio',
+    kicker: 'Cited, not measured on local-desktop',
+    summary:
+      'Desktop llama.cpp wrapper. Vulkan runtime first on Radeon. Local /v1 on :1234. No LM Studio tok/s on AMDai.',
+  },
 ] as const;
 
 export const SETUP_UBUNTU_BASED = {
   title: 'Ubuntu-based distros',
   body:
-    'Linux Mint, Pop!_OS, and Kubuntu are Ubuntu-based. AMD’s ROCm 10.1.0 compatibility matrix lists Ubuntu 26.04.1, 24.04.5, and 22.04.5 by name — not Mint, Pop!_OS, or Kubuntu. Official docs do not put those derivatives on the 10.1 OS row, so we do not invent official AMD support. Follow the Ubuntu steps on this page only as unofficial; that path is not verified on our rig. Prefer stock Ubuntu 24.04.5 if you want the measured local-desktop cards to match the box. Fedora, Arch, and Docker / Podman have their own cited guides.',
+    'Linux Mint, Pop!_OS, and Kubuntu are Ubuntu-based. AMD’s ROCm 10.1.0 compatibility matrix lists Ubuntu 26.04.1, 24.04.5, and 22.04.5 by name — not Mint, Pop!_OS, or Kubuntu. Official docs do not put those derivatives on the 10.1 OS row, so we do not invent official AMD support. Follow the Ubuntu steps on this page only as unofficial; that path is not verified on our rig.     Prefer stock Ubuntu 24.04.5 if you want the measured local-desktop cards to match the box. Fedora, Arch, Docker / Podman, and LM Studio have their own cited guides.',
   links: [
     { href: '/setup/fedora', label: 'Fedora setup' },
     { href: '/setup/arch', label: 'Arch setup' },
     { href: '/setup/windows', label: 'Windows setup' },
     { href: '/setup/docker', label: 'Docker / Podman' },
+    { href: '/setup/lm-studio', label: 'LM Studio' },
   ] satisfies SetupLink[],
 };
 
@@ -307,6 +316,7 @@ export const REQUIRED_SETUP_HREFS = [
   '/setup/fedora',
   '/setup/arch',
   '/setup/docker',
+  '/setup/lm-studio',
   '/fine-tuning',
 ] as const;
 

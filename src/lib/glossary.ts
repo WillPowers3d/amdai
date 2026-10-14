@@ -430,7 +430,25 @@ export const GLOSSARY: GlossaryEntry[] = [
       { href: '/tutorials/run-local-llm', label: 'Run a local Qwen' },
       { href: '/tutorials/serve-qwen', label: 'Serve Qwen' },
     ],
-    seeAlso: ['vulkan', 'hip', 'gguf', 'mmproj'],
+    seeAlso: ['vulkan', 'hip', 'gguf', 'mmproj', 'lm-studio'],
+  },
+  {
+    id: 'lm-studio',
+    term: 'LM Studio',
+    aliases: ['lms', 'lmstudio', ':1234'],
+    letter: 'L',
+    definition:
+      'A desktop chat app that wraps llama.cpp. You download a Vulkan or ROCm llama.cpp runtime, load a GGUF, and optionally serve an OpenAI-compatible /v1 on 127.0.0.1:1234.',
+    why: 'People search “LM Studio Radeon.” The cited first-run is /setup/lm-studio. It is not a measured local-desktop card. Decode numbers on this site are Ubuntu llama.cpp llama-bench, not measured inside LM Studio. Vulkan first; bundled ROCm only if the picker lists this gfx.',
+    deeper:
+      'AMD’s playbook documents Ctrl+Shift+R runtime picker, GPU Offload max, Flash Attention On, and http://127.0.0.1:1234. Linux is an AppImage (libfuse2); Ubuntu newer than 22 is not well tested per LM Studio. House file is still Qwen3.6-35B-A3B UD-Q5_K_XL at 262K. Leave the app for compile flags and matching cards — /setup and /backends/llamacpp.',
+    links: [
+      { href: '/setup/lm-studio', label: 'LM Studio on Radeon' },
+      { href: '/backends/lmstudio', label: 'LM Studio backend' },
+      { href: '/harnesses/lm-studio', label: 'LM Studio harness' },
+      { href: '/setup', label: 'Ubuntu setup (measured)' },
+    ],
+    seeAlso: ['llamacpp', 'vulkan', 'offload'],
   },
   {
     id: 'lora',

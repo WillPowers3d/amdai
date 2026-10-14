@@ -330,6 +330,8 @@ engines:
         href: https://developer.amd.com/playbooks/lmstudio-rocm-llms/
       - title: This site — LM Studio as a harness
         href: https://amdai.net/harnesses/lm-studio
+      - title: This site — Run LM Studio on a Radeon GPU
+        href: https://amdai.net/setup/lm-studio
 
   - id: sglang
     name: SGLang

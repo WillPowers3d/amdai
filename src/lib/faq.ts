@@ -204,13 +204,14 @@ export const FAQ_ENTRIES: FaqItem[] = [
     group: 'getting-started',
     question: 'Ubuntu or Windows for a first local LLM box?',
     answer:
-      'Ubuntu LTS named on AMD’s current ROCm matrix is the path we write. First-run setup walks Ubuntu 24.04+ to the first token. Linux Mint, Pop!_OS, and Kubuntu are Ubuntu-based but are not on that 10.1 OS row — follow /setup only as unofficial, not verified on our rig. Cited Fedora and Arch guides live at /setup/fedora and /setup/arch. Docker or Podman is a cited isolated path at /setup/docker — official llama.cpp images, not a container tok/s card. The Windows guide at /setup/windows is cited vendor docs, not measured on local-desktop. Radeon Stack Lab follows that Ubuntu path — packages are not published yet. Vulkan llama.cpp is the honest Windows path for tokens. Full ROCm userspace is a Linux product. ROCm 10.1 lists WSL2 as a technical preview — not a measured local-desktop daily driver. We do not have Windows, Fedora, Arch, or container tok/s cards.',
+      'Ubuntu LTS named on AMD’s current ROCm matrix is the path we write. First-run setup walks Ubuntu 24.04+ to the first token. Linux Mint, Pop!_OS, and Kubuntu are Ubuntu-based but are not on that 10.1 OS row — follow /setup only as unofficial, not verified on our rig. Cited Fedora and Arch guides live at /setup/fedora and /setup/arch. Docker or Podman is a cited isolated path at /setup/docker — official llama.cpp images, not a container tok/s card. LM Studio is a cited desktop llama.cpp wrapper at /setup/lm-studio — Vulkan runtime first on Radeon, local /v1 on :1234, not an LM Studio tok/s card. The Windows guide at /setup/windows is cited vendor docs, not measured on local-desktop. Radeon Stack Lab follows that Ubuntu path — packages are not published yet. Vulkan llama.cpp is the honest Windows path for tokens. Full ROCm userspace is a Linux product. ROCm 10.1 lists WSL2 as a technical preview — not a measured local-desktop daily driver. We do not have Windows, Fedora, Arch, container, or LM Studio tok/s cards.',
     links: [
       { href: '/setup', label: 'First-run setup' },
       { href: '/setup/windows', label: 'Windows setup' },
       { href: '/setup/fedora', label: 'Fedora setup' },
       { href: '/setup/arch', label: 'Arch setup' },
       { href: '/setup/docker', label: 'Docker / Podman' },
+      { href: '/setup/lm-studio', label: 'LM Studio' },
       { href: '/stack-lab', label: 'Stack Lab' },
       { href: '/start', label: 'Getting started' },
       { href: '/tutorials/install-rocm', label: 'Install ROCm' },
@@ -231,6 +232,22 @@ export const FAQ_ENTRIES: FaqItem[] = [
       { href: '/rocm/vulkan-hip', label: 'Vulkan vs HIP' },
       { href: '/harnesses', label: 'Harnesses' },
       { href: '/troubleshoot/errors', label: 'Error paste' },
+    ],
+  },
+  {
+    id: 'lm-studio-on-radeon',
+    group: 'getting-started',
+    question: 'Can I run LM Studio on a Radeon GPU?',
+    answer:
+      'Yes as a cited path, not a measured local-desktop card. LM Studio is a desktop llama.cpp wrapper. AMD’s playbook documents Vulkan and ROCm runtimes; Vulkan is the first pick on RDNA 2 / 3 / 4 and the R9700. Official LM Studio docs do not publish a per-SKU Radeon list — if the ROCm runtime is missing or the GPU meter stays idle, stay Vulkan or move to /setup. Windows installer or Linux AppImage (Ubuntu 20.04+; versions newer than 22 are not well tested). GPU offload max, house file Qwen3.6-35B-A3B UD-Q5_K_XL at 262K. Q6/Q5/Q4 first; Q3 stays a labeled estimate. Local OpenAI-compatible /v1 is http://127.0.0.1:1234/v1 for harnesses like Hermes. Decode numbers on this site are Ubuntu llama.cpp llama-bench, not measured inside LM Studio. We do not invent an LM Studio tok/s.',
+    links: [
+      { href: '/setup/lm-studio', label: 'LM Studio on Radeon' },
+      { href: '/setup', label: 'Ubuntu setup (measured)' },
+      { href: '/backends/lmstudio', label: 'LM Studio backend' },
+      { href: '/harnesses/lm-studio', label: 'LM Studio harness' },
+      { href: '/harnesses/hermes', label: 'Hermes' },
+      { href: '/rocm/vulkan-hip', label: 'Vulkan vs HIP' },
+      { href: '/troubleshoot', label: 'Troubleshoot' },
     ],
   },
   {
@@ -699,6 +716,7 @@ export const REQUIRED_FAQ_HREFS = [
   '/setup/fedora',
   '/setup/arch',
   '/setup/docker',
+  '/setup/lm-studio',
 ] as const;
 
 const BANNED_VISIBLE = /Qwen2\.5|Qwen3-8B/i;

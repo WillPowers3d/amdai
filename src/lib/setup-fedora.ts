@@ -225,6 +225,7 @@ export const SETUP_FEDORA_HUB_LINKS: SetupFedoraLink[] = [
   { href: '/setup/arch', label: 'Arch setup' },
   { href: '/setup/windows', label: 'Windows setup' },
   { href: '/setup/docker', label: 'Docker / Podman' },
+  { href: '/setup/lm-studio', label: 'LM Studio' },
   { href: '/gpus/r9700', label: 'R9700' },
   { href: '/benchmarks', label: 'Benchmarks' },
   { href: '/start', label: 'Getting started' },

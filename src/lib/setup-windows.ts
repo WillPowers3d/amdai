@@ -205,6 +205,7 @@ export const SETUP_WINDOWS_HUB_LINKS: SetupWindowsLink[] = [
   { href: '/start', label: 'Getting started' },
   { href: '/fine-tuning', label: 'Fine-tuning' },
   { href: '/setup/docker', label: 'Docker / Podman' },
+  { href: '/setup/lm-studio', label: 'LM Studio' },
 ];
 
 export const REQUIRED_SETUP_WINDOWS_HREFS = [

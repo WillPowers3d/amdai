@@ -236,6 +236,12 @@ export const OG_CARDS: OgCard[] = [
     alt: 'AMDai Docker / Podman — cited llama.cpp images, not measured on local-desktop',
   },
   {
+    slug: 'setup-lm-studio',
+    title: 'LM Studio on Radeon',
+    lede: 'Cited Vulkan runtime. Not measured on local-desktop',
+    alt: 'AMDai LM Studio — cited llama.cpp runtime on Radeon, not measured on local-desktop',
+  },
+  {
     slug: 'stack-lab',
     title: 'Radeon Stack Lab',
     lede: 'Packages not published yet',

@@ -412,6 +412,8 @@ harnesses:
     sources:
       - title: LM Studio — OpenAI compatibility
         href: https://lmstudio.ai/docs/developer/openai-compat
+      - title: This site — Run LM Studio on a Radeon GPU
+        href: https://amdai.net/setup/lm-studio
 
   - id: jan
     title: Jan

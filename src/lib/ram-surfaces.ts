@@ -49,6 +49,7 @@ export const RAM_OFFLOAD_SURFACES = [
   '/setup/fedora',
   '/setup/arch',
   '/setup/docker',
+  '/setup/lm-studio',
   '/image-gen',
   '/speech',
   '/long-context',
