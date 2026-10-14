@@ -39,6 +39,7 @@ export const GPU_DETECT: GpuDetectCard[] = [
   { id: 'w7700', name: 'Radeon PRO W7700', gfx: ['gfx1101'], names: ['w7700', 'pro w7700'], vramGb: 16 },
   { id: 'w6800', name: 'Radeon PRO W6800', gfx: ['gfx1030'], names: ['w6800', 'pro w6800'], vramGb: 32 },
   { id: 'strix-halo', name: 'Ryzen AI Max+ 395 / Strix Halo', gfx: ['gfx1151'], names: ['strix halo', 'ryzen ai max+ 395', 'ryzen ai max 395', '8060s', 'gfx1151'], vramGb: null },
+  { id: 'ryzen-igpu', name: 'Ryzen iGPU (780M / 890M)', gfx: ['gfx1103', 'gfx1150'], names: ['radeon 780m', '780m', 'radeon 760m', '760m', 'radeon 890m', '890m', 'radeon 880m', '880m', '8700g', '8600g', 'hx 370', 'ryzen ai 9 365'], vramGb: null },
 ];
 
 const NAME_ORDER = [...GPU_DETECT].sort((a, b) => {
@@ -71,6 +72,7 @@ export function detectGpu(text: string): GpuDetectHit[] {
   const gfxHits: GpuDetectHit[] = [];
   for (const card of GPU_DETECT) {
     for (const gfx of card.gfx) {
+      if (card.id === 'ryzen-igpu' && gfx === 'gfx1150' && hay.includes('gfx1151')) continue;
       if (hay.includes(gfx.toLowerCase())) {
         gfxHits.push({
           id: card.id,

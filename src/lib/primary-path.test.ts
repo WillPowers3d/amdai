@@ -108,6 +108,7 @@ describe('primary path and nav IA', () => {
       '/faq': '../pages/faq.astro',
       '/gpus/r9700': '../pages/gpus/r9700.astro',
       '/gpus/strix-halo': '../pages/gpus/strix-halo.astro',
+      '/gpus/ryzen-igpu': '../pages/gpus/ryzen-igpu.astro',
       '/gpus/rx-7900-xtx': '../pages/gpus/rx-7900-xtx.astro',
       '/gpus/rx-7900-xt': '../pages/gpus/rx-7900-xt.astro',
       '/gpus/rx-7800-xt': '../pages/gpus/rx-7800-xt.astro',

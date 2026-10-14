@@ -57,6 +57,7 @@ export type GpuId =
   | 'w6800'
   | 'unified'
   | 'strix-halo'
+  | 'ryzen-igpu'
   | 'custom';
 export type BackendId = 'llamacpp' | 'strata' | 'ollama' | 'lmstudio' | 'vllm' | 'exllama';
 export type PathId = 'vulkan' | 'hip';
@@ -392,6 +393,7 @@ export const GPU_PRESETS: GpuPreset[] = [
   { id: 'w6800', name: 'Radeon PRO W6800', vramGb: 32, gfx: 'gfx1030', kind: 'discrete', bandwidthGBs: 512, bandwidthNote: AMD_BW },
   { id: 'unified', name: 'Unified memory (APU / iGPU)', vramGb: 32, gfx: '', kind: 'unified', bandwidthGBs: 0, bandwidthNote: 'macOS / Ryzen AI lend the GPU a slice of one pool. Default usable is 70% — an estimate, not a Metal reading.' },
   { id: 'strix-halo', name: 'Ryzen AI Max+ 395 / Strix Halo', vramGb: 64, gfx: 'gfx1151', kind: 'unified', bandwidthGBs: 0, bandwidthNote: 'Shared LPDDR5x. Confirm the OEM kit — we do not invent a GB/s figure.' },
+  { id: 'ryzen-igpu', name: 'Ryzen iGPU (780M / 890M)', vramGb: 64, gfx: 'gfx1103', kind: 'unified', bandwidthGBs: 0, bandwidthNote: 'Shared DDR5 / LPDDR5X. Confirm the OEM kit — we do not invent a GB/s figure.' },
   { id: 'custom', name: 'Custom GPU', vramGb: 24, gfx: '', kind: 'discrete', bandwidthGBs: 0, bandwidthNote: 'Enter VRAM and optional bandwidth from the product page.' },
 ];
 

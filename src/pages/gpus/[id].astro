@@ -21,7 +21,7 @@ import { isWorkstationRecipeGpu } from '../../lib/workstation-gpu';
 
 export function getStaticPaths() {
   return gpuPages(recipes)
-    .filter((page) => page.id !== 'r9700' && page.id !== 'strix-halo' && !isConsumerRecipeGpu(page.id) && !isWorkstationRecipeGpu(page.id))
+    .filter((page) => page.id !== 'r9700' && page.id !== 'strix-halo' && page.id !== 'ryzen-igpu' && !isConsumerRecipeGpu(page.id) && !isWorkstationRecipeGpu(page.id))
     .map((page) => ({ params: { id: page.id }, props: { id: page.id } }));
 }
 

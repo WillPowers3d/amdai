@@ -1,5 +1,6 @@
 export const GPU_NAME_IDS: Record<string, string> = {
   'AMD Ryzen AI Max+ 395 (Radeon 8060S)': 'strix-halo',
+  'AMD Ryzen iGPU (Radeon 780M / 890M)': 'ryzen-igpu',
   'AMD Radeon AI PRO R9700': 'r9700',
   'AMD Radeon AI PRO R9700S': 'r9700s',
   'AMD Radeon AI PRO R9600D': 'r9600d',

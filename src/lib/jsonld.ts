@@ -866,6 +866,7 @@ export function pageJsonLd(input: {
     path === '/quants' ||
     path === '/gpus/r9700' ||
     path === '/gpus/strix-halo' ||
+    path === '/gpus/ryzen-igpu' ||
     path === '/gpus/rx-9070-xt' ||
     path === '/gpus/rx-9070' ||
     path === '/gpus/rx-9070-gre' ||

@@ -39,6 +39,7 @@ const ALLOWED_HREFS = new Set([
   '/gpus',
   '/gpus/r9700',
   '/gpus/strix-halo',
+  '/gpus/ryzen-igpu',
   '/gpus/rx-7900-xtx',
   '/gpus/rx-7900-xt',
   '/gpus/rx-7800-xt',
