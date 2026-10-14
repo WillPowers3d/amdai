@@ -43,12 +43,27 @@ products:
     name: AMD Radeon RX 9070
     kind: gpu
     vram_gb: 16
+    calculator_gpu: rx9070
+    note: 16 GB non-XT listing. Not the 16 GB 9070 XT and not the 12 GB 9070 GRE. No live or invented price.
     urls:
       amazon: https://www.amazon.com/s?k=AMD+Radeon+RX+9070
       newegg: https://www.newegg.com/p/pl?d=AMD+Radeon+RX+9070
       bhphoto: https://www.bhphotovideo.com/c/search?Ntt=AMD+Radeon+RX+9070
       microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=AMD+Radeon+RX+9070
       amd: https://www.amd.com/en/products/graphics/desktops/radeon/9000-series/amd-radeon-rx-9070.html
+
+  - id: rx9070gre
+    name: AMD Radeon RX 9070 GRE
+    kind: gpu
+    vram_gb: 12
+    calculator_gpu: rx9070gre
+    note: 12 GB GRE listing. Not the 16 GB 9070 or 9070 XT. No live or invented price.
+    urls:
+      amazon: https://www.amazon.com/s?k=AMD+Radeon+RX+9070+GRE
+      newegg: https://www.newegg.com/p/pl?d=AMD+Radeon+RX+9070+GRE
+      bhphoto: https://www.bhphotovideo.com/c/search?Ntt=AMD+Radeon+RX+9070+GRE
+      microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=AMD+Radeon+RX+9070+GRE
+      amd: https://www.amd.com/en/products/graphics/desktops/radeon/9000-series/amd-radeon-rx-9070-gre.html
 
   - id: rx9060xt
     name: AMD Radeon RX 9060 XT
@@ -148,6 +163,32 @@ products:
       bhphoto: https://www.bhphotovideo.com/c/search?Ntt=AMD+Radeon+RX+6800+XT
       microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=AMD+Radeon+RX+6800+XT
       amd: https://www.amd.com/en/products/graphics/desktops/radeon/6000-series/amd-radeon-rx-6800-xt.html
+
+  - id: rx6950xt
+    name: AMD Radeon RX 6950 XT
+    kind: gpu
+    vram_gb: 16
+    calculator_gpu: rx6950xt
+    note: 16 GB RDNA 2 6950 XT listing. The 6900 XT is a different 16 GB SKU on the same sheet. No live or invented price.
+    urls:
+      amazon: https://www.amazon.com/s?k=AMD+Radeon+RX+6950+XT
+      newegg: https://www.newegg.com/p/pl?d=AMD+Radeon+RX+6950+XT
+      bhphoto: https://www.bhphotovideo.com/c/search?Ntt=AMD+Radeon+RX+6950+XT
+      microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=AMD+Radeon+RX+6950+XT
+      amd: https://www.amd.com/en/products/graphics/desktops/radeon/6000-series/amd-radeon-rx-6950-xt.html
+
+  - id: rx6900xt
+    name: AMD Radeon RX 6900 XT
+    kind: gpu
+    vram_gb: 16
+    calculator_gpu: rx6950xt
+    note: 16 GB RDNA 2 6900 XT listing. Shared sheet with the 6950 XT. No live or invented price.
+    urls:
+      amazon: https://www.amazon.com/s?k=AMD+Radeon+RX+6900+XT
+      newegg: https://www.newegg.com/p/pl?d=AMD+Radeon+RX+6900+XT
+      bhphoto: https://www.bhphotovideo.com/c/search?Ntt=AMD+Radeon+RX+6900+XT
+      microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=AMD+Radeon+RX+6900+XT
+      amd: https://www.amd.com/en/products/graphics/desktops/radeon/6000-series/amd-radeon-rx-6900-xt.html
 
   - id: rx6700xt
     name: AMD Radeon RX 6700 XT

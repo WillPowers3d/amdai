@@ -34,7 +34,7 @@ describe('consumer GPU recipe sheets', () => {
   it('covers only cited directory SKUs and keeps house rules', () => {
     const pages = consumerRecipePages();
     assert.deepEqual(assertConsumerGpuValid(pages), []);
-    assert.deepEqual([...CONSUMER_RECIPE_IDS], ['rx7900xtx', 'rx7900xt', 'rx7800xt', 'rx9070xt', 'rx9060xt', 'rx7900gre', 'rx7700xt', 'rx7600xt', 'rx7600', 'rx6800xt', 'rx6700xt']);
+    assert.deepEqual([...CONSUMER_RECIPE_IDS], ['rx7900xtx', 'rx7900xt', 'rx7800xt', 'rx9070xt', 'rx9060xt', 'rx7900gre', 'rx7700xt', 'rx7600xt', 'rx7600', 'rx6800xt', 'rx6700xt', 'rx9070', 'rx9070gre', 'rx6950xt']);
     assert.equal(CONSUMER_PUBLISHED, '2026-10-13');
     assert.equal(CONSUMER_MODEL, 'Qwen3.6-35B-A3B');
     assert.equal(CONSUMER_ENGINE, 'llama.cpp');
@@ -60,6 +60,9 @@ describe('consumer GPU recipe sheets', () => {
     assert.equal(consumerPath('rx7600'), '/gpus/rx-7600');
     assert.equal(consumerPath('rx6800xt'), '/gpus/rx-6800-xt');
     assert.equal(consumerPath('rx6700xt'), '/gpus/rx-6700-xt');
+    assert.equal(consumerPath('rx9070'), '/gpus/rx-9070');
+    assert.equal(consumerPath('rx9070gre'), '/gpus/rx-9070-gre');
+    assert.equal(consumerPath('rx6950xt'), '/gpus/rx-6950-xt');
     assert.equal(isConsumerRecipeGpu('r9700'), false);
     assert.equal(isConsumerRecipeGpu('rx9070xt'), true);
     assert.equal(isConsumerRecipeGpu('rx-9070-xt'), true);
@@ -81,6 +84,13 @@ describe('consumer GPU recipe sheets', () => {
     assert.equal(isConsumerRecipeGpu('rx6700xt'), true);
     assert.equal(isConsumerRecipeGpu('rx-6700-xt'), true);
     assert.equal(isConsumerRecipeGpu('rx6700-xt'), true);
+    assert.equal(isConsumerRecipeGpu('rx9070'), true);
+    assert.equal(isConsumerRecipeGpu('rx-9070'), true);
+    assert.equal(isConsumerRecipeGpu('rx9070gre'), true);
+    assert.equal(isConsumerRecipeGpu('rx-9070-gre'), true);
+    assert.equal(isConsumerRecipeGpu('rx6950xt'), true);
+    assert.equal(isConsumerRecipeGpu('rx-6950-xt'), true);
+    assert.equal(isConsumerRecipeGpu('rx-6900-xt'), true);
     assert.equal(isConsumerRecipeGpu('rx-7900-xtx'), true);
     assert.equal(isConsumerRecipeGpu('rx7900-xtx'), true);
     assert.equal(isConsumerRecipeGpu('rx-7900-xt'), true);
@@ -140,6 +150,21 @@ describe('consumer GPU recipe sheets', () => {
     assert.equal(pages[10]?.path, '/gpus/rx-6700-xt');
     assert.equal(pages[10]?.support, 'unofficial');
     assert.match(pages[10]?.lead ?? '', /230 W/);
+    assert.equal(pages[11]?.vramLabel, '16 GB');
+    assert.equal(pages[11]?.gfx, 'gfx1201');
+    assert.equal(pages[11]?.path, '/gpus/rx-9070');
+    assert.equal(pages[11]?.support, 'official');
+    assert.match(pages[11]?.lead ?? '', /220 W/);
+    assert.equal(pages[12]?.vramLabel, '12 GB');
+    assert.equal(pages[12]?.gfx, 'gfx1201');
+    assert.equal(pages[12]?.path, '/gpus/rx-9070-gre');
+    assert.match(pages[12]?.lead ?? '', /432 GB/);
+    assert.equal(pages[13]?.vramLabel, '16 GB');
+    assert.equal(pages[13]?.gfx, 'gfx1030');
+    assert.equal(pages[13]?.path, '/gpus/rx-6950-xt');
+    assert.equal(pages[13]?.support, 'unofficial');
+    assert.match(pages[13]?.lead ?? '', /335 W/);
+    assert.match(pages[13]?.lead ?? '', /6900 XT/);
   });
 
   it('uses calculator estimates and leaves speed not measured', () => {
@@ -214,6 +239,18 @@ describe('consumer GPU recipe sheets', () => {
     assert.equal(gpuDirectoryHref('rx6700xt'), '/gpus/rx-6700-xt');
     const xt6700 = compute(consumerCalcInput('rx6700xt', 'q4_k_m', 4096));
     assert.ok(xt6700.verdict === 'no');
+    assert.equal(consumerRecipeIdFromPage('rx-9070'), 'rx9070');
+    assert.equal(gpuDirectoryHref('rx9070'), '/gpus/rx-9070');
+    const bare9070 = compute(consumerCalcInput('rx9070', 'q4_k_m', 4096));
+    assert.ok(bare9070.verdict === 'no');
+    assert.equal(consumerRecipeIdFromPage('rx-9070-gre'), 'rx9070gre');
+    assert.equal(gpuDirectoryHref('rx9070gre'), '/gpus/rx-9070-gre');
+    const gre9070 = compute(consumerCalcInput('rx9070gre', 'q4_k_m', 4096));
+    assert.ok(gre9070.verdict === 'no');
+    assert.equal(consumerRecipeIdFromPage('rx-6900-xt'), 'rx6950xt');
+    assert.equal(gpuDirectoryHref('rx6950xt'), '/gpus/rx-6950-xt');
+    const xt6950 = compute(consumerCalcInput('rx6950xt', 'q4_k_m', 4096));
+    assert.ok(xt6950.verdict === 'no');
     const gre4k = compute(consumerCalcInput('rx7900gre', 'q4_k_m', 4096));
     assert.ok(gre4k.verdict === 'no');
     assert.ok(xtx4kQ4.weightsGiB > 0);

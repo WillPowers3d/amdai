@@ -31,7 +31,7 @@ import { RAM_FULL_LABEL, RAM_MIN_LABEL } from './ram-surfaces';
 import type { GpuDirectory } from './status';
 import { COMPARE_MODEL, COMPARE_Q3, COMPARE_Q3_CITE } from './local-desktop-compare';
 
-export const CONSUMER_RECIPE_IDS = ['rx7900xtx', 'rx7900xt', 'rx7800xt', 'rx9070xt', 'rx9060xt', 'rx7900gre', 'rx7700xt', 'rx7600xt', 'rx7600', 'rx6800xt', 'rx6700xt'] as const;
+export const CONSUMER_RECIPE_IDS = ['rx7900xtx', 'rx7900xt', 'rx7800xt', 'rx9070xt', 'rx9060xt', 'rx7900gre', 'rx7700xt', 'rx7600xt', 'rx7600', 'rx6800xt', 'rx6700xt', 'rx9070', 'rx9070gre', 'rx6950xt'] as const;
 export type ConsumerRecipeId = (typeof CONSUMER_RECIPE_IDS)[number];
 
 export const CONSUMER_PAGE_SLUG: Record<ConsumerRecipeId, string> = {
@@ -46,6 +46,9 @@ export const CONSUMER_PAGE_SLUG: Record<ConsumerRecipeId, string> = {
   rx7600: 'rx-7600',
   rx6800xt: 'rx-6800-xt',
   rx6700xt: 'rx-6700-xt',
+  rx9070: 'rx-9070',
+  rx9070gre: 'rx-9070-gre',
+  rx6950xt: 'rx-6950-xt',
 };
 
 export const CONSUMER_PAGE_ALIASES: Record<string, ConsumerRecipeId> = {
@@ -87,6 +90,20 @@ export const CONSUMER_PAGE_ALIASES: Record<string, ConsumerRecipeId> = {
   'rx-6700-xt': 'rx6700xt',
   'rx6700-xt': 'rx6700xt',
   'rx-6700xt': 'rx6700xt',
+  rx9070: 'rx9070',
+  'rx-9070': 'rx9070',
+  rx9070gre: 'rx9070gre',
+  'rx-9070-gre': 'rx9070gre',
+  'rx9070-gre': 'rx9070gre',
+  'rx-9070gre': 'rx9070gre',
+  rx6950xt: 'rx6950xt',
+  'rx-6950-xt': 'rx6950xt',
+  'rx6950-xt': 'rx6950xt',
+  'rx-6950xt': 'rx6950xt',
+  rx6900xt: 'rx6950xt',
+  'rx-6900-xt': 'rx6950xt',
+  'rx6900-xt': 'rx6950xt',
+  'rx-6900xt': 'rx6950xt',
 };
 
 export const CONSUMER_PUBLISHED = '2026-10-13';
@@ -117,8 +134,11 @@ export const CONSUMER_NAV_LINKS = [
   { href: '/gpus/rx-7600-xt', label: 'RX 7600 XT' },
   { href: '/gpus/rx-7600', label: 'RX 7600' },
   { href: '/gpus/rx-6800-xt', label: 'RX 6800 XT' },
+  { href: '/gpus/rx-6950-xt', label: 'RX 6950 XT / 6900 XT' },
   { href: '/gpus/rx-6700-xt', label: 'RX 6700 XT' },
   { href: '/gpus/rx-9070-xt', label: 'RX 9070 XT' },
+  { href: '/gpus/rx-9070', label: 'RX 9070' },
+  { href: '/gpus/rx-9070-gre', label: 'RX 9070 GRE' },
   { href: '/gpus/rx-9060-xt', label: 'RX 9060 XT' },
 ] as const;
 
@@ -174,6 +194,9 @@ const SHORT_NAME: Record<ConsumerRecipeId, string> = {
   rx7600: 'RX 7600',
   rx6800xt: 'RX 6800 XT',
   rx6700xt: 'RX 6700 XT',
+  rx9070: 'RX 9070',
+  rx9070gre: 'RX 9070 GRE',
+  rx6950xt: 'RX 6950 XT',
 };
 
 const BUDGET_ANCHOR: Record<ConsumerRecipeId, { href: string; label: string }> = {
@@ -188,6 +211,9 @@ const BUDGET_ANCHOR: Record<ConsumerRecipeId, { href: string; label: string }> =
   rx7600: { href: '/budget#starter', label: 'Starter budget tier' },
   rx6800xt: { href: '/budget#starter', label: 'Starter budget tier' },
   rx6700xt: { href: '/budget#starter', label: 'Starter budget tier' },
+  rx9070: { href: '/budget#starter', label: 'Starter budget tier' },
+  rx9070gre: { href: '/budget#starter', label: 'Starter budget tier' },
+  rx6950xt: { href: '/budget#starter', label: 'Starter budget tier' },
 };
 
 const LEAD: Record<ConsumerRecipeId, string> = {
@@ -198,7 +224,7 @@ const LEAD: Record<ConsumerRecipeId, string> = {
   rx7800xt:
     '16 GB gfx1101 RDNA 3 — the 7800 XT, not the 12 GB 7700 XT on the same gfx. AMD product page cites 16 GB GDDR6, RDNA 3, and 263 W typical board power. Official on the cited ROCm 10.1 matrix as gfx1101. House 35B Q4–Q6 files do not fit this VRAM on the calculator — expect RAM offload or a listed Q3 file, both estimates. Buy the 7900 XT when you want 20 GB on gfx1100, or the R9700 when you want measured 32 GB recipes. Not a measured local-desktop card.',
   rx9070xt:
-    '16 GB RDNA 4 gaming sibling of the measured 32 GB R9700. Same gfx1201 LLVM target — half the VRAM. Size 35B Q6/Q5/Q4 on the calculator before you buy; those files do not sit in this VRAM. A listed Q3 is a labeled estimate. Buy the R9700 when you want the same-arch card with 32 GB and measured house recipes. Not a measured local-desktop card.',
+    '16 GB RDNA 4 gaming sibling of the measured 32 GB R9700. Same gfx1201 LLVM target — half the VRAM. Size 35B Q6/Q5/Q4 on the calculator before you buy; those files do not sit in this VRAM. A listed Q3 is a labeled estimate. The non-XT RX 9070 is the 220 W / 16 GB sheet at /gpus/rx-9070; the 12 GB GRE is /gpus/rx-9070-gre. Buy the R9700 when you want the same-arch card with 32 GB and measured house recipes. Not a measured local-desktop card.',
   rx9060xt:
     '16 GB gfx1200 RDNA 4 — the cheaper 16 GB 9000-series card next to the 9070 XT. Official on the cited ROCm 10.1 matrix as gfx1200; do not mix a gfx1201 (R9700 / 9070 XT) or gfx110x (7900) family package. House 35B Q4–Q6 files do not fit this VRAM on the calculator — expect RAM offload or a listed Q3 file, both estimates. An 8 GB XT LP listing exists; treat it as a different SKU and size it on the calculator, not this 16 GB sheet. Not a measured local-desktop card.',
   rx7900gre:
@@ -210,9 +236,15 @@ const LEAD: Record<ConsumerRecipeId, string> = {
   rx7600:
     '8 GB gfx1102 RDNA 3 — the non-XT 7600, not the 16 GB RX 7600 XT. Same LLVM target as the cited 16 GB XT row on the ROCm 10.1 matrix; do not mix a gfx1101 (7800 / 7700 XT) or gfx1201 pin. House 35B Q4–Q6 files do not fit this VRAM on the calculator — expect RAM offload or a listed Q3 file, both estimates. Buy the 7600 XT when you want 16 GB on this gfx, or the R9700 when you want measured 32 GB recipes. Not a measured local-desktop card.',
   rx6800xt:
-    '16 GB gfx1030 RDNA 2 — the 6800 XT, not the 32 GB PRO W6800 and not the 16 GB 6950 XT / 6900 XT directory listing. Consumer RDNA 2 is unofficial on the current Radeon ROCm row the way W6800 is official. Vulkan llama.cpp stays first. House 35B Q4–Q6 files do not fit this VRAM on the calculator — expect RAM offload or a listed Q3 file, both estimates. Buy the R9700 when you want measured 32 GB recipes. Not a measured local-desktop card.',
+    '16 GB gfx1030 RDNA 2 — the 6800 XT, not the 32 GB PRO W6800 and not the 16 GB 6950 XT / 6900 XT shared sheet. Consumer RDNA 2 is unofficial on the current Radeon ROCm row the way W6800 is official. Vulkan llama.cpp stays first. House 35B Q4–Q6 files do not fit this VRAM on the calculator — expect RAM offload or a listed Q3 file, both estimates. Buy the R9700 when you want measured 32 GB recipes. Not a measured local-desktop card.',
   rx6700xt:
     '12 GB gfx1031 RDNA 2 — the 6700 XT, not the 16 GB 6800 XT and not the 10 GB non-XT 6700. AMD product page cites 12 GB GDDR6, RDNA 2, and 230 W typical board power. gfx1031 is not the official gfx1030 W6800 row. Consumer RDNA 2 is unofficial on the current Radeon ROCm matrix. Vulkan llama.cpp stays first. House 35B Q4–Q6 files do not fit this VRAM on the calculator — expect RAM offload or a listed Q3 file, both estimates. Buy the R9700 when you want measured 32 GB recipes. Not a measured local-desktop card.',
+  rx9070:
+    '16 GB gfx1201 RDNA 4 — the non-XT 9070, not the 16 GB 9070 XT and not the 12 GB 9070 GRE. AMD product page and driver listing cite 16 GB GDDR6, up to 640 GB/s, a 256-bit bus on the AMD 9000-series quick-reference, and 220 W typical board power. Official on the cited ROCm 10.1 matrix as gfx1201 — same LLVM target as the measured R9700, half the VRAM. House 35B Q4–Q6 files do not fit this VRAM on the calculator — expect RAM offload or a listed Q3 file, both estimates. Buy the R9700 when you want measured 32 GB recipes. Not a measured local-desktop card.',
+  rx9070gre:
+    '12 GB gfx1201 RDNA 4 — the GRE SKU, not the 16 GB 9070 or 9070 XT. AMD product page cites 12 GB GDDR6, 192-bit interface, up to 432 GB/s, and 220 W typical board power. Official on the cited ROCm 10.1 matrix as gfx1201. Confirm the 12 GB sticker — do not assume the 16 GB 9070 listing. House 35B Q4–Q6 files do not fit this VRAM on the calculator — expect RAM offload or a listed Q3 file, both estimates. Buy the non-XT 9070 when you want 16 GB on this gfx, or the R9700 when you want measured 32 GB recipes. Not a measured local-desktop card.',
+  rx6950xt:
+    '16 GB gfx1030 RDNA 2 shared sheet for the RX 6950 XT and the RX 6900 XT. AMD 6950 XT product page: 16 GB GDDR6, 256-bit, up to 576 GB/s, 335 W typical board power. AMD 6900 XT product page: same 16 GB / 256-bit class at up to 16 Gbps / 512 GB/s and 300 W typical board power. Consumer RDNA 2 is unofficial on the current Radeon ROCm row the way W6800 is official. Vulkan llama.cpp stays first. House 35B Q4–Q6 files do not fit this VRAM on the calculator — expect RAM offload or a listed Q3 file, both estimates. Buy the R9700 when you want measured 32 GB recipes. Not a measured local-desktop card.',
 };
 
 export type ConsumerFitKind = 'estimate' | 'q3-estimate';
@@ -440,7 +472,7 @@ function stackTips(id: ConsumerRecipeId, gfx: string): ConsumerStackTip[] {
       },
       {
         title: 'gfx1030 family package',
-        body: `${gfx} is the same LLVM target as the official 32 GB W6800 and the 6950 XT / 6900 XT directory listing. Do not mix a gfx110x (7900 / 7800 / 7700 / 7600) or gfx1201 (R9700 / 9070 XT) install. Re-check the cited matrix before you install.`,
+        body: `${gfx} is the same LLVM target as the official 32 GB W6800 and the 6950 XT / 6900 XT sheet. Do not mix a gfx110x (7900 / 7800 / 7700 / 7600) or gfx1201 (R9700 / 9070 XT) install. Re-check the cited matrix before you install.`,
       },
       {
         title: '16 GB XT, not the 32 GB W6800',
@@ -549,6 +581,66 @@ function stackTips(id: ConsumerRecipeId, gfx: string): ConsumerStackTip[] {
       {
         title: 'Setup, then Stack Lab doctor',
         body: 'First-run setup is Ubuntu. Open Stack Lab doctor for the gfx1201 install family. House daily and Flash profiles are R9700 / local-desktop — they do not apply to this 16 GB card. Packages are not published yet.',
+      },
+    ];
+  }
+  if (id === 'rx9070') {
+    return [
+      {
+        title: 'llama.cpp first',
+        body: 'Vulkan is the consumer default on this site. HIP when rocminfo lists gfx1201. Official on the cited ROCm 10.1 matrix — not Vulkan-only. Ollama and vLLM are not the house path for this card.',
+      },
+      {
+        title: 'Same gfx1201 family as the R9700',
+        body: `${gfx} is the same LLVM target as the measured 32 GB R9700 and the 16 GB 9070 XT. Install the gfx1201 ROCm family package. Do not mix a gfx110x 7900 or gfx1200 9060 XT pin.`,
+      },
+      {
+        title: '16 GB non-XT, not the XT or GRE',
+        body: 'This sheet sizes the 16 GB non-XT 9070. AMD product page: 16 GB GDDR6, up to 640 GB/s, 220 W typical board power. The 16 GB 9070 XT and the 12 GB 9070 GRE are different listings. House 35B Q4–Q6 files do not fit this VRAM — expect RAM offload or a lighter listed Q3 file, both estimates.',
+      },
+      {
+        title: 'Setup, then Stack Lab doctor',
+        body: 'First-run setup is Ubuntu. Open Stack Lab doctor for the gfx1201 install family. House daily and Flash profiles are R9700 / local-desktop — they do not apply to this 16 GB card. Packages are not published yet.',
+      },
+    ];
+  }
+  if (id === 'rx9070gre') {
+    return [
+      {
+        title: 'llama.cpp first',
+        body: 'Vulkan is the consumer default on this site. HIP when rocminfo lists gfx1201. Official on the cited ROCm 10.1 matrix — not Vulkan-only. Ollama and vLLM are not the house path for this card.',
+      },
+      {
+        title: 'Same gfx1201 family as the R9700',
+        body: `${gfx} is the same LLVM target as the measured 32 GB R9700. Install the gfx1201 ROCm family package. Do not mix a gfx110x 7900 or gfx1200 9060 XT pin.`,
+      },
+      {
+        title: '12 GB GRE, not the 16 GB 9070',
+        body: 'This sheet sizes the 12 GB GRE. AMD product page: 12 GB GDDR6, 192-bit, up to 432 GB/s, 220 W typical board power. Confirm the sticker. House 35B Q4–Q6 files do not fit this VRAM — expect RAM offload or a lighter listed Q3 file, both estimates. The 16 GB non-XT 9070 is /gpus/rx-9070.',
+      },
+      {
+        title: 'Setup, then Stack Lab doctor',
+        body: 'First-run setup is Ubuntu. Open Stack Lab doctor for the gfx1201 install family. House daily and Flash profiles are R9700 / local-desktop — they do not apply to this 12 GB card. Packages are not published yet.',
+      },
+    ];
+  }
+  if (id === 'rx6950xt') {
+    return [
+      {
+        title: 'llama.cpp first',
+        body: 'Vulkan is the consumer default on this site. HIP is unofficial on this gfx1030 consumer pair — the current Radeon official row lists W6800, not the 6950 XT or 6900 XT. Prefer Vulkan llama.cpp if HIP is angry. Ollama and vLLM are not the house path for these cards.',
+      },
+      {
+        title: 'gfx1030 family package',
+        body: `${gfx} is the same LLVM target as the official 32 GB W6800 and the 16 GB 6800 XT. Do not mix a gfx110x (7900 / 7800 / 7700 / 7600) or gfx1201 (R9700 / 9070) install. Re-check the cited matrix before you install.`,
+      },
+      {
+        title: '6950 XT and 6900 XT are both 16 GB',
+        body: 'AMD 6950 XT product page: 16 GB GDDR6, 256-bit, up to 576 GB/s, 335 W typical board power. AMD 6900 XT product page: 16 GB GDDR6, 256-bit, up to 512 GB/s, 300 W typical board power. Calculator bandwidth on this sheet is the 6950 XT figure. House 35B Q4–Q6 files do not fit this VRAM — expect RAM offload or a lighter listed Q3 file, both estimates. The 32 GB W6800 is a different listing.',
+      },
+      {
+        title: 'Setup, then Stack Lab doctor',
+        body: 'First-run setup is Ubuntu. Open Stack Lab doctor for the install family rocminfo actually prints. House daily and Flash profiles are R9700 / local-desktop — they do not apply to this 16 GB pair. Packages are not published yet.',
       },
     ];
   }
@@ -703,7 +795,7 @@ export function assertConsumerGpuValid(pages: ConsumerRecipePage[] = consumerRec
     if (!yamlIds.has(page.id)) errors.push(`${page.id} missing gpus.yaml row`);
     if (!presetIds.has(page.id)) errors.push(`${page.id} missing calculator preset`);
     if (page.vramGb <= 0) errors.push(`${page.id} missing VRAM hardware label`);
-    if (page.support !== 'official' && !((page.id === 'rx6800xt' || page.id === 'rx6700xt') && page.support === 'unofficial')) {
+    if (page.support !== 'official' && !((page.id === 'rx6800xt' || page.id === 'rx6700xt' || page.id === 'rx6950xt') && page.support === 'unofficial')) {
       errors.push(`${page.id} invented unofficial support`);
     }
     if (!page.matrixHref.startsWith('https://rocm.docs.amd.com/')) errors.push(`${page.id} matrix href`);

@@ -170,12 +170,15 @@ export const CRUMB_LABELS: Record<string, string> = {
   '/gpus/rx-7900-xt': 'RX 7900 XT',
   '/gpus/rx-7800-xt': 'RX 7800 XT',
   '/gpus/rx-9070-xt': 'RX 9070 XT',
+  '/gpus/rx-9070': 'RX 9070',
+  '/gpus/rx-9070-gre': 'RX 9070 GRE',
   '/gpus/rx-9060-xt': 'RX 9060 XT',
   '/gpus/rx-7900-gre': 'RX 7900 GRE',
   '/gpus/rx-7700-xt': 'RX 7700 XT',
   '/gpus/rx-7600-xt': 'RX 7600 XT',
   '/gpus/rx-7600': 'RX 7600',
   '/gpus/rx-6800-xt': 'RX 6800 XT',
+  '/gpus/rx-6950-xt': 'RX 6950 XT',
   '/gpus/rx-6700-xt': 'RX 6700 XT',
   '/gpus/w7900': 'PRO W7900',
   '/gpus/w7800': 'PRO W7800',
@@ -560,6 +563,24 @@ setMeta(
   'RX 6700 XT recipe sheet — 12 GB, gfx1031, cited RDNA 2 directory row. 35B Q6/Q5/Q4 VRAM fit estimates; UD-Q3_K_XL labeled estimate. Not measured on local-desktop.',
 );
 setDate('/gpus/rx-6700-xt', '2026-10-14');
+setMeta(
+  '/gpus/rx-9070',
+  'RX 9070',
+  'RX 9070 recipe sheet — 16 GB, gfx1201, cited ROCm matrix row. 35B Q6/Q5/Q4 VRAM fit estimates; UD-Q3_K_XL labeled estimate. Not measured on local-desktop.',
+);
+setDate('/gpus/rx-9070', '2026-10-14');
+setMeta(
+  '/gpus/rx-9070-gre',
+  'RX 9070 GRE',
+  'RX 9070 GRE recipe sheet — 12 GB, gfx1201, cited ROCm matrix row. 35B Q6/Q5/Q4 VRAM fit estimates; UD-Q3_K_XL labeled estimate. Not measured on local-desktop.',
+);
+setDate('/gpus/rx-9070-gre', '2026-10-14');
+setMeta(
+  '/gpus/rx-6950-xt',
+  'RX 6950 XT',
+  'RX 6950 XT / 6900 XT sheet — 16 GB gfx1030 RDNA 2. 35B Q6/Q5/Q4 fit estimates; UD-Q3_K_XL labeled estimate. Not measured on local-desktop.',
+);
+setDate('/gpus/rx-6950-xt', '2026-10-14');
 setMeta(
   '/gpus/w7900',
   'PRO W7900',

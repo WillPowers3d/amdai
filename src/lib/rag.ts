@@ -235,11 +235,13 @@ export const RAG_FIT_ROWS: RagFitRow[] = [
     vramClass: '16 GB discrete',
     cards: [
       { href: '/gpus/rx-9070-xt', label: 'RX 9070 XT' },
+      { href: '/gpus/rx-9070', label: 'RX 9070' },
       { href: '/gpus/rx-9060-xt', label: 'RX 9060 XT' },
       { href: '/gpus/rx-7900-gre', label: 'RX 7900 GRE' },
       { href: '/gpus/rx-7800-xt', label: 'RX 7800 XT' },
       { href: '/gpus/rx-7600-xt', label: 'RX 7600 XT' },
       { href: '/gpus/rx-6800-xt', label: 'RX 6800 XT' },
+      { href: '/gpus/rx-6950-xt', label: 'RX 6950 XT / 6900 XT' },
     ],
     pick: 'Q6_K or Q5_K_M (108 / 95 MiB official).',
     fit: `Estimate. Official nomic Q6_K is 108 MiB. A house 35B Q4–Q6 file does not sit in 16 GB on the calculator at long context — the LLM sidecar is the fit question, not the embed GGUF. Q3 chat sidecar is a labeled estimate. When that sidecar offloads, read ${RAM_MIN_LABEL} and ${RAM_FULL_LABEL} on the calculator.`,
@@ -251,6 +253,7 @@ export const RAG_FIT_ROWS: RagFitRow[] = [
     vramClass: '12 GB discrete',
     cards: [
       { href: '/gpus/rx-7700-xt', label: 'RX 7700 XT' },
+      { href: '/gpus/rx-9070-gre', label: 'RX 9070 GRE' },
       { href: '/gpus/rx-6700-xt', label: 'RX 6700 XT' },
     ],
     pick: 'Q5_K_M or Q4_K_M (95 / 81 MiB official).',

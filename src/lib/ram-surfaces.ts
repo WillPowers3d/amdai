@@ -14,12 +14,15 @@ export const RAM_OFFLOAD_SURFACES = [
   '/gpus/rx-7900-xt',
   '/gpus/rx-7800-xt',
   '/gpus/rx-9070-xt',
+  '/gpus/rx-9070',
+  '/gpus/rx-9070-gre',
   '/gpus/rx-9060-xt',
   '/gpus/rx-7900-gre',
   '/gpus/rx-7700-xt',
   '/gpus/rx-7600-xt',
   '/gpus/rx-7600',
   '/gpus/rx-6800-xt',
+  '/gpus/rx-6950-xt',
   '/gpus/rx-6700-xt',
   '/gpus/w7900',
   '/gpus/w7800',
@@ -89,12 +92,15 @@ export function assertRamSurfacesValid(): string[] {
   if (!RAM_OFFLOAD_SURFACES.includes('/gpus/rx-7900-xt')) errors.push('missing /gpus/rx-7900-xt');
   if (!RAM_OFFLOAD_SURFACES.includes('/gpus/rx-7800-xt')) errors.push('missing /gpus/rx-7800-xt');
   if (!RAM_OFFLOAD_SURFACES.includes('/gpus/rx-9070-xt')) errors.push('missing /gpus/rx-9070-xt');
+  if (!RAM_OFFLOAD_SURFACES.includes('/gpus/rx-9070')) errors.push('missing /gpus/rx-9070');
+  if (!RAM_OFFLOAD_SURFACES.includes('/gpus/rx-9070-gre')) errors.push('missing /gpus/rx-9070-gre');
   if (!RAM_OFFLOAD_SURFACES.includes('/gpus/rx-9060-xt')) errors.push('missing /gpus/rx-9060-xt');
   if (!RAM_OFFLOAD_SURFACES.includes('/gpus/rx-7900-gre')) errors.push('missing /gpus/rx-7900-gre');
   if (!RAM_OFFLOAD_SURFACES.includes('/gpus/rx-7700-xt')) errors.push('missing /gpus/rx-7700-xt');
   if (!RAM_OFFLOAD_SURFACES.includes('/gpus/rx-7600-xt')) errors.push('missing /gpus/rx-7600-xt');
   if (!RAM_OFFLOAD_SURFACES.includes('/gpus/rx-7600')) errors.push('missing /gpus/rx-7600');
   if (!RAM_OFFLOAD_SURFACES.includes('/gpus/rx-6800-xt')) errors.push('missing /gpus/rx-6800-xt');
+  if (!RAM_OFFLOAD_SURFACES.includes('/gpus/rx-6950-xt')) errors.push('missing /gpus/rx-6950-xt');
   if (!RAM_OFFLOAD_SURFACES.includes('/gpus/rx-6700-xt')) errors.push('missing /gpus/rx-6700-xt');
   if (!RAM_OFFLOAD_SURFACES.includes('/gpus/w7900')) errors.push('missing /gpus/w7900');
   if (!RAM_OFFLOAD_SURFACES.includes('/gpus/w7800')) errors.push('missing /gpus/w7800');

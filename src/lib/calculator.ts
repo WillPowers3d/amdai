@@ -50,6 +50,7 @@ export type GpuId =
   | 'rx7600'
   | 'rx6800xt'
   | 'rx6700xt'
+  | 'rx6950xt'
   | 'w7900'
   | 'w7800'
   | 'w7700'
@@ -373,7 +374,7 @@ export const GPU_PRESETS: GpuPreset[] = [
   { id: 'r9700', name: 'Radeon AI PRO R9700', vramGb: 32, gfx: 'gfx1201', kind: 'discrete', bandwidthGBs: 640, bandwidthNote: AMD_BW },
   { id: 'rx9070xt', name: 'Radeon RX 9070 XT', vramGb: 16, gfx: 'gfx1201', kind: 'discrete', bandwidthGBs: 640, bandwidthNote: AMD_BW },
   { id: 'rx9070', name: 'Radeon RX 9070', vramGb: 16, gfx: 'gfx1201', kind: 'discrete', bandwidthGBs: 640, bandwidthNote: AMD_BW },
-  { id: 'rx9070gre', name: 'Radeon RX 9070 GRE', vramGb: 12, gfx: 'gfx1201', kind: 'discrete', bandwidthGBs: 0, bandwidthNote: 'Confirm the SKU page — bandwidth is not listed here.' },
+  { id: 'rx9070gre', name: 'Radeon RX 9070 GRE', vramGb: 12, gfx: 'gfx1201', kind: 'discrete', bandwidthGBs: 432, bandwidthNote: AMD_BW },
   { id: 'rx9060xt', name: 'Radeon RX 9060 XT 16GB', vramGb: 16, gfx: 'gfx1200', kind: 'discrete', bandwidthGBs: 0, bandwidthNote: 'Confirm the SKU page — 8 GB and 16 GB exist.' },
   { id: 'rx7900xtx', name: 'Radeon RX 7900 XTX', vramGb: 24, gfx: 'gfx1100', kind: 'discrete', bandwidthGBs: 960, bandwidthNote: AMD_BW },
   { id: 'rx7900xt', name: 'Radeon RX 7900 XT', vramGb: 20, gfx: 'gfx1100', kind: 'discrete', bandwidthGBs: 800, bandwidthNote: AMD_BW },
@@ -384,6 +385,7 @@ export const GPU_PRESETS: GpuPreset[] = [
   { id: 'rx7600', name: 'Radeon RX 7600', vramGb: 8, gfx: 'gfx1102', kind: 'discrete', bandwidthGBs: 288, bandwidthNote: AMD_BW },
   { id: 'rx6800xt', name: 'Radeon RX 6800 XT', vramGb: 16, gfx: 'gfx1030', kind: 'discrete', bandwidthGBs: 512, bandwidthNote: AMD_BW },
   { id: 'rx6700xt', name: 'Radeon RX 6700 XT', vramGb: 12, gfx: 'gfx1031', kind: 'discrete', bandwidthGBs: 0, bandwidthNote: 'Confirm the SKU page — AMD cites 12 GB GDDR6, not a GB/s figure here.' },
+  { id: 'rx6950xt', name: 'Radeon RX 6950 XT / 6900 XT', vramGb: 16, gfx: 'gfx1030', kind: 'discrete', bandwidthGBs: 576, bandwidthNote: 'AMD-published 6950 XT peak (576 GB/s). The 6900 XT product page lists 512 GB/s — same 16 GB, different memory speed.' },
   { id: 'w7900', name: 'Radeon PRO W7900', vramGb: 48, gfx: 'gfx1100', kind: 'discrete', bandwidthGBs: 864, bandwidthNote: AMD_BW },
   { id: 'w7800', name: 'Radeon PRO W7800', vramGb: 32, gfx: 'gfx1100', kind: 'discrete', bandwidthGBs: 576, bandwidthNote: 'AMD-published 32 GB SKU peak. A separate 48 GB W7800 lists 864 GB/s — read the sticker.' },
   { id: 'w7700', name: 'Radeon PRO W7700', vramGb: 16, gfx: 'gfx1101', kind: 'discrete', bandwidthGBs: 576, bandwidthNote: AMD_BW },

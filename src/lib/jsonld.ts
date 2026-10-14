@@ -582,6 +582,8 @@ export function pageJsonLd(input: {
     path === '/gpus/r9700' ||
     path === '/gpus/strix-halo' ||
     path === '/gpus/rx-9070-xt' ||
+    path === '/gpus/rx-9070' ||
+    path === '/gpus/rx-9070-gre' ||
     path === '/gpus/rx-9060-xt' ||
     path === '/gpus/rx-7900-gre' ||
     path === '/gpus/rx-7700-xt' ||
@@ -591,6 +593,7 @@ export function pageJsonLd(input: {
     path === '/gpus/rx-7900-xt' ||
     path === '/gpus/rx-7800-xt' ||
     path === '/gpus/rx-6800-xt' ||
+    path === '/gpus/rx-6950-xt' ||
     path === '/gpus/rx-6700-xt' ||
     path === '/gpus/w7900' ||
     path === '/gpus/w7800' ||

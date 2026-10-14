@@ -198,7 +198,7 @@ cards:
     gfx: gfx1030
     vram_gb: 16
     support: unofficial
-    rocm_note: RDNA 2 consumer cards are not on the current Radeon official row the way W6800 is. Community HIP/Vulkan paths exist.
+    rocm_note: RDNA 2 consumer cards are not on the current Radeon official row the way W6800 is. Same gfx1030 LLVM target as the 6800 XT and the official 32 GB W6800. Community HIP/Vulkan paths exist. Prefer Vulkan llama.cpp if HIP is angry.
     hsa_override: Sometimes used (e.g. 10.3.0) when a build omits gfx1030. Unofficial. Prefer Vulkan llama.cpp if HIP is angry.
 
   - name: AMD Radeon PRO W7900

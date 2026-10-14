@@ -37,7 +37,7 @@ describe('GPU vs GPU compare', () => {
     assert.deepEqual(assertGpuCompareValid(runs), []);
     assert.deepEqual(
       [...GPU_COMPARE_IDS],
-      ['r9700', 'w7900', 'w7800', 'w7700', 'w6800', 'rx7900xtx', 'rx7900xt', 'rx9070xt', 'rx9060xt', 'rx7900gre', 'rx7800xt', 'rx7700xt', 'rx7600xt', 'rx7600', 'rx6800xt', 'rx6700xt', 'strix-halo'],
+      ['r9700', 'w7900', 'w7800', 'w7700', 'w6800', 'rx7900xtx', 'rx7900xt', 'rx9070xt', 'rx9070', 'rx9070gre', 'rx9060xt', 'rx7900gre', 'rx7800xt', 'rx7700xt', 'rx7600xt', 'rx7600', 'rx6800xt', 'rx6950xt', 'rx6700xt', 'strix-halo'],
     );
     assert.equal(GPU_COMPARE_PUBLISHED, '2026-10-14');
     assert.equal(GPU_COMPARE_MODEL, 'Qwen3.6-35B-A3B');
@@ -45,7 +45,7 @@ describe('GPU vs GPU compare', () => {
     assert.equal(COMPARE_Q3, 'UD-Q3_K_XL');
     assert.match(COMPARE_Q3_CITE, /16\.8 GB/);
     assert.equal(GPU_COMPARE_HUB, '/compare/gpus');
-    assert.equal(gpuComparePairPages().length, 136);
+    assert.equal(gpuComparePairPages().length, 190);
     assert.equal(gpuCompareFeaturedPages().length, GPU_COMPARE_FEATURED_PAIRS.length);
     assert.equal(gpuComparePairPath('r9700', 'rx9070xt'), '/compare/r9700-vs-rx-9070-xt');
     assert.equal(gpuComparePairPath('rx9070xt', 'r9700'), '/compare/r9700-vs-rx-9070-xt');
@@ -154,6 +154,30 @@ describe('GPU vs GPU compare', () => {
     assert.equal(used.right.support, 'unofficial');
     assert.equal(used.left.bandwidthLabel, '512 GB/s');
     assert.equal(used.right.bandwidthLabel, 'not listed here');
+
+    const nonXt = gpuComparePairPage('rx9070xt', 'rx9070');
+    assert.equal(nonXt.path, '/compare/rx-9070-xt-vs-rx-9070');
+    assert.equal(nonXt.left.vramLabel, '16 GB');
+    assert.equal(nonXt.right.vramLabel, '16 GB');
+    assert.equal(nonXt.left.gfx, 'gfx1201');
+    assert.equal(nonXt.right.gfx, 'gfx1201');
+    assert.equal(nonXt.left.support, 'official');
+    assert.equal(nonXt.right.support, 'official');
+    assert.equal(nonXt.left.bandwidthLabel, '640 GB/s');
+    assert.equal(nonXt.right.bandwidthLabel, '640 GB/s');
+
+    const gre9070 = gpuComparePairPage('rx9070', 'rx9070gre');
+    assert.equal(gre9070.path, '/compare/rx-9070-vs-rx-9070-gre');
+    assert.equal(gre9070.right.vramLabel, '12 GB');
+    assert.equal(gre9070.right.bandwidthLabel, '432 GB/s');
+
+    const rdna2 = gpuComparePairPage('rx6950xt', 'rx6800xt');
+    assert.equal(rdna2.path, '/compare/rx-6800-xt-vs-rx-6950-xt');
+    assert.equal(rdna2.left.id, 'rx6800xt');
+    assert.equal(rdna2.right.id, 'rx6950xt');
+    assert.equal(rdna2.left.support, 'unofficial');
+    assert.equal(rdna2.right.support, 'unofficial');
+    assert.equal(rdna2.right.bandwidthLabel, '576 GB/s');
   });
 
   it('builds picker query, reverse redirects, SEO, and Compare with links', () => {
@@ -175,7 +199,7 @@ describe('GPU vs GPU compare', () => {
 
     const seo = gpuCompareSeoRows();
     assert.ok(seo.some((row) => row.path === GPU_COMPARE_HUB));
-    assert.equal(seo.length, 137);
+    assert.equal(seo.length, 191);
     for (const row of seo) {
       assert.equal(shouldNoindex(row.path), false);
       assert.equal(isSitemapExcluded(row.path), false);

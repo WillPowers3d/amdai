@@ -27,7 +27,7 @@ import { urlPath } from './seo';
 
 export type RelatedLink = PathLink;
 
-const RELATED_MAX = 42;
+const RELATED_MAX = 48;
 
 const SKIP_RELATED = new Set([
   '/',
@@ -526,12 +526,15 @@ export function assertRelatedValid(
     '/gpus/rx-7900-xt',
     '/gpus/rx-7800-xt',
     '/gpus/rx-9070-xt',
+    '/gpus/rx-9070',
+    '/gpus/rx-9070-gre',
     '/gpus/rx-9060-xt',
     '/gpus/rx-7900-gre',
     '/gpus/rx-7700-xt',
     '/gpus/rx-7600-xt',
     '/gpus/rx-7600',
     '/gpus/rx-6800-xt',
+    '/gpus/rx-6950-xt',
     '/gpus/rx-6700-xt',
     '/gpus/w7900',
     '/gpus/w7800',
@@ -580,7 +583,7 @@ export function assertRelatedValid(
   if (!r9700.some((href) => href.startsWith('/recipes/'))) {
     errors.push('/gpus/r9700 missing recipe links');
   }
-  for (const href of ['/gpus/strix-halo', '/gpus/w7900', '/gpus/w7800', '/gpus/w7700', '/gpus/w6800', '/gpus/rx-7900-xtx', '/gpus/rx-7900-xt', '/gpus/rx-7800-xt', '/gpus/rx-9070-xt', '/gpus/rx-9060-xt', '/gpus/rx-7900-gre', '/gpus/rx-7700-xt', '/gpus/rx-7600-xt', '/gpus/rx-7600', '/gpus/rx-6800-xt', '/gpus/rx-6700-xt']) {
+  for (const href of ['/gpus/strix-halo', '/gpus/w7900', '/gpus/w7800', '/gpus/w7700', '/gpus/w6800', '/gpus/rx-7900-xtx', '/gpus/rx-7900-xt', '/gpus/rx-7800-xt', '/gpus/rx-9070-xt', '/gpus/rx-9070', '/gpus/rx-9070-gre', '/gpus/rx-9060-xt', '/gpus/rx-7900-gre', '/gpus/rx-7700-xt', '/gpus/rx-7600-xt', '/gpus/rx-7600', '/gpus/rx-6800-xt', '/gpus/rx-6950-xt', '/gpus/rx-6700-xt']) {
     if (!r9700.includes(href)) errors.push(`/gpus/r9700 missing ${href}`);
   }
   const xtx = relatedFor('/gpus/rx-7900-xtx').map((link) => link.href);

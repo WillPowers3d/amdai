@@ -188,6 +188,7 @@ export const LONG_CONTEXT_TIERS = [
     hrefs: [
       { href: '/calculator?model=qwen36&quant=q4_k_m&ctx=131072&gpu=rx7700xt', label: 'Calculator · 12 GB · 128K' },
       { href: '/gpus/rx-7700-xt', label: 'RX 7700 XT sheet' },
+      { href: '/gpus/rx-9070-gre', label: 'RX 9070 GRE sheet' },
       { href: '/gpus/rx-6700-xt', label: 'RX 6700 XT sheet' },
     ],
   },
@@ -199,8 +200,10 @@ export const LONG_CONTEXT_TIERS = [
       { href: '/calculator?model=qwen36&quant=q4_k_m&ctx=131072&gpu=rx7800xt', label: 'Calculator · 16 GB · 128K' },
       { href: '/gpus/rx-7800-xt', label: 'RX 7800 XT sheet' },
       { href: '/gpus/rx-9070-xt', label: 'RX 9070 XT sheet' },
+      { href: '/gpus/rx-9070', label: 'RX 9070 sheet' },
       { href: '/gpus/rx-7600-xt', label: 'RX 7600 XT sheet' },
       { href: '/gpus/rx-6800-xt', label: 'RX 6800 XT sheet' },
+      { href: '/gpus/rx-6950-xt', label: 'RX 6950 XT / 6900 XT sheet' },
     ],
   },
   {

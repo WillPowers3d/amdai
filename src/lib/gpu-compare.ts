@@ -75,6 +75,8 @@ export const GPU_COMPARE_IDS = [
   'rx7900xtx',
   'rx7900xt',
   'rx9070xt',
+  'rx9070',
+  'rx9070gre',
   'rx9060xt',
   'rx7900gre',
   'rx7800xt',
@@ -82,6 +84,7 @@ export const GPU_COMPARE_IDS = [
   'rx7600xt',
   'rx7600',
   'rx6800xt',
+  'rx6950xt',
   'rx6700xt',
   'strix-halo',
 ] as const;
@@ -97,6 +100,8 @@ export const GPU_COMPARE_SLUG: Record<GpuCompareId, string> = {
   rx7900xtx: 'rx-7900-xtx',
   rx7900xt: 'rx-7900-xt',
   rx9070xt: 'rx-9070-xt',
+  rx9070: 'rx-9070',
+  rx9070gre: 'rx-9070-gre',
   rx9060xt: 'rx-9060-xt',
   rx7900gre: 'rx-7900-gre',
   rx7800xt: 'rx-7800-xt',
@@ -104,6 +109,7 @@ export const GPU_COMPARE_SLUG: Record<GpuCompareId, string> = {
   rx7600xt: 'rx-7600-xt',
   rx7600: 'rx-7600',
   rx6800xt: 'rx-6800-xt',
+  rx6950xt: 'rx-6950-xt',
   rx6700xt: 'rx-6700-xt',
   'strix-halo': 'strix-halo',
 };
@@ -117,6 +123,8 @@ export const GPU_COMPARE_SHORT: Record<GpuCompareId, string> = {
   rx7900xtx: 'RX 7900 XTX',
   rx7900xt: 'RX 7900 XT',
   rx9070xt: 'RX 9070 XT',
+  rx9070: 'RX 9070',
+  rx9070gre: 'RX 9070 GRE',
   rx9060xt: 'RX 9060 XT',
   rx7900gre: 'RX 7900 GRE',
   rx7800xt: 'RX 7800 XT',
@@ -124,6 +132,7 @@ export const GPU_COMPARE_SHORT: Record<GpuCompareId, string> = {
   rx7600xt: 'RX 7600 XT',
   rx7600: 'RX 7600',
   rx6800xt: 'RX 6800 XT',
+  rx6950xt: 'RX 6950 XT',
   rx6700xt: 'RX 6700 XT',
   'strix-halo': 'Strix Halo',
 };
@@ -137,6 +146,8 @@ export const GPU_COMPARE_PRODUCT: Record<GpuCompareId, string> = {
   rx7900xtx: 'rx7900xtx',
   rx7900xt: 'rx7900xt',
   rx9070xt: 'rx9070xt',
+  rx9070: 'rx9070',
+  rx9070gre: 'rx9070gre',
   rx9060xt: 'rx9060xt',
   rx7900gre: 'rx7900gre',
   rx7800xt: 'rx7800xt',
@@ -144,6 +155,7 @@ export const GPU_COMPARE_PRODUCT: Record<GpuCompareId, string> = {
   rx7600xt: 'rx7600xt',
   rx7600: 'rx7600',
   rx6800xt: 'rx6800xt',
+  rx6950xt: 'rx6950xt',
   rx6700xt: 'rx6700xt',
   'strix-halo': 'strix-halo',
 };
@@ -162,6 +174,12 @@ export const GPU_COMPARE_FEATURED_PAIRS = [
   ['rx7900xtx', 'rx7900xt'],
   ['rx7900xtx', 'rx9070xt'],
   ['rx9070xt', 'rx9060xt'],
+  ['r9700', 'rx9070'],
+  ['rx9070xt', 'rx9070'],
+  ['rx9070', 'rx9070gre'],
+  ['rx9070gre', 'rx9060xt'],
+  ['w6800', 'rx6950xt'],
+  ['rx6950xt', 'rx6800xt'],
   ['r9700', 'strix-halo'],
   ['rx7900gre', 'rx9070xt'],
   ['rx7900xt', 'rx7900gre'],
@@ -186,6 +204,8 @@ export const GPU_COMPARE_SHEET_PATH: Record<GpuCompareId, string> = {
   rx7900xtx: consumerPath('rx7900xtx'),
   rx7900xt: consumerPath('rx7900xt'),
   rx9070xt: consumerPath('rx9070xt'),
+  rx9070: consumerPath('rx9070'),
+  rx9070gre: consumerPath('rx9070gre'),
   rx9060xt: consumerPath('rx9060xt'),
   rx7900gre: consumerPath('rx7900gre'),
   rx7800xt: consumerPath('rx7800xt'),
@@ -193,6 +213,7 @@ export const GPU_COMPARE_SHEET_PATH: Record<GpuCompareId, string> = {
   rx7600xt: consumerPath('rx7600xt'),
   rx7600: consumerPath('rx7600'),
   rx6800xt: consumerPath('rx6800xt'),
+  rx6950xt: consumerPath('rx6950xt'),
   rx6700xt: consumerPath('rx6700xt'),
   'strix-halo': STRIX_HALO_PATH,
 };
@@ -802,7 +823,7 @@ export function assertGpuCompareValid(cards: RunCard[] = []): string[] {
   if (pages.length !== expected) errors.push(`expected ${expected} pair pages; got ${pages.length}`);
 
   const ids = [...GPU_COMPARE_IDS];
-  if (ids.join(',') !== 'r9700,w7900,w7800,w7700,w6800,rx7900xtx,rx7900xt,rx9070xt,rx9060xt,rx7900gre,rx7800xt,rx7700xt,rx7600xt,rx7600,rx6800xt,rx6700xt,strix-halo') {
+  if (ids.join(',') !== 'r9700,w7900,w7800,w7700,w6800,rx7900xtx,rx7900xt,rx9070xt,rx9070,rx9070gre,rx9060xt,rx7900gre,rx7800xt,rx7700xt,rx7600xt,rx7600,rx6800xt,rx6950xt,rx6700xt,strix-halo') {
     errors.push(`catalog drifted: ${ids.join(', ')}`);
   }
 
@@ -895,10 +916,15 @@ export function assertGpuCompareValid(cards: RunCard[] = []): string[] {
   }
   for (const href of [
     '/compare/r9700-vs-rx-9070-xt',
+    '/compare/r9700-vs-rx-9070',
     '/compare/r9700-vs-w7900',
     '/compare/w7900-vs-rx-7900-xtx',
     '/compare/w6800-vs-rx-6800-xt',
+    '/compare/w6800-vs-rx-6950-xt',
     '/compare/rx-9070-xt-vs-rx-9060-xt',
+    '/compare/rx-9070-xt-vs-rx-9070',
+    '/compare/rx-9070-vs-rx-9070-gre',
+    '/compare/rx-6800-xt-vs-rx-6950-xt',
     '/compare/r9700-vs-strix-halo',
     '/compare/rx-9070-xt-vs-rx-7900-gre',
     '/compare/rx-7700-xt-vs-rx-6800-xt',
