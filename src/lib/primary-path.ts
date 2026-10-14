@@ -291,6 +291,7 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
     { href: '/disclosure', label: 'Affiliate disclosure' },
   ],
   '/gpus/r9700': [
+    { href: '/kv-cache', label: 'KV cache' },
     { href: '/compare/gpus', label: 'Compare GPUs' },
     { href: '/setup', label: 'First-run setup' },
     { href: DAILY_RECIPE, label: 'Daily-driver recipe' },
@@ -727,6 +728,7 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
     { href: '/stack-lab', label: 'Stack Lab' },
   ],
   '/long-context': [
+    { href: '/kv-cache', label: 'KV cache' },
     { href: '/calculator', label: 'Calculator' },
     { href: '/compare/one-vs-two-gpu', label: 'One vs split' },
     { href: '/compare/q4-q5-q6', label: 'Q6 vs Q5 vs Q4' },
@@ -735,6 +737,17 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
     { href: '/flash-ram-offload', label: 'Flash RAM offload' },
     { href: '/troubleshoot#oom-context', label: 'Long-context OOM' },
     { href: '/benchmarks', label: 'Benchmarks' },
+  ],
+  '/kv-cache': [
+    { href: '/long-context', label: 'Long context' },
+    { href: '/tuning', label: 'Speed up llama.cpp' },
+    { href: '/quants', label: 'Quants · KV types' },
+    { href: '/calculator', label: 'Calculator' },
+    { href: '/gpus/r9700', label: 'R9700 measured page' },
+    { href: '/glossary#kv-cache', label: 'Glossary · KV cache' },
+    { href: '/results', label: 'Run cards' },
+    { href: '/flash-ram-offload', label: 'Flash RAM offload' },
+    { href: '/troubleshoot#oom-context', label: 'Long-context OOM' },
   ],
   '/rag': [
     { href: '/setup', label: 'First-run setup' },
@@ -772,6 +785,7 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
     { href: '/speculative-decoding', label: 'Speculative decoding' },
     { href: '/guides/quantize-gguf', label: 'Make GGUF quants' },
     { href: '/backends/llamacpp', label: 'llama.cpp' },
+    { href: '/kv-cache', label: 'KV cache' },
     { href: '/long-context', label: 'Long context' },
     { href: '/multi-gpu', label: 'Dual / multi-GPU' },
     { href: '/power', label: 'Power and PSU' },

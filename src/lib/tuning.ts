@@ -272,6 +272,7 @@ export const TUNING_KNOBS: TuningKnob[] = [
     exampleNote: 'House cards stay f16. q8_0 quality and decode stay not measured yet.',
     stackLab: 'Stack Lab A/B: prefill / context. Measure q8_0 KV on your box via /stack-lab planner and /amdai-bench.',
     links: [
+      { href: '/kv-cache', label: 'KV cache' },
       { href: '/long-context', label: 'Long context' },
       { href: '/quants', label: 'KV types' },
       { href: '/calculator', label: 'Calculator' },
@@ -451,6 +452,7 @@ export const TUNING_SECTIONS = [
 export const TUNING_HUB_LINKS: TuningLink[] = [
   { href: '/speculative-decoding', label: 'Speculative decoding' },
   { href: '/backends/llamacpp', label: 'llama.cpp' },
+  { href: '/kv-cache', label: 'KV cache' },
   { href: '/long-context', label: 'Long context' },
   { href: '/multi-gpu', label: 'Dual / multi-GPU' },
   { href: '/power', label: 'Power' },
@@ -465,6 +467,7 @@ export const TUNING_HUB_LINKS: TuningLink[] = [
 
 export const REQUIRED_TUNING_HREFS = [
   '/speculative-decoding',
+  '/kv-cache',
   '/long-context',
   '/multi-gpu',
   '/power',

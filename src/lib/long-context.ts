@@ -104,6 +104,7 @@ export const LONG_CONTEXT_FAQ = [
     answer:
       'House default is f16 KV. q8_0 KV is about one byte per element instead of two, so the cache is smaller. That quality trade is not measured on local-desktop — treat any q8_0 KV speed or recall claim as a labeled estimate. Do not confuse q8_0 KV with Q8 weights.',
     links: [
+      { href: '/kv-cache', label: 'KV cache' },
       { href: '/quants', label: 'Quants · KV types' },
       { href: '/calculator', label: 'Calculator' },
     ],
@@ -146,6 +147,7 @@ export const LONG_CONTEXT_ENGINE = [
     title: '--cache-type-k/v (house default f16)',
     body: 'Overnight 35B llama-bench cards recorded -ctk f16 -ctv f16 (same as --cache-type-k/v f16). That is the AMDai default. q8_0 is the smaller KV type the calculator lists. Quality and tok/s for q8_0 KV are not measured yet.',
     links: [
+      { href: '/kv-cache', label: 'KV cache' },
       { href: '/quants', label: 'KV types' },
       { href: '/backends/llamacpp', label: 'llama.cpp' },
     ],
@@ -252,6 +254,7 @@ export const LONG_CONTEXT_SECTIONS = [
 ] as const;
 
 export const LONG_CONTEXT_HUB: LongContextLink[] = [
+  { href: '/kv-cache', label: 'KV cache' },
   { href: '/compare', label: 'Compare 35B' },
   { href: '/compare/one-vs-two-gpu', label: 'One vs split' },
   { href: '/compare/q4-q5-q6', label: 'Q6 vs Q5 vs Q4' },
@@ -273,6 +276,7 @@ export const LONG_CONTEXT_FLASH_GAPS = [
 ];
 
 export const REQUIRED_LONG_CONTEXT_HREFS = [
+  '/kv-cache',
   '/glossary#context-length',
   '/glossary#kv-cache',
   '/glossary#prefill-decode',
@@ -355,6 +359,7 @@ export const LONG_CONTEXT_KV = `
   trade — less VRAM, unknown quality — is not measured yet on local-desktop. q8_0 as
   cache is not “running Q8 weights.” ${RAM_MIN_LABEL} and ${RAM_FULL_LABEL}
   stay the shopper RAM lines when offload or long context appears.
+  The cited shopper page is /kv-cache.
 `.replace(/\s+/g, ' ').trim();
 
 export const LONG_CONTEXT_QUANTS = `

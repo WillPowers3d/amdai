@@ -95,6 +95,7 @@ describe('OG catalog', () => {
     assert.equal(ogSlug('/image-gen'), 'image-gen');
     assert.equal(ogSlug('/speech'), 'speech');
     assert.equal(ogSlug('/long-context'), 'long-context');
+    assert.equal(ogSlug('/kv-cache'), 'kv-cache');
     assert.equal(ogSlug('/rag'), 'rag');
     assert.equal(ogSlug('/fine-tuning'), 'fine-tuning');
     assert.equal(ogSlug('/tuning'), 'tuning');

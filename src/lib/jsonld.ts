@@ -23,6 +23,7 @@ import { QUANTIZE_GGUF_FAQ, QUANTIZE_GGUF_HOWTO_STEPS, QUANTIZE_GGUF_PUBLISHED }
 import { IMAGE_GEN_HOWTO_STEPS, IMAGE_GEN_PUBLISHED } from './image-gen';
 import { SPEECH_HOWTO_STEPS, SPEECH_PUBLISHED } from './speech';
 import { LONG_CONTEXT_FAQ, LONG_CONTEXT_PUBLISHED } from './long-context';
+import { KV_CACHE_FAQ, KV_CACHE_HOWTO_STEPS, KV_CACHE_PUBLISHED } from './kv-cache';
 import { RAG_FAQ, RAG_HOWTO_STEPS, RAG_PUBLISHED } from './rag';
 import { POWER_FAQ, POWER_HOWTO_STEPS, POWER_PUBLISHED } from './power';
 import { VISION_FAQ, VISION_HOWTO_STEPS, VISION_PUBLISHED } from './vision';
@@ -639,6 +640,29 @@ export function pageJsonLd(input: {
       }),
     );
     nodes.push(faqPageJsonLd(LONG_CONTEXT_FAQ, url));
+    return nodes;
+  }
+  if (path === '/kv-cache') {
+    nodes.push(
+      techArticleJsonLd({
+        headline: input.title.replace(/ · AMDai$/, ''),
+        description: input.description,
+        url,
+        published: dates?.published ?? KV_CACHE_PUBLISHED,
+        modified: dates?.modified ?? KV_CACHE_PUBLISHED,
+      }),
+    );
+    nodes.push(
+      howToJsonLd({
+        name: input.title.replace(/ · AMDai$/, ''),
+        description: input.description,
+        url,
+        published: dates?.published ?? KV_CACHE_PUBLISHED,
+        modified: dates?.modified ?? KV_CACHE_PUBLISHED,
+        steps: KV_CACHE_HOWTO_STEPS,
+      }),
+    );
+    nodes.push(faqPageJsonLd(KV_CACHE_FAQ, url));
     return nodes;
   }
   if (path === '/vision') {

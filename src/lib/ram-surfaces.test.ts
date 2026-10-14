@@ -39,6 +39,7 @@ describe('shopper RAM labels', () => {
     assert.ok(RAM_OFFLOAD_SURFACES.includes('/image-gen'));
     assert.ok(RAM_OFFLOAD_SURFACES.includes('/speech'));
     assert.ok(RAM_OFFLOAD_SURFACES.includes('/long-context'));
+    assert.ok(RAM_OFFLOAD_SURFACES.includes('/kv-cache'));
     assert.ok(RAM_OFFLOAD_SURFACES.includes('/rag'));
     assert.ok(RAM_OFFLOAD_SURFACES.includes('/vision'));
     assert.ok(RAM_OFFLOAD_SURFACES.includes('/power'));

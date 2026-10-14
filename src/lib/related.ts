@@ -177,6 +177,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/speculative-decoding', label: 'Speculative decoding' },
       { href: '/guides/quantize-gguf', label: 'Make GGUF quants' },
       { href: '/backends/llamacpp', label: 'llama.cpp' },
+      { href: '/kv-cache', label: 'KV cache' },
       { href: '/long-context', label: 'Long context' },
       { href: '/multi-gpu', label: 'Dual / multi-GPU' },
       { href: '/power', label: 'Power and PSU' },
@@ -350,6 +351,7 @@ function topicLinks(path: string): RelatedLink[] {
   if (path === '/long-context') {
     return [
       { href: '/long-context', label: 'Long context' },
+      { href: '/kv-cache', label: 'KV cache' },
       { href: '/compare', label: 'Compare 35B' },
       { href: '/compare/one-vs-two-gpu', label: 'One vs split' },
       { href: '/compare/q4-q5-q6', label: 'Q6 vs Q5 vs Q4' },
@@ -360,6 +362,31 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/gpus/r9700', label: 'R9700 measured page' },
       { href: '/rag', label: 'RAG on Radeon' },
       { href: '/tuning', label: 'Speed up llama.cpp' },
+    ];
+  }
+  if (path === '/kv-cache') {
+    return [
+      { href: '/long-context', label: 'Long context' },
+      { href: '/tuning', label: 'Speed up llama.cpp' },
+      { href: '/quants', label: 'Quants' },
+      { href: '/calculator', label: 'Calculator' },
+      { href: '/gpus/r9700', label: 'R9700 measured page' },
+      { href: '/glossary', label: 'Glossary' },
+      { href: '/results', label: 'Run cards' },
+      { href: '/flash-ram-offload', label: 'Flash RAM offload' },
+      { href: '/backends/llamacpp', label: 'llama.cpp' },
+      { href: '/stack-lab', label: 'Stack Lab' },
+      { href: '/amdai-bench', label: 'amdai-bench' },
+    ];
+  }
+  if (path === '/calculator' || path === '/quants') {
+    return [
+      { href: '/kv-cache', label: 'KV cache' },
+      { href: '/calculator', label: 'Calculator' },
+      { href: '/quants', label: 'Quants' },
+      { href: '/long-context', label: 'Long context' },
+      { href: '/tuning', label: 'Speed up llama.cpp' },
+      { href: '/gpus/r9700', label: 'R9700 measured page' },
     ];
   }
   if (path === '/rag') {
@@ -497,6 +524,7 @@ export function relatedFor(pathname: string): RelatedLink[] {
     add(out, seen, '/budget', 'Budget');
     add(out, seen, '/fine-tuning', 'Fine-tuning on Radeon');
     add(out, seen, '/tuning', 'Speed up llama.cpp');
+    add(out, seen, '/kv-cache', 'KV cache');
     add(out, seen, '/can-run', 'Can my Radeon run it?');
     if (id) {
       const canGpu = canRunGpuIdFromInput(id);
@@ -565,6 +593,7 @@ export function relatedFor(pathname: string): RelatedLink[] {
       add(out, seen, '/calculator', 'Calculator');
       add(out, seen, '/gpus/r9700', 'R9700 measured page');
       add(out, seen, '/long-context', 'Long context');
+      add(out, seen, '/kv-cache', 'KV cache');
       add(out, seen, '/gpus/rx-7900-xtx', 'RX 7900 XTX');
       add(out, seen, '/gpus/rx-7900-xt', 'RX 7900 XT');
       add(out, seen, '/gpus/rx-7800-xt', 'RX 7800 XT');
@@ -703,6 +732,7 @@ export function assertRelatedValid(
     '/vision',
     '/speech',
     '/long-context',
+    '/kv-cache',
     '/rag',
     '/power',
     '/fine-tuning',

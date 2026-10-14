@@ -448,6 +448,7 @@ export const GLOSSARY: GlossaryEntry[] = [
     deeper:
       'The calculator’s KV estimate is 2 × kv_layers × kv_heads × head_dim × context × bytes. Hybrid Qwen cards only grow KV on full-attention layers — that count comes from the public model card. Official 35B sweep cards use f16.',
     links: [
+      { href: '/kv-cache', label: 'KV cache on a Radeon GPU' },
       { href: '/quants', label: 'Quants · KV types' },
       { href: '/calculator', label: 'Calculator' },
       { href: '/tuning', label: 'Speed up llama.cpp' },

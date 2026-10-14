@@ -206,6 +206,11 @@ export const R9700_MORE: R9700MoreLink[] = [
     body: 'Ubuntu 24.04+ to first token, plus an honest Windows path.',
   },
   {
+    href: '/kv-cache',
+    label: 'KV cache',
+    body: 'f16 vs q8_0 vs q4_0. Measured 35B VRAM on this card. Estimates labeled.',
+  },
+  {
     href: '/calculator',
     label: 'Calculator',
     body: 'Size a GGUF against 32 GB. Client-side, no prices.',
@@ -237,6 +242,7 @@ export const REQUIRED_R9700_HREFS = [
   '/two-r9700',
   '/flash-daily',
   '/qwen',
+  '/kv-cache',
   '/calculator',
   '/budget',
   '/gpus',
