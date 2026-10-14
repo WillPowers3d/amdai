@@ -13,6 +13,7 @@ import { LONG_CONTEXT_FAQ, LONG_CONTEXT_PUBLISHED } from './long-context';
 import { RAG_FAQ, RAG_HOWTO_STEPS, RAG_PUBLISHED } from './rag';
 import { POWER_FAQ, POWER_HOWTO_STEPS, POWER_PUBLISHED } from './power';
 import { VISION_FAQ, VISION_HOWTO_STEPS, VISION_PUBLISHED } from './vision';
+import { FINE_TUNING_FAQ, FINE_TUNING_HOWTO_STEPS, FINE_TUNING_PUBLISHED } from './fine-tuning';
 import {
   TROUBLESHOOT_HOWTO_STEPS,
   TROUBLESHOOT_PUBLISHED,
@@ -491,6 +492,20 @@ export function pageJsonLd(input: {
       }),
     );
     nodes.push(faqPageJsonLd(POWER_FAQ, url));
+    return nodes;
+  }
+  if (path === '/fine-tuning') {
+    nodes.push(
+      howToJsonLd({
+        name: input.title.replace(/ · AMDai$/, ''),
+        description: input.description,
+        url,
+        published: dates?.published ?? FINE_TUNING_PUBLISHED,
+        modified: dates?.modified ?? FINE_TUNING_PUBLISHED,
+        steps: FINE_TUNING_HOWTO_STEPS,
+      }),
+    );
+    nodes.push(faqPageJsonLd(FINE_TUNING_FAQ, url));
     return nodes;
   }
 

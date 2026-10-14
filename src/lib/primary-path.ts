@@ -497,6 +497,17 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
     { href: '/compare/radeon-vs-nvidia', label: 'Radeon vs NVIDIA' },
     { href: '/flash-ram-offload', label: 'Flash RAM offload' },
   ],
+  '/fine-tuning': [
+    { href: '/setup', label: 'First-run setup' },
+    { href: '/setup/windows', label: 'Windows setup' },
+    { href: '/rocm/versions', label: 'ROCm versions' },
+    { href: '/rocm-problems/rocm-10-0-finetune-reset', label: 'Fine-tune reset' },
+    { href: '/gpus/r9700', label: 'R9700 measured page' },
+    { href: '/quants', label: 'Quants' },
+    { href: '/calculator', label: 'Calculator' },
+    { href: '/models', label: 'House models' },
+    { href: '/amdai-bench', label: 'amdai-bench' },
+  ],
 };
 
 export const HIGH_TRAFFIC_PATHS = Object.keys(NEXT_STEPS);

@@ -574,8 +574,9 @@ export const FAQ_ENTRIES: FaqItem[] = [
     group: 'troubleshooting',
     question: 'Can I fine-tune like a 4090 blog post?',
     answer:
-      'PyTorch ROCm exists. ROCm 10.0 has a known issue: training / fine-tune GPU resets on R9700 — try TORCH_BLAS_PREFER_HIPBLASLT=0. That row is cited, not a measured tokens-per-second. Community training writeups often use older ROCm; keep inference on the pin you actually run. We do not invent a fine-tune speed.',
+      'PyTorch ROCm exists. The cited shopper guide is /fine-tuning — LoRA / QLoRA on consumer Radeon, then export to llama.cpp. ROCm 10.0 has a known issue: training / fine-tune GPU resets on R9700 — try TORCH_BLAS_PREFER_HIPBLASLT=0. That row is cited, not a measured tokens-per-second. Community training writeups often use older ROCm; keep inference on the pin you actually run. Training speed is not yet measured on our R9700s. Q3 stays a labeled estimate.',
     links: [
+      { href: '/fine-tuning', label: 'Fine-tuning on Radeon' },
       { href: '/rocm-problems/rocm-10-0-finetune-reset', label: 'Fine-tune reset' },
       { href: '/rocm-problems', label: 'ROCm problems' },
       { href: '/rocm', label: 'What is ROCm' },
@@ -640,6 +641,7 @@ export const REQUIRED_FAQ_HREFS = [
   '/rag',
   '/vision',
   '/power',
+  '/fine-tuning',
 ] as const;
 
 const BANNED_VISIBLE = /Qwen2\.5|Qwen3-8B/i;

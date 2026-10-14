@@ -32,6 +32,7 @@ export const SETUP_INTRO_LINKS: SetupLink[] = [
   { href: '/start', label: 'Getting started' },
   { href: '/faq', label: 'FAQ' },
   { href: '/setup/windows', label: 'Windows guide' },
+  { href: '/fine-tuning', label: 'Fine-tuning' },
 ];
 
 export const SETUP_SECTIONS = [
@@ -262,6 +263,7 @@ export const REQUIRED_SETUP_HREFS = [
   '/troubleshooting',
   '/troubleshoot',
   '/setup/windows',
+  '/fine-tuning',
 ] as const;
 
 const BANNED_VISIBLE = /Qwen2\.5|Qwen3-8B/i;

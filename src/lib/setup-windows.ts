@@ -203,6 +203,7 @@ export const SETUP_WINDOWS_HUB_LINKS: SetupWindowsLink[] = [
   { href: '/gpus/r9700', label: 'R9700' },
   { href: '/benchmarks', label: 'Benchmarks' },
   { href: '/start', label: 'Getting started' },
+  { href: '/fine-tuning', label: 'Fine-tuning' },
 ];
 
 export const REQUIRED_SETUP_WINDOWS_HREFS = [
@@ -217,6 +218,7 @@ export const REQUIRED_SETUP_WINDOWS_HREFS = [
   '/faq',
   '/glossary',
   '/bios',
+  '/fine-tuning',
 ] as const;
 
 const BANNED = /Qwen2\.5|Qwen3-8B/i;

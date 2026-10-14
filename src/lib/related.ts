@@ -81,6 +81,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/speech', label: 'Speech on Radeon' },
       { href: '/long-context', label: 'Long context' },
       { href: '/rag', label: 'RAG on Radeon' },
+      { href: '/fine-tuning', label: 'Fine-tuning on Radeon' },
     ];
   }
   if (path === '/faq' || path === '/glossary') {
@@ -92,6 +93,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/rocm/glossary', label: 'ROCm glossary' },
       { href: '/backends', label: 'Backends' },
       { href: '/long-context', label: 'Long context' },
+      { href: '/fine-tuning', label: 'Fine-tuning on Radeon' },
     ];
   }
   if (path === '/troubleshoot' || path === '/troubleshooting' || path.startsWith('/troubleshoot/')) {
@@ -125,12 +127,26 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/long-context', label: 'Long context' },
     ];
   }
+  if (path === '/fine-tuning') {
+    return [
+      { href: '/setup', label: 'First-run setup' },
+      { href: '/setup/windows', label: 'Windows setup' },
+      { href: '/rocm/versions', label: 'ROCm versions' },
+      { href: '/rocm-problems/rocm-10-0-finetune-reset', label: 'Fine-tune reset' },
+      { href: '/gpus/r9700', label: 'R9700 measured page' },
+      { href: '/quants', label: 'Quants' },
+      { href: '/calculator', label: 'Calculator' },
+      { href: '/models', label: 'House models' },
+      { href: '/amdai-bench', label: 'amdai-bench' },
+    ];
+  }
   if (path.startsWith('/rocm') && !path.startsWith('/rocm-problems')) {
     return [
       { href: '/rocm', label: 'What is ROCm' },
       { href: '/rocm-problems', label: 'ROCm problems' },
       { href: '/glossary', label: 'Glossary' },
       { href: '/setup', label: 'First-run setup' },
+      { href: '/fine-tuning', label: 'Fine-tuning on Radeon' },
     ];
   }
   if (path.startsWith('/rocm-problems')) {
@@ -314,6 +330,7 @@ export function relatedFor(pathname: string): RelatedLink[] {
     for (const link of CONSUMER_NAV_LINKS) add(out, seen, link.href, link.label);
     add(out, seen, '/calculator', 'Calculator');
     add(out, seen, '/budget', 'Budget');
+    add(out, seen, '/fine-tuning', 'Fine-tuning on Radeon');
     for (const model of MODEL_PAGES) add(out, seen, `/models/${model.id}`, model.name);
     if (id) {
       add(out, seen, '/results', 'Run cards');
@@ -458,6 +475,7 @@ export function assertRelatedValid(
     '/long-context',
     '/rag',
     '/power',
+    '/fine-tuning',
     '/hardware',
   ],
 ): string[] {

@@ -213,6 +213,7 @@ export const CRUMB_LABELS: Record<string, string> = {
   '/rag': 'RAG',
   '/vision': 'Vision',
   '/power': 'Power',
+  '/fine-tuning': 'Fine-tuning',
   '/setup': 'First-run setup',
   '/setup/windows': 'Windows setup',
   '/stack-lab': 'Stack Lab',
@@ -362,6 +363,12 @@ setMeta(
   'Cited AMD board power (TBP) per Radeon and PSU sizing, including dual R9700. No invented watts or prices.',
 );
 setDate('/power', '2026-10-14');
+setMeta(
+  '/fine-tuning',
+  'Fine-tuning on Radeon',
+  'Cited LoRA / QLoRA on consumer Radeon. PyTorch ROCm, Unsloth, PEFT/TRL. Not yet measured on our R9700s. Q3 is a labeled estimate.',
+);
+setDate('/fine-tuning', '2026-10-14');
 setMeta(
   '/stacks',
   'Recommended stacks',

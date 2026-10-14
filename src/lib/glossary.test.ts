@@ -64,6 +64,8 @@ const ALLOWED_HREFS = new Set([
   '/tutorials/serve-qwen',
   '/tutorials/verify-rocm',
   '/vision',
+  '/fine-tuning',
+  '/setup/windows',
 ]);
 
 describe('consumer glossary', () => {

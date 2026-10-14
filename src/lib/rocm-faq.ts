@@ -82,7 +82,7 @@ export const ROCM_FAQ: RocmFaqItem[] = [
     id: 'fine-tune',
     question: 'Can I fine-tune like a 4090 blog post?',
     answer:
-      'PyTorch ROCm exists. Fine-tune cookbooks are thinner than CUDA. This site has a dated note about training/fine-tune GPU resets on R9700 in the 10.0 era and a TORCH_BLAS_PREFER_HIPBLASLT=0 suggestion — treat that as a snapshot, not a current KI we have re-verified today. Prefer inference on the pin you already trust.',
+      'PyTorch ROCm exists. The cited shopper guide is /fine-tuning — LoRA / QLoRA, then export to llama.cpp. This site has a dated note about training/fine-tune GPU resets on R9700 in the 10.0 era and a TORCH_BLAS_PREFER_HIPBLASLT=0 suggestion — treat that as a snapshot, not a current KI we have re-verified today. Prefer inference on the pin you already trust. Training speed is not yet measured on our R9700s.',
   },
   {
     id: 'smi',

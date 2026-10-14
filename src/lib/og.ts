@@ -384,6 +384,12 @@ export const OG_CARDS: OgCard[] = [
     alt: 'AMDai local RAG on Radeon — cited llama.cpp embeddings guide, not yet measured',
   },
   {
+    slug: 'fine-tuning',
+    title: 'Fine-tuning on Radeon',
+    lede: 'LoRA / QLoRA. Not yet measured on our R9700s',
+    alt: 'AMDai fine-tuning on Radeon — cited LoRA / QLoRA guide, not yet measured on our R9700s',
+  },
+  {
     slug: 'troubleshoot',
     title: 'Troubleshoot',
     lede: 'Symptom-first fixes. Cited commands only',

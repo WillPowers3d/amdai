@@ -51,6 +51,9 @@ export const REQUIRED_GLOSSARY_IDS = [
   'vulkan',
   'hip',
   'rebar',
+  'lora',
+  'qlora',
+  'adapter',
 ] as const;
 
 export const GLOSSARY: GlossaryEntry[] = [
@@ -70,6 +73,23 @@ export const GLOSSARY: GlossaryEntry[] = [
       { href: '/stacks', label: 'Recommended stacks' },
     ],
     seeAlso: ['instruct', 'gguf', 'house-rules'],
+  },
+  {
+    id: 'adapter',
+    term: 'Adapter',
+    aliases: ['LoRA adapter', 'PEFT adapter', 'merge_and_unload'],
+    letter: 'A',
+    definition:
+      'The small trained matrices from LoRA or QLoRA. The base model stays frozen. After training you merge the adapter into the base (PEFT merge_and_unload) before converting to GGUF for llama.cpp.',
+    why: 'On AMDai, training is a cited side path — inference stays llama.cpp first. Speeds are not yet measured on our R9700s. Q3 stays a labeled estimate after you quantize the merged file.',
+    deeper:
+      'AMD’s Radeon playbook merges with merge_and_unload then save_pretrained. llama.cpp convert_hf_to_gguf.py turns that folder into a GGUF. Quantize Q6_K / Q5_K_M / Q4_K_M; Q3_K_M is a labeled estimate.',
+    links: [
+      { href: '/fine-tuning', label: 'Fine-tuning on Radeon' },
+      { href: '/quants', label: 'Quants' },
+      { href: '/backends/llamacpp', label: 'llama.cpp' },
+    ],
+    seeAlso: ['lora', 'qlora', 'gguf'],
   },
   {
     id: 'amdai',
@@ -376,6 +396,22 @@ export const GLOSSARY: GlossaryEntry[] = [
     seeAlso: ['vulkan', 'hip', 'gguf', 'mmproj'],
   },
   {
+    id: 'lora',
+    term: 'LoRA',
+    aliases: ['Low-Rank Adaptation', 'PEFT LoRA'],
+    letter: 'L',
+    definition:
+      'Parameter-efficient fine-tuning: freeze the base weights and train small low-rank matrices. Unsloth’s table treats LoRA as 16-bit. Hugging Face PEFT/TRL and AMD’s Radeon playbook document it.',
+    why: 'Cheaper than a full retrain, hungrier than QLoRA. Unsloth’s 27B LoRA minimum is 64 GB — not a 16 GB card. Training speed is not yet measured on our R9700s.',
+    deeper:
+      'AMD’s playbook (Gemma 3 4B) lists LoRA typical VRAM 24–32 GB and requires at least 16 GB dedicated VRAM plus 32 GB system RAM on Linux. That is their 4B example, not a 35B number we invent.',
+    links: [
+      { href: '/fine-tuning', label: 'Fine-tuning on Radeon' },
+      { href: '/gpus/r9700', label: 'R9700' },
+    ],
+    seeAlso: ['qlora', 'adapter', 'vram'],
+  },
+  {
     id: 'mmproj',
     term: 'mmproj',
     aliases: ['multimodal projector', 'libmtmd', 'llama-mtmd-cli'],
@@ -479,6 +515,23 @@ export const GLOSSARY: GlossaryEntry[] = [
       { href: '/budget', label: 'Budget' },
     ],
     seeAlso: ['gguf', 'unsloth-ud', 'kv-cache'],
+  },
+  {
+    id: 'qlora',
+    term: 'QLoRA',
+    aliases: ['Quantized LoRA', '4-bit LoRA', 'load_in_4bit'],
+    letter: 'Q',
+    definition:
+      'LoRA plus a 4-bit quantized base. Unsloth’s table treats QLoRA as 4-bit. bitsandbytes is the usual loader. AMD’s Radeon playbook: QLoRA is Linux-only because bitsandbytes is not well supported on Windows.',
+    why: 'The memory-efficient path on a home Radeon. Unsloth 27B QLoRA minimum is 22 GB; 70B is 41 GB. Those are Unsloth minima, not local-desktop runs. Training speed is not yet measured on our R9700s.',
+    deeper:
+      'HF TRL documents load_in_4bit with peft_config. Unsloth documents bitsandbytes QLoRA on Radeon and CDNA. After training, merge the adapter and convert to GGUF — llama.cpp first for tokens.',
+    links: [
+      { href: '/fine-tuning', label: 'Fine-tuning on Radeon' },
+      { href: '/setup/windows', label: 'Windows setup' },
+      { href: '/quants', label: 'Quants' },
+    ],
+    seeAlso: ['lora', 'adapter', 'quant'],
   },
   {
     id: 'qwen36',

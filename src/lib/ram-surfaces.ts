@@ -48,6 +48,7 @@ export const RAM_OFFLOAD_SURFACES = [
   '/rag',
   '/vision',
   '/power',
+  '/fine-tuning',
   '/benchmarks',
   '/stacks',
   '/harnesses/hermes',
@@ -113,6 +114,7 @@ export function assertRamSurfacesValid(): string[] {
   if (!RAM_OFFLOAD_SURFACES.includes('/rag')) errors.push('missing /rag');
   if (!RAM_OFFLOAD_SURFACES.includes('/vision')) errors.push('missing /vision');
   if (!RAM_OFFLOAD_SURFACES.includes('/power')) errors.push('missing /power');
+  if (!RAM_OFFLOAD_SURFACES.includes('/fine-tuning')) errors.push('missing /fine-tuning');
   if (!isRamOffloadSurface('/recipes/qwen36-35b.llamacpp-vulkan.262k')) {
     errors.push('recipe pages must be RAM surfaces');
   }

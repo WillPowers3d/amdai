@@ -160,6 +160,11 @@ export const R9700_MORE: R9700MoreLink[] = [
     body: 'Plain-English ROCm, GGUF, Q3–Q6, KV cache, run cards.',
   },
   {
+    href: '/fine-tuning',
+    label: 'Fine-tuning on Radeon',
+    body: 'Cited LoRA / QLoRA, then export to llama.cpp. Speeds not yet measured on our R9700s. Q3 is a labeled estimate.',
+  },
+  {
     href: '/compare/q4-q5-q6',
     label: 'Q6 / Q5 / Q4 + Q3 estimate',
     body: 'Quant side-by-side. Q3 stays a labeled estimate.',
