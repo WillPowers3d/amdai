@@ -219,7 +219,7 @@ export const FAQ_ENTRIES: FaqItem[] = [
     group: 'getting-started',
     question: 'Ubuntu or Windows for a first local LLM box?',
     answer:
-      'Ubuntu LTS named on AMD’s current ROCm matrix is the path we write. First-run setup walks Ubuntu 24.04+ to the first token. Linux Mint, Pop!_OS, and Kubuntu are Ubuntu-based but are not on that 10.1 OS row — follow /setup only as unofficial, not verified on our rig. Cited Fedora and Arch guides live at /setup/fedora and /setup/arch. Docker or Podman is a cited isolated path at /setup/docker — official llama.cpp images, not a container tok/s card. LM Studio is a cited desktop llama.cpp wrapper at /setup/lm-studio — Vulkan runtime first on Radeon, local /v1 on :1234, not an LM Studio tok/s card. The Windows guide at /setup/windows is cited vendor docs, not measured on local-desktop. The WSL2 guide at /setup/wsl is the same preview AMD names in the 10.1 notes — KFD tools out of scope, AMD SMI monitoring-only, not a measured local-desktop daily driver. Radeon Stack Lab follows that Ubuntu path — packages are not published yet. Vulkan llama.cpp is the honest Windows path for tokens. Full ROCm userspace is a Linux product. We do not have Windows, WSL, Fedora, Arch, container, or LM Studio tok/s cards.',
+      'Ubuntu LTS named on AMD’s current ROCm matrix is the path we write. First-run setup walks Ubuntu 24.04+ to the first token. Linux Mint, Pop!_OS, and Kubuntu are Ubuntu-based but are not on that 10.1 OS row — follow /setup only as unofficial, not verified on our rig. Cited Fedora and Arch guides live at /setup/fedora and /setup/arch. Docker or Podman is a cited isolated path at /setup/docker — official llama.cpp images, not a container tok/s card. LM Studio is a cited desktop llama.cpp wrapper at /setup/lm-studio — Vulkan runtime first on Radeon, local /v1 on :1234, not an LM Studio tok/s card. Lemonade Server is AMD’s own llama.cpp wrapper at /setup/lemonade — Vulkan first, local /api/v1 on :13305, not a Lemonade tok/s card. The Windows guide at /setup/windows is cited vendor docs, not measured on local-desktop. The WSL2 guide at /setup/wsl is the same preview AMD names in the 10.1 notes — KFD tools out of scope, AMD SMI monitoring-only, not a measured local-desktop daily driver. Radeon Stack Lab follows that Ubuntu path — packages are not published yet. Vulkan llama.cpp is the honest Windows path for tokens. Full ROCm userspace is a Linux product. We do not have Windows, WSL, Fedora, Arch, container, LM Studio, or Lemonade tok/s cards.',
     links: [
       { href: '/setup', label: 'First-run setup' },
       { href: '/setup/windows', label: 'Windows setup' },
@@ -228,6 +228,7 @@ export const FAQ_ENTRIES: FaqItem[] = [
       { href: '/setup/arch', label: 'Arch setup' },
       { href: '/setup/docker', label: 'Docker / Podman' },
       { href: '/setup/lm-studio', label: 'LM Studio' },
+      { href: '/setup/lemonade', label: 'Lemonade' },
       { href: '/stack-lab', label: 'Stack Lab' },
       { href: '/start', label: 'Getting started' },
       { href: '/tutorials/install-rocm', label: 'Install ROCm' },
@@ -296,6 +297,24 @@ export const FAQ_ENTRIES: FaqItem[] = [
       { href: '/rocm-problems/ollama-gfx1201-tensile', label: 'gfx1201 tensiles' },
       { href: '/rocm-problems/ollama-r9700-windows', label: 'R9700 Windows' },
       { href: '/setup/lm-studio', label: 'LM Studio' },
+      { href: '/setup/lemonade', label: 'Lemonade' },
+    ],
+  },
+  {
+    id: 'lemonade-on-radeon',
+    group: 'getting-started',
+    question: 'Can I run Lemonade Server on a Radeon GPU?',
+    answer:
+      'Yes as a cited path, not a measured local-desktop card. Lemonade is AMD’s own local AI server. The primary LLM recipe wraps llama.cpp. Ubuntu 24.04+ first: sudo add-apt-repository ppa:lemonade-team/stable then sudo apt install lemonade-server (docs checked 2026-10-14; latest GitHub tag v2026.41.1, 2026-10-07). Windows is the MSI from lemonade-server.ai. Install llamacpp:vulkan first on this site; llamacpp:rocm is second and only on the gfx their docs name (RX 6000/7000 RDNA2/RDNA3/RDNA4, Ryzen AI iGPUs; nightly bins gfx1150 / gfx1151 / gfx103X / gfx110X / gfx120X). OpenAI-compatible base is http://127.0.0.1:13305/api/v1 — note /api/v1, not /v1. House family is Qwen3.6-35B-A3B; pull shape unsloth/Qwen3.6-35B-A3B-GGUF:UD-Q5_K_XL. Q6/Q5/Q4 first; Q3 stays a labeled estimate. Decode numbers on this site are Ubuntu llama.cpp llama-bench, not Lemonade tok/s. llama.cpp you compile remains the daily driver. amdai runs Lemonade on local-desktop; there is still no Lemonade speed card.',
+    links: [
+      { href: '/setup/lemonade', label: 'Lemonade Server on Radeon' },
+      { href: '/setup', label: 'Ubuntu setup (measured)' },
+      { href: '/backends/lemonade', label: 'Lemonade backend' },
+      { href: '/backends/llamacpp', label: 'llama.cpp' },
+      { href: '/rocm/gfx', label: 'gfx targets' },
+      { href: '/setup/ollama', label: 'Ollama' },
+      { href: '/setup/lm-studio', label: 'LM Studio' },
+      { href: '/harnesses/connect', label: 'Connect a harness' },
     ],
   },
   {
@@ -862,6 +881,7 @@ export const REQUIRED_FAQ_HREFS = [
   '/setup/lm-studio',
   '/setup/coding-assistant',
   '/setup/ollama',
+  '/setup/lemonade',
   '/setup/open-webui',
   '/setup/wsl',
   '/setup/comfyui',

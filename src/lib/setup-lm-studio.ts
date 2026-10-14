@@ -275,6 +275,7 @@ export const SETUP_LM_STUDIO_HUB_LINKS: SetupLmStudioLink[] = [
   { href: '/setup/docker', label: 'Docker / Podman' },
   { href: '/setup/coding-assistant', label: 'Coding assistant' },
   { href: '/setup/ollama', label: 'Ollama' },
+  { href: '/setup/lemonade', label: 'Lemonade' },
   { href: '/setup/open-webui', label: 'Open WebUI' },
   { href: '/setup/wsl', label: 'WSL2' },
   { href: '/setup/comfyui', label: 'ComfyUI' },

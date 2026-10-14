@@ -254,6 +254,12 @@ export const OG_CARDS: OgCard[] = [
     alt: 'AMDai Ollama — cited Radeon on-ramp, not measured on local-desktop',
   },
   {
+    slug: 'setup-lemonade',
+    title: 'Lemonade on Radeon',
+    lede: 'Cited AMD llama.cpp wrapper. Not measured on local-desktop',
+    alt: 'AMDai Lemonade — cited AMD llama.cpp wrapper on Radeon, not measured on local-desktop',
+  },
+  {
     slug: 'setup-open-webui',
     title: 'Open WebUI on Radeon',
     lede: 'Cited chat UI on llama-server /v1',

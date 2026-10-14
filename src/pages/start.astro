@@ -21,6 +21,7 @@ const hubs = [
   { href: '/setup/lm-studio', label: 'LM Studio (cited, not measured)', body: 'Desktop llama.cpp wrapper. Vulkan first on Radeon. Local /v1 on :1234. No LM Studio tok/s card.' },
   { href: '/setup/coding-assistant', label: 'Coding assistant (cited attach)', body: 'Aider, Cline, and Continue on llama-server /v1. Vulkan first. No harness tok/s card.' },
   { href: '/setup/ollama', label: 'Ollama (cited, not measured)', body: 'Easy on-ramp. llama.cpp stays the daily driver. Local /v1 on :11434. No Ollama tok/s card.' },
+  { href: '/setup/lemonade', label: 'Lemonade (cited, not measured)', body: 'AMD llama.cpp wrapper. Vulkan first on Radeon. Local /api/v1 on :13305. No Lemonade tok/s card.' },
   { href: '/setup/open-webui', label: 'Open WebUI (cited, not measured)', body: 'Browser chat against llama-server /v1. Docker or pip. No Open WebUI tok/s card.' },
   { href: '/setup/wsl', label: 'WSL2 (cited preview, not measured)', body: 'ROCm 10.1 WSL2 technical preview. llama.cpp HIP in the guest. No WSL tok/s card.' },
   { href: '/calculator', label: 'Check my rig', body: 'Weights, KV, and overhead vs card VRAM. No invented prices.' },
@@ -108,6 +109,7 @@ const hubs = [
       <a class="btn-ghost" href="/setup/lm-studio">LM Studio</a>
       <a class="btn-ghost" href="/setup/coding-assistant">Coding assistant</a>
       <a class="btn-ghost" href="/setup/ollama">Ollama</a>
+      <a class="btn-ghost" href="/setup/lemonade">Lemonade</a>
       <a class="btn-ghost" href="/setup/open-webui">Open WebUI</a>
       <a class="btn-ghost" href="/gpus/r9700">R9700 recipe</a>
       <a class="btn-ghost" href="/gpus/strix-halo">Strix Halo</a>

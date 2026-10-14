@@ -16,6 +16,7 @@ flowchart_fallback:
   - Daily driver already works and you want the Flash agent → Strata v0.1.42.
   - Several clients / continuous batching → vLLM ROCm, advanced. Not default PyPI.
   - Want a GUI → LM Studio only if a GPU meter moves. Else back to llama.cpp.
+  - Lemonade → AMD llama.cpp wrapper on :13305/api/v1. Vulkan first on this site. Not measured on local-desktop.
   - Ollama → only if the backend log and a GPU meter agree. gfx1201 is still cited pain.
   - SGLang, ExLlama/TabbyAPI, MLC-LLM, KTransformers, raw PyTorch → specialized. Not the first home box.
 
@@ -334,6 +335,72 @@ engines:
         href: https://amdai.net/harnesses/lm-studio
       - title: This site — Run LM Studio on a Radeon GPU
         href: https://amdai.net/setup/lm-studio
+
+  - id: lemonade
+    name: Lemonade Server
+    short: AMD llama.cpp wrapper — Vulkan or ROCm on :13305
+    verdict: caution
+    used_on_our_rig: false
+    version: v2026.41.1 (published 2026-10-07). Docs checked 2026-10-14. Do not invent a tok/s pin.
+    homepage: https://lemonade-server.ai/
+    docs: https://lemonade-server.ai/docs/guide/configuration/llamacpp/
+    repo: https://github.com/lemonade-sdk/lemonade
+    what: >-
+      AMD’s own local AI server. The primary LLM recipe wraps llama.cpp
+      (Vulkan or ROCm backends, plus a Linux system-backend). It also ships
+      other recipes (whisper.cpp, sd-cpp, Ryzen AI NPU/FLM). OpenAI-compatible
+      HTTP on 127.0.0.1:13305/api/v1.
+    architecture: >-
+      lemonade / lemond service. You install a recipe backend
+      (llamacpp:vulkan or llamacpp:rocm), pull owner/repo:variant, and serve
+      /api/v1. It is not this site’s Vulkan llama.cpp tree. NPU / Hybrid / FLM
+      paths are Ryzen AI, not a R9700 how-to.
+    well: An AMD-promoted wrapper with an explicit Vulkan vs ROCm switch, if a GPU meter moves.
+    badly: Matching this site’s compile flags or benches; silent CPU; treating /v1 like llama-server.
+    rocm_level: >-
+      Official llamacpp page (checked 2026-10-14): ROCm for AMD Radeon RX
+      6000/7000 series (RDNA2/RDNA3/RDNA4) and Ryzen AI iGPUs (Strix
+      Point/Halo). Nightly bins: gfx1150, gfx1151, gfx103X, gfx110X, gfx120X.
+      v2026.41.1 moves ROCm backends to ROCm 10; first ROCm load after upgrade
+      downloads about 2.6 GB. We do not invent that the stable blob lists
+      gfx1201 / R9700.
+    vulkan: Yes — “recommended for most GPU users” on their llamacpp page. First pick on this site.
+    quants: GGUF via llama.cpp. Q3 is listed as estimate/community unless measured. Q1/Q2 stay off.
+    multi_gpu: --llamacpp-device is documented. Not the house path. One card first.
+    offload: Bundled llama.cpp scheduler. If VRAM never moves, you are on CPU.
+    moe: Whatever the bundled llama.cpp implements. Not measured here.
+    context: --ctx-size (docs default auto). Do not assume 262K.
+    concurrency: Local server can take clients. Not vLLM.
+    api: OpenAI-compatible on :13305/api/v1 (not /v1). AMD playbook placeholder key is lemonade.
+    difficulty: Easy PPA/MSI, opaque engine versus a tree you compiled.
+    best_for: An AMD wrapper after you accept “no data” for tok/s and will watch a GPU meter.
+    worst_for: Matching this site’s compile flags or claiming a Lemonade speed card.
+    when: You want AMD’s server and you will read the backend log.
+    install: |
+      # Ubuntu 24.04+ (Lemonade Ubuntu docs, checked 2026-10-14)
+      # sudo add-apt-repository ppa:lemonade-team/stable
+      # sudo apt install lemonade-server
+      # lemonade backends install llamacpp:vulkan
+      # Prefer the Vulkan llama.cpp you already built if this sits on CPU.
+    run: |
+      lemonade status
+      # lemonade pull unsloth/Qwen3.6-35B-A3B-GGUF:UD-Q5_K_XL
+      # lemonade load unsloth/Qwen3.6-35B-A3B-GGUF:UD-Q5_K_XL --ctx-size 262144 --llamacpp vulkan
+      curl -s http://127.0.0.1:13305/api/v1/models
+    tuning: >-
+      lemonade config set llamacpp.backend=vulkan (or rocm). Env
+      LEMONADE_LLAMACPP. --llamacpp-args reaches llama-server. Do not spray
+      HSA_OVERRIDE_GFX_VERSION. If the meter stays idle, come back to llama.cpp.
+    choose: Only if the meter moves. Otherwise llama.cpp.
+    sources:
+      - title: Lemonade — llama.cpp Backend Options
+        href: https://lemonade-server.ai/docs/guide/configuration/llamacpp/
+      - title: Lemonade v2026.41.1 release
+        href: https://github.com/lemonade-sdk/lemonade/releases/tag/v2026.41.1
+      - title: AMD — Getting Started with Lemonade
+        href: https://developer.amd.com/playbooks/lemonade-getting-started/
+      - title: This site — Lemonade Server on a Radeon GPU
+        href: https://amdai.net/setup/lemonade
 
   - id: sglang
     name: SGLang

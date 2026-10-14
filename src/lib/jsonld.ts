@@ -13,6 +13,7 @@ import { SETUP_DOCKER_HOWTO_STEPS, SETUP_DOCKER_PUBLISHED } from './setup-docker
 import { SETUP_LM_STUDIO_HOWTO_STEPS, SETUP_LM_STUDIO_PUBLISHED } from './setup-lm-studio';
 import { SETUP_CODING_HOWTO_STEPS, SETUP_CODING_PUBLISHED } from './setup-coding-assistant';
 import { SETUP_OLLAMA_HOWTO_STEPS, SETUP_OLLAMA_PUBLISHED } from './setup-ollama';
+import { SETUP_LEMONADE_HOWTO_STEPS, SETUP_LEMONADE_PUBLISHED } from './setup-lemonade';
 import { SETUP_OPEN_WEBUI_HOWTO_STEPS, SETUP_OPEN_WEBUI_PUBLISHED } from './setup-open-webui';
 import { SETUP_WSL_HOWTO_STEPS, SETUP_WSL_PUBLISHED } from './setup-wsl';
 import { SETUP_COMFYUI_HOWTO_STEPS, SETUP_COMFYUI_PUBLISHED } from './setup-comfyui';
@@ -502,6 +503,19 @@ export function pageJsonLd(input: {
         published: dates?.published ?? SETUP_OLLAMA_PUBLISHED,
         modified: dates?.modified ?? SETUP_OLLAMA_PUBLISHED,
         steps: SETUP_OLLAMA_HOWTO_STEPS,
+      }),
+    );
+    return nodes;
+  }
+  if (path === '/setup/lemonade') {
+    nodes.push(
+      howToJsonLd({
+        name: input.title.replace(/ · AMDai$/, ''),
+        description: input.description,
+        url,
+        published: dates?.published ?? SETUP_LEMONADE_PUBLISHED,
+        modified: dates?.modified ?? SETUP_LEMONADE_PUBLISHED,
+        steps: SETUP_LEMONADE_HOWTO_STEPS,
       }),
     );
     return nodes;

@@ -107,6 +107,7 @@ function topicLinks(path: string): RelatedLink[] {
     path === '/setup/lm-studio' ||
     path === '/setup/coding-assistant' ||
     path === '/setup/ollama' ||
+    path === '/setup/lemonade' ||
     path === '/setup/open-webui' ||
     path === '/setup/wsl' ||
     path === '/setup/comfyui' ||
@@ -126,6 +127,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/setup/lm-studio', label: 'LM Studio' },
       { href: '/setup/coding-assistant', label: 'Coding assistant' },
       { href: '/setup/ollama', label: 'Ollama' },
+      { href: '/setup/lemonade', label: 'Lemonade' },
       { href: '/setup/open-webui', label: 'Open WebUI' },
       { href: '/setup/wsl', label: 'WSL2 setup' },
       { href: '/setup/comfyui', label: 'ComfyUI' },
@@ -209,6 +211,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/setup/docker', label: 'Docker / Podman' },
       { href: '/setup/lm-studio', label: 'LM Studio' },
       { href: '/setup/ollama', label: 'Ollama' },
+      { href: '/setup/lemonade', label: 'Lemonade' },
       { href: '/rocm-problems', label: 'ROCm problems' },
       { href: '/bios', label: 'BIOS' },
       { href: '/faq', label: 'FAQ' },
@@ -263,6 +266,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/setup/docker', label: 'Docker / Podman' },
       { href: '/setup/lm-studio', label: 'LM Studio' },
       { href: '/setup/ollama', label: 'Ollama' },
+      { href: '/setup/lemonade', label: 'Lemonade' },
       { href: '/fine-tuning', label: 'Fine-tuning on Radeon' },
     ];
   }
@@ -270,6 +274,7 @@ function topicLinks(path: string): RelatedLink[] {
     return [
       { href: '/rocm-problems', label: 'ROCm problems' },
       { href: '/setup/ollama', label: 'Ollama' },
+      { href: '/setup/lemonade', label: 'Lemonade' },
       { href: '/setup/wsl', label: 'WSL2 setup' },
       { href: '/rocm', label: 'What is ROCm' },
       { href: '/troubleshoot', label: 'Troubleshoot' },
@@ -381,6 +386,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/setup/lm-studio', label: 'LM Studio' },
       { href: '/setup/coding-assistant', label: 'Coding assistant' },
       { href: '/setup/ollama', label: 'Ollama' },
+      { href: '/setup/lemonade', label: 'Lemonade' },
       { href: '/setup/open-webui', label: 'Open WebUI' },
       { href: '/setup/comfyui', label: 'ComfyUI' },
       { href: '/multi-gpu', label: 'Dual / multi-GPU' },
@@ -553,6 +559,7 @@ export function relatedFor(pathname: string): RelatedLink[] {
     add(out, seen, '/setup/lm-studio', 'LM Studio');
     add(out, seen, '/setup/coding-assistant', 'Coding assistant');
     add(out, seen, '/setup/ollama', 'Ollama');
+    add(out, seen, '/setup/lemonade', 'Lemonade');
     add(out, seen, '/setup/open-webui', 'Open WebUI');
     add(out, seen, '/setup/wsl', 'WSL2 setup');
     if (id) {
@@ -643,6 +650,7 @@ export function assertRelatedValid(
     '/setup/lm-studio',
     '/setup/coding-assistant',
     '/setup/ollama',
+    '/setup/lemonade',
     '/setup/open-webui',
     '/setup/wsl',
     '/setup/comfyui',

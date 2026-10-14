@@ -91,6 +91,7 @@ export const primaryNav: NavItem[] = [
   { href: '/setup/lm-studio', label: 'LM Studio', description: 'Cited LM Studio Vulkan or ROCm llama.cpp runtime on Radeon. Not measured on local-desktop', group: 'path' },
   { href: '/setup/coding-assistant', label: 'Coding assistant', description: 'Cited Aider, Cline, and Continue on llama-server /v1. Not a harness tok/s card', group: 'path' },
   { href: '/setup/ollama', label: 'Ollama', description: 'Cited Ollama on Radeon. llama.cpp stays the daily driver. Not measured on local-desktop', group: 'path' },
+  { href: '/setup/lemonade', label: 'Lemonade', description: 'Cited Lemonade Server on Radeon. AMD llama.cpp wrapper. Not measured on local-desktop', group: 'path' },
   { href: '/setup/open-webui', label: 'Open WebUI', description: 'Cited Open WebUI against llama-server /v1. Not measured on local-desktop', group: 'path' },
   { href: '/setup/wsl', label: 'WSL2 setup', description: 'Cited ROCm WSL2 preview on Radeon. llama.cpp HIP in the guest. Not measured on local-desktop', group: 'path' },
   { href: '/setup/comfyui', label: 'ComfyUI', description: 'Cited ComfyUI on Radeon. HIP/ROCm PyTorch. Fit on /image-gen. Not measured on local-desktop', group: 'path' },
