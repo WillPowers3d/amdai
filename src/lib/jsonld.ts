@@ -546,8 +546,7 @@ export function pageJsonLd(input: {
     path === '/gpus/rx-7600' ||
     path === '/gpus/rx-6800-xt' ||
     path === '/gpus/rx-6700-xt' ||
-    path === '/models/qwen36' ||
-    path === '/models/flash' ||
+    path.startsWith('/models/') ||
     path === '/compare/radeon-vs-nvidia' ||
     path === '/multi-gpu' ||
     path === '/methodology' ||

@@ -49,6 +49,9 @@ export const RAM_OFFLOAD_SURFACES = [
   '/harnesses/hermes',
   '/models/qwen36',
   '/models/flash',
+  '/models/gpt-oss-20b',
+  '/models/gemma3-27b',
+  '/models/llama33-70b',
 ] as const;
 
 export function isRamOffloadSurface(path: string): boolean {
@@ -86,6 +89,9 @@ export function assertRamSurfacesValid(): string[] {
   if (!isRamOffloadSurface('/compare/r9700-vs-rx-9070-xt')) errors.push('pair pages must be RAM surfaces');
   if (!RAM_OFFLOAD_SURFACES.includes('/models/qwen36')) errors.push('missing /models/qwen36');
   if (!RAM_OFFLOAD_SURFACES.includes('/models/flash')) errors.push('missing /models/flash');
+  if (!RAM_OFFLOAD_SURFACES.includes('/models/gpt-oss-20b')) errors.push('missing /models/gpt-oss-20b');
+  if (!RAM_OFFLOAD_SURFACES.includes('/models/gemma3-27b')) errors.push('missing /models/gemma3-27b');
+  if (!RAM_OFFLOAD_SURFACES.includes('/models/llama33-70b')) errors.push('missing /models/llama33-70b');
   if (!RAM_OFFLOAD_SURFACES.includes('/calculator')) errors.push('missing /calculator');
   if (!RAM_OFFLOAD_SURFACES.includes('/image-gen')) errors.push('missing /image-gen');
   if (!RAM_OFFLOAD_SURFACES.includes('/speech')) errors.push('missing /speech');

@@ -312,6 +312,7 @@ export function relatedFor(pathname: string): RelatedLink[] {
     for (const link of CONSUMER_NAV_LINKS) add(out, seen, link.href, link.label);
     add(out, seen, '/calculator', 'Calculator');
     add(out, seen, '/budget', 'Budget');
+    for (const model of MODEL_PAGES) add(out, seen, `/models/${model.id}`, model.name);
     if (id) {
       add(out, seen, '/results', 'Run cards');
       add(out, seen, '/backends/llamacpp', 'llama.cpp');
@@ -352,11 +353,15 @@ export function relatedFor(pathname: string): RelatedLink[] {
       if (id === 'flash') add(out, seen, '/flash-daily', 'Flash daily');
       if (id === 'qwen36') add(out, seen, '/qwen36-dual', '35B on two cards');
       add(out, seen, '/compare', 'Compare 35B');
+      add(out, seen, '/compare/gpus', 'Compare GPUs');
       add(out, seen, '/benchmarks', 'Benchmarks');
       add(out, seen, '/calculator', 'Calculator');
       add(out, seen, '/gpus/r9700', 'R9700 measured page');
       add(out, seen, '/long-context', 'Long context');
       add(out, seen, '/gpus/rx-7900-xtx', 'RX 7900 XTX');
+      add(out, seen, '/gpus/rx-7900-xt', 'RX 7900 XT');
+      add(out, seen, '/gpus/rx-7800-xt', 'RX 7800 XT');
+      add(out, seen, '/amdai-bench', 'amdai-bench');
       add(out, seen, '/stack-lab', 'Stack Lab');
       add(out, seen, '/abliterated', 'Abliterated');
       add(out, seen, '/contribute', 'Contribute');
@@ -435,6 +440,9 @@ export function assertRelatedValid(
     '/faq',
     '/models/qwen36',
     '/models/flash',
+    '/models/gpt-oss-20b',
+    '/models/gemma3-27b',
+    '/models/llama33-70b',
     '/image-gen',
     '/vision',
     '/speech',
@@ -475,6 +483,12 @@ export function assertRelatedValid(
   const flash = relatedFor('/models/flash').map((link) => link.href);
   for (const href of ['/flash-daily', '/benchmarks', '/calculator', '/gpus/r9700']) {
     if (!flash.includes(href)) errors.push(`/models/flash missing ${href}`);
+  }
+  for (const path of ['/models/gpt-oss-20b', '/models/gemma3-27b', '/models/llama33-70b'] as const) {
+    const hrefs = relatedFor(path).map((link) => link.href);
+    for (const href of ['/calculator', '/gpus/r9700', '/gpus/rx-7900-xtx', '/amdai-bench']) {
+      if (!hrefs.includes(href)) errors.push(`${path} missing ${href}`);
+    }
   }
   return errors;
 }

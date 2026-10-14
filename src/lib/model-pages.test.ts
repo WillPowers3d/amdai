@@ -8,14 +8,18 @@ import { documentTitle, isSitemapExcluded, pageDescription, shouldNoindex } from
 import { HOUSE_STACK_LAB } from './stack-lab-open';
 import { COMPARE_Q3 } from './local-desktop-compare';
 import {
+  CITED_MODEL_IDS,
   CONTRIBUTE_MODELS,
   HOUSE_MODEL_IDS,
+  MODEL_PAGE_IDS,
   MODEL_PUBLISHED,
+  NOT_YET_MEASURED,
   NO_DATA_CONTRIBUTE,
   REQUIRED_MODEL_HREFS,
   assertModelPagesValid,
   houseModelPage,
   houseModelPages,
+  isCitedModelId,
   isHouseModelId,
   modelBlob,
   modelHrefs,
@@ -23,22 +27,29 @@ import {
 } from './model-pages';
 
 describe('per-model recipe pages', () => {
-  it('covers only house models with cited data and lists the rest as contribute', () => {
+  it('covers house models plus three cited pages and lists the rest as contribute', () => {
     const pages = houseModelPages(runs);
     assert.deepEqual(assertModelPagesValid(pages), []);
     assert.deepEqual([...HOUSE_MODEL_IDS], ['qwen36', 'flash']);
+    assert.deepEqual([...CITED_MODEL_IDS], ['gpt-oss-20b', 'gemma3-27b', 'llama33-70b']);
+    assert.deepEqual([...MODEL_PAGE_IDS], ['qwen36', 'flash', 'gpt-oss-20b', 'gemma3-27b', 'llama33-70b']);
     assert.equal(MODEL_PUBLISHED, '2026-10-13');
     assert.equal(pages[0]?.name, 'Qwen3.6-35B-A3B');
     assert.equal(pages[1]?.name, 'Qwen 3.8 Flash');
+    assert.equal(pages[2]?.name, 'gpt-oss 20B');
+    assert.equal(pages[3]?.name, 'Gemma 3 27B');
+    assert.equal(pages[4]?.name, 'Llama 3.3 70B');
     assert.equal(isHouseModelId('qwen36'), true);
+    assert.equal(isCitedModelId('gpt-oss-20b'), true);
     assert.equal(isHouseModelId('glm-53-flash'), false);
     assert.equal(modelPath('qwen36'), '/models/qwen36');
     assert.equal(modelPath('flash'), '/models/flash');
+    assert.equal(modelPath('gpt-oss-20b'), '/models/gpt-oss-20b');
     assert.ok(CONTRIBUTE_MODELS.some((row) => row.id === 'glm-53-flash'));
     assert.ok(CONTRIBUTE_MODELS.every((row) => !isHouseModelId(row.id)));
     assert.deepEqual(
       MODEL_PAGES.map((row) => row.id),
-      [...HOUSE_MODEL_IDS],
+      [...MODEL_PAGE_IDS],
     );
   });
 
@@ -90,6 +101,37 @@ describe('per-model recipe pages', () => {
         assert.ok(hrefs.includes(required), `${page.id} ${required}`);
       }
       assert.ok(page.fitBadges.every((badge) => badge.href.startsWith('/gpus/')));
+      assert.equal(page.fitBadges.length, 8);
+    }
+  });
+
+  it('builds cited estimate pages without invented tok/s', () => {
+    for (const id of CITED_MODEL_IDS) {
+      const page = houseModelPage(id, runs);
+      assert.equal(page.pageKind, 'cited');
+      assert.equal(page.quantFiles.length, 4);
+      assert.ok(page.quantFiles.some((row) => row.kind === 'q3-estimate'));
+      assert.ok(page.launches[0]?.command?.includes('llama-server'));
+      assert.equal(page.launches[0]?.backend, 'llamacpp');
+      assert.equal(page.ramKind, null);
+      assert.ok(page.ramNeed);
+      assert.ok((DIMM_KIT_GB as readonly number[]).includes(page.ramNeed.atSelected.kitGb));
+      assert.ok((DIMM_KIT_GB as readonly number[]).includes(page.ramNeed.atFullContext.kitGb));
+      assert.ok(page.q3Ram);
+      assert.equal(page.stackLab.screen, 'doctor');
+      assert.ok(page.configRows.every((row) => row.decode === NOT_YET_MEASURED));
+      assert.ok(page.configRows.some((row) => row.quantKind === 'q3-estimate'));
+      assert.ok(page.fitBadges.some((row) => row.gpuCount === 1));
+      assert.ok(page.fitBadges.some((row) => row.gpuCount === 2));
+      const blob = modelBlob(page);
+      assert.ok(blob.includes(NOT_YET_MEASURED));
+      assert.ok(blob.includes(RAM_MIN_LABEL));
+      assert.ok(blob.includes(RAM_FULL_LABEL));
+      assert.doesNotMatch(blob, /\d+(?:\.\d+)? tok\/s/);
+      assert.doesNotMatch(blob, /Qwen2\.5|Qwen3-8B/);
+      assert.doesNotMatch(blob, /\$\d|\bMSRP\b/);
+      assert.doesNotMatch(blob, /Apache-2\.0/);
+      assert.doesNotMatch(blob, /\b(?:IQ[12]_[A-Z0-9]+|Q[12]_[A-Z0-9]+)\b/);
     }
   });
 

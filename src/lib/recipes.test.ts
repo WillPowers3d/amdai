@@ -153,7 +153,7 @@ describe('GPU detect and pages', () => {
     }
     assert.deepEqual(
       MODEL_PAGES.map((row) => row.id),
-      ['qwen36', 'flash'],
+      ['qwen36', 'flash', 'gpt-oss-20b', 'gemma3-27b', 'llama33-70b'],
     );
   });
 });

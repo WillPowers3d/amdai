@@ -17,7 +17,9 @@ import {
   compute,
   formatCtx,
   formatGiB,
+  systemRamNeed,
   type GpuId,
+  type ModelId,
   type QuantId,
   type SystemRamNeed,
   type Verdict,
@@ -61,10 +63,18 @@ import {
 export const HOUSE_MODEL_IDS = ['qwen36', 'flash'] as const;
 export type HouseModelId = (typeof HOUSE_MODEL_IDS)[number];
 
+export const CITED_MODEL_IDS = ['gpt-oss-20b', 'gemma3-27b', 'llama33-70b'] as const;
+export type CitedModelId = (typeof CITED_MODEL_IDS)[number];
+
+export const MODEL_PAGE_IDS = [...HOUSE_MODEL_IDS, ...CITED_MODEL_IDS] as const;
+export type ModelPageId = (typeof MODEL_PAGE_IDS)[number];
+
 export const MODEL_PUBLISHED = '2026-10-13';
+export const CITED_MODEL_PUBLISHED = '2026-10-14';
 export const MODEL_PATH_PREFIX = '/models';
 export const NO_DATA_CONTRIBUTE = 'no data — contribute';
 export const NOT_ON_CARD = 'not on the card';
+export const NOT_YET_MEASURED = 'not yet measured on our R9700s';
 
 export const CONTRIBUTE_MODELS = [
   {
@@ -106,6 +116,7 @@ export const REQUIRED_MODEL_HREFS = [
   '/qwen',
   '/setup',
   '/start',
+  '/amdai-bench',
 ] as const;
 
 const FLASH_CONTEXTS = [4096, 8192, 32768, 100000, 131072, 262144] as const;
@@ -127,7 +138,7 @@ function loadFlashDaily(): FlashDailyFile {
   throw new Error('flash-daily.yaml missing');
 }
 
-function identity(id: HouseModelId) {
+function identity(id: ModelPageId) {
   const row = MODEL_PAGES.find((model) => model.id === id);
   if (!row) throw new Error(`MODEL_PAGES missing ${id}`);
   const preset = MODEL_PRESETS.find((model) => model.id === id);
@@ -139,9 +150,69 @@ export function isHouseModelId(id: string): id is HouseModelId {
   return (HOUSE_MODEL_IDS as readonly string[]).includes(id);
 }
 
-export function modelPath(id: HouseModelId): string {
+export function isCitedModelId(id: string): id is CitedModelId {
+  return (CITED_MODEL_IDS as readonly string[]).includes(id);
+}
+
+export function isModelPageId(id: string): id is ModelPageId {
+  return (MODEL_PAGE_IDS as readonly string[]).includes(id);
+}
+
+export function modelPath(id: ModelPageId): string {
   return `${MODEL_PATH_PREFIX}/${id}`;
 }
+
+const NATIVE_CONTEXT: Record<ModelPageId, { tokens: number; label: string }> = {
+  qwen36: { tokens: 262144, label: '262,144 tokens' },
+  flash: { tokens: 262144, label: '262,144 tokens' },
+  'gpt-oss-20b': { tokens: 131072, label: '131,072 tokens' },
+  'gemma3-27b': { tokens: 128000, label: '128K tokens' },
+  'llama33-70b': { tokens: 128000, label: '128K tokens' },
+};
+
+const OFFICIAL_HF: Record<ModelPageId, string> = {
+  qwen36: officialLinks.qwen36,
+  flash: officialLinks.qwenFlash,
+  'gpt-oss-20b': officialLinks.gptOss20b,
+  'gemma3-27b': officialLinks.gemma327b,
+  'llama33-70b': officialLinks.llama3370b,
+};
+
+const OFFICIAL_GGUF: Record<ModelPageId, string> = {
+  qwen36: officialLinks.qwen36Gguf,
+  flash: officialLinks.qwenFlashGguf,
+  'gpt-oss-20b': officialLinks.gptOss20bGguf,
+  'gemma3-27b': officialLinks.gemma327bGguf,
+  'llama33-70b': officialLinks.llama3370bGguf,
+};
+
+const GGUF_FILENAMES: Record<CitedModelId, Record<'q6_k' | 'q5_k_m' | 'q4_k_m' | 'q3_k_m', string>> = {
+  'gpt-oss-20b': {
+    q6_k: 'gpt-oss-20b-Q6_K.gguf',
+    q5_k_m: 'gpt-oss-20b-Q5_K_M.gguf',
+    q4_k_m: 'gpt-oss-20b-Q4_K_M.gguf',
+    q3_k_m: 'gpt-oss-20b-Q3_K_M.gguf',
+  },
+  'gemma3-27b': {
+    q6_k: 'gemma-3-27b-it-Q6_K.gguf',
+    q5_k_m: 'gemma-3-27b-it-Q5_K_M.gguf',
+    q4_k_m: 'gemma-3-27b-it-Q4_K_M.gguf',
+    q3_k_m: 'gemma-3-27b-it-Q3_K_M.gguf',
+  },
+  'llama33-70b': {
+    q6_k: 'Llama-3.3-70B-Instruct-Q6_K.gguf',
+    q5_k_m: 'Llama-3.3-70B-Instruct-Q5_K_M.gguf',
+    q4_k_m: 'Llama-3.3-70B-Instruct-Q4_K_M.gguf',
+    q3_k_m: 'Llama-3.3-70B-Instruct-Q3_K_M.gguf',
+  },
+};
+
+const QUANT_FILE_ORDER = [
+  { id: 'q6_k' as const, label: 'Q6_K' },
+  { id: 'q5_k_m' as const, label: 'Q5_K_M' },
+  { id: 'q4_k_m' as const, label: 'Q4_K_M' },
+  { id: 'q3_k_m' as const, label: 'Q3_K_M' },
+];
 
 export type ModelCardCite = {
   official: string;
@@ -182,11 +253,22 @@ export type ModelFitBadge = {
   gpuId: string;
   name: string;
   href: string;
+  gpuCount: CompareGpuCount;
   verdict: Verdict;
   verdictLabel: string;
   totalGb: string;
+  offload: boolean;
   kind: 'measured-card' | 'estimate';
   kindLabel: string;
+};
+
+export type ModelQuantFile = {
+  quant: string;
+  quantId: QuantId;
+  decimalGb: number;
+  label: string;
+  kind: 'cited' | 'q3-estimate';
+  href: string;
 };
 
 export type ModelLaunch = {
@@ -196,7 +278,8 @@ export type ModelLaunch = {
   backendLabel: string;
   quant: string;
   ctxLabel: string;
-  recipe: Recipe;
+  recipe: Recipe | null;
+  command: string | null;
 };
 
 export type FlashCitedPair = {
@@ -207,7 +290,7 @@ export type FlashCitedPair = {
 };
 
 export type HouseModelPage = {
-  id: HouseModelId;
+  id: ModelPageId;
   path: string;
   name: string;
   role: string;
@@ -215,12 +298,14 @@ export type HouseModelPage = {
   description: string;
   lead: string;
   engine: string;
+  pageKind: 'house' | 'cited';
   recommendedQuant: string;
   recommendedContext: number;
   recommendedContextLabel: string;
   card: ModelCardCite;
   stackLab: StackLabOpenInput;
-  ramKind: HouseRamKind;
+  ramKind: HouseRamKind | null;
+  quantFiles: ModelQuantFile[];
   configRows: ModelConfigRow[];
   citedPair: FlashCitedPair[];
   launches: ModelLaunch[];
@@ -228,25 +313,26 @@ export type HouseModelPage = {
   ramNeed: SystemRamNeed | null;
   q3Ram: SystemRamNeed | null;
   flashRam: FlashRamRow[];
+  speedsNote: string;
   siblings: { href: string; label: string }[];
   deepLinks: { href: string; label: string }[];
 };
 
-function cardCite(id: HouseModelId): ModelCardCite {
+function cardCite(id: ModelPageId): ModelCardCite {
   const { row, preset } = identity(id);
   const total = preset.totalParamsB;
   const active = preset.activeParamsB;
-  const hf = id === 'qwen36' ? officialLinks.qwen36 : officialLinks.qwenFlash;
-  const ggufHref = id === 'qwen36' ? officialLinks.qwen36Gguf : officialLinks.qwenFlashGguf;
+  const hf = OFFICIAL_HF[id];
+  const native = NATIVE_CONTEXT[id];
   return {
     official: row.official,
     hf,
     ggufName: row.gguf,
-    ggufHref,
+    ggufHref: OFFICIAL_GGUF[id],
     parameters: total != null ? `${total}B total` : 'see official card',
     active: active != null ? `${active}B active` : 'see official card',
-    context: `${preset.defaultCtx.toLocaleString()} tokens`,
-    contextTokens: preset.defaultCtx,
+    context: native.label,
+    contextTokens: native.tokens,
     license: 'On the official Hugging Face card',
     licenseHref: hf,
     licenseNote:
@@ -262,8 +348,8 @@ function llamaFirst(list: Recipe[]): Recipe[] {
   });
 }
 
-function launchesFor(id: HouseModelId): ModelLaunch[] {
-  return llamaFirst(recipesForModel(recipes, id)).map((recipe) => ({
+function launchesFor(id: ModelPageId): ModelLaunch[] {
+  const listed = llamaFirst(recipesForModel(recipes, id)).map((recipe) => ({
     recipeId: recipe.id,
     href: `/recipes/${recipe.id}`,
     backend: recipe.backend,
@@ -271,39 +357,179 @@ function launchesFor(id: HouseModelId): ModelLaunch[] {
     quant: recipe.weights.quant,
     ctxLabel: recipe.ctx_label,
     recipe,
+    command: null,
   }));
+  if (listed.length) return listed;
+  if (!isCitedModelId(id)) return [];
+  const { preset } = identity(id);
+  const file = GGUF_FILENAMES[id].q4_k_m;
+  return [
+    {
+      recipeId: `${id}.llamacpp.generated`,
+      href: '/backends/llamacpp',
+      backend: 'llamacpp',
+      backendLabel: 'llama.cpp',
+      quant: 'Q4_K_M',
+      ctxLabel: formatCtx(preset.defaultCtx),
+      recipe: null,
+      command: [
+        '# Shape only — not a measured local-desktop recipe.',
+        './build-vk/bin/llama-server \\',
+        `  -m ~/models/${file} \\`,
+        '  -ngl 99 \\',
+        `  -c ${preset.defaultCtx} \\`,
+        '  --cache-type-k f16 \\',
+        '  --cache-type-v f16 \\',
+        '  --host 127.0.0.1 --port 8080',
+      ].join('\n'),
+    },
+  ];
 }
 
-function fitBadges(id: HouseModelId): ModelFitBadge[] {
-  const quantId: QuantId = id === 'qwen36' ? 'q5_k_m' : 'q6_k';
-  const context = id === 'qwen36' ? 4096 : 262144;
-  return MODEL_FIT_GPUS.map((gpuId) => {
-    let input = applyGpuPreset(gpuId as GpuId, { ...DEFAULT_INPUT, ramGb: 256, view: 'gpu' });
-    input = applyModelPreset(id, input);
-    const result = compute({
-      ...input,
-      gpuId: gpuId as GpuId,
-      quantId,
-      context,
-      kvId: 'f16',
-      backendId: 'llamacpp',
-      pathId: 'vulkan',
-      gpuCount: 1,
-      split: false,
-      fileWeightGiB: null,
-    });
-    const measured = gpuId === 'r9700' && id === 'qwen36';
+function shopperQuant(id: ModelPageId): QuantId {
+  if (id === 'qwen36') return 'q5_k_m';
+  if (id === 'flash') return 'q6_k';
+  return identity(id).preset.defaultQuant;
+}
+
+function shopperContext(id: ModelPageId): number {
+  if (id === 'qwen36') return 4096;
+  if (id === 'flash') return 262144;
+  return identity(id).preset.defaultCtx;
+}
+
+function citedCalcInput(
+  id: ModelPageId,
+  gpuId: (typeof MODEL_FIT_GPUS)[number],
+  gpuCount: CompareGpuCount,
+  quantId: QuantId,
+  context: number,
+) {
+  let input = applyGpuPreset(gpuId as GpuId, { ...DEFAULT_INPUT, ramGb: 256, view: 'gpu' });
+  input = applyModelPreset(id as ModelId, input);
+  return {
+    ...input,
+    gpuId: gpuId as GpuId,
+    quantId,
+    context,
+    kvId: 'f16' as const,
+    backendId: 'llamacpp' as const,
+    pathId: 'vulkan' as const,
+    gpuCount,
+    split: gpuCount === 2,
+    fileWeightGiB: null,
+  };
+}
+
+function fitBadges(id: ModelPageId): ModelFitBadge[] {
+  const quantId = shopperQuant(id);
+  const context = shopperContext(id);
+  const badges: ModelFitBadge[] = [];
+  for (const gpuId of MODEL_FIT_GPUS) {
+    for (const gpuCount of [1, 2] as const) {
+      const result = compute(citedCalcInput(id, gpuId, gpuCount, quantId, context));
+      const measured = gpuId === 'r9700' && id === 'qwen36' && gpuCount === 1;
+      badges.push({
+        gpuId,
+        name: GPU_SHORT[gpuId],
+        href: gpuId === 'r9700' ? '/gpus/r9700' : gpuDirectoryHref(gpuId),
+        gpuCount,
+        verdict: result.verdict,
+        verdictLabel: result.verdictLabel,
+        totalGb: `${formatGiB(result.totalGiB)} GB`,
+        offload: result.verdict !== 'fits',
+        kind: measured ? 'measured-card' : 'estimate',
+        kindLabel: measured ? 'Measured card' : 'Estimate',
+      });
+    }
+  }
+  return badges;
+}
+
+function quantFilesFor(id: ModelPageId): ModelQuantFile[] {
+  if (!isCitedModelId(id)) return [];
+  const { preset } = identity(id);
+  return QUANT_FILE_ORDER.map((row) => {
+    const listed = preset.publisherFiles[row.id];
+    if (!listed) throw new Error(`${id} missing publisher file for ${row.id}`);
     return {
-      gpuId,
-      name: GPU_SHORT[gpuId],
-      href: gpuId === 'r9700' ? '/gpus/r9700' : gpuDirectoryHref(gpuId),
-      verdict: result.verdict,
-      verdictLabel: result.verdictLabel,
-      totalGb: `${formatGiB(result.totalGiB)} GB`,
-      kind: measured ? 'measured-card' : 'estimate',
-      kindLabel: measured ? 'Measured card' : 'Estimate',
+      quant: row.label,
+      quantId: row.id,
+      decimalGb: listed.decimalGb,
+      label: listed.label,
+      kind: row.id === 'q3_k_m' ? 'q3-estimate' : 'cited',
+      href: OFFICIAL_GGUF[id],
     };
   });
+}
+
+function citedConfigRows(id: CitedModelId): ModelConfigRow[] {
+  const { preset } = identity(id);
+  const context = preset.defaultCtx;
+  const rows: ModelConfigRow[] = [];
+  for (const quant of QUANT_FILE_ORDER) {
+    const q3 = quant.id === 'q3_k_m';
+    for (const gpuCount of [1, 2] as const) {
+      const input = citedCalcInput(id, 'r9700', gpuCount, quant.id, context);
+      const selected = compute(input);
+      const need = systemRamNeed(input);
+      const vram = `${formatGiB(gpuCount === 2 ? selected.perGpuGiB : selected.totalGiB)} GB (estimate)`;
+      const total = `${formatGiB(selected.totalGiB)} GB (estimate)`;
+      rows.push({
+        id: `${quant.label}|${gpuCount}|${context}`,
+        quant: quant.label,
+        quantKind: q3 ? 'q3-estimate' : 'measured',
+        gpuCount,
+        layout: gpuCount === 1 ? 'single' : 'split',
+        context,
+        contextLabel: formatCtx(context),
+        decode: NOT_YET_MEASURED,
+        prefill: NOT_YET_MEASURED,
+        vramPerGpu: vram,
+        vramTotal: total,
+        systemRam: `${need.atSelected.kitGb} GB kit (estimate)`,
+        kind: 'estimate',
+        href: `/calculator?model=${id}&quant=${quant.id}&ctx=${context}&n=${gpuCount}&split=${gpuCount === 2 ? 1 : 0}`,
+        hrefLabel: 'Calculator',
+        runIds: [],
+        note: q3
+          ? `${preset.publisherFiles[quant.id]?.label ?? 'Q3 file'}. Q3 is an option labeled estimate — not a local-desktop run.`
+          : `${preset.publisherFiles[quant.id]?.label ?? 'Cited GGUF file'}. Speeds ${NOT_YET_MEASURED}.`,
+      });
+    }
+  }
+  return rows;
+}
+
+function citedCopy(id: CitedModelId): { title: string; description: string; lead: string; engine: string } {
+  if (id === 'gpt-oss-20b') {
+    return {
+      title: 'gpt-oss 20B',
+      engine: 'llama.cpp first',
+      description:
+        'gpt-oss 20B (21.5B / 3.6B active) on Radeon — cited Unsloth GGUF sizes, llama.cpp first. Not yet measured on our R9700s. Q3 is a labeled estimate.',
+      lead:
+        'OpenAI’s 16 GB-class open-weight MoE. Official card: 21B parameters with 3.6B active; config.json lists 131,072 tokens. Q6 / Q5 / Q4 file sizes come from unsloth/gpt-oss-20b-GGUF. Q3 is a labeled estimate. Decode is not yet measured on our R9700s. llama.cpp first.',
+    };
+  }
+  if (id === 'gemma3-27b') {
+    return {
+      title: 'Gemma 3 27B',
+      engine: 'llama.cpp first',
+      description:
+        'Gemma 3 27B on Radeon — cited Unsloth Q6/Q5/Q4 GGUF sizes, 128K card context, llama.cpp first. Not yet measured on our R9700s. Q3 is a labeled estimate.',
+      lead:
+        'Google’s 27B instruct file for 16–24 GB Radeon boxes. Official card: 27B parameters, 128K input context. Q6 / Q5 / Q4 file sizes come from unsloth/gemma-3-27b-it-GGUF. Q3 is a labeled estimate. Decode is not yet measured on our R9700s. llama.cpp first.',
+    };
+  }
+  return {
+    title: 'Llama 3.3 70B',
+    engine: 'llama.cpp first',
+    description:
+      'Llama 3.3 70B on Radeon — cited bartowski Q6/Q5/Q4 GGUF sizes, llama.cpp first. Not yet measured on our R9700s. Q3 is a labeled estimate.',
+    lead:
+      'Meta’s 70B instruct file for 32–64 GB cards, or RAM offload on 16–24 GB. Official card context is 128K tokens. Q6 / Q5 / Q4 file sizes come from bartowski/Llama-3.3-70B-Instruct-GGUF. Q3 is a labeled estimate. Decode is not yet measured on our R9700s. llama.cpp first.',
+  };
 }
 
 function emptyRow(
@@ -558,47 +784,86 @@ function flashCitedPair(): FlashCitedPair[] {
   ];
 }
 
-export function houseModelPage(id: HouseModelId, cards: RunCard[] = runs): HouseModelPage {
-  const { row } = identity(id);
+function houseCopy(id: HouseModelId): { title: string; description: string; lead: string; engine: string } {
+  if (id === 'qwen36') {
+    return {
+      title: 'Qwen3.6-35B-A3B',
+      description:
+        'Qwen3.6-35B-A3B on one R9700 — Unsloth UD-Q5_K_XL, llama.cpp Vulkan, 262K. Measured local-desktop cards; Q3 is a labeled estimate.',
+      lead:
+        'amdai’s daily driver: Unsloth UD-Q5_K_XL on llama.cpp Vulkan, one R9700, 262K, f16 KV. Every tok/s and measured GB comes from official amdai-bench/run@1 cards. Empty cells stay contribute. Q3 is a labeled estimate.',
+      engine: 'llama.cpp',
+    };
+  }
+  return {
+    title: 'Qwen 3.8 Flash',
+    description:
+      'House recipe page for Qwen 3.8 Flash: cited UD-Q6_K_XL pair, two-card Q6, RAM lines, llama.cpp first. Q3 is a labeled estimate.',
+    lead:
+      'amdai’s fast agent: Unsloth UD-Q6_K_XL. Strata is the cited Hermes path (~32.6 tok/s); llama.cpp is first on this page (~16 tok/s). Two-card Q6 lives on Flash daily. Untested cells say contribute. Q3 is a labeled estimate.',
+    engine: 'llama.cpp first · Strata where cited',
+  };
+}
+
+export function houseModelPage(id: ModelPageId, cards: RunCard[] = runs): HouseModelPage {
+  const { row, preset } = identity(id);
+  const cited = isCitedModelId(id);
   const flashFile = id === 'flash' ? loadFlashDaily() : null;
-  const recommendedQuant = id === 'qwen36' ? 'UD-Q5_K_XL' : 'UD-Q6_K_XL';
-  const recommendedContext = 262144;
-  const ramKind: HouseRamKind = id === 'flash' ? 'flash' : 'daily';
-  const q3 = id === 'qwen36' ? q3RamNeed(1) : null;
+  const copy = cited ? citedCopy(id) : houseCopy(id as HouseModelId);
+  const recommendedQuant = cited ? 'Q4_K_M' : id === 'qwen36' ? 'UD-Q5_K_XL' : 'UD-Q6_K_XL';
+  const recommendedContext = cited ? preset.defaultCtx : 262144;
+  const ramKind: HouseRamKind | null = cited ? null : id === 'flash' ? 'flash' : 'daily';
+  const q3 = cited
+    ? systemRamNeed(citedCalcInput(id, 'r9700', 1, 'q3_k_m', preset.defaultCtx))
+    : id === 'qwen36'
+      ? q3RamNeed(1)
+      : null;
+  const ramNeed = cited
+    ? systemRamNeed(citedCalcInput(id, 'r9700', 1, shopperQuant(id), recommendedContext))
+    : ramKind
+      ? houseSystemRam(ramKind)
+      : null;
   return {
     id,
     path: modelPath(id),
     name: row.name,
     role: row.role,
-    title: row.name,
-    description:
-      id === 'qwen36'
-        ? 'Qwen3.6-35B-A3B on one R9700 — Unsloth UD-Q5_K_XL, llama.cpp Vulkan, 262K. Measured local-desktop cards; Q3 is a labeled estimate.'
-        : 'House recipe page for Qwen 3.8 Flash: cited UD-Q6_K_XL pair, two-card Q6, RAM lines, llama.cpp first. Q3 is a labeled estimate.',
-    lead:
-      id === 'qwen36'
-        ? 'amdai’s daily driver: Unsloth UD-Q5_K_XL on llama.cpp Vulkan, one R9700, 262K, f16 KV. Every tok/s and measured GB comes from official amdai-bench/run@1 cards. Empty cells stay contribute. Q3 is a labeled estimate.'
-        : 'amdai’s fast agent: Unsloth UD-Q6_K_XL. Strata is the cited Hermes path (~32.6 tok/s); llama.cpp is first on this page (~16 tok/s). Two-card Q6 lives on Flash daily. Untested cells say contribute. Q3 is a labeled estimate.',
-    engine: id === 'qwen36' ? 'llama.cpp' : 'llama.cpp first · Strata where cited',
+    title: copy.title,
+    description: copy.description,
+    lead: copy.lead,
+    engine: copy.engine,
+    pageKind: cited ? 'cited' : 'house',
     recommendedQuant,
     recommendedContext,
     recommendedContextLabel: formatCtx(recommendedContext),
     card: cardCite(id),
-    stackLab: id === 'qwen36' ? HOUSE_STACK_LAB.daily : HOUSE_STACK_LAB.flash,
+    stackLab: cited ? HOUSE_STACK_LAB.doctor : id === 'qwen36' ? HOUSE_STACK_LAB.daily : HOUSE_STACK_LAB.flash,
     ramKind,
-    configRows: id === 'qwen36' ? qwen36Rows(cards) : flashRows(cards, flashFile!),
+    quantFiles: quantFilesFor(id),
+    configRows: cited ? citedConfigRows(id) : id === 'qwen36' ? qwen36Rows(cards) : flashRows(cards, flashFile!),
     citedPair: id === 'flash' ? flashCitedPair() : [],
     launches: launchesFor(id),
     fitBadges: fitBadges(id),
-    ramNeed: houseSystemRam(ramKind),
+    ramNeed,
     q3Ram: q3,
     flashRam: flashFile ? flashRamTable(flashFile) : [],
-    siblings: HOUSE_MODEL_IDS.filter((other) => other !== id).map((other) => {
+    speedsNote: cited
+      ? `${NOT_YET_MEASURED}. Contribute an amdai-bench/run@1 card, or open Stack Lab doctor. Do not treat calculator GB as tok/s.`
+      : id === 'qwen36'
+        ? 'Measured cells cite official amdai-bench/run@1 cards. Empty cells stay contribute.'
+        : 'Cited house pair only. Empty cells stay contribute.',
+    siblings: MODEL_PAGE_IDS.filter((other) => other !== id).map((other) => {
       const model = MODEL_PAGES.find((item) => item.id === other)!;
       return { href: modelPath(other), label: model.name };
     }),
-    deepLinks:
-      id === 'qwen36'
+    deepLinks: cited
+      ? [
+          { href: `/calculator?model=${id}`, label: 'Calculator' },
+          { href: '/gpus/r9700', label: 'R9700' },
+          { href: '/gpus/rx-7900-xtx', label: 'RX 7900 XTX' },
+          { href: '/amdai-bench', label: 'amdai-bench' },
+        ]
+      : id === 'qwen36'
         ? [
             { href: '/qwen36-dual', label: '35B on two cards' },
             { href: '/compare/one-vs-two-gpu', label: 'One vs split' },
@@ -615,7 +880,7 @@ export function houseModelPage(id: HouseModelId, cards: RunCard[] = runs): House
 }
 
 export function houseModelPages(cards: RunCard[] = runs): HouseModelPage[] {
-  return HOUSE_MODEL_IDS.map((id) => houseModelPage(id, cards));
+  return MODEL_PAGE_IDS.map((id) => houseModelPage(id, cards));
 }
 
 export function contributeModels(): readonly typeof CONTRIBUTE_MODELS[number][] {
@@ -629,6 +894,7 @@ export function modelHrefs(page: HouseModelPage): string[] {
     page.card.ggufHref,
     page.card.licenseHref,
     ...page.launches.map((row) => row.href),
+    ...page.quantFiles.map((row) => row.href),
     ...page.fitBadges.map((row) => row.href),
     ...page.siblings.map((row) => row.href),
     ...page.deepLinks.map((row) => row.href.split('#')[0] ?? row.href),
@@ -651,11 +917,15 @@ export function modelBlob(page: HouseModelPage): string {
     page.card.license,
     page.card.licenseNote,
     page.card.archNote,
+    page.speedsNote,
+    page.quantFiles.map((row) => `${row.quant} ${row.decimalGb} ${row.label}`).join('\n'),
     page.configRows.map((row) => `${row.quant} ${row.decode} ${row.note ?? ''}`).join('\n'),
     page.citedPair.map((row) => `${row.engine} ${row.decode} ${row.note}`).join('\n'),
+    page.launches.map((row) => row.command ?? '').join('\n'),
     RAM_MIN_LABEL,
     RAM_FULL_LABEL,
     FLASH_RERUN_NOTE,
+    NOT_YET_MEASURED,
   ].join('\n');
 }
 
@@ -665,9 +935,12 @@ const Q4_FLOOR = new RegExp(`floor is q${'4'}|q${'4'} floor|q${'4'} and up only`
 
 export function assertModelPagesValid(pages: HouseModelPage[] = houseModelPages()): string[] {
   const errors: string[] = [];
-  if (pages.length !== HOUSE_MODEL_IDS.length) errors.push('expected one page per house model');
+  if (pages.length !== MODEL_PAGE_IDS.length) errors.push('expected one page per model page id');
   if (pages[0]?.id !== 'qwen36') errors.push('amdai daily driver must be first');
   if (pages[1]?.id !== 'flash') errors.push('Flash must be second');
+  if (pages[2]?.id !== 'gpt-oss-20b') errors.push('gpt-oss 20B must be the first cited page');
+  if (pages[3]?.id !== 'gemma3-27b') errors.push('Gemma 3 27B must be the second cited page');
+  if (pages[4]?.id !== 'llama33-70b') errors.push('Llama 3.3 70B must be the third cited page');
   for (const extra of CONTRIBUTE_MODELS) {
     if (HOUSE_MODEL_IDS.includes(extra.id as HouseModelId)) errors.push(`${extra.id} must not have a shopper page`);
     if (/https:\/\/huggingface\.co\//i.test(`${extra.why} ${extra.href}`)) {
@@ -732,9 +1005,19 @@ export function assertModelPagesValid(pages: HouseModelPage[] = houseModelPages(
         errors.push('Flash must keep the cited Strata launch');
       }
     }
-    if (page.fitBadges.length !== MODEL_FIT_GPUS.length) errors.push(`${page.id} missing fit badges`);
+    if (page.fitBadges.length !== MODEL_FIT_GPUS.length * 2) errors.push(`${page.id} missing 1+2 GPU fit badges`);
     for (const badge of page.fitBadges) {
       if (!badge.href.startsWith('/gpus/')) errors.push(`${page.id} fit badge must link /gpus/*`);
+    }
+    if (page.pageKind === 'cited') {
+      if (page.quantFiles.length !== 4) errors.push(`${page.id} needs Q6/Q5/Q4 plus Q3 file rows`);
+      if (!page.quantFiles.some((row) => row.kind === 'q3-estimate')) errors.push(`${page.id} missing Q3 file estimate`);
+      if (!page.speedsNote.includes(NOT_YET_MEASURED)) errors.push(`${page.id} must say not yet measured`);
+      if (!page.launches[0]?.command?.includes('llama-server')) {
+        errors.push(`${page.id} missing generated llama-server command`);
+      }
+      if (page.launches.some((row) => row.recipe)) errors.push(`${page.id} must not invent a recipe`);
+      if (/\d+(?:\.\d+)? tok\/s/.test(page.speedsNote)) errors.push(`${page.id} invented speed`);
     }
     if (/Apache-2\.0/i.test(page.card.license)) errors.push(`${page.id} invented Apache-2.0`);
     if (!/^https:\/\/huggingface\.co\//.test(page.card.hf)) errors.push(`${page.id} HF must be official card`);

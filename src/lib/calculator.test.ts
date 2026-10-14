@@ -111,6 +111,18 @@ describe('calculator catalog guards', () => {
     assert.equal(qwen36?.publisherFiles.q3_k_m?.decimalGb, 16.6);
     assert.equal(qwen36?.publisherFiles.q3_k_xl?.decimalGb, 16.8);
     assert.equal(qwen36?.publisherFiles.iq3?.decimalGb, 13.7);
+    const gptOss = MODEL_PRESETS.find((m) => m.id === 'gpt-oss-20b');
+    assert.equal(gptOss?.publisherFiles.q6_k?.decimalGb, 12.04);
+    assert.equal(gptOss?.publisherFiles.q4_k_m?.decimalGb, 11.62);
+    assert.equal(gptOss?.publisherFiles.q3_k_m?.decimalGb, 11.51);
+    const gemma = MODEL_PRESETS.find((m) => m.id === 'gemma3-27b');
+    assert.equal(gemma?.publisherFiles.q6_k?.decimalGb, 22.17);
+    assert.equal(gemma?.publisherFiles.q4_k_m?.decimalGb, 16.55);
+    assert.equal(gemma?.publisherFiles.q3_k_m?.decimalGb, 13.44);
+    const llama = MODEL_PRESETS.find((m) => m.id === 'llama33-70b');
+    assert.equal(llama?.publisherFiles.q6_k?.decimalGb, 57.89);
+    assert.equal(llama?.publisherFiles.q4_k_m?.decimalGb, 42.52);
+    assert.equal(llama?.publisherFiles.q3_k_m?.decimalGb, 34.27);
   });
 
   it('keeps house models and a custom row', () => {

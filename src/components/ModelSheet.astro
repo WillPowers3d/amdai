@@ -5,7 +5,7 @@ import LaunchCommand from './LaunchCommand.astro';
 import OpenInStackLab from './OpenInStackLab.astro';
 import SystemRamNeed from './SystemRamNeed.astro';
 import { runPath } from '../lib/run-card';
-import { NO_DATA_CONTRIBUTE, NOT_ON_CARD, type HouseModelPage } from '../lib/model-pages';
+import { NOT_YET_MEASURED, NO_DATA_CONTRIBUTE, NOT_ON_CARD, type HouseModelPage } from '../lib/model-pages';
 
 interface Props {
   page: HouseModelPage;
@@ -14,6 +14,8 @@ interface Props {
 const { page } = Astro.props;
 const q3Rows = page.configRows.filter((row) => row.quantKind === 'q3-estimate');
 const measuredRows = page.configRows.filter((row) => row.quantKind !== 'q3-estimate');
+const fitOne = page.fitBadges.filter((row) => row.gpuCount === 1);
+const fitTwo = page.fitBadges.filter((row) => row.gpuCount === 2);
 ---
 
 <section id="card" class="mt-10 scroll-mt-28" aria-labelledby="card-heading">
@@ -54,14 +56,61 @@ const measuredRows = page.configRows.filter((row) => row.quantKind !== 'q3-estim
   </p>
 </section>
 
+{page.quantFiles.length > 0 && (
+  <section id="gguf" class="mt-12 scroll-mt-28" aria-labelledby="gguf-heading">
+    <h2 id="gguf-heading" class="font-serif text-3xl tracking-tight">GGUF file sizes</h2>
+    <p class="mt-3 max-w-3xl text-sm leading-relaxed text-muted">
+      Q6, Q5, and Q4 sizes are cited from the GGUF repo listing. Q3 is a labeled estimate.
+      GB here is the publisher’s decimal listing, not measured VRAM. Q1 and Q2 stay off.
+    </p>
+    <div class="mt-6 overflow-x-auto">
+      <table class="table-lab min-w-[40rem]">
+        <caption>{page.name} cited GGUF file sizes. Q3 is a labeled estimate.</caption>
+        <thead>
+          <tr>
+            <th scope="col">Quant</th>
+            <th scope="col">File size</th>
+            <th scope="col">Kind</th>
+            <th scope="col">Cite</th>
+          </tr>
+        </thead>
+        <tbody>
+          {page.quantFiles.map((row) => (
+            <tr>
+              <th scope="row">
+                {row.quant}
+                {row.kind === 'q3-estimate' && <span class="block text-xs font-normal text-faint">estimate</span>}
+              </th>
+              <td class="tabular-nums">{row.decimalGb} GB</td>
+              <td>{row.kind === 'q3-estimate' ? 'Estimate' : 'Cited listing'}</td>
+              <td>
+                <a class="underline decoration-accent/40" href={row.href} rel="noopener">{page.card.ggufName}</a>
+                <span class="mt-1 block text-xs text-faint">{row.label}</span>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </section>
+)}
+
 <section id="ram" class="mt-12 scroll-mt-28" aria-labelledby="ram-heading">
   <h2 id="ram-heading" class="font-serif text-3xl tracking-tight">System RAM</h2>
   <p class="mt-3 max-w-3xl text-sm leading-relaxed text-muted">
     Kit sizes are real DIMM steps. Measured peaks come from run cards when we have them; otherwise the line is an estimate.
+    Wherever RAM offload appears, both shopper labels stay on the page.
   </p>
-  <div class="mt-6">
-    <HouseRam which={page.ramKind} />
-  </div>
+  {page.ramKind && (
+    <div class="mt-6">
+      <HouseRam which={page.ramKind} />
+    </div>
+  )}
+  {page.ramNeed && !page.ramKind && (
+    <div class="mt-6">
+      <SystemRamNeed need={page.ramNeed} />
+    </div>
+  )}
   {page.q3Ram && (
     <div class="mt-6">
       <p class="kicker">Q3 estimate · {page.name}</p>
@@ -93,13 +142,26 @@ const measuredRows = page.configRows.filter((row) => row.quantKind !== 'q3-estim
   </section>
 )}
 
+<section id="speeds" class="mt-12 scroll-mt-28" aria-labelledby="speeds-heading">
+  <h2 id="speeds-heading" class="font-serif text-3xl tracking-tight">Speeds</h2>
+  <p class="mt-3 max-w-3xl text-sm leading-relaxed text-muted">{page.speedsNote}</p>
+  {page.pageKind === 'cited' && (
+    <p class="mt-3 max-w-3xl text-sm leading-relaxed text-muted">
+      {NOT_YET_MEASURED}. Record a card with
+      <a class="underline decoration-accent/40" href="/amdai-bench">amdai-bench</a>
+      or open Stack Lab doctor. Other backends on the official card stay secondary.
+    </p>
+  )}
+</section>
+
 <section id="config" class="mt-12 scroll-mt-28" aria-labelledby="config-heading">
   <h2 id="config-heading" class="font-serif text-3xl tracking-tight">Configuration table</h2>
   <p class="mt-3 max-w-3xl text-sm leading-relaxed text-muted">
-    Q6 / Q5 / Q4, plus Q3 as a labeled estimate. 1 GPU and 2 GPU. Contexts we actually talk about.
+    Q6 / Q5 / Q4, plus Q3 as a labeled estimate. 1 GPU and 2 GPU.
     Decode, prefill, peak VRAM per card, VRAM total, and peak system RAM come from
     <code>amdai-bench/run@1</code> cards when a cell is measured. A null field stays {NOT_ON_CARD}.
-    Untested cells say <strong class="text-ink">{NO_DATA_CONTRIBUTE}</strong>.
+    Untested cells say <strong class="text-ink">{NO_DATA_CONTRIBUTE}</strong>
+    {page.pageKind === 'cited' ? ` or ${NOT_YET_MEASURED}` : ''}.
     Q1 and Q2 stay off.
   </p>
   <div class="mt-6 overflow-x-auto">
@@ -170,6 +232,8 @@ const measuredRows = page.configRows.filter((row) => row.quantKind !== 'q3-estim
   <p class="mt-3 max-w-3xl text-sm leading-relaxed text-muted">
     llama.cpp first. Strata only where this site already documents it. Flags marked on the recipe stay shape-only.
     Recommended context is {page.recommendedContextLabel}.
+    {page.pageKind === 'cited' &&
+      ' vLLM, Ollama, and Transformers appear on the official card as secondary paths — they are not the AMDai default.'}
   </p>
   <div class="mt-6">
     <OpenInStackLab {...page.stackLab} />
@@ -178,13 +242,35 @@ const measuredRows = page.configRows.filter((row) => row.quantKind !== 'q3-estim
     <article class="card mt-8 scroll-mt-28 p-5 sm:p-6" id={row.recipeId} aria-labelledby={`${row.recipeId}-heading`}>
       <p class="kicker">{row.backendLabel} · {row.quant} · {row.ctxLabel}</p>
       <h3 id={`${row.recipeId}-heading`} class="mt-1 text-2xl tracking-tight">{row.backendLabel}</h3>
-      <div class="mt-5">
-        <LaunchCommand recipe={row.recipe} />
-      </div>
+      {row.recipe ? (
+        <div class="mt-5">
+          <LaunchCommand recipe={row.recipe} />
+        </div>
+      ) : row.command ? (
+        <div class="mt-5 rounded-xl border border-line bg-canvas/50">
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-line px-3 py-2">
+            <p class="text-sm"><span class="font-medium">llama.cpp</span> · Vulkan · shape only</p>
+            <button type="button" class="code-copy" data-launch-copy>Copy</button>
+          </div>
+          <pre class="overflow-x-auto p-3 text-xs leading-relaxed"><code data-launch-text>{row.command}</code></pre>
+        </div>
+      ) : null}
       <p class="mt-4 text-sm">
-        <a class="underline decoration-accent/40" href={row.href}>Full recipe</a>
-        {' · '}
-        <a class="underline decoration-accent/40" href={row.recipe.calculator}>Calculator</a>
+        {row.recipe ? (
+          <>
+            <a class="underline decoration-accent/40" href={row.href}>Full recipe</a>
+            {' · '}
+            <a class="underline decoration-accent/40" href={row.recipe.calculator}>Calculator</a>
+          </>
+        ) : (
+          <>
+            <a class="underline decoration-accent/40" href={row.href}>llama.cpp backend</a>
+            {' · '}
+            <a class="underline decoration-accent/40" href={`/calculator?model=${page.id}`}>Calculator</a>
+            {' · '}
+            <a class="underline decoration-accent/40" href="/amdai-bench">amdai-bench</a>
+          </>
+        )}
       </p>
     </article>
   ))}
@@ -193,21 +279,42 @@ const measuredRows = page.configRows.filter((row) => row.quantKind !== 'q3-estim
 <section id="fit" class="mt-12 scroll-mt-28" aria-labelledby="fit-heading">
   <h2 id="fit-heading" class="font-serif text-3xl tracking-tight">Fit by GPU</h2>
   <p class="mt-3 max-w-3xl text-sm leading-relaxed text-muted">
-    Calculator VRAM at the house quant, one GPU. The R9700 35B badge is the measured card; other SKUs stay estimates.
-    Speed is not invented here.
+    Calculator VRAM at the shopper quant, 1 GPU and 2 GPUs (split). The R9700 35B one-card badge is the measured card; other SKUs stay estimates.
+    Speed is not invented here. Offload rows still show both RAM labels on this page.
   </p>
-  <ul class="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-    {page.fitBadges.map((badge) => (
-      <li>
-        <a class="block rounded-2xl border border-line bg-raised/40 p-4 hover:border-accent/50" href={badge.href}>
-          <p class="kicker">{badge.kindLabel}</p>
-          <p class="mt-1 text-xl tracking-tight">{badge.name}</p>
-          <p class="mt-2 text-sm text-muted">{badge.verdictLabel}</p>
-          <p class="mt-1 text-xs text-faint">{badge.totalGb} estimate</p>
-        </a>
-      </li>
-    ))}
-  </ul>
+  <div class="mt-6 overflow-x-auto">
+    <table class="table-lab min-w-[40rem]">
+      <caption>{page.name} calculator fit on cited /gpus sheets. 1 GPU and 2 GPU. Estimates unless marked measured.</caption>
+      <thead>
+        <tr>
+          <th scope="col">GPU</th>
+          <th scope="col">1 GPU</th>
+          <th scope="col">2 GPU</th>
+        </tr>
+      </thead>
+      <tbody>
+        {fitOne.map((one) => {
+          const two = fitTwo.find((row) => row.gpuId === one.gpuId);
+          return (
+            <tr>
+              <th scope="row">
+                <a class="underline decoration-accent/40" href={one.href}>{one.name}</a>
+                <span class="mt-1 block text-xs font-normal text-faint">{one.kindLabel}</span>
+              </th>
+              <td>
+                {one.verdictLabel}
+                <span class="mt-1 block text-xs text-faint">{one.totalGb} {one.kind === 'measured-card' ? 'measured card' : 'estimate'}</span>
+              </td>
+              <td>
+                {two?.verdictLabel}
+                <span class="mt-1 block text-xs text-faint">{two?.totalGb} estimate</span>
+              </td>
+            </tr>
+          );
+        })}
+      </tbody>
+    </table>
+  </div>
 </section>
 
 <Callout type="note" title="Abliterated is not the default">
@@ -217,3 +324,20 @@ const measuredRows = page.configRows.filter((row) => row.quantKind !== 'q3-estim
     as an educational catalog. This page is the official instruct file.
   </p>
 </Callout>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('[data-launch-copy]').forEach((btn) => {
+    btn.addEventListener('click', async () => {
+      const text = btn.closest('div')?.parentElement?.querySelector('[data-launch-text]')?.textContent ?? '';
+      try {
+        await navigator.clipboard.writeText(text);
+        btn.textContent = 'Copied';
+        setTimeout(() => {
+          btn.textContent = 'Copy';
+        }, 1200);
+      } catch {
+        btn.textContent = 'Copy failed';
+      }
+    });
+  });
+</script>

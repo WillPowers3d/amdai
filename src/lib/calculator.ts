@@ -692,7 +692,7 @@ export const MODEL_PRESETS: ModelPreset[] = [
     group: 'Llama',
     name: 'Llama 3.3 70B',
     official: 'meta-llama/Llama-3.3-70B-Instruct',
-    gguf: '',
+    gguf: 'bartowski/Llama-3.3-70B-Instruct-GGUF',
     totalParamsB: 70.6,
     activeParamsB: 70.6,
     layers: 80,
@@ -711,8 +711,25 @@ export const MODEL_PRESETS: ModelPreset[] = [
     defaultQuant: 'q4_k_m',
     defaultCtx: 8192,
     defaultKv: 'f16',
-    archNote: 'Dense 70B, GQA 8×128, full-attention KV on 80 layers.',
-    publisherFiles: {},
+    archNote: 'Dense 70B, GQA 8×128, full-attention KV on 80 layers. Official card context is 128K tokens.',
+    publisherFiles: {
+      q6_k: {
+        decimalGb: 57.89,
+        label: 'bartowski/Llama-3.3-70B-Instruct-GGUF README table Q6_K 57.89 GB (LFS shards 39.95 + 17.93 GB)',
+      },
+      q5_k_m: {
+        decimalGb: 49.95,
+        label: 'bartowski/Llama-3.3-70B-Instruct-GGUF README table Q5_K_M 49.95 GB (LFS shards 39.99 + 9.96 GB)',
+      },
+      q4_k_m: {
+        decimalGb: 42.52,
+        label: 'bartowski/Llama-3.3-70B-Instruct-GGUF README table Q4_K_M 42.52 GB (LFS 42.52 GB)',
+      },
+      q3_k_m: {
+        decimalGb: 34.27,
+        label: 'bartowski/Llama-3.3-70B-Instruct-GGUF README table Q3_K_M 34.27 GB. Q3 is a labeled estimate — not a local-desktop run',
+      },
+    },
   },
   {
     id: 'llama31-70b',
@@ -773,7 +790,7 @@ export const MODEL_PRESETS: ModelPreset[] = [
     group: 'Gemma',
     name: 'Gemma 3 27B',
     official: 'google/gemma-3-27b-it',
-    gguf: '',
+    gguf: 'unsloth/gemma-3-27b-it-GGUF',
     totalParamsB: 27.4,
     activeParamsB: 27.4,
     layers: 62,
@@ -792,8 +809,25 @@ export const MODEL_PRESETS: ModelPreset[] = [
     defaultQuant: 'q4_k_m',
     defaultCtx: 8192,
     defaultKv: 'f16',
-    archNote: 'Gemma 3 report: hybrid sliding window — 10 global layers, 52 cache a 1024-token window.',
-    publisherFiles: {},
+    archNote: 'Official card: 128K input context for the 27B size. Hybrid sliding window — 10 global layers, 52 cache a 1024-token window.',
+    publisherFiles: {
+      q6_k: {
+        decimalGb: 22.17,
+        label: 'Hugging Face LFS size for unsloth/gemma-3-27b-it-GGUF gemma-3-27b-it-Q6_K.gguf (22.17 GB)',
+      },
+      q5_k_m: {
+        decimalGb: 19.27,
+        label: 'Hugging Face LFS size for unsloth/gemma-3-27b-it-GGUF gemma-3-27b-it-Q5_K_M.gguf (19.27 GB)',
+      },
+      q4_k_m: {
+        decimalGb: 16.55,
+        label: 'Hugging Face LFS size for unsloth/gemma-3-27b-it-GGUF gemma-3-27b-it-Q4_K_M.gguf (16.55 GB)',
+      },
+      q3_k_m: {
+        decimalGb: 13.44,
+        label: 'Hugging Face LFS size for unsloth/gemma-3-27b-it-GGUF gemma-3-27b-it-Q3_K_M.gguf (13.44 GB). Q3 is a labeled estimate — not a local-desktop run',
+      },
+    },
   },
   {
     id: 'gemma4-31b',
@@ -854,7 +888,7 @@ export const MODEL_PRESETS: ModelPreset[] = [
     group: 'gpt-oss',
     name: 'gpt-oss 20B',
     official: 'openai/gpt-oss-20b',
-    gguf: '',
+    gguf: 'unsloth/gpt-oss-20b-GGUF',
     totalParamsB: 21.5,
     activeParamsB: 3.6,
     layers: 24,
@@ -873,8 +907,26 @@ export const MODEL_PRESETS: ModelPreset[] = [
     defaultQuant: 'q4_k_m',
     defaultCtx: 8192,
     defaultKv: 'f16',
-    archNote: 'MoE 21.5B / 3.6B active. Alternating attention: 12 full-context layers, 12 at a 128-token window. Native MXFP4 on disk is not a Q3; GGUF Q3 rows here are formula estimates.',
-    publisherFiles: {},
+    archNote:
+      'Official card: 21B parameters with 3.6B active. Official config.json max_position_embeddings is 131,072. Alternating attention: 12 full-context layers, 12 at a 128-token window. Native MXFP4 MoE weights keep GGUF Q6/Q5/Q4/Q3 files close in size; the Q3 row is a labeled estimate.',
+    publisherFiles: {
+      q6_k: {
+        decimalGb: 12.04,
+        label: 'Hugging Face LFS size for unsloth/gpt-oss-20b-GGUF gpt-oss-20b-Q6_K.gguf (12.04 GB)',
+      },
+      q5_k_m: {
+        decimalGb: 11.72,
+        label: 'Hugging Face LFS size for unsloth/gpt-oss-20b-GGUF gpt-oss-20b-Q5_K_M.gguf (11.72 GB)',
+      },
+      q4_k_m: {
+        decimalGb: 11.62,
+        label: 'Hugging Face LFS size for unsloth/gpt-oss-20b-GGUF gpt-oss-20b-Q4_K_M.gguf (11.62 GB)',
+      },
+      q3_k_m: {
+        decimalGb: 11.51,
+        label: 'Hugging Face LFS size for unsloth/gpt-oss-20b-GGUF gpt-oss-20b-Q3_K_M.gguf (11.51 GB). Q3 is a labeled estimate — not a local-desktop run',
+      },
+    },
   },
   {
     id: 'gpt-oss-120b',

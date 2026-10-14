@@ -177,6 +177,9 @@ export const CRUMB_LABELS: Record<string, string> = {
   '/models': 'Models',
   '/models/qwen36': 'Qwen3.6-35B-A3B',
   '/models/flash': 'Qwen 3.8 Flash',
+  '/models/gpt-oss-20b': 'gpt-oss 20B',
+  '/models/gemma3-27b': 'Gemma 3 27B',
+  '/models/llama33-70b': 'Llama 3.3 70B',
   '/recipes': 'Recipes',
   '/blog': 'Blog',
   '/updates': 'Updates',
@@ -524,10 +527,10 @@ setMeta(
 setDate('/gpus/rx-6700-xt', '2026-10-14');
 setMeta(
   '/models',
-  'House Qwen models',
-  'House Qwen models with tested Radeon recipes. Reverse view of the GPU directory. Models without a cited row stay on contribute.',
+  'Models',
+  'House Qwen recipes plus cited gpt-oss 20B, Gemma 3 27B, and Llama 3.3 70B pages. Reverse view of the GPU directory. Q3 is a labeled estimate.',
 );
-setDate('/models', '2026-10-13');
+setDate('/models', '2026-10-14');
 setMeta(
   '/models/qwen36',
   'Qwen3.6-35B-A3B',
@@ -540,6 +543,24 @@ setMeta(
   'House recipe page for Qwen 3.8 Flash: cited UD-Q6_K_XL pair, two-card Q6, RAM lines, llama.cpp first. Q3 is a labeled estimate.',
 );
 setDate('/models/flash', '2026-10-13');
+setMeta(
+  '/models/gpt-oss-20b',
+  'gpt-oss 20B',
+  'gpt-oss 20B (21.5B / 3.6B active) on Radeon — cited Unsloth GGUF sizes, llama.cpp first. Not yet measured on our R9700s. Q3 is a labeled estimate.',
+);
+setDate('/models/gpt-oss-20b', '2026-10-14');
+setMeta(
+  '/models/gemma3-27b',
+  'Gemma 3 27B',
+  'Gemma 3 27B on Radeon — cited Unsloth Q6/Q5/Q4 GGUF sizes, 128K card context, llama.cpp first. Not yet measured on our R9700s. Q3 is a labeled estimate.',
+);
+setDate('/models/gemma3-27b', '2026-10-14');
+setMeta(
+  '/models/llama33-70b',
+  'Llama 3.3 70B',
+  'Llama 3.3 70B on Radeon — cited bartowski Q6/Q5/Q4 GGUF sizes, llama.cpp first. Not yet measured on our R9700s. Q3 is a labeled estimate.',
+);
+setDate('/models/llama33-70b', '2026-10-14');
 setMeta(
   '/rocm',
   'What is ROCm',

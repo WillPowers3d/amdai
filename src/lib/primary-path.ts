@@ -331,6 +331,9 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
   '/models': [
     { href: '/models/qwen36', label: 'Qwen3.6-35B-A3B' },
     { href: '/models/flash', label: 'Qwen 3.8 Flash' },
+    { href: '/models/gpt-oss-20b', label: 'gpt-oss 20B' },
+    { href: '/models/gemma3-27b', label: 'Gemma 3 27B' },
+    { href: '/models/llama33-70b', label: 'Llama 3.3 70B' },
     { href: '/qwen', label: 'Qwen compare' },
     { href: '/calculator', label: 'Calculator' },
     { href: '/contribute', label: 'Contribute' },
@@ -347,6 +350,27 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
     { href: '/backends/strata', label: 'Strata' },
     { href: '/benchmarks', label: 'Benchmarks' },
     { href: '/gpus/r9700', label: 'R9700 measured page' },
+    { href: '/stack-lab', label: 'Stack Lab' },
+  ],
+  '/models/gpt-oss-20b': [
+    { href: '/calculator?model=gpt-oss-20b', label: 'Calculator' },
+    { href: '/gpus/r9700', label: 'R9700 measured page' },
+    { href: '/gpus/rx-7900-xtx', label: 'RX 7900 XTX' },
+    { href: '/amdai-bench', label: 'amdai-bench' },
+    { href: '/stack-lab', label: 'Stack Lab' },
+  ],
+  '/models/gemma3-27b': [
+    { href: '/calculator?model=gemma3-27b', label: 'Calculator' },
+    { href: '/gpus/r9700', label: 'R9700 measured page' },
+    { href: '/gpus/rx-7900-xtx', label: 'RX 7900 XTX' },
+    { href: '/amdai-bench', label: 'amdai-bench' },
+    { href: '/stack-lab', label: 'Stack Lab' },
+  ],
+  '/models/llama33-70b': [
+    { href: '/calculator?model=llama33-70b', label: 'Calculator' },
+    { href: '/gpus/r9700', label: 'R9700 measured page' },
+    { href: '/gpus/rx-7900-xtx', label: 'RX 7900 XTX' },
+    { href: '/amdai-bench', label: 'amdai-bench' },
     { href: '/stack-lab', label: 'Stack Lab' },
   ],
   '/troubleshoot': [

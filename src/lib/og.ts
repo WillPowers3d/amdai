@@ -288,10 +288,28 @@ export const OG_CARDS: OgCard[] = [
     alt: 'AMDai Qwen 3.8 Flash — cited Strata vs llama.cpp pair',
   },
   {
+    slug: 'models-gpt-oss-20b',
+    title: 'gpt-oss 20B',
+    lede: 'Cited Unsloth GGUF. Not yet measured on our R9700s',
+    alt: 'AMDai gpt-oss 20B — cited GGUF sizes, not yet measured on our R9700s',
+  },
+  {
+    slug: 'models-gemma3-27b',
+    title: 'Gemma 3 27B',
+    lede: 'Cited Unsloth GGUF. Not yet measured on our R9700s',
+    alt: 'AMDai Gemma 3 27B — cited GGUF sizes, not yet measured on our R9700s',
+  },
+  {
+    slug: 'models-llama33-70b',
+    title: 'Llama 3.3 70B',
+    lede: 'Cited bartowski GGUF. Not yet measured on our R9700s',
+    alt: 'AMDai Llama 3.3 70B — cited GGUF sizes, not yet measured on our R9700s',
+  },
+  {
     slug: 'models',
-    title: 'House models',
-    lede: 'Qwen files we actually run. Contribute the rest',
-    alt: 'AMDai house models — Qwen files we actually run',
+    title: 'Models',
+    lede: 'House Qwen plus cited gpt-oss, Gemma 3, Llama 3.3',
+    alt: 'AMDai models — house Qwen plus cited open-weight pages',
   },
   {
     slug: 'multi-gpu',
@@ -438,7 +456,16 @@ export function ogSlug(pathname: string): string {
   if (slug === 'gpus-rx-7600') return 'gpus-rx-7600';
   if (slug === 'gpus-rx-6800-xt') return 'gpus-rx-6800-xt';
   if (slug === 'gpus-rx-6700-xt') return 'gpus-rx-6700-xt';
-  if (slug === 'models' || slug === 'models-qwen36' || slug === 'models-flash') return slug;
+  if (
+    slug === 'models' ||
+    slug === 'models-qwen36' ||
+    slug === 'models-flash' ||
+    slug === 'models-gpt-oss-20b' ||
+    slug === 'models-gemma3-27b' ||
+    slug === 'models-llama33-70b'
+  ) {
+    return slug;
+  }
   if (slug.startsWith('models-') || slug.startsWith('gpus-') || slug.startsWith('recipes-')) {
     return 'gpus';
   }

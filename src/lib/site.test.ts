@@ -93,6 +93,9 @@ describe('accessibility statement', () => {
     assert.equal(ogSlug('/models'), 'models');
     assert.equal(ogSlug('/models/qwen36'), 'models-qwen36');
     assert.equal(ogSlug('/models/flash'), 'models-flash');
+    assert.equal(ogSlug('/models/gpt-oss-20b'), 'models-gpt-oss-20b');
+    assert.equal(ogSlug('/models/gemma3-27b'), 'models-gemma3-27b');
+    assert.equal(ogSlug('/models/llama33-70b'), 'models-llama33-70b');
     assert.equal(ogSlug('/troubleshoot'), 'troubleshoot');
     assert.equal(ogSlug('/labs/shannon'), 'labs-shannon');
     assert.equal(ogSlug('/secure-lab'), 'secure-lab');

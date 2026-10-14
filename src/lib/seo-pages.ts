@@ -9,7 +9,7 @@ import { harnesses, harnessesFile } from './harnesses-data';
 import { quizCombos, parseQuizCombo, pickHarness } from './harnesses';
 import { recipes } from './recipes-data';
 import { rocmProblems } from './rocm-problems-data';
-import { houseModelPages } from './model-pages';
+import { CITED_MODEL_PUBLISHED, MODEL_PUBLISHED, houseModelPages, isCitedModelId } from './model-pages';
 import { runs } from './run-card-data';
 import { bootstrapPageMeta, registerRunCardMeta } from './seo';
 
@@ -31,7 +31,7 @@ for (const model of houseModelPages()) {
     path: model.path,
     title: model.title,
     description: model.description,
-    published: '2026-10-13',
+    published: isCitedModelId(model.id) ? CITED_MODEL_PUBLISHED : MODEL_PUBLISHED,
   });
 }
 

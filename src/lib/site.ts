@@ -53,6 +53,12 @@ export const officialLinks = {
   qwenFlashGguf: 'https://huggingface.co/unsloth/Qwen3.8-Flash-Next-GGUF',
   qwen38: 'https://huggingface.co/Qwen/Qwen3.8-27B',
   qwen36Dense: 'https://huggingface.co/Qwen/Qwen3.6-27B',
+  gptOss20b: 'https://huggingface.co/openai/gpt-oss-20b',
+  gptOss20bGguf: 'https://huggingface.co/unsloth/gpt-oss-20b-GGUF',
+  gemma327b: 'https://huggingface.co/google/gemma-3-27b-it',
+  gemma327bGguf: 'https://huggingface.co/unsloth/gemma-3-27b-it-GGUF',
+  llama3370b: 'https://huggingface.co/meta-llama/Llama-3.3-70B-Instruct',
+  llama3370bGguf: 'https://huggingface.co/bartowski/Llama-3.3-70B-Instruct-GGUF',
   coder390:
     'https://huggingface.co/nerkyor/Qwen3.8-27B-Coder390-EfficientThink-Opus5.5-GPT6Astra-Grok4.7-DSV4Pro-K3-SFT-RLOO-GGUF-NInfer',
 };

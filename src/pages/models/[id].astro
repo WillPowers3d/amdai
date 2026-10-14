@@ -6,14 +6,14 @@ import NewsletterSignup from '../../components/NewsletterSignup.astro';
 import NextSteps from '../../components/NextSteps.astro';
 import RecipeTable from '../../components/RecipeTable.astro';
 import RunCard from '../../components/RunCard.astro';
-import { houseModelPage, HOUSE_MODEL_IDS } from '../../lib/model-pages';
+import { houseModelPage, MODEL_PAGE_IDS } from '../../lib/model-pages';
 import { recipesForModel } from '../../lib/recipes';
 import { recipes } from '../../lib/recipes-data';
 import { officialAmdaiRuns, runsForModelName, verifiedMeasured } from '../../lib/run-card';
 import { runs } from '../../lib/run-card-data';
 
 export function getStaticPaths() {
-  return HOUSE_MODEL_IDS.map((id) => ({ params: { id }, props: { id } }));
+  return MODEL_PAGE_IDS.map((id) => ({ params: { id }, props: { id } }));
 }
 
 const page = houseModelPage(Astro.props.id);
@@ -49,7 +49,10 @@ const modelRuns = officialAmdaiRuns(verifiedMeasured(runsForModelName(runs, page
     <section class="mt-12" aria-labelledby="recipes-heading">
       <h2 id="recipes-heading" class="font-serif text-3xl">Recipes</h2>
       <div class="mt-6">
-        <RecipeTable recipes={rows} empty="No tested recipe yet — contribute." />
+        <RecipeTable
+          recipes={rows}
+          empty={page.pageKind === 'cited' ? 'Not yet measured on our R9700s — no house recipe yet.' : 'No tested recipe yet — contribute.'}
+        />
       </div>
     </section>
 

@@ -52,4 +52,28 @@ export const MODEL_PAGES = [
     role: 'Fast agent when Strata is up',
     hf: 'https://huggingface.co/Qwen/Qwen3.8-Flash-Next',
   },
+  {
+    id: 'gpt-oss-20b',
+    name: 'gpt-oss 20B',
+    official: 'openai/gpt-oss-20b',
+    gguf: 'unsloth/gpt-oss-20b-GGUF',
+    role: '16 GB MoE — cited, not measured',
+    hf: 'https://huggingface.co/openai/gpt-oss-20b',
+  },
+  {
+    id: 'gemma3-27b',
+    name: 'Gemma 3 27B',
+    official: 'google/gemma-3-27b-it',
+    gguf: 'unsloth/gemma-3-27b-it-GGUF',
+    role: '16–24 GB dense — cited, not measured',
+    hf: 'https://huggingface.co/google/gemma-3-27b-it',
+  },
+  {
+    id: 'llama33-70b',
+    name: 'Llama 3.3 70B',
+    official: 'meta-llama/Llama-3.3-70B-Instruct',
+    gguf: 'bartowski/Llama-3.3-70B-Instruct-GGUF',
+    role: '32–64 GB dense — cited, not measured',
+    hf: 'https://huggingface.co/meta-llama/Llama-3.3-70B-Instruct',
+  },
 ] as const;

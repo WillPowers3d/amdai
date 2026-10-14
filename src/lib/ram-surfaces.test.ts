@@ -40,6 +40,9 @@ describe('shopper RAM labels', () => {
     assert.ok(isRamOffloadSurface('/compare/r9700-vs-rx-9070-xt'));
     assert.ok(RAM_OFFLOAD_SURFACES.includes('/models/qwen36'));
     assert.ok(RAM_OFFLOAD_SURFACES.includes('/models/flash'));
+    assert.ok(RAM_OFFLOAD_SURFACES.includes('/models/gpt-oss-20b'));
+    assert.ok(RAM_OFFLOAD_SURFACES.includes('/models/gemma3-27b'));
+    assert.ok(RAM_OFFLOAD_SURFACES.includes('/models/llama33-70b'));
     assert.ok(isRamOffloadSurface('/recipes/qwen36-35b.llamacpp-vulkan.262k'));
     assert.equal(isRamOffloadSurface('/results'), false);
     assert.deepEqual(missingRamLabels('<p>peak system RAM 42.9 GB</p>'), [RAM_MIN_LABEL, RAM_FULL_LABEL]);
