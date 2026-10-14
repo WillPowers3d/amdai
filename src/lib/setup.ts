@@ -42,6 +42,7 @@ export const SETUP_INTRO_LINKS: SetupLink[] = [
   { href: '/setup/wsl', label: 'WSL2' },
   { href: '/setup/comfyui', label: 'ComfyUI' },
   { href: '/setup/multi-gpu', label: 'Multi-GPU llama.cpp' },
+  { href: '/compare/vulkan-vs-rocm', label: 'Vulkan vs ROCm' },
   { href: '/fine-tuning', label: 'Fine-tuning' },
 ];
 
@@ -192,6 +193,7 @@ export const SETUP_PATHS: SetupPath[] = [
         links: [
           { href: '/backends', label: 'Backends' },
           { href: '/backends/llamacpp', label: 'llama.cpp' },
+          { href: '/compare/vulkan-vs-rocm', label: 'Vulkan vs ROCm' },
           { href: '/backends/strata', label: 'Strata' },
           { href: '/software', label: 'AI software' },
         ],
@@ -260,6 +262,7 @@ export const SETUP_PATHS: SetupPath[] = [
           { href: '/backends/llamacpp', label: 'llama.cpp' },
           { href: '/rocm-problems/windows-wsl-preview', label: 'Windows / WSL2 preview' },
           { href: '/rocm/vulkan-hip', label: 'Vulkan vs HIP' },
+          { href: '/compare/vulkan-vs-rocm', label: 'Vulkan vs ROCm compare' },
           { href: '/tutorials/install-rocm', label: 'Install ROCm (Linux)' },
         ],
       },
@@ -271,6 +274,7 @@ export const SETUP_PATHS: SetupPath[] = [
         measured: false,
         links: [
           { href: '/backends', label: 'Backends' },
+          { href: '/compare/vulkan-vs-rocm', label: 'Vulkan vs ROCm' },
           { href: '/software', label: 'AI software' },
         ],
       },
@@ -380,6 +384,7 @@ export const REQUIRED_SETUP_HREFS = [
   '/setup/wsl',
   '/setup/comfyui',
   '/setup/multi-gpu',
+  '/compare/vulkan-vs-rocm',
   '/fine-tuning',
 ] as const;
 

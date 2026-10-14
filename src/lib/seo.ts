@@ -138,6 +138,7 @@ export const CRUMB_LABELS: Record<string, string> = {
   '/compare/one-vs-two-gpu': 'One vs two GPUs',
   '/compare/q4-q5-q6': 'Q6 Q5 Q4',
   '/compare/radeon-vs-nvidia': 'Radeon vs NVIDIA',
+  '/compare/vulkan-vs-rocm': 'Vulkan vs ROCm',
   '/harnesses': 'Harnesses',
   '/harnesses/compare': 'Compare harnesses',
   '/harnesses/quiz': 'Quiz',
@@ -498,6 +499,12 @@ setMeta(
   'Cited Radeon vs NVIDIA for a local LLM: vendor specs, measured R9700 35B, and an honest CUDA vs ROCm software split. No invented prices.',
 );
 setDate('/compare/radeon-vs-nvidia', '2026-10-13');
+setMeta(
+  '/compare/vulkan-vs-rocm',
+  'llama.cpp on Radeon: Vulkan vs ROCm (HIP)',
+  'llama.cpp on Radeon: Vulkan vs ROCm (HIP). Why the house 35B daily driver is Vulkan. HIP stays a cited second compile. Q3 is a labeled estimate.',
+);
+setDate('/compare/vulkan-vs-rocm', '2026-10-14');
 for (const row of gpuCompareSeoRows()) {
   CRUMB_LABELS[row.path] = row.title;
   setMeta(row.path, row.title, row.description);

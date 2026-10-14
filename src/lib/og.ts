@@ -341,6 +341,12 @@ export const OG_CARDS: OgCard[] = [
     measured: true,
   },
   {
+    slug: 'compare-vulkan-vs-rocm',
+    title: 'Vulkan vs ROCm (HIP)',
+    lede: 'llama.cpp on Radeon. HIP cells stay pending',
+    alt: 'AMDai llama.cpp on Radeon — Vulkan vs ROCm HIP, measured 35B Vulkan cells only',
+  },
+  {
     slug: 'compare-gpus',
     title: 'Compare AMD GPUs',
     lede: 'VRAM, 35B Q6/Q5/Q4 fit estimates, labeled Q3',

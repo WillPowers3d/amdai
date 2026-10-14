@@ -59,6 +59,7 @@ describe('shopper RAM labels', () => {
     assert.ok(RAM_OFFLOAD_SURFACES.includes('/guides/buying-used-radeon'));
     assert.ok(isRamOffloadSurface('/can-run/qwen36-35b-on-rx-7900-xtx'));
     assert.ok(RAM_OFFLOAD_SURFACES.includes('/compare/radeon-vs-nvidia'));
+    assert.ok(RAM_OFFLOAD_SURFACES.includes('/compare/vulkan-vs-rocm'));
     assert.ok(RAM_OFFLOAD_SURFACES.includes('/compare/gpus'));
     assert.ok(RAM_OFFLOAD_SURFACES.includes('/compare/models'));
     assert.ok(isRamOffloadSurface('/compare/r9700-vs-rx-9070-xt'));

@@ -29,6 +29,7 @@ const ALLOWED_HREFS = new Set([
   '/compare/q4-q5-q6',
   '/compare/gpus',
   '/compare/models',
+  '/compare/vulkan-vs-rocm',
   '/calculator',
   '/credits',
   '/faq',

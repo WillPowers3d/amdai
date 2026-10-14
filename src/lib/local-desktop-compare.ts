@@ -400,6 +400,12 @@ export function compareHubCards() {
       body: 'Cited specs and an honest software split for shoppers picking an R9700 / RX 7900-class card versus an RTX 5090, 4090, 3090, 5080, 5070 Ti, or 5060 Ti 16GB. Measured R9700 tok/s; NVIDIA speed stays empty until a cited figure exists.',
     },
     {
+      href: '/compare/vulkan-vs-rocm',
+      kicker: 'Backend',
+      title: 'llama.cpp Vulkan vs ROCm (HIP)',
+      body: 'Why the house 35B daily driver is a Vulkan build. HIP is the cited second compile. Measured Vulkan cells only; HIP stays pending until a local-desktop card lands. Q3 is a labeled estimate.',
+    },
+    {
       href: '/long-context',
       kicker: 'Context',
       title: 'Long context on Radeon',

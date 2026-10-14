@@ -419,8 +419,9 @@ export const FAQ_ENTRIES: FaqItem[] = [
     group: 'getting-started',
     question: 'Vulkan or ROCm HIP?',
     answer:
-      'Consumer default on AMDai is llama.cpp Vulkan for the daily-driver 35B. HIP is the ROCm compile when you need it, and it is also where gfx1201 “no binary for GPU” reports show up. If HIP configure is a mess, try Vulkan first and read the cited problem row. Engine notes live on the backends pages — llama.cpp first.',
+      'Consumer default on AMDai is llama.cpp Vulkan for the daily-driver 35B. HIP is the ROCm compile when you need it, and it is also where gfx1201 “no binary for GPU” reports show up. If HIP configure is a mess, try Vulkan first and read the cited problem row. The shopper compare is /compare/vulkan-vs-rocm. HIP decode on local-desktop stays pending. Engine notes live on the backends pages — llama.cpp first.',
     links: [
+      { href: '/compare/vulkan-vs-rocm', label: 'Vulkan vs ROCm' },
       { href: '/backends', label: 'Backends' },
       { href: '/backends/llamacpp', label: 'llama.cpp' },
       { href: '/rocm/vulkan-hip', label: 'Vulkan vs HIP' },
@@ -827,6 +828,7 @@ export const REQUIRED_FAQ_HREFS = [
   '/multi-gpu',
   '/amdai-bench',
   '/compare/radeon-vs-nvidia',
+  '/compare/vulkan-vs-rocm',
   '/troubleshoot',
   '/image-gen',
   '/speech',

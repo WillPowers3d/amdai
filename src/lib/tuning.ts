@@ -394,6 +394,7 @@ export const TUNING_KNOBS: TuningKnob[] = [
     exampleNote: 'Measure Vulkan vs ROCm on your box. Do not copy a HIP tok/s from this page.',
     stackLab: 'Stack Lab A/B: Vulkan vs ROCm backend. Measure it on your box via /stack-lab planner, /rocm/vulkan-hip, and /amdai-bench.',
     links: [
+      { href: '/compare/vulkan-vs-rocm', label: 'Vulkan vs ROCm' },
       { href: '/rocm/vulkan-hip', label: 'Vulkan vs HIP' },
       { href: '/backends/llamacpp', label: 'llama.cpp' },
       { href: '/backends', label: 'Backends' },
@@ -452,6 +453,7 @@ export const TUNING_HUB_LINKS: TuningLink[] = [
   { href: '/multi-gpu', label: 'Dual / multi-GPU' },
   { href: '/power', label: 'Power' },
   { href: '/flash-ram-offload', label: 'Flash RAM offload' },
+  { href: '/compare/vulkan-vs-rocm', label: 'Vulkan vs ROCm' },
   { href: '/rocm/vulkan-hip', label: 'Vulkan vs HIP' },
   { href: '/stack-lab', label: 'Stack Lab' },
   { href: '/amdai-bench', label: 'amdai-bench' },
@@ -466,6 +468,7 @@ export const REQUIRED_TUNING_HREFS = [
   '/flash-ram-offload',
   '/backends',
   '/backends/llamacpp',
+  '/compare/vulkan-vs-rocm',
   '/rocm/vulkan-hip',
   '/stack-lab',
   '/amdai-bench',

@@ -377,6 +377,7 @@ export const GLOSSARY: GlossaryEntry[] = [
     deeper:
       'Compile GGML_HIP only after /opt/rocm and rocminfo show gfx1201. Family packages are gfx-specific; a gfx1100 tree is the wrong binary. HIPRTC and rocBLAS live on the ROCm-guide pages, not here.',
     links: [
+      { href: '/compare/vulkan-vs-rocm', label: 'Vulkan vs ROCm' },
       { href: '/rocm', label: 'What is ROCm' },
       { href: '/backends', label: 'Backends' },
       { href: '/tutorials/run-local-llm', label: 'Run a local Qwen' },
@@ -946,6 +947,7 @@ export const GLOSSARY: GlossaryEntry[] = [
     deeper:
       'House 35B cards use Mesa RADV 25.2.8. After llama.cpp --list-devices, pick the RADV GFX1201 device and hide the iGPU if two Vulkan devices appear. Vulkan is an on-ramp, not a fallback — it is what we run.',
     links: [
+      { href: '/compare/vulkan-vs-rocm', label: 'Vulkan vs ROCm' },
       { href: '/backends', label: 'Backends' },
       { href: '/tutorials/run-local-llm', label: 'Run a local Qwen' },
       { href: '/rocm', label: 'What is ROCm' },

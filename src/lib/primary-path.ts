@@ -520,6 +520,17 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
     { href: '/budget', label: 'Budget' },
     { href: '/faq', label: 'FAQ' },
   ],
+  '/compare/vulkan-vs-rocm': [
+    { href: '/compare', label: 'Compare 35B' },
+    { href: '/backends/llamacpp', label: 'llama.cpp' },
+    { href: '/rocm/vulkan-hip', label: 'Vulkan vs HIP' },
+    { href: '/setup', label: 'First-run setup' },
+    { href: '/gpus/r9700', label: 'R9700 measured page' },
+    { href: '/benchmarks', label: 'Benchmarks' },
+    { href: '/stack-lab', label: 'Stack Lab' },
+    { href: '/amdai-bench', label: 'amdai-bench' },
+    { href: '/multi-gpu', label: 'Dual / multi-GPU' },
+  ],
   '/stack-lab': [
     { href: '/setup', label: 'First-run setup' },
     { href: '/gpus/r9700', label: 'R9700 measured page' },

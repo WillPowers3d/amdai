@@ -62,6 +62,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/compare/gpus', label: 'Compare GPUs' },
       { href: '/compare/models', label: 'Compare models' },
       { href: '/compare/radeon-vs-nvidia', label: 'Radeon vs NVIDIA' },
+      { href: '/compare/vulkan-vs-rocm', label: 'Vulkan vs ROCm' },
       { href: '/benchmarks', label: 'Benchmarks' },
       { href: '/results', label: 'Run cards' },
       { href: '/multi-gpu', label: 'Dual / multi-GPU' },
@@ -128,6 +129,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/setup/wsl', label: 'WSL2 setup' },
       { href: '/setup/comfyui', label: 'ComfyUI' },
       { href: '/setup/multi-gpu', label: 'Multi-GPU llama.cpp' },
+      { href: '/compare/vulkan-vs-rocm', label: 'Vulkan vs ROCm' },
       { href: '/image-gen', label: 'Image gen on Radeon' },
       { href: '/vision', label: 'Vision on Radeon' },
       { href: '/speech', label: 'Speech on Radeon' },
@@ -253,6 +255,7 @@ function topicLinks(path: string): RelatedLink[] {
   if (path.startsWith('/rocm') && !path.startsWith('/rocm-problems')) {
     return [
       { href: '/rocm', label: 'What is ROCm' },
+      { href: '/compare/vulkan-vs-rocm', label: 'Vulkan vs ROCm' },
       { href: '/rocm-problems', label: 'ROCm problems' },
       { href: '/glossary', label: 'Glossary' },
       { href: '/setup', label: 'First-run setup' },
@@ -543,6 +546,7 @@ export function relatedFor(pathname: string): RelatedLink[] {
   if (path === '/backends' || path.startsWith('/backends/')) {
     const id = path === '/backends' ? '' : path.slice('/backends/'.length);
     add(out, seen, '/backends', 'Backends');
+    add(out, seen, '/compare/vulkan-vs-rocm', 'Vulkan vs ROCm');
     add(out, seen, '/tuning', 'Speed up llama.cpp');
     add(out, seen, '/setup/docker', 'Docker / Podman');
     add(out, seen, '/setup/lm-studio', 'LM Studio');
@@ -628,6 +632,7 @@ export function assertRelatedValid(
     '/compare/gpus',
     '/compare/models',
     '/compare/radeon-vs-nvidia',
+    '/compare/vulkan-vs-rocm',
     '/setup',
     '/setup/windows',
     '/setup/fedora',
