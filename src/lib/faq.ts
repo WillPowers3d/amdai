@@ -692,10 +692,25 @@ export const FAQ_ENTRIES: FaqItem[] = [
       'Yes on the measured house path: Qwen3.6-35B-A3B on llama.cpp Vulkan, f16 KV, one R9700 at 262144. Official UD-Q5_K_XL decode is 66.43 tok/s at 128K and 44.4 tok/s at 256K. The shopper guide is /long-context. Empty cells stay not measured yet. Q3 is a labeled estimate. We do not publish a planted-token recall score. llama.cpp first.',
     links: [
       { href: '/long-context', label: 'Long context on Radeon' },
+      { href: '/kv-cache', label: 'KV cache' },
       { href: '/calculator', label: 'Calculator' },
       { href: '/compare', label: 'Compare 35B' },
       { href: '/gpus/r9700', label: 'R9700' },
       { href: '/troubleshoot#oom-context', label: 'Long-context OOM' },
+    ],
+  },
+  {
+    id: 'kv-cache-radeon',
+    group: 'context-ram',
+    question: 'How much VRAM does the KV cache cost on a Radeon, and should I switch to q8_0?',
+    answer:
+      'The shopper guide is /kv-cache. House daily driver stays f16 KV at 262144 on one R9700 — measured UD-Q5 peak is 25.97 GB at 4K and 29.34 GB at 256K. q8_0 and q4_0 shrink the estimated cache. Quality and tok/s for those types are not measured yet. llama.cpp multi-gpu.md requires flash attention for a quantized V cache. Print both RAM lines when the window spills.',
+    links: [
+      { href: '/kv-cache', label: 'KV cache on a Radeon GPU' },
+      { href: '/long-context', label: 'Long context' },
+      { href: '/calculator', label: 'Calculator' },
+      { href: '/tuning', label: 'Speed up llama.cpp' },
+      { href: '/quants', label: 'Quants · KV types' },
     ],
   },
   {
@@ -849,6 +864,7 @@ export const REQUIRED_FAQ_HREFS = [
   '/image-gen',
   '/speech',
   '/long-context',
+  '/kv-cache',
   '/rag',
   '/vision',
   '/power',

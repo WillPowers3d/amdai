@@ -218,6 +218,7 @@ export const CRUMB_LABELS: Record<string, string> = {
   '/image-gen': 'Image gen',
   '/speech': 'Speech',
   '/long-context': 'Long context',
+  '/kv-cache': 'KV cache',
   '/rag': 'RAG',
   '/vision': 'Vision',
   '/power': 'Power',
@@ -433,6 +434,12 @@ setMeta(
   'Run 128K–262K locally on Radeon. Measured 35B llama.cpp cards from local-desktop. f16 KV default. Empty cells stay not measured yet.',
 );
 setDate('/long-context', '2026-10-13');
+setMeta(
+  '/kv-cache',
+  'KV cache on a Radeon GPU',
+  'Cited llama.cpp KV cache on Radeon. f16 vs q8_0 vs q4_0. Measured 35B VRAM. Estimates labeled. No invented tok/s.',
+);
+setDate('/kv-cache', '2026-10-14');
 setMeta(
   '/rag',
   'Local RAG on Radeon',

@@ -480,6 +480,12 @@ export const OG_CARDS: OgCard[] = [
     alt: 'AMDai long context on Radeon — measured 35B cards, f16 KV default',
   },
   {
+    slug: 'kv-cache',
+    title: 'KV cache on a Radeon GPU',
+    lede: 'f16 vs q8_0 vs q4_0. Measured 35B VRAM. Estimates labeled',
+    alt: 'AMDai KV cache on a Radeon GPU — f16 vs q8_0 vs q4_0, measured 35B VRAM',
+  },
+  {
     slug: 'rag',
     title: 'Local RAG on Radeon',
     lede: 'llama.cpp embeddings first. Speeds not yet measured by AMDai',

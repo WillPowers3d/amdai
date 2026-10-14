@@ -152,6 +152,7 @@ describe('primary path and nav IA', () => {
       '/vision': '../pages/vision.astro',
       '/speech': '../pages/speech.astro',
       '/long-context': '../pages/long-context.astro',
+      '/kv-cache': '../pages/kv-cache.astro',
       '/rag': '../pages/rag.astro',
       '/power': '../pages/power.astro',
       '/fine-tuning': '../pages/fine-tuning.astro',
