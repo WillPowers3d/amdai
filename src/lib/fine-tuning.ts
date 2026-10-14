@@ -252,9 +252,10 @@ export const FINE_TUNING_STEPS: FineTuningStep[] = [
     id: 'windows',
     title: 'Windows is a second path',
     body:
-      'Inference first-run on Windows is /setup/windows — llama.cpp Vulkan, not measured on local-desktop. Unsloth’s AMD page lists Windows + WSL + Linux for RDNA 3/4. AMD’s Radeon playbook: bitsandbytes is not well supported on Windows, so QLoRA is Linux-only there; Windows uses LoRA or full fine-tuning. Unsloth: AMD multi-GPU training is Linux-only. We have not measured training on Windows.',
+      'Inference first-run on Windows is /setup/windows — llama.cpp Vulkan, not measured on local-desktop. WSL2 ROCm is a 10.1 technical preview at /setup/wsl. Unsloth’s AMD page lists Windows + WSL + Linux for RDNA 3/4. AMD’s Radeon playbook: bitsandbytes is not well supported on Windows, so QLoRA is Linux-only there; Windows uses LoRA or full fine-tuning. Unsloth: AMD multi-GPU training is Linux-only. We have not measured training on Windows or WSL.',
     links: [
       { href: '/setup/windows', label: 'Windows setup' },
+      { href: '/setup/wsl', label: 'WSL2 setup' },
       { href: '/rocm-problems/windows-wsl-preview', label: 'Windows / WSL preview' },
     ],
   },
@@ -378,6 +379,7 @@ export const FINE_TUNING_SECTIONS = [
 export const FINE_TUNING_HUB_LINKS: FineTuningLink[] = [
   { href: '/setup', label: 'Ubuntu setup' },
   { href: '/setup/windows', label: 'Windows setup' },
+  { href: '/setup/wsl', label: 'WSL2 setup' },
   { href: '/rocm/versions', label: 'ROCm versions' },
   { href: '/rocm-problems/rocm-10-0-finetune-reset', label: 'Fine-tune reset' },
   { href: '/gpus/r9700', label: 'R9700' },
@@ -392,6 +394,7 @@ export const FINE_TUNING_HUB_LINKS: FineTuningLink[] = [
 export const REQUIRED_FINE_TUNING_HREFS = [
   '/setup',
   '/setup/windows',
+  '/setup/wsl',
   '/rocm/versions',
   '/rocm-problems/rocm-10-0-finetune-reset',
   '/tutorials/install-rocm',

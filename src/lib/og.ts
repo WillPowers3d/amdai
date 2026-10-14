@@ -260,6 +260,12 @@ export const OG_CARDS: OgCard[] = [
     alt: 'AMDai Open WebUI — cited chat UI against llama-server /v1',
   },
   {
+    slug: 'setup-wsl',
+    title: 'WSL2 on Radeon',
+    lede: 'Cited ROCm preview. Not measured on local-desktop',
+    alt: 'AMDai WSL2 — cited ROCm preview on Radeon, not measured on local-desktop',
+  },
+  {
     slug: 'stack-lab',
     title: 'Radeon Stack Lab',
     lede: 'Packages not published yet',

@@ -204,10 +204,11 @@ export const FAQ_ENTRIES: FaqItem[] = [
     group: 'getting-started',
     question: 'Ubuntu or Windows for a first local LLM box?',
     answer:
-      'Ubuntu LTS named on AMD’s current ROCm matrix is the path we write. First-run setup walks Ubuntu 24.04+ to the first token. Linux Mint, Pop!_OS, and Kubuntu are Ubuntu-based but are not on that 10.1 OS row — follow /setup only as unofficial, not verified on our rig. Cited Fedora and Arch guides live at /setup/fedora and /setup/arch. Docker or Podman is a cited isolated path at /setup/docker — official llama.cpp images, not a container tok/s card. LM Studio is a cited desktop llama.cpp wrapper at /setup/lm-studio — Vulkan runtime first on Radeon, local /v1 on :1234, not an LM Studio tok/s card. The Windows guide at /setup/windows is cited vendor docs, not measured on local-desktop. Radeon Stack Lab follows that Ubuntu path — packages are not published yet. Vulkan llama.cpp is the honest Windows path for tokens. Full ROCm userspace is a Linux product. ROCm 10.1 lists WSL2 as a technical preview — not a measured local-desktop daily driver. We do not have Windows, Fedora, Arch, container, or LM Studio tok/s cards.',
+      'Ubuntu LTS named on AMD’s current ROCm matrix is the path we write. First-run setup walks Ubuntu 24.04+ to the first token. Linux Mint, Pop!_OS, and Kubuntu are Ubuntu-based but are not on that 10.1 OS row — follow /setup only as unofficial, not verified on our rig. Cited Fedora and Arch guides live at /setup/fedora and /setup/arch. Docker or Podman is a cited isolated path at /setup/docker — official llama.cpp images, not a container tok/s card. LM Studio is a cited desktop llama.cpp wrapper at /setup/lm-studio — Vulkan runtime first on Radeon, local /v1 on :1234, not an LM Studio tok/s card. The Windows guide at /setup/windows is cited vendor docs, not measured on local-desktop. The WSL2 guide at /setup/wsl is the same preview AMD names in the 10.1 notes — KFD tools out of scope, AMD SMI monitoring-only, not a measured local-desktop daily driver. Radeon Stack Lab follows that Ubuntu path — packages are not published yet. Vulkan llama.cpp is the honest Windows path for tokens. Full ROCm userspace is a Linux product. We do not have Windows, WSL, Fedora, Arch, container, or LM Studio tok/s cards.',
     links: [
       { href: '/setup', label: 'First-run setup' },
       { href: '/setup/windows', label: 'Windows setup' },
+      { href: '/setup/wsl', label: 'WSL2 setup' },
       { href: '/setup/fedora', label: 'Fedora setup' },
       { href: '/setup/arch', label: 'Arch setup' },
       { href: '/setup/docker', label: 'Docker / Podman' },
@@ -296,6 +297,21 @@ export const FAQ_ENTRIES: FaqItem[] = [
       { href: '/setup/docker', label: 'Docker / Podman' },
       { href: '/setup/ollama', label: 'Ollama' },
       { href: '/harnesses/connect', label: 'Connect a harness' },
+    ],
+  },
+  {
+    id: 'wsl-on-radeon',
+    group: 'getting-started',
+    question: 'Can I run local AI on a Radeon under Windows WSL2?',
+    answer:
+      'Yes as a cited technical preview, not a measured local-desktop card. ROCm 10.1.0 lists WSL2 in TheRock artifacts: Ubuntu 26.04 / 24.04 / 22.04 guests, host Adrenalin then guest ROCm via /dev/dxg. Profiling, debugging, and KFD-dependent tools are out of scope; AMD SMI is monitoring-only. Native Linux at /setup is still the measured path. Native Windows first token is llama.cpp Vulkan at /setup/windows. Inside the guest, llama.cpp HIP (GGML_HIP=ON) is the documented GPU build — we do not invent Vulkan-in-WSL. Q6/Q5/Q4 first; Q3 stays a labeled estimate. Nothing on /setup/wsl was measured on local-desktop.',
+    links: [
+      { href: '/setup/wsl', label: 'WSL2 on Radeon' },
+      { href: '/setup/windows', label: 'Windows setup' },
+      { href: '/setup', label: 'Ubuntu setup (measured)' },
+      { href: '/rocm-problems/windows-wsl-preview', label: 'Windows / WSL2 preview' },
+      { href: '/backends/llamacpp', label: 'llama.cpp' },
+      { href: '/troubleshoot', label: 'Troubleshoot' },
     ],
   },
   {
@@ -768,6 +784,7 @@ export const REQUIRED_FAQ_HREFS = [
   '/setup/coding-assistant',
   '/setup/ollama',
   '/setup/open-webui',
+  '/setup/wsl',
 ] as const;
 
 const BANNED_VISIBLE = /Qwen2\.5|Qwen3-8B/i;

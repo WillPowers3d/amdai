@@ -129,6 +129,7 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
     { href: '/setup/coding-assistant', label: 'Coding assistant' },
     { href: '/setup/ollama', label: 'Ollama' },
     { href: '/setup/open-webui', label: 'Open WebUI' },
+    { href: '/setup/wsl', label: 'WSL2 setup' },
   ],
   '/setup/windows': [
     { href: '/setup', label: 'First-run setup' },
@@ -143,6 +144,7 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
     { href: '/setup/coding-assistant', label: 'Coding assistant' },
     { href: '/setup/ollama', label: 'Ollama' },
     { href: '/setup/open-webui', label: 'Open WebUI' },
+    { href: '/setup/wsl', label: 'WSL2 setup' },
   ],
   '/setup/fedora': [
     { href: '/setup', label: 'First-run setup' },
@@ -153,6 +155,7 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
     { href: '/setup/coding-assistant', label: 'Coding assistant' },
     { href: '/setup/ollama', label: 'Ollama' },
     { href: '/setup/open-webui', label: 'Open WebUI' },
+    { href: '/setup/wsl', label: 'WSL2 setup' },
     { href: '/gpus/r9700', label: 'R9700 measured page' },
     { href: '/backends/llamacpp', label: 'llama.cpp' },
     { href: '/troubleshoot', label: 'Troubleshoot' },
@@ -167,6 +170,7 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
     { href: '/setup/coding-assistant', label: 'Coding assistant' },
     { href: '/setup/ollama', label: 'Ollama' },
     { href: '/setup/open-webui', label: 'Open WebUI' },
+    { href: '/setup/wsl', label: 'WSL2 setup' },
     { href: '/gpus/r9700', label: 'R9700 measured page' },
     { href: '/backends/llamacpp', label: 'llama.cpp' },
     { href: '/troubleshoot', label: 'Troubleshoot' },
@@ -230,6 +234,16 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
     { href: '/setup/docker', label: 'Docker / Podman' },
     { href: '/setup/ollama', label: 'Ollama' },
     { href: '/setup/lm-studio', label: 'LM Studio' },
+    { href: '/calculator', label: 'Calculator' },
+  ],
+  '/setup/wsl': [
+    { href: '/setup', label: 'First-run setup' },
+    { href: '/setup/windows', label: 'Windows setup' },
+    { href: '/setup/fedora', label: 'Fedora setup' },
+    { href: '/setup/arch', label: 'Arch setup' },
+    { href: '/backends/llamacpp', label: 'llama.cpp' },
+    { href: '/rocm-problems/windows-wsl-preview', label: 'WSL2 preview' },
+    { href: '/troubleshoot', label: 'Troubleshoot' },
     { href: '/calculator', label: 'Calculator' },
   ],
   '/faq': [

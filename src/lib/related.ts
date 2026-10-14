@@ -90,6 +90,7 @@ function topicLinks(path: string): RelatedLink[] {
     path === '/setup/coding-assistant' ||
     path === '/setup/ollama' ||
     path === '/setup/open-webui' ||
+    path === '/setup/wsl' ||
     path === '/start'
   ) {
     return [
@@ -106,6 +107,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/setup/coding-assistant', label: 'Coding assistant' },
       { href: '/setup/ollama', label: 'Ollama' },
       { href: '/setup/open-webui', label: 'Open WebUI' },
+      { href: '/setup/wsl', label: 'WSL2 setup' },
       { href: '/image-gen', label: 'Image gen on Radeon' },
       { href: '/vision', label: 'Vision on Radeon' },
       { href: '/speech', label: 'Speech on Radeon' },
@@ -197,6 +199,7 @@ function topicLinks(path: string): RelatedLink[] {
     return [
       { href: '/setup', label: 'First-run setup' },
       { href: '/setup/windows', label: 'Windows setup' },
+      { href: '/setup/wsl', label: 'WSL2 setup' },
       { href: '/rocm/versions', label: 'ROCm versions' },
       { href: '/rocm-problems/rocm-10-0-finetune-reset', label: 'Fine-tune reset' },
       { href: '/gpus/r9700', label: 'R9700 measured page' },
@@ -222,6 +225,7 @@ function topicLinks(path: string): RelatedLink[] {
     return [
       { href: '/rocm-problems', label: 'ROCm problems' },
       { href: '/setup/ollama', label: 'Ollama' },
+      { href: '/setup/wsl', label: 'WSL2 setup' },
       { href: '/rocm', label: 'What is ROCm' },
       { href: '/troubleshoot', label: 'Troubleshoot' },
       { href: '/troubleshooting', label: 'Troubleshooting' },
@@ -500,6 +504,7 @@ export function relatedFor(pathname: string): RelatedLink[] {
     add(out, seen, '/setup/coding-assistant', 'Coding assistant');
     add(out, seen, '/setup/ollama', 'Ollama');
     add(out, seen, '/setup/open-webui', 'Open WebUI');
+    add(out, seen, '/setup/wsl', 'WSL2 setup');
     if (id) {
       for (const recipe of liveRecipes(recipes).filter((row) => row.backend === id)) {
         add(out, seen, `/recipes/${recipe.id}`, recipeLabel(recipe));
@@ -587,6 +592,7 @@ export function assertRelatedValid(
     '/setup/coding-assistant',
     '/setup/ollama',
     '/setup/open-webui',
+    '/setup/wsl',
     '/faq',
     '/models/qwen36',
     '/models/flash',

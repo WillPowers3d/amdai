@@ -272,6 +272,7 @@ export const SETUP_OPEN_WEBUI_HUB_LINKS: SetupOpenWebuiLink[] = [
   { href: '/setup/lm-studio', label: 'LM Studio' },
   { href: '/calculator', label: 'Calculator' },
   { href: '/gpus/r9700', label: 'R9700' },
+  { href: '/setup/wsl', label: 'WSL2' },
 ];
 
 export const REQUIRED_SETUP_OPEN_WEBUI_HREFS = [

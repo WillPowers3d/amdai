@@ -39,6 +39,7 @@ export const SETUP_INTRO_LINKS: SetupLink[] = [
   { href: '/setup/coding-assistant', label: 'Coding assistant' },
   { href: '/setup/ollama', label: 'Ollama' },
   { href: '/setup/open-webui', label: 'Open WebUI' },
+  { href: '/setup/wsl', label: 'WSL2' },
   { href: '/fine-tuning', label: 'Fine-tuning' },
 ];
 
@@ -103,12 +104,19 @@ export const SETUP_MORE_PATHS = [
     summary:
       'Browser chat against llama-server /v1. Docker or pip. No Open WebUI tok/s on AMDai.',
   },
+  {
+    href: '/setup/wsl',
+    label: 'WSL2',
+    kicker: 'Cited, not measured on local-desktop',
+    summary:
+      'ROCm 10.1 WSL2 technical preview. Native Linux stays measured. llama.cpp HIP in the guest. No WSL tok/s on AMDai.',
+  },
 ] as const;
 
 export const SETUP_UBUNTU_BASED = {
   title: 'Ubuntu-based distros',
   body:
-    'Linux Mint, Pop!_OS, and Kubuntu are Ubuntu-based. AMD’s ROCm 10.1.0 compatibility matrix lists Ubuntu 26.04.1, 24.04.5, and 22.04.5 by name — not Mint, Pop!_OS, or Kubuntu. Official docs do not put those derivatives on the 10.1 OS row, so we do not invent official AMD support. Follow the Ubuntu steps on this page only as unofficial; that path is not verified on our rig.     Prefer stock Ubuntu 24.04.5 if you want the measured local-desktop cards to match the box. Fedora, Arch, Docker / Podman, LM Studio, the coding-assistant guide, Ollama, and Open WebUI have their own cited pages.',
+    'Linux Mint, Pop!_OS, and Kubuntu are Ubuntu-based. AMD’s ROCm 10.1.0 compatibility matrix lists Ubuntu 26.04.1, 24.04.5, and 22.04.5 by name — not Mint, Pop!_OS, or Kubuntu. Official docs do not put those derivatives on the 10.1 OS row, so we do not invent official AMD support. Follow the Ubuntu steps on this page only as unofficial; that path is not verified on our rig.     Prefer stock Ubuntu 24.04.5 if you want the measured local-desktop cards to match the box. Fedora, Arch, Docker / Podman, LM Studio, the coding-assistant guide, Ollama, Open WebUI, and WSL2 have their own cited pages.',
   links: [
     { href: '/setup/fedora', label: 'Fedora setup' },
     { href: '/setup/arch', label: 'Arch setup' },
@@ -118,6 +126,7 @@ export const SETUP_UBUNTU_BASED = {
     { href: '/setup/coding-assistant', label: 'Coding assistant' },
     { href: '/setup/ollama', label: 'Ollama' },
     { href: '/setup/open-webui', label: 'Open WebUI' },
+    { href: '/setup/wsl', label: 'WSL2' },
   ] satisfies SetupLink[],
 };
 
@@ -205,7 +214,7 @@ export const SETUP_PATHS: SetupPath[] = [
     label: 'Windows',
     kicker: 'Honest limits',
     summary:
-      'Cited Windows guide at /setup/windows. Vulkan llama.cpp is the honest first token. Full ROCm userspace is a Linux product. ROCm 10.1 lists WSL2 as a technical preview. local-desktop cards are Ubuntu — we do not have Windows tok/s.',
+      'Cited Windows guide at /setup/windows. Vulkan llama.cpp is the honest first token. Full ROCm userspace is a Linux product. ROCm 10.1 lists WSL2 as a technical preview — cited walk at /setup/wsl. local-desktop cards are Ubuntu — we do not have Windows or WSL tok/s.',
     recommended: false,
     steps: [
       {
@@ -224,10 +233,11 @@ export const SETUP_PATHS: SetupPath[] = [
         id: 'windows-vulkan',
         title: 'Vulkan first — ROCm is not the first-run path',
         body:
-          'Build or install llama.cpp with Vulkan. That is the labeled estimate for a first Windows token. Native Windows ROCm and PyTorch-on-Windows exist as a narrower product; do not expect rocm-smi culture. WSL2 ROCm 10.1 is a tech preview, not a measured daily driver. Prefer a spare-drive Ubuntu install if you want the cards on this site to match your box.',
+          'Build or install llama.cpp with Vulkan. That is the labeled estimate for a first Windows token. Native Windows ROCm and PyTorch-on-Windows exist as a narrower product; do not expect rocm-smi culture. WSL2 ROCm 10.1 is a tech preview at /setup/wsl, not a measured daily driver. Prefer a spare-drive Ubuntu install if you want the cards on this site to match your box.',
         measured: false,
         links: [
           { href: '/setup/windows', label: 'Windows guide' },
+          { href: '/setup/wsl', label: 'WSL2 preview' },
           { href: '/backends/llamacpp', label: 'llama.cpp' },
           { href: '/rocm-problems/windows-wsl-preview', label: 'Windows / WSL2 preview' },
           { href: '/rocm/vulkan-hip', label: 'Vulkan vs HIP' },
@@ -347,6 +357,7 @@ export const REQUIRED_SETUP_HREFS = [
   '/setup/coding-assistant',
   '/setup/ollama',
   '/setup/open-webui',
+  '/setup/wsl',
   '/fine-tuning',
 ] as const;
 

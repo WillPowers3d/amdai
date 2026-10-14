@@ -108,6 +108,7 @@ describe('accessibility statement', () => {
     assert.equal(ogSlug('/setup/coding-assistant'), 'setup-coding-assistant');
     assert.equal(ogSlug('/setup/ollama'), 'setup-ollama');
     assert.equal(ogSlug('/setup/open-webui'), 'setup-open-webui');
+    assert.equal(ogSlug('/setup/wsl'), 'setup-wsl');
     assert.equal(ogSlug('/stack-lab'), 'stack-lab');
     assert.equal(ogSlug('/faq'), 'faq');
     assert.equal(ogSlug('/models'), 'models');

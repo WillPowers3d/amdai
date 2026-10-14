@@ -231,6 +231,7 @@ export const CRUMB_LABELS: Record<string, string> = {
   '/setup/coding-assistant': 'Coding assistant',
   '/setup/ollama': 'Ollama',
   '/setup/open-webui': 'Open WebUI',
+  '/setup/wsl': 'WSL2',
   '/stack-lab': 'Stack Lab',
   '/stacks': 'Stacks',
   '/calculator': 'Calculator',
@@ -384,6 +385,12 @@ setMeta(
   'Cited Open WebUI against llama-server /v1 on Radeon. llama.cpp first. No Open WebUI tok/s on AMDai.',
 );
 setDate('/setup/open-webui', '2026-10-14');
+setMeta(
+  '/setup/wsl',
+  'Run local AI on Radeon under Windows WSL2',
+  'Cited ROCm WSL2 preview on Radeon: listed cards, Ubuntu guest, llama.cpp HIP. Native Linux stays measured. Not measured on local-desktop.',
+);
+setDate('/setup/wsl', '2026-10-14');
 setMeta(
   '/image-gen',
   'Local image gen on Radeon',

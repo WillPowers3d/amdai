@@ -70,6 +70,8 @@ const ALLOWED_HREFS = new Set([
   '/setup/coding-assistant',
   '/setup/ollama',
   '/setup/open-webui',
+  '/setup/wsl',
+  '/rocm-problems/windows-wsl-preview',
   '/harnesses/open-webui',
   '/backends/ollama',
   '/rocm-problems/ollama-gfx1201-tensile',

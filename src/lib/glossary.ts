@@ -915,6 +915,24 @@ export const GLOSSARY: GlossaryEntry[] = [
     seeAlso: ['llamacpp', 'hip', 'gfx1201'],
   },
   {
+    id: 'wsl2',
+    term: 'WSL2',
+    aliases: ['WSL', 'Windows Subsystem for Linux', 'ROCm WSL2'],
+    letter: 'W',
+    definition:
+      'Windows Subsystem for Linux 2. ROCm 10.1.0 lists it as a technical preview: Ubuntu guest, Windows host Adrenalin, GPU via /dev/dxg. Profiling, debugging, and KFD-dependent tools are out of scope. AMD SMI is discovery and monitoring only.',
+    why: 'People search “ROCm WSL2 Radeon” and “llama.cpp WSL AMD GPU.” The cited walk is /setup/wsl. It is not a measured local-desktop card. Native Linux stays the measured path. Native Windows first token is llama.cpp Vulkan.',
+    deeper:
+      'TheRock artifacts ship Ubuntu .deb and Python wheels, not RPM. rocminfo prints “WSL2 environment detected.” Missing /dev/kfd is a cited preview limit. Microsoft documents .wslconfig memory= (default 50% of Windows RAM). llama.cpp’s documented GPU path in a Linux guest is HIP (GGML_HIP=ON). We do not invent Vulkan-in-WSL.',
+    links: [
+      { href: '/setup/wsl', label: 'WSL2 on Radeon' },
+      { href: '/setup/windows', label: 'Windows setup' },
+      { href: '/rocm-problems/windows-wsl-preview', label: 'Windows / WSL2 preview' },
+      { href: '/backends/llamacpp', label: 'llama.cpp' },
+    ],
+    seeAlso: ['rocm', 'hip', 'vulkan', 'llamacpp'],
+  },
+  {
     id: 'local-desktop',
     term: 'local-desktop',
     aliases: ['amdai', 'AMDai', 'house rig'],

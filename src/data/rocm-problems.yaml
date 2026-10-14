@@ -222,7 +222,8 @@ problems:
     status: workaround
     workaround: >-
       For HIP + PyTorch + `amd-smi` as AMD documents them, use a listed
-      Ubuntu. For tokens tonight on Windows, use llama.cpp Vulkan. Treat
+      Ubuntu. For tokens tonight on Windows, use llama.cpp Vulkan
+      (/setup/windows). The cited WSL2 walk is /setup/wsl. Treat
       WSL2 ROCm as preview: expect known issues, and do not file “ROCm is
       broken on Radeon” when the missing piece is KFD in WSL.
     affected_gpus: []

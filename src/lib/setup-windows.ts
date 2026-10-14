@@ -102,8 +102,8 @@ export const SETUP_WINDOWS_TRACKS: SetupWindowsTrack[] = [
       Ubuntu .deb packages and Python wheels, not RPM. Profiling, debugging, and KFD-dependent
       tools are out of scope at that launch. AMD SMI on WSL2 is discovery/monitoring only.
       The notes also list hangs and missing device-side fault reporting. That is too thin to
-      recommend WSL for a first Windows token. Prefer Ubuntu 24.04+ on bare metal if you want
-      the measured AMDai cards to match the box.
+      recommend WSL for a first Windows token. The cited WSL walk is /setup/wsl.
+      Prefer Ubuntu 24.04+ on bare metal if you want the measured AMDai cards to match the box.
     `.replace(/\s+/g, ' ').trim(),
   },
 ];
@@ -187,6 +187,7 @@ export const SETUP_WINDOWS_STEPS: SetupWindowsStep[] = [
       { href: '/troubleshoot', label: 'Troubleshoot' },
       { href: '/troubleshoot/errors', label: 'Error paste' },
       { href: '/rocm-problems/windows-wsl-preview', label: 'Windows / WSL2 preview' },
+      { href: '/setup/wsl', label: 'WSL2 setup' },
       { href: '/faq', label: 'FAQ' },
       { href: '/glossary', label: 'Glossary' },
     ],
@@ -209,6 +210,7 @@ export const SETUP_WINDOWS_HUB_LINKS: SetupWindowsLink[] = [
   { href: '/setup/coding-assistant', label: 'Coding assistant' },
   { href: '/setup/ollama', label: 'Ollama' },
   { href: '/setup/open-webui', label: 'Open WebUI' },
+  { href: '/setup/wsl', label: 'WSL2' },
 ];
 
 export const REQUIRED_SETUP_WINDOWS_HREFS = [
@@ -225,6 +227,7 @@ export const REQUIRED_SETUP_WINDOWS_HREFS = [
   '/bios',
   '/fine-tuning',
   '/setup/docker',
+  '/setup/wsl',
 ] as const;
 
 const BANNED = /Qwen2\.5|Qwen3-8B/i;

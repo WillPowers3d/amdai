@@ -234,6 +234,7 @@ export const SETUP_ARCH_HUB_LINKS: SetupArchLink[] = [
   { href: '/setup/coding-assistant', label: 'Coding assistant' },
   { href: '/setup/ollama', label: 'Ollama' },
   { href: '/setup/open-webui', label: 'Open WebUI' },
+  { href: '/setup/wsl', label: 'WSL2' },
   { href: '/gpus/r9700', label: 'R9700' },
   { href: '/benchmarks', label: 'Benchmarks' },
   { href: '/start', label: 'Getting started' },
