@@ -85,6 +85,7 @@ function topicLinks(path: string): RelatedLink[] {
     path === '/setup/windows' ||
     path === '/setup/fedora' ||
     path === '/setup/arch' ||
+    path === '/setup/docker' ||
     path === '/start'
   ) {
     return [
@@ -96,6 +97,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/setup/windows', label: 'Windows setup' },
       { href: '/setup/fedora', label: 'Fedora setup' },
       { href: '/setup/arch', label: 'Arch setup' },
+      { href: '/setup/docker', label: 'Docker / Podman' },
       { href: '/image-gen', label: 'Image gen on Radeon' },
       { href: '/vision', label: 'Vision on Radeon' },
       { href: '/speech', label: 'Speech on Radeon' },
@@ -153,6 +155,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/troubleshoot/errors', label: 'Error paste' },
       { href: '/troubleshooting', label: 'Troubleshooting' },
       { href: '/setup', label: 'First-run setup' },
+      { href: '/setup/docker', label: 'Docker / Podman' },
       { href: '/rocm-problems', label: 'ROCm problems' },
       { href: '/bios', label: 'BIOS' },
       { href: '/faq', label: 'FAQ' },
@@ -199,6 +202,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/rocm-problems', label: 'ROCm problems' },
       { href: '/glossary', label: 'Glossary' },
       { href: '/setup', label: 'First-run setup' },
+      { href: '/setup/docker', label: 'Docker / Podman' },
       { href: '/fine-tuning', label: 'Fine-tuning on Radeon' },
     ];
   }
@@ -474,6 +478,7 @@ export function relatedFor(pathname: string): RelatedLink[] {
     const id = path === '/backends' ? '' : path.slice('/backends/'.length);
     add(out, seen, '/backends', 'Backends');
     add(out, seen, '/tuning', 'Speed up llama.cpp');
+    add(out, seen, '/setup/docker', 'Docker / Podman');
     if (id) {
       for (const recipe of liveRecipes(recipes).filter((row) => row.backend === id)) {
         add(out, seen, `/recipes/${recipe.id}`, recipeLabel(recipe));
@@ -556,6 +561,7 @@ export function assertRelatedValid(
     '/setup/windows',
     '/setup/fedora',
     '/setup/arch',
+    '/setup/docker',
     '/faq',
     '/models/qwen36',
     '/models/flash',

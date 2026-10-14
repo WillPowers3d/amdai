@@ -230,6 +230,12 @@ export const OG_CARDS: OgCard[] = [
     alt: 'AMDai Arch setup — cited, not verified on our rig',
   },
   {
+    slug: 'setup-docker',
+    title: 'Docker / Podman llama.cpp',
+    lede: 'Cited official images. Not measured on local-desktop',
+    alt: 'AMDai Docker / Podman — cited llama.cpp images, not measured on local-desktop',
+  },
+  {
     slug: 'stack-lab',
     title: 'Radeon Stack Lab',
     lede: 'Packages not published yet',

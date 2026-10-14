@@ -204,6 +204,7 @@ export const SETUP_WINDOWS_HUB_LINKS: SetupWindowsLink[] = [
   { href: '/benchmarks', label: 'Benchmarks' },
   { href: '/start', label: 'Getting started' },
   { href: '/fine-tuning', label: 'Fine-tuning' },
+  { href: '/setup/docker', label: 'Docker / Podman' },
 ];
 
 export const REQUIRED_SETUP_WINDOWS_HREFS = [
@@ -219,6 +220,7 @@ export const REQUIRED_SETUP_WINDOWS_HREFS = [
   '/glossary',
   '/bios',
   '/fine-tuning',
+  '/setup/docker',
 ] as const;
 
 const BANNED = /Qwen2\.5|Qwen3-8B/i;

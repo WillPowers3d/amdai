@@ -17,6 +17,7 @@ const hubs = [
   { href: '/setup/windows', label: 'Windows (cited, not measured)', body: 'llama.cpp Vulkan first. HIP SDK where AMD lists the card. No Windows tok/s card.' },
   { href: '/setup/fedora', label: 'Fedora (cited, not verified)', body: 'Fedora’s own rocm packages + Mesa RADV. Not on the ROCm 10.1 OS row. No Fedora tok/s card.' },
   { href: '/setup/arch', label: 'Arch (cited, not verified)', body: 'Arch Wiki vulkan-radeon, then ggml-vulkan. Not on the ROCm 10.1 OS row. No Arch tok/s card.' },
+  { href: '/setup/docker', label: 'Docker / Podman (cited, not measured)', body: 'Official llama.cpp Vulkan or ROCm images. Localhost /v1. No container tok/s card.' },
   { href: '/calculator', label: 'Check my rig', body: 'Weights, KV, and overhead vs card VRAM. No invented prices.' },
   { href: '/budget', label: 'Pick a budget', body: 'Starter through the two-R9700 Pro rig. Check-price only.' },
   { href: '/gpus/r9700', label: 'R9700 measured page', body: '32 GB 35B llama.cpp sheet — one GPU vs two, cited cards.' },
@@ -98,6 +99,7 @@ const hubs = [
       <a class="btn-ghost" href="/setup/windows">Windows setup</a>
       <a class="btn-ghost" href="/setup/fedora">Fedora setup</a>
       <a class="btn-ghost" href="/setup/arch">Arch setup</a>
+      <a class="btn-ghost" href="/setup/docker">Docker / Podman</a>
       <a class="btn-ghost" href="/gpus/r9700">R9700 recipe</a>
       <a class="btn-ghost" href="/gpus/strix-halo">Strix Halo</a>
       <a class="btn-ghost" href="/gpus/rx-9070-xt">9070 XT sheet</a>

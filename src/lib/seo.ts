@@ -226,6 +226,7 @@ export const CRUMB_LABELS: Record<string, string> = {
   '/setup/windows': 'Windows setup',
   '/setup/fedora': 'Fedora setup',
   '/setup/arch': 'Arch setup',
+  '/setup/docker': 'Docker / Podman',
   '/stack-lab': 'Stack Lab',
   '/stacks': 'Stacks',
   '/calculator': 'Calculator',
@@ -349,6 +350,12 @@ setMeta(
   'Cited Arch Wiki RADV + llama.cpp Vulkan. Not on the ROCm 10.1 OS row. Not verified on our rig.',
 );
 setDate('/setup/arch', '2026-10-14');
+setMeta(
+  '/setup/docker',
+  'Run llama.cpp on Radeon in Docker or Podman',
+  'Cited official llama.cpp Vulkan and ROCm images on Radeon. Localhost /v1. Not measured on local-desktop.',
+);
+setDate('/setup/docker', '2026-10-14');
 setMeta(
   '/image-gen',
   'Local image gen on Radeon',

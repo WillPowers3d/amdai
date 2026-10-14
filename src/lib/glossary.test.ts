@@ -59,7 +59,13 @@ const ALLOWED_HREFS = new Set([
   '/rocm',
   '/rocm/glossary',
   '/software',
+  '/setup',
+  '/setup/windows',
+  '/setup/fedora',
+  '/setup/arch',
+  '/setup/docker',
   '/stack-lab',
+  '/troubleshoot/errors',
   '/stacks',
   '/start',
   '/tutorials/install-rocm',
@@ -70,9 +76,6 @@ const ALLOWED_HREFS = new Set([
   '/fine-tuning',
   '/tuning',
   '/can-run',
-  '/setup/windows',
-  '/setup/fedora',
-  '/setup/arch',
 ]);
 
 describe('consumer glossary', () => {

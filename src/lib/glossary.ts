@@ -175,6 +175,23 @@ export const GLOSSARY: GlossaryEntry[] = [
     seeAlso: ['kv-cache', 'prefill-decode', 'quant'],
   },
   {
+    id: 'container',
+    term: 'Container (Docker / Podman)',
+    aliases: ['Docker', 'Podman', 'container image'],
+    letter: 'C',
+    definition:
+      'An isolated process that runs an official llama.cpp image instead of a host build. On AMDai that is ggml-org’s GHCR server-vulkan first, server-rocm second. The host still owns /dev/dri and, for HIP, /dev/kfd.',
+    why: 'People search “rocm docker llama.cpp.” The cited path is /setup/docker. It is not a measured local-desktop card. We do not invent a container tok/s or a speed delta versus bare metal. Bind the published port to 127.0.0.1.',
+    deeper:
+      'docker.md names ghcr.io/ggml-org/llama.cpp:server-vulkan and :server-rocm and says GPU images are not currently tested by CI beyond being built. AMD’s ROCm 10.1 container page documents --device /dev/kfd --device /dev/dri and optional seccomp=unconfined. Rootless Podman needs --group-add keep-groups; Fedora SELinux needs container_use_devices plus :z / :Z on the model volume.',
+    links: [
+      { href: '/setup/docker', label: 'Docker / Podman' },
+      { href: '/setup', label: 'Ubuntu setup (measured)' },
+      { href: '/backends/llamacpp', label: 'llama.cpp' },
+    ],
+    seeAlso: ['llamacpp', 'device-passthrough', 'nvme'],
+  },
+  {
     id: 'daily-driver',
     term: 'Daily driver',
     aliases: ['qwen-reliable', 'house default'],
@@ -190,6 +207,23 @@ export const GLOSSARY: GlossaryEntry[] = [
       { href: '/recipes/qwen36-35b.llamacpp-vulkan.262k', label: '262K recipe' },
     ],
     seeAlso: ['qwen36', 'llamacpp', 'quant'],
+  },
+  {
+    id: 'device-passthrough',
+    term: 'Device passthrough',
+    aliases: ['--device', '/dev/kfd', '/dev/dri', 'keep-groups'],
+    letter: 'D',
+    definition:
+      'Giving a container the host GPU nodes it needs. Vulkan llama.cpp uses /dev/dri. ROCm / HIP also needs /dev/kfd. The login (or --group-add) must match render and video.',
+    why: 'Permission denied on /dev/kfd is the usual container miss. AMD’s ROCm 10.1 container page documents both nodes and optional seccomp=unconfined. Rootless Podman bind-mounts devices and needs --group-add keep-groups; Fedora SELinux may need container_use_devices.',
+    deeper:
+      'Passing all of /dev/dri exposes every GPU. AMD shows renderD128 / renderD129 to restrict. Volume labels :z / :Z are for the GGUF mount, not for /dev. Full walk: /setup/docker.',
+    links: [
+      { href: '/setup/docker', label: 'Docker / Podman' },
+      { href: '/troubleshoot/errors', label: 'Error paste' },
+      { href: '/rocm', label: 'What is ROCm' },
+    ],
+    seeAlso: ['container', 'rocm', 'hip'],
   },
   {
     id: 'dual-gpu',

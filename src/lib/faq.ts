@@ -204,17 +204,33 @@ export const FAQ_ENTRIES: FaqItem[] = [
     group: 'getting-started',
     question: 'Ubuntu or Windows for a first local LLM box?',
     answer:
-      'Ubuntu LTS named on AMD’s current ROCm matrix is the path we write. First-run setup walks Ubuntu 24.04+ to the first token. Linux Mint, Pop!_OS, and Kubuntu are Ubuntu-based but are not on that 10.1 OS row — follow /setup only as unofficial, not verified on our rig. Cited Fedora and Arch guides live at /setup/fedora and /setup/arch. The Windows guide at /setup/windows is cited vendor docs, not measured on local-desktop. Radeon Stack Lab follows that Ubuntu path — packages are not published yet. Vulkan llama.cpp is the honest Windows path for tokens. Full ROCm userspace is a Linux product. ROCm 10.1 lists WSL2 as a technical preview — not a measured local-desktop daily driver. We do not have Windows, Fedora, or Arch tok/s cards.',
+      'Ubuntu LTS named on AMD’s current ROCm matrix is the path we write. First-run setup walks Ubuntu 24.04+ to the first token. Linux Mint, Pop!_OS, and Kubuntu are Ubuntu-based but are not on that 10.1 OS row — follow /setup only as unofficial, not verified on our rig. Cited Fedora and Arch guides live at /setup/fedora and /setup/arch. Docker or Podman is a cited isolated path at /setup/docker — official llama.cpp images, not a container tok/s card. The Windows guide at /setup/windows is cited vendor docs, not measured on local-desktop. Radeon Stack Lab follows that Ubuntu path — packages are not published yet. Vulkan llama.cpp is the honest Windows path for tokens. Full ROCm userspace is a Linux product. ROCm 10.1 lists WSL2 as a technical preview — not a measured local-desktop daily driver. We do not have Windows, Fedora, Arch, or container tok/s cards.',
     links: [
       { href: '/setup', label: 'First-run setup' },
       { href: '/setup/windows', label: 'Windows setup' },
       { href: '/setup/fedora', label: 'Fedora setup' },
       { href: '/setup/arch', label: 'Arch setup' },
+      { href: '/setup/docker', label: 'Docker / Podman' },
       { href: '/stack-lab', label: 'Stack Lab' },
       { href: '/start', label: 'Getting started' },
       { href: '/tutorials/install-rocm', label: 'Install ROCm' },
       { href: '/rocm-problems/windows-wsl-preview', label: 'Windows / WSL2 preview' },
       { href: '/backends/llamacpp', label: 'llama.cpp' },
+    ],
+  },
+  {
+    id: 'docker-or-podman',
+    group: 'getting-started',
+    question: 'Can I run llama.cpp on Radeon in Docker or Podman?',
+    answer:
+      'Yes as a cited path, not a measured local-desktop card. Official ggml-org images are server-vulkan first and server-rocm second. Pass /dev/dri for Vulkan; add /dev/kfd and optional seccomp=unconfined for ROCm. Bind the published port to 127.0.0.1. Rootless Podman needs keep-groups; Fedora SELinux needs container_use_devices. Q6/Q5/Q4 first; Q3 stays a labeled estimate. We do not invent container tok/s or a speed delta versus bare metal.',
+    links: [
+      { href: '/setup/docker', label: 'Docker / Podman' },
+      { href: '/setup', label: 'Ubuntu setup (measured)' },
+      { href: '/backends/llamacpp', label: 'llama.cpp' },
+      { href: '/rocm/vulkan-hip', label: 'Vulkan vs HIP' },
+      { href: '/harnesses', label: 'Harnesses' },
+      { href: '/troubleshoot/errors', label: 'Error paste' },
     ],
   },
   {
@@ -682,6 +698,7 @@ export const REQUIRED_FAQ_HREFS = [
   '/can-run',
   '/setup/fedora',
   '/setup/arch',
+  '/setup/docker',
 ] as const;
 
 const BANNED_VISIBLE = /Qwen2\.5|Qwen3-8B/i;

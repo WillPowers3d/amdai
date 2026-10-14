@@ -9,6 +9,7 @@ import { SETUP_HOWTO_STEPS, SETUP_PUBLISHED } from './setup';
 import { SETUP_WINDOWS_HOWTO_STEPS, SETUP_WINDOWS_PUBLISHED } from './setup-windows';
 import { SETUP_FEDORA_HOWTO_STEPS, SETUP_FEDORA_PUBLISHED } from './setup-fedora';
 import { SETUP_ARCH_HOWTO_STEPS, SETUP_ARCH_PUBLISHED } from './setup-arch';
+import { SETUP_DOCKER_HOWTO_STEPS, SETUP_DOCKER_PUBLISHED } from './setup-docker';
 import { IMAGE_GEN_HOWTO_STEPS, IMAGE_GEN_PUBLISHED } from './image-gen';
 import { SPEECH_HOWTO_STEPS, SPEECH_PUBLISHED } from './speech';
 import { LONG_CONTEXT_FAQ, LONG_CONTEXT_PUBLISHED } from './long-context';
@@ -439,6 +440,19 @@ export function pageJsonLd(input: {
         published: dates?.published ?? SETUP_ARCH_PUBLISHED,
         modified: dates?.modified ?? SETUP_ARCH_PUBLISHED,
         steps: SETUP_ARCH_HOWTO_STEPS,
+      }),
+    );
+    return nodes;
+  }
+  if (path === '/setup/docker') {
+    nodes.push(
+      howToJsonLd({
+        name: input.title.replace(/ · AMDai$/, ''),
+        description: input.description,
+        url,
+        published: dates?.published ?? SETUP_DOCKER_PUBLISHED,
+        modified: dates?.modified ?? SETUP_DOCKER_PUBLISHED,
+        steps: SETUP_DOCKER_HOWTO_STEPS,
       }),
     );
     return nodes;

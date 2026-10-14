@@ -28,11 +28,12 @@ import { HOUSE_STACK_LAB } from '../lib/stack-lab-open';
     <p class="kicker">Zero to first token</p>
     <h1 class="mt-3 font-serif text-4xl tracking-tight sm:text-5xl">{SETUP_NAME}</h1>
     <p class="mt-4 text-lg leading-relaxed text-muted">
-      Ubuntu 24.04+ is the recommended, measured path. Windows, Fedora, and Arch are cited
-      guides for what we have not run —
-      <a class="underline decoration-accent/40" href="/setup/fedora">/setup/fedora</a>
+      Ubuntu 24.04+ is the recommended, measured path. Windows, Fedora, Arch, and
+      Docker / Podman are cited guides for what we have not run —
+      <a class="underline decoration-accent/40" href="/setup/fedora">/setup/fedora</a>,
+      <a class="underline decoration-accent/40" href="/setup/arch">/setup/arch</a>,
       and
-      <a class="underline decoration-accent/40" href="/setup/arch">/setup/arch</a>.
+      <a class="underline decoration-accent/40" href="/setup/docker">/setup/docker</a>.
       Short answers stay on the
       <a class="underline decoration-accent/40" href="/faq">FAQ</a>.
       The longer map is
@@ -83,7 +84,7 @@ import { HOUSE_STACK_LAB } from '../lib/stack-lab-open';
           </a>
         ))}
         {SETUP_MORE_PATHS.map((path) => (
-          <a class="card p-5 hover:border-accent/40" href={path.href === '/setup/fedora' ? '/setup/fedora' : '/setup/arch'}>
+          <a class="card p-5 hover:border-accent/40" href={path.href}>
             <p class="kicker">{path.kicker}</p>
             <h3 class="mt-2 text-xl tracking-tight">{path.label}</h3>
             <p class="mt-3 text-sm leading-relaxed text-muted">{path.summary}</p>
