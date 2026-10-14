@@ -520,6 +520,10 @@ export const OG_CARDS: OgCard[] = [
     title: 'Speculative decoding on Radeon',
     lede: 'Cited llama.cpp draft flags. Speed not measured on local-desktop',
     alt: 'AMDai speculative decoding on a Radeon GPU with llama.cpp — cited flags, draft speed not measured',
+    slug: 'constrained-decoding',
+    title: 'Constrained decoding on Radeon',
+    lede: 'Cited GBNF and JSON schema. Measure Stack Lab grammar-ab/1',
+    alt: 'AMDai constrained decoding on Radeon — cited llama.cpp GBNF and JSON schema',
   },
   {
     slug: 'moe',

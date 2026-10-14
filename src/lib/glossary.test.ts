@@ -103,6 +103,7 @@ const ALLOWED_HREFS = new Set([
   '/tuning',
   '/speculative-decoding',
   '/kv-cache',
+  '/constrained-decoding',
   '/moe',
   '/can-run',
 ]);

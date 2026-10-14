@@ -217,6 +217,7 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
   '/setup/coding-assistant': [
     { href: '/setup', label: 'First-run setup' },
     { href: '/backends/llamacpp', label: 'llama.cpp' },
+    { href: '/constrained-decoding', label: 'Constrained decoding' },
     { href: '/harnesses/aider', label: 'Aider' },
     { href: '/harnesses/cline', label: 'Cline' },
     { href: '/harnesses/continue', label: 'Continue' },
@@ -786,6 +787,7 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
     { href: '/guides/quantize-gguf', label: 'Make GGUF quants' },
     { href: '/backends/llamacpp', label: 'llama.cpp' },
     { href: '/kv-cache', label: 'KV cache' },
+    { href: '/constrained-decoding', label: 'Constrained decoding' },
     { href: '/long-context', label: 'Long context' },
     { href: '/multi-gpu', label: 'Dual / multi-GPU' },
     { href: '/power', label: 'Power and PSU' },
@@ -803,6 +805,16 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
     { href: '/moe', label: 'MoE on Radeon' },
     { href: '/multi-gpu', label: 'Dual / multi-GPU' },
     { href: '/benchmarks', label: 'Benchmarks' },
+  '/constrained-decoding': [
+    { href: '/tuning', label: 'Speed up llama.cpp' },
+    { href: '/harnesses', label: 'Harnesses' },
+    { href: '/setup/coding-assistant', label: 'Coding assistant' },
+    { href: '/backends/llamacpp', label: 'llama.cpp' },
+    { href: '/moe', label: 'MoE on Radeon' },
+    { href: '/stack-lab', label: 'Stack Lab' },
+    { href: '/amdai-bench', label: 'amdai-bench' },
+    { href: '/calculator', label: 'Calculator' },
+    { href: '/glossary', label: 'Glossary' },
   ],
   '/moe': [
     { href: '/flash-ram-offload', label: 'Flash RAM offload' },

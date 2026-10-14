@@ -225,6 +225,7 @@ export const CRUMB_LABELS: Record<string, string> = {
   '/fine-tuning': 'Fine-tuning',
   '/tuning': 'Tuning',
   '/speculative-decoding': 'Speculative decoding',
+  '/constrained-decoding': 'Constrained decoding',
   '/moe': 'MoE',
   '/can-run': 'Can my Radeon run it?',
   '/setup': 'First-run setup',
@@ -491,6 +492,11 @@ setMeta(
   'Speculative decoding on Radeon with llama.cpp. Cited -md flags. Measured 35B only. Draft speed not measured on local-desktop. Q3 is a labeled estimate.',
 );
 setDate('/speculative-decoding', '2026-10-14');
+  '/constrained-decoding',
+  'Constrained decoding on a Radeon GPU',
+  'Constrained decoding on Radeon with llama.cpp. Cited GBNF and JSON schema. Measure decode vs free-form on Stack Lab grammar-ab/1. Q3 is a labeled estimate.',
+);
+setDate('/constrained-decoding', '2026-10-14');
 setMeta(
   '/moe',
   'Mixture-of-Experts on a Radeon GPU',

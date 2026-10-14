@@ -160,6 +160,7 @@ describe('primary path and nav IA', () => {
       '/fine-tuning': '../pages/fine-tuning.astro',
       '/tuning': '../pages/tuning.astro',
       '/speculative-decoding': '../pages/speculative-decoding.astro',
+      '/constrained-decoding': '../pages/constrained-decoding.astro',
       '/moe': '../pages/moe.astro',
       '/can-run': '../pages/can-run/index.astro',
     };

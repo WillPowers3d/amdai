@@ -141,6 +141,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/rag', label: 'RAG on Radeon' },
       { href: '/fine-tuning', label: 'Fine-tuning on Radeon' },
       { href: '/tuning', label: 'Speed up llama.cpp' },
+      { href: '/constrained-decoding', label: 'Constrained decoding' },
       { href: '/can-run', label: 'Can my Radeon run it?' },
     ];
   }
@@ -178,6 +179,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/guides/quantize-gguf', label: 'Make GGUF quants' },
       { href: '/backends/llamacpp', label: 'llama.cpp' },
       { href: '/kv-cache', label: 'KV cache' },
+      { href: '/constrained-decoding', label: 'Constrained decoding' },
       { href: '/long-context', label: 'Long context' },
       { href: '/multi-gpu', label: 'Dual / multi-GPU' },
       { href: '/power', label: 'Power and PSU' },
@@ -202,6 +204,18 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/amdai-bench', label: 'amdai-bench' },
       { href: '/calculator', label: 'Calculator' },
       { href: '/benchmarks', label: 'Benchmarks' },
+  if (path === '/constrained-decoding') {
+    return [
+      { href: '/tuning', label: 'Speed up llama.cpp' },
+      { href: '/harnesses', label: 'Harnesses' },
+      { href: '/setup/coding-assistant', label: 'Coding assistant' },
+      { href: '/backends/llamacpp', label: 'llama.cpp' },
+      { href: '/moe', label: 'MoE on Radeon' },
+      { href: '/compare/vulkan-vs-rocm', label: 'Vulkan vs ROCm' },
+      { href: '/stack-lab', label: 'Stack Lab' },
+      { href: '/amdai-bench', label: 'amdai-bench' },
+      { href: '/calculator', label: 'Calculator' },
+      { href: '/glossary', label: 'Glossary' },
     ];
   }
   if (path === '/moe') {
@@ -215,6 +229,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/multi-gpu', label: 'Dual / multi-GPU' },
       { href: '/setup/multi-gpu', label: 'Multi-GPU llama.cpp how-to' },
       { href: '/tuning', label: 'Speed up llama.cpp' },
+      { href: '/constrained-decoding', label: 'Constrained decoding' },
       { href: '/can-run', label: 'Can my Radeon run it?' },
       { href: '/compare/models', label: 'Compare models' },
       { href: '/benchmarks', label: 'Benchmarks' },
@@ -444,6 +459,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/setup', label: 'First-run setup' },
       { href: '/setup/lm-studio', label: 'LM Studio' },
       { href: '/setup/coding-assistant', label: 'Coding assistant' },
+      { href: '/constrained-decoding', label: 'Constrained decoding' },
       { href: '/setup/ollama', label: 'Ollama' },
       { href: '/setup/lemonade', label: 'Lemonade' },
       { href: '/setup/open-webui', label: 'Open WebUI' },
@@ -617,6 +633,7 @@ export function relatedFor(pathname: string): RelatedLink[] {
     add(out, seen, '/compare/vulkan-vs-rocm', 'Vulkan vs ROCm');
     add(out, seen, '/tuning', 'Speed up llama.cpp');
     add(out, seen, '/speculative-decoding', 'Speculative decoding');
+    add(out, seen, '/constrained-decoding', 'Constrained decoding');
     add(out, seen, '/setup/docker', 'Docker / Podman');
     add(out, seen, '/setup/lm-studio', 'LM Studio');
     add(out, seen, '/setup/coding-assistant', 'Coding assistant');
@@ -738,6 +755,7 @@ export function assertRelatedValid(
     '/fine-tuning',
     '/tuning',
     '/speculative-decoding',
+    '/constrained-decoding',
     '/moe',
     '/can-run',
     '/hardware',

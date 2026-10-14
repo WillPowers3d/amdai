@@ -551,6 +551,17 @@ export const FAQ_ENTRIES: FaqItem[] = [
       { href: '/stack-lab', label: 'Stack Lab' },
       { href: '/amdai-bench', label: 'amdai-bench' },
       { href: '/calculator', label: 'Calculator' },
+    id: 'constrained-decoding',
+    group: 'models-quants',
+    question: 'How do I force llama.cpp to emit valid JSON on a Radeon?',
+    answer:
+      'Use constrained decoding: a GBNF grammar or a JSON Schema that llama.cpp converts to GBNF. Official flags are --grammar / --grammar-file, -j / --json-schema, -jf / --json-schema-file, plus response_format on /v1/chat/completions. Describe the shape in the prompt — the schema is not injected except during tool calling. Grammar decode versus free-form is not measured on local-desktop; run Stack Lab grammar-ab/1 and record an amdai-bench card. Q3 is a labeled estimate. llama.cpp first.',
+    links: [
+      { href: '/constrained-decoding', label: 'Constrained decoding' },
+      { href: '/setup/coding-assistant', label: 'Coding assistant' },
+      { href: '/harnesses', label: 'Harnesses' },
+      { href: '/stack-lab', label: 'Stack Lab' },
+      { href: '/amdai-bench', label: 'amdai-bench' },
     ],
   },
   {
@@ -921,6 +932,7 @@ export const REQUIRED_FAQ_HREFS = [
   '/fine-tuning',
   '/tuning',
   '/speculative-decoding',
+  '/constrained-decoding',
   '/moe',
   '/can-run',
   '/setup/fedora',

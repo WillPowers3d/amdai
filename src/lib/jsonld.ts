@@ -30,6 +30,7 @@ import { VISION_FAQ, VISION_HOWTO_STEPS, VISION_PUBLISHED } from './vision';
 import { FINE_TUNING_FAQ, FINE_TUNING_HOWTO_STEPS, FINE_TUNING_PUBLISHED } from './fine-tuning';
 import { TUNING_FAQ, TUNING_HOWTO_STEPS, TUNING_PUBLISHED } from './tuning';
 import { SPEC_FAQ, SPEC_HOWTO_STEPS, SPEC_PUBLISHED } from './speculative-decoding';
+import { CD_FAQ, CD_HOWTO_STEPS, CD_PUBLISHED } from './constrained-decoding';
 import { MOE_FAQ, MOE_HOWTO_STEPS, MOE_PUBLISHED } from './moe';
 import { VULKAN_VS_ROCM_FAQ, VULKAN_VS_ROCM_HOWTO_STEPS, VULKAN_VS_ROCM_PUBLISHED } from './vulkan-vs-rocm';
 import { CAN_RUN_HUB_FAQ, CAN_RUN_PUBLISHED, canRunPairPage, parseCanRunSlug } from './can-run';
@@ -736,6 +737,16 @@ export function pageJsonLd(input: {
     return nodes;
   }
   if (path === '/speculative-decoding') {
+  if (path === '/constrained-decoding') {
+    nodes.push(
+      techArticleJsonLd({
+        headline: input.title.replace(/ · AMDai$/, ''),
+        description: input.description,
+        url,
+        published: dates?.published ?? CD_PUBLISHED,
+        modified: dates?.modified ?? CD_PUBLISHED,
+      }),
+    );
     nodes.push(
       howToJsonLd({
         name: input.title.replace(/ · AMDai$/, ''),
@@ -747,6 +758,12 @@ export function pageJsonLd(input: {
       }),
     );
     nodes.push(faqPageJsonLd(SPEC_FAQ, url));
+        published: dates?.published ?? CD_PUBLISHED,
+        modified: dates?.modified ?? CD_PUBLISHED,
+        steps: CD_HOWTO_STEPS,
+      }),
+    );
+    nodes.push(faqPageJsonLd(CD_FAQ, url));
     return nodes;
   }
   if (path === '/compare/vulkan-vs-rocm') {
