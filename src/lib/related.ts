@@ -158,12 +158,29 @@ function topicLinks(path: string): RelatedLink[] {
   if (path === '/tuning') {
     return [
       { href: '/backends/llamacpp', label: 'llama.cpp' },
+      { href: '/thinking', label: 'Thinking mode' },
       { href: '/long-context', label: 'Long context' },
       { href: '/multi-gpu', label: 'Dual / multi-GPU' },
       { href: '/power', label: 'Power and PSU' },
       { href: '/flash-ram-offload', label: 'Flash RAM offload' },
       { href: '/moe', label: 'MoE on Radeon' },
       { href: '/rocm/vulkan-hip', label: 'Vulkan vs HIP' },
+      { href: '/stack-lab', label: 'Stack Lab' },
+      { href: '/amdai-bench', label: 'amdai-bench' },
+      { href: '/benchmarks', label: 'Benchmarks' },
+      { href: '/calculator', label: 'Calculator' },
+    ];
+  }
+  if (path === '/thinking') {
+    return [
+      { href: '/backends/llamacpp', label: 'llama.cpp' },
+      { href: '/tuning', label: 'Speed up llama.cpp' },
+      { href: '/tutorials/serve-qwen', label: 'Serve Qwen' },
+      { href: '/long-context', label: 'Long context' },
+      { href: '/moe', label: 'MoE on Radeon' },
+      { href: '/harnesses', label: 'Harnesses' },
+      { href: '/models/qwen36', label: 'Qwen3.6-35B' },
+      { href: '/gpus/r9700', label: 'R9700 measured page' },
       { href: '/stack-lab', label: 'Stack Lab' },
       { href: '/amdai-bench', label: 'amdai-bench' },
       { href: '/benchmarks', label: 'Benchmarks' },
@@ -665,6 +682,7 @@ export function assertRelatedValid(
     '/power',
     '/fine-tuning',
     '/tuning',
+    '/thinking',
     '/moe',
     '/can-run',
     '/hardware',

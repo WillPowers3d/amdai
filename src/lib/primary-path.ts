@@ -737,6 +737,7 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
   ],
   '/tuning': [
     { href: '/backends/llamacpp', label: 'llama.cpp' },
+    { href: '/thinking', label: 'Thinking mode' },
     { href: '/long-context', label: 'Long context' },
     { href: '/multi-gpu', label: 'Dual / multi-GPU' },
     { href: '/power', label: 'Power and PSU' },
@@ -745,6 +746,18 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
     { href: '/amdai-bench', label: 'amdai-bench' },
     { href: '/benchmarks', label: 'Benchmarks' },
     { href: '/calculator', label: 'Calculator' },
+  ],
+  '/thinking': [
+    { href: '/tutorials/serve-qwen', label: 'Serve Qwen' },
+    { href: '/tuning', label: 'Speed up llama.cpp' },
+    { href: '/backends/llamacpp', label: 'llama.cpp' },
+    { href: '/models/qwen36', label: 'Qwen3.6-35B' },
+    { href: '/long-context', label: 'Long context' },
+    { href: '/harnesses', label: 'Harnesses' },
+    { href: '/gpus/r9700', label: 'R9700 measured page' },
+    { href: '/stack-lab', label: 'Stack Lab' },
+    { href: '/amdai-bench', label: 'amdai-bench' },
+    { href: '/troubleshoot', label: 'Troubleshoot' },
   ],
   '/moe': [
     { href: '/flash-ram-offload', label: 'Flash RAM offload' },

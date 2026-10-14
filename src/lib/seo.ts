@@ -223,6 +223,7 @@ export const CRUMB_LABELS: Record<string, string> = {
   '/power': 'Power',
   '/fine-tuning': 'Fine-tuning',
   '/tuning': 'Tuning',
+  '/thinking': 'Thinking mode',
   '/moe': 'MoE',
   '/can-run': 'Can my Radeon run it?',
   '/setup': 'First-run setup',
@@ -463,6 +464,12 @@ setMeta(
   'Speed up llama.cpp on Radeon. Cited -ngl, threads, batch, -fa, KV, split, draft, power. Measured 35B cells only. Q3 is a labeled estimate.',
 );
 setDate('/tuning', '2026-10-14');
+setMeta(
+  '/thinking',
+  'Thinking / reasoning mode on Radeon',
+  'Thinking / reasoning mode on a Radeon GPU with llama.cpp. Cited --reasoning and Qwen3.6 enable_thinking. Tokens not measured on local-desktop.',
+);
+setDate('/thinking', '2026-10-14');
 setMeta(
   '/moe',
   'Mixture-of-Experts on a Radeon GPU',

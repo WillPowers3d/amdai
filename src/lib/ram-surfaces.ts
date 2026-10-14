@@ -67,6 +67,7 @@ export const RAM_OFFLOAD_SURFACES = [
   '/power',
   '/fine-tuning',
   '/tuning',
+  '/thinking',
   '/moe',
   '/can-run',
   '/benchmarks',
