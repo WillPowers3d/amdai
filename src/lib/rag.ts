@@ -7,10 +7,11 @@
 import { CONSUMER_NAV_LINKS } from './consumer-gpu';
 import { RAM_FULL_LABEL, RAM_MIN_LABEL } from './ram-surfaces';
 
-export const RAG_PUBLISHED = '2026-10-13';
+export const RAG_PUBLISHED = '2026-10-14';
 export const RAG_CITED_LABEL = 'Cited, not measured on local-desktop';
 export const RAG_SPEED_LABEL = 'not yet measured by AMDai';
 export const RAG_EMPTY = 'not measured yet';
+export const RAG_NOMIC_HREF = 'https://huggingface.co/nomic-ai/nomic-embed-text-v1.5-GGUF';
 
 export type RagLink = { href: string; label: string };
 
@@ -29,12 +30,25 @@ export type RagModel = {
   kind: 'cited' | 'estimate';
 };
 
+export type RagFitBand = {
+  id: string;
+  quant: string;
+  size: string;
+  kind: 'cited' | 'q3-estimate';
+  kindLabel: string;
+  standalone: string;
+  sidecar: string;
+  speed: string;
+};
+
 export type RagFitRow = {
   id: string;
   vramClass: string;
   cards: RagLink[];
+  pick: string;
   fit: string;
   speed: string;
+  offload: boolean;
 };
 
 export type RagStep = {
@@ -53,7 +67,7 @@ export type RagError = {
 
 export const RAG_TITLE = 'Local RAG on Radeon';
 export const RAG_DESCRIPTION =
-  'Chat with your own PDFs and notes on Radeon. llama.cpp embeddings first. Linux first. Fit estimates, not measured on local-desktop.';
+  'Chat with your own PDFs on Radeon. Cited nomic-embed Q6/Q5/Q4 plus labeled Q3. llama.cpp first. Not measured on local-desktop.';
 
 export const RAG_LEAD = `
   Local RAG means you chunk your files, embed the chunks, retrieve the ones
@@ -94,11 +108,11 @@ export const RAG_SOURCES: RagSource[] = [
 
 export const RAG_MODELS: RagModel[] = [
   {
-    id: 'nomic-q4',
-    name: 'nomic-embed-text-v1.5 Q4_K_M',
-    size: '81 MiB',
-    note: 'Official nomic-embed-text-v1.5 GGUF table. Small cited Q4+ file.',
-    href: 'https://huggingface.co/nomic-ai/nomic-embed-text-v1.5-GGUF',
+    id: 'nomic-q6',
+    name: 'nomic-embed-text-v1.5 Q6_K',
+    size: '108 MiB',
+    note: 'Official nomic-embed-text-v1.5 GGUF table. House Q6 step on the comparison.',
+    href: RAG_NOMIC_HREF,
     kind: 'cited',
   },
   {
@@ -106,15 +120,31 @@ export const RAG_MODELS: RagModel[] = [
     name: 'nomic-embed-text-v1.5 Q5_K_M',
     size: '95 MiB',
     note: 'Official nomic-embed-text-v1.5 GGUF table.',
-    href: 'https://huggingface.co/nomic-ai/nomic-embed-text-v1.5-GGUF',
+    href: RAG_NOMIC_HREF,
     kind: 'cited',
+  },
+  {
+    id: 'nomic-q4',
+    name: 'nomic-embed-text-v1.5 Q4_K_M',
+    size: '81 MiB',
+    note: 'Official nomic-embed-text-v1.5 GGUF table.',
+    href: RAG_NOMIC_HREF,
+    kind: 'cited',
+  },
+  {
+    id: 'nomic-q3',
+    name: 'nomic-embed-text-v1.5 Q3_K_M',
+    size: '65 MiB',
+    note: 'Official listing. Labeled estimate — not a local-desktop run. Q1 and Q2 stay off.',
+    href: RAG_NOMIC_HREF,
+    kind: 'estimate',
   },
   {
     id: 'nomic-q8',
     name: 'nomic-embed-text-v1.5 Q8_0',
     size: '140 MiB',
-    note: 'Official nomic-embed-text-v1.5 GGUF table. House default when the file still fits.',
-    href: 'https://huggingface.co/nomic-ai/nomic-embed-text-v1.5-GGUF',
+    note: 'Official nomic-embed-text-v1.5 GGUF table. Larger cited file, not the Q6/Q5/Q4 comparison set.',
+    href: RAG_NOMIC_HREF,
     kind: 'cited',
   },
   {
@@ -122,16 +152,8 @@ export const RAG_MODELS: RagModel[] = [
     name: 'nomic-embed-text-v1.5 F16',
     size: '262 MiB',
     note: 'Official nomic-embed-text-v1.5 GGUF table. Largest listed nomic file we cite.',
-    href: 'https://huggingface.co/nomic-ai/nomic-embed-text-v1.5-GGUF',
+    href: RAG_NOMIC_HREF,
     kind: 'cited',
-  },
-  {
-    id: 'nomic-q3',
-    name: 'nomic-embed-text-v1.5 Q3_K_M',
-    size: '65 MiB',
-    note: 'Official listing. Labeled estimate for fit talk only — not runnable advice on our rig. Nothing below Q4 runs on local-desktop.',
-    href: 'https://huggingface.co/nomic-ai/nomic-embed-text-v1.5-GGUF',
-    kind: 'estimate',
   },
   {
     id: 'bge-small',
@@ -151,13 +173,62 @@ export const RAG_MODELS: RagModel[] = [
   },
 ];
 
+export const RAG_FIT_BANDS: RagFitBand[] = [
+  {
+    id: 'q6',
+    quant: 'Q6_K',
+    size: '108 MiB',
+    kind: 'cited',
+    kindLabel: 'cited',
+    standalone:
+      'Estimate: official file 108 MiB — under an 8 GB sticker as a dedicated embed server. Runtime VRAM is not measured.',
+    sidecar: 'Next to a house 35B sidecar the LLM is the limiter, not this file.',
+    speed: RAG_SPEED_LABEL,
+  },
+  {
+    id: 'q5',
+    quant: 'Q5_K_M',
+    size: '95 MiB',
+    kind: 'cited',
+    kindLabel: 'cited',
+    standalone:
+      'Estimate: official file 95 MiB — under an 8 GB sticker as a dedicated embed server. Runtime VRAM is not measured.',
+    sidecar: 'Next to a house 35B sidecar the LLM is the limiter, not this file.',
+    speed: RAG_SPEED_LABEL,
+  },
+  {
+    id: 'q4',
+    quant: 'Q4_K_M',
+    size: '81 MiB',
+    kind: 'cited',
+    kindLabel: 'cited',
+    standalone:
+      'Estimate: official file 81 MiB — under an 8 GB sticker as a dedicated embed server. Runtime VRAM is not measured.',
+    sidecar: 'Next to a house 35B sidecar the LLM is the limiter, not this file.',
+    speed: RAG_SPEED_LABEL,
+  },
+  {
+    id: 'q3',
+    quant: 'Q3_K_M',
+    size: '65 MiB',
+    kind: 'q3-estimate',
+    kindLabel: 'Q3 estimate',
+    standalone:
+      'Official listing 65 MiB. Labeled estimate — not a local-desktop run. Runtime VRAM is not measured.',
+    sidecar: 'Same sidecar rule: the LLM is the limiter. Q3 stays a labeled estimate.',
+    speed: RAG_SPEED_LABEL,
+  },
+];
+
 export const RAG_FIT_ROWS: RagFitRow[] = [
   {
     id: '32gb',
     vramClass: '32 GB discrete',
     cards: [{ href: '/gpus/r9700', label: 'Radeon AI PRO R9700' }],
-    fit: 'Estimate for the pair. The measured house 35B daily driver already sits on one R9700. Official nomic F16 is 262 MiB — the embed file is not the limiter. We have not measured embed-plus-LLM VRAM on local-desktop. Size the chat sidecar on the calculator.',
+    pick: 'Q6_K (108 MiB official). Q8_0 (140 MiB) and F16 (262 MiB) stay cited larger files.',
+    fit: 'Estimate for the pair. The measured house 35B daily driver already sits on one R9700. Official nomic Q6_K is 108 MiB — the embed file is not the limiter. We have not measured embed-plus-LLM VRAM on local-desktop. Size the chat sidecar on the calculator.',
     speed: RAG_SPEED_LABEL,
+    offload: false,
   },
   {
     id: '16gb',
@@ -170,22 +241,28 @@ export const RAG_FIT_ROWS: RagFitRow[] = [
       { href: '/gpus/rx-7600-xt', label: 'RX 7600 XT' },
       { href: '/gpus/rx-6800-xt', label: 'RX 6800 XT' },
     ],
-    fit: 'Estimate. Official nomic Q8_0 is 140 MiB. A house 35B Q4–Q6 file does not sit in 16 GB on the calculator at long context — the LLM sidecar is the fit question, not the embed GGUF. Q3 chat sidecar is a labeled estimate, not runnable advice.',
+    pick: 'Q6_K or Q5_K_M (108 / 95 MiB official).',
+    fit: `Estimate. Official nomic Q6_K is 108 MiB. A house 35B Q4–Q6 file does not sit in 16 GB on the calculator at long context — the LLM sidecar is the fit question, not the embed GGUF. Q3 chat sidecar is a labeled estimate. When that sidecar offloads, read ${RAM_MIN_LABEL} and ${RAM_FULL_LABEL} on the calculator.`,
     speed: RAG_SPEED_LABEL,
+    offload: true,
   },
   {
     id: '12gb',
     vramClass: '12 GB discrete',
     cards: [{ href: '/gpus/rx-7700-xt', label: 'RX 7700 XT' }],
-    fit: 'Estimate. Official nomic Q4_K_M is 81 MiB. Do not stack a house 35B Q4–Q6 file on the same 12 GB sticker without the calculator. Prefer a smaller Q4+ chat sidecar, or keep the LLM on DDR5 offload and read the RAM lines.',
+    pick: 'Q5_K_M or Q4_K_M (95 / 81 MiB official).',
+    fit: `Estimate. Official nomic Q5_K_M is 95 MiB. Do not stack a house 35B Q4–Q6 file on the same 12 GB sticker without the calculator. Keep the LLM on DDR5 offload if needed, and read ${RAM_MIN_LABEL} and ${RAM_FULL_LABEL}. Q3 chat sidecar is a labeled estimate.`,
     speed: RAG_SPEED_LABEL,
+    offload: true,
   },
   {
     id: '8gb',
     vramClass: '8 GB discrete',
     cards: [{ href: '/gpus/rx-7600', label: 'RX 7600' }],
-    fit: 'Estimate. Official nomic Q4_K_M is 81 MiB — under 8 GB on paper. The chat sidecar will not be a house 35B Q4–Q6 in VRAM. Size a smaller Q4+ LLM, or offload. This is not the 16 GB RX 7600 XT.',
+    pick: 'Q4_K_M (81 MiB official). Q3_K_M (65 MiB) is a labeled estimate.',
+    fit: `Estimate. Official nomic Q4_K_M is 81 MiB — under 8 GB on paper. The chat sidecar will not be a house 35B Q4–Q6 in VRAM. Size a smaller listed LLM, or offload and read ${RAM_MIN_LABEL} and ${RAM_FULL_LABEL}. This is not the 16 GB RX 7600 XT.`,
     speed: RAG_SPEED_LABEL,
+    offload: true,
   },
 ];
 
@@ -205,7 +282,7 @@ export const RAG_LINUX_STEPS: RagStep[] = [
     id: 'embed-server',
     title: 'Serve a dedicated embedding GGUF with llama.cpp',
     body:
-      'The llama.cpp server README documents --embeddings (also --embedding): restrict the process to embedding use, and use it only with a dedicated embedding model. The OpenAI-shaped route is POST /v1/embeddings. That is a second llama-server, not the chat /v1 on :8080. Vulkan is the consumer default, same as the daily driver. Pick a listed nomic-embed-text-v1.5 GGUF (Q8_0 is 140 MiB on the official table). The nomic card requires a task prefix such as search_query: on questions.',
+      'The llama.cpp server README documents --embeddings (also --embedding): restrict the process to embedding use, and use it only with a dedicated embedding model. The OpenAI-shaped route is POST /v1/embeddings. That is a second llama-server, not the chat /v1 on :8080. Vulkan is the consumer default, same as the daily driver. House comparison is nomic-embed-text-v1.5 Q6_K (108 MiB official), Q5_K_M (95 MiB), and Q4_K_M (81 MiB). Q3_K_M (65 MiB) is a labeled estimate. Q8_0 (140 MiB) and F16 (262 MiB) stay cited larger files. The nomic card requires a task prefix such as search_query: on questions.',
     links: [
       { href: 'https://github.com/ggml-org/llama.cpp/blob/master/tools/server/README.md', label: 'llama.cpp server README' },
       { href: 'https://huggingface.co/nomic-ai/nomic-embed-text-v1.5-GGUF', label: 'nomic-embed GGUF' },
@@ -266,7 +343,7 @@ export const RAG_ERRORS: RagError[] = [
     id: 'oom-embed',
     title: 'OOM while embedding or next to the chat sidecar',
     body:
-      'Official nomic F16 is 262 MiB. That can still starve a card that already holds a 35B GGUF if you load both into the same VRAM pool. Size the LLM on the calculator first. Run the embed server as its own process. A second card is a /multi-gpu question — we have not measured RAG-plus-LLM on local-desktop.',
+      `Official nomic Q6_K is 108 MiB and F16 is 262 MiB. That can still starve a card that already holds a 35B GGUF if you load both into the same VRAM pool. Size the LLM on the calculator first. Run the embed server as its own process. When the sidecar offloads, shopper lines stay ${RAM_MIN_LABEL} and ${RAM_FULL_LABEL}. A second card is a /multi-gpu question — we have not measured RAG-plus-LLM on local-desktop.`,
     links: [
       { href: '/troubleshoot#oom-context', label: 'OOM at long context' },
       { href: '/troubleshoot#mmap-ram', label: 'System RAM too small' },
@@ -312,7 +389,7 @@ export const RAG_FAQ = [
     id: 'which-embed',
     question: 'Which embedding file should I start with?',
     answer:
-      'Cite the nomic-embed-text-v1.5 GGUF table: Q8_0 is 140 MiB, F16 is 262 MiB, Q4_K_M is 81 MiB. Prefer Q8_0 when it fits. Q3_K_M (65 MiB) is a labeled estimate, not runnable advice. BGE small is 33.4M params and BGE base is 0.1B params on the official cards — we do not invent those GGUF disk sizes. Q1 and Q2 stay off.',
+      'Cite the nomic-embed-text-v1.5 GGUF table: Q6_K is 108 MiB, Q5_K_M is 95 MiB, Q4_K_M is 81 MiB. Q3_K_M (65 MiB) is a labeled estimate — not a local-desktop run. Q8_0 (140 MiB) and F16 (262 MiB) stay cited larger files. BGE small is 33.4M params and BGE base is 0.1B params on the official cards — we do not invent those GGUF disk sizes. Q1 and Q2 stay off.',
     links: [
       { href: 'https://huggingface.co/nomic-ai/nomic-embed-text-v1.5-GGUF', label: 'nomic-embed GGUF' },
       { href: '/quants', label: 'Quants' },
@@ -332,8 +409,8 @@ export const RAG_FAQ = [
 
 export const RAG_SECTIONS = [
   { id: 'what-it-is', label: 'What it is' },
-  { id: 'models', label: 'Cited embed files' },
-  { id: 'fit', label: 'VRAM fit' },
+  { id: 'models', label: 'nomic-embed bands' },
+  { id: 'fit', label: 'Pick by VRAM' },
   { id: 'linux', label: 'Linux path' },
   { id: 'windows', label: 'Windows' },
   { id: 'alongside', label: 'Next to the LLM' },
@@ -398,9 +475,9 @@ export const RAG_WHAT = `
   Chunk, embed, retrieve, answer. The embedding model is a small GGUF.
   Context is the retrieved window plus the question. LLM weights are the
   chat sidecar — that is where VRAM and system RAM move. Official nomic
-  F16 is 262 MiB; official UD-Q5_K_XL 35B on one R9700 is the measured
-  daily driver. Adding those two on one card is an estimate until a
-  first-party card lands. Empty cells stay ${RAG_EMPTY}.
+  Q6_K is 108 MiB and F16 is 262 MiB; official UD-Q5_K_XL 35B on one R9700
+  is the measured daily driver. Adding those two on one card is an estimate
+  until a first-party card lands. Empty cells stay ${RAG_EMPTY}.
 `.replace(/\s+/g, ' ').trim();
 
 export function ragBlob(): string {
@@ -413,7 +490,8 @@ export function ragBlob(): string {
     RAG_ALONGSIDE,
     RAG_WHAT,
     ...RAG_MODELS.map((row) => `${row.name} ${row.size} ${row.note}`),
-    ...RAG_FIT_ROWS.map((row) => `${row.vramClass} ${row.fit} ${row.speed}`),
+    ...RAG_FIT_BANDS.map((row) => `${row.quant} ${row.size} ${row.kindLabel} ${row.standalone} ${row.sidecar} ${row.speed}`),
+    ...RAG_FIT_ROWS.map((row) => `${row.vramClass} ${row.pick} ${row.fit} ${row.speed}`),
     ...RAG_LINUX_STEPS.map((row) => `${row.title} ${row.body}`),
     ...RAG_WINDOWS_STEPS.map((row) => `${row.title} ${row.body}`),
     ...RAG_ERRORS.map((row) => `${row.title} ${row.body}`),
@@ -450,7 +528,10 @@ export function assertRagValid(): string[] {
   if (!/llama\.cpp/i.test(blob)) errors.push('must keep llama.cpp first');
   if (!/--embeddings/.test(blob)) errors.push('must cite --embeddings');
   if (!/\/v1\/embeddings/.test(blob)) errors.push('must cite /v1/embeddings');
-  if (!/140 MiB/.test(blob) || !/262 MiB/.test(blob)) errors.push('must cite official nomic sizes');
+  if (!/108 MiB/.test(blob) || !/95 MiB/.test(blob) || !/81 MiB/.test(blob)) {
+    errors.push('must cite official nomic Q6/Q5/Q4 sizes');
+  }
+  if (!/140 MiB/.test(blob) || !/262 MiB/.test(blob)) errors.push('must cite official nomic Q8/F16 sizes');
   if (!/33\.4M/.test(blob) || !/0\.1B/.test(blob)) errors.push('must cite official BGE param counts');
   if (!/Q3_K_M/.test(blob) || !/labeled estimate/.test(blob)) errors.push('Q3 must stay a labeled estimate');
   if (BANNED.test(blob)) errors.push('banned model');
@@ -463,14 +544,28 @@ export function assertRagValid(): string[] {
   if (!/No house Stack Lab recipe/.test(blob) && !/no house Stack Lab recipe/i.test(blob)) {
     errors.push('must refuse an invented Stack Lab recipe');
   }
-  if (RAG_FIT_ROWS.some((row) => row.speed !== RAG_SPEED_LABEL || !/estimate/i.test(row.fit))) {
-    errors.push('every fit row must be a labeled estimate with the unmeasured speed label');
+  if (RAG_FIT_ROWS.some((row) => row.speed !== RAG_SPEED_LABEL || !/estimate/i.test(row.fit) || !row.pick)) {
+    errors.push('every fit row must be a labeled estimate with a pick and the unmeasured speed label');
   }
   if (!RAG_FIT_ROWS.some((row) => row.id === '8gb') || !RAG_FIT_ROWS.some((row) => row.id === '32gb')) {
     errors.push('fit table must cover 8 GB and 32 GB');
   }
+  if (RAG_FIT_ROWS.some((row) => row.offload && (!row.fit.includes(RAM_MIN_LABEL) || !row.fit.includes(RAM_FULL_LABEL)))) {
+    errors.push('offload rows must show both RAM lines');
+  }
+  if (RAG_FIT_BANDS.map((row) => row.quant).join(',') !== 'Q6_K,Q5_K_M,Q4_K_M,Q3_K_M') {
+    errors.push('fit bands must be Q6_K / Q5_K_M / Q4_K_M / Q3_K_M');
+  }
+  if (RAG_FIT_BANDS.some((row) => row.speed !== RAG_SPEED_LABEL || !row.size.endsWith('MiB'))) {
+    errors.push('every fit band must cite an official MiB size and the unmeasured speed label');
+  }
+  const q3Band = RAG_FIT_BANDS.find((row) => row.quant === 'Q3_K_M');
+  if (!q3Band || q3Band.kind !== 'q3-estimate') errors.push('nomic Q3 band must stay a labeled estimate');
   const q3 = RAG_MODELS.find((row) => row.id === 'nomic-q3');
   if (!q3 || q3.kind !== 'estimate') errors.push('nomic Q3 must stay a labeled estimate');
+  if (!RAG_MODELS.some((row) => row.id === 'nomic-q6' && row.size === '108 MiB')) {
+    errors.push('must cite official nomic Q6_K 108 MiB');
+  }
   for (const required of REQUIRED_RAG_HREFS) {
     if (!hrefs.some((href) => href === required || href.startsWith(`${required}`))) {
       errors.push(`missing required href ${required}`);

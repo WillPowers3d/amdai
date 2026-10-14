@@ -10,6 +10,7 @@ import {
   RAG_EMPTY,
   RAG_ERRORS,
   RAG_FAQ,
+  RAG_FIT_BANDS,
   RAG_FIT_ROWS,
   RAG_HUB,
   RAG_LEAD,
@@ -96,14 +97,49 @@ import { RAM_FULL_LABEL, RAM_MIN_LABEL } from '../lib/ram-surfaces';
     </section>
 
     <section id="models" class="mt-12 scroll-mt-36" aria-labelledby="models-heading">
-      <h2 id="models-heading" class="font-serif text-3xl tracking-tight">Cited embedding files</h2>
+      <h2 id="models-heading" class="font-serif text-3xl tracking-tight">nomic-embed fit bands</h2>
       <p class="mt-3 max-w-3xl leading-relaxed text-muted">
-        Sizes below are from official model cards. Empty or missing GGUF listings stay
-        <strong class="text-ink">{RAG_EMPTY}</strong>. We do not invent a disk size.
+        Official nomic-embed-text-v1.5 GGUF sizes. House comparison is Q6_K / Q5_K_M /
+        Q4_K_M. <strong class="text-ink">Q3_K_M is a labeled estimate</strong> — not a
+        local-desktop run. Runtime VRAM stays {RAG_EMPTY}. We do not invent a disk size.
+      </p>
+      <div class="mt-6 overflow-x-auto">
+        <table class="table-lab min-w-[52rem]">
+          <caption>
+            Official nomic-embed-text-v1.5 GGUF sizes. Q3 is a labeled estimate. Speed is not measured.
+          </caption>
+          <thead>
+            <tr>
+              <th scope="col">Quant</th>
+              <th scope="col">Kind</th>
+              <th scope="col">Official size</th>
+              <th scope="col">Standalone 8 GB+</th>
+              <th scope="col">Next to a 35B sidecar</th>
+              <th scope="col">Speed</th>
+            </tr>
+          </thead>
+          <tbody>
+            {RAG_FIT_BANDS.map((row) => (
+              <tr>
+                <th scope="row">{row.quant}</th>
+                <td>{row.kindLabel}</td>
+                <td class="tabular-nums">{row.size}</td>
+                <td>{row.standalone}</td>
+                <td>{row.sidecar}</td>
+                <td>{row.speed}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p class="mt-3 text-xs leading-relaxed text-faint">
+        Also cited, not in the Q6/Q5/Q4 set: Q8_0 140 MiB, F16 262 MiB, BGE small 33.4M
+        params, BGE base 0.1B params. File listings without a published GGUF size stay
+        {RAG_EMPTY}.
       </p>
       <div class="mt-6 overflow-x-auto">
         <table class="min-w-[40rem] border-collapse text-left text-sm">
-          <caption class="sr-only">Cited embedding model sizes from official cards. Q3 is a labeled estimate.</caption>
+          <caption class="sr-only">Cited embedding files including larger nomic listings and BGE param counts.</caption>
           <thead>
             <tr class="border-b border-line">
               <th scope="col" class="py-3 pr-4 font-medium text-ink">File</th>
@@ -130,32 +166,68 @@ import { RAM_FULL_LABEL, RAM_MIN_LABEL } from '../lib/ram-surfaces';
     </section>
 
     <section id="fit" class="mt-12 scroll-mt-36" aria-labelledby="fit-heading">
-      <h2 id="fit-heading" class="font-serif text-3xl tracking-tight">Hardware fit — embed plus a Q4+ LLM</h2>
+      <h2 id="fit-heading" class="font-serif text-3xl tracking-tight">Pick by VRAM — embed plus the chat sidecar</h2>
       <p class="mt-3 max-w-3xl leading-relaxed text-muted">
-        Every row is a labeled estimate. The embed GGUF is small; the chat sidecar
-        is the VRAM question. Speed stays {RAG_SPEED_LABEL}.
+        Every row is a labeled estimate. Pick the nomic file from official sizes.
+        The embed GGUF is small; the chat sidecar is the VRAM question. Speed stays
+        {RAG_SPEED_LABEL}.
       </p>
-      <ul class="mt-6 grid gap-4">
-        {RAG_FIT_ROWS.map((row) => (
-          <li id={row.id} class="scroll-mt-28 rounded-2xl border border-line bg-raised/50 p-5">
-            <h3 class="font-serif text-2xl tracking-tight">{row.vramClass}</h3>
-            <p class="mt-3 leading-relaxed text-muted">{row.fit}</p>
-            <p class="mt-2 text-sm text-faint">Speed · {row.speed}</p>
-            <ul class="mt-4 flex flex-wrap gap-2">
-              {row.cards.map((link) => (
-                <li>
-                  <a
-                    class="inline-flex min-h-11 items-center rounded-full border border-line bg-canvas px-3 text-sm text-ink hover:border-accent/50 hover:text-accent-ink"
-                    href={link.href}
-                  >
-                    {link.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
+      <div class="mt-6 overflow-x-auto">
+        <table class="table-lab min-w-[52rem]">
+          <caption>
+            Pick a cited nomic-embed file by discrete VRAM class. Speed is not measured.
+          </caption>
+          <thead>
+            <tr>
+              <th scope="col">VRAM</th>
+              <th scope="col">Pick</th>
+              <th scope="col">Fit</th>
+              <th scope="col">Speed</th>
+            </tr>
+          </thead>
+          <tbody>
+            {RAG_FIT_ROWS.map((row) => (
+              <tr id={row.id}>
+                <th scope="row">{row.vramClass}</th>
+                <td>{row.pick}</td>
+                <td>{row.fit}</td>
+                <td>{row.speed}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <ul class="mt-4 flex flex-wrap gap-2">
+        {RAG_FIT_ROWS.flatMap((row) => row.cards).map((link) => (
+          <li>
+            <a
+              class="inline-flex min-h-11 items-center rounded-full border border-line bg-canvas px-3 text-sm text-ink hover:border-accent/50 hover:text-accent-ink"
+              href={link.href}
+            >
+              {link.label}
+            </a>
           </li>
         ))}
       </ul>
+      <div class="mt-6 rounded-xl border border-line bg-canvas/60 p-3 text-sm">
+        <p class="text-muted">
+          When the chat sidecar offloads, shopper RAM lines stay the same two labels —
+          labeled estimate until a first-party RAG card exists. Size the LLM on the
+          <a class="underline decoration-accent/40" href="/calculator">calculator</a>.
+        </p>
+        <div class="mt-3 grid gap-3 sm:grid-cols-2">
+          <div>
+            <p class="text-faint">{RAM_MIN_LABEL}</p>
+            <p class="mt-1 font-serif text-2xl">Estimate</p>
+            <p class="mt-1 text-xs text-faint">Chat sidecar · size on the calculator</p>
+          </div>
+          <div>
+            <p class="text-faint">{RAM_FULL_LABEL}</p>
+            <p class="mt-1 font-serif text-2xl">Estimate</p>
+            <p class="mt-1 text-xs text-faint">Chat sidecar · size on the calculator</p>
+          </div>
+        </div>
+      </div>
     </section>
 
     <section id="linux" class="mt-12 scroll-mt-36" aria-labelledby="linux-heading">

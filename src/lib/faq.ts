@@ -239,7 +239,7 @@ export const FAQ_ENTRIES: FaqItem[] = [
     group: 'getting-started',
     question: 'Can I chat with my own PDFs and notes on a Radeon, not just a local LLM?',
     answer:
-      'Yes. Local RAG on AMDai is chunk → embed → retrieve → answer. The first embed path is llama.cpp --embeddings and /v1/embeddings with a dedicated embedding GGUF. The chat sidecar stays llama.cpp Vulkan. The cited shopper guide is /rag. Linux Ubuntu 24.04+ first. Official nomic-embed-text-v1.5 Q8_0 is 140 MiB. Speeds and retrieval quality are not yet measured by AMDai. There is no house Stack Lab recipe. Q3 stays a labeled estimate. Nothing below Q3.',
+      'Yes. Local RAG on AMDai is chunk → embed → retrieve → answer. The first embed path is llama.cpp --embeddings and /v1/embeddings with a dedicated embedding GGUF. The chat sidecar stays llama.cpp Vulkan. The cited shopper guide is /rag. Linux Ubuntu 24.04+ first. Official nomic-embed-text-v1.5 Q6_K is 108 MiB; Q5_K_M 95 MiB; Q4_K_M 81 MiB. Q3_K_M (65 MiB) is a labeled estimate. Speeds and retrieval quality are not yet measured by AMDai. There is no house Stack Lab recipe. Nothing below Q3.',
     links: [
       { href: '/rag', label: 'RAG on Radeon' },
       { href: '/harnesses/anythingllm', label: 'AnythingLLM' },

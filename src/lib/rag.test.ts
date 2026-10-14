@@ -7,8 +7,10 @@ import { RAM_FULL_LABEL, RAM_MIN_LABEL } from './ram-surfaces';
 import {
   RAG_CITED_LABEL,
   RAG_DESCRIPTION,
+  RAG_FIT_BANDS,
   RAG_FIT_ROWS,
   RAG_MODELS,
+  RAG_PUBLISHED,
   RAG_SPEED_LABEL,
   RAG_TITLE,
   assertRagValid,
@@ -24,11 +26,15 @@ describe('local RAG guide', () => {
     assert.equal(RAG_TITLE, 'Local RAG on Radeon');
     assert.equal(RAG_CITED_LABEL, 'Cited, not measured on local-desktop');
     assert.equal(RAG_SPEED_LABEL, 'not yet measured by AMDai');
+    assert.equal(RAG_PUBLISHED, '2026-10-14');
     assert.ok(RAG_DESCRIPTION.length >= 70);
     assert.ok(RAG_DESCRIPTION.length <= 160);
     const blob = ragBlob();
     assert.match(blob, /llama\.cpp/);
     assert.match(blob, /--embeddings/);
+    assert.match(blob, /108 MiB/);
+    assert.match(blob, /95 MiB/);
+    assert.match(blob, /81 MiB/);
     assert.match(blob, /140 MiB/);
     assert.match(blob, /262 MiB/);
     assert.match(blob, /not yet measured by AMDai/);
@@ -43,7 +49,11 @@ describe('local RAG guide', () => {
     for (const href of ['/setup', '/setup/windows', '/harnesses/anythingllm', '/long-context', '/wanted']) {
       assert.ok(hrefs.includes(href), href);
     }
-    assert.ok(RAG_FIT_ROWS.every((row) => row.speed === RAG_SPEED_LABEL));
+    assert.deepEqual(RAG_FIT_BANDS.map((row) => row.quant), ['Q6_K', 'Q5_K_M', 'Q4_K_M', 'Q3_K_M']);
+    assert.equal(RAG_FIT_BANDS.find((row) => row.quant === 'Q3_K_M')?.kind, 'q3-estimate');
+    assert.ok(RAG_FIT_ROWS.every((row) => row.speed === RAG_SPEED_LABEL && row.pick));
+    assert.ok(RAG_FIT_ROWS.filter((row) => row.offload).every((row) => row.fit.includes(RAM_MIN_LABEL) && row.fit.includes(RAM_FULL_LABEL)));
+    assert.ok(RAG_MODELS.some((row) => row.id === 'nomic-q6' && row.size === '108 MiB'));
     assert.ok(RAG_MODELS.some((row) => row.id === 'nomic-q3' && row.kind === 'estimate'));
   });
 
@@ -51,6 +61,10 @@ describe('local RAG guide', () => {
     const page = readFileSync(join(here, '../pages/rag.astro'), 'utf8');
     assert.match(page, /NextSteps/);
     assert.match(page, /href="\/stack-lab"/);
+    assert.match(page, /RAG_FIT_BANDS/);
+    assert.match(page, /Pick by VRAM/);
+    assert.match(page, /RAM_MIN_LABEL/);
+    assert.match(page, /RAM_FULL_LABEL/);
     assert.doesNotMatch(page, /HOUSE_STACK_LAB|OpenInStackLab/);
     assert.doesNotMatch(page, /coming soon/i);
     assert.doesNotMatch(page, /Qwen2\.5|Qwen3-8B/);

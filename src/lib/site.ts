@@ -112,7 +112,7 @@ export const primaryNav: NavItem[] = [
   { href: '/vision', label: 'Vision', description: 'Cited llama.cpp mmproj path for image-in text-out. Linux first. Speeds not yet measured by AMDai', group: 'learn' },
   { href: '/speech', label: 'Speech', description: 'Cited whisper.cpp Vulkan STT plus Piper TTS. Linux first. Not measured on local-desktop', group: 'learn' },
   { href: '/long-context', label: 'Long context', description: '128K–262K on Radeon. Measured 35B llama.cpp cards. f16 KV default. Empty cells stay not measured yet', group: 'learn' },
-  { href: '/rag', label: 'RAG', description: 'Cited llama.cpp-first local RAG on Radeon. Embed plus a Q4+ LLM. Linux first. Not measured on local-desktop', group: 'learn' },
+  { href: '/rag', label: 'RAG', description: 'Cited llama.cpp-first local RAG on Radeon. nomic-embed Q6/Q5/Q4 plus labeled Q3. Linux first. Not measured on local-desktop', group: 'learn' },
   { href: '/harnesses', label: 'Harnesses', description: 'What to plug your local model into — agents, chat UIs, ComfyUI', group: 'learn' },
   { href: '/labs/shannon', label: 'Shannon’s lab', description: 'Cited How I run my Lab — Herdr, Coolify, secure-lab, autoresearch. Not measured by AMDai', group: 'learn' },
   { href: '/hardware', label: 'Hardware', description: 'PSU, cooling, noise, VRAM vs model size', group: 'learn' },

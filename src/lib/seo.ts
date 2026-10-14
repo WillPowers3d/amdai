@@ -334,9 +334,9 @@ setDate('/long-context', '2026-10-13');
 setMeta(
   '/rag',
   'Local RAG on Radeon',
-  'Chat with your own PDFs and notes on Radeon. llama.cpp embeddings first. Linux first. Fit estimates, not measured on local-desktop.',
+  'Chat with your own PDFs on Radeon. Cited nomic-embed Q6/Q5/Q4 plus labeled Q3. llama.cpp first. Not measured on local-desktop.',
 );
-setDate('/rag', '2026-10-13');
+setDate('/rag', '2026-10-14');
 setMeta(
   '/vision',
   'Local vision on Radeon',
