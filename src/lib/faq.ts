@@ -618,6 +618,17 @@ export const FAQ_ENTRIES: FaqItem[] = [
       { href: '/harnesses', label: 'Harnesses' },
       { href: '/stack-lab', label: 'Stack Lab' },
       { href: '/amdai-bench', label: 'amdai-bench' },
+    id: 'thinking-mode',
+    group: 'models-quants',
+    question: 'How do I turn thinking / reasoning mode off on llama.cpp?',
+    answer:
+      'Cited path: llama-server --reasoning off, and/or reasoning_effort none, and/or chat_template_kwargs {"enable_thinking": false}. Official Qwen3.6 card thinks by default and does not support /think or /nothink. The shopper page is /thinking. Thinking-token counts and wall-clock stay not measured on local-desktop. Q3 is a labeled estimate. llama.cpp first.',
+    links: [
+      { href: '/thinking', label: 'Thinking mode' },
+      { href: '/tutorials/serve-qwen', label: 'Serve Qwen' },
+      { href: '/tuning', label: 'Speed up llama.cpp' },
+      { href: '/stack-lab', label: 'Stack Lab' },
+      { href: '/amdai-bench', label: 'amdai-bench' },
     ],
   },
   {
@@ -989,6 +1000,7 @@ export const REQUIRED_FAQ_HREFS = [
   '/tuning',
   '/speculative-decoding',
   '/constrained-decoding',
+  '/thinking',
   '/moe',
   '/can-run',
   '/setup/fedora',

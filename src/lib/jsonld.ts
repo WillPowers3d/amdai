@@ -33,6 +33,7 @@ import { TUNING_FAQ, TUNING_HOWTO_STEPS, TUNING_PUBLISHED } from './tuning';
 import { SPEC_FAQ, SPEC_HOWTO_STEPS, SPEC_PUBLISHED } from './speculative-decoding';
 import { CD_FAQ, CD_HOWTO_STEPS, CD_PUBLISHED } from './constrained-decoding';
 import { TC_FAQ, TC_HOWTO_STEPS, TC_PUBLISHED } from './tool-calling';
+import { THINK_FAQ, THINK_HOWTO_STEPS, THINK_PUBLISHED } from './thinking';
 import { MOE_FAQ, MOE_HOWTO_STEPS, MOE_PUBLISHED } from './moe';
 import { VULKAN_VS_ROCM_FAQ, VULKAN_VS_ROCM_HOWTO_STEPS, VULKAN_VS_ROCM_PUBLISHED } from './vulkan-vs-rocm';
 import { ROCM_UPGRADE_FAQ, ROCM_UPGRADE_HOWTO_STEPS, ROCM_UPGRADE_PUBLISHED } from './rocm-upgrade';
@@ -765,6 +766,7 @@ export function pageJsonLd(input: {
       }),
     );
   if (path === '/rocm/upgrade') {
+  if (path === '/thinking') {
     nodes.push(
       howToJsonLd({
         name: input.title.replace(/ · AMDai$/, ''),
@@ -802,6 +804,12 @@ export function pageJsonLd(input: {
       }),
     );
     nodes.push(faqPageJsonLd(ROCM_UPGRADE_FAQ, url));
+        published: dates?.published ?? THINK_PUBLISHED,
+        modified: dates?.modified ?? THINK_PUBLISHED,
+        steps: THINK_HOWTO_STEPS,
+      }),
+    );
+    nodes.push(faqPageJsonLd(THINK_FAQ, url));
     return nodes;
   }
   if (path === '/compare/vulkan-vs-rocm') {

@@ -49,6 +49,7 @@ describe('shopper RAM labels', () => {
     assert.ok(RAM_OFFLOAD_SURFACES.includes('/speculative-decoding'));
     assert.ok(RAM_OFFLOAD_SURFACES.includes('/constrained-decoding'));
     assert.ok(RAM_OFFLOAD_SURFACES.includes('/guides/tool-calling'));
+    assert.ok(RAM_OFFLOAD_SURFACES.includes('/thinking'));
     assert.ok(RAM_OFFLOAD_SURFACES.includes('/moe'));
     assert.ok(RAM_OFFLOAD_SURFACES.includes('/can-run'));
     assert.ok(RAM_OFFLOAD_SURFACES.includes('/setup/fedora'));

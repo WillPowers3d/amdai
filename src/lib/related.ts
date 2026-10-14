@@ -202,6 +202,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/backends/llamacpp', label: 'llama.cpp' },
       { href: '/kv-cache', label: 'KV cache' },
       { href: '/constrained-decoding', label: 'Constrained decoding' },
+      { href: '/thinking', label: 'Thinking mode' },
       { href: '/long-context', label: 'Long context' },
       { href: '/multi-gpu', label: 'Dual / multi-GPU' },
       { href: '/power', label: 'Power and PSU' },
@@ -239,6 +240,20 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/calculator', label: 'Calculator' },
       { href: '/glossary', label: 'Glossary' },
       { href: '/guides/tool-calling', label: 'Tool calling' },
+  if (path === '/thinking') {
+    return [
+      { href: '/backends/llamacpp', label: 'llama.cpp' },
+      { href: '/tuning', label: 'Speed up llama.cpp' },
+      { href: '/tutorials/serve-qwen', label: 'Serve Qwen' },
+      { href: '/long-context', label: 'Long context' },
+      { href: '/moe', label: 'MoE on Radeon' },
+      { href: '/harnesses', label: 'Harnesses' },
+      { href: '/models/qwen36', label: 'Qwen3.6-35B' },
+      { href: '/gpus/r9700', label: 'R9700 measured page' },
+      { href: '/stack-lab', label: 'Stack Lab' },
+      { href: '/amdai-bench', label: 'amdai-bench' },
+      { href: '/benchmarks', label: 'Benchmarks' },
+      { href: '/calculator', label: 'Calculator' },
     ];
   }
   if (path === '/moe') {
@@ -788,6 +803,7 @@ export function assertRelatedValid(
     '/speculative-decoding',
     '/constrained-decoding',
     '/guides/tool-calling',
+    '/thinking',
     '/moe',
     '/can-run',
     '/hardware',

@@ -229,6 +229,7 @@ export const CRUMB_LABELS: Record<string, string> = {
   '/speculative-decoding': 'Speculative decoding',
   '/constrained-decoding': 'Constrained decoding',
   '/guides/tool-calling': 'Tool calling',
+  '/thinking': 'Thinking mode',
   '/moe': 'MoE',
   '/can-run': 'Can my Radeon run it?',
   '/setup': 'First-run setup',
@@ -513,6 +514,11 @@ setMeta(
   'Tool calling on Radeon with llama.cpp. Cited --jinja, tools, JSON schema, GBNF. Measure grammar cost on Stack Lab grammar-ab/1. Q3 is a labeled estimate.',
 );
 setDate('/guides/tool-calling', '2026-10-14');
+  '/thinking',
+  'Thinking / reasoning mode on Radeon',
+  'Thinking / reasoning mode on a Radeon GPU with llama.cpp. Cited --reasoning and Qwen3.6 enable_thinking. Tokens not measured on local-desktop.',
+);
+setDate('/thinking', '2026-10-14');
 setMeta(
   '/moe',
   'Mixture-of-Experts on a Radeon GPU',

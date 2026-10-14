@@ -75,6 +75,7 @@ export const RAM_OFFLOAD_SURFACES = [
   '/speculative-decoding',
   '/constrained-decoding',
   '/guides/tool-calling',
+  '/thinking',
   '/moe',
   '/can-run',
   '/benchmarks',

@@ -164,6 +164,7 @@ export const primaryNav: NavItem[] = [
   { href: '/speculative-decoding', label: 'Speculative decoding', description: 'Draft models on llama.cpp for Radeon. Cited -md flags. Measured 35B cells only. Draft speed not measured on local-desktop', group: 'learn' },
   { href: '/constrained-decoding', label: 'Constrained decoding', description: 'Cited llama.cpp GBNF and JSON schema on Radeon. Measure decode vs free-form on Stack Lab grammar-ab/1. Q3 is a labeled estimate', group: 'learn' },
   { href: '/guides/tool-calling', label: 'Tool calling', description: 'Cited llama.cpp --jinja, tools, JSON schema, GBNF on Radeon. Measure grammar-ab/1. Tool-call success not measured on local-desktop', group: 'learn' },
+  { href: '/thinking', label: 'Thinking mode', description: 'Cited llama.cpp --reasoning on Radeon. Official Qwen3.6 thinks by default. Tokens not measured on local-desktop', group: 'learn' },
   { href: '/moe', label: 'MoE', description: 'Mixture-of-Experts on a Radeon GPU. Why 35B-A3B fits one 32 GB R9700 while dense 27B and Flash differ. llama.cpp first', group: 'learn' },
   { href: '/bios', label: 'BIOS', description: 'Above 4G, ReBAR/SAM, CSM, x8/x8 vs x16/x4 — cited chipset notes', group: 'learn' },
   { href: '/flash-ram-offload', label: 'Flash RAM offload', description: 'Run Flash with experts on DDR5 — kits, measured DIMM speed, launch shape', group: 'learn' },

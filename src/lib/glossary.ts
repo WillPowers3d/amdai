@@ -1009,7 +1009,25 @@ export const GLOSSARY: GlossaryEntry[] = [
       { href: '/results', label: 'Run cards' },
       { href: '/qwen', label: 'Qwen compare' },
     ],
-    seeAlso: ['prefill-decode', 'run-card', 'amdai-bench'],
+    seeAlso: ['prefill-decode', 'run-card', 'amdai-bench', 'thinking'],
+  },
+  {
+    id: 'thinking',
+    term: 'Thinking mode',
+    aliases: ['reasoning mode', '--reasoning', 'enable_thinking', 'reasoning_effort'],
+    letter: 'T',
+    definition:
+      'A chat-template behavior where the model writes a hidden thought block, then a final answer. llama.cpp documents --reasoning on|off|auto, --reasoning-effort, --reasoning-budget, and chat_template_kwargs.enable_thinking.',
+    why: 'Official Qwen3.6 cards think by default. Hidden tokens burn context and wall-clock. Turn it off with --reasoning off or reasoning_effort none. Thinking-token counts are not measured on local-desktop.',
+    deeper:
+      'Server README (checked 2026-10-14): reasoning_effort none disables thinking when the template honors it. Official Qwen3.6 card does not support /think or /nothink. --reasoning-format deepseek fills message.reasoning_content. Strata Flash thinking is not verified here.',
+    links: [
+      { href: '/thinking', label: 'Thinking mode' },
+      { href: '/tuning', label: 'Speed up llama.cpp' },
+      { href: '/tutorials/serve-qwen', label: 'Serve Qwen' },
+      { href: '/stack-lab', label: 'Stack Lab' },
+    ],
+    seeAlso: ['instruct', 'llamacpp', 'prefill-decode', 'toks'],
   },
   {
     id: 'tool-calling',

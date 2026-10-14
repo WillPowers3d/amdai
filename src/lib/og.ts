@@ -548,6 +548,10 @@ export const OG_CARDS: OgCard[] = [
     title: 'Tool calling on Radeon',
     lede: 'Cited --jinja, tools, JSON schema. Success not measured',
     alt: 'AMDai tool calling and structured JSON with llama.cpp on a Radeon GPU — cited flags, success not measured',
+    slug: 'thinking',
+    title: 'Thinking on Radeon',
+    lede: 'Cited --reasoning. Tokens not measured on local-desktop',
+    alt: 'AMDai thinking / reasoning mode on a Radeon GPU with llama.cpp — cited flags, thinking tokens not measured',
   },
   {
     slug: 'moe',
