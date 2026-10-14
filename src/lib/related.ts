@@ -157,6 +157,7 @@ function topicLinks(path: string): RelatedLink[] {
   }
   if (path === '/tuning') {
     return [
+      { href: '/speculative-decoding', label: 'Speculative decoding' },
       { href: '/backends/llamacpp', label: 'llama.cpp' },
       { href: '/long-context', label: 'Long context' },
       { href: '/multi-gpu', label: 'Dual / multi-GPU' },
@@ -166,8 +167,22 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/rocm/vulkan-hip', label: 'Vulkan vs HIP' },
       { href: '/stack-lab', label: 'Stack Lab' },
       { href: '/amdai-bench', label: 'amdai-bench' },
-      { href: '/benchmarks', label: 'Benchmarks' },
       { href: '/calculator', label: 'Calculator' },
+    ];
+  }
+  if (path === '/speculative-decoding') {
+    return [
+      { href: '/tuning', label: 'Speed up llama.cpp' },
+      { href: '/backends/llamacpp', label: 'llama.cpp' },
+      { href: '/compare/vulkan-vs-rocm', label: 'Vulkan vs ROCm' },
+      { href: '/moe', label: 'MoE on Radeon' },
+      { href: '/multi-gpu', label: 'Dual / multi-GPU' },
+      { href: '/models/flash', label: 'Flash' },
+      { href: '/backends/strata', label: 'Strata' },
+      { href: '/stack-lab', label: 'Stack Lab' },
+      { href: '/amdai-bench', label: 'amdai-bench' },
+      { href: '/calculator', label: 'Calculator' },
+      { href: '/benchmarks', label: 'Benchmarks' },
     ];
   }
   if (path === '/moe') {
@@ -549,6 +564,7 @@ export function relatedFor(pathname: string): RelatedLink[] {
     add(out, seen, '/backends', 'Backends');
     add(out, seen, '/compare/vulkan-vs-rocm', 'Vulkan vs ROCm');
     add(out, seen, '/tuning', 'Speed up llama.cpp');
+    add(out, seen, '/speculative-decoding', 'Speculative decoding');
     add(out, seen, '/setup/docker', 'Docker / Podman');
     add(out, seen, '/setup/lm-studio', 'LM Studio');
     add(out, seen, '/setup/coding-assistant', 'Coding assistant');
@@ -665,6 +681,7 @@ export function assertRelatedValid(
     '/power',
     '/fine-tuning',
     '/tuning',
+    '/speculative-decoding',
     '/moe',
     '/can-run',
     '/hardware',

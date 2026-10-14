@@ -513,10 +513,25 @@ export const FAQ_ENTRIES: FaqItem[] = [
       'Fit the file first, then turn one cited knob at a time: -ngl, --threads, --threads-batch, -b / -ub, -fa, KV type, --split-mode, a Q4+ draft, or a vendor power cap. The shopper guide is /tuning. Measured decode is the official local-desktop 35B llama.cpp Vulkan sweep. Everything else stays not measured yet. Q3 is a labeled estimate. Draft models stay Q4 and up. llama.cpp first.',
     links: [
       { href: '/tuning', label: 'Speed up llama.cpp' },
+      { href: '/speculative-decoding', label: 'Speculative decoding' },
       { href: '/backends/llamacpp', label: 'llama.cpp' },
       { href: '/benchmarks', label: 'Benchmarks' },
       { href: '/stack-lab', label: 'Stack Lab' },
       { href: '/amdai-bench', label: 'amdai-bench' },
+    ],
+  },
+  {
+    id: 'speculative-decoding',
+    group: 'models-quants',
+    question: 'Does speculative decoding speed up llama.cpp on a Radeon?',
+    answer:
+      'AMDai has not measured a draft pair on local-desktop. A Q4+ same-family draft can help when acceptance is high (code, repetitive text) and both files fit. The house 35B-A3B already decodes fast on one R9700, so a draft can also waste VRAM. Draft speed stays not measured yet — run the Stack Lab speculative decoding A/B. Drafts stay Q4 and up. Q3 is a labeled estimate for the main file. The shopper page is /speculative-decoding. llama.cpp first.',
+    links: [
+      { href: '/speculative-decoding', label: 'Speculative decoding' },
+      { href: '/tuning', label: 'Speed up llama.cpp' },
+      { href: '/stack-lab', label: 'Stack Lab' },
+      { href: '/amdai-bench', label: 'amdai-bench' },
+      { href: '/calculator', label: 'Calculator' },
     ],
   },
   {
@@ -854,6 +869,7 @@ export const REQUIRED_FAQ_HREFS = [
   '/power',
   '/fine-tuning',
   '/tuning',
+  '/speculative-decoding',
   '/moe',
   '/can-run',
   '/setup/fedora',
@@ -950,6 +966,7 @@ export function assertFaqValid(items: FaqItem[] = FAQ_ENTRIES): string[] {
     'when-is-q3-an-estimate',
     'radeon-vs-nvidia',
     'radeon-vs-mac',
+    'speculative-decoding',
   ]) {
     if (!items.some((item) => item.id === required)) errors.push(`missing ${required}`);
   }

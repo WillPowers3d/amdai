@@ -736,6 +736,7 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
     { href: '/amdai-bench', label: 'amdai-bench' },
   ],
   '/tuning': [
+    { href: '/speculative-decoding', label: 'Speculative decoding' },
     { href: '/backends/llamacpp', label: 'llama.cpp' },
     { href: '/long-context', label: 'Long context' },
     { href: '/multi-gpu', label: 'Dual / multi-GPU' },
@@ -743,8 +744,17 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
     { href: '/flash-ram-offload', label: 'Flash RAM offload' },
     { href: '/stack-lab', label: 'Stack Lab' },
     { href: '/amdai-bench', label: 'amdai-bench' },
-    { href: '/benchmarks', label: 'Benchmarks' },
     { href: '/calculator', label: 'Calculator' },
+  ],
+  '/speculative-decoding': [
+    { href: '/tuning', label: 'Speed up llama.cpp' },
+    { href: '/backends/llamacpp', label: 'llama.cpp' },
+    { href: '/stack-lab', label: 'Stack Lab' },
+    { href: '/amdai-bench', label: 'amdai-bench' },
+    { href: '/calculator', label: 'Calculator' },
+    { href: '/moe', label: 'MoE on Radeon' },
+    { href: '/multi-gpu', label: 'Dual / multi-GPU' },
+    { href: '/benchmarks', label: 'Benchmarks' },
   ],
   '/moe': [
     { href: '/flash-ram-offload', label: 'Flash RAM offload' },

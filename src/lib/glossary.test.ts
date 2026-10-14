@@ -97,6 +97,7 @@ const ALLOWED_HREFS = new Set([
   '/vision',
   '/fine-tuning',
   '/tuning',
+  '/speculative-decoding',
   '/moe',
   '/can-run',
 ]);
