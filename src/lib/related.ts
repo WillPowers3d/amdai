@@ -131,6 +131,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/setup/comfyui', label: 'ComfyUI' },
       { href: '/setup/multi-gpu', label: 'Multi-GPU llama.cpp' },
       { href: '/compare/vulkan-vs-rocm', label: 'Vulkan vs ROCm' },
+      { href: '/rocm/upgrade', label: 'Upgrade or reinstall ROCm' },
       { href: '/image-gen', label: 'Image gen on Radeon' },
       { href: '/vision', label: 'Vision on Radeon' },
       { href: '/speech', label: 'Speech on Radeon' },
@@ -245,6 +246,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/setup/windows', label: 'Windows setup' },
       { href: '/setup/wsl', label: 'WSL2 setup' },
       { href: '/rocm/versions', label: 'ROCm versions' },
+      { href: '/rocm/upgrade', label: 'Upgrade or reinstall ROCm' },
       { href: '/rocm-problems/rocm-10-0-finetune-reset', label: 'Fine-tune reset' },
       { href: '/gpus/r9700', label: 'R9700 measured page' },
       { href: '/quants', label: 'Quants' },
@@ -256,6 +258,7 @@ function topicLinks(path: string): RelatedLink[] {
   if (path.startsWith('/rocm') && !path.startsWith('/rocm-problems')) {
     return [
       { href: '/rocm', label: 'What is ROCm' },
+      { href: '/rocm/upgrade', label: 'Upgrade or reinstall ROCm' },
       { href: '/compare/vulkan-vs-rocm', label: 'Vulkan vs ROCm' },
       { href: '/rocm-problems', label: 'ROCm problems' },
       { href: '/glossary', label: 'Glossary' },
@@ -269,6 +272,7 @@ function topicLinks(path: string): RelatedLink[] {
   if (path.startsWith('/rocm-problems')) {
     return [
       { href: '/rocm-problems', label: 'ROCm problems' },
+      { href: '/rocm/upgrade', label: 'Upgrade or reinstall ROCm' },
       { href: '/setup/ollama', label: 'Ollama' },
       { href: '/setup/wsl', label: 'WSL2 setup' },
       { href: '/rocm', label: 'What is ROCm' },
@@ -635,6 +639,7 @@ export function assertRelatedValid(
     '/compare/radeon-vs-nvidia',
     '/compare/radeon-vs-mac',
     '/compare/vulkan-vs-rocm',
+    '/rocm/upgrade',
     '/setup',
     '/setup/windows',
     '/setup/fedora',

@@ -1,0 +1,241 @@
+---
+import RocmGuide from '../../layouts/RocmGuide.astro';
+import Callout from '../../components/Callout.astro';
+import Cite from '../../components/rocm/Cite.astro';
+import GoDeeper from '../../components/rocm/GoDeeper.astro';
+import Sources from '../../components/rocm/Sources.astro';
+import type { CiteKey } from '../../lib/rocm-guide';
+import {
+  ROCM_UPGRADE_APT_PURGE_INSTALLER,
+  ROCM_UPGRADE_APT_UPDATE,
+  ROCM_UPGRADE_CHECK_COMMANDS,
+  ROCM_UPGRADE_HEADINGS,
+  ROCM_UPGRADE_HIP_REBUILD,
+  ROCM_UPGRADE_LEAD,
+  ROCM_UPGRADE_PIN_UNOFFICIAL,
+  ROCM_UPGRADE_RADEON_UNINSTALL,
+  ROCM_UPGRADE_RECOVERY,
+  ROCM_UPGRADE_RUNFILE_UNINSTALL,
+  ROCM_UPGRADE_SMOKE,
+} from '../../lib/rocm-upgrade';
+
+const used = [
+  'rocm101Install',
+  'radeonInstall',
+  'theRock101',
+  'rocmRunfile',
+  'pytorchRocm',
+  'llamaBuild',
+  'mesaRadv',
+  'aptMark',
+  'theRock',
+  'rocm101Blog',
+] as const satisfies readonly CiteKey[];
+---
+
+<RocmGuide page="upgrade" headings={ROCM_UPGRADE_HEADINGS}>
+  <p>{ROCM_UPGRADE_LEAD}</p>
+
+  <Callout type="linux">
+    Linux first. Ubuntu 24.04+ is the path this page writes. First install still lives on
+    <a href="/tutorials/install-rocm">Install ROCm</a>. Cadence and “official vs works” stay on
+    <a href="/rocm/versions">versions</a>. Mixing a leftover DKMS tree, a distro module, and an old
+    runfile is how people get a black screen — that warning is already on
+    <a href="/rocm/stack">the stack</a>.
+  </Callout>
+
+  <h2 id="check">Check what you have now</h2>
+  <p>
+    Write down the method you used last time (AMD 10.1 apt / TheRock, <code>amdgpu-install</code>,
+    ROCm CLI, runfile, or tarball) before you add another repo. One method.
+    <code>rocminfo</code> is how you ask ROCr which agents it can see.
+    <code>amd-smi</code> is the successor to <code>rocm-smi</code> on the 10.1 line.<Cite id="rocm101Blog" used={used} />
+    TheRock 10.x installs under <code>/opt/rocm/core-10.1</code>; a leftover legacy tree is often
+    <code>/opt/rocm-7.2/</code>.<Cite id="theRock101" used={used} />
+  </p>
+  <pre><code>{ROCM_UPGRADE_CHECK_COMMANDS}</code></pre>
+  <p>
+    In <code>rocminfo</code>, find the GPU agent — marketing name plus the gfx the compiler cares
+    about. Confirm that id on <a href="/rocm/gfx">gfx IDs</a> before you rebuild HIP. Then
+    <a href="/tutorials/verify-rocm">verify</a>. Do not install a second userspace on top of a
+    failed first one.
+  </p>
+
+  <h2 id="in-place">In-place upgrade (official method)</h2>
+  <p>
+    There are two official stories. They are not interchangeable.
+  </p>
+  <h3 id="apt-update">ROCm 10.1 apt — “install and update”</h3>
+  <p>
+    AMD’s 10.1 install page registers a signed repo so you can
+    <strong>install and update</strong> ROCm packages with <code>apt</code>.<Cite id="rocm101Install" used={used} />
+    Copy the Ubuntu 24.04 (noble), 26.04, or 22.04 snippet from that page for the point release
+    you actually run. Then:
+  </p>
+  <pre><code>{ROCM_UPGRADE_APT_UPDATE}</code></pre>
+  <p>
+    Installing every family package at once is how you fight TheRock. Confirm the prefix with
+    <code>ls /opt/rocm</code>. If you still have <strong>ROCm 7.2.4 or older</strong>, AMD says
+    uninstall it before proceeding.<Cite id="rocm101Install" used={used} />
+  </p>
+  <h3 id="radeon-no-inplace">Radeon Software / amdgpu-install — no in-place upgrade</h3>
+  <p>
+    The Radeon software for Linux page is explicit: the recommended method to upgrade is to
+    uninstall, then install. <strong>Radeon Software for Linux does not support in-place
+    upgrades.</strong><Cite id="radeonInstall" used={used} />
+    <code>sudo amdgpu-install --list-usecase</code> lists usecases; graphics + ROCm is the
+    default they recommend. Copy the <code>amdgpu-install</code> .deb from the official page for
+    the version you chose. Official docs currently show different versioned filenames on the
+    Radeon 7.2.1 path and the ROCm 10.1 <code>31.60</code> path — do not mix those from memory.
+  </p>
+  <pre><code>{ROCM_UPGRADE_RADEON_UNINSTALL}</code></pre>
+
+  <h2 id="pin">Pin or hold a known-good version</h2>
+  <p>
+    AMD does not publish a ROCm “pin this version” command. On Ubuntu, <code>apt-mark hold</code>
+    is the distro tool that stops <code>apt</code> from upgrading a package.<Cite id="aptMark" used={used} />
+    That is <strong>unofficial</strong> for this job — Ubuntu noble man-page, not an AMD ROCm
+    pin. Inventory first. Hold the packages you actually installed.
+  </p>
+  <pre><code>{ROCM_UPGRADE_PIN_UNOFFICIAL}</code></pre>
+  <p>
+    Fedora <code>versionlock</code> and Arch <code>IgnorePkg</code> are the same idea on those
+    distros — also not AMD-published ROCm pins. Do not treat a hold as a substitute for
+    <a href="/tutorials/verify-rocm">rocminfo still listing this gfx</a>.
+  </p>
+
+  <h2 id="reinstall">Clean uninstall and reinstall</h2>
+  <p>
+    Use this when an upgrade left you with mixed repos, a leftover DKMS tree, or a runfile next
+    to an apt tree. Uninstall with the <strong>same method you installed</strong>. Then follow
+    <a href="/tutorials/install-rocm">Install ROCm</a> with one method.
+  </p>
+  <h3 id="amdgpu-uninstall">amdgpu-install</h3>
+  <p>
+    Official uninstall for that path is <code>sudo amdgpu-uninstall</code>, then purge the
+    installer package and clean apt.<Cite id="radeonInstall" used={used} /><Cite id="rocm101Install" used={used} />
+  </p>
+  <pre><code>{ROCM_UPGRADE_APT_PURGE_INSTALLER}</code></pre>
+  <h3 id="runfile-uninstall">Runfile</h3>
+  <p>
+    Copy the current <code>.run</code> name from the 10.1 runfile page. The 10.1.0 docs show
+    <code>uninstall-rocm gfx=all</code> (or a single gfx) and <code>uninstall-amdgpu</code>.<Cite id="rocmRunfile" used={used} />
+  </p>
+  <pre><code>{ROCM_UPGRADE_RUNFILE_UNINSTALL}</code></pre>
+  <h3 id="leftovers">Leftover DKMS, mixed repos, TheRock vs legacy</h3>
+  <ul>
+    <li>
+      <code>dkms status</code> should not show a leftover <code>amdgpu</code> tree next to the
+      in-tree module you meant to keep. One source of <code>amdgpu</code>.<a href="/rocm/stack"> The stack</a>.
+    </li>
+    <li>
+      Ubuntu archive <code>rocm</code> / <code>libamdhip64-dev</code> / <code>libhsa-runtime*</code>
+      must not sit next to AMD’s 10.x repo.
+      <a href="/rocm-problems/ubuntu-rocm-package-shadow">Archive shadow</a>.
+    </li>
+    <li>
+      TheRock packages are <code>amdrocm-*</code> under <code>/opt/rocm/core-10.1</code>. Legacy
+      packages were <code>rocm-*</code> under <code>/opt/rocm-7.2/</code>.<Cite id="theRock101" used={used} />
+      Do not keep both.
+    </li>
+    <li>
+      Tarball installs are a directory you remove, plus any <code>PATH</code> /
+      <code>ROCM_PATH</code> you added. Copy that cleanup from the 10.1 install page if you
+      extracted somewhere other than the documented default.<Cite id="rocm101Install" used={used} />
+    </li>
+  </ul>
+  <p>Reboot after the uninstall if the kernel module changed. Then install once.</p>
+
+  <h2 id="rebuild">What to rebuild afterwards</h2>
+  <p>
+    <strong>llama.cpp Vulkan first.</strong> <code>GGML_VULKAN=ON</code> talks to a Vulkan ICD.
+    On Linux that is typically <strong>Mesa RADV</strong>, packaged by the distro, not
+    <code>/opt/rocm</code>.<Cite id="llamaBuild" used={used} /><Cite id="mesaRadv" used={used} />
+    A ROCm userspace swap does not replace RADV, so the house Vulkan binary usually survives
+    untouched. Shopper compare:
+    <a href="/compare/vulkan-vs-rocm">Vulkan vs ROCm</a>. Guide:
+    <a href="/rocm/vulkan-hip">Vulkan vs HIP</a>.
+  </p>
+  <p>
+    <strong>HIP is the alternate.</strong> Rebuild after <code>rocminfo</code> still lists this
+    gfx. Pin <code>AMDGPU_TARGETS</code> to that id. <code>GGML_HIP=ON</code> is the
+    llama.cpp flag.<Cite id="llamaBuild" used={used} />
+  </p>
+  <pre><code>{ROCM_UPGRADE_HIP_REBUILD}</code></pre>
+  <p>
+    <strong>PyTorch ROCm wheels</strong> for ComfyUI or fine-tuning must match the userspace you
+    just installed. Copy the index URL from AMD’s Install PyTorch for ROCm page — do not reuse a
+    wheel from the previous major.<Cite id="pytorchRocm" used={used} />
+    Walkthroughs: <a href="/setup/comfyui">ComfyUI</a>, <a href="/fine-tuning">fine-tuning</a>.
+  </p>
+  <Callout type="note">
+    If you also replaced the kernel <code>amdgpu</code> module and the desktop stack broke,
+    Vulkan can break too. That is a mixed driver, not “ROCm userspace.” Recover the one
+    <code>amdgpu</code> source, then retest <code>vulkaninfo</code> before you rebuild HIP.
+  </Callout>
+
+  <h2 id="fedora-arch">Fedora and Arch</h2>
+  <p>
+    Short notes only. Neither distro is an official ROCm 10.1 OS row. Do not drop
+    <code>repo.radeon.com</code> debs onto them and call it official 10.1.
+  </p>
+  <ul>
+    <li>
+      <strong>Fedora</strong> — if you installed Fedora’s own <code>rocm</code> packages, upgrade
+      is that distro set via <code>dnf</code>, not AMD Core SDK 10.1. Cited path:
+      <a href="/setup/fedora">/setup/fedora</a>. Not verified on our rig.
+    </li>
+    <li>
+      <strong>Arch</strong> — rolling <code>pacman -Syu</code> of the extra ROCm packages the
+      Arch Wiki documents. A custom kernel or DKMS <code>amdgpu</code> is not verified on our
+      rig. Cited path: <a href="/setup/arch">/setup/arch</a>.
+    </li>
+  </ul>
+  <p>
+    Dual-boot Ubuntu 24.04.5 if you want the measured local-desktop path to match the box.
+    <a href="/setup">Ubuntu setup</a>.
+  </p>
+
+  <h2 id="smoke">Post-upgrade smoke test</h2>
+  <p>
+    House default on AMDai: Qwen3.6-35B-A3B Unsloth UD-Q5_K_XL, one R9700, 262144 context,
+    f16 KV, llama.cpp Vulkan. Measured decode lives on
+    <a href="/gpus/r9700">/gpus/r9700</a> and <a href="/benchmarks">/benchmarks</a> — do not
+    copy tok/s from memory. Q3 stays a labeled estimate on those pages. Q1/Q2 stay off.
+  </p>
+  <pre><code>{ROCM_UPGRADE_SMOKE}</code></pre>
+  <p>
+    Confirm <code>--list-devices</code> still sees the discrete Radeon. If only the Vulkan build
+    was in use, you are done. If you need HIP, rebuild it, then compare on your box with
+    amdai-bench — HIP decode on local-desktop stays pending.
+  </p>
+
+  <h2 id="recovery">Recovery checklist</h2>
+  <p>
+    Match the symptom to the cited row. This page does not retell those write-ups.
+  </p>
+  <ul>
+    {ROCM_UPGRADE_RECOVERY.map((row) => (
+      <li>
+        <a href={row.href}>{row.title}</a> — {row.body}
+      </li>
+    ))}
+  </ul>
+  <p>
+    Also: <a href="/tutorials/verify-rocm">verify</a>,
+    <a href="/tutorials/install-rocm">reinstall with one method</a>,
+    <a href="/troubleshoot">troubleshoot</a>,
+    <a href="/rocm-problems">all open problems</a>.
+    Do not add a third driver to “fix” a mix.
+  </p>
+
+  <GoDeeper title="HSA_OVERRIDE is still unofficial after an upgrade">
+    <p>
+      <code>HSA_OVERRIDE_GFX_VERSION</code> is not an AMD-documented recovery step. On official
+      gfx1201 + current ROCm you should not need it. Unset it. Prefer Vulkan if HIP is angry.
+      <a href="/rocm-problems/hsa-override-unofficial">Cited row</a>.
+    </p>
+  </GoDeeper>
+
+  <Sources used={used} />
+</RocmGuide>

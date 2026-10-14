@@ -90,6 +90,12 @@ export const ROCM_FAQ: RocmFaqItem[] = [
     answer:
       'The 10.1 blog says the rocm-smi deprecation period is complete and amd-smi is the successor. New scripts should call amd-smi. Old blog posts will still say rocm-smi.',
   },
+  {
+    id: 'upgrade',
+    question: 'How do I upgrade ROCm without mixing leftovers?',
+    answer:
+      'Inventory first, then use the same official method you installed. Radeon Software / amdgpu-install does not support in-place upgrades. The 10.1 apt path documents install-and-update; uninstall first if you still have 7.2.4 or older. apt-mark hold is unofficial. Step-by-step: /rocm/upgrade. First install stays on Install ROCm.',
+  },
 ];
 
 export const ROCM_FAQ_ALL: RocmFaqItem[] = [...ROCM_MISCONCEPTIONS, ...ROCM_FAQ];

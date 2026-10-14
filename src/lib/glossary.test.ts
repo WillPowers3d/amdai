@@ -63,6 +63,7 @@ const ALLOWED_HREFS = new Set([
   '/results',
   '/rocm',
   '/rocm/glossary',
+  '/rocm/upgrade',
   '/software',
   '/setup',
   '/setup/windows',

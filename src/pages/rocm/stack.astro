@@ -103,9 +103,10 @@ const headings = [
     The in-tree Linux driver for modern AMD GPUs is <code>amdgpu</code>. It covers GCN, RDNA, and
     CDNA devices.<Cite id="amdgpuKernel" used={used} />
     That is the same driver that puts pixels on a monitor <em>and</em> the driver ROCm compute
-    sits on. Mixing a leftover DKMS tree, a distro module, and an old runfile is how people get a
+    sits on.     Mixing a leftover DKMS tree, a distro module, and an old runfile is how people get a
     black screen. One source of <code>amdgpu</code>. Confirm with <code>lsmod</code> and
-    <code>dmesg</code> before you blame userspace. The
+    <code>dmesg</code> before you blame userspace. Moving versions, pinning, or recovering
+    that mix is <a href="/rocm/upgrade">upgrade or reinstall ROCm</a>. The
     <a href="/troubleshooting">troubleshooting</a> page starts there.
   </p>
   <p>
@@ -216,6 +217,7 @@ const headings = [
       <strong>vLLM</strong> — AMD documents a ROCm vLLM path. It is a serve stack (batching, many
       clients), not this site’s consumer default.<Cite id="vllmAmd" used={used} />
       Pins move: see <a href="/rocm/versions">versions</a>.
+      Moving the tree: <a href="/rocm/upgrade">upgrade or reinstall</a>.
     </li>
   </ul>
 

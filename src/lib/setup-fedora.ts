@@ -137,9 +137,10 @@ export const SETUP_FEDORA_STEPS: SetupFedoraStep[] = [
     id: 'rocm',
     title: 'ROCm / HIP from Fedora packages',
     body:
-      'After Vulkan tokens are the goal, Fedora’s HIP stack is sudo dnf install rocm (optional rocm-devel for headers). That is the SIG’s command. It is Fedora’s package set, not AMD Core SDK 10.1. Confirm rocminfo prints the gfx the card actually is (gfx1201 on an R9700 / 9070-class card). Do not invent an HSA override. Not verified on our rig.',
+      'After Vulkan tokens are the goal, Fedora’s HIP stack is sudo dnf install rocm (optional rocm-devel for headers). That is the SIG’s command. It is Fedora’s package set, not AMD Core SDK 10.1. Confirm rocminfo prints the gfx the card actually is (gfx1201 on an R9700 / 9070-class card). Do not invent an HSA override. Moving that Fedora set later is a distro upgrade, not AMD 10.1 — see /rocm/upgrade. Not verified on our rig.',
     links: [
       { href: '/tutorials/install-rocm', label: 'Install ROCm (Ubuntu)' },
+      { href: '/rocm/upgrade', label: 'Upgrade or reinstall ROCm' },
       { href: '/rocm-problems', label: 'ROCm problems' },
     ],
   },
@@ -235,6 +236,7 @@ export const SETUP_FEDORA_HUB_LINKS: SetupFedoraLink[] = [
   { href: '/gpus/r9700', label: 'R9700' },
   { href: '/benchmarks', label: 'Benchmarks' },
   { href: '/start', label: 'Getting started' },
+  { href: '/rocm/upgrade', label: 'Upgrade or reinstall ROCm' },
 ];
 
 export const REQUIRED_SETUP_FEDORA_HREFS = [
@@ -252,6 +254,7 @@ export const REQUIRED_SETUP_FEDORA_HREFS = [
   '/glossary',
   '/bios',
   '/recipes/qwen36-35b.llamacpp-vulkan.262k',
+  '/rocm/upgrade',
 ] as const;
 
 const BANNED = /Qwen2\.5|Qwen3-8B/i;

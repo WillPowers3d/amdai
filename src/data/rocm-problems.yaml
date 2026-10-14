@@ -101,7 +101,7 @@ problems:
       On official gfx1201 + ROCm 10.0/10.1, unset it. Install a userspace
       that actually lists your gfx ID, or run llama.cpp Vulkan. If you keep
       an override on an unofficial ISA (see gfx1031), treat it as unofficial
-      and expect wrong kernels.
+      and expect wrong kernels. After an upgrade, unset it — /rocm/upgrade.
     affected_gpus: []
     affected_gfx:
       - gfx1201
@@ -187,7 +187,8 @@ problems:
       Pick one source. Purge archive `rocm`, `libamdhip64-dev`, and
       `libhsa-runtime*` before adding AMD’s 10.x repo. Check
       `ldd $(which rocminfo)` / `ldconfig` so `/opt/rocm` wins. See the
-      install tutorial.
+      install tutorial, then /rocm/upgrade if the mix is leftover from a
+      half-finished version move.
     affected_gpus: []
     affected_gfx:
       - gfx1201
@@ -374,7 +375,7 @@ problems:
       Rebuild or reinstall with an explicit gfx1201 target
       (`-DAMDGPU_TARGETS=gfx1201` / `-DGGML_HIP=ON`, or the gfx1201 ROCm
       family package). If HIP still has no binary, use llama.cpp Vulkan
-      tonight.
+      tonight. After a ROCm version move, rebuild HIP — see /rocm/upgrade.
     affected_gpus: []
     affected_gfx:
       - gfx1201

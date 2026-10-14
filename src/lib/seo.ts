@@ -129,6 +129,7 @@ export const CRUMB_LABELS: Record<string, string> = {
   '/rocm/gfx': 'gfx IDs',
   '/rocm/vulkan-hip': 'Vulkan vs HIP',
   '/rocm/versions': 'Versions',
+  '/rocm/upgrade': 'Upgrade',
   '/rocm/history': 'History',
   '/rocm/glossary': 'ROCm glossary',
   '/rocm/faq': 'ROCm FAQ',

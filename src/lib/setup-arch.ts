@@ -142,9 +142,10 @@ export const SETUP_ARCH_STEPS: SetupArchStep[] = [
     id: 'rocm',
     title: 'ROCm / HIP from Arch packages',
     body:
-      'After Vulkan tokens are the goal, Arch Wiki GPGPU documents the extra ROCm packages (HIP / OpenCL on the amdgpu kernel driver). That is Arch’s build, not AMD Core SDK 10.1. Confirm rocminfo prints the gfx the card actually is. Arch Wiki notes ROC_ENABLE_PRE_VEGA=1 for Polaris-era cards — do not set that on gfx1201, and do not invent an HSA override. Not verified on our rig.',
+      'After Vulkan tokens are the goal, Arch Wiki GPGPU documents the extra ROCm packages (HIP / OpenCL on the amdgpu kernel driver). That is Arch’s build, not AMD Core SDK 10.1. Confirm rocminfo prints the gfx the card actually is. Arch Wiki notes ROC_ENABLE_PRE_VEGA=1 for Polaris-era cards — do not set that on gfx1201, and do not invent an HSA override. Rolling upgrades of that extra set are a distro story — see /rocm/upgrade. Not verified on our rig.',
     links: [
       { href: '/tutorials/install-rocm', label: 'Install ROCm (Ubuntu)' },
+      { href: '/rocm/upgrade', label: 'Upgrade or reinstall ROCm' },
       { href: '/rocm-problems', label: 'ROCm problems' },
     ],
   },
@@ -240,6 +241,7 @@ export const SETUP_ARCH_HUB_LINKS: SetupArchLink[] = [
   { href: '/gpus/r9700', label: 'R9700' },
   { href: '/benchmarks', label: 'Benchmarks' },
   { href: '/start', label: 'Getting started' },
+  { href: '/rocm/upgrade', label: 'Upgrade or reinstall ROCm' },
 ];
 
 export const REQUIRED_SETUP_ARCH_HREFS = [
@@ -257,6 +259,7 @@ export const REQUIRED_SETUP_ARCH_HREFS = [
   '/glossary',
   '/bios',
   '/recipes/qwen36-35b.llamacpp-vulkan.262k',
+  '/rocm/upgrade',
 ] as const;
 
 const BANNED = /Qwen2\.5|Qwen3-8B/i;

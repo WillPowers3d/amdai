@@ -8,7 +8,7 @@ featured: true
 order: 1
 ---
 
-This walkthrough is for a **dedicated or dual-boot Linux install** you are willing to reboot. It targets the **AMD Radeon AI PRO R9700** (`gfx1201`) and other GPUs on AMD’s current matrix. It is not a silent unattended script. For what ROCm *is* — stack, gfx IDs, Vulkan vs HIP, versions — start at [What is ROCm](/rocm). Consumer jargon: [glossary](/glossary).
+This walkthrough is for a **dedicated or dual-boot Linux install** you are willing to reboot. It targets the **AMD Radeon AI PRO R9700** (`gfx1201`) and other GPUs on AMD’s current matrix. It is not a silent unattended script. For what ROCm *is* — stack, gfx IDs, Vulkan vs HIP, versions — start at [What is ROCm](/rocm). Already installed and need to move versions, pin, or recover a half-upgraded box: [upgrade or reinstall ROCm](/rocm/upgrade). Consumer jargon: [glossary](/glossary).
 
 <Callout type="check">
 Package names, repo URLs, and even the preferred installer change between ROCm releases. Use this page for **order of operations**. Copy exact `wget` / `amdgpu-install` / `rocm` lines from the [ROCm 10.1.0 install docs](https://rocm.docs.amd.com/en/docs-10.1.0/install/rocm.html) for the version you chose.
@@ -165,7 +165,7 @@ Do **not** install PyTorch yet if this step failed. Continue in [Verify GPU and 
 
 ## Common failure modes
 
-**Black screen after reboot.** You mixed a desktop `amdgpu` stack with another driver story, or DKMS failed against this kernel. Recovery: TTY (`Ctrl+Alt+F3`) or SSH, then the official uninstall / purge steps for the method you used. Do not `apt install` a third driver to “fix” it.
+**Black screen after reboot.** You mixed a desktop `amdgpu` stack with another driver story, or DKMS failed against this kernel. Recovery: TTY (`Ctrl+Alt+F3`) or SSH, then the official uninstall / purge steps for the method you used. Do not `apt install` a third driver to “fix” it. Step-by-step: [upgrade or reinstall](/rocm/upgrade).
 
 **`Permission denied` on `/dev/kfd`.** Groups did not apply, or you are inside a container without the right devices.
 

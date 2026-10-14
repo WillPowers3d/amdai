@@ -463,8 +463,23 @@ export const FAQ_ENTRIES: FaqItem[] = [
       'You can. You should not, if you want Core SDK 10.0/10.1, gfx1201, or a current vLLM ROCm image. Canonical’s archive has lagged. Add AMD’s 10.1 repo or use ROCm CLI v0.2.0 — never both plus archive rocm. Walkthrough: Install ROCm.',
     links: [
       { href: '/tutorials/install-rocm', label: 'Install ROCm' },
+      { href: '/rocm/upgrade', label: 'Upgrade or reinstall ROCm' },
       { href: '/rocm-problems/ubuntu-rocm-package-shadow', label: 'Archive shadow' },
       { href: '/start', label: 'Getting started' },
+    ],
+  },
+  {
+    id: 'upgrade-rocm',
+    group: 'getting-started',
+    question: 'How do I upgrade ROCm on a Radeon GPU without breaking Linux?',
+    answer:
+      'Cited shopper guide is /rocm/upgrade. Inventory first: rocminfo, amd-smi or rocm-smi, dpkg, dkms, /opt/rocm. Radeon Software / amdgpu-install does not support in-place upgrades — uninstall, then install. The ROCm 10.1 apt path documents install-and-update; if you still have 7.2.4 or older, uninstall first. apt-mark hold is unofficial (Ubuntu man-page, not an AMD pin). llama.cpp Vulkan usually survives a userspace swap; rebuild HIP and matching PyTorch ROCm wheels. No invented tok/s.',
+    links: [
+      { href: '/rocm/upgrade', label: 'Upgrade or reinstall ROCm' },
+      { href: '/tutorials/install-rocm', label: 'Install ROCm' },
+      { href: '/compare/vulkan-vs-rocm', label: 'Vulkan vs ROCm' },
+      { href: '/rocm-problems', label: 'ROCm problems' },
+      { href: '/setup', label: 'Ubuntu setup' },
     ],
   },
   {
@@ -867,6 +882,7 @@ export const REQUIRED_FAQ_HREFS = [
   '/setup/comfyui',
   '/setup/multi-gpu',
   '/guides/buying-used-radeon',
+  '/rocm/upgrade',
 ] as const;
 
 const BANNED_VISIBLE = /Qwen2\.5|Qwen3-8B/i;

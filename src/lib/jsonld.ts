@@ -28,6 +28,7 @@ import { FINE_TUNING_FAQ, FINE_TUNING_HOWTO_STEPS, FINE_TUNING_PUBLISHED } from 
 import { TUNING_FAQ, TUNING_HOWTO_STEPS, TUNING_PUBLISHED } from './tuning';
 import { MOE_FAQ, MOE_HOWTO_STEPS, MOE_PUBLISHED } from './moe';
 import { VULKAN_VS_ROCM_FAQ, VULKAN_VS_ROCM_HOWTO_STEPS, VULKAN_VS_ROCM_PUBLISHED } from './vulkan-vs-rocm';
+import { ROCM_UPGRADE_FAQ, ROCM_UPGRADE_HOWTO_STEPS, ROCM_UPGRADE_PUBLISHED } from './rocm-upgrade';
 import { CAN_RUN_HUB_FAQ, CAN_RUN_PUBLISHED, canRunPairPage, parseCanRunSlug } from './can-run';
 import {
   TROUBLESHOOT_HOWTO_STEPS,
@@ -679,6 +680,20 @@ export function pageJsonLd(input: {
       }),
     );
     nodes.push(faqPageJsonLd(TUNING_FAQ, url));
+    return nodes;
+  }
+  if (path === '/rocm/upgrade') {
+    nodes.push(
+      howToJsonLd({
+        name: input.title.replace(/ · AMDai$/, ''),
+        description: input.description,
+        url,
+        published: dates?.published ?? ROCM_UPGRADE_PUBLISHED,
+        modified: dates?.modified ?? ROCM_UPGRADE_PUBLISHED,
+        steps: ROCM_UPGRADE_HOWTO_STEPS,
+      }),
+    );
+    nodes.push(faqPageJsonLd(ROCM_UPGRADE_FAQ, url));
     return nodes;
   }
   if (path === '/compare/vulkan-vs-rocm') {
