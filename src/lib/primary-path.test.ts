@@ -98,6 +98,7 @@ describe('primary path and nav IA', () => {
       '/setup/lm-studio': '../pages/setup/lm-studio.astro',
       '/setup/coding-assistant': '../pages/setup/coding-assistant.astro',
       '/setup/ollama': '../pages/setup/ollama.astro',
+      '/setup/open-webui': '../pages/setup/open-webui.astro',
       '/faq': '../pages/faq.astro',
       '/gpus/r9700': '../pages/gpus/r9700.astro',
       '/gpus/strix-halo': '../pages/gpus/strix-halo.astro',

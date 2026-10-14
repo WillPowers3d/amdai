@@ -254,6 +254,12 @@ export const OG_CARDS: OgCard[] = [
     alt: 'AMDai Ollama — cited Radeon on-ramp, not measured on local-desktop',
   },
   {
+    slug: 'setup-open-webui',
+    title: 'Open WebUI on Radeon',
+    lede: 'Cited chat UI on llama-server /v1',
+    alt: 'AMDai Open WebUI — cited chat UI against llama-server /v1',
+  },
+  {
     slug: 'stack-lab',
     title: 'Radeon Stack Lab',
     lede: 'Packages not published yet',

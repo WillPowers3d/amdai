@@ -69,6 +69,8 @@ const ALLOWED_HREFS = new Set([
   '/setup/lm-studio',
   '/setup/coding-assistant',
   '/setup/ollama',
+  '/setup/open-webui',
+  '/harnesses/open-webui',
   '/backends/ollama',
   '/rocm-problems/ollama-gfx1201-tensile',
   '/harnesses/aider',

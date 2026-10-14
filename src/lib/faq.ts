@@ -283,6 +283,22 @@ export const FAQ_ENTRIES: FaqItem[] = [
     ],
   },
   {
+    id: 'open-webui-on-radeon',
+    group: 'getting-started',
+    question: 'Can I run Open WebUI on a Radeon GPU?',
+    answer:
+      'Yes as a cited path, not a measured local-desktop card. Open WebUI is a browser chat UI. It does not run the GGUF. Start llama.cpp llama-server first (Vulkan on Ubuntu 24.04+), then Docker or pip. Official Docker maps 3000:8080; pip defaults to :8080 so use --port 3000 or it collides with house llama-server. Connections → OpenAI URL http://127.0.0.1:8080/v1 (host.docker.internal from a container). House file is Qwen3.6-35B-A3B UD-Q5_K_XL. Q6/Q5/Q4 first; Q3 stays a labeled estimate. Do not pull the :cuda image on a Radeon. Decode numbers on this site are Ubuntu llama.cpp llama-bench, not Open WebUI. Ollama is a secondary connection.',
+    links: [
+      { href: '/setup/open-webui', label: 'Open WebUI on Radeon' },
+      { href: '/setup', label: 'Ubuntu setup (measured)' },
+      { href: '/harnesses/open-webui', label: 'Open WebUI harness' },
+      { href: '/backends/llamacpp', label: 'llama.cpp' },
+      { href: '/setup/docker', label: 'Docker / Podman' },
+      { href: '/setup/ollama', label: 'Ollama' },
+      { href: '/harnesses/connect', label: 'Connect a harness' },
+    ],
+  },
+  {
     id: 'local-image-gen',
     group: 'getting-started',
     question: 'Can I run Stable Diffusion or Flux on a Radeon, not just a local LLM?',
@@ -751,6 +767,7 @@ export const REQUIRED_FAQ_HREFS = [
   '/setup/lm-studio',
   '/setup/coding-assistant',
   '/setup/ollama',
+  '/setup/open-webui',
 ] as const;
 
 const BANNED_VISIBLE = /Qwen2\.5|Qwen3-8B/i;

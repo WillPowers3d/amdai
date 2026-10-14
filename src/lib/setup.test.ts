@@ -38,6 +38,7 @@ describe('first-run setup', () => {
     assert.ok(hrefs.includes('/setup/lm-studio'));
     assert.ok(hrefs.includes('/setup/coding-assistant'));
     assert.ok(hrefs.includes('/setup/ollama'));
+    assert.ok(hrefs.includes('/setup/open-webui'));
   });
 
   it('builds HowTo JSON-LD from the Ubuntu steps and stays in the sitemap', () => {

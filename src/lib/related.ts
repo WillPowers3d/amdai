@@ -89,6 +89,7 @@ function topicLinks(path: string): RelatedLink[] {
     path === '/setup/lm-studio' ||
     path === '/setup/coding-assistant' ||
     path === '/setup/ollama' ||
+    path === '/setup/open-webui' ||
     path === '/start'
   ) {
     return [
@@ -104,6 +105,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/setup/lm-studio', label: 'LM Studio' },
       { href: '/setup/coding-assistant', label: 'Coding assistant' },
       { href: '/setup/ollama', label: 'Ollama' },
+      { href: '/setup/open-webui', label: 'Open WebUI' },
       { href: '/image-gen', label: 'Image gen on Radeon' },
       { href: '/vision', label: 'Vision on Radeon' },
       { href: '/speech', label: 'Speech on Radeon' },
@@ -330,6 +332,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/setup/lm-studio', label: 'LM Studio' },
       { href: '/setup/coding-assistant', label: 'Coding assistant' },
       { href: '/setup/ollama', label: 'Ollama' },
+      { href: '/setup/open-webui', label: 'Open WebUI' },
       { href: '/multi-gpu', label: 'Dual / multi-GPU' },
       { href: '/gpus/r9700', label: 'R9700 measured page' },
       { href: '/speech', label: 'Speech on Radeon' },
@@ -496,6 +499,7 @@ export function relatedFor(pathname: string): RelatedLink[] {
     add(out, seen, '/setup/lm-studio', 'LM Studio');
     add(out, seen, '/setup/coding-assistant', 'Coding assistant');
     add(out, seen, '/setup/ollama', 'Ollama');
+    add(out, seen, '/setup/open-webui', 'Open WebUI');
     if (id) {
       for (const recipe of liveRecipes(recipes).filter((row) => row.backend === id)) {
         add(out, seen, `/recipes/${recipe.id}`, recipeLabel(recipe));
@@ -582,6 +586,7 @@ export function assertRelatedValid(
     '/setup/lm-studio',
     '/setup/coding-assistant',
     '/setup/ollama',
+    '/setup/open-webui',
     '/faq',
     '/models/qwen36',
     '/models/flash',

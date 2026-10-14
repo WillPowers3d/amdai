@@ -13,6 +13,7 @@ import { SETUP_DOCKER_HOWTO_STEPS, SETUP_DOCKER_PUBLISHED } from './setup-docker
 import { SETUP_LM_STUDIO_HOWTO_STEPS, SETUP_LM_STUDIO_PUBLISHED } from './setup-lm-studio';
 import { SETUP_CODING_HOWTO_STEPS, SETUP_CODING_PUBLISHED } from './setup-coding-assistant';
 import { SETUP_OLLAMA_HOWTO_STEPS, SETUP_OLLAMA_PUBLISHED } from './setup-ollama';
+import { SETUP_OPEN_WEBUI_HOWTO_STEPS, SETUP_OPEN_WEBUI_PUBLISHED } from './setup-open-webui';
 import { IMAGE_GEN_HOWTO_STEPS, IMAGE_GEN_PUBLISHED } from './image-gen';
 import { SPEECH_HOWTO_STEPS, SPEECH_PUBLISHED } from './speech';
 import { LONG_CONTEXT_FAQ, LONG_CONTEXT_PUBLISHED } from './long-context';
@@ -495,6 +496,19 @@ export function pageJsonLd(input: {
         published: dates?.published ?? SETUP_OLLAMA_PUBLISHED,
         modified: dates?.modified ?? SETUP_OLLAMA_PUBLISHED,
         steps: SETUP_OLLAMA_HOWTO_STEPS,
+      }),
+    );
+    return nodes;
+  }
+  if (path === '/setup/open-webui') {
+    nodes.push(
+      howToJsonLd({
+        name: input.title.replace(/ · AMDai$/, ''),
+        description: input.description,
+        url,
+        published: dates?.published ?? SETUP_OPEN_WEBUI_PUBLISHED,
+        modified: dates?.modified ?? SETUP_OPEN_WEBUI_PUBLISHED,
+        steps: SETUP_OPEN_WEBUI_HOWTO_STEPS,
       }),
     );
     return nodes;

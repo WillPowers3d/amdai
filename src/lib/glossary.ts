@@ -466,7 +466,25 @@ export const GLOSSARY: GlossaryEntry[] = [
       { href: '/backends/llamacpp', label: 'llama.cpp' },
       { href: '/rocm-problems/ollama-gfx1201-tensile', label: 'gfx1201 tensiles' },
     ],
-    seeAlso: ['llamacpp', 'lm-studio', 'context-length'],
+    seeAlso: ['llamacpp', 'lm-studio', 'open-webui', 'context-length'],
+  },
+  {
+    id: 'open-webui',
+    term: 'Open WebUI',
+    aliases: ['openwebui', ':3000', 'self-hosted chat UI'],
+    letter: 'O',
+    definition:
+      'A self-hosted browser chat UI. It talks to an OpenAI-compatible /v1. On AMDai that server is llama.cpp llama-server on 127.0.0.1:8080. The UI itself does not run the GGUF.',
+    why: 'People search “Open WebUI AMD GPU.” The cited first-run is /setup/open-webui. It is not a measured local-desktop card. Decode numbers on this site are Ubuntu llama.cpp llama-bench, not measured inside Open WebUI. llama.cpp you compile stays the daily driver.',
+    deeper:
+      'Official Docker maps host 3000 to container 8080. pip defaults to :8080 — use --port 3000 so it does not steal house llama-server. Admin → Connections → OpenAI, Provider llama.cpp. Do not pull the :cuda image on a Radeon. Ollama :11434 is a secondary path. House file is still Qwen3.6-35B-A3B UD-Q5_K_XL.',
+    links: [
+      { href: '/setup/open-webui', label: 'Open WebUI on Radeon' },
+      { href: '/harnesses/open-webui', label: 'Open WebUI harness' },
+      { href: '/backends/llamacpp', label: 'llama.cpp' },
+      { href: '/setup/ollama', label: 'Ollama' },
+    ],
+    seeAlso: ['llamacpp', 'ollama', 'lm-studio'],
   },
   {
     id: 'coding-assistant',

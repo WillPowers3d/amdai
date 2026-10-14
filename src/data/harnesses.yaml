@@ -393,6 +393,8 @@ harnesses:
     sources:
       - title: Open WebUI — LM Studio / OpenAI-compatible connection
         href: https://docs.openwebui.com/alternatives/lm-studio/
+      - title: This site — Run Open WebUI on a Radeon GPU
+        href: https://amdai.net/setup/open-webui
 
   - id: lm-studio
     title: LM Studio

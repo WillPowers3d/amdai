@@ -349,6 +349,7 @@ export const SETUP_CODING_HUB_LINKS: SetupCodingLink[] = [
   { href: '/setup', label: 'Ubuntu setup (measured)' },
   { href: '/setup/lm-studio', label: 'LM Studio' },
   { href: '/setup/ollama', label: 'Ollama' },
+  { href: '/setup/open-webui', label: 'Open WebUI' },
   { href: '/backends/llamacpp', label: 'llama.cpp' },
   { href: '/harnesses', label: 'Harnesses' },
   { href: '/models/qwen36', label: 'Qwen3.6-35B' },

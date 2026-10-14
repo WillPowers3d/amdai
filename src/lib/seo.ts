@@ -230,6 +230,7 @@ export const CRUMB_LABELS: Record<string, string> = {
   '/setup/lm-studio': 'LM Studio',
   '/setup/coding-assistant': 'Coding assistant',
   '/setup/ollama': 'Ollama',
+  '/setup/open-webui': 'Open WebUI',
   '/stack-lab': 'Stack Lab',
   '/stacks': 'Stacks',
   '/calculator': 'Calculator',
@@ -377,6 +378,12 @@ setMeta(
   'Cited Ollama on consumer Radeon. Linux first. llama.cpp stays the daily driver. No Ollama tok/s on AMDai.',
 );
 setDate('/setup/ollama', '2026-10-14');
+setMeta(
+  '/setup/open-webui',
+  'Run Open WebUI on a Radeon GPU',
+  'Cited Open WebUI against llama-server /v1 on Radeon. llama.cpp first. No Open WebUI tok/s on AMDai.',
+);
+setDate('/setup/open-webui', '2026-10-14');
 setMeta(
   '/image-gen',
   'Local image gen on Radeon',

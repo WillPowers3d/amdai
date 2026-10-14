@@ -265,6 +265,7 @@ export const SETUP_OLLAMA_HUB_LINKS: SetupOllamaLink[] = [
   { href: '/backends/llamacpp', label: 'llama.cpp' },
   { href: '/backends/ollama', label: 'Ollama backend' },
   { href: '/setup/lm-studio', label: 'LM Studio' },
+  { href: '/setup/open-webui', label: 'Open WebUI' },
   { href: '/rocm/vulkan-hip', label: 'Vulkan vs HIP' },
   { href: '/rocm-problems', label: 'ROCm problems' },
   { href: '/calculator', label: 'Calculator' },
