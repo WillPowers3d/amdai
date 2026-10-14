@@ -65,6 +65,7 @@ export const RAM_OFFLOAD_SURFACES = [
   '/power',
   '/fine-tuning',
   '/tuning',
+  '/moe',
   '/can-run',
   '/benchmarks',
   '/stacks',
@@ -139,6 +140,7 @@ export function assertRamSurfacesValid(): string[] {
   if (!RAM_OFFLOAD_SURFACES.includes('/power')) errors.push('missing /power');
   if (!RAM_OFFLOAD_SURFACES.includes('/fine-tuning')) errors.push('missing /fine-tuning');
   if (!RAM_OFFLOAD_SURFACES.includes('/tuning')) errors.push('missing /tuning');
+  if (!RAM_OFFLOAD_SURFACES.includes('/moe')) errors.push('missing /moe');
   if (!RAM_OFFLOAD_SURFACES.includes('/can-run')) errors.push('missing /can-run');
   if (!isRamOffloadSurface('/can-run/qwen36-35b-on-rx-7900-xtx')) errors.push('can-run pair pages must be RAM surfaces');
   if (!isRamOffloadSurface('/recipes/qwen36-35b.llamacpp-vulkan.262k')) {

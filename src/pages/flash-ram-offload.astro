@@ -41,11 +41,14 @@ const strata8k = dimm.find((row) => row.backend === 'Strata' && row.context === 
       Decode cells come from verified <code>amdai-bench/run@1</code> Flash cards.
       Empty stays <strong class="text-ink">{NOT_MEASURED_ON_local-desktop}</strong>.
       RAM kits are calculator estimates (file size + KV), labeled as such.
+      MoE vs dense, and why 35B-A3B is a different fit, live on
+      <a class="underline decoration-accent/40" href="/moe">/moe</a>.
     </p>
     <div class="mt-6 flex flex-wrap gap-3">
       <a class="btn-primary" href="/flash-daily">Flash daily driver</a>
       <a class="btn-secondary" href="/backends/strata">Strata deep dive</a>
       <a class="btn-ghost" href="/results">Official run cards</a>
+      <a class="btn-ghost" href="/moe">MoE on Radeon</a>
       <a class="btn-ghost" href="/bios">BIOS / four DIMMs</a>
       <a class="btn-ghost" href={officialLinks.qwenFlashGguf}>Unsloth GGUF</a>
     </div>

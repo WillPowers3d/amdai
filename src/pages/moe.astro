@@ -1,0 +1,406 @@
+---
+import Base from '../layouts/Base.astro';
+import Callout from '../components/Callout.astro';
+import HowWeTest from '../components/HowWeTest.astro';
+import NewsletterSignup from '../components/NewsletterSignup.astro';
+import NextSteps from '../components/NextSteps.astro';
+import OpenInStackLab from '../components/OpenInStackLab.astro';
+import SystemRamNeed from '../components/SystemRamNeed.astro';
+import { HOUSE_STACK_LAB } from '../lib/stack-lab-open';
+import { runPath } from '../lib/run-card';
+import { runs } from '../lib/run-card-data';
+import {
+  COMPARE_MODEL,
+  COMPARE_Q3,
+  FLASH_OFFLOAD_KITS,
+  MOE_CITED_LABEL,
+  MOE_DESCRIPTION,
+  MOE_EXPERT_OFFLOAD_LAUNCH,
+  MOE_FAQ,
+  MOE_FIT_STORIES,
+  MOE_HOUSE_LAUNCH,
+  MOE_HUB,
+  MOE_LEAD,
+  MOE_OFFLOAD_NOTE,
+  MOE_QUANT_ROWS,
+  MOE_SECTIONS,
+  MOE_SOURCES,
+  MOE_SPEED_LABEL,
+  MOE_SPLIT_NOTE,
+  MOE_STACK_LAB_NOTE,
+  MOE_STRATA_OFFLOAD_LAUNCH,
+  MOE_TITLE,
+  MOE_UNMEASURED,
+  MOE_WHAT,
+  RAM_FULL_LABEL,
+  RAM_MIN_LABEL,
+  moeDailyRamNeed,
+  moeFlashRamNeed,
+  moeMeasuredRows,
+} from '../lib/moe';
+
+const measured = moeMeasuredRows(runs);
+const dailyRam = moeDailyRamNeed();
+const flashRam = moeFlashRamNeed();
+const quant35 = MOE_QUANT_ROWS.filter((row) => row.family === '35b');
+const quantDense = MOE_QUANT_ROWS.filter((row) => row.family === 'dense-36' || row.family === 'dense-38');
+const quantFlash = MOE_QUANT_ROWS.filter((row) => row.family === 'flash');
+---
+
+<Base title={MOE_TITLE} description={MOE_DESCRIPTION}>
+  <main id="main" class="mx-auto max-w-4xl px-4 py-10 sm:px-6">
+    <p class="kicker">{MOE_CITED_LABEL}</p>
+    <h1 class="display mt-3 text-4xl sm:text-5xl">Mixture-of-Experts on a Radeon GPU</h1>
+    <p class="mt-4 max-w-3xl text-lg leading-relaxed text-muted">{MOE_LEAD}</p>
+    <ul class="mt-4 flex flex-wrap gap-2">
+      {MOE_HUB.map((link) => (
+        <li>
+          <a
+            class="inline-flex min-h-11 items-center rounded-full border border-line bg-canvas px-3 text-sm text-ink hover:border-accent/50 hover:text-accent-ink"
+            href={link.href}
+          >
+            {link.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+    <div class="mt-4">
+      <HowWeTest />
+    </div>
+    <div class="mt-4 grid gap-3">
+      <OpenInStackLab {...HOUSE_STACK_LAB.daily} compact />
+      <OpenInStackLab {...HOUSE_STACK_LAB.flash} compact />
+      <OpenInStackLab {...HOUSE_STACK_LAB.doctor} compact />
+    </div>
+
+    <Callout type="note" title="Three fit stories, one daily driver">
+      <p>
+        Official cards only for param / active / file figures. Measured decode is the
+        local-desktop {COMPARE_MODEL} llama.cpp Vulkan sweep. Dense 27B decode stays
+        <strong class="text-ink">{MOE_SPEED_LABEL}</strong>.
+        {COMPARE_Q3} is a labeled estimate. Flash stays on
+        <a class="underline decoration-accent/40" href="/flash-ram-offload">/flash-ram-offload</a>.
+        There is no allowlisted Stack Lab MoE expert-offload A/B.
+      </p>
+    </Callout>
+
+    <nav
+      class="sticky z-20 -mx-4 mt-8 border-y border-line bg-canvas/95 px-4 py-2 backdrop-blur-md sm:-mx-6 sm:px-6"
+      aria-label="MoE sections"
+    >
+      <p class="mb-2 font-mono text-[0.68rem] uppercase tracking-[0.16em] text-faint">Jump to section</p>
+      <ol class="flex flex-wrap gap-2">
+        {MOE_SECTIONS.map((section) => (
+          <li>
+            <a
+              class="inline-flex min-h-11 items-center rounded-full border border-line bg-raised px-3 text-sm text-ink hover:border-accent/50 hover:text-accent-ink"
+              href={`#${section.id}`}
+            >
+              {section.label}
+            </a>
+          </li>
+        ))}
+      </ol>
+    </nav>
+
+    <section id="what-it-is" class="mt-12 scroll-mt-28" aria-labelledby="what-it-is-heading">
+      <h2 id="what-it-is-heading" class="font-serif text-3xl tracking-tight">MoE vs dense in plain words</h2>
+      <p class="mt-3 max-w-3xl leading-relaxed text-muted">{MOE_WHAT}</p>
+      <Callout type="note" title="Glossary">
+        <p>
+          The short definitions live at
+          <a class="underline decoration-accent/40" href="/glossary#moe">MoE vs dense</a>
+          and
+          <a class="underline decoration-accent/40" href="/glossary#expert-offload">expert offload</a>.
+          Shopper RAM lines stay <strong class="text-ink">{RAM_MIN_LABEL}</strong> and
+          <strong class="text-ink">{RAM_FULL_LABEL}</strong> wherever experts leave the GPU.
+        </p>
+      </Callout>
+    </section>
+
+    <section id="three-fits" class="mt-12 scroll-mt-28" aria-labelledby="three-fits-heading">
+      <h2 id="three-fits-heading" class="font-serif text-3xl tracking-tight">Three fit stories</h2>
+      <p class="mt-3 max-w-3xl leading-relaxed text-muted">
+        Same shopper question — “will this file sit on one 32 GB R9700?” — three answers.
+        Do not reuse one VRAM number for the other two.
+      </p>
+      <ul class="mt-6 grid gap-4">
+        {MOE_FIT_STORIES.map((row) => (
+          <li id={row.id} class="scroll-mt-28 rounded-2xl border border-line bg-raised/50 p-5">
+            <h3 class="font-serif text-2xl tracking-tight">{row.title}</h3>
+            <p class="mt-2 font-mono text-sm text-accent-ink">{row.params}</p>
+            <p class="mt-1 text-xs text-faint">{row.paramsCite}</p>
+            <p class="mt-3 leading-relaxed text-muted">{row.pick}</p>
+            <p class="mt-3 leading-relaxed text-muted">{row.fit}</p>
+            <ul class="mt-4 flex flex-wrap gap-2">
+              {row.links.map((link) => (
+                <li>
+                  <a
+                    class="inline-flex min-h-11 items-center rounded-full border border-line bg-canvas px-3 text-sm text-ink hover:border-accent/50 hover:text-accent-ink"
+                    href={link.href}
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section id="quants" class="mt-12 scroll-mt-28" aria-labelledby="quants-heading">
+      <h2 id="quants-heading" class="font-serif text-3xl tracking-tight">Quant ladder</h2>
+      <p class="mt-3 max-w-3xl leading-relaxed text-muted">
+        Q6 / Q5 / Q4 first. <strong class="text-ink">Q3 is a labeled estimate</strong> — no
+        Q3 download or run on this page. Nothing below Q3. Publisher GB only when a listing
+        exists. Dense 27B speed stays {MOE_SPEED_LABEL}.
+      </p>
+
+      <h3 class="mt-8 font-serif text-2xl tracking-tight">35B-A3B · llama.cpp</h3>
+      <div class="mt-4 overflow-x-auto">
+        <table class="table-lab min-w-[52rem]">
+          <caption>Cited or measured 35B-A3B quant ladder. Q3 is a labeled estimate.</caption>
+          <thead>
+            <tr>
+              <th scope="col">Quant</th>
+              <th scope="col">Kind</th>
+              <th scope="col">File</th>
+              <th scope="col">VRAM</th>
+              <th scope="col">Note</th>
+            </tr>
+          </thead>
+          <tbody>
+            {quant35.map((row) => (
+              <tr>
+                <th scope="row">{row.quant}</th>
+                <td>{row.kindLabel}</td>
+                <td>{row.size}</td>
+                <td>{row.vram}</td>
+                <td>{row.note}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="mt-8 font-serif text-2xl tracking-tight">Dense 27B · cited listings</h3>
+      <div class="mt-4 overflow-x-auto">
+        <table class="table-lab min-w-[52rem]">
+          <caption>Official Unsloth listings for Qwen3.6 27B and Qwen3.8 27B. Speed is not measured.</caption>
+          <thead>
+            <tr>
+              <th scope="col">Quant</th>
+              <th scope="col">Kind</th>
+              <th scope="col">File</th>
+              <th scope="col">Speed</th>
+              <th scope="col">Note</th>
+            </tr>
+          </thead>
+          <tbody>
+            {quantDense.map((row) => (
+              <tr>
+                <th scope="row">{row.quant}</th>
+                <td>{row.kindLabel}</td>
+                <td>{row.size}</td>
+                <td>{row.speed}</td>
+                <td>{row.note}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="mt-8 font-serif text-2xl tracking-tight">Flash · expert offload</h3>
+      <div class="mt-4 overflow-x-auto">
+        <table class="table-lab min-w-[52rem]">
+          <caption>Official Flash listings. Q3 is a labeled estimate. Speeds live on Flash RAM offload.</caption>
+          <thead>
+            <tr>
+              <th scope="col">Quant</th>
+              <th scope="col">Kind</th>
+              <th scope="col">File</th>
+              <th scope="col">VRAM</th>
+              <th scope="col">Note</th>
+            </tr>
+          </thead>
+          <tbody>
+            {quantFlash.map((row) => (
+              <tr>
+                <th scope="row">{row.quant}</th>
+                <td>{row.kindLabel}</td>
+                <td>{row.size}</td>
+                <td>{row.vram}</td>
+                <td>{row.note}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="measured" class="mt-12 scroll-mt-28" aria-labelledby="measured-heading">
+      <h2 id="measured-heading" class="font-serif text-3xl tracking-tight">Measured 35B on one R9700</h2>
+      <p class="mt-3 max-w-3xl text-sm leading-relaxed text-muted">
+        Official llama.cpp Vulkan cells from existing run cards. Empty stays {MOE_UNMEASURED}.
+        {COMPARE_Q3} is a labeled estimate. Full matrix:
+        <a class="underline decoration-accent/40" href="/benchmarks">/benchmarks</a>.
+      </p>
+      <div class="mt-6 overflow-x-auto">
+        <table class="min-w-full text-left text-sm">
+          <caption class="sr-only">{COMPARE_MODEL} decode on one R9700</caption>
+          <thead>
+            <tr class="border-b border-line text-faint">
+              <th class="py-2 pr-3 font-normal" scope="col">Quant</th>
+              <th class="py-2 pr-3 font-normal" scope="col">Kind</th>
+              <th class="py-2 pr-3 font-normal" scope="col">4K decode</th>
+              <th class="py-2 pr-3 font-normal" scope="col">32K decode</th>
+              <th class="py-2 font-normal" scope="col">Note</th>
+            </tr>
+          </thead>
+          <tbody>
+            {measured.map((row) => (
+              <tr class="border-b border-line/70 align-top">
+                <th class="py-3 pr-3 font-medium" scope="row">{row.quant}</th>
+                <td class="py-3 pr-3 text-muted">{row.kind === 'q3-estimate' ? 'Q3 estimate' : 'Measured'}</td>
+                <td class="py-3 pr-3">
+                  {row.kind === 'measured' && row.decode4k !== MOE_UNMEASURED ? (
+                    <span class="text-accent-ink">{row.decode4k}</span>
+                  ) : (
+                    <span class="text-faint">{row.decode4k}</span>
+                  )}
+                </td>
+                <td class="py-3 pr-3">
+                  {row.kind === 'measured' && row.decode32k !== MOE_UNMEASURED ? (
+                    <span class="text-accent-ink">{row.decode32k}</span>
+                  ) : (
+                    <span class="text-faint">{row.decode32k}</span>
+                  )}
+                </td>
+                <td class="py-3 text-xs text-faint">
+                  {row.note}
+                  {row.runIds.length > 0 && (
+                    <p class="mt-1">
+                      {row.runIds.map((id) => (
+                        <a class="mr-2 underline decoration-accent/40" href={runPath(id)}>{id}</a>
+                      ))}
+                    </p>
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <h3 class="mt-8 font-serif text-2xl tracking-tight">House launch</h3>
+      <p class="mt-3 max-w-3xl text-sm leading-relaxed text-muted">
+        Start here. Exact recipe:
+        <a class="underline decoration-accent/40" href="/recipes/qwen36-35b.llamacpp-vulkan.262k">qwen36-35b.llamacpp-vulkan.262k</a>.
+      </p>
+      <pre class="mt-4 overflow-x-auto rounded-2xl border border-line bg-canvas p-4 text-xs">{MOE_HOUSE_LAUNCH}</pre>
+    </section>
+
+    <section id="offload" class="mt-12 scroll-mt-28" aria-labelledby="offload-heading">
+      <h2 id="offload-heading" class="font-serif text-3xl tracking-tight">Expert offload and system RAM</h2>
+      <p class="mt-3 max-w-3xl leading-relaxed text-muted">{MOE_OFFLOAD_NOTE}</p>
+      <pre class="mt-4 overflow-x-auto rounded-2xl border border-line bg-canvas p-4 text-xs">{MOE_EXPERT_OFFLOAD_LAUNCH}</pre>
+      <p class="mt-3 text-xs text-faint">
+        Strata expert-cache flags stay on the house Flash path only — shape, not invented values.
+      </p>
+      <pre class="mt-3 overflow-x-auto rounded-2xl border border-line bg-canvas p-4 text-xs">{MOE_STRATA_OFFLOAD_LAUNCH}</pre>
+      <p class="mt-4 text-sm text-muted">
+        Shopper kits already on Flash RAM offload: {FLASH_OFFLOAD_KITS.join(' / ')} GB.
+        Both labels print on the house recipes below.
+      </p>
+      {dailyRam && (
+        <div class="mt-6">
+          <h3 class="font-serif text-2xl tracking-tight">House 35B · in-VRAM</h3>
+          <p class="mt-2 text-sm text-muted">Daily driver does not offload on one R9700. Measured peaks when a card exists.</p>
+          <div class="mt-4">
+            <SystemRamNeed need={dailyRam} />
+          </div>
+        </div>
+      )}
+      {flashRam && (
+        <div class="mt-8">
+          <h3 class="font-serif text-2xl tracking-tight">House Flash · expert offload</h3>
+          <p class="mt-2 text-sm text-muted">
+            {RAM_MIN_LABEL} is the full-system estimate (offloaded weights + OS / cache / headroom),
+            rounded up to a real kit. {RAM_FULL_LABEL} is 262K with cache — measured only when we have a card.
+          </p>
+          <div class="mt-4">
+            <SystemRamNeed need={flashRam} />
+          </div>
+        </div>
+      )}
+    </section>
+
+    <section id="stack-lab" class="mt-12 scroll-mt-28" aria-labelledby="stack-lab-heading">
+      <h2 id="stack-lab-heading" class="font-serif text-3xl tracking-tight">Stack Lab and amdai-bench</h2>
+      <p class="mt-3 max-w-3xl leading-relaxed text-muted">{MOE_STACK_LAB_NOTE}</p>
+      <div class="mt-4 grid gap-3">
+        <OpenInStackLab {...HOUSE_STACK_LAB.daily} compact />
+        <OpenInStackLab {...HOUSE_STACK_LAB.flash} compact />
+        <OpenInStackLab {...HOUSE_STACK_LAB.doctor} compact />
+      </div>
+    </section>
+
+    <section id="split" class="mt-12 scroll-mt-28" aria-labelledby="split-heading">
+      <h2 id="split-heading" class="font-serif text-3xl tracking-tight">Two cards</h2>
+      <p class="mt-3 max-w-3xl leading-relaxed text-muted">{MOE_SPLIT_NOTE}</p>
+      <p class="mt-4 text-sm">
+        <a class="underline decoration-accent/40" href="/multi-gpu">Dual / multi-GPU</a>
+        {' · '}
+        <a class="underline decoration-accent/40" href="/setup/multi-gpu">Multi-GPU llama.cpp how-to</a>
+        {' · '}
+        <a class="underline decoration-accent/40" href="/tuning">Speed up llama.cpp</a>
+      </p>
+    </section>
+
+    <section id="faq" class="mt-12 scroll-mt-28" aria-labelledby="faq-heading">
+      <h2 id="faq-heading" class="font-serif text-3xl tracking-tight">FAQ</h2>
+      <dl class="mt-6 grid gap-6">
+        {MOE_FAQ.map((item) => (
+          <div id={item.id}>
+            <dt class="font-serif text-2xl tracking-tight">{item.question}</dt>
+            <dd class="mt-2 leading-relaxed text-muted">{item.answer}</dd>
+            <dd class="mt-2 text-sm">
+              {item.links.map((link, index) => (
+                <>
+                  {index > 0 ? ' · ' : ''}
+                  <a class="underline decoration-accent/40" href={link.href}>{link.label}</a>
+                </>
+              ))}
+            </dd>
+          </div>
+        ))}
+      </dl>
+    </section>
+
+    <section id="sources" class="mt-12 scroll-mt-28" aria-labelledby="sources-heading">
+      <h2 id="sources-heading" class="font-serif text-3xl tracking-tight">Sources</h2>
+      <ul class="mt-4 grid gap-2 text-sm">
+        {MOE_SOURCES.map((source) => (
+          <li>
+            <a class="underline decoration-accent/40" href={source.href} rel={source.href.startsWith('http') ? 'noopener' : undefined}>
+              {source.title}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <p class="mt-10 text-sm text-muted">
+      Also:
+      <a class="underline decoration-accent/40" href="/tuning">Speed up llama.cpp</a>
+      ·
+      <a class="underline decoration-accent/40" href="/can-run">Can my Radeon run it?</a>
+      ·
+      <a class="underline decoration-accent/40" href="/faq">FAQ</a>
+    </p>
+    <NextSteps path="/moe" />
+    <div class="mt-12">
+      <NewsletterSignup variant="article" />
+    </div>
+  </main>
+</Base>

@@ -26,6 +26,7 @@ import { POWER_FAQ, POWER_HOWTO_STEPS, POWER_PUBLISHED } from './power';
 import { VISION_FAQ, VISION_HOWTO_STEPS, VISION_PUBLISHED } from './vision';
 import { FINE_TUNING_FAQ, FINE_TUNING_HOWTO_STEPS, FINE_TUNING_PUBLISHED } from './fine-tuning';
 import { TUNING_FAQ, TUNING_HOWTO_STEPS, TUNING_PUBLISHED } from './tuning';
+import { MOE_FAQ, MOE_HOWTO_STEPS, MOE_PUBLISHED } from './moe';
 import { CAN_RUN_HUB_FAQ, CAN_RUN_PUBLISHED, canRunPairPage, parseCanRunSlug } from './can-run';
 import {
   TROUBLESHOOT_HOWTO_STEPS,
@@ -677,6 +678,20 @@ export function pageJsonLd(input: {
       }),
     );
     nodes.push(faqPageJsonLd(TUNING_FAQ, url));
+    return nodes;
+  }
+  if (path === '/moe') {
+    nodes.push(
+      howToJsonLd({
+        name: input.title.replace(/ · AMDai$/, ''),
+        description: input.description,
+        url,
+        published: dates?.published ?? MOE_PUBLISHED,
+        modified: dates?.modified ?? MOE_PUBLISHED,
+        steps: MOE_HOWTO_STEPS,
+      }),
+    );
+    nodes.push(faqPageJsonLd(MOE_FAQ, url));
     return nodes;
   }
   if (path === '/can-run') {

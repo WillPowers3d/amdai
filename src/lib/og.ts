@@ -486,6 +486,12 @@ export const OG_CARDS: OgCard[] = [
     alt: 'AMDai speed up llama.cpp on Radeon — cited flags, measured 35B cells only',
   },
   {
+    slug: 'moe',
+    title: 'Mixture-of-Experts on a Radeon GPU',
+    lede: 'Why 35B-A3B fits one 32 GB R9700. Dense 27B and Flash differ',
+    alt: 'AMDai Mixture-of-Experts on a Radeon GPU — cited 35B-A3B vs dense 27B vs Flash',
+  },
+  {
     slug: 'can-run',
     title: 'Can my Radeon run it?',
     lede: 'Cited GPU × model fit. Q3 is a labeled estimate',

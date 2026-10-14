@@ -272,6 +272,7 @@ export const GLOSSARY: GlossaryEntry[] = [
     deeper:
       'Shape only: llama-server -ngl 99 -c 262144 --n-cpu-moe not recorded -ot not recorded --cache-type-k/v f16. Copy that skeleton from Flash RAM offload; do not invent the regex or N.',
     links: [
+      { href: '/moe', label: 'MoE on Radeon' },
       { href: '/flash-ram-offload', label: 'Flash RAM offload' },
       { href: '/flash-daily', label: 'Flash daily driver' },
       { href: '/tutorials/run-local-llm', label: 'Run a local Qwen' },
@@ -567,6 +568,7 @@ export const GLOSSARY: GlossaryEntry[] = [
     deeper:
       'Qwen3.6-35B-A3B activates a 3B-class slice; that is why UD-Q5_K_XL fits one 32 GB card (25.97 GB VRAM at 4K). Flash is a different MoE and usually needs DDR5 expert offload. Dense 27B rows on /qwen are a separate fit.',
     links: [
+      { href: '/moe', label: 'MoE on Radeon' },
       { href: '/qwen', label: 'Qwen compare' },
       { href: '/models', label: 'Models' },
       { href: '/models/qwen36-27b', label: 'Qwen3.6 27B' },

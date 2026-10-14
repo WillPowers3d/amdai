@@ -504,6 +504,20 @@ export const FAQ_ENTRIES: FaqItem[] = [
     ],
   },
   {
+    id: 'moe-on-radeon',
+    group: 'models-quants',
+    question: 'Why does a 35B MoE fit one 32 GB R9700 when dense 27B and Flash look different?',
+    answer:
+      'MoE activates a slice; dense runs every parameter. Official Qwen3.6-35B-A3B is 35B total / 3B active — that is why UD-Q5_K_XL fits one 32 GB R9700 (publisher 26.6 GB; measured 25.97 GB VRAM at 4K and 29.34 GB at 256K). Dense Qwen3.6 27B and Qwen3.8 27B are a different file. Flash is a different MoE (official 125B / 6B plus a 51B n-gram) and usually needs DDR5 expert offload. The shopper hub is /moe. llama.cpp first. Q3 is a labeled estimate. Nothing below Q3.',
+    links: [
+      { href: '/moe', label: 'MoE on Radeon' },
+      { href: '/glossary#moe', label: 'MoE vs dense' },
+      { href: '/flash-ram-offload', label: 'Flash RAM offload' },
+      { href: '/qwen', label: 'Qwen compare' },
+      { href: '/gpus/r9700', label: 'R9700' },
+    ],
+  },
+  {
     id: '35b-or-flash',
     group: 'models-quants',
     question: '35B or Flash — which Qwen should I run first?',
@@ -822,6 +836,7 @@ export const REQUIRED_FAQ_HREFS = [
   '/power',
   '/fine-tuning',
   '/tuning',
+  '/moe',
   '/can-run',
   '/setup/fedora',
   '/setup/arch',

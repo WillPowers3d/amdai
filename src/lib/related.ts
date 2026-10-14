@@ -147,6 +147,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/compare/models', label: 'Compare models' },
       { href: '/backends/llamacpp', label: 'llama.cpp' },
       { href: '/tuning', label: 'Speed up llama.cpp' },
+      { href: '/moe', label: 'MoE on Radeon' },
       { href: '/stack-lab', label: 'Stack Lab' },
       { href: '/amdai-bench', label: 'amdai-bench' },
     ];
@@ -158,11 +159,28 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/multi-gpu', label: 'Dual / multi-GPU' },
       { href: '/power', label: 'Power and PSU' },
       { href: '/flash-ram-offload', label: 'Flash RAM offload' },
+      { href: '/moe', label: 'MoE on Radeon' },
       { href: '/rocm/vulkan-hip', label: 'Vulkan vs HIP' },
       { href: '/stack-lab', label: 'Stack Lab' },
       { href: '/amdai-bench', label: 'amdai-bench' },
       { href: '/benchmarks', label: 'Benchmarks' },
       { href: '/calculator', label: 'Calculator' },
+    ];
+  }
+  if (path === '/moe') {
+    return [
+      { href: '/moe', label: 'MoE on Radeon' },
+      { href: '/flash-ram-offload', label: 'Flash RAM offload' },
+      { href: '/gpus/r9700', label: 'R9700 measured page' },
+      { href: '/qwen', label: 'Qwen compare' },
+      { href: '/models', label: 'House models' },
+      { href: '/glossary', label: 'Glossary' },
+      { href: '/multi-gpu', label: 'Dual / multi-GPU' },
+      { href: '/setup/multi-gpu', label: 'Multi-GPU llama.cpp how-to' },
+      { href: '/tuning', label: 'Speed up llama.cpp' },
+      { href: '/can-run', label: 'Can my Radeon run it?' },
+      { href: '/compare/models', label: 'Compare models' },
+      { href: '/benchmarks', label: 'Benchmarks' },
     ];
   }
   if (path === '/faq' || path === '/glossary') {
@@ -201,6 +219,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/power', label: 'Power and PSU' },
       { href: '/compare/one-vs-two-gpu', label: 'One vs split' },
       { href: '/flash-daily', label: 'Flash daily' },
+      { href: '/moe', label: 'MoE on Radeon' },
       { href: '/setup', label: 'First-run setup' },
       { href: '/long-context', label: 'Long context' },
       { href: '/tuning', label: 'Speed up llama.cpp' },
@@ -209,6 +228,7 @@ function topicLinks(path: string): RelatedLink[] {
   if (path === '/flash-daily' || path === '/flash-ram-offload') {
     return [
       { href: '/models/flash', label: 'Qwen 3.8 Flash' },
+      { href: '/moe', label: 'MoE on Radeon' },
       { href: '/backends/strata', label: 'Strata' },
       { href: '/multi-gpu', label: 'Dual / multi-GPU' },
       { href: '/quants', label: 'Quants' },
@@ -480,6 +500,7 @@ export function relatedFor(pathname: string): RelatedLink[] {
         add(out, seen, `/recipes/${recipe.id}`, recipeLabel(recipe));
       }
       add(out, seen, '/qwen', 'Qwen compare');
+      add(out, seen, '/moe', 'MoE on Radeon');
       if (id === 'flash') add(out, seen, '/flash-daily', 'Flash daily');
       if (id === 'qwen36') add(out, seen, '/qwen36-dual', '35B on two cards');
       add(out, seen, '/compare', 'Compare 35B');
@@ -513,6 +534,7 @@ export function relatedFor(pathname: string): RelatedLink[] {
     } else {
       for (const model of MODEL_PAGES) add(out, seen, `/models/${model.id}`, model.name);
       add(out, seen, '/qwen', 'Qwen compare');
+      add(out, seen, '/moe', 'MoE on Radeon');
       add(out, seen, '/contribute', 'Contribute');
       add(out, seen, '/abliterated', 'Abliterated');
     }
@@ -636,6 +658,7 @@ export function assertRelatedValid(
     '/power',
     '/fine-tuning',
     '/tuning',
+    '/moe',
     '/can-run',
     '/hardware',
   ],

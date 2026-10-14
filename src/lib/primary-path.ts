@@ -723,6 +723,18 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
     { href: '/benchmarks', label: 'Benchmarks' },
     { href: '/calculator', label: 'Calculator' },
   ],
+  '/moe': [
+    { href: '/flash-ram-offload', label: 'Flash RAM offload' },
+    { href: '/gpus/r9700', label: 'R9700 measured page' },
+    { href: '/qwen', label: 'Qwen compare' },
+    { href: '/models', label: 'House models' },
+    { href: '/multi-gpu', label: 'Dual / multi-GPU' },
+    { href: '/setup/multi-gpu', label: 'Multi-GPU llama.cpp how-to' },
+    { href: '/tuning', label: 'Speed up llama.cpp' },
+    { href: '/can-run', label: 'Can my Radeon run it?' },
+    { href: '/compare/models', label: 'Compare models' },
+    { href: '/benchmarks', label: 'Benchmarks' },
+  ],
   '/can-run': [
     { href: '/calculator', label: 'Calculator' },
     { href: '/gpus', label: 'GPU directory' },

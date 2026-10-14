@@ -221,6 +221,7 @@ export const CRUMB_LABELS: Record<string, string> = {
   '/power': 'Power',
   '/fine-tuning': 'Fine-tuning',
   '/tuning': 'Tuning',
+  '/moe': 'MoE',
   '/can-run': 'Can my Radeon run it?',
   '/setup': 'First-run setup',
   '/setup/windows': 'Windows setup',
@@ -460,6 +461,12 @@ setMeta(
   'Speed up llama.cpp on Radeon. Cited -ngl, threads, batch, -fa, KV, split, draft, power. Measured 35B cells only. Q3 is a labeled estimate.',
 );
 setDate('/tuning', '2026-10-14');
+setMeta(
+  '/moe',
+  'Mixture-of-Experts on a Radeon GPU',
+  'Mixture-of-Experts on a Radeon GPU. Why 35B-A3B fits one 32 GB R9700 while dense 27B and Flash differ. llama.cpp first. Q3 is a labeled estimate.',
+);
+setDate('/moe', '2026-10-14');
 setMeta(
   '/stacks',
   'Recommended stacks',
