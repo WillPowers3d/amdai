@@ -1,0 +1,275 @@
+---
+import Base from '../../../layouts/Base.astro';
+import Callout from '../../../components/Callout.astro';
+import HowWeTest from '../../../components/HowWeTest.astro';
+import NewsletterSignup from '../../../components/NewsletterSignup.astro';
+import NextSteps from '../../../components/NextSteps.astro';
+import OpenInStackLab from '../../../components/OpenInStackLab.astro';
+import SystemRamNeed from '../../../components/SystemRamNeed.astro';
+import { runs } from '../../../lib/run-card-data';
+import { runPath } from '../../../lib/run-card';
+import {
+  MODEL_COMPARE_HUB,
+  modelComparePairPages,
+  parseModelCompareSlug,
+  modelComparePairPage,
+} from '../../../lib/model-compare';
+import { RAM_FULL_LABEL, RAM_MIN_LABEL } from '../../../lib/ram-surfaces';
+
+export function getStaticPaths() {
+  return modelComparePairPages().map((page) => ({ params: { slug: page.slug } }));
+}
+
+const slug = Astro.params.slug ?? '';
+const parsed = parseModelCompareSlug(slug);
+if (!parsed) throw new Error(`unknown model compare slug ${slug}`);
+const page = modelComparePairPage(parsed[0], parsed[1], runs);
+const sides = [page.left, page.right] as const;
+---
+
+<Base title={page.title} description={page.description}>
+  <main id="main" class="mx-auto max-w-6xl px-4 py-10 sm:px-6">
+    <p class="kicker">
+      <a class="underline decoration-accent/40" href="/compare">Compare</a>
+      ·
+      <a class="underline decoration-accent/40" href={MODEL_COMPARE_HUB}>Models</a>
+      · {page.engine}
+    </p>
+    <h1 class="display mt-3 text-4xl sm:text-5xl">{page.heading}</h1>
+    <p class="mt-4 max-w-3xl text-lg leading-relaxed text-muted">{page.lead}</p>
+    <div class="mt-4">
+      <HowWeTest />
+    </div>
+    <Callout type="note" title="What is measured">
+      <p>
+        Sizes and context claims come from the existing
+        <a class="underline decoration-accent/40" href={page.left.path}>{page.left.shortName}</a>
+        and
+        <a class="underline decoration-accent/40" href={page.right.path}>{page.right.shortName}</a>
+        pages. Fit totals are calculator estimates on published GPU sheets.
+        <strong class="text-ink">{page.q3Left}</strong> and <strong class="text-ink">{page.q3Right}</strong>
+        are labeled estimates. Measured tok/s appear only where a local-desktop card already exists.
+        We do not invent a price.
+      </p>
+    </Callout>
+
+    <section id="specs" class="mt-10" aria-labelledby="specs-heading">
+      <h2 id="specs-heading" class="font-serif text-3xl tracking-tight">Sizes, active params, context</h2>
+      <div class="mt-6 grid gap-4 md:grid-cols-2">
+        {sides.map((side) => (
+          <article class="rounded-2xl border border-line bg-raised/50 p-5">
+            <p class="kicker">{side.measured ? 'Measured on local-desktop' : 'Cited, not measured on local-desktop'}</p>
+            <h3 class="mt-2 font-serif text-2xl tracking-tight">
+              <a class="hover:text-accent-ink" href={side.path}>{side.shortName}</a>
+            </h3>
+            <p class="mt-2 text-sm text-muted">{side.role}</p>
+            <dl class="mt-4 grid gap-3 text-sm">
+              <div>
+                <dt class="text-faint">Parameters</dt>
+                <dd class="mt-1 font-serif text-2xl tabular-nums">{side.paramsLine}</dd>
+                <dd class="mt-1 text-xs text-muted">{side.totalParams} · {side.activeParams}</dd>
+              </div>
+              <div>
+                <dt class="text-faint">Cited context</dt>
+                <dd class="mt-1 font-serif text-2xl tabular-nums">{side.contextLabel}</dd>
+                <dd class="mt-1 text-xs text-muted">{side.contextCite}</dd>
+              </div>
+              <div>
+                <dt class="text-faint">Q6 / Q5 / Q4 / Q3 files</dt>
+                <dd class="mt-1">
+                  <ul class="grid gap-1 text-xs">
+                    {side.files.map((file) => (
+                      <li>
+                        <span class="text-ink">{file.quant}</span>
+                        {' · '}
+                        <span class="tabular-nums">{file.sizeGb}</span>
+                        {file.kind === 'q3-estimate' ? ' · Q3 estimate' : file.kind === 'estimate' ? ' · estimate' : ''}
+                      </li>
+                    ))}
+                  </ul>
+                </dd>
+                <dd class="mt-2 text-xs text-faint">{side.archNote}</dd>
+              </div>
+            </dl>
+            <p class="mt-4 text-sm">
+              <a class="underline decoration-accent/40" href={side.path}>Full model page</a>
+              {' · '}
+              <a class="underline decoration-accent/40" href={side.hf} rel="noopener">Official card</a>
+              {' · '}
+              <a class="underline decoration-accent/40" href={side.ggufHref} rel="noopener">GGUF</a>
+              {' · '}
+              <a class="underline decoration-accent/40" href={side.calculatorHref}>Open in calculator</a>
+            </p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section id="fit" class="mt-12" aria-labelledby="fit-heading">
+      <h2 id="fit-heading" class="font-serif text-3xl tracking-tight">Fit on common cards</h2>
+      <p class="mt-3 max-w-3xl text-sm leading-relaxed text-muted">
+        Existing GPU sheets only: R9700, RX 7900 XTX, RX 7900 XT, RX 7800 XT. {page.engine}, f16 KV.
+        Totals are calculator estimates. Speed is measured only on R9700 35B cells that already exist;
+        everything else stays not measured. Q3 is always a labeled estimate.
+      </p>
+      {page.gpuBlocks.map((block) => (
+        <div id={`fit-${block.gpuId}`} class="mt-8">
+          <h3 class="font-serif text-2xl tracking-tight">
+            <a class="hover:text-accent-ink" href={block.gpuHref}>{block.gpuName}</a>
+            <span class="ml-2 font-sans text-sm font-normal text-faint">{block.vramLabel}</span>
+          </h3>
+          <div class="mt-4 overflow-x-auto">
+            <table class="min-w-full text-left text-sm">
+              <caption class="sr-only">{page.left.shortName} vs {page.right.shortName} on {block.gpuName}</caption>
+              <thead>
+                <tr class="border-b border-line text-faint">
+                  <th class="py-2 pr-3 font-normal" scope="col">Quant</th>
+                  <th class="py-2 pr-3 font-normal" scope="col">Kind</th>
+                  <th class="py-2 pr-3 font-normal" scope="col">{page.left.shortName} 4K</th>
+                  <th class="py-2 pr-3 font-normal" scope="col">{page.left.shortName} 32K</th>
+                  <th class="py-2 pr-3 font-normal" scope="col">{page.right.shortName} 4K</th>
+                  <th class="py-2 pr-3 font-normal" scope="col">{page.right.shortName} 32K</th>
+                </tr>
+              </thead>
+              <tbody>
+                {block.rows.map((row) => (
+                  <tr class="border-b border-line/70 align-top">
+                    <th class="py-3 pr-3 font-medium" scope="row">
+                      {row.step}
+                      <p class="mt-1 text-xs font-normal text-faint">{row.leftQuant} / {row.rightQuant}</p>
+                    </th>
+                    <td class="py-3 pr-3 text-muted">{row.kindLabel}</td>
+                    {[...row.left, ...row.right].map((cell) => (
+                      <td class="py-3 pr-3">
+                        <p class="tabular-nums">{cell.totalGb}</p>
+                        <p class="text-xs text-muted">{cell.verdictLabel}</p>
+                        <p class="text-xs">
+                          {cell.speedKind === 'measured' ? (
+                            <span class="text-accent-ink">{cell.speed}</span>
+                          ) : (
+                            <span class="text-faint">{cell.speed}</span>
+                          )}
+                        </p>
+                        {cell.runIds.length > 0 && (
+                          <p class="mt-1 text-xs">
+                            {cell.runIds.map((id) => (
+                              <a class="mr-2 underline decoration-accent/40" href={runPath(id)}>{id}</a>
+                            ))}
+                          </p>
+                        )}
+                        <p class="mt-1 text-xs text-faint">{cell.note}</p>
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      ))}
+    </section>
+
+    <section id="ram" class="mt-12" aria-labelledby="ram-heading">
+      <h2 id="ram-heading" class="font-serif text-3xl tracking-tight">System RAM</h2>
+      <p class="mt-3 max-w-3xl leading-relaxed text-muted">
+        When a shopper file does not fit, the spill is system RAM.
+        Shopper lines stay <strong class="text-ink">{RAM_MIN_LABEL}</strong> and
+        <strong class="text-ink">{RAM_FULL_LABEL}</strong> on one R9700 at the model’s shopper quant,
+        32K selected and the official-card full context. Estimate unless a measured R9700 card overlays the kit.
+      </p>
+      <div class="mt-6 grid gap-4 md:grid-cols-2">
+        {sides.map((side) => (
+          <article class="rounded-2xl border border-line bg-raised/40 p-5">
+            <h3 class="font-serif text-2xl tracking-tight">{side.shortName}</h3>
+            <p class="mt-2 text-sm text-muted">
+              {side.offload
+                ? `${side.ramQuant} at 4K or 32K does not fit every listed card on the calculator.`
+                : `${side.ramQuant} at 4K and 32K fits the listed cards on the calculator.`}
+            </p>
+            <div class="mt-4">
+              <SystemRamNeed need={side.ramNeed} />
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section id="launch" class="mt-12" aria-labelledby="launch-heading">
+      <h2 id="launch-heading" class="font-serif text-3xl tracking-tight">llama.cpp first</h2>
+      <p class="mt-3 max-w-3xl text-sm leading-relaxed text-muted">
+        Commands and recipes already on the model pages. Cited-model shapes are not measured local-desktop recipes.
+        House Flash keeps its existing Strata recipe plus the llama.cpp backend page.
+      </p>
+      <div class="mt-6 grid gap-4 md:grid-cols-2">
+        {sides.map((side) => (
+          <article class="rounded-2xl border border-line bg-raised/50 p-5">
+            <h3 class="font-serif text-2xl tracking-tight">{side.shortName}</h3>
+            <ul class="mt-4 grid gap-3 text-sm">
+              {side.launches.map((launch) => (
+                <li>
+                  <p>
+                    <a class="underline decoration-accent/40" href={launch.href}>{launch.label}</a>
+                    <span class="ml-2 text-faint">{launch.backend}</span>
+                  </p>
+                  {launch.command && (
+                    <pre class="mt-2 overflow-x-auto rounded-xl border border-line bg-canvas p-3 text-xs">{launch.command}</pre>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section id="verdict" class="mt-12" aria-labelledby="verdict-heading">
+      <h2 id="verdict-heading" class="font-serif text-3xl tracking-tight">Plain-English pick</h2>
+      <ul class="mt-6 grid gap-4 md:grid-cols-2">
+        {page.useCases.map((row) => (
+          <li class="rounded-2xl border border-line bg-raised/50 p-5">
+            <h3 class="font-serif text-2xl tracking-tight">{row.title}</h3>
+            <p class="mt-3 leading-relaxed text-muted">{row.body}</p>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section id="stack-lab" class="mt-12" aria-labelledby="stack-lab-heading">
+      <h2 id="stack-lab-heading" class="font-serif text-3xl tracking-tight">Stack Lab</h2>
+      <p class="mt-3 max-w-3xl text-sm leading-relaxed text-muted">
+        Open in Stack Lab only where the handoff is already allowlisted. Doctor is always here.
+        House daily / Flash / agent profiles appear only when that house model is on the pair.
+      </p>
+      <div class="mt-4 grid gap-4">
+        {page.stackLab.map((input) => (
+          <OpenInStackLab {...input} compact />
+        ))}
+      </div>
+    </section>
+
+    <p class="mt-10 text-sm text-muted">
+      Pages:
+      <a class="underline decoration-accent/40" href={page.left.path}>{page.left.shortName}</a>
+      ·
+      <a class="underline decoration-accent/40" href={page.right.path}>{page.right.shortName}</a>
+      ·
+      <a class="underline decoration-accent/40" href={MODEL_COMPARE_HUB}>All model compares</a>
+      ·
+      <a class="underline decoration-accent/40" href="/compare/gpus">Compare GPUs</a>
+      ·
+      <a class="underline decoration-accent/40" href="/compare">Compare 35B</a>
+      ·
+      <a class="underline decoration-accent/40" href="/benchmarks">Benchmarks</a>
+      ·
+      <a class="underline decoration-accent/40" href="/stack-lab">Stack Lab</a>
+      ·
+      <a class="underline decoration-accent/40" href="/long-context">Long context</a>
+      ·
+      <a class="underline decoration-accent/40" href="/calculator">Calculator</a>
+    </p>
+    <NextSteps path={page.path} />
+    <div class="mt-12">
+      <NewsletterSignup variant="article" />
+    </div>
+  </main>
+</Base>

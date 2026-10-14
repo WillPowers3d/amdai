@@ -13,6 +13,7 @@ import { GUIDE_UPDATED, rocmPages } from './rocm-guide';
 import { amdai, amdai, type RunCard } from './run-card';
 import { forumCategories } from './forum-categories';
 import { gpuCompareSeoRows } from './gpu-compare';
+import { modelCompareSeoRows } from './model-compare';
 
 export const SITE_ORIGIN = 'https://amdai.net';
 export const TITLE_SUFFIX = ` · ${BRAND}`;
@@ -132,6 +133,7 @@ export const CRUMB_LABELS: Record<string, string> = {
   '/rocm/faq': 'ROCm FAQ',
   '/compare': 'Compare',
   '/compare/gpus': 'Compare GPUs',
+  '/compare/models': 'Compare models',
   '/compare/one-vs-two-gpu': 'One vs two GPUs',
   '/compare/q4-q5-q6': 'Q6 Q5 Q4',
   '/compare/radeon-vs-nvidia': 'Radeon vs NVIDIA',
@@ -401,6 +403,11 @@ setMeta(
 );
 setDate('/compare/radeon-vs-nvidia', '2026-10-13');
 for (const row of gpuCompareSeoRows()) {
+  CRUMB_LABELS[row.path] = row.title;
+  setMeta(row.path, row.title, row.description);
+  setDate(row.path, row.published);
+}
+for (const row of modelCompareSeoRows()) {
   CRUMB_LABELS[row.path] = row.title;
   setMeta(row.path, row.title, row.description);
   setDate(row.path, row.published);

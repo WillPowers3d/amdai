@@ -12,6 +12,7 @@ import { recipes } from './recipes-data';
 import { CONSUMER_NAV_LINKS } from './consumer-gpu';
 import { WORKSTATION_NAV_LINKS } from './workstation-gpu';
 import { gpuCompareIdFromInput, gpuCompareLinksFor } from './gpu-compare';
+import { modelCompareIdFromInput, modelCompareLinksFor } from './model-compare';
 import { urlPath } from './seo';
 
 export type RelatedLink = PathLink;
@@ -49,6 +50,7 @@ function topicLinks(path: string): RelatedLink[] {
     return [
       { href: '/gpus/r9700', label: 'R9700 measured page' },
       { href: '/compare/gpus', label: 'Compare GPUs' },
+      { href: '/compare/models', label: 'Compare models' },
       { href: '/compare/radeon-vs-nvidia', label: 'Radeon vs NVIDIA' },
       { href: '/benchmarks', label: 'Benchmarks' },
       { href: '/results', label: 'Run cards' },
@@ -373,6 +375,15 @@ export function relatedFor(pathname: string): RelatedLink[] {
       if (id === 'qwen36') add(out, seen, '/qwen36-dual', '35B on two cards');
       add(out, seen, '/compare', 'Compare 35B');
       add(out, seen, '/compare/gpus', 'Compare GPUs');
+      add(out, seen, '/compare/models', 'Compare models');
+      if (id) {
+        const compareId = modelCompareIdFromInput(id);
+        if (compareId) {
+          for (const link of modelCompareLinksFor(compareId).filter((row) => row.featured)) {
+            add(out, seen, link.href, `vs ${link.label}`);
+          }
+        }
+      }
       add(out, seen, '/benchmarks', 'Benchmarks');
       add(out, seen, '/calculator', 'Calculator');
       add(out, seen, '/gpus/r9700', 'R9700 measured page');
@@ -458,6 +469,7 @@ export function assertRelatedValid(
     '/gpus/w6800',
     '/compare',
     '/compare/gpus',
+    '/compare/models',
     '/compare/radeon-vs-nvidia',
     '/setup',
     '/faq',
@@ -504,7 +516,7 @@ export function assertRelatedValid(
     if (!xtx.includes(href)) errors.push(`/gpus/rx-7900-xtx missing ${href}`);
   }
   const qwen36 = relatedFor('/models/qwen36').map((link) => link.href);
-  for (const href of ['/qwen36-dual', '/compare', '/benchmarks', '/calculator', '/gpus/r9700']) {
+  for (const href of ['/qwen36-dual', '/compare', '/compare/models', '/benchmarks', '/calculator', '/gpus/r9700']) {
     if (!qwen36.includes(href)) errors.push(`/models/qwen36 missing ${href}`);
   }
   const flash = relatedFor('/models/flash').map((link) => link.href);

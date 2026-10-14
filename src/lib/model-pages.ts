@@ -92,6 +92,7 @@ export const REQUIRED_MODEL_HREFS = [
   '/calculator',
   '/benchmarks',
   '/compare',
+  '/compare/models',
   '/gpus/r9700',
   '/gpus/rx-7900-xtx',
   '/gpus/rx-7900-xt',

@@ -28,6 +28,7 @@ export const RAM_OFFLOAD_SURFACES = [
   '/multi-gpu',
   '/compare',
   '/compare/gpus',
+  '/compare/models',
   '/compare/one-vs-two-gpu',
   '/compare/q4-q5-q6',
   '/compare/radeon-vs-nvidia',
@@ -98,6 +99,8 @@ export function assertRamSurfacesValid(): string[] {
   if (!RAM_OFFLOAD_SURFACES.includes('/gpus/w6800')) errors.push('missing /gpus/w6800');
   if (!RAM_OFFLOAD_SURFACES.includes('/compare/radeon-vs-nvidia')) errors.push('missing /compare/radeon-vs-nvidia');
   if (!RAM_OFFLOAD_SURFACES.includes('/compare/gpus')) errors.push('missing /compare/gpus');
+  if (!RAM_OFFLOAD_SURFACES.includes('/compare/models')) errors.push('missing /compare/models');
+  if (!isRamOffloadSurface('/compare/models/qwen36-vs-glm-53-flash')) errors.push('model pair pages must be RAM surfaces');
   if (!isRamOffloadSurface('/compare/r9700-vs-rx-9070-xt')) errors.push('pair pages must be RAM surfaces');
   if (!RAM_OFFLOAD_SURFACES.includes('/models/qwen36')) errors.push('missing /models/qwen36');
   if (!RAM_OFFLOAD_SURFACES.includes('/models/flash')) errors.push('missing /models/flash');

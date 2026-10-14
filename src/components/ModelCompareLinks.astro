@@ -1,0 +1,56 @@
+---
+import {
+  MODEL_COMPARE_HUB,
+  MODEL_COMPARE_SHORT,
+  modelCompareIdFromInput,
+  modelCompareLinksFor,
+  type ModelCompareId,
+} from '../lib/model-compare';
+
+interface Props {
+  id?: string;
+  heading?: string;
+}
+
+const rawId = Astro.props.id;
+const heading = Astro.props.heading ?? 'Compare with…';
+const compareId = modelCompareIdFromInput(rawId ?? '') as ModelCompareId | null;
+const links = compareId ? modelCompareLinksFor(compareId) : [];
+const featured = links.filter((link) => link.featured);
+const rest = links.filter((link) => !link.featured);
+const name = compareId ? MODEL_COMPARE_SHORT[compareId] : 'this model';
+---
+
+<section id="compare-models" class="mt-12 scroll-mt-28" aria-labelledby="compare-models-heading">
+  <h2 id="compare-models-heading" class="font-serif text-3xl tracking-tight">{heading}</h2>
+  <p class="mt-3 max-w-3xl leading-relaxed text-muted">
+    Head-to-head pages use the same sizes, cited context, and calculator fit already on the model pages.
+    Q3 is a labeled estimate. No invented prices.
+    {compareId ? `${name} against the other cited /models pages:` : 'Open the model picker to choose two pages.'}
+  </p>
+  <ul class="mt-4 flex flex-wrap gap-2">
+    <li>
+      <a class="inline-flex min-h-9 items-center rounded-full border border-accent/50 bg-raised px-3 text-sm" href={MODEL_COMPARE_HUB}>
+        Compare models
+      </a>
+    </li>
+    {featured.map((link) => (
+      <li>
+        <a class="inline-flex min-h-9 items-center rounded-full border border-line bg-canvas px-3 text-sm" href={link.href}>
+          vs {link.label}
+        </a>
+      </li>
+    ))}
+  </ul>
+  {rest.length > 0 && (
+    <p class="mt-3 text-sm text-muted">
+      Also:
+      {rest.map((link, index) => (
+        <>
+          {index > 0 ? ' · ' : ''}
+          <a class="underline decoration-accent/40 underline-offset-2" href={link.href}>{link.label}</a>
+        </>
+      ))}
+    </p>
+  )}
+</section>

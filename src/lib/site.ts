@@ -111,6 +111,7 @@ export const primaryNav: NavItem[] = [
   { href: '/budget', label: 'Budget', description: 'Starter → Pro Radeon builds, no invented prices', group: 'tools' },
   { href: '/compare', label: 'Compare 35B', description: 'One GPU vs split, and Q6 / Q5 / Q4 plus a labeled Q3 estimate — from local-desktop run cards', group: 'tools' },
   { href: '/compare/gpus', label: 'Compare GPUs', description: 'Pick two Radeon sheets — VRAM, 35B Q6/Q5/Q4 fit estimates, labeled Q3. No invented prices', group: 'tools' },
+  { href: '/compare/models', label: 'Compare models', description: 'Pick two cited /models pages — sizes, context, Q6/Q5/Q4 fit estimates, labeled Q3. No invented prices', group: 'tools' },
   { href: '/qwen', label: 'Qwen compare', description: 'Every current 3.6 / 3.8 model × quant — sortable, filterable, measured cells from run cards', group: 'tools' },
   { href: '/benchmarks', label: 'Benchmarks', description: 'Cited 35B llama.cpp matrix from local-desktop run cards — Flash stays its own block', group: 'tools' },
   { href: '/results', label: 'Results', description: 'Official amdai-bench/run@1 cards — amdai’s verified local-desktop tests, exact launch command', group: 'tools' },

@@ -263,6 +263,12 @@ export const OG_CARDS: OgCard[] = [
     alt: 'AMDai compare AMD GPUs — VRAM and labeled 35B estimates',
   },
   {
+    slug: 'compare-models',
+    title: 'Compare models',
+    lede: 'Sizes, cited context, Q6/Q5/Q4 fit, labeled Q3',
+    alt: 'AMDai compare models — sizes and labeled Q3 estimates',
+  },
+  {
     slug: 'results',
     title: 'Official run cards',
     lede: 'amdai-bench/run@1 from amdai on local-desktop',
@@ -488,6 +494,7 @@ export function ogSlug(pathname: string): string {
   if (slug === 'benchmarks' || slug.startsWith('benchmarks-')) return 'benchmarks';
   if (slug === 'compare' || slug.startsWith('compare-')) {
     if (SLUGS.has(slug)) return slug;
+    if (slug === 'compare-models' || slug.startsWith('compare-models')) return 'compare-models';
     if (slug === 'compare-gpus' || slug.includes('-vs-')) return 'compare-gpus';
     return 'compare';
   }

@@ -370,6 +370,12 @@ export function compareHubCards() {
       body: 'Head-to-head from the published sheets: VRAM, bandwidth, which 35B Q6/Q5/Q4 files fit, a labeled Q3 estimate, and a plain-English pick per job. No invented prices or tok/s.',
     },
     {
+      href: '/compare/models',
+      kicker: 'Models',
+      title: 'Qwen3.6-35B vs GLM 5.3 Flash (and other pairs)',
+      body: 'Head-to-head from cited /models pages: sizes, official-card context, Q6/Q5/Q4 fit estimates on existing GPU sheets, and a labeled Q3 estimate. No invented prices or tok/s.',
+    },
+    {
       href: '/gpus/r9700',
       kicker: 'This card',
       title: 'Radeon AI PRO R9700',

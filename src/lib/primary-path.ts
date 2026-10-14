@@ -308,8 +308,17 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
     { href: '/compare/r9700-vs-rx-9070-xt', label: 'R9700 vs 9070 XT' },
     { href: '/gpus/r9700', label: 'R9700 measured page' },
     { href: '/compare/radeon-vs-nvidia', label: 'Radeon vs NVIDIA' },
+    { href: '/compare/models', label: 'Compare models' },
     { href: '/calculator', label: 'Calculator' },
     { href: '/gpus', label: 'GPU directory' },
+  ],
+  '/compare/models': [
+    { href: '/compare/models/qwen36-vs-glm-53-flash', label: 'Qwen3.6-35B vs GLM 5.3 Flash' },
+    { href: '/compare/models/qwen36-vs-flash', label: '35B vs Flash' },
+    { href: '/models', label: 'Models' },
+    { href: '/compare/gpus', label: 'Compare GPUs' },
+    { href: '/benchmarks', label: 'Benchmarks' },
+    { href: '/calculator', label: 'Calculator' },
   ],
   '/compare/radeon-vs-nvidia': [
     { href: '/gpus/r9700', label: 'R9700 measured page' },
@@ -370,6 +379,7 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
     { href: '/models/qwen36-27b', label: 'Qwen3.6 27B' },
     { href: '/models/qwen38-27b', label: 'Qwen3.8 27B' },
     { href: '/qwen', label: 'Qwen compare' },
+    { href: '/compare/models', label: 'Compare models' },
     { href: '/calculator', label: 'Calculator' },
     { href: '/contribute', label: 'Contribute' },
   ],
@@ -515,6 +525,7 @@ export const HIGH_TRAFFIC_PATHS = Object.keys(NEXT_STEPS);
 export function nextStepsFor(pathname: string): PathLink[] {
   const path = pathname === '/' ? '/' : pathname.replace(/\/+$/, '') || '/';
   if (NEXT_STEPS[path]) return NEXT_STEPS[path]!;
+  if (path.startsWith('/compare/models')) return NEXT_STEPS['/compare/models']!;
   if (path.startsWith('/compare/') && path.includes('-vs-')) return NEXT_STEPS['/compare/gpus']!;
   return NEXT_STEPS['/']!;
 }

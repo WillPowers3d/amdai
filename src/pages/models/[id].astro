@@ -1,6 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
 import HowWeTest from '../../components/HowWeTest.astro';
+import ModelCompareLinks from '../../components/ModelCompareLinks.astro';
 import ModelSheet from '../../components/ModelSheet.astro';
 import NewsletterSignup from '../../components/NewsletterSignup.astro';
 import NextSteps from '../../components/NextSteps.astro';
@@ -34,6 +35,7 @@ const modelRuns = officialAmdaiRuns(verifiedMeasured(runsForModelName(runs, page
       <a class="btn-primary" href={`/calculator?model=${page.id}`}>Open in calculator</a>
       <a class="btn-ghost" href="/benchmarks">Benchmarks</a>
       <a class="btn-ghost" href="/compare">Compare 35B</a>
+      <a class="btn-ghost" href="/compare/models">Compare models</a>
       <a class="btn-ghost" href="/gpus/r9700">R9700</a>
       <a class="btn-ghost" href={page.card.hf}>Hugging Face card</a>
       {page.deepLinks.map((link) => (
@@ -45,6 +47,7 @@ const modelRuns = officialAmdaiRuns(verifiedMeasured(runsForModelName(runs, page
     </div>
 
     <ModelSheet page={page} />
+    <ModelCompareLinks id={page.id} />
 
     <section class="mt-12" aria-labelledby="recipes-heading">
       <h2 id="recipes-heading" class="font-serif text-3xl">Recipes</h2>

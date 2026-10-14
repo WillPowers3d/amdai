@@ -37,7 +37,7 @@ describe('related links', () => {
     assert.ok(hrefs.includes(`/gpus/${recipe.card}`));
     assert.ok(hrefs.includes(`/models/${recipe.model_id}`));
     const model = relatedFor('/models/qwen36').map((link) => link.href);
-    for (const href of ['/qwen36-dual', '/compare', '/benchmarks', '/calculator', '/gpus/r9700']) {
+    for (const href of ['/qwen36-dual', '/compare', '/compare/models', '/benchmarks', '/calculator', '/gpus/r9700']) {
       assert.ok(model.includes(href), href);
     }
     assert.ok(hrefs.includes(`/backends/${recipe.backend}`));
