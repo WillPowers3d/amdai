@@ -19,6 +19,7 @@ export const RAM_OFFLOAD_SURFACES = [
   '/gpus/rx-7700-xt',
   '/gpus/rx-7600-xt',
   '/gpus/rx-7600',
+  '/gpus/rx-6800-xt',
   '/multi-gpu',
   '/compare',
   '/compare/one-vs-two-gpu',
@@ -75,6 +76,7 @@ export function assertRamSurfacesValid(): string[] {
   if (!RAM_OFFLOAD_SURFACES.includes('/gpus/rx-7700-xt')) errors.push('missing /gpus/rx-7700-xt');
   if (!RAM_OFFLOAD_SURFACES.includes('/gpus/rx-7600-xt')) errors.push('missing /gpus/rx-7600-xt');
   if (!RAM_OFFLOAD_SURFACES.includes('/gpus/rx-7600')) errors.push('missing /gpus/rx-7600');
+  if (!RAM_OFFLOAD_SURFACES.includes('/gpus/rx-6800-xt')) errors.push('missing /gpus/rx-6800-xt');
   if (!RAM_OFFLOAD_SURFACES.includes('/compare/radeon-vs-nvidia')) errors.push('missing /compare/radeon-vs-nvidia');
   if (!RAM_OFFLOAD_SURFACES.includes('/models/qwen36')) errors.push('missing /models/qwen36');
   if (!RAM_OFFLOAD_SURFACES.includes('/models/flash')) errors.push('missing /models/flash');

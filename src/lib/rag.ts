@@ -168,6 +168,7 @@ export const RAG_FIT_ROWS: RagFitRow[] = [
       { href: '/gpus/rx-7900-gre', label: 'RX 7900 GRE' },
       { href: '/gpus/rx7800xt', label: 'RX 7800 XT' },
       { href: '/gpus/rx-7600-xt', label: 'RX 7600 XT' },
+      { href: '/gpus/rx-6800-xt', label: 'RX 6800 XT' },
     ],
     fit: 'Estimate. Official nomic Q8_0 is 140 MiB. A house 35B Q4–Q6 file does not sit in 16 GB on the calculator at long context — the LLM sidecar is the fit question, not the embed GGUF. Q3 chat sidecar is a labeled estimate, not runnable advice.',
     speed: RAG_SPEED_LABEL,

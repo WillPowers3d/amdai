@@ -114,7 +114,7 @@ export const FAQ_ENTRIES: FaqItem[] = [
     group: 'getting-started',
     question: 'Which GPU should I start with?',
     answer:
-      'The measured house box is one AMD Radeon AI PRO R9700 (32 GB, gfx1201). There is no consumer RX 9700. A 16 GB RX 9070 XT is the same generation with half the VRAM — see the RX 9070 XT recipe sheet for calculator fit estimates, not local-desktop tok/s. The cheaper 16 GB RDNA 4 pick is the RX 9060 XT (gfx1200) — same estimate-sheet rules, different family package. A 7900 XTX (gfx1100) is still a practical home card on a different ROCm family package; the 16 GB 7900 GRE sits between the 7900 XT and 7800 XT on that same gfx1100 pin. The 12 GB 7700 XT is the next smaller gfx1101 sheet after the 7800 XT. The 16 GB 7600 XT is the gfx1102 budget 16 GB sheet — not the 8 GB RX 7600, which has its own estimate sheet. Mini-PCs on Ryzen AI Max / Strix Halo (Radeon 8060S, gfx1151) are a shared-memory APU, not a discrete VRAM card — see that cited guide. Confirm the SKU on the R9700 measured page and the GPU directory, then size the file on the calculator before you buy a second card.',
+      'The measured house box is one AMD Radeon AI PRO R9700 (32 GB, gfx1201). There is no consumer RX 9700. A 16 GB RX 9070 XT is the same generation with half the VRAM — see the RX 9070 XT recipe sheet for calculator fit estimates, not local-desktop tok/s. The cheaper 16 GB RDNA 4 pick is the RX 9060 XT (gfx1200) — same estimate-sheet rules, different family package. A 7900 XTX (gfx1100) is still a practical home card on a different ROCm family package; the 16 GB 7900 GRE sits between the 7900 XT and 7800 XT on that same gfx1100 pin. The 12 GB 7700 XT is the next smaller gfx1101 sheet after the 7800 XT. The 16 GB 7600 XT is the gfx1102 budget 16 GB sheet — not the 8 GB RX 7600, which has its own estimate sheet. The 16 GB RX 6800 XT is the RDNA 2 gfx1030 estimate sheet — unofficial on the current Radeon ROCm row, Vulkan first. Mini-PCs on Ryzen AI Max / Strix Halo (Radeon 8060S, gfx1151) are a shared-memory APU, not a discrete VRAM card — see that cited guide. Confirm the SKU on the R9700 measured page and the GPU directory, then size the file on the calculator before you buy a second card.',
     links: [
       { href: '/gpus/r9700', label: 'R9700 measured page' },
       { href: '/gpus/rx-9070-xt', label: 'RX 9070 XT sheet' },
@@ -127,6 +127,7 @@ export const FAQ_ENTRIES: FaqItem[] = [
       { href: '/gpus/rx-7700-xt', label: 'RX 7700 XT sheet' },
       { href: '/gpus/rx-7600-xt', label: 'RX 7600 XT sheet' },
       { href: '/gpus/rx-7600', label: 'RX 7600 sheet' },
+      { href: '/gpus/rx-6800-xt', label: 'RX 6800 XT sheet' },
       { href: '/gpus', label: 'GPU directory' },
       { href: '/calculator', label: 'Calculator' },
       { href: '/start', label: 'Getting started' },

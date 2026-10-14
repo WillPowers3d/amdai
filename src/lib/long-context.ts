@@ -190,6 +190,7 @@ export const LONG_CONTEXT_TIERS = [
       { href: '/gpus/rx7800xt', label: 'RX 7800 XT sheet' },
       { href: '/gpus/rx-9070-xt', label: 'RX 9070 XT sheet' },
       { href: '/gpus/rx-7600-xt', label: 'RX 7600 XT sheet' },
+      { href: '/gpus/rx-6800-xt', label: 'RX 6800 XT sheet' },
     ],
   },
   {

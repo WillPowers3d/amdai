@@ -153,6 +153,7 @@ export const SPEECH_FIT_ROWS: SpeechFitRow[] = [
       { href: '/gpus/rx-7900-gre', label: 'RX 7900 GRE' },
       { href: '/gpus/rx7800xt', label: 'RX 7800 XT' },
       { href: '/gpus/rx-7600-xt', label: 'RX 7600 XT' },
+      { href: '/gpus/rx-6800-xt', label: 'RX 6800 XT' },
     ],
     fit: 'Estimate. Official table through large (~3.9 GB mem) sits under 16 GB. Sharing the card with a 35B GGUF is a calculator question, not a speech-mem claim.',
     speed: SPEECH_SPEED_LABEL,
@@ -335,6 +336,7 @@ export const REQUIRED_SPEECH_HREFS = [
   '/gpus/rx-7700-xt',
   '/gpus/rx-7600-xt',
   '/gpus/rx-7600',
+  '/gpus/rx-6800-xt',
   '/multi-gpu',
   '/calculator',
   '/troubleshoot',
@@ -455,6 +457,7 @@ export function assertSpeechValid(): string[] {
     '/gpus/rx-7700-xt',
     '/gpus/rx-7600-xt',
     '/gpus/rx-7600',
+    '/gpus/rx-6800-xt',
     '/gpus/strix-halo',
   ]) {
     if (!fitHrefs.includes(href)) errors.push(`fit table missing ${href}`);

@@ -31,7 +31,7 @@ import { RAM_FULL_LABEL, RAM_MIN_LABEL } from './ram-surfaces';
 import type { GpuDirectory } from './status';
 import { COMPARE_MODEL, COMPARE_Q3, COMPARE_Q3_CITE } from './local-desktop-compare';
 
-export const CONSUMER_RECIPE_IDS = ['rx7900xtx', 'rx7900xt', 'rx7800xt', 'rx9070xt', 'rx9060xt', 'rx7900gre', 'rx7700xt', 'rx7600xt', 'rx7600'] as const;
+export const CONSUMER_RECIPE_IDS = ['rx7900xtx', 'rx7900xt', 'rx7800xt', 'rx9070xt', 'rx9060xt', 'rx7900gre', 'rx7700xt', 'rx7600xt', 'rx7600', 'rx6800xt'] as const;
 export type ConsumerRecipeId = (typeof CONSUMER_RECIPE_IDS)[number];
 
 export const CONSUMER_PAGE_SLUG: Record<ConsumerRecipeId, string> = {
@@ -44,6 +44,7 @@ export const CONSUMER_PAGE_SLUG: Record<ConsumerRecipeId, string> = {
   rx7700xt: 'rx-7700-xt',
   rx7600xt: 'rx-7600-xt',
   rx7600: 'rx-7600',
+  rx6800xt: 'rx-6800-xt',
 };
 
 export const CONSUMER_PAGE_ALIASES: Record<string, ConsumerRecipeId> = {
@@ -68,6 +69,10 @@ export const CONSUMER_PAGE_ALIASES: Record<string, ConsumerRecipeId> = {
   rx7600: 'rx7600',
   'rx-7600': 'rx7600',
   'rx7600-8gb': 'rx7600',
+  rx6800xt: 'rx6800xt',
+  'rx-6800-xt': 'rx6800xt',
+  'rx6800-xt': 'rx6800xt',
+  'rx-6800xt': 'rx6800xt',
 };
 
 export const CONSUMER_PUBLISHED = '2026-10-13';
@@ -97,6 +102,7 @@ export const CONSUMER_NAV_LINKS = [
   { href: '/gpus/rx-7700-xt', label: 'RX 7700 XT' },
   { href: '/gpus/rx-7600-xt', label: 'RX 7600 XT' },
   { href: '/gpus/rx-7600', label: 'RX 7600' },
+  { href: '/gpus/rx-6800-xt', label: 'RX 6800 XT' },
   { href: '/gpus/rx-9070-xt', label: 'RX 9070 XT' },
   { href: '/gpus/rx-9060-xt', label: 'RX 9060 XT' },
 ] as const;
@@ -150,6 +156,7 @@ const SHORT_NAME: Record<ConsumerRecipeId, string> = {
   rx7700xt: 'RX 7700 XT',
   rx7600xt: 'RX 7600 XT',
   rx7600: 'RX 7600',
+  rx6800xt: 'RX 6800 XT',
 };
 
 const BUDGET_ANCHOR: Record<ConsumerRecipeId, { href: string; label: string }> = {
@@ -162,6 +169,7 @@ const BUDGET_ANCHOR: Record<ConsumerRecipeId, { href: string; label: string }> =
   rx7700xt: { href: '/budget#starter', label: 'Starter budget tier' },
   rx7600xt: { href: '/budget#starter', label: 'Starter budget tier' },
   rx7600: { href: '/budget#starter', label: 'Starter budget tier' },
+  rx6800xt: { href: '/budget#starter', label: 'Starter budget tier' },
 };
 
 const LEAD: Record<ConsumerRecipeId, string> = {
@@ -183,6 +191,8 @@ const LEAD: Record<ConsumerRecipeId, string> = {
     '16 GB gfx1102 RDNA 3 — the 16 GB 7600-class card, not the 8 GB RX 7600. Same LLVM target as the cited 8 GB 7600 row on the ROCm 10.1 matrix; do not mix a gfx1101 (7800 / 7700 XT) or gfx1201 pin. House 35B Q4–Q6 files do not fit this VRAM on the calculator — expect RAM offload or a listed Q3 file, both estimates. Buy the 7800 XT when you want 16 GB on gfx1101, or the R9700 when you want measured 32 GB recipes. Not a measured local-desktop card.',
   rx7600:
     '8 GB gfx1102 RDNA 3 — the non-XT 7600, not the 16 GB RX 7600 XT. Same LLVM target as the cited 16 GB XT row on the ROCm 10.1 matrix; do not mix a gfx1101 (7800 / 7700 XT) or gfx1201 pin. House 35B Q4–Q6 files do not fit this VRAM on the calculator — expect RAM offload or a listed Q3 file, both estimates. Buy the 7600 XT when you want 16 GB on this gfx, or the R9700 when you want measured 32 GB recipes. Not a measured local-desktop card.',
+  rx6800xt:
+    '16 GB gfx1030 RDNA 2 — the 6800 XT, not the 32 GB PRO W6800 and not the 16 GB 6950 XT / 6900 XT directory listing. Consumer RDNA 2 is unofficial on the current Radeon ROCm row the way W6800 is official. Vulkan llama.cpp stays first. House 35B Q4–Q6 files do not fit this VRAM on the calculator — expect RAM offload or a listed Q3 file, both estimates. Buy the R9700 when you want measured 32 GB recipes. Not a measured local-desktop card.',
 };
 
 export type ConsumerFitKind = 'estimate' | 'q3-estimate';
@@ -342,6 +352,26 @@ function stackTips(id: ConsumerRecipeId, gfx: string): ConsumerStackTip[] {
       },
     ];
   }
+  if (id === 'rx6800xt') {
+    return [
+      {
+        title: 'llama.cpp first',
+        body: 'Vulkan is the consumer default on this site. HIP is unofficial on this gfx1030 consumer card — the current Radeon official row lists W6800, not the 6800 XT. Prefer Vulkan llama.cpp if HIP is angry. Ollama and vLLM are not the house path for this card.',
+      },
+      {
+        title: 'gfx1030 family package',
+        body: `${gfx} is the same LLVM target as the official 32 GB W6800 and the 6950 XT / 6900 XT directory listing. Do not mix a gfx110x (7900 / 7800 / 7700 / 7600) or gfx1201 (R9700 / 9070 XT) install. Re-check the cited matrix before you install.`,
+      },
+      {
+        title: '16 GB XT, not the 32 GB W6800',
+        body: 'This sheet sizes the 16 GB consumer 6800 XT. House 35B Q4–Q6 files do not fit this VRAM — expect RAM offload or a lighter listed Q3 file, both estimates. The 32 GB PRO W6800 is a different listing. Size the file on the calculator before you download.',
+      },
+      {
+        title: 'Setup, then Stack Lab doctor',
+        body: 'First-run setup is Ubuntu. Open Stack Lab doctor for the install family rocminfo actually prints. House daily and Flash profiles are R9700 / local-desktop — they do not apply to this 16 GB card. Packages are not published yet.',
+      },
+    ];
+  }
   if (id === 'rx7700xt') {
     return [
       {
@@ -486,7 +516,10 @@ export function consumerRecipePage(id: ConsumerRecipeId): ConsumerRecipePage {
     name: card.name,
     shortName,
     title: shortName,
-    description: `${shortName} recipe sheet — ${vramGb} GB, ${card.gfx}, cited ROCm matrix row. 35B Q6/Q5/Q4 VRAM fit estimates; ${COMPARE_Q3} labeled estimate. Not measured on local-desktop.`,
+    description:
+      card.support === 'unofficial'
+        ? `${shortName} recipe sheet — ${vramGb} GB, ${card.gfx}, cited RDNA 2 directory row. 35B Q6/Q5/Q4 VRAM fit estimates; ${COMPARE_Q3} labeled estimate. Not measured on local-desktop.`
+        : `${shortName} recipe sheet — ${vramGb} GB, ${card.gfx}, cited ROCm matrix row. 35B Q6/Q5/Q4 VRAM fit estimates; ${COMPARE_Q3} labeled estimate. Not measured on local-desktop.`,
     family: card.family,
     arch: card.arch,
     gfx: card.gfx,
@@ -570,7 +603,9 @@ export function assertConsumerGpuValid(pages: ConsumerRecipePage[] = consumerRec
     if (!yamlIds.has(page.id)) errors.push(`${page.id} missing gpus.yaml row`);
     if (!presetIds.has(page.id)) errors.push(`${page.id} missing calculator preset`);
     if (page.vramGb <= 0) errors.push(`${page.id} missing VRAM hardware label`);
-    if (page.support !== 'official') errors.push(`${page.id} invented unofficial support`);
+    if (page.support !== 'official' && !(page.id === 'rx6800xt' && page.support === 'unofficial')) {
+      errors.push(`${page.id} invented unofficial support`);
+    }
     if (!page.matrixHref.startsWith('https://rocm.docs.amd.com/')) errors.push(`${page.id} matrix href`);
     if (!page.linuxReqsHref.startsWith('https://rocm.docs.amd.com/')) errors.push(`${page.id} linux_reqs href`);
     if (!/not measured on local-desktop/i.test(page.notMeasured)) errors.push(`${page.id} must say not measured on local-desktop`);

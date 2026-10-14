@@ -60,6 +60,9 @@ export default defineConfig({
     '/gpus/rx7600-xt': '/gpus/rx-7600-xt',
     '/gpus/rx7600': '/gpus/rx-7600',
     '/gpus/rx7600-8gb': '/gpus/rx-7600',
+    '/gpus/rx6800xt': '/gpus/rx-6800-xt',
+    '/gpus/rx6800-xt': '/gpus/rx-6800-xt',
+    '/gpus/rx-6800xt': '/gpus/rx-6800-xt',
     '/embeddings': '/rag',
   },
   markdown: {

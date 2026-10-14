@@ -31,6 +31,7 @@ export const GPU_DETECT: GpuDetectCard[] = [
   { id: 'rx7700xt', name: 'Radeon RX 7700 XT', gfx: ['gfx1101'], names: ['7700 xt'], vramGb: 12 },
   { id: 'rx7600xt', name: 'Radeon RX 7600 XT', gfx: ['gfx1102'], names: ['rx 7600 xt', '7600 xt'], vramGb: 16 },
   { id: 'rx7600', name: 'Radeon RX 7600', gfx: ['gfx1102'], names: ['rx 7600', '7600'], vramGb: 8 },
+  { id: 'rx6800xt', name: 'Radeon RX 6800 XT', gfx: ['gfx1030'], names: ['rx 6800 xt', '6800 xt', 'rx6800xt'], vramGb: 16 },
   { id: 'w7900', name: 'Radeon PRO W7900', gfx: ['gfx1100'], names: ['w7900', 'pro w7900'], vramGb: 48 },
   { id: 'w7800', name: 'Radeon PRO W7800', gfx: ['gfx1100'], names: ['w7800', 'pro w7800'], vramGb: 32 },
   { id: 'w6800', name: 'Radeon PRO W6800', gfx: ['gfx1030'], names: ['w6800', 'pro w6800'], vramGb: 32 },
@@ -54,6 +55,7 @@ export function detectGpu(text: string): GpuDetectHit[] {
     if (card.id === 'rx9070' && /9070\s+(xt|gre)/.test(hay)) continue;
     if (card.id === 'rx7900xt' && /7900\s+xtx/.test(hay)) continue;
     if (card.id === 'rx7600' && /7600\s+xt/.test(hay)) continue;
+    if (card.id === 'w6800' && /6800\s+xt/.test(hay)) continue;
     named.push({
       id: card.id,
       name: card.name,

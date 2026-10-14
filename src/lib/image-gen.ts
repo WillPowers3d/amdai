@@ -168,6 +168,7 @@ export const IMAGE_GEN_FIT_ROWS: ImageGenFitRow[] = [
       { href: '/gpus/rx-7900-gre', label: 'RX 7900 GRE' },
       { href: '/gpus/rx7800xt', label: 'RX 7800 XT' },
       { href: '/gpus/rx-7600-xt', label: 'RX 7600 XT' },
+      { href: '/gpus/rx-6800-xt', label: 'RX 6800 XT' },
     ],
     fit: 'Estimate. SD 1.5 is the more likely family. SDXL may need a lower resolution or the CPU-offload path the SDXL card documents. Flux-class 12B BF16 is tighter on 16 GB than on 24 / 32 GB.',
     speed: IMAGE_GEN_SPEED_LABEL,
@@ -350,6 +351,7 @@ export const REQUIRED_IMAGE_GEN_HREFS = [
   '/gpus/rx-7700-xt',
   '/gpus/rx-7600-xt',
   '/gpus/rx-7600',
+  '/gpus/rx-6800-xt',
   '/multi-gpu',
   '/calculator',
   '/troubleshoot',
@@ -463,6 +465,7 @@ export function assertImageGenValid(): string[] {
     '/gpus/rx-7700-xt',
     '/gpus/rx-7600-xt',
     '/gpus/rx-7600',
+    '/gpus/rx-6800-xt',
     '/gpus/strix-halo',
   ]) {
     if (!fitHrefs.includes(href)) errors.push(`fit table missing ${href}`);
