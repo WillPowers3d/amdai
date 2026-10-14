@@ -278,6 +278,12 @@ export const OG_CARDS: OgCard[] = [
     alt: 'AMDai multi-GPU llama.cpp — cited how-to, 35B split measured on local-desktop',
   },
   {
+    slug: 'setup-server',
+    title: 'Always-on llama-server',
+    lede: 'Cited systemd unit. Loopback first',
+    alt: 'AMDai always-on llama-server — cited systemd unit on Linux, loopback first',
+  },
+  {
     slug: 'guides-buying-used-radeon',
     title: 'Buying a used Radeon',
     lede: 'Cited shopper guide. No invented prices',

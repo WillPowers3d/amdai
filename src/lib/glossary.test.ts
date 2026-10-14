@@ -76,6 +76,7 @@ const ALLOWED_HREFS = new Set([
   '/setup/wsl',
   '/setup/comfyui',
   '/setup/multi-gpu',
+  '/setup/server',
   '/guides/buying-used-radeon',
   '/image-gen',
   '/harnesses/image',

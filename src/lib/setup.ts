@@ -42,6 +42,7 @@ export const SETUP_INTRO_LINKS: SetupLink[] = [
   { href: '/setup/wsl', label: 'WSL2' },
   { href: '/setup/comfyui', label: 'ComfyUI' },
   { href: '/setup/multi-gpu', label: 'Multi-GPU llama.cpp' },
+  { href: '/setup/server', label: 'Always-on server' },
   { href: '/compare/vulkan-vs-rocm', label: 'Vulkan vs ROCm' },
   { href: '/fine-tuning', label: 'Fine-tuning' },
 ];
@@ -128,12 +129,19 @@ export const SETUP_MORE_PATHS = [
     summary:
       'Run llama.cpp across two Radeon GPUs. Layer split or two pinned servers. 35B split numbers are the overnight cards. No invented tok/s.',
   },
+  {
+    href: '/setup/server',
+    label: 'Always-on server',
+    kicker: 'Cited llama.cpp + systemd',
+    summary:
+      'llama-server as a Linux systemd unit. Loopback first. Dual-card pins stay on the multi-GPU how-to. Not a measured service card.',
+  },
 ] as const;
 
 export const SETUP_UBUNTU_BASED = {
   title: 'Ubuntu-based distros',
   body:
-    'Linux Mint, Pop!_OS, and Kubuntu are Ubuntu-based. AMD’s ROCm 10.1.0 compatibility matrix lists Ubuntu 26.04.1, 24.04.5, and 22.04.5 by name — not Mint, Pop!_OS, or Kubuntu. Official docs do not put those derivatives on the 10.1 OS row, so we do not invent official AMD support. Follow the Ubuntu steps on this page only as unofficial; that path is not verified on our rig.     Prefer stock Ubuntu 24.04.5 if you want the measured local-desktop cards to match the box. Fedora, Arch, Docker / Podman, LM Studio, the coding-assistant guide, Ollama, Open WebUI, WSL2, ComfyUI, and the multi-GPU llama.cpp how-to have their own cited pages.',
+    'Linux Mint, Pop!_OS, and Kubuntu are Ubuntu-based. AMD’s ROCm 10.1.0 compatibility matrix lists Ubuntu 26.04.1, 24.04.5, and 22.04.5 by name — not Mint, Pop!_OS, or Kubuntu. Official docs do not put those derivatives on the 10.1 OS row, so we do not invent official AMD support. Follow the Ubuntu steps on this page only as unofficial; that path is not verified on our rig.     Prefer stock Ubuntu 24.04.5 if you want the measured local-desktop cards to match the box. Fedora, Arch, Docker / Podman, LM Studio, the coding-assistant guide, Ollama, Open WebUI, WSL2, ComfyUI, the multi-GPU llama.cpp how-to, and the always-on systemd server have their own cited pages.',
   links: [
     { href: '/setup/fedora', label: 'Fedora setup' },
     { href: '/setup/arch', label: 'Arch setup' },
@@ -146,6 +154,7 @@ export const SETUP_UBUNTU_BASED = {
     { href: '/setup/wsl', label: 'WSL2' },
     { href: '/setup/comfyui', label: 'ComfyUI' },
     { href: '/setup/multi-gpu', label: 'Multi-GPU llama.cpp' },
+    { href: '/setup/server', label: 'Always-on server' },
   ] satisfies SetupLink[],
 };
 
@@ -384,6 +393,7 @@ export const REQUIRED_SETUP_HREFS = [
   '/setup/wsl',
   '/setup/comfyui',
   '/setup/multi-gpu',
+  '/setup/server',
   '/compare/vulkan-vs-rocm',
   '/fine-tuning',
 ] as const;

@@ -373,6 +373,19 @@ export const FAQ_ENTRIES: FaqItem[] = [
     ],
   },
   {
+    id: 'always-on-llama-server',
+    group: 'getting-started',
+    question: 'How do I keep llama-server running after I log out?',
+    answer:
+      'Cited walk is /setup/server. A systemd Type=simple unit with enable --now. House bind is 127.0.0.1:8080. Confirm GET /health and /v1/models before you attach a harness. Dual-card units stay on /setup/multi-gpu. Q6/Q5/Q4 first; Q3 stays a labeled estimate. We do not invent a service tok/s.',
+    links: [
+      { href: '/setup/server', label: 'Always-on llama-server' },
+      { href: '/tutorials/serve-qwen', label: 'Serve Qwen' },
+      { href: '/setup/multi-gpu', label: 'Multi-GPU llama.cpp how-to' },
+      { href: '/setup', label: 'Ubuntu setup (measured)' },
+    ],
+  },
+  {
     id: 'buying-used-radeon',
     group: 'getting-started',
     question: 'How do I pick and vet a used Radeon for local AI?',
@@ -866,6 +879,7 @@ export const REQUIRED_FAQ_HREFS = [
   '/setup/wsl',
   '/setup/comfyui',
   '/setup/multi-gpu',
+  '/setup/server',
   '/guides/buying-used-radeon',
 ] as const;
 

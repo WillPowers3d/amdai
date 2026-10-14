@@ -353,6 +353,7 @@ export const SETUP_CODING_HUB_LINKS: SetupCodingLink[] = [
   { href: '/setup/wsl', label: 'WSL2' },
   { href: '/setup/comfyui', label: 'ComfyUI' },
   { href: '/setup/multi-gpu', label: 'Multi-GPU llama.cpp' },
+  { href: '/setup/server', label: 'Always-on server' },
   { href: '/backends/llamacpp', label: 'llama.cpp' },
   { href: '/harnesses', label: 'Harnesses' },
   { href: '/models/qwen36', label: 'Qwen3.6-35B' },

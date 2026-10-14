@@ -42,6 +42,7 @@ describe('first-run setup', () => {
     assert.ok(hrefs.includes('/setup/wsl'));
     assert.ok(hrefs.includes('/setup/comfyui'));
     assert.ok(hrefs.includes('/setup/multi-gpu'));
+    assert.ok(hrefs.includes('/setup/server'));
     assert.ok(hrefs.includes('/compare/vulkan-vs-rocm'));
   });
 

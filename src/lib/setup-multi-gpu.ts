@@ -392,6 +392,7 @@ export const SETUP_MULTI_GPU_HUB_LINKS: SetupMultiGpuLink[] = [
   { href: '/compare/one-vs-two-gpu', label: 'One vs split' },
   { href: '/qwen36-dual', label: '35B on two cards' },
   { href: '/setup', label: 'Ubuntu setup (measured)' },
+  { href: '/setup/server', label: 'Always-on server' },
   { href: '/backends/llamacpp', label: 'llama.cpp' },
   { href: '/gpus/r9700', label: 'R9700' },
   { href: '/flash-daily', label: 'Flash daily' },

@@ -102,6 +102,7 @@ describe('primary path and nav IA', () => {
       '/setup/wsl': '../pages/setup/wsl.astro',
       '/setup/comfyui': '../pages/setup/comfyui.astro',
       '/setup/multi-gpu': '../pages/setup/multi-gpu.astro',
+      '/setup/server': '../pages/setup/server.astro',
       '/guides/buying-used-radeon': '../pages/guides/buying-used-radeon.astro',
       '/faq': '../pages/faq.astro',
       '/gpus/r9700': '../pages/gpus/r9700.astro',

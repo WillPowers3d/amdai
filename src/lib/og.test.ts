@@ -77,6 +77,7 @@ describe('OG catalog', () => {
     assert.equal(ogSlug('/setup/wsl'), 'setup-wsl');
     assert.equal(ogSlug('/setup/comfyui'), 'setup-comfyui');
     assert.equal(ogSlug('/setup/multi-gpu'), 'setup-multi-gpu');
+    assert.equal(ogSlug('/setup/server'), 'setup-server');
     assert.equal(ogSlug('/guides/buying-used-radeon'), 'guides-buying-used-radeon');
     assert.equal(ogSlug('/stack-lab'), 'stack-lab');
     assert.equal(ogSlug('/faq'), 'faq');
