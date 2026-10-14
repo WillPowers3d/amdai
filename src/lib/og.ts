@@ -558,6 +558,12 @@ export const OG_CARDS: OgCard[] = [
     alt: 'AMDai thinking / reasoning mode on a Radeon GPU with llama.cpp — cited flags, thinking tokens not measured',
   },
   {
+    slug: 'sampling',
+    title: 'Sampling settings on Radeon',
+    lede: 'Cited --temp, --top-p, --min-p. House recipes do not pin samplers',
+    alt: 'AMDai sampling settings on a Radeon GPU with llama.cpp — cited --temp --top-p --min-p, sampler speed not measured',
+  },
+  {
     slug: 'concurrency-ab',
     title: 'Parallel slots on Radeon',
     lede: 'Cited -np / --parallel. Measure Stack Lab concurrency-ab/1',

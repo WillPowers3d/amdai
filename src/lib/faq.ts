@@ -698,6 +698,20 @@ export const FAQ_ENTRIES: FaqItem[] = [
     ],
   },
   {
+    id: 'sampling',
+    group: 'models-quants',
+    question: 'What llama.cpp sampling flags should I set on a Radeon?',
+    answer:
+      'Official llama-server defaults are --temp 0.80, --top-k 40, --top-p 0.95, --min-p 0.05. House recipes do not record a sampler pin. Copy a Qwen card row only when that card publishes one. Sampler speed stays not measured yet. The shopper page is /sampling. Q3 is a labeled estimate. llama.cpp first.',
+    links: [
+      { href: '/sampling', label: 'Sampling' },
+      { href: '/thinking', label: 'Thinking mode' },
+      { href: '/tuning', label: 'Speed up llama.cpp' },
+      { href: '/constrained-decoding', label: 'Constrained decoding' },
+      { href: '/troubleshoot', label: 'Troubleshoot' },
+    ],
+  },
+  {
     id: 'thinking-mode',
     group: 'models-quants',
     question: 'How do I turn thinking / reasoning mode off on llama.cpp?',
@@ -1097,6 +1111,7 @@ export const REQUIRED_FAQ_HREFS = [
   '/speculative-decoding',
   '/constrained-decoding',
   '/thinking',
+  '/sampling',
   '/concurrency-ab',
   '/flash-attention',
   '/prefill',

@@ -165,6 +165,7 @@ export const primaryNav: NavItem[] = [
   { href: '/constrained-decoding', label: 'Constrained decoding', description: 'Cited llama.cpp GBNF and JSON schema on Radeon. Measure decode vs free-form on Stack Lab grammar-ab/1. Q3 is a labeled estimate', group: 'learn' },
   { href: '/guides/tool-calling', label: 'Tool calling', description: 'Cited llama.cpp --jinja, tools, JSON schema, GBNF on Radeon. Measure grammar-ab/1. Tool-call success not measured on local-desktop', group: 'learn' },
   { href: '/thinking', label: 'Thinking mode', description: 'Cited llama.cpp --reasoning on Radeon. Official Qwen3.6 thinks by default. Tokens not measured on local-desktop', group: 'learn' },
+  { href: '/sampling', label: 'Sampling', description: 'Cited llama.cpp --temp, --top-p, --min-p on Radeon. House recipes do not pin samplers. Sampler speed not measured. Q3 is a labeled estimate', group: 'learn' },
   { href: '/concurrency-ab', label: 'Parallel slots', description: 'Cited llama.cpp -np / --parallel on Radeon. Measure Stack Lab concurrency-ab/1. Slots not measured on local-desktop', group: 'learn' },
   { href: '/flash-attention', label: 'Flash Attention', description: 'Cited llama.cpp -fa / --flash-attn on Radeon. Overnight -fa 1. llama-server FA deltas not measured. Q3 is a labeled estimate', group: 'learn' },
   { href: '/prefill', label: 'Prefill', description: 'Cited llama.cpp -b / -ub on Radeon. Measure Stack Lab prefill-ab/1. llama-server batch not measured. Q3 is a labeled estimate', group: 'learn' },

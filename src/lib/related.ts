@@ -151,6 +151,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/concurrency-ab', label: 'Parallel slots' },
       { href: '/flash-attention', label: 'Flash Attention' },
       { href: '/prompt-cache', label: 'Prompt cache' },
+      { href: '/sampling', label: 'Sampling' },
     ];
   }
   if (path === '/guides/tool-calling') {
@@ -169,6 +170,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/amdai-bench', label: 'amdai-bench' },
       { href: '/calculator', label: 'Calculator' },
       { href: '/glossary', label: 'Glossary' },
+      { href: '/sampling', label: 'Sampling' },
     ];
   }
   if (path === '/can-run' || path.startsWith('/can-run/')) {
@@ -207,6 +209,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/kv-cache', label: 'KV cache' },
       { href: '/constrained-decoding', label: 'Constrained decoding' },
       { href: '/thinking', label: 'Thinking mode' },
+      { href: '/sampling', label: 'Sampling' },
       { href: '/concurrency-ab', label: 'Parallel slots' },
       { href: '/flash-attention', label: 'Flash Attention' },
       { href: '/prefill', label: 'Prefill' },
@@ -253,6 +256,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/calculator', label: 'Calculator' },
       { href: '/glossary', label: 'Glossary' },
       { href: '/guides/tool-calling', label: 'Tool calling' },
+      { href: '/sampling', label: 'Sampling' },
     ];
   }
   if (path === '/thinking') {
@@ -270,6 +274,25 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/benchmarks', label: 'Benchmarks' },
       { href: '/calculator', label: 'Calculator' },
       { href: '/prompt-cache', label: 'Prompt cache' },
+      { href: '/sampling', label: 'Sampling' },
+    ];
+  }
+  if (path === '/sampling') {
+    return [
+      { href: '/thinking', label: 'Thinking mode' },
+      { href: '/constrained-decoding', label: 'Constrained decoding' },
+      { href: '/guides/tool-calling', label: 'Tool calling' },
+      { href: '/tuning', label: 'Speed up llama.cpp' },
+      { href: '/qwen', label: 'Qwen compare' },
+      { href: '/models/qwen36', label: 'Qwen3.6-35B' },
+      { href: '/models/flash', label: 'Qwen 3.8 Flash' },
+      { href: '/setup/server', label: 'Always-on server' },
+      { href: '/backends/llamacpp', label: 'llama.cpp' },
+      { href: '/harnesses', label: 'Harnesses' },
+      { href: '/troubleshoot', label: 'Troubleshoot' },
+      { href: '/stack-lab', label: 'Stack Lab' },
+      { href: '/amdai-bench', label: 'amdai-bench' },
+      { href: '/calculator', label: 'Calculator' },
     ];
   }
   if (path === '/concurrency-ab') {
@@ -372,6 +395,22 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/backends/llamacpp', label: 'llama.cpp' },
       { href: '/troubleshoot', label: 'Troubleshoot' },
       { href: '/amdai-bench', label: 'amdai-bench' },
+    ];
+  }
+  if (path === '/qwen') {
+    return [
+      { href: '/models/qwen36', label: 'Qwen3.6-35B' },
+      { href: '/models/flash', label: 'Qwen 3.8 Flash' },
+      { href: '/models/qwen36-27b', label: 'Qwen3.6 27B' },
+      { href: '/models/qwen38-27b', label: 'Qwen3.8 27B' },
+      { href: '/sampling', label: 'Sampling' },
+      { href: '/thinking', label: 'Thinking mode' },
+      { href: '/moe', label: 'MoE on Radeon' },
+      { href: '/compare/models', label: 'Compare models' },
+      { href: '/calculator', label: 'Calculator' },
+      { href: '/benchmarks', label: 'Benchmarks' },
+      { href: '/backends/llamacpp', label: 'llama.cpp' },
+      { href: '/stack-lab', label: 'Stack Lab' },
     ];
   }
   if (path === '/moe') {
@@ -793,6 +832,7 @@ export function relatedFor(pathname: string): RelatedLink[] {
       add(out, seen, '/gpus/r9700', 'R9700 measured page');
       add(out, seen, '/long-context', 'Long context');
       add(out, seen, '/kv-cache', 'KV cache');
+      add(out, seen, '/sampling', 'Sampling');
       add(out, seen, '/gpus/rx-7900-xtx', 'RX 7900 XTX');
       add(out, seen, '/gpus/rx-7900-xt', 'RX 7900 XT');
       add(out, seen, '/gpus/rx-7800-xt', 'RX 7800 XT');
@@ -818,6 +858,7 @@ export function relatedFor(pathname: string): RelatedLink[] {
     add(out, seen, '/speculative-decoding', 'Speculative decoding');
     add(out, seen, '/constrained-decoding', 'Constrained decoding');
     add(out, seen, '/guides/tool-calling', 'Tool calling');
+    add(out, seen, '/sampling', 'Sampling');
     add(out, seen, '/concurrency-ab', 'Parallel slots');
     add(out, seen, '/flash-attention', 'Flash Attention');
     add(out, seen, '/prefill', 'Prefill');
@@ -929,6 +970,7 @@ export function assertRelatedValid(
     '/guides/buying-used-radeon',
     '/guides/quantize-gguf',
     '/faq',
+    '/qwen',
     '/models/qwen36',
     '/models/flash',
     '/models/gpt-oss-20b',
@@ -950,6 +992,7 @@ export function assertRelatedValid(
     '/constrained-decoding',
     '/guides/tool-calling',
     '/thinking',
+    '/sampling',
     '/concurrency-ab',
     '/flash-attention',
     '/prefill',

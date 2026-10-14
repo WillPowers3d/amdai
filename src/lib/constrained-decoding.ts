@@ -277,6 +277,7 @@ export const CD_HUB_LINKS: CdLink[] = [
   { href: '/calculator', label: 'Calculator' },
   { href: '/stack-lab', label: 'Stack Lab' },
   { href: '/amdai-bench', label: 'amdai-bench' },
+  { href: '/sampling', label: 'Sampling' },
 ];
 
 export const REQUIRED_CD_HREFS = [
@@ -292,6 +293,7 @@ export const REQUIRED_CD_HREFS = [
   '/compare/q4-q5-q6',
   '/stack-lab',
   '/amdai-bench',
+  '/sampling',
   '/benchmarks',
   '/results',
   '/gpus/r9700',

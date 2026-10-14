@@ -230,6 +230,7 @@ export const CRUMB_LABELS: Record<string, string> = {
   '/constrained-decoding': 'Constrained decoding',
   '/guides/tool-calling': 'Tool calling',
   '/thinking': 'Thinking mode',
+  '/sampling': 'Sampling',
   '/concurrency-ab': 'Parallel slots',
   '/flash-attention': 'Flash Attention',
   '/prefill': 'Prefill',
@@ -527,6 +528,12 @@ setMeta(
   'Thinking / reasoning mode on a Radeon GPU with llama.cpp. Cited --reasoning and Qwen3.6 enable_thinking. Tokens not measured on local-desktop.',
 );
 setDate('/thinking', '2026-10-14');
+setMeta(
+  '/sampling',
+  'Sampling settings on a Radeon GPU',
+  'Sampling settings on a Radeon GPU with llama.cpp. Cited --temp, --top-p, --min-p. House recipes do not pin samplers. Q3 is a labeled estimate.',
+);
+setDate('/sampling', '2026-10-14');
 setMeta(
   '/concurrency-ab',
   'Parallel slots (-np) on a Radeon GPU',

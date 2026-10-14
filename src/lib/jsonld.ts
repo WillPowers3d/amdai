@@ -34,6 +34,7 @@ import { SPEC_FAQ, SPEC_HOWTO_STEPS, SPEC_PUBLISHED } from './speculative-decodi
 import { CD_FAQ, CD_HOWTO_STEPS, CD_PUBLISHED } from './constrained-decoding';
 import { TC_FAQ, TC_HOWTO_STEPS, TC_PUBLISHED } from './tool-calling';
 import { THINK_FAQ, THINK_HOWTO_STEPS, THINK_PUBLISHED } from './thinking';
+import { SAM_FAQ, SAM_HOWTO_STEPS, SAM_PUBLISHED } from './sampling';
 import { NP_FAQ, NP_HOWTO_STEPS, NP_PUBLISHED } from './concurrency-ab';
 import { FA_FAQ, FA_HOWTO_STEPS, FA_PUBLISHED } from './flash-attention';
 import { PP_FAQ, PP_HOWTO_STEPS, PP_PUBLISHED } from './prefill';
@@ -814,6 +815,20 @@ export function pageJsonLd(input: {
       }),
     );
     nodes.push(faqPageJsonLd(THINK_FAQ, url));
+    return nodes;
+  }
+  if (path === '/sampling') {
+    nodes.push(
+      howToJsonLd({
+        name: input.title.replace(/ · AMDai$/, ''),
+        description: input.description,
+        url,
+        published: dates?.published ?? SAM_PUBLISHED,
+        modified: dates?.modified ?? SAM_PUBLISHED,
+        steps: SAM_HOWTO_STEPS,
+      }),
+    );
+    nodes.push(faqPageJsonLd(SAM_FAQ, url));
     return nodes;
   }
   if (path === '/concurrency-ab') {

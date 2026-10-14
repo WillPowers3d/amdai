@@ -1240,7 +1240,75 @@ export const GLOSSARY: GlossaryEntry[] = [
       { href: '/tutorials/serve-qwen', label: 'Serve Qwen' },
       { href: '/stack-lab', label: 'Stack Lab' },
     ],
-    seeAlso: ['instruct', 'llamacpp', 'prefill-decode', 'toks'],
+    seeAlso: ['instruct', 'llamacpp', 'prefill-decode', 'toks', 'temperature'],
+  },
+  {
+    id: 'temperature',
+    term: 'Temperature (--temp)',
+    aliases: ['--temp', '--temperature', 'temperature', 'LLAMA_ARG_TEMPERATURE'],
+    letter: 'T',
+    definition:
+      'llama.cpp sampler that scales logits before the rest of the chain. Official --temp / --temperature default 0.80 (env LLAMA_ARG_TEMPERATURE). The /completion field is temperature (default 0.8). 0 is greedy.',
+    why: 'Shoppers search llama.cpp temperature AMD when output looks random or stuck. House recipes do not record a --temp pin. Official llama.cpp defaults then apply unless a client sends the field. Sampler speed stays not measured yet.',
+    deeper:
+      'Copy a value only from the official model card. Qwen3.6-35B publishes thinking 1.0 / coding 0.6 / instruct 0.7. gpt-oss, Gemma 3 27B, and Llama 3.3 70B do not publish a recommended set. The shopper page is /sampling.',
+    links: [
+      { href: '/sampling', label: 'Sampling' },
+      { href: '/thinking', label: 'Thinking mode' },
+      { href: '/models/qwen36', label: 'Qwen3.6-35B' },
+    ],
+    seeAlso: ['top-p', 'min-p', 'repeat-penalty', 'llamacpp', 'thinking'],
+  },
+  {
+    id: 'top-p',
+    term: 'Top-p (--top-p)',
+    aliases: ['--top-p', 'top_p', 'nucleus', 'LLAMA_ARG_TOP_P'],
+    letter: 'T',
+    definition:
+      'Nucleus sampling. Official llama.cpp --top-p default 0.95; 1.0 disables (env LLAMA_ARG_TOP_P). The /completion and OpenAI-shaped field is top_p.',
+    why: 'Qwen cards pair top_p=0.95 with thinking and top_p=0.80 with instruct. House recipes do not record --top-p. Do not invent 0.9.',
+    deeper:
+      'Works with --top-k (default 40; 0 disables) and --min-p (default 0.05). Official --samplers order includes top_p before min_p and temperature. The shopper page is /sampling.',
+    links: [
+      { href: '/sampling', label: 'Sampling' },
+      { href: '/qwen', label: 'Qwen compare' },
+      { href: '/backends/llamacpp', label: 'llama.cpp' },
+    ],
+    seeAlso: ['temperature', 'min-p', 'repeat-penalty', 'llamacpp'],
+  },
+  {
+    id: 'min-p',
+    term: 'Min-p (--min-p)',
+    aliases: ['--min-p', 'min_p', 'LLAMA_ARG_MIN_P'],
+    letter: 'M',
+    definition:
+      'Drops tokens below a fraction of the most likely token. Official llama.cpp --min-p default 0.05; 0.0 disables (env LLAMA_ARG_MIN_P). The /completion field is min_p.',
+    why: 'Official Qwen cards set min_p=0.0 on their recommended rows. That is not the llama.cpp CLI default. House recipes do not record --min-p.',
+    deeper:
+      '/v1/chat/completions accepts min_p as a llama.cpp extra on the OpenAI-shaped body. Sampler speed stays not measured yet. The shopper page is /sampling.',
+    links: [
+      { href: '/sampling', label: 'Sampling' },
+      { href: '/thinking', label: 'Thinking mode' },
+      { href: '/models/qwen36', label: 'Qwen3.6-35B' },
+    ],
+    seeAlso: ['temperature', 'top-p', 'repeat-penalty', 'llamacpp'],
+  },
+  {
+    id: 'repeat-penalty',
+    term: 'Repeat penalty',
+    aliases: ['--repeat-penalty', 'repeat_penalty', 'repetition_penalty', 'presence_penalty', 'LLAMA_ARG_REPEAT_PENALTY'],
+    letter: 'R',
+    definition:
+      'Official llama.cpp --repeat-penalty penalizes repeating token sequences (CLI default 1.00 = disabled; env LLAMA_ARG_REPEAT_PENALTY). --presence-penalty and --frequency-penalty default 0.00. Qwen cards write repetition_penalty; llama.cpp maps that to repeat_penalty.',
+    why: 'Loops and repetition are often this knob, not the GPU. Official Qwen cards allow presence_penalty 0–2. The /completion field repeat_penalty is documented as default 1.1 — an official discrepancy versus the CLI 1.00 default.',
+    deeper:
+      'DRY (--dry-multiplier, default 0 = off) and XTC (--xtc-probability, default 0 = off) are separate official samplers. House recipes do not record any of them. The shopper page is /sampling.',
+    links: [
+      { href: '/sampling', label: 'Sampling' },
+      { href: '/troubleshoot', label: 'Troubleshoot' },
+      { href: '/constrained-decoding', label: 'Constrained decoding' },
+    ],
+    seeAlso: ['temperature', 'top-p', 'min-p', 'llamacpp'],
   },
   {
     id: 'tool-calling',

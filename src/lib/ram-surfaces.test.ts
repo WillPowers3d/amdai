@@ -56,6 +56,7 @@ describe('shopper RAM labels', () => {
     assert.ok(RAM_OFFLOAD_SURFACES.includes('/prompt-cache'));
     assert.ok(RAM_OFFLOAD_SURFACES.includes('/out-of-vram'));
     assert.ok(RAM_OFFLOAD_SURFACES.includes('/mmap'));
+    assert.ok(RAM_OFFLOAD_SURFACES.includes('/sampling'));
     assert.ok(RAM_OFFLOAD_SURFACES.includes('/moe'));
     assert.ok(RAM_OFFLOAD_SURFACES.includes('/can-run'));
     assert.ok(RAM_OFFLOAD_SURFACES.includes('/setup/fedora'));

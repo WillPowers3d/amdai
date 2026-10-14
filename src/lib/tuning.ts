@@ -469,6 +469,7 @@ export const TUNING_HUB_LINKS: TuningLink[] = [
   { href: '/kv-cache', label: 'KV cache' },
   { href: '/constrained-decoding', label: 'Constrained decoding' },
   { href: '/thinking', label: 'Thinking mode' },
+  { href: '/sampling', label: 'Sampling' },
   { href: '/long-context', label: 'Long context' },
   { href: '/multi-gpu', label: 'Dual / multi-GPU' },
   { href: '/power', label: 'Power' },
@@ -510,6 +511,7 @@ export const REQUIRED_TUNING_HREFS = [
   '/gpus/r9700',
   '/faq',
   '/constrained-decoding',
+  '/sampling',
 ] as const;
 
 export function tuningOffloadRamNeed(): SystemRamNeed {

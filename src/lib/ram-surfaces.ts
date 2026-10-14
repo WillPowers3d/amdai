@@ -76,6 +76,7 @@ export const RAM_OFFLOAD_SURFACES = [
   '/constrained-decoding',
   '/guides/tool-calling',
   '/thinking',
+  '/sampling',
   '/concurrency-ab',
   '/flash-attention',
   '/prefill',
@@ -170,6 +171,7 @@ export function assertRamSurfacesValid(): string[] {
   if (!RAM_OFFLOAD_SURFACES.includes('/prompt-cache')) errors.push('missing /prompt-cache');
   if (!RAM_OFFLOAD_SURFACES.includes('/out-of-vram')) errors.push('missing /out-of-vram');
   if (!RAM_OFFLOAD_SURFACES.includes('/mmap')) errors.push('missing /mmap');
+  if (!RAM_OFFLOAD_SURFACES.includes('/sampling')) errors.push('missing /sampling');
   if (!RAM_OFFLOAD_SURFACES.includes('/moe')) errors.push('missing /moe');
   if (!RAM_OFFLOAD_SURFACES.includes('/can-run')) errors.push('missing /can-run');
   if (!isRamOffloadSurface('/can-run/qwen36-35b-on-rx-7900-xtx')) errors.push('can-run pair pages must be RAM surfaces');

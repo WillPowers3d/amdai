@@ -106,6 +106,7 @@ describe('OG catalog', () => {
     assert.equal(ogSlug('/constrained-decoding'), 'constrained-decoding');
     assert.equal(ogSlug('/guides/tool-calling'), 'guides-tool-calling');
     assert.equal(ogSlug('/thinking'), 'thinking');
+    assert.equal(ogSlug('/sampling'), 'sampling');
     assert.equal(ogSlug('/concurrency-ab'), 'concurrency-ab');
     assert.equal(ogSlug('/flash-attention'), 'flash-attention');
     assert.equal(ogSlug('/prefill'), 'prefill');

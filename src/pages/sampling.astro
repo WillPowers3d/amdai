@@ -1,0 +1,252 @@
+---
+import Base from '../layouts/Base.astro';
+import Callout from '../components/Callout.astro';
+import HouseRam from '../components/HouseRam.astro';
+import HowWeTest from '../components/HowWeTest.astro';
+import NextSteps from '../components/NextSteps.astro';
+import OpenInStackLab from '../components/OpenInStackLab.astro';
+import { HOUSE_STACK_LAB } from '../lib/stack-lab-open';
+import { COMPARE_Q3 } from '../lib/local-desktop-compare';
+import {
+  SAM_API,
+  SAM_CARDS,
+  SAM_CITED_LABEL,
+  SAM_CURL_CARD,
+  SAM_DESCRIPTION,
+  SAM_DOCS,
+  SAM_FLAGS,
+  SAM_FLASH,
+  SAM_H1,
+  SAM_HOUSE,
+  SAM_HOUSE_NOTE,
+  SAM_HUB_LINKS,
+  SAM_LEAD,
+  SAM_ORDER,
+  SAM_PENALTIES,
+  SAM_QUANTS,
+  SAM_RAM,
+  SAM_SOURCES,
+  SAM_STEPS,
+  SAM_TITLE,
+  SAM_TROUBLE,
+  SAM_UNMEASURED,
+  SAM_WHAT,
+} from '../lib/sampling';
+---
+
+<Base title={SAM_TITLE} description={SAM_DESCRIPTION}>
+  <main id="main" class="mx-auto max-w-3xl px-4 py-10 sm:px-6">
+    <p class="kicker">{SAM_CITED_LABEL}</p>
+    <h1 class="mt-3 font-serif text-4xl tracking-tight sm:text-5xl">
+      {SAM_H1}
+    </h1>
+    <p class="mt-4 text-lg leading-relaxed text-muted">{SAM_LEAD}</p>
+    <ul class="mt-4 flex flex-wrap gap-2">
+      {SAM_HUB_LINKS.map((link) => (
+        <li>
+          <a
+            class="inline-flex min-h-9 items-center rounded-full border border-line bg-canvas px-3 text-sm text-ink hover:border-accent/50 hover:text-accent-ink"
+            href={link.href}
+          >
+            {link.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+
+    <Callout type="linux" title="House recipes do not pin samplers">
+      <p>
+        Official llama.cpp defaults then apply unless a client sends request
+        fields. Sampler speed cost stays {SAM_UNMEASURED} — open the
+        <a class="underline decoration-accent/40" href="/stack-lab">planner</a>.
+        Do not invent a Stack Lab sampler-pack id.
+      </p>
+    </Callout>
+
+    <section id="what" class="mt-12 scroll-mt-28" aria-labelledby="what-heading">
+      <h2 id="what-heading" class="font-serif text-3xl tracking-tight">What temperature, top-p, top-k, and min-p do</h2>
+      <p class="mt-3 leading-relaxed text-muted">{SAM_WHAT}</p>
+    </section>
+
+    <section id="penalties" class="mt-12 scroll-mt-28" aria-labelledby="penalties-heading">
+      <h2 id="penalties-heading" class="font-serif text-3xl tracking-tight">Penalties, DRY, and XTC</h2>
+      <p class="mt-3 leading-relaxed text-muted">{SAM_PENALTIES}</p>
+    </section>
+
+    <section id="order" class="mt-12 scroll-mt-28" aria-labelledby="order-heading">
+      <h2 id="order-heading" class="font-serif text-3xl tracking-tight">Sampler order and seed</h2>
+      <p class="mt-3 leading-relaxed text-muted">{SAM_ORDER}</p>
+    </section>
+
+    <section id="api" class="mt-12 scroll-mt-28" aria-labelledby="api-heading">
+      <h2 id="api-heading" class="font-serif text-3xl tracking-tight">OpenAI-compatible request fields</h2>
+      <p class="mt-3 leading-relaxed text-muted">{SAM_API}</p>
+    </section>
+
+    <section id="flags" class="mt-12 scroll-mt-28" aria-labelledby="flags-heading">
+      <h2 id="flags-heading" class="font-serif text-3xl tracking-tight">Cited flags</h2>
+      <p class="mt-3 leading-relaxed text-muted">
+        Vulkan house path. Each row cites the llama-server README. These are
+        official defaults, not a local-desktop pin.
+      </p>
+      <ul class="mt-4 space-y-3">
+        {SAM_FLAGS.map((row) => (
+          <li id={row.id} class="scroll-mt-28 rounded-2xl border border-line bg-raised/50 p-4">
+            <p class="font-mono text-sm text-ink">{row.flag}</p>
+            <p class="mt-1 font-mono text-sm text-muted">{row.api}</p>
+            <p class="mt-2 text-sm text-ink">{row.meaning}</p>
+            <p class="mt-2 text-sm text-muted">{row.cite}</p>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section id="house" class="mt-12 scroll-mt-28" aria-labelledby="house-heading">
+      <h2 id="house-heading" class="font-serif text-3xl tracking-tight">House 35B and Flash as recorded</h2>
+      <p class="mt-3 leading-relaxed text-muted">{SAM_HOUSE_NOTE}</p>
+      <pre class="mt-4 overflow-x-auto rounded-2xl border border-line bg-raised/50 p-4 text-sm leading-relaxed text-ink"><code>{SAM_HOUSE.trim()}</code></pre>
+      <pre class="mt-4 overflow-x-auto rounded-2xl border border-line bg-raised/50 p-4 text-sm leading-relaxed text-ink"><code>{SAM_FLASH.trim()}</code></pre>
+      <pre class="mt-4 overflow-x-auto rounded-2xl border border-line bg-raised/50 p-4 text-sm leading-relaxed text-ink"><code>{SAM_DOCS.trim()}</code></pre>
+      <pre class="mt-4 overflow-x-auto rounded-2xl border border-line bg-raised/50 p-4 text-sm leading-relaxed text-ink"><code>{SAM_CURL_CARD.trim()}</code></pre>
+    </section>
+
+    <section id="cards" class="mt-12 scroll-mt-28" aria-labelledby="cards-heading">
+      <h2 id="cards-heading" class="font-serif text-3xl tracking-tight">Official card values only</h2>
+      <p class="mt-3 leading-relaxed text-muted">
+        Thinking versus instruct rows come from each model’s official card.
+        If the card gives no generation set, this page says so. llama.cpp maps
+        the card’s <code>repetition_penalty</code> to <code>--repeat-penalty</code>
+        / <code>repeat_penalty</code>.
+      </p>
+      <ul class="mt-4 space-y-3">
+        {SAM_CARDS.map((row) => (
+          <li id={row.id} class="scroll-mt-28 rounded-2xl border border-line bg-raised/50 p-4">
+            <p class="font-mono text-sm text-ink">{row.model}</p>
+            <p class="mt-1 text-sm text-muted">{row.mode}</p>
+            <p class="mt-2 text-sm text-ink">{row.values}</p>
+            <p class="mt-2 text-sm text-muted">{row.note}</p>
+            <p class="mt-3">
+              <a class="underline decoration-accent/40" href={row.href} rel="noopener">Official card</a>
+            </p>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section id="trouble" class="mt-12 scroll-mt-28" aria-labelledby="trouble-heading">
+      <h2 id="trouble-heading" class="font-serif text-3xl tracking-tight">Troubleshooting</h2>
+      <p class="mt-3 leading-relaxed text-muted">
+        Loops, stuck thinking, and broken JSON are usually samplers or
+        templates — not the GPU. No invented quality or speed claims.
+      </p>
+      <ul class="mt-4 space-y-3">
+        {SAM_TROUBLE.map((row) => (
+          <li id={row.id} class="scroll-mt-28 rounded-2xl border border-line bg-raised/50 p-4">
+            <h3 class="font-serif text-2xl tracking-tight">{row.title}</h3>
+            <p class="mt-2 leading-relaxed text-ink">{row.body}</p>
+            <ul class="mt-4 flex flex-wrap gap-2">
+              {row.links.map((link) => (
+                <li>
+                  <a
+                    class="inline-flex min-h-9 items-center rounded-full border border-line bg-canvas px-3 text-sm text-ink hover:border-accent/50 hover:text-accent-ink"
+                    href={link.href}
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section id="quants" class="mt-12 scroll-mt-28" aria-labelledby="quants-heading">
+      <h2 id="quants-heading" class="font-serif text-3xl tracking-tight">Q6 / Q5 / Q4 plus a labeled Q3</h2>
+      <p class="mt-3 leading-relaxed text-muted">
+        Samplers do not shrink the GGUF. House recipes stay Q4 and up.
+        {COMPARE_Q3} is a labeled estimate — do not download it to run.
+        Sampler speed stays {SAM_UNMEASURED}.
+      </p>
+      <ul class="mt-4 space-y-3">
+        {SAM_QUANTS.map((row) => (
+          <li class="rounded-2xl border border-line bg-raised/50 p-4">
+            <p class="font-mono text-sm text-ink">
+              {row.quant}
+              {row.estimate ? ' · labeled estimate' : ''}
+            </p>
+            <p class="mt-1 text-sm text-muted">{row.file}</p>
+            <p class="mt-2 text-sm text-ink">Sampler speed: {row.speed}</p>
+            <p class="mt-1 text-sm text-muted">{row.ramMin}</p>
+            <p class="mt-1 text-sm text-muted">{row.ramFull}</p>
+            <p class="mt-2 text-sm text-muted">{row.note}</p>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section id="checklist" class="mt-12 scroll-mt-28" aria-labelledby="checklist-heading">
+      <h2 id="checklist-heading" class="font-serif text-3xl tracking-tight">Zero to a cited sampler pin</h2>
+      <ol class="mt-8 space-y-6">
+        {SAM_STEPS.map((step, index) => (
+          <li id={step.id} class="scroll-mt-28 rounded-2xl border border-line bg-raised/50 p-5">
+            <p class="font-mono text-[0.68rem] uppercase tracking-[0.14em] text-faint">
+              {index + 1} · {SAM_CITED_LABEL}
+            </p>
+            <h3 class="mt-2 font-serif text-2xl tracking-tight">{step.title}</h3>
+            <p class="mt-3 leading-relaxed text-ink">{step.body}</p>
+            <ul class="mt-4 flex flex-wrap gap-2">
+              {step.links.map((link) => (
+                <li>
+                  <a
+                    class="inline-flex min-h-9 items-center rounded-full border border-line bg-canvas px-3 text-sm text-ink hover:border-accent/50 hover:text-accent-ink"
+                    href={link.href}
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <section id="fit-ram" class="mt-12 scroll-mt-28" aria-labelledby="fit-ram-heading">
+      <h2 id="fit-ram-heading" class="font-serif text-3xl tracking-tight">RAM lines (Ubuntu-measured)</h2>
+      <p class="mt-3 leading-relaxed text-muted">{SAM_RAM}</p>
+      <div class="mt-4">
+        <HouseRam which="daily" compact />
+      </div>
+    </section>
+
+    <section id="stack-lab-cta" class="mt-12 scroll-mt-28" aria-labelledby="stack-lab-cta-heading">
+      <h2 id="stack-lab-cta-heading" class="font-serif text-3xl tracking-tight">Open in Stack Lab</h2>
+      <p class="mt-3 leading-relaxed text-muted">
+        There is no allowlisted sampler A/B deep link on this site. Use the
+        planner. Packages are not published yet and there is no public
+        download. Anything unmeasured stays {SAM_UNMEASURED}.
+      </p>
+      <div class="mt-4">
+        <OpenInStackLab {...HOUSE_STACK_LAB.planner} compact />
+      </div>
+    </section>
+
+    <section id="sources" class="mt-12 scroll-mt-28" aria-labelledby="sources-heading">
+      <h2 id="sources-heading" class="font-serif text-3xl tracking-tight">Sources</h2>
+      <ul class="mt-4 list-disc space-y-2 pl-5 text-sm leading-relaxed text-muted">
+        {SAM_SOURCES.map((source) => (
+          <li>
+            <a class="underline decoration-accent/40" href={source.href} rel="noopener">{source.title}</a>
+            {source.official ? '' : ' — unofficial for llama.cpp'}
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <div class="mt-8">
+      <HowWeTest />
+    </div>
+    <NextSteps path="/sampling" />
+  </main>
+</Base>
