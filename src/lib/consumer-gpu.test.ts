@@ -49,9 +49,9 @@ describe('consumer GPU recipe sheets', () => {
       assert.ok(presetIds.has(id), id);
       assert.equal(isConsumerRecipeGpu(id), true);
     }
-    assert.equal(consumerPath('rx7900xtx'), '/gpus/rx7900xtx');
-    assert.equal(consumerPath('rx7900xt'), '/gpus/rx7900xt');
-    assert.equal(consumerPath('rx7800xt'), '/gpus/rx7800xt');
+    assert.equal(consumerPath('rx7900xtx'), '/gpus/rx-7900-xtx');
+    assert.equal(consumerPath('rx7900xt'), '/gpus/rx-7900-xt');
+    assert.equal(consumerPath('rx7800xt'), '/gpus/rx-7800-xt');
     assert.equal(consumerPath('rx9070xt'), '/gpus/rx-9070-xt');
     assert.equal(consumerPath('rx9060xt'), '/gpus/rx-9060-xt');
     assert.equal(consumerPath('rx7900gre'), '/gpus/rx-7900-gre');
@@ -81,11 +81,26 @@ describe('consumer GPU recipe sheets', () => {
     assert.equal(isConsumerRecipeGpu('rx6700xt'), true);
     assert.equal(isConsumerRecipeGpu('rx-6700-xt'), true);
     assert.equal(isConsumerRecipeGpu('rx6700-xt'), true);
+    assert.equal(isConsumerRecipeGpu('rx-7900-xtx'), true);
+    assert.equal(isConsumerRecipeGpu('rx7900-xtx'), true);
+    assert.equal(isConsumerRecipeGpu('rx-7900-xt'), true);
+    assert.equal(isConsumerRecipeGpu('rx7900-xt'), true);
+    assert.equal(isConsumerRecipeGpu('rx-7800-xt'), true);
+    assert.equal(isConsumerRecipeGpu('rx7800-xt'), true);
 
     assert.equal(consumerShortName('rx7900xtx'), 'RX 7900 XTX');
     assert.equal(pages[0]?.vramLabel, '24 GB');
+    assert.equal(pages[0]?.path, '/gpus/rx-7900-xtx');
+    assert.equal(pages[0]?.support, 'official');
+    assert.match(pages[0]?.lead ?? '', /355 W/);
+    assert.match(pages[0]?.stack.map((tip) => tip.body).join('\n') ?? '', /Stack Lab doctor/);
+    assert.doesNotMatch(pages[0]?.stack.map((tip) => tip.body).join('\n') ?? '', /no Open in Stack Lab handoff/);
     assert.equal(pages[1]?.vramLabel, '20 GB');
+    assert.equal(pages[1]?.path, '/gpus/rx-7900-xt');
+    assert.match(pages[1]?.lead ?? '', /315 W/);
     assert.equal(pages[2]?.vramLabel, '16 GB');
+    assert.equal(pages[2]?.path, '/gpus/rx-7800-xt');
+    assert.match(pages[2]?.lead ?? '', /263 W/);
     assert.equal(pages[3]?.vramLabel, '16 GB');
     assert.equal(pages[0]?.gfx, 'gfx1100');
     assert.equal(pages[1]?.gfx, 'gfx1100');
@@ -205,6 +220,12 @@ describe('consumer GPU recipe sheets', () => {
     assert.ok(CONSUMER_NAV_LINKS.every((link) => link.href.startsWith('/gpus/')));
     assert.equal(consumerRecipeIdFromPage('rx-9070-xt'), 'rx9070xt');
     assert.equal(gpuDirectoryHref('rx9070xt'), '/gpus/rx-9070-xt');
+    assert.equal(consumerRecipeIdFromPage('rx-7900-xtx'), 'rx7900xtx');
+    assert.equal(gpuDirectoryHref('rx7900xtx'), '/gpus/rx-7900-xtx');
+    assert.equal(consumerRecipeIdFromPage('rx-7900-xt'), 'rx7900xt');
+    assert.equal(gpuDirectoryHref('rx7900xt'), '/gpus/rx-7900-xt');
+    assert.equal(consumerRecipeIdFromPage('rx-7800-xt'), 'rx7800xt');
+    assert.equal(gpuDirectoryHref('rx7800xt'), '/gpus/rx-7800-xt');
   });
 
   it('has unique SEO without pretending the cards were measured', () => {

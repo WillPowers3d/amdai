@@ -29,6 +29,7 @@ import {
   type FlashDailyFile,
   type FlashRamRow,
 } from './flash-daily';
+import { gpuDirectoryHref } from './consumer-gpu';
 import { MODEL_PAGES } from './gpu-ids';
 import { houseSystemRam, type HouseRamKind } from './house-ram';
 import { RAM_FULL_LABEL, RAM_MIN_LABEL } from './ram-surfaces';
@@ -94,9 +95,9 @@ export const REQUIRED_MODEL_HREFS = [
   '/benchmarks',
   '/compare',
   '/gpus/r9700',
-  '/gpus/rx7900xtx',
-  '/gpus/rx7900xt',
-  '/gpus/rx7800xt',
+  '/gpus/rx-7900-xtx',
+  '/gpus/rx-7900-xt',
+  '/gpus/rx-7800-xt',
   '/backends/llamacpp',
   '/stack-lab',
   '/contribute',
@@ -295,7 +296,7 @@ function fitBadges(id: HouseModelId): ModelFitBadge[] {
     return {
       gpuId,
       name: GPU_SHORT[gpuId],
-      href: `/gpus/${gpuId}`,
+      href: gpuId === 'r9700' ? '/gpus/r9700' : gpuDirectoryHref(gpuId),
       verdict: result.verdict,
       verdictLabel: result.verdictLabel,
       totalGb: `${formatGiB(result.totalGiB)} GB`,

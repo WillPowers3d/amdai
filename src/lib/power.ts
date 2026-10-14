@@ -4,7 +4,7 @@
  * Dual R9700 is not a PSU SKU we invent. No prices, no invented tok/s.
  */
 
-import { CONSUMER_NAV_LINKS } from './consumer-gpu';
+import { CONSUMER_NAV_LINKS, gpuDirectoryHref } from './consumer-gpu';
 import { RAM_FULL_LABEL, RAM_MIN_LABEL } from './ram-surfaces';
 import {
   AMD_7800XT_SPEC,
@@ -81,7 +81,7 @@ function citedRadeonPower(): PowerBoardRow[] {
   return SPEC_ROWS.filter((row) => row.camp === 'radeon').map((row) => ({
     id: row.id,
     name: row.name,
-    href: row.id === 'r9700' ? '/gpus/r9700' : `/gpus/${row.productId}`,
+    href: row.id === 'r9700' ? '/gpus/r9700' : gpuDirectoryHref(row.productId),
     tbp: row.power.value,
     psu: row.id === 'r9700' ? '750 W minimum (AMD product page)' : POWER_PSU_EMPTY,
     connector: row.id === 'r9700' ? R9700_CONNECTOR : POWER_EMPTY,
@@ -346,9 +346,9 @@ export const REQUIRED_POWER_HREFS = [
   '/qwen36-dual',
   '/flash-ram-offload',
   '/gpus/r9700',
-  '/gpus/rx7900xtx',
-  '/gpus/rx7900xt',
-  '/gpus/rx7800xt',
+  '/gpus/rx-7900-xtx',
+  '/gpus/rx-7900-xt',
+  '/gpus/rx-7800-xt',
   '/gpus/rx-9070-xt',
   '/gpus/rx-9060-xt',
   '/gpus/rx-7900-gre',

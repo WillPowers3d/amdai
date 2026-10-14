@@ -163,9 +163,9 @@ export const CRUMB_LABELS: Record<string, string> = {
   '/gpus': 'GPUs',
   '/gpus/r9700': 'R9700',
   '/gpus/strix-halo': 'Strix Halo',
-  '/gpus/rx7900xtx': 'RX 7900 XTX',
-  '/gpus/rx7900xt': 'RX 7900 XT',
-  '/gpus/rx7800xt': 'RX 7800 XT',
+  '/gpus/rx-7900-xtx': 'RX 7900 XTX',
+  '/gpus/rx-7900-xt': 'RX 7900 XT',
+  '/gpus/rx-7800-xt': 'RX 7800 XT',
   '/gpus/rx-9070-xt': 'RX 9070 XT',
   '/gpus/rx-9060-xt': 'RX 9060 XT',
   '/gpus/rx-7900-gre': 'RX 7900 GRE',
@@ -457,23 +457,23 @@ setMeta(
 );
 setDate('/gpus/strix-halo', '2026-10-13');
 setMeta(
-  '/gpus/rx7900xtx',
+  '/gpus/rx-7900-xtx',
   'RX 7900 XTX',
   'RX 7900 XTX recipe sheet — 24 GB, gfx1100, cited ROCm matrix row. 35B Q6/Q5/Q4 VRAM fit estimates; UD-Q3_K_XL labeled estimate. Not measured on local-desktop.',
 );
-setDate('/gpus/rx7900xtx', '2026-10-13');
+setDate('/gpus/rx-7900-xtx', '2026-10-14');
 setMeta(
-  '/gpus/rx7900xt',
+  '/gpus/rx-7900-xt',
   'RX 7900 XT',
   'RX 7900 XT recipe sheet — 20 GB, gfx1100, cited ROCm matrix row. 35B Q6/Q5/Q4 VRAM fit estimates; UD-Q3_K_XL labeled estimate. Not measured on local-desktop.',
 );
-setDate('/gpus/rx7900xt', '2026-10-13');
+setDate('/gpus/rx-7900-xt', '2026-10-14');
 setMeta(
-  '/gpus/rx7800xt',
+  '/gpus/rx-7800-xt',
   'RX 7800 XT',
   'RX 7800 XT recipe sheet — 16 GB, gfx1101, cited ROCm matrix row. 35B Q6/Q5/Q4 VRAM fit estimates; UD-Q3_K_XL labeled estimate. Not measured on local-desktop.',
 );
-setDate('/gpus/rx7800xt', '2026-10-13');
+setDate('/gpus/rx-7800-xt', '2026-10-14');
 setMeta(
   '/gpus/rx-9070-xt',
   'RX 9070 XT',

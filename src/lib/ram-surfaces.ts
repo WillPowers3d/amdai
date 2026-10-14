@@ -10,9 +10,9 @@ export const RAM_FULL_LABEL = 'RAM needed at full context';
 export const RAM_OFFLOAD_SURFACES = [
   '/gpus/r9700',
   '/gpus/strix-halo',
-  '/gpus/rx7900xtx',
-  '/gpus/rx7900xt',
-  '/gpus/rx7800xt',
+  '/gpus/rx-7900-xtx',
+  '/gpus/rx-7900-xt',
+  '/gpus/rx-7800-xt',
   '/gpus/rx-9070-xt',
   '/gpus/rx-9060-xt',
   '/gpus/rx-7900-gre',
@@ -70,9 +70,9 @@ export function assertRamSurfacesValid(): string[] {
   if (RAM_FULL_LABEL !== 'RAM needed at full context') errors.push('full label drifted');
   if (RAM_OFFLOAD_SURFACES.length < 10) errors.push('surface list too short');
   if (!RAM_OFFLOAD_SURFACES.includes('/gpus/r9700')) errors.push('missing /gpus/r9700');
-  if (!RAM_OFFLOAD_SURFACES.includes('/gpus/rx7900xtx')) errors.push('missing /gpus/rx7900xtx');
-  if (!RAM_OFFLOAD_SURFACES.includes('/gpus/rx7900xt')) errors.push('missing /gpus/rx7900xt');
-  if (!RAM_OFFLOAD_SURFACES.includes('/gpus/rx7800xt')) errors.push('missing /gpus/rx7800xt');
+  if (!RAM_OFFLOAD_SURFACES.includes('/gpus/rx-7900-xtx')) errors.push('missing /gpus/rx-7900-xtx');
+  if (!RAM_OFFLOAD_SURFACES.includes('/gpus/rx-7900-xt')) errors.push('missing /gpus/rx-7900-xt');
+  if (!RAM_OFFLOAD_SURFACES.includes('/gpus/rx-7800-xt')) errors.push('missing /gpus/rx-7800-xt');
   if (!RAM_OFFLOAD_SURFACES.includes('/gpus/rx-9070-xt')) errors.push('missing /gpus/rx-9070-xt');
   if (!RAM_OFFLOAD_SURFACES.includes('/gpus/rx-9060-xt')) errors.push('missing /gpus/rx-9060-xt');
   if (!RAM_OFFLOAD_SURFACES.includes('/gpus/rx-7900-gre')) errors.push('missing /gpus/rx-7900-gre');

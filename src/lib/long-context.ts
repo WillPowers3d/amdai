@@ -197,7 +197,7 @@ export const LONG_CONTEXT_TIERS = [
     body: 'House 35B Q4–Q6 files do not sit in 16 GB on the calculator at long context. Expect RAM offload or a shorter window. Q3 is a labeled estimate, not runnable advice. Size the file before you set -c 131072.',
     hrefs: [
       { href: '/calculator?model=qwen36&quant=q4_k_m&ctx=131072&gpu=rx7800xt', label: 'Calculator · 16 GB · 128K' },
-      { href: '/gpus/rx7800xt', label: 'RX 7800 XT sheet' },
+      { href: '/gpus/rx-7800-xt', label: 'RX 7800 XT sheet' },
       { href: '/gpus/rx-9070-xt', label: 'RX 9070 XT sheet' },
       { href: '/gpus/rx-7600-xt', label: 'RX 7600 XT sheet' },
       { href: '/gpus/rx-6800-xt', label: 'RX 6800 XT sheet' },
@@ -209,7 +209,7 @@ export const LONG_CONTEXT_TIERS = [
     body: 'More VRAM than the 16 GB class. Q4 may fit at a shorter window; Q5 at 262K still needs the calculator. Speed on this class is not measured yet on local-desktop.',
     hrefs: [
       { href: '/calculator?model=qwen36&quant=q4_k_m&ctx=131072&gpu=rx7900xtx', label: 'Calculator · 24 GB · 128K' },
-      { href: '/gpus/rx7900xtx', label: 'RX 7900 XTX sheet' },
+      { href: '/gpus/rx-7900-xtx', label: 'RX 7900 XTX sheet' },
     ],
   },
   {

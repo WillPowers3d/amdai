@@ -37,7 +37,7 @@ describe('GPU vs GPU compare', () => {
     assert.deepEqual(assertGpuCompareValid(runs), []);
     assert.deepEqual(
       [...GPU_COMPARE_IDS],
-      ['r9700', 'rx9070xt', 'rx9060xt', 'rx7900gre', 'rx7700xt', 'rx7600xt', 'rx7600', 'rx6800xt', 'rx6700xt', 'strix-halo'],
+      ['r9700', 'rx7900xtx', 'rx7900xt', 'rx9070xt', 'rx9060xt', 'rx7900gre', 'rx7800xt', 'rx7700xt', 'rx7600xt', 'rx7600', 'rx6800xt', 'rx6700xt', 'strix-halo'],
     );
     assert.equal(GPU_COMPARE_PUBLISHED, '2026-10-14');
     assert.equal(GPU_COMPARE_MODEL, 'Qwen3.6-35B-A3B');
@@ -45,10 +45,13 @@ describe('GPU vs GPU compare', () => {
     assert.equal(COMPARE_Q3, 'UD-Q3_K_XL');
     assert.match(COMPARE_Q3_CITE, /16\.8 GB/);
     assert.equal(GPU_COMPARE_HUB, '/compare/gpus');
-    assert.equal(gpuComparePairPages().length, 45);
+    assert.equal(gpuComparePairPages().length, 78);
     assert.equal(gpuCompareFeaturedPages().length, GPU_COMPARE_FEATURED_PAIRS.length);
     assert.equal(gpuComparePairPath('r9700', 'rx9070xt'), '/compare/r9700-vs-rx-9070-xt');
     assert.equal(gpuComparePairPath('rx9070xt', 'r9700'), '/compare/r9700-vs-rx-9070-xt');
+    assert.equal(gpuComparePairPath('r9700', 'rx7900xtx'), '/compare/r9700-vs-rx-7900-xtx');
+    assert.equal(gpuComparePairPath('rx7900xtx', 'rx7900xt'), '/compare/rx-7900-xtx-vs-rx-7900-xt');
+    assert.equal(gpuComparePairPath('rx7800xt', 'rx7700xt'), '/compare/rx-7800-xt-vs-rx-7700-xt');
     assert.equal(gpuComparePairPath('rx7900gre', 'rx9070xt'), '/compare/rx-9070-xt-vs-rx-7900-gre');
     assert.equal(gpuComparePairPath('rx6800xt', 'rx7700xt'), '/compare/rx-7700-xt-vs-rx-6800-xt');
     assert.deepEqual(canonicalizeGpuComparePair('rx9070xt', 'r9700'), ['r9700', 'rx9070xt']);
@@ -124,6 +127,23 @@ describe('GPU vs GPU compare', () => {
     assert.match(halo.right.vramLabel, /shared/i);
     assert.equal(halo.right.bandwidthLabel, 'not listed here');
 
+    const xtx = gpuComparePairPage('rx7900xtx', 'rx7900xt');
+    assert.equal(xtx.path, '/compare/rx-7900-xtx-vs-rx-7900-xt');
+    assert.equal(xtx.left.vramLabel, '24 GB');
+    assert.equal(xtx.right.vramLabel, '20 GB');
+    assert.equal(xtx.left.gfx, 'gfx1100');
+    assert.equal(xtx.right.gfx, 'gfx1100');
+    assert.equal(xtx.left.support, 'official');
+    assert.equal(xtx.left.bandwidthLabel, '960 GB/s');
+    assert.equal(xtx.right.bandwidthLabel, '800 GB/s');
+
+    const xt16 = gpuComparePairPage('rx7800xt', 'rx7700xt');
+    assert.equal(xt16.path, '/compare/rx-7800-xt-vs-rx-7700-xt');
+    assert.equal(xt16.left.vramLabel, '16 GB');
+    assert.equal(xt16.right.vramLabel, '12 GB');
+    assert.equal(xt16.left.gfx, 'gfx1101');
+    assert.equal(xt16.left.bandwidthLabel, '624 GB/s');
+
     const used = gpuComparePairPage('rx6700xt', 'rx6800xt');
     assert.equal(used.left.id, 'rx6800xt');
     assert.equal(used.right.id, 'rx6700xt');
@@ -152,7 +172,7 @@ describe('GPU vs GPU compare', () => {
 
     const seo = gpuCompareSeoRows();
     assert.ok(seo.some((row) => row.path === GPU_COMPARE_HUB));
-    assert.equal(seo.length, 46);
+    assert.equal(seo.length, 79);
     for (const row of seo) {
       assert.equal(shouldNoindex(row.path), false);
       assert.equal(isSitemapExcluded(row.path), false);

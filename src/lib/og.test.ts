@@ -38,7 +38,10 @@ describe('OG catalog', () => {
     assert.equal(ogSlug('/gpus/strix-halo'), 'gpus-strix-halo');
     assert.equal(ogSlug('/gpus/rx-9070-xt'), 'gpus-rx-9070-xt');
     assert.equal(ogSlug('/gpus/rx-9060-xt'), 'gpus-rx-9060-xt');
+    assert.equal(ogSlug('/gpus/rx-7900-xtx'), 'gpus-rx-7900-xtx');
+    assert.equal(ogSlug('/gpus/rx-7900-xt'), 'gpus-rx-7900-xt');
     assert.equal(ogSlug('/gpus/rx-7900-gre'), 'gpus-rx-7900-gre');
+    assert.equal(ogSlug('/gpus/rx-7800-xt'), 'gpus-rx-7800-xt');
     assert.equal(ogSlug('/gpus/rx-7700-xt'), 'gpus-rx-7700-xt');
     assert.equal(ogSlug('/gpus/rx-7600-xt'), 'gpus-rx-7600-xt');
     assert.equal(ogSlug('/gpus/rx-7600'), 'gpus-rx-7600');

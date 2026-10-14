@@ -76,9 +76,9 @@ Public site URL is `https://amdai.net` (`site` in `astro.config.mjs`; override w
 | `/quants` | Q3–Q8, UD dynamic, KV types, why Q1/Q2 stay off |
 | `/gpus` | GPU directory — gfx IDs, VRAM, official ROCm rows, links to `/gpus/<id>` |
 | `/gpus/r9700` | Radeon AI PRO R9700 measured hero — 32 GB, 35B llama.cpp tables, Start → setup → recipe → Stack Lab |
-| `/gpus/rx7900xtx` | RX 7900 XTX consumer recipe sheet — 24 GB, gfx1100, calculator fit estimates; not measured on local-desktop |
-| `/gpus/rx7900xt` | RX 7900 XT consumer recipe sheet — 20 GB, gfx1100, calculator fit estimates; not measured on local-desktop |
-| `/gpus/rx7800xt` | RX 7800 XT consumer recipe sheet — 16 GB, gfx1101, calculator fit estimates; not measured on local-desktop |
+| `/gpus/rx-7900-xtx` | RX 7900 XTX consumer recipe sheet — 24 GB, gfx1100, calculator fit estimates; not measured on local-desktop |
+| `/gpus/rx-7900-xt` | RX 7900 XT consumer recipe sheet — 20 GB, gfx1100, calculator fit estimates; not measured on local-desktop |
+| `/gpus/rx-7800-xt` | RX 7800 XT consumer recipe sheet — 16 GB, gfx1101, calculator fit estimates; not measured on local-desktop |
 | `/gpus/<id>` | One card: recipe table, launch command, estimate sheet when listed, or “no tested recipe yet” |
 | `/models` | House Qwen models — daily drivers first; names without a cited row stay contribute |
 | `/models/qwen36` | Qwen3.6-35B-A3B recipe page — measured config table, RAM lines, llama.cpp launch, Stack Lab |

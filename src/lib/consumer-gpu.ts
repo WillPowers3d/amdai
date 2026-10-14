@@ -35,9 +35,9 @@ export const CONSUMER_RECIPE_IDS = ['rx7900xtx', 'rx7900xt', 'rx7800xt', 'rx9070
 export type ConsumerRecipeId = (typeof CONSUMER_RECIPE_IDS)[number];
 
 export const CONSUMER_PAGE_SLUG: Record<ConsumerRecipeId, string> = {
-  rx7900xtx: 'rx7900xtx',
-  rx7900xt: 'rx7900xt',
-  rx7800xt: 'rx7800xt',
+  rx7900xtx: 'rx-7900-xtx',
+  rx7900xt: 'rx-7900-xt',
+  rx7800xt: 'rx-7800-xt',
   rx9070xt: 'rx-9070-xt',
   rx9060xt: 'rx-9060-xt',
   rx7900gre: 'rx-7900-gre',
@@ -50,8 +50,17 @@ export const CONSUMER_PAGE_SLUG: Record<ConsumerRecipeId, string> = {
 
 export const CONSUMER_PAGE_ALIASES: Record<string, ConsumerRecipeId> = {
   rx7900xtx: 'rx7900xtx',
+  'rx-7900-xtx': 'rx7900xtx',
+  'rx7900-xtx': 'rx7900xtx',
+  'rx-7900xtx': 'rx7900xtx',
   rx7900xt: 'rx7900xt',
+  'rx-7900-xt': 'rx7900xt',
+  'rx7900-xt': 'rx7900xt',
+  'rx-7900xt': 'rx7900xt',
   rx7800xt: 'rx7800xt',
+  'rx-7800-xt': 'rx7800xt',
+  'rx7800-xt': 'rx7800xt',
+  'rx-7800xt': 'rx7800xt',
   rx9070xt: 'rx9070xt',
   'rx-9070-xt': 'rx9070xt',
   'rx9070-xt': 'rx9070xt',
@@ -100,10 +109,10 @@ export const CONSUMER_FIT_QUANTS = [
 ];
 
 export const CONSUMER_NAV_LINKS = [
-  { href: '/gpus/rx7900xtx', label: 'RX 7900 XTX' },
-  { href: '/gpus/rx7900xt', label: 'RX 7900 XT' },
+  { href: '/gpus/rx-7900-xtx', label: 'RX 7900 XTX' },
+  { href: '/gpus/rx-7900-xt', label: 'RX 7900 XT' },
   { href: '/gpus/rx-7900-gre', label: 'RX 7900 GRE' },
-  { href: '/gpus/rx7800xt', label: 'RX 7800 XT' },
+  { href: '/gpus/rx-7800-xt', label: 'RX 7800 XT' },
   { href: '/gpus/rx-7700-xt', label: 'RX 7700 XT' },
   { href: '/gpus/rx-7600-xt', label: 'RX 7600 XT' },
   { href: '/gpus/rx-7600', label: 'RX 7600' },
@@ -183,11 +192,11 @@ const BUDGET_ANCHOR: Record<ConsumerRecipeId, { href: string; label: string }> =
 
 const LEAD: Record<ConsumerRecipeId, string> = {
   rx7900xtx:
-    '24 GB RDNA 3 consumer card shoppers buy next to the R9700 when they want more VRAM than a 16 GB 9070-class SKU without the workstation card. gfx1100 — a different ROCm family package than the measured gfx1201 house box.',
+    '24 GB gfx1100 RDNA 3 — the 7900 XTX, not the 20 GB 7900 XT. AMD product page cites 24 GB GDDR6, RDNA 3, and 355 W typical board power. Official on the cited ROCm 10.1 matrix as gfx1100; install the gfx110x family package, not the gfx1201 pin used on the measured R9700. Size Qwen3.6-35B-A3B on the calculator before you assume a Q5 file sits in VRAM at long context. Buy the R9700 when you want measured 32 GB recipes. Not a measured local-desktop card.',
   rx7900xt:
-    '20 GB is a real VRAM bracket, not a rounding error. gfx1100. Size Qwen3.6-35B-A3B on the calculator before you assume a Q5 file sits in VRAM. Not a measured local-desktop card.',
+    '20 GB gfx1100 RDNA 3 — the 7900 XT, not the 24 GB XTX and not the 16 GB 7900 GRE. AMD product page cites 20 GB GDDR6, RDNA 3, and 315 W typical board power. Official on the cited ROCm 10.1 matrix as gfx1100. Size Qwen3.6-35B-A3B on the calculator before you assume a Q5 file sits in VRAM. House 35B Q4–Q6 files may need RAM offload at long context — both RAM lines stay labeled estimate. Buy the R9700 when you want measured 32 GB recipes. Not a measured local-desktop card.',
   rx7800xt:
-    '16 GB gfx1101. Official on the current ROCm matrix. House 35B Q4–Q6 GGUFs do not fit this VRAM on the calculator — expect RAM offload or a lighter listed Q3 file, both estimates.',
+    '16 GB gfx1101 RDNA 3 — the 7800 XT, not the 12 GB 7700 XT on the same gfx. AMD product page cites 16 GB GDDR6, RDNA 3, and 263 W typical board power. Official on the cited ROCm 10.1 matrix as gfx1101. House 35B Q4–Q6 files do not fit this VRAM on the calculator — expect RAM offload or a listed Q3 file, both estimates. Buy the 7900 XT when you want 20 GB on gfx1100, or the R9700 when you want measured 32 GB recipes. Not a measured local-desktop card.',
   rx9070xt:
     '16 GB RDNA 4 gaming sibling of the measured 32 GB R9700. Same gfx1201 LLVM target — half the VRAM. Size 35B Q6/Q5/Q4 on the calculator before you buy; those files do not sit in this VRAM. A listed Q3 is a labeled estimate. Buy the R9700 when you want the same-arch card with 32 GB and measured house recipes. Not a measured local-desktop card.',
   rx9060xt:
@@ -323,6 +332,66 @@ function kindLabel(kind: ConsumerFitKind): string {
 }
 
 function stackTips(id: ConsumerRecipeId, gfx: string): ConsumerStackTip[] {
+  if (id === 'rx7900xtx') {
+    return [
+      {
+        title: 'llama.cpp first',
+        body: 'Vulkan is the consumer default on this site. HIP when rocminfo lists gfx1100. Official on the cited ROCm 10.1 matrix — not Vulkan-only. Ollama and vLLM are not the house path for this card.',
+      },
+      {
+        title: 'gfx1100 family package',
+        body: `${gfx} needs the gfx110x ROCm family package, same pin as the 7900 XT and 7900 GRE. Do not mix a gfx1201 (R9700 / 9070 XT) or gfx1200 (9060 XT) install. Re-check the cited matrix before you install.`,
+      },
+      {
+        title: '24 GB XTX, not the 20 GB XT',
+        body: 'This sheet sizes the 24 GB consumer 7900 XTX. AMD product page: 24 GB GDDR6, RDNA 3, 355 W typical board power. Size Qwen3.6-35B-A3B on the calculator before you download. The 20 GB 7900 XT is a different listing at /gpus/rx-7900-xt. The R9700 remains the measured 32 GB north star.',
+      },
+      {
+        title: 'Setup, then Stack Lab doctor',
+        body: 'First-run setup is Ubuntu. Open Stack Lab doctor for the gfx110x install family. House daily and Flash profiles are R9700 / local-desktop — they do not apply to this 24 GB card. Packages are not published yet.',
+      },
+    ];
+  }
+  if (id === 'rx7900xt') {
+    return [
+      {
+        title: 'llama.cpp first',
+        body: 'Vulkan is the consumer default on this site. HIP when rocminfo lists gfx1100. Official on the cited ROCm 10.1 matrix — not Vulkan-only. Ollama and vLLM are not the house path for this card.',
+      },
+      {
+        title: 'gfx1100 family package',
+        body: `${gfx} needs the gfx110x ROCm family package, same pin as the 7900 XTX and 7900 GRE. Do not mix a gfx1201 (R9700 / 9070 XT) or gfx1200 (9060 XT) install. Re-check the cited matrix before you install.`,
+      },
+      {
+        title: '20 GB XT, not the 24 GB XTX',
+        body: 'This sheet sizes the 20 GB consumer 7900 XT. AMD product page: 20 GB GDDR6, RDNA 3, 315 W typical board power. Size Qwen3.6-35B-A3B on the calculator before you download. The 24 GB XTX and the 16 GB 7900 GRE are different listings. The R9700 remains the measured 32 GB north star.',
+      },
+      {
+        title: 'Setup, then Stack Lab doctor',
+        body: 'First-run setup is Ubuntu. Open Stack Lab doctor for the gfx110x install family. House daily and Flash profiles are R9700 / local-desktop — they do not apply to this 20 GB card. Packages are not published yet.',
+      },
+    ];
+  }
+  if (id === 'rx7800xt') {
+    return [
+      {
+        title: 'llama.cpp first',
+        body: 'Vulkan is the consumer default on this site. HIP when rocminfo lists gfx1101. Official on the cited ROCm 10.1 matrix — not Vulkan-only. Ollama and vLLM are not the house path for this card.',
+      },
+      {
+        title: 'gfx1101 family package',
+        body: `${gfx} needs the gfx110x ROCm family package, same pin as the 7700 XT. Do not mix a gfx1100 (7900 XTX / XT / GRE), gfx1201 (R9700 / 9070 XT), or gfx1200 (9060 XT) install. Re-check the cited matrix before you install.`,
+      },
+      {
+        title: '16 GB 7800 XT, not the 12 GB 7700 XT',
+        body: 'This sheet sizes the 16 GB consumer 7800 XT. AMD product page: 16 GB GDDR6, RDNA 3, 263 W typical board power. House 35B Q4–Q6 files do not fit this VRAM — expect RAM offload or a lighter listed Q3 file, both estimates. The 12 GB 7700 XT is a different listing at /gpus/rx-7700-xt. Size the file on the calculator before you download.',
+      },
+      {
+        title: 'Setup, then Stack Lab doctor',
+        body: 'First-run setup is Ubuntu. Open Stack Lab doctor for the gfx110x install family. House daily and Flash profiles are R9700 / local-desktop — they do not apply to this 16 GB card. Packages are not published yet.',
+      },
+    ];
+  }
   if (id === 'rx7600') {
     return [
       {

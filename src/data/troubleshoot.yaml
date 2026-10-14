@@ -91,7 +91,7 @@ symptoms:
         label: gfx IDs
       - href: /gpus/r9700
         label: R9700 measured page
-      - href: /gpus/rx7900xtx
+      - href: /gpus/rx-7900-xtx
         label: RX 7900 XTX sheet
       - href: /troubleshoot/errors#no-binary-for-gpu
         label: hipErrorNoBinaryForGpu
@@ -291,7 +291,7 @@ symptoms:
         label: Quants
       - href: /gpus/r9700
         label: R9700 measured page
-      - href: /gpus/rx7800xt
+      - href: /gpus/rx-7800-xt
         label: RX 7800 XT sheet
     citations:
       - href: /calculator

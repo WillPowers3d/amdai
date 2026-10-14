@@ -526,6 +526,9 @@ export const GLOSSARY: GlossaryEntry[] = [
     links: [
       { href: '/rocm', label: 'What is ROCm' },
       { href: '/gpus', label: 'GPU directory' },
+      { href: '/gpus/rx-7900-xtx', label: 'RX 7900 XTX sheet' },
+      { href: '/gpus/rx-7900-xt', label: 'RX 7900 XT sheet' },
+      { href: '/gpus/rx-7800-xt', label: 'RX 7800 XT sheet' },
       { href: '/tutorials/install-rocm', label: 'Install ROCm' },
     ],
     seeAlso: ['gfx1201', 'r9700', 'rocm'],

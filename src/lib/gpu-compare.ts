@@ -62,9 +62,12 @@ export const GPU_COMPARE_RAM_CONTEXT = 32768;
 
 export const GPU_COMPARE_IDS = [
   'r9700',
+  'rx7900xtx',
+  'rx7900xt',
   'rx9070xt',
   'rx9060xt',
   'rx7900gre',
+  'rx7800xt',
   'rx7700xt',
   'rx7600xt',
   'rx7600',
@@ -77,9 +80,12 @@ export type GpuCompareId = (typeof GPU_COMPARE_IDS)[number];
 
 export const GPU_COMPARE_SLUG: Record<GpuCompareId, string> = {
   r9700: 'r9700',
+  rx7900xtx: 'rx-7900-xtx',
+  rx7900xt: 'rx-7900-xt',
   rx9070xt: 'rx-9070-xt',
   rx9060xt: 'rx-9060-xt',
   rx7900gre: 'rx-7900-gre',
+  rx7800xt: 'rx-7800-xt',
   rx7700xt: 'rx-7700-xt',
   rx7600xt: 'rx-7600-xt',
   rx7600: 'rx-7600',
@@ -90,9 +96,12 @@ export const GPU_COMPARE_SLUG: Record<GpuCompareId, string> = {
 
 export const GPU_COMPARE_SHORT: Record<GpuCompareId, string> = {
   r9700: 'R9700',
+  rx7900xtx: 'RX 7900 XTX',
+  rx7900xt: 'RX 7900 XT',
   rx9070xt: 'RX 9070 XT',
   rx9060xt: 'RX 9060 XT',
   rx7900gre: 'RX 7900 GRE',
+  rx7800xt: 'RX 7800 XT',
   rx7700xt: 'RX 7700 XT',
   rx7600xt: 'RX 7600 XT',
   rx7600: 'RX 7600',
@@ -103,9 +112,12 @@ export const GPU_COMPARE_SHORT: Record<GpuCompareId, string> = {
 
 export const GPU_COMPARE_PRODUCT: Record<GpuCompareId, string> = {
   r9700: 'r9700',
+  rx7900xtx: 'rx7900xtx',
+  rx7900xt: 'rx7900xt',
   rx9070xt: 'rx9070xt',
   rx9060xt: 'rx9060xt',
   rx7900gre: 'rx7900gre',
+  rx7800xt: 'rx7800xt',
   rx7700xt: 'rx7700xt',
   rx7600xt: 'rx7600xt',
   rx7600: 'rx7600',
@@ -117,10 +129,16 @@ export const GPU_COMPARE_PRODUCT: Record<GpuCompareId, string> = {
 /** Shopper-useful pairs highlighted on the picker. Canonical href still uses catalog order. */
 export const GPU_COMPARE_FEATURED_PAIRS = [
   ['r9700', 'rx9070xt'],
+  ['r9700', 'rx7900xtx'],
+  ['rx7900xtx', 'rx7900xt'],
+  ['rx7900xtx', 'rx9070xt'],
   ['rx9070xt', 'rx9060xt'],
   ['r9700', 'strix-halo'],
   ['rx7900gre', 'rx9070xt'],
+  ['rx7900xt', 'rx7900gre'],
   ['rx6800xt', 'rx7700xt'],
+  ['rx7800xt', 'rx7700xt'],
+  ['rx7800xt', 'rx9070xt'],
   ['rx7600xt', 'rx7600'],
   ['rx6700xt', 'rx7700xt'],
   ['r9700', 'rx9060xt'],
@@ -132,9 +150,12 @@ export const GPU_COMPARE_FEATURED_PAIRS = [
 
 export const GPU_COMPARE_SHEET_PATH: Record<GpuCompareId, string> = {
   r9700: '/gpus/r9700',
+  rx7900xtx: consumerPath('rx7900xtx'),
+  rx7900xt: consumerPath('rx7900xt'),
   rx9070xt: consumerPath('rx9070xt'),
   rx9060xt: consumerPath('rx9060xt'),
   rx7900gre: consumerPath('rx7900gre'),
+  rx7800xt: consumerPath('rx7800xt'),
   rx7700xt: consumerPath('rx7700xt'),
   rx7600xt: consumerPath('rx7600xt'),
   rx7600: consumerPath('rx7600'),
@@ -741,7 +762,7 @@ export function assertGpuCompareValid(cards: RunCard[] = []): string[] {
   if (pages.length !== expected) errors.push(`expected ${expected} pair pages; got ${pages.length}`);
 
   const ids = [...GPU_COMPARE_IDS];
-  if (ids.join(',') !== 'r9700,rx9070xt,rx9060xt,rx7900gre,rx7700xt,rx7600xt,rx7600,rx6800xt,rx6700xt,strix-halo') {
+  if (ids.join(',') !== 'r9700,rx7900xtx,rx7900xt,rx9070xt,rx9060xt,rx7900gre,rx7800xt,rx7700xt,rx7600xt,rx7600,rx6800xt,rx6700xt,strix-halo') {
     errors.push(`catalog drifted: ${ids.join(', ')}`);
   }
 

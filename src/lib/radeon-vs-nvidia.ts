@@ -332,7 +332,7 @@ export const DECISION_CASES: DecisionCase[] = [
     ram: 'sixteen',
     links: [
       { href: '/calculator', label: 'Calculator' },
-      { href: '/gpus/rx7900xtx', label: 'RX 7900 XTX sheet' },
+      { href: '/gpus/rx-7900-xtx', label: 'RX 7900 XTX sheet' },
       { href: '/gpus/rx-9070-xt', label: 'RX 9070 XT sheet' },
       { href: '/gpus/rx-9060-xt', label: 'RX 9060 XT sheet' },
       { href: '/gpus/rx-7900-gre', label: 'RX 7900 GRE sheet' },
@@ -387,9 +387,9 @@ export const SPEED_NOTE =
 export const REQUIRED_PAGE_HREFS = [
   '/compare',
   '/gpus/r9700',
-  '/gpus/rx7900xtx',
-  '/gpus/rx7900xt',
-  '/gpus/rx7800xt',
+  '/gpus/rx-7900-xtx',
+  '/gpus/rx-7900-xt',
+  '/gpus/rx-7800-xt',
   '/gpus/rx-9070-xt',
   '/gpus/rx-9060-xt',
   '/gpus/rx-7900-gre',

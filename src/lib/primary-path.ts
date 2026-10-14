@@ -153,26 +153,32 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
     { href: '/bios', label: 'BIOS' },
     { href: '/rocm-problems/strix-halo-mes-remove-queue', label: 'MES hang' },
   ],
-  '/gpus/rx7900xtx': [
+  '/gpus/rx-7900-xtx': [
+    { href: '/compare/gpus', label: 'Compare GPUs' },
     { href: '/calculator', label: 'Calculator' },
     { href: '/budget', label: 'Budget' },
     { href: '/gpus/r9700', label: 'R9700 measured page' },
+    { href: '/gpus/rx-7900-xt', label: 'RX 7900 XT sheet' },
     { href: '/compare/radeon-vs-nvidia', label: 'Radeon vs NVIDIA' },
     { href: '/setup', label: 'First-run setup' },
     { href: '/stack-lab', label: 'Stack Lab' },
   ],
-  '/gpus/rx7900xt': [
+  '/gpus/rx-7900-xt': [
+    { href: '/compare/gpus', label: 'Compare GPUs' },
     { href: '/calculator', label: 'Calculator' },
     { href: '/budget', label: 'Budget' },
     { href: '/gpus/r9700', label: 'R9700 measured page' },
+    { href: '/gpus/rx-7900-xtx', label: 'RX 7900 XTX sheet' },
     { href: '/compare/radeon-vs-nvidia', label: 'Radeon vs NVIDIA' },
     { href: '/setup', label: 'First-run setup' },
     { href: '/stack-lab', label: 'Stack Lab' },
   ],
-  '/gpus/rx7800xt': [
+  '/gpus/rx-7800-xt': [
+    { href: '/compare/gpus', label: 'Compare GPUs' },
     { href: '/calculator', label: 'Calculator' },
     { href: '/budget', label: 'Budget' },
     { href: '/gpus/r9700', label: 'R9700 measured page' },
+    { href: '/gpus/rx-7700-xt', label: 'RX 7700 XT sheet' },
     { href: '/compare/radeon-vs-nvidia', label: 'Radeon vs NVIDIA' },
     { href: '/setup', label: 'First-run setup' },
     { href: '/stack-lab', label: 'Stack Lab' },
@@ -196,15 +202,15 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
   ],
   '/gpus/rx-7900-gre': [
     { href: '/calculator', label: 'Calculator' },
-    { href: '/gpus/rx7900xt', label: 'RX 7900 XT sheet' },
-    { href: '/gpus/rx7800xt', label: 'RX 7800 XT sheet' },
+    { href: '/gpus/rx-7900-xt', label: 'RX 7900 XT sheet' },
+    { href: '/gpus/rx-7800-xt', label: 'RX 7800 XT sheet' },
     { href: '/gpus/r9700', label: 'R9700 measured page' },
     { href: '/compare/radeon-vs-nvidia', label: 'Radeon vs NVIDIA' },
     { href: '/setup', label: 'First-run setup' },
   ],
   '/gpus/rx-7700-xt': [
     { href: '/calculator', label: 'Calculator' },
-    { href: '/gpus/rx7800xt', label: 'RX 7800 XT sheet' },
+    { href: '/gpus/rx-7800-xt', label: 'RX 7800 XT sheet' },
     { href: '/gpus/rx-7900-gre', label: 'RX 7900 GRE sheet' },
     { href: '/gpus/r9700', label: 'R9700 measured page' },
     { href: '/compare/radeon-vs-nvidia', label: 'Radeon vs NVIDIA' },
@@ -212,7 +218,7 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
   ],
   '/gpus/rx-7600-xt': [
     { href: '/calculator', label: 'Calculator' },
-    { href: '/gpus/rx7800xt', label: 'RX 7800 XT sheet' },
+    { href: '/gpus/rx-7800-xt', label: 'RX 7800 XT sheet' },
     { href: '/gpus/rx-7700-xt', label: 'RX 7700 XT sheet' },
     { href: '/gpus/rx-7600', label: 'RX 7600 (8 GB)' },
     { href: '/gpus/r9700', label: 'R9700 measured page' },
@@ -228,7 +234,7 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
   ],
   '/gpus/rx-6800-xt': [
     { href: '/calculator', label: 'Calculator' },
-    { href: '/gpus/rx7800xt', label: 'RX 7800 XT sheet' },
+    { href: '/gpus/rx-7800-xt', label: 'RX 7800 XT sheet' },
     { href: '/gpus/rx-7600-xt', label: 'RX 7600 XT sheet' },
     { href: '/gpus/r9700', label: 'R9700 measured page' },
     { href: '/compare/radeon-vs-nvidia', label: 'Radeon vs NVIDIA' },

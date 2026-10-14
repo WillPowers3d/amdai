@@ -18,9 +18,9 @@ describe('shopper RAM labels', () => {
     assert.equal(RAM_FULL_LABEL, 'RAM needed at full context');
     assert.ok(RAM_OFFLOAD_SURFACES.includes('/gpus/r9700'));
     assert.ok(RAM_OFFLOAD_SURFACES.includes('/gpus/strix-halo'));
-    assert.ok(RAM_OFFLOAD_SURFACES.includes('/gpus/rx7900xtx'));
-    assert.ok(RAM_OFFLOAD_SURFACES.includes('/gpus/rx7900xt'));
-    assert.ok(RAM_OFFLOAD_SURFACES.includes('/gpus/rx7800xt'));
+    assert.ok(RAM_OFFLOAD_SURFACES.includes('/gpus/rx-7900-xtx'));
+    assert.ok(RAM_OFFLOAD_SURFACES.includes('/gpus/rx-7900-xt'));
+    assert.ok(RAM_OFFLOAD_SURFACES.includes('/gpus/rx-7800-xt'));
     assert.ok(RAM_OFFLOAD_SURFACES.includes('/gpus/rx-9070-xt'));
     assert.ok(RAM_OFFLOAD_SURFACES.includes('/gpus/rx-9060-xt'));
     assert.ok(RAM_OFFLOAD_SURFACES.includes('/gpus/rx-7900-gre'));

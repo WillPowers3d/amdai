@@ -92,10 +92,28 @@ export const OG_CARDS: OgCard[] = [
     alt: 'AMDai RX 9060 XT — 16 GB gfx1200 recipe sheet, not measured on local-desktop',
   },
   {
+    slug: 'gpus-rx-7900-xtx',
+    title: 'Radeon RX 7900 XTX',
+    lede: '24 GB gfx1100 estimates. Not measured on local-desktop',
+    alt: 'AMDai RX 7900 XTX — 24 GB gfx1100 recipe sheet, not measured on local-desktop',
+  },
+  {
+    slug: 'gpus-rx-7900-xt',
+    title: 'Radeon RX 7900 XT',
+    lede: '20 GB gfx1100 estimates. Not measured on local-desktop',
+    alt: 'AMDai RX 7900 XT — 20 GB gfx1100 recipe sheet, not measured on local-desktop',
+  },
+  {
     slug: 'gpus-rx-7900-gre',
     title: 'Radeon RX 7900 GRE',
     lede: '16 GB gfx1100 estimates. Not measured on local-desktop',
     alt: 'AMDai RX 7900 GRE — 16 GB gfx1100 recipe sheet, not measured on local-desktop',
+  },
+  {
+    slug: 'gpus-rx-7800-xt',
+    title: 'Radeon RX 7800 XT',
+    lede: '16 GB gfx1101 estimates. Not measured on local-desktop',
+    alt: 'AMDai RX 7800 XT — 16 GB gfx1101 recipe sheet, not measured on local-desktop',
   },
   {
     slug: 'gpus-rx-7700-xt',
@@ -411,7 +429,10 @@ export function ogSlug(pathname: string): string {
   if (slug === 'gpus-strix-halo') return 'gpus-strix-halo';
   if (slug === 'gpus-rx-9070-xt') return 'gpus-rx-9070-xt';
   if (slug === 'gpus-rx-9060-xt') return 'gpus-rx-9060-xt';
+  if (slug === 'gpus-rx-7900-xtx') return 'gpus-rx-7900-xtx';
+  if (slug === 'gpus-rx-7900-xt') return 'gpus-rx-7900-xt';
   if (slug === 'gpus-rx-7900-gre') return 'gpus-rx-7900-gre';
+  if (slug === 'gpus-rx-7800-xt') return 'gpus-rx-7800-xt';
   if (slug === 'gpus-rx-7700-xt') return 'gpus-rx-7700-xt';
   if (slug === 'gpus-rx-7600-xt') return 'gpus-rx-7600-xt';
   if (slug === 'gpus-rx-7600') return 'gpus-rx-7600';

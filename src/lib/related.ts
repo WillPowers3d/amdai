@@ -356,7 +356,7 @@ export function relatedFor(pathname: string): RelatedLink[] {
       add(out, seen, '/calculator', 'Calculator');
       add(out, seen, '/gpus/r9700', 'R9700 measured page');
       add(out, seen, '/long-context', 'Long context');
-      add(out, seen, '/gpus/rx7900xtx', 'RX 7900 XTX');
+      add(out, seen, '/gpus/rx-7900-xtx', 'RX 7900 XTX');
       add(out, seen, '/stack-lab', 'Stack Lab');
       add(out, seen, '/abliterated', 'Abliterated');
       add(out, seen, '/contribute', 'Contribute');
@@ -417,9 +417,9 @@ const Q1Q2 = /\b(?:IQ[12]_[A-Z0-9]+|Q[12]_[A-Z0-9]+)\b/;
 export function assertRelatedValid(
   paths: string[] = [
     '/gpus/r9700',
-    '/gpus/rx7900xtx',
-    '/gpus/rx7900xt',
-    '/gpus/rx7800xt',
+    '/gpus/rx-7900-xtx',
+    '/gpus/rx-7900-xt',
+    '/gpus/rx-7800-xt',
     '/gpus/rx-9070-xt',
     '/gpus/rx-9060-xt',
     '/gpus/rx-7900-gre',
@@ -461,12 +461,12 @@ export function assertRelatedValid(
   if (!r9700.some((href) => href.startsWith('/recipes/'))) {
     errors.push('/gpus/r9700 missing recipe links');
   }
-  for (const href of ['/gpus/strix-halo', '/gpus/rx7900xtx', '/gpus/rx7900xt', '/gpus/rx7800xt', '/gpus/rx-9070-xt', '/gpus/rx-9060-xt', '/gpus/rx-7900-gre', '/gpus/rx-7700-xt', '/gpus/rx-7600-xt', '/gpus/rx-7600', '/gpus/rx-6800-xt', '/gpus/rx-6700-xt']) {
+  for (const href of ['/gpus/strix-halo', '/gpus/rx-7900-xtx', '/gpus/rx-7900-xt', '/gpus/rx-7800-xt', '/gpus/rx-9070-xt', '/gpus/rx-9060-xt', '/gpus/rx-7900-gre', '/gpus/rx-7700-xt', '/gpus/rx-7600-xt', '/gpus/rx-7600', '/gpus/rx-6800-xt', '/gpus/rx-6700-xt']) {
     if (!r9700.includes(href)) errors.push(`/gpus/r9700 missing ${href}`);
   }
-  const xtx = relatedFor('/gpus/rx7900xtx').map((link) => link.href);
+  const xtx = relatedFor('/gpus/rx-7900-xtx').map((link) => link.href);
   for (const href of ['/gpus/r9700', '/calculator', '/budget', '/setup', '/stack-lab']) {
-    if (!xtx.includes(href)) errors.push(`/gpus/rx7900xtx missing ${href}`);
+    if (!xtx.includes(href)) errors.push(`/gpus/rx-7900-xtx missing ${href}`);
   }
   const qwen36 = relatedFor('/models/qwen36').map((link) => link.href);
   for (const href of ['/qwen36-dual', '/compare', '/benchmarks', '/calculator', '/gpus/r9700']) {
