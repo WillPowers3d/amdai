@@ -575,6 +575,7 @@ export const GLOSSARY: GlossaryEntry[] = [
       { href: '/tuning', label: 'Speed up llama.cpp' },
       { href: '/tutorials/run-local-llm', label: 'Run a local Qwen' },
       { href: '/tutorials/serve-qwen', label: 'Serve Qwen' },
+      { href: '/setup/server', label: 'Always-on llama-server' },
     ],
     seeAlso: ['vulkan', 'hip', 'gguf', 'mmproj', 'lm-studio', 'lemonade'],
   },

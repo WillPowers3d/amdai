@@ -276,6 +276,7 @@ export const SETUP_OPEN_WEBUI_HUB_LINKS: SetupOpenWebuiLink[] = [
   { href: '/setup/comfyui', label: 'ComfyUI' },
   { href: '/setup/multi-gpu', label: 'Multi-GPU llama.cpp' },
   { href: '/guides/tool-calling', label: 'Tool calling' },
+  { href: '/setup/server', label: 'Always-on server' },
 ];
 
 export const REQUIRED_SETUP_OPEN_WEBUI_HREFS = [

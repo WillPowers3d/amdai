@@ -60,6 +60,7 @@ export const RAM_OFFLOAD_SURFACES = [
   '/setup/wsl',
   '/setup/comfyui',
   '/setup/multi-gpu',
+  '/setup/server',
   '/guides/buying-used-radeon',
   '/guides/quantize-gguf',
   '/image-gen',

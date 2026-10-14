@@ -44,7 +44,7 @@ curl -s http://127.0.0.1:8080/v1/chat/completions \
   -d '{"model":"qwen","messages":[{"role":"user","content":"Reply with the single word READY and nothing else."}],"max_tokens":8}'
 ```
 
-If VRAM never moves, stop. Point Hermes or OpenClaw at `http://127.0.0.1:8080/v1` **only after** this returns `READY`.
+If VRAM never moves, stop. Point Hermes or OpenClaw at `http://127.0.0.1:8080/v1` **only after** this returns `READY`. To keep that process after logout, use the cited [always-on systemd unit](/setup/server) — loopback first, not a measured service card. Dual-card units stay on [multi-GPU llama.cpp](/setup/multi-gpu).
 
 ## Path B — Strata (fast agent on our rig)
 

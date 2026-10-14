@@ -18,6 +18,7 @@ import { SETUP_OPEN_WEBUI_HOWTO_STEPS, SETUP_OPEN_WEBUI_PUBLISHED } from './setu
 import { SETUP_WSL_HOWTO_STEPS, SETUP_WSL_PUBLISHED } from './setup-wsl';
 import { SETUP_COMFYUI_HOWTO_STEPS, SETUP_COMFYUI_PUBLISHED } from './setup-comfyui';
 import { SETUP_MULTI_GPU_HOWTO_STEPS, SETUP_MULTI_GPU_PUBLISHED } from './setup-multi-gpu';
+import { SETUP_SERVER_FAQ, SETUP_SERVER_HOWTO_STEPS, SETUP_SERVER_PUBLISHED } from './setup-server';
 import { BUYING_USED_FAQ, BUYING_USED_HOWTO_STEPS, BUYING_USED_PUBLISHED } from './buying-used-radeon';
 import { QUANTIZE_GGUF_FAQ, QUANTIZE_GGUF_HOWTO_STEPS, QUANTIZE_GGUF_PUBLISHED } from './quantize-gguf';
 import { IMAGE_GEN_HOWTO_STEPS, IMAGE_GEN_PUBLISHED } from './image-gen';
@@ -576,6 +577,20 @@ export function pageJsonLd(input: {
         steps: SETUP_MULTI_GPU_HOWTO_STEPS,
       }),
     );
+    return nodes;
+  }
+  if (path === '/setup/server') {
+    nodes.push(
+      howToJsonLd({
+        name: input.title.replace(/ · AMDai$/, ''),
+        description: input.description,
+        url,
+        published: dates?.published ?? SETUP_SERVER_PUBLISHED,
+        modified: dates?.modified ?? SETUP_SERVER_PUBLISHED,
+        steps: SETUP_SERVER_HOWTO_STEPS,
+      }),
+    );
+    nodes.push(faqPageJsonLd(SETUP_SERVER_FAQ, url));
     return nodes;
   }
   if (path === '/guides/buying-used-radeon') {

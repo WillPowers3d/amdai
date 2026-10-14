@@ -113,6 +113,7 @@ function topicLinks(path: string): RelatedLink[] {
     path === '/setup/wsl' ||
     path === '/setup/comfyui' ||
     path === '/setup/multi-gpu' ||
+    path === '/setup/server' ||
     path === '/start'
   ) {
     return [
@@ -133,6 +134,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/setup/wsl', label: 'WSL2 setup' },
       { href: '/setup/comfyui', label: 'ComfyUI' },
       { href: '/setup/multi-gpu', label: 'Multi-GPU llama.cpp' },
+      { href: '/setup/server', label: 'Always-on server' },
       { href: '/compare/vulkan-vs-rocm', label: 'Vulkan vs ROCm' },
       { href: '/rocm/upgrade', label: 'Upgrade or reinstall ROCm' },
       { href: '/image-gen', label: 'Image gen on Radeon' },
@@ -762,6 +764,7 @@ export function assertRelatedValid(
     '/setup/wsl',
     '/setup/comfyui',
     '/setup/multi-gpu',
+    '/setup/server',
     '/guides/buying-used-radeon',
     '/guides/quantize-gguf',
     '/faq',
