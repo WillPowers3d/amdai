@@ -224,6 +224,8 @@ export const CRUMB_LABELS: Record<string, string> = {
   '/can-run': 'Can my Radeon run it?',
   '/setup': 'First-run setup',
   '/setup/windows': 'Windows setup',
+  '/setup/fedora': 'Fedora setup',
+  '/setup/arch': 'Arch setup',
   '/stack-lab': 'Stack Lab',
   '/stacks': 'Stacks',
   '/calculator': 'Calculator',
@@ -335,6 +337,18 @@ setMeta(
   'Cited Windows ROCm + llama.cpp Vulkan first-run on Radeon. Ubuntu 24.04+ stays the measured AMDai path. Not measured on local-desktop.',
 );
 setDate('/setup/windows', '2026-10-13');
+setMeta(
+  '/setup/fedora',
+  'Fedora first-run setup',
+  'Cited Fedora ROCm + llama.cpp Vulkan. Not on the ROCm 10.1 OS row. Not verified on our rig.',
+);
+setDate('/setup/fedora', '2026-10-14');
+setMeta(
+  '/setup/arch',
+  'Arch Linux first-run setup',
+  'Cited Arch Wiki RADV + llama.cpp Vulkan. Not on the ROCm 10.1 OS row. Not verified on our rig.',
+);
+setDate('/setup/arch', '2026-10-14');
 setMeta(
   '/image-gen',
   'Local image gen on Radeon',

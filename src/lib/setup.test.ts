@@ -30,6 +30,10 @@ describe('first-run setup', () => {
     assert.match(blob, /Minimum system RAM needed/);
     assert.match(blob, /RAM needed at full context/);
     assert.match(blob, /no public download/i);
+    assert.match(blob, /Ubuntu-based distros/);
+    assert.match(blob, /Linux Mint/);
+    assert.ok(hrefs.includes('/setup/fedora'));
+    assert.ok(hrefs.includes('/setup/arch'));
   });
 
   it('builds HowTo JSON-LD from the Ubuntu steps and stays in the sitemap', () => {

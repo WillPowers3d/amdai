@@ -92,6 +92,8 @@ describe('primary path and nav IA', () => {
       '/start': '../pages/start.astro',
       '/setup': '../pages/setup.astro',
       '/setup/windows': '../pages/setup/windows.astro',
+      '/setup/fedora': '../pages/setup/fedora.astro',
+      '/setup/arch': '../pages/setup/arch.astro',
       '/faq': '../pages/faq.astro',
       '/gpus/r9700': '../pages/gpus/r9700.astro',
       '/gpus/strix-halo': '../pages/gpus/strix-halo.astro',

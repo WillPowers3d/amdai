@@ -218,6 +218,18 @@ export const OG_CARDS: OgCard[] = [
     alt: 'AMDai Windows setup — cited, not measured on local-desktop',
   },
   {
+    slug: 'setup-fedora',
+    title: 'Fedora first-run setup',
+    lede: 'Cited distro ROCm. Not verified on our rig',
+    alt: 'AMDai Fedora setup — cited, not verified on our rig',
+  },
+  {
+    slug: 'setup-arch',
+    title: 'Arch Linux first-run setup',
+    lede: 'Cited Arch Wiki RADV. Not verified on our rig',
+    alt: 'AMDai Arch setup — cited, not verified on our rig',
+  },
+  {
     slug: 'stack-lab',
     title: 'Radeon Stack Lab',
     lede: 'Packages not published yet',

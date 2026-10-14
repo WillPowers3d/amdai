@@ -5,12 +5,14 @@ import NewsletterSignup from '../components/NewsletterSignup.astro';
 import NextSteps from '../components/NextSteps.astro';
 import {
   SETUP_INTRO_LINKS,
+  SETUP_MORE_PATHS,
   SETUP_NAME,
   SETUP_NUMBERS,
   SETUP_PATHS,
   SETUP_SECTIONS,
   SETUP_STACK_LAB,
   SETUP_TROUBLE,
+  SETUP_UBUNTU_BASED,
 } from '../lib/setup';
 import HouseRam from '../components/HouseRam.astro';
 import OpenInStackLab from '../components/OpenInStackLab.astro';
@@ -26,8 +28,12 @@ import { HOUSE_STACK_LAB } from '../lib/stack-lab-open';
     <p class="kicker">Zero to first token</p>
     <h1 class="mt-3 font-serif text-4xl tracking-tight sm:text-5xl">{SETUP_NAME}</h1>
     <p class="mt-4 text-lg leading-relaxed text-muted">
-      Two paths. Ubuntu 24.04+ is the recommended, measured one. Windows is honest about
-      what we have not run. Short answers stay on the
+      Ubuntu 24.04+ is the recommended, measured path. Windows, Fedora, and Arch are cited
+      guides for what we have not run —
+      <a class="underline decoration-accent/40" href="/setup/fedora">/setup/fedora</a>
+      and
+      <a class="underline decoration-accent/40" href="/setup/arch">/setup/arch</a>.
+      Short answers stay on the
       <a class="underline decoration-accent/40" href="/faq">FAQ</a>.
       The longer map is
       <a class="underline decoration-accent/40" href="/start">Getting started</a>.
@@ -76,6 +82,13 @@ import { HOUSE_STACK_LAB } from '../lib/stack-lab-open';
             <p class="mt-3 text-sm leading-relaxed text-muted">{path.summary}</p>
           </a>
         ))}
+        {SETUP_MORE_PATHS.map((path) => (
+          <a class="card p-5 hover:border-accent/40" href={path.href === '/setup/fedora' ? '/setup/fedora' : '/setup/arch'}>
+            <p class="kicker">{path.kicker}</p>
+            <h3 class="mt-2 text-xl tracking-tight">{path.label}</h3>
+            <p class="mt-3 text-sm leading-relaxed text-muted">{path.summary}</p>
+          </a>
+        ))}
       </div>
     </section>
 
@@ -87,7 +100,8 @@ import { HOUSE_STACK_LAB } from '../lib/stack-lab-open';
           <Callout type="linux" title="Recommended">
             <p>
               Official 10.1 Radeon OS rows include Ubuntu 24.04.5. Install ROCm and verify on
-              those pages — this guide only orders the work.
+              those pages — this guide only orders the work. Linux Mint, Pop!_OS, and Kubuntu
+              are not on that row — see Ubuntu-based distros below.
             </p>
           </Callout>
         ) : (
@@ -125,6 +139,29 @@ import { HOUSE_STACK_LAB } from '../lib/stack-lab-open';
         </ol>
       </section>
     ))}
+
+    <section id="ubuntu-based" class="mt-12 scroll-mt-36" aria-labelledby="ubuntu-based-heading">
+      <h2 id="ubuntu-based-heading" class="font-serif text-3xl tracking-tight">{SETUP_UBUNTU_BASED.title}</h2>
+      <p class="mt-3 leading-relaxed text-muted">{SETUP_UBUNTU_BASED.body}</p>
+      <Callout type="warn" title="Not verified on our rig">
+        <p>
+          Official docs support the Ubuntu LTS names on AMD’s 10.1 matrix. Derivatives follow
+          this page only as unofficial. Prefer stock 24.04.5 if you want the measured cards.
+        </p>
+      </Callout>
+      <ul class="mt-4 flex flex-wrap gap-2">
+        {SETUP_UBUNTU_BASED.links.map((link) => (
+          <li>
+            <a
+              class="inline-flex min-h-9 items-center rounded-full border border-line bg-canvas px-3 text-sm text-ink hover:border-accent/50 hover:text-accent-ink"
+              href={link.href}
+            >
+              {link.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
 
     <section id="stack-lab" class="mt-12 scroll-mt-36" aria-labelledby="stack-lab-heading">
       <h2 id="stack-lab-heading" class="font-serif text-3xl tracking-tight">{SETUP_STACK_LAB.title}</h2>

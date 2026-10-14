@@ -65,6 +65,8 @@ describe('OG catalog', () => {
     assert.equal(ogSlug('/budget'), 'budget');
     assert.equal(ogSlug('/setup'), 'setup');
     assert.equal(ogSlug('/setup/windows'), 'setup-windows');
+    assert.equal(ogSlug('/setup/fedora'), 'setup-fedora');
+    assert.equal(ogSlug('/setup/arch'), 'setup-arch');
     assert.equal(ogSlug('/stack-lab'), 'stack-lab');
     assert.equal(ogSlug('/faq'), 'faq');
     assert.equal(ogSlug('/models'), 'models');

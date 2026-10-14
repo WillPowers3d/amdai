@@ -57,8 +57,10 @@ Public site URL is `https://amdai.net` (`site` in `astro.config.mjs`; override w
 | --- | --- |
 | `/` | Home + living status card |
 | `/start` | Short hub — Ubuntu setup, measured recipe, benchmarks, optional Stack Lab |
-| `/setup` | First-run setup — Ubuntu 24.04+ measured path; Windows card links to `/setup/windows` |
+| `/setup` | First-run setup — Ubuntu 24.04+ measured path; Windows card links to `/setup/windows`; Ubuntu-based note for Mint / Pop!_OS / Kubuntu |
 | `/setup/windows` | Cited Windows ROCm + llama.cpp Vulkan first-run — not measured on local-desktop |
+| `/setup/fedora` | Cited Fedora distro ROCm + llama.cpp Vulkan — not verified on our rig |
+| `/setup/arch` | Cited Arch Wiki RADV + llama.cpp Vulkan — not verified on our rig |
 | `/gpus/strix-halo` | Cited Ryzen AI Max+ 395 / Strix Halo APU guide — shared memory, not measured on local-desktop |
 | `/stacks` | Recommended stack cards from the test rig |
 | `/qwen` | Master 3.6 / 3.8 comparison table — one row per model × quant, measured tok/s from run cards |

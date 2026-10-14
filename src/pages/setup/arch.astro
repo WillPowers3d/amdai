@@ -1,0 +1,136 @@
+---
+import Base from '../../layouts/Base.astro';
+import Callout from '../../components/Callout.astro';
+import HouseRam from '../../components/HouseRam.astro';
+import HowWeTest from '../../components/HowWeTest.astro';
+import NextSteps from '../../components/NextSteps.astro';
+import OpenInStackLab from '../../components/OpenInStackLab.astro';
+import { HOUSE_STACK_LAB } from '../../lib/stack-lab-open';
+import {
+  SETUP_ARCH_CITED_LABEL,
+  SETUP_ARCH_HUB_LINKS,
+  SETUP_ARCH_SOURCES,
+  SETUP_ARCH_STEPS,
+  SETUP_ARCH_TRACKS,
+} from '../../lib/setup-arch';
+---
+
+<Base
+  title="Arch Linux first-run setup"
+  description="Cited Arch Wiki Mesa RADV + llama.cpp Vulkan on Radeon. Not on the ROCm 10.1 OS row. Not verified on our rig."
+>
+  <main id="main" class="mx-auto max-w-3xl px-4 py-10 sm:px-6">
+    <p class="kicker">{SETUP_ARCH_CITED_LABEL}</p>
+    <h1 class="mt-3 font-serif text-4xl tracking-tight sm:text-5xl">Arch Linux first-run setup</h1>
+    <p class="mt-4 text-lg leading-relaxed text-muted">
+      Ubuntu 24.04+ on bare metal is still the measured AMDai path —
+      <a class="underline decoration-accent/40" href="/setup">/setup</a>,
+      <a class="underline decoration-accent/40" href="/gpus/r9700">/gpus/r9700</a>,
+      <a class="underline decoration-accent/40" href="/benchmarks">/benchmarks</a>.
+      Arch is <strong class="text-ink">not</strong> on AMD’s ROCm 10.1 official OS row.
+      Everything here is <strong class="text-ink">{SETUP_ARCH_CITED_LABEL}</strong>
+      and not measured on local-desktop. We do not invent drivers, version pins, tok/s, or prices.
+      llama.cpp first.
+    </p>
+    <ul class="mt-4 flex flex-wrap gap-2">
+      {SETUP_ARCH_HUB_LINKS.map((link) => (
+        <li>
+          <a
+            class="inline-flex min-h-9 items-center rounded-full border border-line bg-canvas px-3 text-sm text-ink hover:border-accent/50 hover:text-accent-ink"
+            href={link.href}
+          >
+            {link.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+
+    <Callout type="warn" title="Not verified on our rig">
+      <p>
+        Official 35B decode numbers on AMDai are Ubuntu llama-bench cards. An Arch box can
+        still get a first token. It cannot claim those tok/s.
+      </p>
+    </Callout>
+
+    <section id="tracks" class="mt-12 scroll-mt-28" aria-labelledby="tracks-heading">
+      <h2 id="tracks-heading" class="font-serif text-3xl tracking-tight">Two tracks</h2>
+      <div class="mt-6 grid gap-4">
+        {SETUP_ARCH_TRACKS.map((track) => (
+          <article id={track.id} class="scroll-mt-28 rounded-2xl border border-line bg-raised/50 p-5">
+            <p class="kicker">{track.recommend ? 'Try this' : 'Do not start here'}</p>
+            <h3 class="mt-2 font-serif text-2xl tracking-tight">{track.title}</h3>
+            <p class="mt-3 leading-relaxed text-ink">{track.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section id="checklist" class="mt-12 scroll-mt-28" aria-labelledby="checklist-heading">
+      <h2 id="checklist-heading" class="font-serif text-3xl tracking-tight">Zero to first token</h2>
+      <ol class="mt-8 space-y-6">
+        {SETUP_ARCH_STEPS.map((step, index) => (
+          <li id={step.id} class="scroll-mt-28 rounded-2xl border border-line bg-raised/50 p-5">
+            <p class="font-mono text-[0.68rem] uppercase tracking-[0.14em] text-faint">
+              {index + 1} · {SETUP_ARCH_CITED_LABEL}
+            </p>
+            <h3 class="mt-2 font-serif text-2xl tracking-tight">{step.title}</h3>
+            <p class="mt-3 leading-relaxed text-ink">{step.body}</p>
+            <ul class="mt-4 flex flex-wrap gap-2">
+              {step.links.map((link) => (
+                <li>
+                  <a
+                    class="inline-flex min-h-9 items-center rounded-full border border-line bg-canvas px-3 text-sm text-ink hover:border-accent/50 hover:text-accent-ink"
+                    href={link.href}
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <section id="fit-ram" class="mt-12 scroll-mt-28" aria-labelledby="fit-ram-heading">
+      <h2 id="fit-ram-heading" class="font-serif text-3xl tracking-tight">RAM lines (Ubuntu-measured)</h2>
+      <p class="mt-3 leading-relaxed text-muted">
+        Use the calculator before you download a second quant. The two labels stay
+        <strong class="text-ink">Minimum system RAM needed</strong>
+        and
+        <strong class="text-ink">RAM needed at full context</strong>.
+        The house 35B peaks below are Ubuntu, not Arch.
+      </p>
+      <div class="mt-4">
+        <HouseRam which="daily" compact />
+      </div>
+    </section>
+
+    <section id="stack-lab-cta" class="mt-12 scroll-mt-28" aria-labelledby="stack-lab-cta-heading">
+      <h2 id="stack-lab-cta-heading" class="font-serif text-3xl tracking-tight">Open in Stack Lab</h2>
+      <p class="mt-3 leading-relaxed text-muted">
+        Stack Lab remains Ubuntu-first. The button is the allowlisted scheme. There is no
+        Arch package and no public download.
+      </p>
+      <div class="mt-4">
+        <OpenInStackLab {...HOUSE_STACK_LAB.doctor} compact />
+      </div>
+    </section>
+
+    <section id="sources" class="mt-12 scroll-mt-28" aria-labelledby="sources-heading">
+      <h2 id="sources-heading" class="font-serif text-3xl tracking-tight">Sources</h2>
+      <ul class="mt-4 list-disc space-y-2 pl-5 text-sm leading-relaxed text-muted">
+        {SETUP_ARCH_SOURCES.map((source) => (
+          <li>
+            <a class="underline decoration-accent/40" href={source.href} rel="noopener">{source.title}</a>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <div class="mt-8">
+      <HowWeTest />
+    </div>
+    <NextSteps path="/setup/arch" />
+  </main>
+</Base>

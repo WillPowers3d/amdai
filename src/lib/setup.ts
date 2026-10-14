@@ -32,17 +32,49 @@ export const SETUP_INTRO_LINKS: SetupLink[] = [
   { href: '/start', label: 'Getting started' },
   { href: '/faq', label: 'FAQ' },
   { href: '/setup/windows', label: 'Windows guide' },
+  { href: '/setup/fedora', label: 'Fedora guide' },
+  { href: '/setup/arch', label: 'Arch guide' },
   { href: '/fine-tuning', label: 'Fine-tuning' },
 ];
 
 export const SETUP_SECTIONS = [
   { id: 'pick-a-path', label: 'Pick a path' },
   { id: 'ubuntu', label: 'Ubuntu' },
+  { id: 'ubuntu-based', label: 'Ubuntu-based' },
   { id: 'windows', label: 'Windows' },
   { id: 'stack-lab', label: 'Stack Lab' },
   { id: 'read-the-numbers', label: 'Read the numbers' },
   { id: 'troubleshooting', label: 'When it breaks' },
 ] as const;
+
+/** Extra cards on the hub. Not SETUP_PATHS — HowTo JSON-LD stays Ubuntu-only. */
+export const SETUP_MORE_PATHS = [
+  {
+    href: '/setup/fedora',
+    label: 'Fedora',
+    kicker: 'Cited, not verified on our rig',
+    summary:
+      'Fedora’s own rocm packages and Mesa RADV. Not on the ROCm 10.1 OS row. No Fedora tok/s on AMDai.',
+  },
+  {
+    href: '/setup/arch',
+    label: 'Arch Linux',
+    kicker: 'Cited, not verified on our rig',
+    summary:
+      'Arch Wiki mesa / vulkan-radeon, then ggml-vulkan. Not on the ROCm 10.1 OS row. No Arch tok/s on AMDai.',
+  },
+] as const;
+
+export const SETUP_UBUNTU_BASED = {
+  title: 'Ubuntu-based distros',
+  body:
+    'Linux Mint, Pop!_OS, and Kubuntu are Ubuntu-based. AMD’s ROCm 10.1.0 compatibility matrix lists Ubuntu 26.04.1, 24.04.5, and 22.04.5 by name — not Mint, Pop!_OS, or Kubuntu. Official docs do not put those derivatives on the 10.1 OS row, so we do not invent official AMD support. Follow the Ubuntu steps on this page only as unofficial; that path is not verified on our rig. Prefer stock Ubuntu 24.04.5 if you want the measured local-desktop cards to match the box. Fedora and Arch have their own cited guides.',
+  links: [
+    { href: '/setup/fedora', label: 'Fedora setup' },
+    { href: '/setup/arch', label: 'Arch setup' },
+    { href: '/setup/windows', label: 'Windows setup' },
+  ] satisfies SetupLink[],
+};
 
 export const SETUP_PATHS: SetupPath[] = [
   {
@@ -263,6 +295,8 @@ export const REQUIRED_SETUP_HREFS = [
   '/troubleshooting',
   '/troubleshoot',
   '/setup/windows',
+  '/setup/fedora',
+  '/setup/arch',
   '/fine-tuning',
 ] as const;
 
@@ -273,6 +307,8 @@ const Q4_FLOOR = new RegExp(`floor is q${'4'}|q${'4'} floor|q${'4'} and up only`
 export function setupBlob(): string {
   const parts = [
     ...SETUP_PATHS.flatMap((path) => [path.label, path.summary, ...path.steps.map((step) => `${step.title} ${step.body}`)]),
+    SETUP_UBUNTU_BASED.title,
+    SETUP_UBUNTU_BASED.body,
     SETUP_STACK_LAB.title,
     SETUP_STACK_LAB.body,
     SETUP_NUMBERS.title,
@@ -286,6 +322,8 @@ export function setupBlob(): string {
 export function setupHrefs(): string[] {
   const links = [
     ...SETUP_INTRO_LINKS,
+    ...SETUP_MORE_PATHS.map((path) => ({ href: path.href, label: path.label })),
+    ...SETUP_UBUNTU_BASED.links,
     ...SETUP_PATHS.flatMap((path) => path.steps.flatMap((step) => step.links)),
     ...SETUP_STACK_LAB.links,
     ...SETUP_NUMBERS.links,

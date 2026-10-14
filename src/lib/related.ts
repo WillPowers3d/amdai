@@ -80,7 +80,13 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/long-context', label: 'Long context' },
     ];
   }
-  if (path === '/setup' || path === '/setup/windows' || path === '/start') {
+  if (
+    path === '/setup' ||
+    path === '/setup/windows' ||
+    path === '/setup/fedora' ||
+    path === '/setup/arch' ||
+    path === '/start'
+  ) {
     return [
       { href: '/gpus/r9700', label: 'R9700 measured page' },
       { href: '/benchmarks', label: 'Benchmarks' },
@@ -88,6 +94,8 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/troubleshoot', label: 'Troubleshoot' },
       { href: '/stack-lab', label: 'Stack Lab' },
       { href: '/setup/windows', label: 'Windows setup' },
+      { href: '/setup/fedora', label: 'Fedora setup' },
+      { href: '/setup/arch', label: 'Arch setup' },
       { href: '/image-gen', label: 'Image gen on Radeon' },
       { href: '/vision', label: 'Vision on Radeon' },
       { href: '/speech', label: 'Speech on Radeon' },
@@ -545,6 +553,9 @@ export function assertRelatedValid(
     '/compare/models',
     '/compare/radeon-vs-nvidia',
     '/setup',
+    '/setup/windows',
+    '/setup/fedora',
+    '/setup/arch',
     '/faq',
     '/models/qwen36',
     '/models/flash',

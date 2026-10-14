@@ -45,6 +45,8 @@ describe('shopper RAM labels', () => {
     assert.ok(RAM_OFFLOAD_SURFACES.includes('/fine-tuning'));
     assert.ok(RAM_OFFLOAD_SURFACES.includes('/tuning'));
     assert.ok(RAM_OFFLOAD_SURFACES.includes('/can-run'));
+    assert.ok(RAM_OFFLOAD_SURFACES.includes('/setup/fedora'));
+    assert.ok(RAM_OFFLOAD_SURFACES.includes('/setup/arch'));
     assert.ok(isRamOffloadSurface('/can-run/qwen36-35b-on-rx-7900-xtx'));
     assert.ok(RAM_OFFLOAD_SURFACES.includes('/compare/radeon-vs-nvidia'));
     assert.ok(RAM_OFFLOAD_SURFACES.includes('/compare/gpus'));

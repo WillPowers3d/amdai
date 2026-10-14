@@ -68,6 +68,8 @@ const ALLOWED_HREFS = new Set([
   '/tuning',
   '/can-run',
   '/setup/windows',
+  '/setup/fedora',
+  '/setup/arch',
 ]);
 
 describe('consumer glossary', () => {

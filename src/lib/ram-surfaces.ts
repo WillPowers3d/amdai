@@ -46,6 +46,8 @@ export const RAM_OFFLOAD_SURFACES = [
   '/backends/strata',
   '/setup',
   '/setup/windows',
+  '/setup/fedora',
+  '/setup/arch',
   '/image-gen',
   '/speech',
   '/long-context',
