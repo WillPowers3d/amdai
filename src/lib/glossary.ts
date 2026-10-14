@@ -519,12 +519,31 @@ export const GLOSSARY: GlossaryEntry[] = [
       'The calculator’s KV estimate is 2 × kv_layers × kv_heads × head_dim × context × bytes. Hybrid Qwen cards only grow KV on full-attention layers — that count comes from the public model card. Official 35B sweep cards use f16.',
     links: [
       { href: '/kv-cache', label: 'KV cache on a Radeon GPU' },
+      { href: '/concurrency-ab', label: 'Parallel slots' },
       { href: '/quants', label: 'Quants · KV types' },
       { href: '/calculator', label: 'Calculator' },
       { href: '/tuning', label: 'Speed up llama.cpp' },
       { href: '/results', label: 'Run cards' },
     ],
-    seeAlso: ['context-length', 'vram', 'quant'],
+    seeAlso: ['context-length', 'vram', 'quant', 'parallel-slots'],
+  },
+  {
+    id: 'parallel-slots',
+    term: 'Parallel slots (-np)',
+    aliases: ['-np', '--parallel', 'llama-server slots', 'concurrency-ab'],
+    letter: 'P',
+    definition:
+      'How many concurrent sequences one llama-server accepts. Official flag is -np / --parallel (default auto). Each slot needs KV. Usable context per client is total ctx / np unless you raise -c or set --kv-unified-per-slot.',
+    why: 'Hermes, Open WebUI, and a coding tool often share one always-on unit. House daily driver stays one slot. AMDai has not measured -np 2/4/8 on one R9700 — run Stack Lab concurrency-ab/1. Two GPU copies are a different layout.',
+    deeper:
+      'llama.cpp server README: -np / --parallel N, --kv-unified-per-slot N, GET /health total_slots. Pack concurrency-ab/1 is amdai-bench ab-concurrency. That pack is not an allowlisted Open-in-Stack-Lab deep link. Do not copy a one-client 35B tok/s as an -np 4 figure.',
+    links: [
+      { href: '/concurrency-ab', label: 'Parallel slots' },
+      { href: '/setup/server', label: 'Always-on server' },
+      { href: '/kv-cache', label: 'KV cache' },
+      { href: '/stack-lab', label: 'Stack Lab' },
+    ],
+    seeAlso: ['kv-cache', 'llamacpp', 'context-length'],
   },
   {
     id: 'kl-divergence',

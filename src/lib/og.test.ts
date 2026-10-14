@@ -106,6 +106,7 @@ describe('OG catalog', () => {
     assert.equal(ogSlug('/constrained-decoding'), 'constrained-decoding');
     assert.equal(ogSlug('/guides/tool-calling'), 'guides-tool-calling');
     assert.equal(ogSlug('/thinking'), 'thinking');
+    assert.equal(ogSlug('/concurrency-ab'), 'concurrency-ab');
     assert.equal(ogSlug('/moe'), 'moe');
     assert.equal(ogSlug('/can-run'), 'can-run');
     assert.equal(ogSlug('/can-run/qwen36-35b-on-rx-7900-xtx'), 'can-run');

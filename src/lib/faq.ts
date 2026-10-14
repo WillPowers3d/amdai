@@ -410,9 +410,10 @@ export const FAQ_ENTRIES: FaqItem[] = [
     group: 'getting-started',
     question: 'How do I keep llama-server running after I log out?',
     answer:
-      'Cited walk is /setup/server. A systemd Type=simple unit with enable --now. House bind is 127.0.0.1:8080. Confirm GET /health and /v1/models before you attach a harness. Dual-card units stay on /setup/multi-gpu. Q6/Q5/Q4 first; Q3 stays a labeled estimate. We do not invent a service tok/s.',
+      'Cited walk is /setup/server. A systemd Type=simple unit with enable --now. House bind is 127.0.0.1:8080. Confirm GET /health and /v1/models before you attach a harness. Dual-card units stay on /setup/multi-gpu. Shared clients use /concurrency-ab for -np. Q6/Q5/Q4 first; Q3 stays a labeled estimate. We do not invent a service tok/s.',
     links: [
       { href: '/setup/server', label: 'Always-on llama-server' },
+      { href: '/concurrency-ab', label: 'Parallel slots' },
       { href: '/tutorials/serve-qwen', label: 'Serve Qwen' },
       { href: '/setup/multi-gpu', label: 'Multi-GPU llama.cpp how-to' },
       { href: '/setup', label: 'Ubuntu setup (measured)' },
@@ -624,7 +625,21 @@ export const FAQ_ENTRIES: FaqItem[] = [
     ],
   },
   {
-        id: 'thinking-mode',
+    id: 'parallel-slots',
+    group: 'speed-vram',
+    question: 'How do I serve several clients from one llama-server on a Radeon?',
+    answer:
+      'Cited path is llama-server -np / --parallel. Context per slot is total ctx / np unless you raise -c or set --kv-unified-per-slot. AMDai has not measured -np 2/4/8 on one R9700 — run Stack Lab concurrency-ab/1. The shopper page is /concurrency-ab. Two GPU copies stay on /qwen36-dual. Q3 is a labeled estimate. llama.cpp first.',
+    links: [
+      { href: '/concurrency-ab', label: 'Parallel slots' },
+      { href: '/setup/server', label: 'Always-on server' },
+      { href: '/kv-cache', label: 'KV cache' },
+      { href: '/stack-lab', label: 'Stack Lab' },
+      { href: '/amdai-bench', label: 'amdai-bench' },
+    ],
+  },
+  {
+    id: 'thinking-mode',
     group: 'models-quants',
     question: 'How do I turn thinking / reasoning mode off on llama.cpp?',
     answer:
@@ -1007,6 +1022,7 @@ export const REQUIRED_FAQ_HREFS = [
   '/speculative-decoding',
   '/constrained-decoding',
   '/thinking',
+  '/concurrency-ab',
   '/moe',
   '/can-run',
   '/setup/fedora',

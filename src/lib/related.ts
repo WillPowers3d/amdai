@@ -147,6 +147,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/constrained-decoding', label: 'Constrained decoding' },
       { href: '/can-run', label: 'Can my Radeon run it?' },
       { href: '/guides/tool-calling', label: 'Tool calling' },
+      { href: '/concurrency-ab', label: 'Parallel slots' },
     ];
   }
   if (path === '/guides/tool-calling') {
@@ -203,6 +204,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/kv-cache', label: 'KV cache' },
       { href: '/constrained-decoding', label: 'Constrained decoding' },
       { href: '/thinking', label: 'Thinking mode' },
+      { href: '/concurrency-ab', label: 'Parallel slots' },
       { href: '/long-context', label: 'Long context' },
       { href: '/multi-gpu', label: 'Dual / multi-GPU' },
       { href: '/power', label: 'Power and PSU' },
@@ -257,6 +259,22 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/stack-lab', label: 'Stack Lab' },
       { href: '/amdai-bench', label: 'amdai-bench' },
       { href: '/benchmarks', label: 'Benchmarks' },
+      { href: '/calculator', label: 'Calculator' },
+    ];
+  }
+  if (path === '/concurrency-ab') {
+    return [
+      { href: '/setup/server', label: 'Always-on server' },
+      { href: '/kv-cache', label: 'KV cache' },
+      { href: '/backends/llamacpp', label: 'llama.cpp' },
+      { href: '/harnesses', label: 'Harnesses' },
+      { href: '/long-context', label: 'Long context' },
+      { href: '/tuning', label: 'Speed up llama.cpp' },
+      { href: '/thinking', label: 'Thinking mode' },
+      { href: '/guides/tool-calling', label: 'Tool calling' },
+      { href: '/qwen36-dual', label: '35B on two cards' },
+      { href: '/stack-lab', label: 'Stack Lab' },
+      { href: '/amdai-bench', label: 'amdai-bench' },
       { href: '/calculator', label: 'Calculator' },
     ];
   }
@@ -437,6 +455,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/backends/llamacpp', label: 'llama.cpp' },
       { href: '/stack-lab', label: 'Stack Lab' },
       { href: '/amdai-bench', label: 'amdai-bench' },
+      { href: '/concurrency-ab', label: 'Parallel slots' },
     ];
   }
   if (path === '/calculator' || path === '/quants') {
@@ -516,6 +535,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/long-context', label: 'Long context' },
       { href: '/rag', label: 'RAG on Radeon' },
       { href: '/guides/tool-calling', label: 'Tool calling' },
+      { href: '/concurrency-ab', label: 'Parallel slots' },
     ];
   }
   if (path === '/forum' || path.startsWith('/forum/')) {
@@ -682,6 +702,7 @@ export function relatedFor(pathname: string): RelatedLink[] {
     add(out, seen, '/speculative-decoding', 'Speculative decoding');
     add(out, seen, '/constrained-decoding', 'Constrained decoding');
     add(out, seen, '/guides/tool-calling', 'Tool calling');
+    add(out, seen, '/concurrency-ab', 'Parallel slots');
     add(out, seen, '/setup/docker', 'Docker / Podman');
     add(out, seen, '/setup/lm-studio', 'LM Studio');
     add(out, seen, '/setup/coding-assistant', 'Coding assistant');
@@ -808,6 +829,7 @@ export function assertRelatedValid(
     '/constrained-decoding',
     '/guides/tool-calling',
     '/thinking',
+    '/concurrency-ab',
     '/moe',
     '/can-run',
     '/hardware',

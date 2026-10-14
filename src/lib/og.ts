@@ -558,6 +558,12 @@ export const OG_CARDS: OgCard[] = [
     alt: 'AMDai thinking / reasoning mode on a Radeon GPU with llama.cpp — cited flags, thinking tokens not measured',
   },
   {
+    slug: 'concurrency-ab',
+    title: 'Parallel slots on Radeon',
+    lede: 'Cited -np / --parallel. Measure Stack Lab concurrency-ab/1',
+    alt: 'AMDai parallel slots (-np) on a Radeon GPU with llama.cpp — cited flags, slots not measured on local-desktop',
+  },
+  {
     slug: 'moe',
     title: 'Mixture-of-Experts on a Radeon GPU',
     lede: 'Why 35B-A3B fits one 32 GB R9700. Dense 27B and Flash differ',

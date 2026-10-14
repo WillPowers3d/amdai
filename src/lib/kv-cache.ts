@@ -183,8 +183,9 @@ export const KV_CACHE_FAQ = [
     id: 'parallel-slots',
     question: 'Does --parallel multiply the KV cache?',
     answer:
-      'Yes on llama-server. Official --parallel / -np sizes a slot cache per concurrent sequence. Two slots at the same -c is two KV pools. House path is one interactive user. Size a second slot on the calculator before you raise -np.',
+      'Yes on llama-server. Official --parallel / -np sizes a slot cache per concurrent sequence. Two slots at the same -c is two KV pools. House path is one interactive user. Size a second slot on the calculator before you raise -np. The shopper page is /concurrency-ab.',
     links: [
+      { href: '/concurrency-ab', label: 'Parallel slots' },
       { href: '/calculator', label: 'Calculator' },
       { href: '/tuning', label: 'Tuning flags' },
       { href: '/harnesses/connect', label: 'Connect a harness' },

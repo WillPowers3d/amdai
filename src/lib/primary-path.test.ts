@@ -165,6 +165,7 @@ describe('primary path and nav IA', () => {
       '/constrained-decoding': '../pages/constrained-decoding.astro',
       '/guides/tool-calling': '../pages/guides/tool-calling.astro',
       '/thinking': '../pages/thinking.astro',
+      '/concurrency-ab': '../pages/concurrency-ab.astro',
       '/moe': '../pages/moe.astro',
       '/can-run': '../pages/can-run/index.astro',
     };
