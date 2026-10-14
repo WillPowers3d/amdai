@@ -54,6 +54,7 @@ export const MULTI_GPU_INTRO_LINKS: MultiGpuLink[] = [
   { href: '/compare/one-vs-two-gpu', label: 'One vs split' },
   { href: '/flash-daily', label: 'Flash daily' },
   { href: '/setup', label: 'First-run setup' },
+  { href: '/setup/multi-gpu', label: 'Multi-GPU how-to' },
 ];
 
 export const MULTI_GPU_WHEN = {
@@ -164,6 +165,11 @@ export const MULTI_GPU_MORE: { href: string; label: string; body: string }[] = [
     body: 'Ubuntu 24.04+ to first token, then this guide if you seat two cards.',
   },
   {
+    href: '/setup/multi-gpu',
+    label: 'Multi-GPU llama.cpp how-to',
+    body: 'Hands-on device pins, --split-mode layer, --tensor-split, and two-server combo.',
+  },
+  {
     href: '/calculator',
     label: 'Calculator',
     body: 'Size a GGUF against 32 GB or 64 GB. Client-side, no prices.',
@@ -214,6 +220,7 @@ export const REQUIRED_MULTI_GPU_HREFS = [
   '/backends',
   '/backends/llamacpp',
   '/setup',
+  '/setup/multi-gpu',
   '/calculator',
   '/budget',
   '/glossary',

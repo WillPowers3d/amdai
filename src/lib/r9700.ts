@@ -61,6 +61,7 @@ export const R9700_SECTIONS = [
 export const R9700_INTRO_LINKS: R9700Link[] = [
   { href: '/start', label: 'Start' },
   { href: '/setup', label: 'First-run setup' },
+  { href: '/setup/multi-gpu', label: 'Multi-GPU how-to' },
   { href: `/recipes/${R9700_DAILY_RECIPE}`, label: 'Measured recipe' },
   { href: '/stack-lab', label: 'Stack Lab' },
 ];
@@ -175,6 +176,11 @@ export const R9700_MORE: R9700MoreLink[] = [
     body: 'When a second R9700 helps or hurts — llama.cpp flags, PCIe, PSU. Desktop 2 192 GB is planned, not measured.',
   },
   {
+    href: '/setup/multi-gpu',
+    label: 'Multi-GPU llama.cpp how-to',
+    body: 'Hands-on --split-mode, --tensor-split, device pins, and two-server combo. 35B split measured on local-desktop.',
+  },
+  {
     href: '/two-r9700',
     label: 'Two R9700s',
     body: 'Split versus two copies. A split is not two chats.',
@@ -227,6 +233,7 @@ export const REQUIRED_R9700_HREFS = [
   '/faq',
   '/glossary',
   '/multi-gpu',
+  '/setup/multi-gpu',
   '/two-r9700',
   '/flash-daily',
   '/qwen',

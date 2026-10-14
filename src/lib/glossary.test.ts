@@ -72,6 +72,7 @@ const ALLOWED_HREFS = new Set([
   '/setup/open-webui',
   '/setup/wsl',
   '/setup/comfyui',
+  '/setup/multi-gpu',
   '/image-gen',
   '/harnesses/image',
   '/rocm-problems/windows-wsl-preview',

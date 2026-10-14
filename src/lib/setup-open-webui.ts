@@ -274,6 +274,7 @@ export const SETUP_OPEN_WEBUI_HUB_LINKS: SetupOpenWebuiLink[] = [
   { href: '/gpus/r9700', label: 'R9700' },
   { href: '/setup/wsl', label: 'WSL2' },
   { href: '/setup/comfyui', label: 'ComfyUI' },
+  { href: '/setup/multi-gpu', label: 'Multi-GPU llama.cpp' },
 ];
 
 export const REQUIRED_SETUP_OPEN_WEBUI_HREFS = [

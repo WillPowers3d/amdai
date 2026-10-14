@@ -332,6 +332,7 @@ export const SETUP_WSL_HUB_LINKS: SetupWslLink[] = [
   { href: '/calculator', label: 'Calculator' },
   { href: '/gpus/r9700', label: 'R9700' },
   { href: '/setup/comfyui', label: 'ComfyUI' },
+  { href: '/setup/multi-gpu', label: 'Multi-GPU llama.cpp' },
 ];
 
 export const REQUIRED_SETUP_WSL_HREFS = [

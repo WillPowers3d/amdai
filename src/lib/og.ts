@@ -272,6 +272,12 @@ export const OG_CARDS: OgCard[] = [
     alt: 'AMDai ComfyUI — cited Radeon image-gen setup, not yet measured by AMDai',
   },
   {
+    slug: 'setup-multi-gpu',
+    title: 'llama.cpp on two Radeons',
+    lede: 'Cited how-to. 35B split measured on local-desktop',
+    alt: 'AMDai multi-GPU llama.cpp — cited how-to, 35B split measured on local-desktop',
+  },
+  {
     slug: 'stack-lab',
     title: 'Radeon Stack Lab',
     lede: 'Packages not published yet',

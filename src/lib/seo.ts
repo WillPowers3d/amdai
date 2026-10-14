@@ -233,6 +233,7 @@ export const CRUMB_LABELS: Record<string, string> = {
   '/setup/open-webui': 'Open WebUI',
   '/setup/wsl': 'WSL2',
   '/setup/comfyui': 'ComfyUI',
+  '/setup/multi-gpu': 'Multi-GPU llama.cpp',
   '/stack-lab': 'Stack Lab',
   '/stacks': 'Stacks',
   '/calculator': 'Calculator',
@@ -398,6 +399,12 @@ setMeta(
   'Cited ComfyUI on Radeon: Ubuntu git clone, ROCm PyTorch, first workflow. llama.cpp stays first for LLMs. No ComfyUI speeds on AMDai.',
 );
 setDate('/setup/comfyui', '2026-10-14');
+setMeta(
+  '/setup/multi-gpu',
+  'Run llama.cpp across two (or more) Radeon GPUs',
+  'Cited llama.cpp multi-GPU on Radeon: Vulkan and HIP device pins, --split-mode layer, --tensor-split, two-server combo. 35B split measured on local-desktop. No invented tok/s.',
+);
+setDate('/setup/multi-gpu', '2026-10-14');
 setMeta(
   '/image-gen',
   'Local image gen on Radeon',

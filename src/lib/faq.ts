@@ -344,6 +344,20 @@ export const FAQ_ENTRIES: FaqItem[] = [
     ],
   },
   {
+    id: 'llamacpp-multi-gpu',
+    group: 'getting-started',
+    question: 'How do I run llama.cpp across two Radeon GPUs?',
+    answer:
+      'Cited walk is /setup/multi-gpu. llama.cpp first: --list-devices, then --device or GGML_VK_VISIBLE_DEVICES on Vulkan and HIP_VISIBLE_DEVICES / ROCR_VISIBLE_DEVICES on HIP. Official default is --split-mode layer; --split-mode row is deprecated; --split-mode tensor is experimental. Two patterns: one model split across both cards, or two llama-server copies pinned one per card (house ports :8080 and :8081). Overnight 35B UD-Q5 at 4K is 102.39 tok/s on one R9700 and 82.78 on a layer split. Combo-preset tok/s is not measured — use amdai-bench. Q3 stays a labeled estimate. Nothing below Q3.',
+    links: [
+      { href: '/setup/multi-gpu', label: 'Multi-GPU llama.cpp how-to' },
+      { href: '/multi-gpu', label: 'Dual / multi-GPU (why)' },
+      { href: '/compare/one-vs-two-gpu', label: 'One vs two GPU' },
+      { href: '/qwen36-dual', label: '35B on two cards' },
+      { href: '/amdai-bench', label: 'amdai-bench' },
+    ],
+  },
+  {
     id: 'local-speech',
     group: 'getting-started',
     question: 'Can I run speech-to-text or TTS on a Radeon, not just a local LLM?',
@@ -563,9 +577,10 @@ export const FAQ_ENTRIES: FaqItem[] = [
     group: 'speed-vram',
     question: 'Will two R9700s double decode speed?',
     answer:
-      'Not automatically. On the overnight cards, one R9700 UD-Q5_K_XL at 4K decodes 102.39 tok/s; the two-card split is 82.78 tok/s. A split pays an RCCL / topology tax. Two copies of the same server can serve two requests; that is not “double one chat.” Read /multi-gpu, then measure on /compare/one-vs-two-gpu and /qwen36-dual before you buy a second card for speed.',
+      'Not automatically. On the overnight cards, one R9700 UD-Q5_K_XL at 4K decodes 102.39 tok/s; the two-card split is 82.78 tok/s. A split pays an RCCL / topology tax. Two copies of the same server can serve two requests; that is not “double one chat.” Read /multi-gpu for the why and /setup/multi-gpu for the llama.cpp flags, then measure on /compare/one-vs-two-gpu and /qwen36-dual before you buy a second card for speed.',
     links: [
       { href: '/multi-gpu', label: 'Dual / multi-GPU' },
+      { href: '/setup/multi-gpu', label: 'Multi-GPU llama.cpp how-to' },
       { href: '/compare/one-vs-two-gpu', label: 'One vs two GPU' },
       { href: '/qwen36-dual', label: '35B on two cards' },
       { href: '/benchmarks', label: 'Benchmarks' },
@@ -577,9 +592,10 @@ export const FAQ_ENTRIES: FaqItem[] = [
     group: 'speed-vram',
     question: 'What is a two-GPU Combo versus a split?',
     answer:
-      'A split is one model cut across two cards (llama.cpp -sm layer on the overnight rows). A Combo on this site is two models at once — Flash on one card and 35B on the other — not a promise of 2× decode. Read Dual / multi-GPU before you buy a second card for speed.',
+      'A split is one model cut across two cards (llama.cpp -sm layer on the overnight rows). A Combo on this site is two models at once — Flash on one card and 35B on the other — not a promise of 2× decode. Hands-on flags, ports, and systemd-style pins are /setup/multi-gpu. Read Dual / multi-GPU before you buy a second card for speed.',
     links: [
       { href: '/multi-gpu', label: 'Dual / multi-GPU' },
+      { href: '/setup/multi-gpu', label: 'Multi-GPU llama.cpp how-to' },
       { href: '/compare/one-vs-two-gpu', label: 'One vs two GPU' },
       { href: '/qwen36-dual', label: '35B on two cards' },
       { href: '/flash-daily', label: 'Flash daily' },
@@ -801,6 +817,7 @@ export const REQUIRED_FAQ_HREFS = [
   '/setup/open-webui',
   '/setup/wsl',
   '/setup/comfyui',
+  '/setup/multi-gpu',
 ] as const;
 
 const BANNED_VISIBLE = /Qwen2\.5|Qwen3-8B/i;

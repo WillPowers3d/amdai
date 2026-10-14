@@ -92,6 +92,7 @@ function topicLinks(path: string): RelatedLink[] {
     path === '/setup/open-webui' ||
     path === '/setup/wsl' ||
     path === '/setup/comfyui' ||
+    path === '/setup/multi-gpu' ||
     path === '/start'
   ) {
     return [
@@ -110,6 +111,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/setup/open-webui', label: 'Open WebUI' },
       { href: '/setup/wsl', label: 'WSL2 setup' },
       { href: '/setup/comfyui', label: 'ComfyUI' },
+      { href: '/setup/multi-gpu', label: 'Multi-GPU llama.cpp' },
       { href: '/image-gen', label: 'Image gen on Radeon' },
       { href: '/vision', label: 'Vision on Radeon' },
       { href: '/speech', label: 'Speech on Radeon' },
@@ -179,6 +181,7 @@ function topicLinks(path: string): RelatedLink[] {
   if (path === '/multi-gpu' || path === '/qwen36-dual') {
     return [
       { href: '/gpus/r9700', label: 'R9700 measured page' },
+      { href: '/setup/multi-gpu', label: 'Multi-GPU llama.cpp how-to' },
       { href: '/power', label: 'Power and PSU' },
       { href: '/compare/one-vs-two-gpu', label: 'One vs split' },
       { href: '/flash-daily', label: 'Flash daily' },
@@ -597,6 +600,7 @@ export function assertRelatedValid(
     '/setup/open-webui',
     '/setup/wsl',
     '/setup/comfyui',
+    '/setup/multi-gpu',
     '/faq',
     '/models/qwen36',
     '/models/flash',

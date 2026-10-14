@@ -41,6 +41,7 @@ export const SETUP_INTRO_LINKS: SetupLink[] = [
   { href: '/setup/open-webui', label: 'Open WebUI' },
   { href: '/setup/wsl', label: 'WSL2' },
   { href: '/setup/comfyui', label: 'ComfyUI' },
+  { href: '/setup/multi-gpu', label: 'Multi-GPU llama.cpp' },
   { href: '/fine-tuning', label: 'Fine-tuning' },
 ];
 
@@ -119,12 +120,19 @@ export const SETUP_MORE_PATHS = [
     summary:
       'Image gen on HIP/ROCm PyTorch. Ubuntu git clone first. Fit tables stay on /image-gen. No ComfyUI speeds on AMDai.',
   },
+  {
+    href: '/setup/multi-gpu',
+    label: 'Multi-GPU llama.cpp',
+    kicker: 'Cited how-to; 35B split measured on local-desktop',
+    summary:
+      'Run llama.cpp across two Radeon GPUs. Layer split or two pinned servers. 35B split numbers are the overnight cards. No invented tok/s.',
+  },
 ] as const;
 
 export const SETUP_UBUNTU_BASED = {
   title: 'Ubuntu-based distros',
   body:
-    'Linux Mint, Pop!_OS, and Kubuntu are Ubuntu-based. AMD’s ROCm 10.1.0 compatibility matrix lists Ubuntu 26.04.1, 24.04.5, and 22.04.5 by name — not Mint, Pop!_OS, or Kubuntu. Official docs do not put those derivatives on the 10.1 OS row, so we do not invent official AMD support. Follow the Ubuntu steps on this page only as unofficial; that path is not verified on our rig.     Prefer stock Ubuntu 24.04.5 if you want the measured local-desktop cards to match the box. Fedora, Arch, Docker / Podman, LM Studio, the coding-assistant guide, Ollama, Open WebUI, WSL2, and ComfyUI have their own cited pages.',
+    'Linux Mint, Pop!_OS, and Kubuntu are Ubuntu-based. AMD’s ROCm 10.1.0 compatibility matrix lists Ubuntu 26.04.1, 24.04.5, and 22.04.5 by name — not Mint, Pop!_OS, or Kubuntu. Official docs do not put those derivatives on the 10.1 OS row, so we do not invent official AMD support. Follow the Ubuntu steps on this page only as unofficial; that path is not verified on our rig.     Prefer stock Ubuntu 24.04.5 if you want the measured local-desktop cards to match the box. Fedora, Arch, Docker / Podman, LM Studio, the coding-assistant guide, Ollama, Open WebUI, WSL2, ComfyUI, and the multi-GPU llama.cpp how-to have their own cited pages.',
   links: [
     { href: '/setup/fedora', label: 'Fedora setup' },
     { href: '/setup/arch', label: 'Arch setup' },
@@ -136,6 +144,7 @@ export const SETUP_UBUNTU_BASED = {
     { href: '/setup/open-webui', label: 'Open WebUI' },
     { href: '/setup/wsl', label: 'WSL2' },
     { href: '/setup/comfyui', label: 'ComfyUI' },
+    { href: '/setup/multi-gpu', label: 'Multi-GPU llama.cpp' },
   ] satisfies SetupLink[],
 };
 
@@ -199,6 +208,7 @@ export const SETUP_PATHS: SetupPath[] = [
           { href: '/qwen', label: 'Qwen compare' },
           { href: '/flash-daily', label: 'Flash daily' },
           { href: '/multi-gpu', label: 'Dual / multi-GPU' },
+          { href: '/setup/multi-gpu', label: 'Multi-GPU how-to' },
           { href: '/two-r9700', label: 'Two R9700s' },
           { href: '/stacks', label: 'Stacks' },
         ],
@@ -275,6 +285,7 @@ export const SETUP_PATHS: SetupPath[] = [
           { href: '/qwen', label: 'Qwen compare' },
           { href: '/flash-daily', label: 'Flash daily' },
           { href: '/multi-gpu', label: 'Dual / multi-GPU' },
+          { href: '/setup/multi-gpu', label: 'Multi-GPU how-to' },
           { href: '/two-r9700', label: 'Two R9700s' },
         ],
       },
@@ -368,6 +379,7 @@ export const REQUIRED_SETUP_HREFS = [
   '/setup/open-webui',
   '/setup/wsl',
   '/setup/comfyui',
+  '/setup/multi-gpu',
   '/fine-tuning',
 ] as const;
 

@@ -267,6 +267,7 @@ export const SETUP_DOCKER_HUB_LINKS: SetupDockerLink[] = [
   { href: '/setup/open-webui', label: 'Open WebUI' },
   { href: '/setup/wsl', label: 'WSL2' },
   { href: '/setup/comfyui', label: 'ComfyUI' },
+  { href: '/setup/multi-gpu', label: 'Multi-GPU llama.cpp' },
   { href: '/gpus/r9700', label: 'R9700' },
   { href: '/benchmarks', label: 'Benchmarks' },
   { href: '/start', label: 'Getting started' },

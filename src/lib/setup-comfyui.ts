@@ -296,6 +296,7 @@ export const SETUP_COMFYUI_HUB_LINKS: SetupComfyuiLink[] = [
   { href: '/multi-gpu', label: 'Dual / multi-GPU' },
   { href: '/setup/windows', label: 'Windows' },
   { href: '/setup/wsl', label: 'WSL2' },
+  { href: '/setup/multi-gpu', label: 'Multi-GPU llama.cpp' },
   { href: '/calculator', label: 'Calculator' },
 ];
 

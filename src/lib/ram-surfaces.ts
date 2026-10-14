@@ -55,6 +55,7 @@ export const RAM_OFFLOAD_SURFACES = [
   '/setup/open-webui',
   '/setup/wsl',
   '/setup/comfyui',
+  '/setup/multi-gpu',
   '/image-gen',
   '/speech',
   '/long-context',

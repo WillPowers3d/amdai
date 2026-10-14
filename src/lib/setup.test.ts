@@ -41,6 +41,7 @@ describe('first-run setup', () => {
     assert.ok(hrefs.includes('/setup/open-webui'));
     assert.ok(hrefs.includes('/setup/wsl'));
     assert.ok(hrefs.includes('/setup/comfyui'));
+    assert.ok(hrefs.includes('/setup/multi-gpu'));
   });
 
   it('builds HowTo JSON-LD from the Ubuntu steps and stays in the sitemap', () => {

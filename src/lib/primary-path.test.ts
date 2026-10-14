@@ -101,6 +101,7 @@ describe('primary path and nav IA', () => {
       '/setup/open-webui': '../pages/setup/open-webui.astro',
       '/setup/wsl': '../pages/setup/wsl.astro',
       '/setup/comfyui': '../pages/setup/comfyui.astro',
+      '/setup/multi-gpu': '../pages/setup/multi-gpu.astro',
       '/faq': '../pages/faq.astro',
       '/gpus/r9700': '../pages/gpus/r9700.astro',
       '/gpus/strix-halo': '../pages/gpus/strix-halo.astro',

@@ -41,6 +41,7 @@ export const PRIMARY_PATH: PathStep[] = [
       { href: '/flash-daily', label: 'Flash daily' },
       { href: '/qwen36-dual', label: 'Two cards' },
       { href: '/multi-gpu', label: 'Dual / multi-GPU' },
+      { href: '/setup/multi-gpu', label: 'Multi-GPU how-to' },
     ],
   },
   {
@@ -131,6 +132,7 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
     { href: '/setup/open-webui', label: 'Open WebUI' },
     { href: '/setup/wsl', label: 'WSL2 setup' },
     { href: '/setup/comfyui', label: 'ComfyUI' },
+    { href: '/setup/multi-gpu', label: 'Multi-GPU llama.cpp' },
   ],
   '/setup/windows': [
     { href: '/setup', label: 'First-run setup' },
@@ -147,6 +149,7 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
     { href: '/setup/open-webui', label: 'Open WebUI' },
     { href: '/setup/wsl', label: 'WSL2 setup' },
     { href: '/setup/comfyui', label: 'ComfyUI' },
+    { href: '/setup/multi-gpu', label: 'Multi-GPU llama.cpp' },
   ],
   '/setup/fedora': [
     { href: '/setup', label: 'First-run setup' },
@@ -439,8 +442,20 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
     { href: '/compare/gpus', label: 'Compare GPUs' },
     { href: '/setup', label: 'First-run setup' },
   ],
+  '/setup/multi-gpu': [
+    { href: '/multi-gpu', label: 'Dual / multi-GPU (why)' },
+    { href: '/compare/one-vs-two-gpu', label: 'One vs split' },
+    { href: '/qwen36-dual', label: '35B on two cards' },
+    { href: '/setup', label: 'First-run setup' },
+    { href: '/backends/llamacpp', label: 'llama.cpp' },
+    { href: '/gpus/r9700', label: 'R9700 measured page' },
+    { href: '/flash-daily', label: 'Flash daily' },
+    { href: '/calculator', label: 'Calculator' },
+    { href: '/amdai-bench', label: 'amdai-bench' },
+  ],
   '/multi-gpu': [
     { href: '/gpus/r9700', label: 'R9700 measured page' },
+    { href: '/setup/multi-gpu', label: 'Multi-GPU llama.cpp how-to' },
     { href: '/qwen36-dual', label: '35B on two cards' },
     { href: '/flash-daily', label: 'Flash daily' },
     { href: '/compare/one-vs-two-gpu', label: 'One vs split' },
