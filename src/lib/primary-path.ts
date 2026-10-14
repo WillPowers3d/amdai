@@ -837,6 +837,7 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
     { href: '/moe', label: 'MoE on Radeon' },
     { href: '/multi-gpu', label: 'Dual / multi-GPU' },
     { href: '/benchmarks', label: 'Benchmarks' },
+  ],
   '/constrained-decoding': [
     { href: '/tuning', label: 'Speed up llama.cpp' },
     { href: '/harnesses', label: 'Harnesses' },

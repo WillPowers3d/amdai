@@ -755,18 +755,6 @@ export function pageJsonLd(input: {
     return nodes;
   }
   if (path === '/speculative-decoding') {
-  if (path === '/constrained-decoding') {
-    nodes.push(
-      techArticleJsonLd({
-        headline: input.title.replace(/ · AMDai$/, ''),
-        description: input.description,
-        url,
-        published: dates?.published ?? CD_PUBLISHED,
-        modified: dates?.modified ?? CD_PUBLISHED,
-      }),
-    );
-  if (path === '/rocm/upgrade') {
-  if (path === '/thinking') {
     nodes.push(
       howToJsonLd({
         name: input.title.replace(/ · AMDai$/, ''),
@@ -778,12 +766,48 @@ export function pageJsonLd(input: {
       }),
     );
     nodes.push(faqPageJsonLd(SPEC_FAQ, url));
+    return nodes;
+  }
+  if (path === '/constrained-decoding') {
+    nodes.push(
+      howToJsonLd({
+        name: input.title.replace(/ · AMDai$/, ''),
+        description: input.description,
+        url,
         published: dates?.published ?? CD_PUBLISHED,
         modified: dates?.modified ?? CD_PUBLISHED,
         steps: CD_HOWTO_STEPS,
       }),
     );
     nodes.push(faqPageJsonLd(CD_FAQ, url));
+    return nodes;
+  }
+  if (path === '/rocm/upgrade') {
+    nodes.push(
+      howToJsonLd({
+        name: input.title.replace(/ · AMDai$/, ''),
+        description: input.description,
+        url,
+        published: dates?.published ?? ROCM_UPGRADE_PUBLISHED,
+        modified: dates?.modified ?? ROCM_UPGRADE_PUBLISHED,
+        steps: ROCM_UPGRADE_HOWTO_STEPS,
+      }),
+    );
+    nodes.push(faqPageJsonLd(ROCM_UPGRADE_FAQ, url));
+    return nodes;
+  }
+  if (path === '/thinking') {
+    nodes.push(
+      howToJsonLd({
+        name: input.title.replace(/ · AMDai$/, ''),
+        description: input.description,
+        url,
+        published: dates?.published ?? THINK_PUBLISHED,
+        modified: dates?.modified ?? THINK_PUBLISHED,
+        steps: THINK_HOWTO_STEPS,
+      }),
+    );
+    nodes.push(faqPageJsonLd(THINK_FAQ, url));
     return nodes;
   }
   if (path === '/guides/tool-calling') {
@@ -798,18 +822,6 @@ export function pageJsonLd(input: {
       }),
     );
     nodes.push(faqPageJsonLd(TC_FAQ, url));
-        published: dates?.published ?? ROCM_UPGRADE_PUBLISHED,
-        modified: dates?.modified ?? ROCM_UPGRADE_PUBLISHED,
-        steps: ROCM_UPGRADE_HOWTO_STEPS,
-      }),
-    );
-    nodes.push(faqPageJsonLd(ROCM_UPGRADE_FAQ, url));
-        published: dates?.published ?? THINK_PUBLISHED,
-        modified: dates?.modified ?? THINK_PUBLISHED,
-        steps: THINK_HOWTO_STEPS,
-      }),
-    );
-    nodes.push(faqPageJsonLd(THINK_FAQ, url));
     return nodes;
   }
   if (path === '/compare/vulkan-vs-rocm') {

@@ -593,7 +593,10 @@ export const FAQ_ENTRIES: FaqItem[] = [
       { href: '/stack-lab', label: 'Stack Lab' },
       { href: '/amdai-bench', label: 'amdai-bench' },
       { href: '/calculator', label: 'Calculator' },
-    id: 'constrained-decoding',
+    ],
+  },
+  {
+        id: 'constrained-decoding',
     group: 'models-quants',
     question: 'How do I force llama.cpp to emit valid JSON on a Radeon?',
     answer:
@@ -618,7 +621,10 @@ export const FAQ_ENTRIES: FaqItem[] = [
       { href: '/harnesses', label: 'Harnesses' },
       { href: '/stack-lab', label: 'Stack Lab' },
       { href: '/amdai-bench', label: 'amdai-bench' },
-    id: 'thinking-mode',
+    ],
+  },
+  {
+        id: 'thinking-mode',
     group: 'models-quants',
     question: 'How do I turn thinking / reasoning mode off on llama.cpp?',
     answer:

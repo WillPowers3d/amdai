@@ -503,6 +503,7 @@ setMeta(
   'Speculative decoding on Radeon with llama.cpp. Cited -md flags. Measured 35B only. Draft speed not measured on local-desktop. Q3 is a labeled estimate.',
 );
 setDate('/speculative-decoding', '2026-10-14');
+setMeta(
   '/constrained-decoding',
   'Constrained decoding on a Radeon GPU',
   'Constrained decoding on Radeon with llama.cpp. Cited GBNF and JSON schema. Measure decode vs free-form on Stack Lab grammar-ab/1. Q3 is a labeled estimate.',
@@ -514,6 +515,7 @@ setMeta(
   'Tool calling on Radeon with llama.cpp. Cited --jinja, tools, JSON schema, GBNF. Measure grammar cost on Stack Lab grammar-ab/1. Q3 is a labeled estimate.',
 );
 setDate('/guides/tool-calling', '2026-10-14');
+setMeta(
   '/thinking',
   'Thinking / reasoning mode on Radeon',
   'Thinking / reasoning mode on a Radeon GPU with llama.cpp. Cited --reasoning and Qwen3.6 enable_thinking. Tokens not measured on local-desktop.',

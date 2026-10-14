@@ -406,23 +406,6 @@ export const GLOSSARY: GlossaryEntry[] = [
     seeAlso: ['quant', 'unsloth-ud', 'nvme', 'imatrix'],
   },
   {
-    id: 'gbnf',
-    term: 'GBNF',
-    aliases: ['GBNF grammar', '--grammar', '--grammar-file', 'constrained decoding'],
-    letter: 'G',
-    definition:
-      'llama.cpp’s grammar language. A GBNF file (or --grammar string) forces the next tokens to match a shape. JSON Schema converts to GBNF via json-schema-to-grammar.',
-    why: 'Use a grammar when the whole reply must parse — a calculator object, a recipe export — and you are not in a tool loop. Tool calling injects the tool schema; a free-form JSON shape still needs to be described in the prompt. Grammar cost stays not measured yet — run Stack Lab grammar-ab/1.',
-    deeper:
-      'Official grammars/README.md: the schema is not injected except during tool calling. Server README also accepts response_format json_object / json_schema and -j / --json-schema. A grammar can stall (llama.cpp issue #4218). Do not invent an overhead tok/s.',
-    links: [
-      { href: '/guides/tool-calling', label: 'Tool calling' },
-      { href: '/glossary#json-schema', label: 'JSON schema' },
-      { href: '/stack-lab', label: 'Stack Lab' },
-    ],
-    seeAlso: ['json-schema', 'tool-calling', 'llamacpp', 'chat-template'],
-  },
-  {
     id: 'gtt',
     term: 'GTT',
     aliases: ['Graphics Translation Table', 'dynamic allocation', 'dynamic VRAM'],

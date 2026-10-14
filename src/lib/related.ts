@@ -227,6 +227,8 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/amdai-bench', label: 'amdai-bench' },
       { href: '/calculator', label: 'Calculator' },
       { href: '/benchmarks', label: 'Benchmarks' },
+    ];
+  }
   if (path === '/constrained-decoding') {
     return [
       { href: '/tuning', label: 'Speed up llama.cpp' },
@@ -240,6 +242,8 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/calculator', label: 'Calculator' },
       { href: '/glossary', label: 'Glossary' },
       { href: '/guides/tool-calling', label: 'Tool calling' },
+    ];
+  }
   if (path === '/thinking') {
     return [
       { href: '/backends/llamacpp', label: 'llama.cpp' },
