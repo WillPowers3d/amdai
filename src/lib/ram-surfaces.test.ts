@@ -31,6 +31,7 @@ describe('shopper RAM labels', () => {
     assert.ok(RAM_OFFLOAD_SURFACES.includes('/speech'));
     assert.ok(RAM_OFFLOAD_SURFACES.includes('/long-context'));
     assert.ok(RAM_OFFLOAD_SURFACES.includes('/rag'));
+    assert.ok(RAM_OFFLOAD_SURFACES.includes('/power'));
     assert.ok(RAM_OFFLOAD_SURFACES.includes('/compare/radeon-vs-nvidia'));
     assert.ok(RAM_OFFLOAD_SURFACES.includes('/models/qwen36'));
     assert.ok(RAM_OFFLOAD_SURFACES.includes('/models/flash'));

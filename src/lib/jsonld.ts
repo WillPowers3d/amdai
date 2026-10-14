@@ -11,6 +11,7 @@ import { IMAGE_GEN_HOWTO_STEPS, IMAGE_GEN_PUBLISHED } from './image-gen';
 import { SPEECH_HOWTO_STEPS, SPEECH_PUBLISHED } from './speech';
 import { LONG_CONTEXT_FAQ, LONG_CONTEXT_PUBLISHED } from './long-context';
 import { RAG_FAQ, RAG_HOWTO_STEPS, RAG_PUBLISHED } from './rag';
+import { POWER_FAQ, POWER_HOWTO_STEPS, POWER_PUBLISHED } from './power';
 import {
   TROUBLESHOOT_HOWTO_STEPS,
   TROUBLESHOOT_PUBLISHED,
@@ -461,6 +462,20 @@ export function pageJsonLd(input: {
       }),
     );
     nodes.push(faqPageJsonLd(RAG_FAQ, url));
+    return nodes;
+  }
+  if (path === '/power') {
+    nodes.push(
+      howToJsonLd({
+        name: input.title.replace(/ · AMDai$/, ''),
+        description: input.description,
+        url,
+        published: dates?.published ?? POWER_PUBLISHED,
+        modified: dates?.modified ?? POWER_PUBLISHED,
+        steps: POWER_HOWTO_STEPS,
+      }),
+    );
+    nodes.push(faqPageJsonLd(POWER_FAQ, url));
     return nodes;
   }
 

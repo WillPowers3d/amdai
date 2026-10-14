@@ -105,6 +105,7 @@ function topicLinks(path: string): RelatedLink[] {
   if (path === '/multi-gpu' || path === '/qwen36-dual') {
     return [
       { href: '/gpus/r9700', label: 'R9700 measured page' },
+      { href: '/power', label: 'Power and PSU' },
       { href: '/compare/one-vs-two-gpu', label: 'One vs split' },
       { href: '/flash-daily', label: 'Flash daily' },
       { href: '/setup', label: 'First-run setup' },
@@ -150,10 +151,23 @@ function topicLinks(path: string): RelatedLink[] {
   }
   if (path === '/hardware') {
     return [
+      { href: '/power', label: 'Power and PSU' },
       { href: '/bios', label: 'BIOS' },
       { href: '/gpus/r9700', label: 'R9700 measured page' },
       { href: '/multi-gpu', label: 'Dual / multi-GPU' },
       { href: '/labs/shannon', label: 'Shannon’s lab' },
+    ];
+  }
+  if (path === '/power') {
+    return [
+      { href: '/hardware', label: 'Hardware' },
+      { href: '/multi-gpu', label: 'Dual / multi-GPU' },
+      { href: '/gpus/r9700', label: 'R9700 measured page' },
+      { href: '/budget', label: 'Budget' },
+      { href: '/bios', label: 'BIOS' },
+      { href: '/compare/radeon-vs-nvidia', label: 'Radeon vs NVIDIA' },
+      { href: '/flash-ram-offload', label: 'Flash RAM offload' },
+      { href: '/setup', label: 'First-run setup' },
     ];
   }
   if (path === '/long-context') {
@@ -395,6 +409,8 @@ export function assertRelatedValid(
     '/speech',
     '/long-context',
     '/rag',
+    '/power',
+    '/hardware',
   ],
 ): string[] {
   const errors: string[] = [];

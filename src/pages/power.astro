@@ -1,0 +1,207 @@
+---
+import Base from '../layouts/Base.astro';
+import BuyButtons from '../components/BuyButtons.astro';
+import Callout from '../components/Callout.astro';
+import HowWeTest from '../components/HowWeTest.astro';
+import NextSteps from '../components/NextSteps.astro';
+import {
+  POWER_BOARD_ROWS,
+  POWER_CITED_LABEL,
+  POWER_DESCRIPTION,
+  POWER_DUAL,
+  POWER_EMPTY,
+  POWER_FAQ,
+  POWER_HUB_LINKS,
+  POWER_LEAD,
+  POWER_SEARCH_GUIDANCE,
+  POWER_SECTIONS,
+  POWER_SOURCES,
+  POWER_STEPS,
+  POWER_TITLE,
+  POWER_UNRECORDED_ROWS,
+} from '../lib/power';
+import { RAM_FULL_LABEL, RAM_MIN_LABEL } from '../lib/ram-surfaces';
+
+const cited = POWER_BOARD_ROWS.filter((row) => row.kind === 'cited');
+---
+
+<Base title={POWER_TITLE} description={POWER_DESCRIPTION}>
+  <main id="main" class="mx-auto max-w-4xl px-4 py-10 sm:px-6">
+    <p class="kicker">{POWER_CITED_LABEL}</p>
+    <h1 class="display mt-3 text-4xl sm:text-5xl">{POWER_TITLE}</h1>
+    <p class="mt-4 max-w-3xl text-lg leading-relaxed text-muted">{POWER_LEAD}</p>
+    <ul class="mt-4 flex flex-wrap gap-2">
+      {POWER_HUB_LINKS.map((link) => (
+        <li>
+          <a
+            class="inline-flex min-h-11 items-center rounded-full border border-line bg-canvas px-3 text-sm text-ink hover:border-accent/50 hover:text-accent-ink"
+            href={link.href}
+          >
+            {link.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+    <div class="mt-4">
+      <HowWeTest />
+    </div>
+
+    <Callout type="note" title="Cited watts only">
+      <p>
+        TBP cells copy AMD product pages already cited on
+        <a class="underline decoration-accent/40" href="/compare/radeon-vs-nvidia">Radeon vs NVIDIA</a>.
+        The R9700 minimum PSU is 750 W on that same product page. Empty stays
+        <strong class="text-ink">{POWER_EMPTY}</strong>.
+        {POWER_SEARCH_GUIDANCE}. llama.cpp first for tokens.
+      </p>
+    </Callout>
+
+    <nav
+      class="sticky z-20 -mx-4 mt-8 border-y border-line bg-canvas/95 px-4 py-2 backdrop-blur-md sm:-mx-6 sm:px-6"
+      aria-label="Power sections"
+    >
+      <p class="mb-2 font-mono text-[0.68rem] uppercase tracking-[0.16em] text-faint">Jump to section</p>
+      <ol class="flex flex-wrap gap-2">
+        {POWER_SECTIONS.map((section) => (
+          <li>
+            <a
+              class="inline-flex min-h-11 items-center rounded-full border border-line bg-raised px-3 text-sm text-ink hover:border-accent/50 hover:text-accent-ink"
+              href={`#${section.id}`}
+            >
+              {section.label}
+            </a>
+          </li>
+        ))}
+      </ol>
+    </nav>
+
+    <section id="board-power" class="mt-10 scroll-mt-36" aria-labelledby="board-power-heading">
+      <h2 id="board-power-heading" class="font-serif text-3xl tracking-tight">Cited board power</h2>
+      <p class="mt-3 max-w-3xl text-muted">
+        AMD-published TBP. Source links go to the product page. Sheet links stay on AMDai.
+      </p>
+      <div class="mt-6 overflow-x-auto">
+        <table class="min-w-full text-left text-sm">
+          <caption class="sr-only">Cited AMD total board power and PSU minimums</caption>
+          <thead>
+            <tr class="border-b border-line text-faint">
+              <th scope="col" class="py-2 pr-4 font-medium">GPU</th>
+              <th scope="col" class="py-2 pr-4 font-medium">TBP</th>
+              <th scope="col" class="py-2 pr-4 font-medium">PSU minimum</th>
+              <th scope="col" class="py-2 font-medium">Connector</th>
+            </tr>
+          </thead>
+          <tbody>
+            {cited.map((row) => (
+              <tr class="border-b border-line/70">
+                <th scope="row" class="py-3 pr-4 font-medium text-ink">
+                  <a class="underline decoration-accent/40" href={row.href}>{row.name}</a>
+                </th>
+                <td class="py-3 pr-4">
+                  <a class="underline decoration-accent/40" href={row.sourceHref}>{row.tbp}</a>
+                </td>
+                <td class="py-3 pr-4">{row.psu}</td>
+                <td class="py-3">{row.connector}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="unrecorded" class="mt-12 scroll-mt-36" aria-labelledby="unrecorded-heading">
+      <h2 id="unrecorded-heading" class="font-serif text-3xl tracking-tight">Not recorded yet</h2>
+      <p class="mt-3 max-w-3xl text-muted">
+        Directory sheets without a cited AMD TBP. We do not copy a neighbor wattage.
+      </p>
+      <ul class="mt-6 grid gap-3 sm:grid-cols-2">
+        {POWER_UNRECORDED_ROWS.map((row) => (
+          <li class="rounded-2xl border border-line bg-raised/50 p-4">
+            <a class="font-medium text-ink underline decoration-accent/40" href={row.href}>{row.name}</a>
+            <p class="mt-2 text-sm text-muted">
+              TBP {row.tbp}. {row.psu}. {row.source}.
+            </p>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section id="psu" class="mt-12 scroll-mt-36" aria-labelledby="psu-heading">
+      <h2 id="psu-heading" class="font-serif text-3xl tracking-tight">PSU sizing</h2>
+      <ol class="mt-6 grid gap-4">
+        {POWER_STEPS.map((step, index) => (
+          <li id={step.id} class="scroll-mt-28 rounded-2xl border border-line bg-raised/50 p-5">
+            <p class="font-mono text-[0.68rem] uppercase tracking-[0.16em] text-faint">Step {index + 1}</p>
+            <h3 class="mt-1 font-serif text-2xl tracking-tight">{step.title}</h3>
+            <p class="mt-3 leading-relaxed text-muted">{step.body}</p>
+            <ul class="mt-4 flex flex-wrap gap-2">
+              {step.links.map((link) => (
+                <li>
+                  <a
+                    class="inline-flex min-h-11 items-center rounded-full border border-line bg-canvas px-3 text-sm text-ink hover:border-accent/50 hover:text-accent-ink"
+                    href={link.href}
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </li>
+        ))}
+      </ol>
+      <p class="mt-6 text-sm text-muted">
+        As an Amazon Associate I earn from qualifying purchases. {POWER_SEARCH_GUIDANCE}.
+      </p>
+      <div class="mt-4">
+        <BuyButtons products={['psu-1000w', 'r9700']} />
+      </div>
+    </section>
+
+    <section id="dual" class="mt-12 scroll-mt-36" aria-labelledby="dual-heading">
+      <h2 id="dual-heading" class="font-serif text-3xl tracking-tight">Dual R9700</h2>
+      <p class="mt-4 max-w-3xl leading-relaxed text-muted">{POWER_DUAL}</p>
+      <p class="mt-4 text-sm text-muted">
+        {RAM_MIN_LABEL} and {RAM_FULL_LABEL} for Flash offload:
+        <a class="underline decoration-accent/40" href="/flash-ram-offload">/flash-ram-offload</a>.
+        This page does not invent a kit.
+      </p>
+    </section>
+
+    <section id="faq" class="mt-12 scroll-mt-36" aria-labelledby="faq-heading">
+      <h2 id="faq-heading" class="font-serif text-3xl tracking-tight">FAQ</h2>
+      <ul class="mt-6 grid gap-4">
+        {POWER_FAQ.map((item) => (
+          <li id={item.id} class="scroll-mt-28 rounded-2xl border border-line bg-raised/50 p-5">
+            <h3 class="font-serif text-2xl tracking-tight">{item.question}</h3>
+            <p class="mt-3 leading-relaxed text-muted">{item.answer}</p>
+            <ul class="mt-4 flex flex-wrap gap-2">
+              {item.links.map((link) => (
+                <li>
+                  <a
+                    class="inline-flex min-h-11 items-center rounded-full border border-line bg-canvas px-3 text-sm text-ink hover:border-accent/50 hover:text-accent-ink"
+                    href={link.href}
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section id="sources" class="mt-12 scroll-mt-36" aria-labelledby="sources-heading">
+      <h2 id="sources-heading" class="font-serif text-3xl tracking-tight">Sources</h2>
+      <ul class="mt-4 list-disc space-y-2 pl-5 text-muted">
+        {POWER_SOURCES.map((source) => (
+          <li>
+            <a class="underline decoration-accent/40" href={source.href}>{source.title}</a>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <NextSteps path="/power" />
+  </main>
+</Base>

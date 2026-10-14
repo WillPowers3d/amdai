@@ -131,6 +131,7 @@ export const FAQ_ENTRIES: FaqItem[] = [
       { href: '/calculator', label: 'Calculator' },
       { href: '/start', label: 'Getting started' },
       { href: '/hardware', label: 'Hardware' },
+      { href: '/power', label: 'Power and PSU' },
       { href: '/budget', label: 'Setup by budget' },
     ],
   },
@@ -145,6 +146,20 @@ export const FAQ_ENTRIES: FaqItem[] = [
       { href: '/calculator', label: 'Calculator' },
       { href: '/gpus/r9700', label: 'R9700 measured page' },
       { href: '/disclosure', label: 'Affiliate disclosure' },
+    ],
+  },
+  {
+    id: 'psu-sizing',
+    group: 'getting-started',
+    question: 'How do I size a PSU for a Radeon local-AI box?',
+    answer:
+      'Read AMD’s published TBP on the product page. The R9700 is 300 W TBP with a 750 W minimum PSU recommendation (product page). Other directory cards stay not recorded until we cite that page. Two 300 W TBP cards plus 750 W minimum per card is not a dual-card PSU SKU we invent. 1000W-class is search guidance, not a SKU. The cited shopper guide is /power. llama.cpp first for tokens. Q3 stays a labeled estimate. Nothing below Q3.',
+    links: [
+      { href: '/power', label: 'Power and PSU' },
+      { href: '/hardware', label: 'Hardware' },
+      { href: '/multi-gpu', label: 'Dual / multi-GPU' },
+      { href: '/gpus/r9700', label: 'R9700 measured page' },
+      { href: '/budget', label: 'Budget' },
     ],
   },
   {
@@ -597,6 +612,7 @@ export const REQUIRED_FAQ_HREFS = [
   '/speech',
   '/long-context',
   '/rag',
+  '/power',
 ] as const;
 
 const BANNED_VISIBLE = /Qwen2\.5|Qwen3-8B/i;

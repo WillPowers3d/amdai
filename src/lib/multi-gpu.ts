@@ -184,6 +184,11 @@ export const MULTI_GPU_MORE: { href: string; label: string; body: string }[] = [
     body: '300 W TBP, 750 W min PSU, double slot, cooling notes.',
   },
   {
+    href: '/power',
+    label: 'Power and PSU',
+    body: 'Cited TBP per GPU. Dual R9700 is not a PSU SKU we invent.',
+  },
+  {
     href: '/glossary',
     label: 'Glossary',
     body: 'Dual-GPU, offload, run cards — plain English.',
@@ -214,6 +219,7 @@ export const REQUIRED_MULTI_GPU_HREFS = [
   '/glossary',
   '/bios',
   '/hardware',
+  '/power',
   '/benchmarks',
   '/results',
   '/compare/q4-q5-q6',

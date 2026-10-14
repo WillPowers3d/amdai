@@ -197,6 +197,7 @@ export const CRUMB_LABELS: Record<string, string> = {
   '/speech': 'Speech',
   '/long-context': 'Long context',
   '/rag': 'RAG',
+  '/power': 'Power',
   '/setup': 'First-run setup',
   '/setup/windows': 'Windows setup',
   '/stack-lab': 'Stack Lab',
@@ -334,6 +335,12 @@ setMeta(
   'Chat with your own PDFs and notes on Radeon. llama.cpp embeddings first. Linux first. Fit estimates, not measured on local-desktop.',
 );
 setDate('/rag', '2026-10-13');
+setMeta(
+  '/power',
+  'Board power and PSU on Radeon',
+  'Cited AMD board power (TBP) per Radeon and PSU sizing, including dual R9700. No invented watts or prices.',
+);
+setDate('/power', '2026-10-14');
 setMeta(
   '/stacks',
   'Recommended stacks',
