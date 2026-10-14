@@ -40,7 +40,7 @@ describe('speculative decoding guide', () => {
     assert.ok(SPEC_DESCRIPTION.length >= 70);
     assert.ok(SPEC_DESCRIPTION.length <= 160);
     assert.equal(COMPARE_Q3, 'UD-Q3_K_XL');
-    assert.match(SPEC_UNMEASURED, /not measured yet on local-desktop/);
+    assert.match(SPEC_UNMEASURED, /not measured yet on the local desktop/);
     assert.match(SPEC_DRAFT_RULE, /Q4 and up/);
 
     const blob = specBlob(runs);

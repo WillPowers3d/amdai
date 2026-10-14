@@ -415,7 +415,7 @@ function launchesFor(id: ModelPageId): ModelLaunch[] {
       ctxLabel: formatCtx(preset.defaultCtx),
       recipe: null,
       command: [
-        '# Shape only — not a measured local-desktop recipe.',
+        '# Shape only — not a measured local desktop recipe.',
         './build-vk/bin/llama-server \\',
         `  -m ~/models/${file} \\`,
         '  -ngl 99 \\',
@@ -535,7 +535,7 @@ function citedConfigRows(id: CitedModelId): ModelConfigRow[] {
         hrefLabel: 'Calculator',
         runIds: [],
         note: q3
-          ? `${preset.publisherFiles[quant.id]?.label ?? 'Q3 file'}. Q3 is an option labeled estimate — not a local-desktop run.`
+          ? `${preset.publisherFiles[quant.id]?.label ?? 'Q3 file'}. Q3 is an option labeled estimate — not a local desktop run.`
           : `${preset.publisherFiles[quant.id]?.label ?? 'Cited GGUF file'}. Speeds ${NOT_YET_MEASURED}.`,
       });
     }
@@ -673,7 +673,7 @@ function qwen36Rows(cards: RunCard[]): ModelConfigRow[] {
               kind: 'estimate',
               href: '/calculator',
               hrefLabel: 'Calculator',
-              note: `${COMPARE_Q3_CITE}. Q3 is an option labeled estimate — not a local-desktop run.`,
+              note: `${COMPARE_Q3_CITE}. Q3 is an option labeled estimate — not a local desktop run.`,
             }),
           );
           continue;
@@ -762,7 +762,7 @@ function flashRows(cards: RunCard[], file: FlashDailyFile): ModelConfigRow[] {
                 kind: 'estimate',
                 href: '/calculator',
                 hrefLabel: 'Calculator',
-                note: `Labeled Q3 estimate from the calculator + ${FLASH_RAM_QUANTS.find((row) => row.short === 'Q3')?.label} listing. Not a local-desktop speed run.`,
+                note: `Labeled Q3 estimate from the calculator + ${FLASH_RAM_QUANTS.find((row) => row.short === 'Q3')?.label} listing. Not a local desktop speed run.`,
               }),
             );
             continue;
@@ -844,7 +844,7 @@ function flashCitedPair(): FlashCitedPair[] {
     {
       engine: 'Strata',
       decode: '32.6 tok/s',
-      note: 'Prior first-party Flash UD-Q6_K_XL on local-desktop. Card count was not published; recorded on the two-R9700 host.',
+      note: 'Prior first-party Flash UD-Q6_K_XL on the local desktop. Card count was not published; recorded on the two-R9700 host.',
       href: '/benchmarks#flash',
     },
     {
@@ -861,9 +861,9 @@ function houseCopy(id: HouseModelId): { title: string; description: string; lead
     return {
       title: 'Qwen3.6-35B-A3B',
       description:
-        'Qwen3.6-35B-A3B on one R9700 — Unsloth UD-Q5_K_XL, llama.cpp Vulkan, 262K. Measured local-desktop cards; Q3 is a labeled estimate.',
+        'Qwen3.6-35B-A3B on one R9700 — Unsloth UD-Q5_K_XL, llama.cpp Vulkan, 262K. Measured local desktop cards; Q3 is a labeled estimate.',
       lead:
-        'amdai’s daily driver: Unsloth UD-Q5_K_XL on llama.cpp Vulkan, one R9700, 262K, f16 KV. Every tok/s and measured GB comes from official amdai-bench/run@1 cards. Empty cells stay contribute. Q3 is a labeled estimate.',
+        'the house daily driver: Unsloth UD-Q5_K_XL on llama.cpp Vulkan, one R9700, 262K, f16 KV. Every tok/s and measured GB comes from official amdai-bench/run@1 cards. Empty cells stay contribute. Q3 is a labeled estimate.',
       engine: 'llama.cpp',
     };
   }
@@ -872,7 +872,7 @@ function houseCopy(id: HouseModelId): { title: string; description: string; lead
     description:
       'House recipe page for Qwen 3.8 Flash: cited UD-Q6_K_XL pair, two-card Q6, RAM lines, llama.cpp first. Q3 is a labeled estimate.',
     lead:
-      'amdai’s fast agent: Unsloth UD-Q6_K_XL. Strata is the cited Hermes path (~32.6 tok/s); llama.cpp is first on this page (~16 tok/s). Two-card Q6 lives on Flash daily. Untested cells say contribute. Q3 is a labeled estimate.',
+      'the house fast agent: Unsloth UD-Q6_K_XL. Strata is the cited Hermes path (~32.6 tok/s); llama.cpp is first on this page (~16 tok/s). Two-card Q6 lives on Flash daily. Untested cells say contribute. Q3 is a labeled estimate.',
     engine: 'llama.cpp first · Strata where cited',
   };
 }
@@ -1008,7 +1008,7 @@ const Q4_FLOOR = new RegExp(`floor is q${'4'}|q${'4'} floor|q${'4'} and up only`
 export function assertModelPagesValid(pages: HouseModelPage[] = houseModelPages()): string[] {
   const errors: string[] = [];
   if (pages.length !== MODEL_PAGE_IDS.length) errors.push('expected one page per model page id');
-  if (pages[0]?.id !== 'qwen36') errors.push('amdai daily driver must be first');
+  if (pages[0]?.id !== 'qwen36') errors.push('AMDai daily driver must be first');
   if (pages[1]?.id !== 'flash') errors.push('Flash must be second');
   if (pages[2]?.id !== 'gpt-oss-20b') errors.push('gpt-oss 20B must be the first cited page');
   if (pages[3]?.id !== 'gemma3-27b') errors.push('Gemma 3 27B must be the second cited page');

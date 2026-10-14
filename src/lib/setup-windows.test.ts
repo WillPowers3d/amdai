@@ -23,7 +23,7 @@ describe('Windows first-run setup', () => {
   it('keeps cited tracks, Vulkan first, and house rules', () => {
     assert.deepEqual(assertSetupWindowsValid(), []);
     assert.equal(SETUP_WINDOWS_PUBLISHED, '2026-10-13');
-    assert.equal(SETUP_WINDOWS_CITED_LABEL, 'Cited, not measured on local-desktop');
+    assert.equal(SETUP_WINDOWS_CITED_LABEL, 'Cited, not measured on the local desktop');
     assert.equal(SETUP_WINDOWS_TRACKS[0]?.id, 'native');
     assert.equal(SETUP_WINDOWS_TRACKS[1]?.id, 'wsl');
     assert.equal(SETUP_WINDOWS_TRACKS[1]?.recommend, false);
@@ -49,7 +49,7 @@ describe('Windows first-run setup', () => {
   it('wires the dedicated page and stays in the sitemap', () => {
     const page = readFileSync(join(here, '../pages/setup/windows.astro'), 'utf8');
     const hub = readFileSync(join(here, '../pages/setup.astro'), 'utf8');
-    assert.match(page, /Cited, not measured on local-desktop/);
+    assert.match(page, /Cited, not measured on the local desktop/);
     assert.match(page, /llama\.cpp/);
     assert.match(page, /Open in Stack Lab/);
     assert.match(page, /NextSteps/);

@@ -25,7 +25,7 @@ import { FLASH_Q3_EXCEPTION } from './run-card';
 const seed = Object.fromEntries(recipes.map((row) => [row.id, row]));
 
 describe('recipe catalog', () => {
-  it('seeds only the measured local-desktop decode set and rejects extras', () => {
+  it('seeds only the measured local desktop decode set and rejects extras', () => {
     const decodes = recipes.flatMap((row) => row.proof.map((proof) => proof.decode).filter((n): n is number => n != null));
     assert.deepEqual(
       [...new Set(decodes)].sort((a, b) => a - b),

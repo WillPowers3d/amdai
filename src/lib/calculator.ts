@@ -223,17 +223,17 @@ export type SpeedFloor = {
 /** Consumer DIMM kits we round the host-RAM estimate up to (module labels in GB). */
 export const DIMM_KIT_GB = [16, 32, 48, 64, 96, 128, 192, 256, 384, 512, 768, 1024] as const;
 
-/** OS + desktop idle estimate. Not measured on local-desktop. */
+/** OS + desktop idle estimate. Not measured on the local desktop. */
 export const OS_DESKTOP_BASELINE_GIB = 8;
 
 /** Spare so the box does not sit at 100% RAM. Estimate, not a bench. */
 export const RAM_HEADROOM_GIB = 16;
 
-/** local-desktop ships this kit. Measured process RSS is not recorded until Local AI numbers arrive. */
-export const local-desktop_DDR5_GB = 256;
+/** local desktop ships this kit. Measured process RSS is not recorded until Local AI numbers arrive. */
+export const LOCAL_DESKTOP_DDR5_GB = 256;
 /** Linux-visible GiB on that 256 GB kit, labeled GB on this site. */
-export const local-desktop_USABLE_RAM_GB = 249;
-export const local-desktop_MEASURED_RAM_GIB: number | null = null;
+export const LOCAL_DESKTOP_USABLE_RAM_GB = 249;
+export const LOCAL_DESKTOP_MEASURED_RAM_GIB: number | null = null;
 
 export type SystemRamBreakdown = {
   offloadedWeightsGiB: number;
@@ -465,7 +465,7 @@ export const MODEL_PRESETS: ModelPreset[] = [
       },
       iq3: {
         decimalGb: 81.96,
-        label: 'Hugging Face LFS sizes for UD-IQ3_XXS (81.96 GB across 3 shards). Estimate / community — not measured on local-desktop',
+        label: 'Hugging Face LFS sizes for UD-IQ3_XXS (81.96 GB across 3 shards). Estimate / community — not measured on the local desktop',
       },
       q4_k_m: {
         decimalGb: 111,
@@ -518,11 +518,11 @@ export const MODEL_PRESETS: ModelPreset[] = [
       },
       q3_k_m: {
         decimalGb: 13.15,
-        label: 'Hugging Face LFS size for unsloth/Qwen3.8-27B-GGUF Qwen3.8-27B-UD-Q3_K_XL.gguf (13.15 GB). Q3 is a labeled estimate — not a local-desktop run',
+        label: 'Hugging Face LFS size for unsloth/Qwen3.8-27B-GGUF Qwen3.8-27B-UD-Q3_K_XL.gguf (13.15 GB). Q3 is a labeled estimate — not a local desktop run',
       },
       q3_k_xl: {
         decimalGb: 13.15,
-        label: 'Hugging Face LFS size for unsloth/Qwen3.8-27B-GGUF Qwen3.8-27B-UD-Q3_K_XL.gguf (13.15 GB). Q3 is a labeled estimate — not a local-desktop run',
+        label: 'Hugging Face LFS size for unsloth/Qwen3.8-27B-GGUF Qwen3.8-27B-UD-Q3_K_XL.gguf (13.15 GB). Q3 is a labeled estimate — not a local desktop run',
       },
     },
   },
@@ -566,11 +566,11 @@ export const MODEL_PRESETS: ModelPreset[] = [
       },
       q3_k_m: {
         decimalGb: 13.59,
-        label: 'Hugging Face LFS size for unsloth/Qwen3.6-27B-GGUF Qwen3.6-27B-Q3_K_M.gguf (13.59 GB). Q3 is a labeled estimate — not a local-desktop run',
+        label: 'Hugging Face LFS size for unsloth/Qwen3.6-27B-GGUF Qwen3.6-27B-Q3_K_M.gguf (13.59 GB). Q3 is a labeled estimate — not a local desktop run',
       },
       q3_k_xl: {
         decimalGb: 14.47,
-        label: 'Hugging Face LFS size for unsloth/Qwen3.6-27B-GGUF Qwen3.6-27B-UD-Q3_K_XL.gguf (14.47 GB). Q3 is a labeled estimate — not a local-desktop run',
+        label: 'Hugging Face LFS size for unsloth/Qwen3.6-27B-GGUF Qwen3.6-27B-UD-Q3_K_XL.gguf (14.47 GB). Q3 is a labeled estimate — not a local desktop run',
       },
     },
   },
@@ -776,7 +776,7 @@ export const MODEL_PRESETS: ModelPreset[] = [
       },
       q3_k_m: {
         decimalGb: 34.27,
-        label: 'bartowski/Llama-3.3-70B-Instruct-GGUF README table Q3_K_M 34.27 GB. Q3 is a labeled estimate — not a local-desktop run',
+        label: 'bartowski/Llama-3.3-70B-Instruct-GGUF README table Q3_K_M 34.27 GB. Q3 is a labeled estimate — not a local desktop run',
       },
     },
   },
@@ -874,7 +874,7 @@ export const MODEL_PRESETS: ModelPreset[] = [
       },
       q3_k_m: {
         decimalGb: 13.44,
-        label: 'Hugging Face LFS size for unsloth/gemma-3-27b-it-GGUF gemma-3-27b-it-Q3_K_M.gguf (13.44 GB). Q3 is a labeled estimate — not a local-desktop run',
+        label: 'Hugging Face LFS size for unsloth/gemma-3-27b-it-GGUF gemma-3-27b-it-Q3_K_M.gguf (13.44 GB). Q3 is a labeled estimate — not a local desktop run',
       },
     },
   },
@@ -973,7 +973,7 @@ export const MODEL_PRESETS: ModelPreset[] = [
       },
       q3_k_m: {
         decimalGb: 11.51,
-        label: 'Hugging Face LFS size for unsloth/gpt-oss-20b-GGUF gpt-oss-20b-Q3_K_M.gguf (11.51 GB). Q3 is a labeled estimate — not a local-desktop run',
+        label: 'Hugging Face LFS size for unsloth/gpt-oss-20b-GGUF gpt-oss-20b-Q3_K_M.gguf (11.51 GB). Q3 is a labeled estimate — not a local desktop run',
       },
     },
   },
@@ -1018,7 +1018,7 @@ export const MODEL_PRESETS: ModelPreset[] = [
       },
       q3_k_m: {
         decimalGb: 147.54,
-        label: 'Hugging Face LFS shard sum for unsloth/GLM-5.3-Flash-GGUF UD-Q3_K_XL (147.54 GB across 4 shards). Q3 is a labeled estimate — not a local-desktop run',
+        label: 'Hugging Face LFS shard sum for unsloth/GLM-5.3-Flash-GGUF UD-Q3_K_XL (147.54 GB across 4 shards). Q3 is a labeled estimate — not a local desktop run',
       },
     },
   },
@@ -1399,10 +1399,10 @@ function systemRamLine(input: CalcInput): SystemRamLine {
     breakdown.osDesktopGiB +
     breakdown.headroomGiB;
   const kitGb = roundUpToDimmKitGb(rawGiB);
-  const measured = local-desktop_MEASURED_RAM_GIB != null;
-  const local-desktop =
-    kitGb === local-desktop_DDR5_GB || rawGiB > 128
-      ? ` local-desktop ships ${local-desktop_DDR5_GB} GB DDR5; measured host-RAM usage is not recorded until Local AI numbers arrive.`
+  const measured = LOCAL_DESKTOP_MEASURED_RAM_GIB != null;
+  const localDesktopNote =
+    kitGb === LOCAL_DESKTOP_DDR5_GB || rawGiB > 128
+      ? ` The local desktop ships ${LOCAL_DESKTOP_DDR5_GB} GB DDR5; measured host-RAM usage is not recorded until Local AI numbers arrive.`
       : '';
   return {
     context: input.context,
@@ -1411,8 +1411,8 @@ function systemRamLine(input: CalcInput): SystemRamLine {
     measured,
     label: measured ? 'measured' : 'estimate',
     note: measured
-      ? `Measured on our rig — ${local-desktop_MEASURED_RAM_GIB} GiB used on the ${local-desktop_DDR5_GB} GB DDR5 kit.`
-      : `Estimate. Offloaded weights + KV in RAM + runtime + OS/desktop + headroom, rounded up to a ${kitGb} GB DIMM kit.${local-desktop}`,
+      ? `Measured on our rig — ${LOCAL_DESKTOP_MEASURED_RAM_GIB} GiB used on the ${LOCAL_DESKTOP_DDR5_GB} GB DDR5 kit.`
+      : `Estimate. Offloaded weights + KV in RAM + runtime + OS/desktop + headroom, rounded up to a ${kitGb} GB DIMM kit.${localDesktopNote}`,
     breakdown,
   };
 }
@@ -1461,7 +1461,7 @@ export function applyMeasuredRamLine(line: SystemRamLine, hits: MeasuredRamHit[]
     kitGb: roundUpToDimmKitGb(Math.max(...peakGbs)),
     peakGbs,
     runIds,
-    note: `Measured peak system RAM on local-desktop: ${shown} GB (Linux GiB labeled GB). Measured, pending re-verify after RAM fix.`,
+    note: `Measured peak system RAM on the local desktop: ${shown} GB (Linux GiB labeled GB). Measured, pending re-verify after RAM fix.`,
   };
 }
 

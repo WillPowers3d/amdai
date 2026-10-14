@@ -23,9 +23,9 @@
   "proof": [
     {
       "date": "2026-10",
-      "who": "local-desktop",
+      "who": "local desktop",
       "tier": "tested-our-rig",
-      "source": "local-desktop strata-test report / Local AI measurements",
+      "source": "local desktop strata-test report / Local AI measurements",
       "gates": {
         "load": "pass",
         "chat": "pass",

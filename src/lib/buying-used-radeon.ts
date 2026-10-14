@@ -40,7 +40,7 @@ export const BUYING_USED_TITLE = 'Buying a used Radeon for local AI';
 export const BUYING_USED_DESCRIPTION =
   'Cited used-Radeon shopper guide: RDNA4 / RDNA3 / RDNA2 gfx and ROCm notes, VRAM-first 12–32 GB picker from existing fit data, Linux vetting checklist. llama.cpp first. No invented prices.';
 export const BUYING_USED_PUBLISHED = '2026-10-14';
-export const BUYING_USED_CITED_LABEL = 'Cited, not measured on local-desktop';
+export const BUYING_USED_CITED_LABEL = 'Cited, not measured on the local desktop';
 export const BUYING_USED_SPEED_LABEL = 'not measured';
 
 export const BUYING_USED_LSPCI = "lspci -nn | grep -Ei 'vga|display|3d'";
@@ -270,7 +270,7 @@ function representativeMeta(id: ConsumerRecipeId | 'r9700'): {
       name: 'Radeon AI PRO R9700',
       href: '/gpus/r9700',
       gfx: 'gfx1201',
-      support: 'Official (measured on local-desktop)',
+      support: 'Official (measured on the local desktop)',
       gpuId: 'r9700',
     };
   }
@@ -379,7 +379,7 @@ export const BUYING_USED_STEPS: BuyingUsedStep[] = [
   {
     id: 'bench',
     title: 'Compare a short llama-bench or amdai-bench run to the site',
-    body: 'Used-card sheets stay not measured on local-desktop. After a short llama.cpp llama-bench or an amdai-bench/run@1 card on your box, compare against the measured R9700 numbers on /benchmarks and /results — do not paste those tok/s onto a 6800 XT listing. Empty speed cells stay empty. Contribute a recipe if you have a log. We do not invent a used-card tok/s to fill the hole.',
+    body: 'Used-card sheets stay not measured on the local desktop. After a short llama.cpp llama-bench or an amdai-bench/run@1 card on your box, compare against the measured R9700 numbers on /benchmarks and /results — do not paste those tok/s onto a 6800 XT listing. Empty speed cells stay empty. Contribute a recipe if you have a log. We do not invent a used-card tok/s to fill the hole.',
     links: [
       { href: '/amdai-bench', label: 'amdai-bench' },
       { href: '/benchmarks', label: 'Benchmarks (measured R9700)' },
@@ -463,7 +463,7 @@ export const BUYING_USED_FAQ: BuyingUsedFaq[] = [
   {
     id: 'q3-used',
     question: 'Can I buy a 12 GB card and just run Q3?',
-    answer: `${COMPARE_Q3} is a labeled estimate (${COMPARE_Q3_CITE}) — not a local-desktop run and not a promise that Q3 “makes 12 GB enough.” Q6 / Q5 / Q4 stay on the table. Nothing below Q3. Size the file on the calculator and the 12 GB sheet. ${RAM_MIN_LABEL} and ${RAM_FULL_LABEL} print when that file spills.`,
+    answer: `${COMPARE_Q3} is a labeled estimate (${COMPARE_Q3_CITE}) — not a local desktop run and not a promise that Q3 “makes 12 GB enough.” Q6 / Q5 / Q4 stay on the table. Nothing below Q3. Size the file on the calculator and the 12 GB sheet. ${RAM_MIN_LABEL} and ${RAM_FULL_LABEL} print when that file spills.`,
     links: [
       { href: '/quants', label: 'Quants' },
       { href: '/calculator', label: 'Calculator' },
@@ -574,7 +574,7 @@ export function assertBuyingUsedValid(): string[] {
 
   if (BUYING_USED_PATH !== '/guides/buying-used-radeon') errors.push('path drifted');
   if (BUYING_USED_TITLE !== 'Buying a used Radeon for local AI') errors.push('title drifted');
-  if (BUYING_USED_CITED_LABEL !== 'Cited, not measured on local-desktop') errors.push('cited label drifted');
+  if (BUYING_USED_CITED_LABEL !== 'Cited, not measured on the local desktop') errors.push('cited label drifted');
   if (BUYING_USED_SPEED_LABEL !== 'not measured') errors.push('speed label drifted');
   if (BUYING_USED_GENERATIONS.length !== 3) errors.push('need RDNA4 / RDNA3 / RDNA2');
   if (BUYING_USED_STEPS.length < 8) errors.push('checklist too short');

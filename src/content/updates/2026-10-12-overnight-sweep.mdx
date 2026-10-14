@@ -1,11 +1,11 @@
 ---
 title: Overnight sweep, 2026-10-12
 date: 2026-10-12
-summary: 33 official amdai-bench/run@1 cards from local-desktop (amdai) for Qwen3.6-35B-A3B on one R9700 and both cards. Measured, pending re-verify after the DDR5-5200 RAM fix.
+summary: 33 official amdai-bench/run@1 cards from local desktop (AMDai) for Qwen3.6-35B-A3B on one R9700 and both cards. Measured, pending re-verify after the DDR5-5200 RAM fix.
 current: true
 ---
 
-Thirty-three first-party llama.cpp Vulkan cards from amdai’s rig local-desktop (Ryzen 9 9950X, 4×64 GB DDR5-5200, 2× Radeon AI PRO R9700 32 GB, Ubuntu 24.04.5, llama.cpp c060ca974, ROCm 7.2.0, Mesa RADV 25.2.8).
+Thirty-three first-party llama.cpp Vulkan cards from the house rig local desktop (Ryzen 9 9950X, 4×64 GB DDR5-5200, 2× Radeon AI PRO R9700 32 GB, Ubuntu 24.04.5, llama.cpp c060ca974, ROCm 7.2.0, Mesa RADV 25.2.8).
 
 Quants: UD-Q5_K_XL, Q5_K_M, Q4_K_M, Q6_K. Contexts: 4K / 32K / 128K / 256K. Layouts: one GPU and a split across both GPUs. Each card records prefill tok/s, decode tok/s, peak VRAM per card and total, and peak system DDR5. GB is the Linux GiB value.
 
@@ -16,4 +16,4 @@ Caveats, on every card and in the table footnote:
 - **Measured, pending re-verify after RAM fix.** DDR5-5200 later proved unstable. A kernel oops at 00:14 CT aborted the sweep. All 33 cards predate that oops. Each card already notes one transient bad read in earlier sha256 passes.
 - **Q6_K single-GPU 4K table cell is 103.23 tok/s** from the 23:55 card (the 4K point in the complete Q6_K single-GPU series). The earlier 23:26 card at 82.62 tok/s stays on /results and is not averaged into the cell.
 
-Flash rows listed only in the human summary were **not** ingested. Q3 comparison rows stay cited estimates. Nothing below Q4 ran on local-desktop in this drop.
+Flash rows listed only in the human summary were **not** ingested. Q3 comparison rows stay cited estimates. Nothing below Q4 ran on the local desktop in this drop.

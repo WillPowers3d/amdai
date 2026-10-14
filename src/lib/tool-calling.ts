@@ -1,7 +1,7 @@
 /**
  * Cited guide: tool calling and structured JSON with llama.cpp on Radeon.
  * Reuse /harnesses, /setup/coding-assistant, /setup/open-webui, /backends, /tuning.
- * Tool-call success and grammar decode are not measured on local-desktop.
+ * Tool-call success and grammar decode are not measured on the local desktop.
  * Q3 is a labeled estimate. Q1/Q2 stay off. No Qwen2.5 / Qwen3-8B names.
  */
 
@@ -33,7 +33,7 @@ export const TC_PATH = '/guides/tool-calling';
 export const TC_NAME = 'Tool calling on Radeon';
 export const TC_HEADING = 'Tool calling and structured JSON with llama.cpp on a Radeon GPU';
 export const TC_PUBLISHED = '2026-10-14';
-export const TC_CITED_LABEL = 'Cited llama.cpp --jinja · tool-call success not measured on local-desktop';
+export const TC_CITED_LABEL = 'Cited llama.cpp --jinja · tool-call success not measured on the local desktop';
 export const TC_UNMEASURED = 'not measured yet — run Stack Lab grammar-ab/1';
 export const TC_PACK = 'grammar-ab/1';
 
@@ -58,7 +58,7 @@ export const TC_DESCRIPTION =
   'Tool calling on Radeon with llama.cpp. Cited --jinja, tools, JSON schema, GBNF. Measure grammar cost on Stack Lab grammar-ab/1. Q3 is a labeled estimate.';
 
 export const TC_LEAD =
-  `Hermes, Cline, Continue, and Roo need OpenAI-style tool calls and JSON that parses. llama.cpp documents that path in docs/function-calling.md and the server README (checked 2026-10-14): start llama-server with --jinja, send tools on /v1/chat/completions, and optionally constrain the body with response_format, a JSON Schema, or GBNF. AMDai has not measured tool-call success or grammar decode on local-desktop, so those cells stay ${TC_UNMEASURED}. Stack Lab pack ${TC_PACK} is the free-form versus grammar / JSON-schema A/B. It is not an allowlisted Open-in-Stack-Lab deep link — open the planner, then record an amdai-bench card. House daily driver is ${COMPARE_MODEL} UD-Q5_K_XL on ${COMPARE_ENGINE} Vulkan, one R9700, 262144 context, f16 KV. ${COMPARE_Q3} is a labeled estimate (${COMPARE_Q3_CITE}). Q1/Q2 stay off.`;
+  `Hermes, Cline, Continue, and Roo need OpenAI-style tool calls and JSON that parses. llama.cpp documents that path in docs/function-calling.md and the server README (checked 2026-10-14): start llama-server with --jinja, send tools on /v1/chat/completions, and optionally constrain the body with response_format, a JSON Schema, or GBNF. AMDai has not measured tool-call success or grammar decode on the local desktop, so those cells stay ${TC_UNMEASURED}. Stack Lab pack ${TC_PACK} is the free-form versus grammar / JSON-schema A/B. It is not an allowlisted Open-in-Stack-Lab deep link — open the planner, then record an amdai-bench card. House daily driver is ${COMPARE_MODEL} UD-Q5_K_XL on ${COMPARE_ENGINE} Vulkan, one R9700, 262144 context, f16 KV. ${COMPARE_Q3} is a labeled estimate (${COMPARE_Q3_CITE}). Q1/Q2 stay off.`;
 
 export const TC_WHAT =
   'A tool call is an OpenAI-shaped /v1/chat/completions request that includes a tools array. The model returns tool_calls instead of (or before) a normal message. llama.cpp parses that when --jinja is on and the chat template understands tools. Function-calling.md: native handlers exist for several families (Llama 3.1 / 3.3, GPT-OSS Harmony, Hermes 2/3, Functionary, Mistral Nemo, Command R7B, DeepSeek R1). Unrecognized templates fall back to Generic — logs say Chat format: Generic. Generic may use more tokens. Parallel / multiple tool calls stay off unless the payload sets "parallel_tool_calls": true, and only some templates support them.';
@@ -73,10 +73,10 @@ export const TC_STRUCTURED =
   'Tool calling injects the tool schema into the prompt. Constrained decoding is a different knob: it forces the next tokens to match a grammar. Official grammars/README.md: JSON Schema converts to GBNF via json-schema-to-grammar; the schema is not injected except during tool calling, so describe a free-form JSON shape in the prompt. Use response_format {"type":"json_object"} or a schema-constrained object when the whole reply must be JSON (calculator output, recipe export) and you are not in a tool loop. Use --grammar / --grammar-file when the output is not JSON. Use tools + --jinja when the harness expects tool_calls. A grammar can stall — llama.cpp issue #4218. Do not invent an overhead tok/s; measure ${TC_PACK}.';
 
 export const TC_HOUSE =
-  `amdai’s default is ${COMPARE_MODEL} Unsloth UD-Q5_K_XL, llama.cpp Vulkan, one R9700, 262144 context, f16 KV. Add --jinja for tools. House /v1 is http://127.0.0.1:8080/v1 with model id qwen — same pin as /setup/coding-assistant. function-calling.md cautions that extreme KV quants (example: q4_0 KV) can degrade tool calling. House KV stays f16. A tools payload and multi-turn history eat context — size -c on /long-context.`;
+  `the house default is ${COMPARE_MODEL} Unsloth UD-Q5_K_XL, llama.cpp Vulkan, one R9700, 262144 context, f16 KV. Add --jinja for tools. House /v1 is http://127.0.0.1:8080/v1 with model id qwen — same pin as /setup/coding-assistant. function-calling.md cautions that extreme KV quants (example: q4_0 KV) can degrade tool calling. House KV stays f16. A tools payload and multi-turn history eat context — size -c on /long-context.`;
 
 export const TC_STRATA =
-  'House Hermes on local-desktop also talks to Strata on :8083 for the Flash fast-agent path. llama.cpp function-calling.md does not document Strata. Treat Strata tool calls as not verified here. Attach notes stay on /harnesses/hermes and /backends/strata.';
+  'House Hermes on the local desktop also talks to Strata on :8083 for the Flash fast-agent path. llama.cpp function-calling.md does not document Strata. Treat Strata tool calls as not verified here. Attach notes stay on /harnesses/hermes and /backends/strata.';
 
 export const TC_LAUNCH = [
   '# House daily-driver shape with --jinja. Not a measured tool-call pin.',
@@ -348,7 +348,7 @@ export function tcMeasuredRows(cards: RunCard[]): TcQuantRow[] {
       kind: 'measured',
       decode4k: at4k?.one.decode ?? TC_UNMEASURED,
       decode32k: at32k?.one.decode ?? TC_UNMEASURED,
-      note: 'Official local-desktop llama.cpp Vulkan, one R9700. Free-form — no tools array.',
+      note: 'Official local desktop llama.cpp Vulkan, one R9700. Free-form — no tools array.',
       runIds: [...new Set([...(at4k?.one.runIds ?? []), ...(at32k?.one.runIds ?? [])])],
     };
   });
@@ -357,7 +357,7 @@ export function tcMeasuredRows(cards: RunCard[]): TcQuantRow[] {
     kind: 'q3-estimate',
     decode4k: TC_UNMEASURED,
     decode32k: TC_UNMEASURED,
-    note: `${COMPARE_Q3_CITE}. Q3 is a labeled estimate — not a local-desktop run, not a tool-call card.`,
+    note: `${COMPARE_Q3_CITE}. Q3 is a labeled estimate — not a local desktop run, not a tool-call card.`,
     runIds: [],
   });
   return rows;

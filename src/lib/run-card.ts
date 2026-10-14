@@ -1,6 +1,6 @@
 /**
  * amdai-bench/run@1 — one test-run card.
- * Stack Lab and overnight local-desktop drops emit this object (one jsonl line).
+ * Stack Lab and overnight local desktop drops emit this object (one jsonl line).
  * Verified measured runs feed GPU / model / 35B tables. Do not invent numbers.
  */
 
@@ -13,14 +13,7 @@ import type { BackendId, MeasuredRamHit, QuantId } from './calculator';
 
 export const RUN_SCHEMA = 'amdai-bench/run@1' as const;
 export const FLASH_Q3_EXCEPTION = 'flash-q3-measured-approved';
-export const amdai = {
-  handle: 'amdai',
-  display: 'amdai',
-  rig: 'local-desktop',
-  verified: true,
-} as const;
-
-export const amdai = {
+export const AMDAI_CREDIT = {
   handle: 'amdai',
   display: 'AMDai',
   rig: 'local-desktop',
@@ -29,7 +22,7 @@ export const amdai = {
 
 /** Flash / Strata / Q3 were excluded from the 2026-10-13 35B drop after a RAM crash. */
 export const FLASH_RERUN_NOTE =
-  'Flash, Strata, and Q3 runs are pending a rerun after amdai stabilizes the DDR5.';
+  'Flash, Strata, and Q3 runs are pending a rerun after AMDai stabilizes the DDR5.';
 
 /** Whole 2026-10-12/13 35B llama.cpp sweep. All 33 cards predate the 00:14 CT oops. */
 export const SWEEP_REVERIFY =
@@ -211,12 +204,12 @@ function notesFromUnknown(value: unknown): string | undefined {
 
 export function houseHandle(handle: string): boolean {
   const normalized = handle.toLowerCase().replace(/[^a-z]/g, '');
-  return normalized === amdai.handle || normalized === 'amdai';
+  return normalized === AMDAI_CREDIT.handle;
 }
 
 export function isSweep35bCard(card: RunCard): boolean {
   return (
-    card.submitted_by.rig === amdai.rig &&
+    card.submitted_by.rig === AMDAI_CREDIT.rig &&
     /35B/i.test(card.model.name) &&
     !/flash/i.test(card.model.name) &&
     card.software.backend.toLowerCase().includes('llama.cpp') &&
@@ -435,7 +428,7 @@ export function verifiedMeasured(cards: RunCard[]): RunCard[] {
 
 export function officialAmdaiRuns(cards: RunCard[]): RunCard[] {
   return verifiedMeasured(cards).filter(
-    (card) => houseHandle(card.submitted_by.handle) && card.submitted_by.rig === amdai.rig,
+    (card) => houseHandle(card.submitted_by.handle) && card.submitted_by.rig === AMDAI_CREDIT.rig,
   );
 }
 
@@ -667,7 +660,7 @@ export function qwen36TableFromRuns(cards: RunCard[]): {
     gpu: 'one R9700 vs both R9700s',
     kv: 'f16',
     notes: [
-      'Cells come from verified amdai-bench/run@1 cards on local-desktop (overnight sweep 2026-10-12, llama.cpp c060ca974 Vulkan). A blank stays not measured. GB is the Linux GiB value.',
+      'Cells come from verified amdai-bench/run@1 cards on the local desktop (overnight sweep 2026-10-12, llama.cpp c060ca974 Vulkan). A blank stays not measured. GB is the Linux GiB value.',
       'Side by side: prefill, decode, VRAM per card, VRAM total, and peak system RAM. At short context one R9700 decodes faster than splitting the same 35B across both cards (UD-Q5_K_XL 102.39 vs 82.78 tok/s at 4K).',
       SWEEP_REVERIFY,
       Q6_4K_VARIANCE_NOTE,
@@ -805,7 +798,7 @@ export function deriveV1Catalog(cards: RunCard[]): AmdaiBenchFile {
     version: AMDAI_BENCH_VERSION,
     as_of: '2026-10-13',
     label: MEASURED_LABEL,
-    source: 'local-desktop official run cards (amdai-bench/run@1)',
+    source: 'local desktop official run cards (amdai-bench/run@1)',
     results,
   };
 }

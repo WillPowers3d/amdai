@@ -433,7 +433,7 @@ function flashSpecs(): QwenSpec[] {
     edition: 'original' as const,
     hfUrl: officialLinks.qwenFlash,
     ggufUrl: officialLinks.qwenFlashGguf,
-    note: 'House fast-agent family. Strata first on local-desktop. File sizes are Unsloth folder listings.',
+    note: 'House fast-agent family. Strata first on the local desktop. File sizes are Unsloth folder listings.',
   };
   const rows: Array<Omit<QwenSpec, 'id'> & { slug: string }> = [
     {
@@ -442,7 +442,7 @@ function flashSpecs(): QwenSpec[] {
       quantId: 'iq3',
       runQuant: 'UD-IQ3_XXS',
       citedDecimalGb: 81.96,
-      sizeCite: 'Hugging Face LFS sizes for UD-IQ3_XXS (81.96 GB across 3 shards). Estimate / community — not measured on local-desktop',
+      sizeCite: 'Hugging Face LFS sizes for UD-IQ3_XXS (81.96 GB across 3 shards). Estimate / community — not measured on the local desktop',
       skipPublisher: false,
     },
     {

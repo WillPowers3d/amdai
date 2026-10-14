@@ -38,7 +38,7 @@ const payload = rows.map((row) => ({
 
 <Base
   title="One R9700 vs two (split)"
-  description="Qwen3.6-35B-A3B on local-desktop: one R9700 versus a split across both cards — decode, prefill, VRAM, and system RAM from official llama.cpp run cards."
+  description="Qwen3.6-35B-A3B on the local desktop: one R9700 versus a split across both cards — decode, prefill, VRAM, and system RAM from official llama.cpp run cards."
 >
   <main id="main" class="mx-auto max-w-6xl px-4 py-10 sm:px-6">
     <p class="kicker">
@@ -167,7 +167,7 @@ const payload = rows.map((row) => ({
 
     <div class="compare-table mt-8 hidden overflow-x-auto lg:block" id="compare-table">
       <table class="table-lab compare-sticky min-w-[72rem]">
-        <caption>One R9700 versus a split across both cards. Decode, prefill, VRAM, and system RAM from local-desktop run cards.</caption>
+        <caption>One R9700 versus a split across both cards. Decode, prefill, VRAM, and system RAM from local desktop run cards.</caption>
         <thead>
           <tr>
             <th scope="col" rowspan="2">Quant</th>
@@ -226,8 +226,8 @@ const payload = rows.map((row) => ({
       <p class="kicker">Q3 estimate</p>
       <h2 id="q3-ram-heading" class="mt-2 font-serif text-2xl tracking-tight">{COMPARE_Q3}</h2>
       <p class="mt-3 text-sm leading-relaxed text-muted">
-        Q6 / Q5 / Q4 system RAM above is from local-desktop cards.
-        <strong class="text-ink">{COMPARE_Q3}</strong> is a labeled estimate ({COMPARE_Q3_CITE}) — not a local-desktop run.
+        Q6 / Q5 / Q4 system RAM above is from local desktop cards.
+        <strong class="text-ink">{COMPARE_Q3}</strong> is a labeled estimate ({COMPARE_Q3_CITE}) — not a local desktop run.
         Decode and prefill stay not measured. Full Q3 column:
         <a class="underline decoration-accent/40" href="/compare/q4-q5-q6">Q6 / Q5 / Q4 + Q3 estimate</a>.
       </p>

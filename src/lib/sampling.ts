@@ -178,7 +178,7 @@ export const SAM_RAM = `
 
 export const SAM_HOUSE = `# House daily driver as recorded (no --temp / --top-p / --min-p / --samplers pin).
 # llama-server README Sampling params: --temp 0.80, --top-k 40, --top-p 0.95, --min-p 0.05.
-# Those defaults are official docs — not a local-desktop pin we will invent.
+# Those defaults are official docs — not a local desktop pin we will invent.
 ./build-vk/bin/llama-server \\
   -m /path/to/nvme/${SAM_HOUSE_FILE} \\
   ${SAM_HOUSE_SERVER_FLAGS}`;
@@ -498,7 +498,7 @@ export const SAM_TROUBLE = [
   {
     id: 'thinking-stuck',
     title: 'Thinking never ends',
-    body: 'That is a reasoning toggle, not a temperature bug. Official Qwen3.6 thinks by default. Use --reasoning off or enable_thinking: false. The shopper page is /thinking. Thinking-token counts stay not measured on local-desktop.',
+    body: 'That is a reasoning toggle, not a temperature bug. Official Qwen3.6 thinks by default. Use --reasoning off or enable_thinking: false. The shopper page is /thinking. Thinking-token counts stay not measured on the local desktop.',
     links: [
       { href: '/thinking', label: 'Thinking mode' },
       { href: '/troubleshoot', label: 'Troubleshoot' },
@@ -561,7 +561,7 @@ export const SAM_STEPS: SamStep[] = [
   {
     id: 'measure',
     title: 'Measure on your box — do not invent a sampler tok/s',
-    body: `AMDai has not measured llama-server decode with versus without a card sampler pin on local-desktop — ${SAM_UNMEASURED}. There is no Stack Lab sampler-pack id on this site. Open the planner. Export a lab-notes-report/1 pack and ingest with npx tsx src/scripts/amdai-bench.ts ingest pack.json. Packages are not published yet.`,
+    body: `AMDai has not measured llama-server decode with versus without a card sampler pin on the local desktop — ${SAM_UNMEASURED}. There is no Stack Lab sampler-pack id on this site. Open the planner. Export a lab-notes-report/1 pack and ingest with npx tsx src/scripts/amdai-bench.ts ingest pack.json. Packages are not published yet.`,
     links: [
       { href: '/stack-lab', label: 'Stack Lab' },
       { href: '/amdai-bench', label: 'amdai-bench' },
@@ -592,7 +592,7 @@ export const SAM_FAQ: SamFaq[] = [
     id: 'card-vs-house',
     question: 'Does the house 35B use the official Qwen3.6 sampling row?',
     answer:
-      'Not as recorded. House llama-server is Vulkan, UD-Q5_K_XL, 262144 context, f16 KV — no --temp / --top-p / --min-p pin. Official llama.cpp defaults then apply unless the client sends fields. The Qwen3.6-35B card has separate thinking (general and coding) and instruct rows. Those are card recommendations, not a local-desktop pin.',
+      'Not as recorded. House llama-server is Vulkan, UD-Q5_K_XL, 262144 context, f16 KV — no --temp / --top-p / --min-p pin. Official llama.cpp defaults then apply unless the client sends fields. The Qwen3.6-35B card has separate thinking (general and coding) and instruct rows. Those are card recommendations, not a local desktop pin.',
     links: [
       { href: '/thinking', label: 'Thinking mode' },
       { href: '/tutorials/serve-qwen', label: 'Serve Qwen' },

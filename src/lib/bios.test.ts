@@ -43,7 +43,7 @@ describe('bios catalog', () => {
     }
   });
 
-  it('does not invent per-board notes or a local-desktop motherboard', () => {
+  it('does not invent per-board notes or a local desktop motherboard', () => {
     assert.deepEqual(file.boards, []);
     for (const id of REQUIRED_CHIPSETS) {
       assert.deepEqual(boardsForChipset(file, id), []);

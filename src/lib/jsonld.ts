@@ -67,7 +67,7 @@ import {
   type Crumb,
 } from './seo';
 import { BRAND } from './site';
-import { RUN_SCHEMA, amdai, amdai } from './run-card';
+import { RUN_SCHEMA } from './run-card';
 import { TRUST_PUBLISHED } from './trust';
 import { runs } from './run-card-data';
 import { parseBios, type BiosFile } from './bios';
@@ -116,11 +116,6 @@ export function organizationJsonLd(): JsonLd {
     name: BRAND,
     url: SITE_ORIGIN,
     description: 'Independent consumer notes for local AI on AMD Radeon. Not affiliated with AMD.',
-    founder: {
-      '@type': 'Person',
-      name: amdai.display,
-      alternateName: [amdai.handle, amdai.rig, amdai.handle, amdai.display],
-    },
   };
 }
 
@@ -140,7 +135,7 @@ export function aboutPageJsonLd(input: {
     dateModified: input.modified,
     about: { '@id': `${SITE_ORIGIN}/#organization` },
     publisher: { '@id': `${SITE_ORIGIN}/#organization` },
-    author: { '@type': 'Person', name: amdai.display },
+    author: { '@id': `${SITE_ORIGIN}/#organization` },
   };
 }
 
@@ -206,7 +201,7 @@ export function techArticleJsonLd(input: {
     url: input.url,
     datePublished: input.published,
     dateModified: input.modified,
-    author: { '@type': 'Person', name: amdai.display },
+    author: { '@id': `${SITE_ORIGIN}/#organization` },
     publisher: { '@id': `${SITE_ORIGIN}/#organization` },
   };
 }
@@ -262,12 +257,12 @@ export function datasetJsonLd(pageUrl: string, name: string, description: string
     description,
     url: pageUrl,
     creator: {
-      '@type': 'Person',
+      '@type': 'Organization',
       name: DATASET_CREATOR.name,
-      alternateName: [...DATASET_CREATOR.alternateName],
+      '@id': `${SITE_ORIGIN}/#organization`,
     },
     license: DATASET_LICENSE,
-    measurementTechnique: `llama.cpp llama-bench recorded as ${RUN_SCHEMA} on AMD Radeon AI PRO R9700 at ${amdai.rig}`,
+    measurementTechnique: `llama.cpp llama-bench recorded as ${RUN_SCHEMA} on AMD Radeon AI PRO R9700 at the local desktop`,
     variableMeasured: ['decode tokens per second', 'prefill tokens per second', 'peak VRAM GB', 'peak system RAM GB'],
     isAccessibleForFree: true,
   };

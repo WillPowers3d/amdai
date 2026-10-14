@@ -56,7 +56,7 @@ const dailyRam = dailyRecipe ? recipeSystemRam(dailyRecipe, measuredRamHits) : n
 
 <Base
   title={R9700_SHORT}
-  description="Measured 35B llama.cpp on the Radeon AI PRO R9700 — 32 GB VRAM, one GPU vs two, cited decode and prefill from local-desktop run cards."
+  description="Measured 35B llama.cpp on the Radeon AI PRO R9700 — 32 GB VRAM, one GPU vs two, cited decode and prefill from local desktop run cards."
 >
   <main id="main" class="mx-auto max-w-6xl px-4 py-10 sm:px-6">
     <a class="skip-link skip-to-r9700-nav" href="#r9700-sections">Skip to section nav</a>
@@ -197,7 +197,7 @@ const dailyRam = dailyRecipe ? recipeSystemRam(dailyRecipe, measuredRamHits) : n
       </p>
       <div class="mt-6 overflow-x-auto">
         <table class="table-lab min-w-[52rem]">
-          <caption>UD-Q5_K_XL decode, prefill, peak VRAM, and peak system RAM on one R9700 versus a split. Cited local-desktop cards.</caption>
+          <caption>UD-Q5_K_XL decode, prefill, peak VRAM, and peak system RAM on one R9700 versus a split. Cited local desktop cards.</caption>
           <thead>
             <tr>
               <th scope="col">Context</th>
@@ -392,11 +392,11 @@ const dailyRam = dailyRecipe ? recipeSystemRam(dailyRecipe, measuredRamHits) : n
 
     <section id="q3-estimate" class="mt-12 scroll-mt-36" aria-labelledby="q3-estimate-heading">
       <h2 id="q3-estimate-heading" class="font-serif text-3xl tracking-tight">Q3 is a labeled estimate</h2>
-      <Callout type="warn" title={`${COMPARE_Q3} — not a local-desktop run`}>
+      <Callout type="warn" title={`${COMPARE_Q3} — not a local desktop run`}>
         <p>
           {COMPARE_Q3} may appear in comparison chrome as a labeled estimate.
           Cited file listing: {COMPARE_Q3_CITE}.
-          We do not invent a Q3 tok/s. Do not run Q3 on local-desktop from this page.
+          We do not invent a Q3 tok/s. Do not run Q3 on the local desktop from this page.
           {FLASH_RERUN_NOTE}
           Q1 and Q2 stay off.
         </p>

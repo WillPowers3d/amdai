@@ -108,7 +108,7 @@ export const FA_BACKENDS = `
   Vulkan is the house path. The recorded overnight line is llama.cpp
   Vulkan: ${FA_HOUSE_BENCH}. llama.cpp documents the same -fa /
   --flash-attn and --cache-type-k/v flags on the HIP / ROCm compile. HIP
-  FA on versus off for the house 35B sweep stays not measured on local-desktop.
+  FA on versus off for the house 35B sweep stays not measured on the local desktop.
   Do not invent a HIP flash-attn delta, a watt figure, or an acceptance
   rate. If a Vulkan or HIP build rejects -fa, leave it off and record
   the card.
@@ -243,7 +243,7 @@ export const FA_STEPS: FaStep[] = [
   {
     id: 'vulkan-hip',
     title: 'Vulkan first; HIP / ROCm is the cited second compile',
-    body: 'The recorded 35B line is Vulkan. llama.cpp documents the same -fa flags on HIP. HIP FA on versus off for the house 35B sweep stays not measured on local-desktop. Do not invent a HIP delta, watts, or an acceptance rate.',
+    body: 'The recorded 35B line is Vulkan. llama.cpp documents the same -fa flags on HIP. HIP FA on versus off for the house 35B sweep stays not measured on the local desktop. Do not invent a HIP delta, watts, or an acceptance rate.',
     links: [
       { href: '/compare/vulkan-vs-rocm', label: 'Vulkan vs ROCm' },
       { href: '/rocm/vulkan-hip', label: 'Vulkan vs HIP' },
@@ -274,7 +274,7 @@ export const FA_FAQ: FaFaq[] = [
     id: 'what-is-fa',
     question: 'What does llama.cpp -fa / --flash-attn do?',
     answer:
-      'Official fused attention flag. Values are on, off, or auto (default auto; env LLAMA_ARG_FLASH_ATTN). Overnight 35B Vulkan llama-bench recorded -fa 1. llama-server FA on versus off is not measured on local-desktop — run Stack Lab Flash Attention A/B. Q3 is a labeled estimate. House recipes stay Q4 and up. llama.cpp first.',
+      'Official fused attention flag. Values are on, off, or auto (default auto; env LLAMA_ARG_FLASH_ATTN). Overnight 35B Vulkan llama-bench recorded -fa 1. llama-server FA on versus off is not measured on the local desktop — run Stack Lab Flash Attention A/B. Q3 is a labeled estimate. House recipes stay Q4 and up. llama.cpp first.',
     links: [
       { href: '/flash-attention', label: 'Flash Attention' },
       { href: '/tuning', label: 'Speed up llama.cpp' },
@@ -296,7 +296,7 @@ export const FA_FAQ: FaFaq[] = [
     id: 'vulkan-vs-hip',
     question: 'Does Flash Attention work the same on Vulkan and HIP?',
     answer:
-      'llama.cpp documents the same -fa / --flash-attn flags on both compiles. The house 35B overnight line is Vulkan with -fa 1. HIP FA on versus off stays not measured on local-desktop. Do not invent a HIP flash-attn delta. Measure Stack Lab Flash Attention A/B.',
+      'llama.cpp documents the same -fa / --flash-attn flags on both compiles. The house 35B overnight line is Vulkan with -fa 1. HIP FA on versus off stays not measured on the local desktop. Do not invent a HIP flash-attn delta. Measure Stack Lab Flash Attention A/B.',
     links: [
       { href: '/compare/vulkan-vs-rocm', label: 'Vulkan vs ROCm' },
       { href: '/stack-lab', label: 'Stack Lab' },

@@ -144,7 +144,7 @@ describe('workstation PRO GPU recipe sheets', () => {
       assert.ok(documentTitle(page.path).endsWith(' · AMDai'));
       const desc = pageDescription(page.path);
       assert.match(desc, /estimate/i);
-      assert.match(desc, /not measured on local-desktop/i);
+      assert.match(desc, /not measured on the local desktop/i);
       assert.doesNotMatch(desc, /tok\/s/);
     }
   });

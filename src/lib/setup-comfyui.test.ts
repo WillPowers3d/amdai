@@ -26,7 +26,7 @@ describe('ComfyUI Radeon setup', () => {
   it('keeps Linux first, cited install, and house rules', () => {
     assert.deepEqual(assertSetupComfyuiValid(), []);
     assert.equal(SETUP_COMFYUI_PUBLISHED, '2026-10-14');
-    assert.equal(SETUP_COMFYUI_CITED_LABEL, 'Cited, not measured on local-desktop');
+    assert.equal(SETUP_COMFYUI_CITED_LABEL, 'Cited, not measured on the local desktop');
     assert.equal(SETUP_COMFYUI_SPEED_LABEL, 'not yet measured by AMDai');
     assert.equal(SETUP_COMFYUI_TRACKS[0]?.id, 'linux');
     assert.equal(SETUP_COMFYUI_TRACKS[1]?.recommend, false);

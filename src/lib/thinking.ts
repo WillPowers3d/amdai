@@ -1,7 +1,7 @@
 /**
  * Cited thinking / reasoning mode on Radeon with llama.cpp.
  * Official sources: llama.cpp server README, official Qwen3.6-35B-A3B card.
- * Thinking-token counts and wall-clock stay not measured on local-desktop.
+ * Thinking-token counts and wall-clock stay not measured on the local desktop.
  * No invented tok/s, prices, or Stack Lab pack ids. llama.cpp Vulkan first.
  */
 
@@ -10,11 +10,11 @@ import { RAM_FULL_LABEL, RAM_MIN_LABEL } from './ram-surfaces';
 
 export const THINK_PATH = '/thinking';
 export const THINK_PUBLISHED = '2026-10-14';
-export const THINK_CITED_LABEL = 'Cited llama.cpp + Qwen3.6 card · tokens not measured on local-desktop';
+export const THINK_CITED_LABEL = 'Cited llama.cpp + Qwen3.6 card · tokens not measured on the local desktop';
 
 export const THINK_TITLE = 'Thinking / reasoning mode on Radeon';
 export const THINK_DESCRIPTION =
-  'Thinking / reasoning mode on a Radeon GPU with llama.cpp. Cited --reasoning and Qwen3.6 enable_thinking. Tokens not measured on local-desktop.';
+  'Thinking / reasoning mode on a Radeon GPU with llama.cpp. Cited --reasoning and Qwen3.6 enable_thinking. Tokens not measured on the local desktop.';
 
 export const THINK_HOUSE_FILE = 'Qwen3.6-35B-A3B-UD-Q5_K_XL.gguf';
 export const THINK_PORT = 8080;
@@ -53,7 +53,7 @@ export const THINK_LEAD = `
   and wall-clock on the same llama-server that already serves the house 35B.
   This AMDai page is the cited llama.cpp toggle: --reasoning, reasoning_effort,
   and chat_template_kwargs.enable_thinking. Thinking-token counts stay not
-  measured on local-desktop. llama.cpp Vulkan first. Q6/Q5/Q4 recommended; Q3 is a
+  measured on the local desktop. llama.cpp Vulkan first. Q6/Q5/Q4 recommended; Q3 is a
   labeled estimate. Q1/Q2 stay off.
 `.replace(/\s+/g, ' ').trim();
 
@@ -177,7 +177,7 @@ export const THINK_STEPS: ThinkStep[] = [
   {
     id: 'ram',
     title: 'Both RAM lines — thinking eats context, not a new kit',
-    body: `Where context and offload appear, AMDai prints ${RAM_MIN_LABEL} and ${RAM_FULL_LABEL}. Overnight UD-Q5 one-GPU peaks are ${THINK_RAM_4K} GB at 4K and ${THINK_RAM_256K} GB at 256K — measured llama-bench on local-desktop, Linux GB. Round ${RAM_MIN_LABEL} to a ${THINK_KIT_GB} GB kit for this file on one R9700. Thinking tokens consume the same context window; we do not invent a thinking-token count or a second RAM number. Q3 stays a labeled estimate.`,
+    body: `Where context and offload appear, AMDai prints ${RAM_MIN_LABEL} and ${RAM_FULL_LABEL}. Overnight UD-Q5 one-GPU peaks are ${THINK_RAM_4K} GB at 4K and ${THINK_RAM_256K} GB at 256K — measured llama-bench on the local desktop, Linux GB. Round ${RAM_MIN_LABEL} to a ${THINK_KIT_GB} GB kit for this file on one R9700. Thinking tokens consume the same context window; we do not invent a thinking-token count or a second RAM number. Q3 stays a labeled estimate.`,
     links: [
       { href: '/calculator', label: 'Calculator' },
       { href: '/gpus/r9700', label: 'R9700 measured page' },
@@ -199,7 +199,7 @@ export const THINK_STEPS: ThinkStep[] = [
   {
     id: 'measure',
     title: 'Measure on your box — do not copy a screenshot',
-    body: 'Thinking-token counts and wall-clock stay not measured on local-desktop. Overnight 35B numbers are llama-bench decode, not a thinking A/B. Use amdai-bench and the Stack Lab planner on Ubuntu — packages are not published yet and there is no public download. Do not invent a Stack Lab pack id. Q3 is a labeled estimate.',
+    body: 'Thinking-token counts and wall-clock stay not measured on the local desktop. Overnight 35B numbers are llama-bench decode, not a thinking A/B. Use amdai-bench and the Stack Lab planner on Ubuntu — packages are not published yet and there is no public download. Do not invent a Stack Lab pack id. Q3 is a labeled estimate.',
     links: [
       { href: '/amdai-bench', label: 'amdai-bench' },
       { href: '/stack-lab', label: 'Stack Lab' },
@@ -219,7 +219,7 @@ export const THINK_FAQ: ThinkFaq[] = [
     id: 'turn-off',
     question: 'How do I turn thinking / reasoning mode off on llama.cpp?',
     answer:
-      'Cited path: llama-server --reasoning off, and/or reasoning_effort none, and/or chat_template_kwargs {"enable_thinking": false}. Official Qwen3.6 card thinks by default and does not support /think or /nothink. Thinking-token counts and wall-clock stay not measured on local-desktop. Q3 is a labeled estimate. llama.cpp first.',
+      'Cited path: llama-server --reasoning off, and/or reasoning_effort none, and/or chat_template_kwargs {"enable_thinking": false}. Official Qwen3.6 card thinks by default and does not support /think or /nothink. Thinking-token counts and wall-clock stay not measured on the local desktop. Q3 is a labeled estimate. llama.cpp first.',
     links: [
       { href: '/thinking', label: 'Thinking mode' },
       { href: '/tutorials/serve-qwen', label: 'Serve Qwen' },

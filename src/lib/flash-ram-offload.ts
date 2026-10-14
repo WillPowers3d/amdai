@@ -9,7 +9,7 @@ import {
   formatLinuxGb,
   FLASH_RAM_QUANTS,
   MEASURED_ON_OUR_RIG,
-  NOT_MEASURED_ON_local-desktop,
+  NOT_MEASURED_ON_LOCAL_DESKTOP,
   type FlashQuantShort,
 } from './flash-daily';
 import { formatGiB, systemRamNeed, type SystemRamNeed } from './calculator';
@@ -82,7 +82,7 @@ export function flashDecodeCell(
     context: query.context,
     gpus: query.gpus,
   }).filter((card) => card.results.decode_tps != null);
-  if (!hits.length) return { text: NOT_MEASURED_ON_local-desktop, measured: false, href: null };
+  if (!hits.length) return { text: NOT_MEASURED_ON_LOCAL_DESKTOP, measured: false, href: null };
   const text = hits
     .map((card) => {
       const speed = card.hardware.ram_speed_mts;
@@ -170,7 +170,7 @@ export function kitRecommendations(rows: FlashRamOffloadRow[]): KitRec[] {
     const oneQ6 = full.some((row) => row.short === 'Q6' && row.cards === 1);
     let headline = `${kitGb} GB kit — estimate only.`;
     if (kitGb === 256 && twoQ6) {
-      headline = '256 GB is the local-desktop kit. Two-card Q6 at 262K is the measured house fast-agent.';
+      headline = '256 GB is the local desktop kit. Two-card Q6 at 262K is the measured house fast-agent.';
     } else if (kitGb === 192 && oneQ6) {
       headline = '192 GB covers one-card Q6 at 262K on the calculator estimate. Speeds for that card count are not measured.';
     } else if (kitGb === 128 && twoQ6) {
@@ -218,7 +218,7 @@ export function dimmSpeedRows(cards: RunCard[]): DimmSpeedRow[] {
       const at = (mts: number): FlashSpeedCell => {
         const hit = hits.find((card) => card.hardware.ram_speed_mts === mts);
         if (!hit || hit.results.decode_tps == null) {
-          return { text: NOT_MEASURED_ON_local-desktop, measured: false, href: null };
+          return { text: NOT_MEASURED_ON_LOCAL_DESKTOP, measured: false, href: null };
         }
         return {
           text: `${hit.results.decode_tps.toFixed(1)} tok/s`,
@@ -245,8 +245,8 @@ export function flashOffloadEmptyNotes(grid: FlashSpeedRow[]): string[] {
   if (!any((cell, row) => cell.measured && row.short === 'Q3')) {
     notes.push('No Flash Q3 decode in data/runs yet. When the approved measured card lands, this grid will show it.');
   }
-  if (!any((cell, row) => cell.measured && row.short === 'Q4')) notes.push('Flash Q4 decode is not measured on local-desktop.');
-  if (!any((cell, row) => cell.measured && row.short === 'Q5')) notes.push('Flash Q5 decode is not measured on local-desktop.');
+  if (!any((cell, row) => cell.measured && row.short === 'Q4')) notes.push('Flash Q4 decode is not measured on the local desktop.');
+  if (!any((cell, row) => cell.measured && row.short === 'Q5')) notes.push('Flash Q5 decode is not measured on the local desktop.');
   if (!any((_cell, row) => row.cards === 1 && FLASH_OFFLOAD_CONTEXTS.some((ctx) => row.cells[ctx].measured))) {
     notes.push('One-card Flash decode cells are empty. Prior 32.6 / 16 points recorded card count as unpublished.');
   }
@@ -263,4 +263,4 @@ export function formatEstimateGiB(n: number): string {
   return `${formatGiB(n)} GB est.`;
 }
 
-export { MEASURED_ON_OUR_RIG, NOT_MEASURED_ON_local-desktop, formatLinuxGb };
+export { MEASURED_ON_OUR_RIG, NOT_MEASURED_ON_LOCAL_DESKTOP, formatLinuxGb };

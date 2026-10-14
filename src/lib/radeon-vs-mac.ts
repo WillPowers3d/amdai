@@ -1,6 +1,6 @@
 /**
  * Cited Radeon vs Mac (Apple Silicon) shopper page at /compare/radeon-vs-mac.
- * Hardware cells cite AMD or Apple spec pages. R9700 tok/s come from local-desktop cards.
+ * Hardware cells cite AMD or Apple spec pages. R9700 tok/s come from local desktop cards.
  * Mac and Strix Halo speed stay “not measured here” unless a third-party llama.cpp
  * figure is ingested with a source link. No prices. Q3 is a labeled estimate.
  */
@@ -290,7 +290,7 @@ export const AXIS_ROWS: AxisRow[] = [
     title: 'Prefill vs decode',
     kind: 'pending',
     radeon:
-      'Measured on local-desktop llama.cpp Vulkan, one R9700, house 35B only. Decode and prefill live in the table below and on /benchmarks. Strix Halo speed stays not measured here. Dual-card split of the same file is often slower than one card at short context — that is a measured split tax, not a Mac number.',
+      'Measured on the local desktop llama.cpp Vulkan, one R9700, house 35B only. Decode and prefill live in the table below and on /benchmarks. Strix Halo speed stays not measured here. Dual-card split of the same file is often slower than one card at short context — that is a measured split tax, not a Mac number.',
     mac:
       'Mac prefill and decode for this 35B file stay not measured here. We will only print a third-party llama.cpp figure with a source link, labeled third-party, and not apples-to-apples. MLX is a different engine. Do not copy a viral screenshot onto this page.',
   },
@@ -301,14 +301,14 @@ export const AXIS_ROWS: AxisRow[] = [
     radeon:
       'llama.cpp first: Vulkan (GGML_VULKAN=ON) is the house daily driver; HIP (GGML_HIP=ON) after rocminfo lists the gfx. Cited at llama.cpp build.md and /compare/vulkan-vs-rocm. Strata / vLLM stay on /backends.',
     mac:
-      'llama.cpp Metal is the documented macOS GPU compile (GGML_METAL). MLX is Apple’s array framework — a different stack, not a llama.cpp tok/s. We do not invent a Metal-in-Linux path. Asahi Linux exists; it is not measured on local-desktop.',
+      'llama.cpp Metal is the documented macOS GPU compile (GGML_METAL). MLX is Apple’s array framework — a different stack, not a llama.cpp tok/s. We do not invent a Metal-in-Linux path. Asahi Linux exists; it is not measured on the local desktop.',
   },
   {
     id: 'upgrade',
     title: 'Upgradeability',
     kind: 'cited',
     radeon:
-      'A discrete card swaps. A second R9700 is a measured layout on local-desktop. Strix Halo memory is the soldered kit — pick 64 GB or 128 GB at purchase. AMD lists max 128 GB.',
+      'A discrete card swaps. A second R9700 is a measured layout on the local desktop. Strix Halo memory is the soldered kit — pick 64 GB or 128 GB at purchase. AMD lists max 128 GB.',
     mac:
       'Unified memory is configured at purchase on Apple’s spec pages. You do not add a GPU later. A bigger Studio SKU is a different product, not an upgrade slot.',
   },
@@ -326,9 +326,9 @@ export const AXIS_ROWS: AxisRow[] = [
     title: 'Linux support',
     kind: 'cited',
     radeon:
-      'Ubuntu 24.04+ is the measured local-desktop path. llama.cpp Vulkan first. ROCm 10.1 lists the R9700 / gfx1201 and Ryzen AI Max+ 395 / gfx1151 rows. Windows Vulkan is a cited estimate at /setup/windows.',
+      'Ubuntu 24.04+ is the measured local desktop path. llama.cpp Vulkan first. ROCm 10.1 lists the R9700 / gfx1201 and Ryzen AI Max+ 395 / gfx1151 rows. Windows Vulkan is a cited estimate at /setup/windows.',
     mac:
-      'macOS is Apple’s listed OS on the Studio spec pages. llama.cpp Metal and MLX are macOS stories. Asahi Linux is a cited third-party Apple Silicon Linux project — not measured on local-desktop, not a Metal port.',
+      'macOS is Apple’s listed OS on the Studio spec pages. llama.cpp Metal and MLX are macOS stories. Asahi Linux is a cited third-party Apple Silicon Linux project — not measured on the local desktop, not a Metal port.',
   },
 ];
 
@@ -345,7 +345,7 @@ export const SOFTWARE_ROWS: SoftwareRow[] = [
     id: 'llamacpp-vulkan-metal',
     name: 'llama.cpp · Vulkan vs Metal',
     radeon:
-      'Consumer default on AMDai. House daily driver is one R9700, Vulkan, UD-Q5_K_XL, 262K, f16 KV. Measured on local-desktop.',
+      'Consumer default on AMDai. House daily driver is one R9700, Vulkan, UD-Q5_K_XL, 262K, f16 KV. Measured on the local desktop.',
     mac:
       'llama.cpp documents GGML_METAL on macOS. We have no ingested first-party or cited third-party 35B Metal tok/s for the Studio SKUs on this page, so those cells stay not measured here.',
     hrefs: [
@@ -371,7 +371,7 @@ export const SOFTWARE_ROWS: SoftwareRow[] = [
     name: 'MLX',
     radeon: 'MLX is not a Radeon stack. Do not expect a HIP MLX.',
     mac:
-      'MLX is Apple’s array framework on Apple Silicon. It is not llama.cpp and not a local-desktop card. We do not invent an MLX 35B tok/s.',
+      'MLX is Apple’s array framework on Apple Silicon. It is not llama.cpp and not a local desktop card. We do not invent an MLX 35B tok/s.',
     hrefs: [{ href: MLX_REPO, label: 'ml-explore/mlx' }],
   },
   {
@@ -467,7 +467,7 @@ export const LEAD = {
 };
 
 export const SPEED_NOTE =
-  'R9700 decode is measured on local-desktop (amdai-bench/run@1, llama.cpp Vulkan, one card). Mac and Strix Halo cells say “not measured here.” A third-party llama.cpp figure may appear later only with a source link, labeled third-party, and not apples-to-apples (different engine, quant, or context). We will not estimate one.';
+  'R9700 decode is measured on the local desktop (amdai-bench/run@1, llama.cpp Vulkan, one card). Mac and Strix Halo cells say “not measured here.” A third-party llama.cpp figure may appear later only with a source link, labeled third-party, and not apples-to-apples (different engine, quant, or context). We will not estimate one.';
 
 export const FIT_QUANTS: { id: QuantId; label: string; kind: 'estimate' | 'q3-estimate' }[] = [
   { id: 'q6_k', label: 'Q6_K', kind: 'estimate' },

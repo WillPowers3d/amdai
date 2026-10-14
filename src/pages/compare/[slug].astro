@@ -46,7 +46,7 @@ const sides = [page.left, page.right] as const;
         VRAM stickers and gfx rows come from the existing GPU sheets.
         Fit totals are calculator estimates.
         <strong class="text-ink">{COMPARE_Q3}</strong> is a labeled estimate ({page.q3Cite}).
-        Measured tok/s appear only where a local-desktop card exists — today that is the R9700 35B table.
+        Measured tok/s appear only where a local desktop card exists — today that is the R9700 35B table.
         Check-price buttons use the existing <a class="underline decoration-accent/40" href="/disclosure">/go/</a> routes. We do not print a price.
       </p>
     </Callout>
@@ -56,7 +56,7 @@ const sides = [page.left, page.right] as const;
       <div class="mt-6 grid gap-4 md:grid-cols-2">
         {sides.map((side) => (
           <article class="rounded-2xl border border-line bg-raised/50 p-5">
-            <p class="kicker">{side.measured ? 'Measured on local-desktop' : 'Cited, not measured on local-desktop'}</p>
+            <p class="kicker">{side.measured ? 'Measured on the local desktop' : 'Cited, not measured on the local desktop'}</p>
             <h3 class="mt-2 font-serif text-2xl tracking-tight">
               <a class="hover:text-accent-ink" href={side.path}>{side.shortName}</a>
             </h3>

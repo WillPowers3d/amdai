@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://amdai.net/amdai-bench/run@1.schema.json",
   "title": "amdai-bench/run@1",
-  "description": "One official test-run card. Stack Lab amdai-bench and overnight local-desktop drops emit this object (one JSON object per jsonl line). Do not invent tok/s, VRAM, or flags. Q3 is estimate/community unless measured; a measured Qwen 3.8 Flash Q3 run is an approved one-time exception. Q1/Q2 stay off.",
+  "description": "One official test-run card. Stack Lab amdai-bench and overnight local desktop drops emit this object (one JSON object per jsonl line). Do not invent tok/s, VRAM, or flags. Q3 is estimate/community unless measured; a measured Qwen 3.8 Flash Q3 run is an approved one-time exception. Q1/Q2 stay off.",
   "type": "object",
   "additionalProperties": false,
   "required": [

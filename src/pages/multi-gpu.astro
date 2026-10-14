@@ -25,7 +25,7 @@ import {
   MULTI_GPU_WHEN,
   Q6_4K_VARIANCE_NOTE,
   SWEEP_REVERIFY,
-  local-desktop_KIT_GB,
+  LOCAL_DESKTOP_KIT_GB,
   multiGpuDaily256k,
   multiGpuDailyRow,
   multiGpuQuantRows,
@@ -34,13 +34,13 @@ import { runs } from '../lib/run-card-data';
 import { officialLinks } from '../lib/site';
 import OpenInStackLab from '../components/OpenInStackLab.astro';
 import { HOUSE_STACK_LAB } from '../lib/stack-lab-open';
-import { local-desktopDual } from '../lib/local-desktop-dual-data';
+import { localDesktopDual } from '../lib/local-desktop-dual-data';
 
 const daily = multiGpuDailyRow(runs);
 const at256 = multiGpuDaily256k(runs);
 const quant4k = multiGpuQuantRows(runs);
-const copies = local-desktopDual.copies;
-const split = local-desktopDual.split;
+const copies = localDesktopDual.copies;
+const split = localDesktopDual.split;
 const q6 = flashDaily.measured_q6_two_cards;
 const q6File = flashDaily.files.find((row) => row.short === 'Q6');
 const flashTwo = q6File ? flashRamRow('Q6', 2, q6File.file_gb) : null;
@@ -49,7 +49,7 @@ const flashOne = q6File ? flashRamRow('Q6', 1, q6File.file_gb) : null;
 
 <Base
   title="Dual / multi-GPU"
-  description="When a second Radeon AI PRO R9700 helps or hurts: llama.cpp first, measured local-desktop 35B and Flash, plus cited PCIe and PSU. No invented tok/s."
+  description="When a second Radeon AI PRO R9700 helps or hurts: llama.cpp first, measured local desktop 35B and Flash, plus cited PCIe and PSU. No invented tok/s."
 >
   <main id="main" class="mx-auto max-w-3xl px-4 py-10 sm:px-6">
     <a class="skip-link skip-to-multi-gpu-nav" href="#multi-gpu-sections">Skip to section nav</a>
@@ -58,7 +58,7 @@ const flashOne = q6File ? flashRamRow('Q6', 1, q6File.file_gb) : null;
     <p class="mt-4 text-lg leading-relaxed text-muted">
       Two <strong class="text-ink">AMD Radeon AI PRO R9700</strong> cards (32 GB, gfx1201).
       This is the consumer guide: when the second card helps, how llama.cpp splits or pins,
-      and the hardware that actually matters. Numbers are official local-desktop
+      and the hardware that actually matters. Numbers are official local desktop
       <code class="font-mono text-ink">amdai-bench/run@1</code> cards, the two-card soak, or Flash Q6.
       Anything unmeasured is labeled an estimate with a cite. We do not invent tok/s or prices.
     </p>
@@ -150,7 +150,7 @@ const flashOne = q6File ? flashRamRow('Q6', 1, q6File.file_gb) : null;
 
       <div class="card mt-6 overflow-x-auto">
         <table class="table-lab min-w-[36rem]">
-          <caption>35B llama.cpp 4K decode on one R9700 versus a split. Official local-desktop cards.</caption>
+          <caption>35B llama.cpp 4K decode on one R9700 versus a split. Official local desktop cards.</caption>
           <thead>
             <tr>
               <th scope="col">Quant</th>
@@ -359,7 +359,7 @@ const flashOne = q6File ? flashRamRow('Q6', 1, q6File.file_gb) : null;
         Launch shape:
         <a class="underline decoration-accent/40" href="/flash-ram-offload">Flash RAM offload</a>.
         The 35B daily driver does not offload weights — those RAM peaks are OS / runtime on the
-        {local-desktop_KIT_GB} GB kit.
+        {LOCAL_DESKTOP_KIT_GB} GB kit.
       </p>
     </section>
 

@@ -2,7 +2,7 @@
  * Cited consumer guide: speed up llama.cpp on Radeon.
  * Reuse /long-context, /multi-gpu, /power, /flash-ram-offload,
  * /backends, /rocm/vulkan-hip, and /stack-lab — do not duplicate them.
- * Measured tok/s come only from existing local-desktop 35B run cards.
+ * Measured tok/s come only from existing local desktop 35B run cards.
  * Q3 is a labeled estimate. Q1/Q2 stay off. Draft models stay Q4+.
  */
 
@@ -66,7 +66,7 @@ export const TUNING_DESCRIPTION =
   'Speed up llama.cpp on Radeon. Cited -ngl, threads, batch, -fa, KV, split, draft, power. Measured 35B cells only. Q3 is a labeled estimate.';
 
 export const TUNING_LEAD =
-  `These knobs are the ones people actually turn on consumer Radeon. llama.cpp first — Vulkan, then ROCm/HIP when they differ. Strata and vLLM stay on /backends; this page does not retell those stacks. Measured decode is the official local-desktop ${COMPARE_MODEL} ${COMPARE_ENGINE} sweep (UD-Q5_K_XL / Q5_K_M / Q4_K_M / Q6_K). Every other figure is cited to llama.cpp or AMD docs, or labeled ${TUNING_UNMEASURED}. ${COMPARE_Q3} is a labeled estimate (${COMPARE_Q3_CITE}). Q1/Q2 stay off. Draft / speculative models stay Q4 and up.`;
+  `These knobs are the ones people actually turn on consumer Radeon. llama.cpp first — Vulkan, then ROCm/HIP when they differ. Strata and vLLM stay on /backends; this page does not retell those stacks. Measured decode is the official local desktop ${COMPARE_MODEL} ${COMPARE_ENGINE} sweep (UD-Q5_K_XL / Q5_K_M / Q4_K_M / Q6_K). Every other figure is cited to llama.cpp or AMD docs, or labeled ${TUNING_UNMEASURED}. ${COMPARE_Q3} is a labeled estimate (${COMPARE_Q3_CITE}). Q1/Q2 stay off. Draft / speculative models stay Q4 and up.`;
 
 export const LLAMA_CPP = officialLinks.llamaCpp;
 export const LLAMA_SERVER = 'https://github.com/ggml-org/llama.cpp/blob/master/tools/server/README.md';
@@ -105,9 +105,9 @@ export const TUNING_KNOBS: TuningKnob[] = [
     when:
       'Single card: start at -ngl 99 so the file sits in VRAM when it can. Dual card: still start at -ngl 99, then read --split-mode on Dual / multi-GPU — a second card is a split, not a magic -ngl. Partial -ngl is the 16 GB / 12 GB move when Q4 still spills.',
     tradeoff:
-      'More layers on GPU usually means faster decode and less DDR5 traffic. Too many layers on a small card OOMs or silently spills. Spill is system RAM — print both RAM lines below. Quality of the GGUF does not change; speed does. Partial -ngl tok/s is not measured yet on local-desktop except where a card already names --fit-target.',
+      'More layers on GPU usually means faster decode and less DDR5 traffic. Too many layers on a small card OOMs or silently spills. Spill is system RAM — print both RAM lines below. Quality of the GGUF does not change; speed does. Partial -ngl tok/s is not measured yet on the local desktop except where a card already names --fit-target.',
     example: [
-      '# Partial offload shape only — not a measured local-desktop pin.',
+      '# Partial offload shape only — not a measured local desktop pin.',
       './build-vk/bin/llama-server \\',
       '  -m ~/models/Qwen3.6-35B-A3B-UD-Q5_K_XL.gguf \\',
       '  -ngl 20 \\',
@@ -132,13 +132,13 @@ export const TUNING_KNOBS: TuningKnob[] = [
     title: 'CPU threads (--threads)',
     flag: '--threads / -t',
     what:
-      '--threads sets how many CPU threads llama.cpp uses for work that still runs on the host — leftover layers, some prefill helpers, and tokenization. llama.cpp documents the flag in --help and the server README. We have not measured a thread sweep on local-desktop.',
+      '--threads sets how many CPU threads llama.cpp uses for work that still runs on the host — leftover layers, some prefill helpers, and tokenization. llama.cpp documents the flag in --help and the server README. We have not measured a thread sweep on the local desktop.',
     when:
       'Single card with the file in VRAM: extra host threads rarely move decode. They matter when -ngl leaves layers on DDR5, or during prefill. Dual card: the host still owns the leftover; do not invent a per-GPU thread pin.',
     tradeoff:
       'Too few threads can stall prefill when RAM offload is in play. Too many fight the GPU for memory bandwidth. Speed vs core count is not measured yet. Quality is unchanged.',
     example: [
-      '# Thread count is not measured on local-desktop. Copy nproc and measure.',
+      '# Thread count is not measured on the local desktop. Copy nproc and measure.',
       './build-vk/bin/llama-server \\',
       '  -m ~/models/Qwen3.6-35B-A3B-UD-Q5_K_XL.gguf \\',
       '  -ngl 99 \\',
@@ -162,13 +162,13 @@ export const TUNING_KNOBS: TuningKnob[] = [
     title: 'Batch threads (--threads-batch)',
     flag: '--threads-batch',
     what:
-      '--threads-batch is the host thread count for prompt / batch (prefill) work. llama.cpp lists it next to --threads. Prefill and decode are different jobs — the Prefill vs decode glossary entry already says so. We have not measured a --threads-batch sweep on local-desktop.',
+      '--threads-batch is the host thread count for prompt / batch (prefill) work. llama.cpp lists it next to --threads. Prefill and decode are different jobs — the Prefill vs decode glossary entry already says so. We have not measured a --threads-batch sweep on the local desktop.',
     when:
       'Single card: try it when prefill feels stuck and rocm-smi / amd-smi shows the GPU idle while the GGUF is on NVMe — check the disk first (glossary). Dual card: same host flag; do not invent a per-GPU batch-thread split.',
     tradeoff:
       'More batch threads can help prefill when layers sit in RAM. They can also steal bandwidth from decode. Prefill tok/s vs --threads-batch is not measured yet. Quality is unchanged.',
     example: [
-      '# Prefill thread pin is not measured on local-desktop.',
+      '# Prefill thread pin is not measured on the local desktop.',
       './build-vk/bin/llama-server \\',
       '  -m ~/models/Qwen3.6-35B-A3B-UD-Q5_K_XL.gguf \\',
       '  -ngl 99 \\',
@@ -198,9 +198,9 @@ export const TUNING_KNOBS: TuningKnob[] = [
     when:
       'Single card: raise batch only after the file fits. Dual card: batch still lives on the process; split-mode decides which GPU sees the layers. Long prompts at 128K–262K are a KV problem first — read Long context.',
     tradeoff:
-      'Larger batch can raise prefill and VRAM. Smaller batch can fit a tight card and slow prefill. Batch vs tok/s is not measured yet on local-desktop llama-server. Quality is unchanged if the GGUF stays the same.',
+      'Larger batch can raise prefill and VRAM. Smaller batch can fit a tight card and slow prefill. Batch vs tok/s is not measured yet on the local desktop llama-server. Quality is unchanged if the GGUF stays the same.',
     example: [
-      '# Example values from llama.cpp --help — not a local-desktop pin.',
+      '# Example values from llama.cpp --help — not a local desktop pin.',
       './build-vk/bin/llama-server \\',
       '  -m ~/models/Qwen3.6-35B-A3B-UD-Q5_K_XL.gguf \\',
       '  -ngl 99 \\',
@@ -261,9 +261,9 @@ export const TUNING_KNOBS: TuningKnob[] = [
     when:
       'Single card: stay on f16 for the house 35B daily driver. Switch to q8_0 only when 32K–262K KV is the thing that spills — size it on the calculator first. Dual card: KV still grows; split does not delete it. Read Long context for 128K–262K.',
     tradeoff:
-      'q8_0 KV uses less VRAM and can raise the context you fit. It is a quality and speed unknown on local-desktop. f16 is the measured house default. When KV or weights spill, both RAM lines below apply.',
+      'q8_0 KV uses less VRAM and can raise the context you fit. It is a quality and speed unknown on the local desktop. f16 is the measured house default. When KV or weights spill, both RAM lines below apply.',
     example: [
-      '# q8_0 KV is listed on the calculator — not measured on local-desktop.',
+      '# q8_0 KV is listed on the calculator — not measured on the local desktop.',
       './build-vk/bin/llama-server \\',
       '  -m ~/models/Qwen3.6-35B-A3B-UD-Q5_K_XL.gguf \\',
       '  -ngl 99 \\',
@@ -287,7 +287,7 @@ export const TUNING_KNOBS: TuningKnob[] = [
     title: 'Multi-GPU (--split-mode / --tensor-split)',
     flag: '--split-mode / -sm and --tensor-split / -ts',
     what:
-      '--split-mode layer (short -sm layer) is the documented llama.cpp multi-GPU default and the overnight 35B split on local-desktop. --split-mode row and --tensor-split are documented and not measured on local-desktop. Dual / multi-GPU already walks those flags — this page does not retell that guide.',
+      '--split-mode layer (short -sm layer) is the documented llama.cpp multi-GPU default and the overnight 35B split on the local desktop. --split-mode row and --tensor-split are documented and not measured on the local desktop. Dual / multi-GPU already walks those flags — this page does not retell that guide.',
     when:
       'Single card: skip these flags. Dual card: start at --split-mode layer only after you decide the file cannot stay on one GPU. One R9700 usually decodes the house 35B faster than the split — that comparison lives on One vs two GPUs.',
     tradeoff:
@@ -317,13 +317,13 @@ export const TUNING_KNOBS: TuningKnob[] = [
     title: 'Speculative decoding / draft models',
     flag: '-md / --model-draft (server README)',
     what:
-      'Speculative decoding runs a smaller draft model ahead of the target and accepts matching tokens. llama.cpp documents draft models on the server README. AMDai has not measured a draft pair on local-desktop. Draft GGUFs stay Q4 and up — Q3 draft is a labeled estimate and not a house pick. Q1/Q2 drafts stay off, including MTP heads.',
+      'Speculative decoding runs a smaller draft model ahead of the target and accepts matching tokens. llama.cpp documents draft models on the server README. AMDai has not measured a draft pair on the local desktop. Draft GGUFs stay Q4 and up — Q3 draft is a labeled estimate and not a house pick. Q1/Q2 drafts stay off, including MTP heads.',
     when:
       'Single card: only if both files fit, or the draft is the thing you are willing to spill. Dual card: do not invent a “draft on GPU 1, target on GPU 2” pin we did not record. Same-family drafts only. The house ban list still applies.',
     tradeoff:
       'A good draft can raise decode. A bad draft wastes VRAM and can lose. Draft tok/s is not measured yet. Quality of accepted tokens depends on the draft — we do not invent an accept-rate. Size both files on the calculator.',
     example: [
-      '# Shape only — draft decode is not measured on local-desktop. Draft stays Q4+.',
+      '# Shape only — draft decode is not measured on the local desktop. Draft stays Q4+.',
       './build-vk/bin/llama-server \\',
       '  -m ~/models/Qwen3.6-35B-A3B-UD-Q5_K_XL.gguf \\',
       '  -md ~/models/draft-Q4_K_M.gguf \\',
@@ -352,7 +352,7 @@ export const TUNING_KNOBS: TuningKnob[] = [
     what:
       'A power cap limits board watts below AMD’s published TBP. The Power guide already cites TBP and PSU minimums. This site does not invent an amd-smi set-power command or a tok/s-per-watt. amd-smi is the successor to rocm-smi on the cited ROCm 10.1 row.',
     when:
-      'Single card: cap only if the room, PSU, or noise needs it — read /power first. Dual card: two TBP numbers are not a dual-card PSU SKU we invent. Decode vs watts is not measured yet on local-desktop.',
+      'Single card: cap only if the room, PSU, or noise needs it — read /power first. Dual card: two TBP numbers are not a dual-card PSU SKU we invent. Decode vs watts is not measured yet on the local desktop.',
     tradeoff:
       'A lower cap can cut heat and fan noise. It can also cut clocks and decode. We do not invent either delta. TBP stays the AMD product-page cite.',
     example: [
@@ -445,7 +445,7 @@ export const TUNING_FAQ: TuningFaq[] = [
     id: 'structured-json',
     question: 'How do I force valid JSON from llama.cpp?',
     answer:
-      'That is constrained decoding, not a speed knob. Official --grammar / --json-schema and response_format live on /constrained-decoding. Grammar decode versus free-form is not measured on local-desktop — run Stack Lab grammar-ab/1.',
+      'That is constrained decoding, not a speed knob. Official --grammar / --json-schema and response_format live on /constrained-decoding. Grammar decode versus free-form is not measured on the local desktop — run Stack Lab grammar-ab/1.',
     links: [
       { href: '/constrained-decoding', label: 'Constrained decoding' },
       { href: '/setup/coding-assistant', label: 'Coding assistant' },
@@ -548,7 +548,7 @@ export function tuningMeasuredRows(cards: RunCard[]): TuningQuantRow[] {
       kind: 'measured',
       decode4k,
       decode32k,
-      note: 'Official local-desktop llama.cpp Vulkan, one R9700.',
+      note: 'Official local desktop llama.cpp Vulkan, one R9700.',
       runIds,
     };
   });
@@ -557,7 +557,7 @@ export function tuningMeasuredRows(cards: RunCard[]): TuningQuantRow[] {
     kind: 'q3-estimate',
     decode4k: TUNING_UNMEASURED,
     decode32k: TUNING_UNMEASURED,
-    note: `${COMPARE_Q3_CITE}. Q3 is a labeled estimate — not a local-desktop run.`,
+    note: `${COMPARE_Q3_CITE}. Q3 is a labeled estimate — not a local desktop run.`,
     runIds: [],
   });
   return rows;

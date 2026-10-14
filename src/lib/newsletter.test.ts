@@ -93,7 +93,7 @@ describe('newsletter digest', () => {
           title: 'UD-Q5_K_XL 4K llama.cpp card',
           href: 'https://amdai.net/results/local-desktop-20261012-2311-35b-udq5kxl-1gpu-4k-llamacpp-f16',
           date: '2026-10-12',
-          summary: 'Official amdai-bench/run@1 card on local-desktop.',
+          summary: 'Official amdai-bench/run@1 card on the local desktop.',
         },
         {
           topic: 'guides',

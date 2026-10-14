@@ -54,7 +54,7 @@ const payload = JSON.stringify({
       <a class="underline decoration-accent/40 underline-offset-2" href="/gpus/rx-7900-xtx">RX 7900 XTX</a>,
       <a class="underline decoration-accent/40 underline-offset-2" href="/gpus/rx-7900-xt">RX 7900 XT</a>,
       <a class="underline decoration-accent/40 underline-offset-2" href="/gpus/rx-7800-xt">RX 7800 XT</a>
-      — estimate sheets, not local-desktop runs.
+      — estimate sheets, not local desktop runs.
       Vet a used listing:
       <a class="underline decoration-accent/40 underline-offset-2" href="/guides/buying-used-radeon">Buying a used Radeon</a>.
       Two cards:
@@ -127,7 +127,7 @@ const payload = JSON.stringify({
           <p class="mt-2 text-sm text-muted">{tier.vram_note}</p>
           {tier.gpus.some((id) => isConsumerRecipeGpu(id)) && (
             <p class="mt-2 text-sm text-muted">
-              Recipe sheets (estimates, not local-desktop):
+              Recipe sheets (estimates, not local desktop):
               {tier.gpus.filter(isConsumerRecipeGpu).map((id, index, list) => (
                 <>
                   {index > 0 ? (index === list.length - 1 ? ' and ' : ', ') : ' '}

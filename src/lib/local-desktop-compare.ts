@@ -1,5 +1,5 @@
 /**
- * Consumer compare pages for the official local-desktop 35B llama.cpp sweep.
+ * Consumer compare pages for the official local desktop 35B llama.cpp sweep.
  * Numbers come from validated amdai-bench/run@1 cards. Q3 is estimate only.
  */
 
@@ -281,7 +281,7 @@ function estimateColumn(quant: typeof COMPARE_Q3, context: number, gpuCount: Com
     ramFull: kitLineFromNeed(need, 'atFullContext'),
     href: '/calculator',
     runIds: [],
-    note: `${COMPARE_Q3_CITE}. Q3 is an option labeled estimate — not a local-desktop run.`,
+    note: `${COMPARE_Q3_CITE}. Q3 is an option labeled estimate — not a local desktop run.`,
   };
 }
 
@@ -391,7 +391,7 @@ export function compareHubCards() {
       href: '/compare/q4-q5-q6',
       kicker: 'Quant',
       title: 'Q6 vs Q5 vs Q4 — plus a Q3 estimate',
-      body: 'Same 35B family, 1-GPU or split. Quality vs speed vs VRAM. Q3 is a labeled estimate (Unsloth UD-Q3_K_XL listing), not a local-desktop run.',
+      body: 'Same 35B family, 1-GPU or split. Quality vs speed vs VRAM. Q3 is a labeled estimate (Unsloth UD-Q3_K_XL listing), not a local desktop run.',
     },
     {
       href: '/compare/radeon-vs-nvidia',
@@ -409,13 +409,13 @@ export function compareHubCards() {
       href: '/compare/vulkan-vs-rocm',
       kicker: 'Backend',
       title: 'llama.cpp Vulkan vs ROCm (HIP)',
-      body: 'Why the house 35B daily driver is a Vulkan build. HIP is the cited second compile. Measured Vulkan cells only; HIP stays pending until a local-desktop card lands. Q3 is a labeled estimate.',
+      body: 'Why the house 35B daily driver is a Vulkan build. HIP is the cited second compile. Measured Vulkan cells only; HIP stays pending until a local desktop card lands. Q3 is a labeled estimate.',
     },
     {
       href: '/long-context',
       kicker: 'Context',
       title: 'Long context on Radeon',
-      body: '128K–262K from local-desktop 35B llama.cpp cards. f16 KV default. Empty cells stay not measured yet. Q3 is a labeled estimate. No planted-token recall score.',
+      body: '128K–262K from local desktop 35B llama.cpp cards. f16 KV default. Empty cells stay not measured yet. Q3 is a labeled estimate. No planted-token recall score.',
     },
   ];
 }

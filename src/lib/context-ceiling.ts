@@ -94,7 +94,7 @@ export const CX_LEAD = `
   (amdai-bench ${CX_BENCH_ID}, UI ${CX_UI}, deeplink names context-ceiling
   and max-context). That pack is not an allowlisted Open-in-Stack-Lab deep
   link — open the planner, then ingest a ${REPORT_SCHEMA} pack. AMDai has
-  not ingested a ${CX_PACK} card on local-desktop, so the finder winner, first
+  not ingested a ${CX_PACK} card on the local desktop, so the finder winner, first
   fail reason, and per-step VRAM stay ${CX_UNMEASURED}. House overnight
   llama-bench did run ${CX_NATIVE} on ${CX_HOUSE_FILE}, llama.cpp Vulkan,
   one R9700, f16 KV — that is not a ctx-ceiling winner. ${COMPARE_Q3} is a
@@ -145,7 +145,7 @@ export const CX_HOUSE = `# House daily driver as recorded (262144 ran on overnig
   -m /path/to/nvme/${CX_HOUSE_FILE} \\
   ${CX_HOUSE_SERVER_FLAGS}`;
 
-export const CX_LEAN = `# Lean / short-context load — the kit line, not a local-desktop pin.
+export const CX_LEAN = `# Lean / short-context load — the kit line, not a local desktop pin.
 # Size -c on the calculator before you copy it. 4096 is the house 4K llama-bench window.
 ./build-vk/bin/llama-server \\
   -m /path/to/nvme/${CX_HOUSE_FILE} \\
@@ -341,7 +341,7 @@ export const CX_FAQ: CxFaq[] = [
     id: 'what-is-ceiling',
     question: "What's the biggest context I can run on a Radeon GPU with llama.cpp?",
     answer:
-      'Native max is the model-card window (Qwen3.6-35B-A3B lists 262144). The real ceiling is the largest -c that still loads and serves on your box. Stack Lab ctx-ceiling/1 (amdai-bench ab-ctx-ceiling) climbs a lean ladder on one GPU and on all GPUs and stops at the first OOM or load failure. AMDai has not ingested a winner on local-desktop — not yet measured. House overnight llama-bench did run 262144 on UD-Q5, one R9700, f16 KV. Q3 is a labeled estimate. llama.cpp first.',
+      'Native max is the model-card window (Qwen3.6-35B-A3B lists 262144). The real ceiling is the largest -c that still loads and serves on your box. Stack Lab ctx-ceiling/1 (amdai-bench ab-ctx-ceiling) climbs a lean ladder on one GPU and on all GPUs and stops at the first OOM or load failure. AMDai has not ingested a winner on the local desktop — not yet measured. House overnight llama-bench did run 262144 on UD-Q5, one R9700, f16 KV. Q3 is a labeled estimate. llama.cpp first.',
     links: [
       { href: '/context-ceiling', label: 'Context ceiling' },
       { href: '/long-context', label: 'Long context' },

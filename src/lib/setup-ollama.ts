@@ -1,6 +1,6 @@
 /**
  * Cited Ollama first-run on Radeon.
- * Not measured on local-desktop. Official sources only: Ollama docs / GPU page,
+ * Not measured on the local desktop. Official sources only: Ollama docs / GPU page,
  * AMD ROCm install docs, llama.cpp docs.
  * Do not invent Ollama versions, tok/s, prices, or a library Q6/Q5/Q3 tag.
  */
@@ -9,7 +9,7 @@ import { RAM_FULL_LABEL, RAM_MIN_LABEL } from './ram-surfaces';
 import { COMPARE_Q3, COMPARE_Q3_CITE } from './local-desktop-compare';
 
 export const SETUP_OLLAMA_PUBLISHED = '2026-10-14';
-export const SETUP_OLLAMA_CITED_LABEL = 'Cited, not measured on local-desktop';
+export const SETUP_OLLAMA_CITED_LABEL = 'Cited, not measured on the local desktop';
 
 export const SETUP_OLLAMA_HOST = '127.0.0.1';
 export const SETUP_OLLAMA_PORT = 11434;
@@ -104,7 +104,7 @@ export const SETUP_OLLAMA_TRACKS: SetupOllamaTrack[] = [
       Ollama is a packaged llama.cpp / ROCm (or Vulkan) runtime you do not compile.
       The measured path on this site is still a llama.cpp tree you built on Ubuntu
       24.04+ — Vulkan first, HIP second. Use that when you want the house flags
-      (-ngl 99, -c 262144, f16 KV, :8080) and the local-desktop cards. Ollama is the
+      (-ngl 99, -c 262144, f16 KV, :8080) and the local desktop cards. Ollama is the
       easy on-ramp. Prefer /setup and /backends/llamacpp when gfx1201 tensiles
       miss, Windows ROCm stays on CPU, or you need a matching recipe. Link
       /rocm/vulkan-hip. Not measured inside Ollama.
@@ -122,7 +122,7 @@ export const SETUP_OLLAMA_TRACKS: SetupOllamaTrack[] = [
       does not name the R9700 or 9070 series. Vulkan is additional support and
       is enabled by default when that backend is installed. Prove the GPU with
       ollama ps (100% GPU vs 100% CPU) and a meter — silent CPU fallback is the
-      cited failure. Not measured on local-desktop.
+      cited failure. Not measured on the local desktop.
     `.replace(/\s+/g, ' ').trim(),
   },
 ];
@@ -133,28 +133,28 @@ export const SETUP_OLLAMA_QUANTS: SetupOllamaQuant[] = [
     role: 'Higher-quality 35B sibling',
     ollama:
       'No qwen3.6 Q6_K tag on the official Ollama library tags page we checked. Import the Unsloth Q6_K GGUF already sized on /models/qwen36: FROM /path/to/Qwen3.6-35B-A3B-Q6_K.gguf then ollama create qwen36-q6. Not a speed measured inside Ollama.',
-    note: 'Measured on llama.cpp Vulkan on local-desktop, not inside Ollama: Q6_K 1-GPU 4K decode 103.23 tok/s (23:55 card). 32K+ is partly on DDR5.',
+    note: 'Measured on llama.cpp Vulkan on the local desktop, not inside Ollama: Q6_K 1-GPU 4K decode 103.23 tok/s (23:55 card). 32K+ is partly on DDR5.',
     estimate: false,
   },
   {
     quant: 'UD-Q5_K_XL',
     role: 'House default file on one R9700',
     ollama: `Import the house GGUF so the quant is the one we measure: FROM ~/models/${SETUP_OLLAMA_HOUSE_FILE} then ollama create qwen36-q5. Official library latest / ${SETUP_OLLAMA_LIBRARY} is 23–24 GB — do not assume that blob is UD-Q5_K_XL.`,
-    note: 'Measured on llama.cpp Vulkan on local-desktop, not inside Ollama: 102.39 tok/s decode at 4K, 90.52 at 32K, 66.43 at 128K, 44.4 at 256K. Peak VRAM 25.97 / 29.34 GB; peak RAM 37.32 / 42.9 GB.',
+    note: 'Measured on llama.cpp Vulkan on the local desktop, not inside Ollama: 102.39 tok/s decode at 4K, 90.52 at 32K, 66.43 at 128K, 44.4 at 256K. Peak VRAM 25.97 / 29.34 GB; peak RAM 37.32 / 42.9 GB.',
     estimate: false,
   },
   {
     quant: 'Q4_K_M',
     role: 'Official Ollama library 35B Q4',
     ollama: `Cited library tag ${SETUP_OLLAMA_LIBRARY_Q4} (24 GB, 256K) on ollama.com/library/qwen3.6/tags. ollama pull ${SETUP_OLLAMA_LIBRARY_Q4}. Same family as ${SETUP_OLLAMA_LIBRARY}.`,
-    note: 'Measured on llama.cpp Vulkan on local-desktop, not inside Ollama: Q4_K_M 32K decode 117.69 tok/s. Still check both RAM lines.',
+    note: 'Measured on llama.cpp Vulkan on the local desktop, not inside Ollama: Q4_K_M 32K decode 117.69 tok/s. Still check both RAM lines.',
     estimate: false,
   },
   {
     quant: COMPARE_Q3,
     role: 'Cited Q3 option — labeled estimate',
     ollama: `${COMPARE_Q3_CITE}. No qwen3.6 Q3 tag on the official library tags page we checked. Import the listed Unsloth Q3 GGUF from /models/qwen36 if you need that size. We do not invent an Ollama Q3 speed. Q1/Q2 stay off.`,
-    note: 'Labeled estimate unless a run card exists — none does for 35B Q3 on local-desktop.',
+    note: 'Labeled estimate unless a run card exists — none does for 35B Q3 on the local desktop.',
     estimate: true,
   },
 ];
@@ -163,7 +163,7 @@ export const SETUP_OLLAMA_STEPS: SetupOllamaStep[] = [
   {
     id: 'linux',
     title: 'Linux install on Ubuntu 24.04+',
-    body: `Official Linux install: ${SETUP_OLLAMA_INSTALL}. Manual tarball is also documented. AMD GPU extra: ${SETUP_OLLAMA_ROCM_PKG}. gpu.mdx: Ollama requires the AMD ROCm v7 driver on Linux — install or upgrade with amdgpu-install from AMD’s ROCm docs. Ubuntu 24.04.5 is the measured AMDai llama.cpp OS; that is not an Ollama test claim. Start with ollama serve (or systemctl start ollama). Confirm ollama -v and curl -s ${SETUP_OLLAMA_SERVER}/api/tags. Keep the bind on 127.0.0.1 unless you set OLLAMA_HOST. Fedora and Arch can run the same script as a cited try — not verified on our rig. Not measured on local-desktop.`,
+    body: `Official Linux install: ${SETUP_OLLAMA_INSTALL}. Manual tarball is also documented. AMD GPU extra: ${SETUP_OLLAMA_ROCM_PKG}. gpu.mdx: Ollama requires the AMD ROCm v7 driver on Linux — install or upgrade with amdgpu-install from AMD’s ROCm docs. Ubuntu 24.04.5 is the measured AMDai llama.cpp OS; that is not an Ollama test claim. Start with ollama serve (or systemctl start ollama). Confirm ollama -v and curl -s ${SETUP_OLLAMA_SERVER}/api/tags. Keep the bind on 127.0.0.1 unless you set OLLAMA_HOST. Fedora and Arch can run the same script as a cited try — not verified on our rig. Not measured on the local desktop.`,
     links: [
       { href: '/setup', label: 'Ubuntu setup (measured)' },
       { href: '/setup/fedora', label: 'Fedora setup' },
@@ -175,7 +175,7 @@ export const SETUP_OLLAMA_STEPS: SetupOllamaStep[] = [
   {
     id: 'windows',
     title: 'Windows note — short, then back to Linux',
-    body: 'Ollama documents a native Windows app (Windows 10 22H2+). API on http://localhost:11434. Windows ROCm needs an AMD ROCm v7 / HIP7-capable driver, or a Vulkan-capable Radeon driver. Official Windows ROCm card table is 7900 / 7800 / 7700 / 7600 and W79xx — not the R9700 or 9070 series. gpu.mdx Windows table matches that shorter list. Cited Windows R9700 pain: Ollama detects the card, fails to init ROCm, falls back to CPU — /rocm-problems/ollama-r9700-windows. Workaround on that page: llama.cpp Vulkan or OLLAMA_VULKAN=1. Do not invent HSA_OVERRIDE on gfx1201. Official 35B cards on this site are Ubuntu llama.cpp, not Windows Ollama. Not measured on local-desktop.',
+    body: 'Ollama documents a native Windows app (Windows 10 22H2+). API on http://localhost:11434. Windows ROCm needs an AMD ROCm v7 / HIP7-capable driver, or a Vulkan-capable Radeon driver. Official Windows ROCm card table is 7900 / 7800 / 7700 / 7600 and W79xx — not the R9700 or 9070 series. gpu.mdx Windows table matches that shorter list. Cited Windows R9700 pain: Ollama detects the card, fails to init ROCm, falls back to CPU — /rocm-problems/ollama-r9700-windows. Workaround on that page: llama.cpp Vulkan or OLLAMA_VULKAN=1. Do not invent HSA_OVERRIDE on gfx1201. Official 35B cards on this site are Ubuntu llama.cpp, not Windows Ollama. Not measured on the local desktop.',
     links: [
       { href: '/setup/windows', label: 'Windows setup' },
       { href: '/rocm-problems/ollama-r9700-windows', label: 'Ollama R9700 Windows' },
@@ -211,7 +211,7 @@ export const SETUP_OLLAMA_STEPS: SetupOllamaStep[] = [
   {
     id: 'nvme',
     title: 'Stage models on fast NVMe, not a slow bulk mount',
-    body: 'Ollama FAQ: Linux default store is /usr/share/ollama/.ollama/models; Windows is %USERPROFILE%\\.ollama\\models. Point OLLAMA_MODELS at a fast NVMe directory (the ollama user needs write on Linux — chown -R ollama:ollama). A USB or spinning bulk mount will stall pulls and swaps; we do not invent a GB/s. Size the file on the calculator before the pull. Not measured on local-desktop.',
+    body: 'Ollama FAQ: Linux default store is /usr/share/ollama/.ollama/models; Windows is %USERPROFILE%\\.ollama\\models. Point OLLAMA_MODELS at a fast NVMe directory (the ollama user needs write on Linux — chown -R ollama:ollama). A USB or spinning bulk mount will stall pulls and swaps; we do not invent a GB/s. Size the file on the calculator before the pull. Not measured on the local desktop.',
     links: [
       { href: '/calculator', label: 'Calculator' },
       { href: '/gpus/r9700', label: 'R9700' },
@@ -221,7 +221,7 @@ export const SETUP_OLLAMA_STEPS: SetupOllamaStep[] = [
   {
     id: 'context',
     title: 'Context, parallel, and KV — Ollama multiplies per request',
-    body: `Ollama FAQ default context is 4096 tokens — not the house 262144. Override with OLLAMA_CONTEXT_LENGTH=8192 ollama serve, /set parameter num_ctx, or API options.num_ctx. Parallel requests grow that window: FAQ example, 2K context × 4 parallel = 8K plus extra allocation. Required RAM scales by OLLAMA_NUM_PARALLEL × OLLAMA_CONTEXT_LENGTH. That is why the calculator’s Ollama backend sizes KV per request — open /calculator and pick Ollama. Flash Attention: OLLAMA_FLASH_ATTENTION=1 to force on, 0 to disable. KV type: OLLAMA_KV_CACHE_TYPE (default f16; q8_0 or q4_0 only with Flash Attention). House llama.cpp uses f16 KV. The calculator prints ${RAM_MIN_LABEL} (rounded kit estimate with a breakdown — 192 or 256 GB when a 35B file spills) and ${RAM_FULL_LABEL} when we have a measured llama.cpp peak (37.32 GB at 4K, 42.9 GB at 256K on UD-Q5). Those peaks are llama.cpp on local-desktop, not Ollama. Label estimate unless measured.`,
+    body: `Ollama FAQ default context is 4096 tokens — not the house 262144. Override with OLLAMA_CONTEXT_LENGTH=8192 ollama serve, /set parameter num_ctx, or API options.num_ctx. Parallel requests grow that window: FAQ example, 2K context × 4 parallel = 8K plus extra allocation. Required RAM scales by OLLAMA_NUM_PARALLEL × OLLAMA_CONTEXT_LENGTH. That is why the calculator’s Ollama backend sizes KV per request — open /calculator and pick Ollama. Flash Attention: OLLAMA_FLASH_ATTENTION=1 to force on, 0 to disable. KV type: OLLAMA_KV_CACHE_TYPE (default f16; q8_0 or q4_0 only with Flash Attention). House llama.cpp uses f16 KV. The calculator prints ${RAM_MIN_LABEL} (rounded kit estimate with a breakdown — 192 or 256 GB when a 35B file spills) and ${RAM_FULL_LABEL} when we have a measured llama.cpp peak (37.32 GB at 4K, 42.9 GB at 256K on UD-Q5). Those peaks are llama.cpp on the local desktop, not Ollama. Label estimate unless measured.`,
     links: [
       { href: '/calculator', label: 'Calculator' },
       { href: '/long-context', label: 'Long context' },
@@ -232,7 +232,7 @@ export const SETUP_OLLAMA_STEPS: SetupOllamaStep[] = [
   {
     id: 'ps',
     title: 'Prove the GPU, then point a harness at /v1',
-    body: `ollama ps is the official check: 100% GPU, 100% CPU, or a split. curl -s ${SETUP_OLLAMA_SERVER}/api/tags. OpenAI-shaped local path is ${SETUP_OLLAMA_V1} (docs show /v1/chat/completions and /v1/responses). Point Hermes, Open WebUI, Aider, Cline, or Continue at that base — /harnesses/connect and /setup/coding-assistant. House Hermes on local-desktop talks to llama-server :8080, not a measured Ollama attach. Keep 127.0.0.1 unless you mean the LAN (OLLAMA_HOST). Do not present llama.cpp tok/s as an Ollama result.`,
+    body: `ollama ps is the official check: 100% GPU, 100% CPU, or a split. curl -s ${SETUP_OLLAMA_SERVER}/api/tags. OpenAI-shaped local path is ${SETUP_OLLAMA_V1} (docs show /v1/chat/completions and /v1/responses). Point Hermes, Open WebUI, Aider, Cline, or Continue at that base — /harnesses/connect and /setup/coding-assistant. House Hermes on the local desktop talks to llama-server :8080, not a measured Ollama attach. Keep 127.0.0.1 unless you mean the LAN (OLLAMA_HOST). Do not present llama.cpp tok/s as an Ollama result.`,
     links: [
       { href: '/harnesses/connect', label: 'Connect a harness' },
       { href: '/harnesses/hermes', label: 'Hermes' },
@@ -322,7 +322,7 @@ export function assertSetupOllamaValid(): string[] {
   const errors: string[] = [];
   const blob = setupOllamaBlob();
   const hrefs = new Set(setupOllamaHrefs());
-  if (SETUP_OLLAMA_CITED_LABEL !== 'Cited, not measured on local-desktop') errors.push('cited label drifted');
+  if (SETUP_OLLAMA_CITED_LABEL !== 'Cited, not measured on the local desktop') errors.push('cited label drifted');
   if (SETUP_OLLAMA_TRACKS.length !== 2) errors.push('need llama.cpp and Ollama tracks');
   if (!SETUP_OLLAMA_TRACKS.find((row) => row.id === 'llamacpp')?.recommend) {
     errors.push('llama.cpp should be the try');

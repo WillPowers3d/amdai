@@ -1,7 +1,7 @@
 /**
  * Cited llama-server parallel slots (-np) on Radeon.
  * Official source: llama.cpp server README (-np / --parallel, --kv-unified-per-slot).
- * Stack Lab ships concurrency-ab/1 (amdai-bench ab-concurrency). No -np tok/s on local-desktop.
+ * Stack Lab ships concurrency-ab/1 (amdai-bench ab-concurrency). No -np tok/s on the local desktop.
  * Two-card copies stay on /qwen36-dual — those cards are not one-GPU -np.
  * No invented tok/s, prices, or Open-in-Stack-Lab pack deep links. llama.cpp Vulkan first.
  */
@@ -12,7 +12,7 @@ import { COMPARE_Q3, COMPARE_Q3_CITE } from './local-desktop-compare';
 
 export const NP_PATH = '/concurrency-ab';
 export const NP_PUBLISHED = '2026-10-14';
-export const NP_CITED_LABEL = 'Cited llama.cpp --parallel · slots not measured on local-desktop';
+export const NP_CITED_LABEL = 'Cited llama.cpp --parallel · slots not measured on the local desktop';
 export const NP_PACK = 'concurrency-ab/1';
 export const NP_UNMEASURED = 'not measured yet — run Stack Lab concurrency-ab/1';
 

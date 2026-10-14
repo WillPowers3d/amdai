@@ -1,7 +1,7 @@
 /**
  * Cited guide: speculative decoding on a Radeon GPU with llama.cpp.
  * Reuse /tuning, /backends, /glossary, /models, /long-context, /multi-gpu.
- * Draft decode is not measured on local-desktop. Draft GGUFs stay Q4+.
+ * Draft decode is not measured on the local desktop. Draft GGUFs stay Q4+.
  * Main-model Q3 is a labeled estimate. Q1/Q2 and MTP heads stay off.
  */
 
@@ -33,8 +33,8 @@ export const SPEC_PATH = '/speculative-decoding';
 export const SPEC_NAME = 'Speculative decoding on Radeon';
 export const SPEC_HEADING = 'Speculative decoding on a Radeon GPU with llama.cpp';
 export const SPEC_PUBLISHED = '2026-10-14';
-export const SPEC_CITED_LABEL = 'Cited llama.cpp flags · draft decode not measured on local-desktop';
-export const SPEC_UNMEASURED = 'not measured yet on local-desktop — run the Stack Lab speculative decoding A/B';
+export const SPEC_CITED_LABEL = 'Cited llama.cpp flags · draft decode not measured on the local desktop';
+export const SPEC_UNMEASURED = 'not measured yet on the local desktop — run the Stack Lab speculative decoding A/B';
 export const SPEC_DRAFT_RULE = 'Draft / speculative models stay Q4 and up';
 
 export const LLAMA_CPP = officialLinks.llamaCpp;
@@ -65,10 +65,10 @@ export type SpecFaq = {
 
 export const SPEC_TITLE = SPEC_HEADING;
 export const SPEC_DESCRIPTION =
-  'Speculative decoding on Radeon with llama.cpp. Cited -md flags. Measured 35B only. Draft speed not measured on local-desktop. Q3 is a labeled estimate.';
+  'Speculative decoding on Radeon with llama.cpp. Cited -md flags. Measured 35B only. Draft speed not measured on the local desktop. Q3 is a labeled estimate.';
 
 export const SPEC_LEAD =
-  `A draft model guesses the next tokens; the target accepts or rejects them. llama.cpp documents that path on the server README. AMDai has not measured a draft pair on local-desktop, so every speed-up cell stays ${SPEC_UNMEASURED}. House daily driver is ${COMPARE_MODEL} UD-Q5_K_XL on llama.cpp Vulkan, one R9700, 262144 context, f16 KV — decode in the table, no draft. Hermes’s Flash path is Strata UD-Q6_K_XL with no MTP (cited pair ~32.6 tok/s versus llama.cpp ~16 tok/s at 262K on /models/flash). ${SPEC_DRAFT_RULE}. ${COMPARE_Q3} is a labeled estimate for the main file (${COMPARE_Q3_CITE}). Q1/Q2 stay off, including MTP heads. vLLM and other engines stay on /backends — we do not invent a speculative vLLM 35B number.`;
+  `A draft model guesses the next tokens; the target accepts or rejects them. llama.cpp documents that path on the server README. AMDai has not measured a draft pair on the local desktop, so every speed-up cell stays ${SPEC_UNMEASURED}. House daily driver is ${COMPARE_MODEL} UD-Q5_K_XL on llama.cpp Vulkan, one R9700, 262144 context, f16 KV — decode in the table, no draft. Hermes’s Flash path is Strata UD-Q6_K_XL with no MTP (cited pair ~32.6 tok/s versus llama.cpp ~16 tok/s at 262K on /models/flash). ${SPEC_DRAFT_RULE}. ${COMPARE_Q3} is a labeled estimate for the main file (${COMPARE_Q3_CITE}). Q1/Q2 stay off, including MTP heads. vLLM and other engines stay on /backends — we do not invent a speculative vLLM 35B number.`;
 
 export const SPEC_WHAT =
   'The draft is a smaller same-family GGUF that runs ahead of the target. llama.cpp proposes draft tokens, then the target checks them in one forward pass. Accepted tokens are free decode; rejected tokens fall back to the target. Acceptance is a measured rate on your box, not a number we invent. A bad draft wastes VRAM and can lose. Size both files plus KV before you launch.';
@@ -80,10 +80,10 @@ export const SPEC_WHEN_NOT =
   `It often does not help on MoE A3B-class models that already decode fast on one R9700 — the house 35B is that class. Low acceptance burns draft VRAM for no tok/s. Dual-card split of a file that already fits one card is often slower at short context (measured split tax on /compare/one-vs-two-gpu). We do not invent a “draft on GPU 1, target on GPU 2” pin. Flash stays the Strata no-MTP path, not a draft-model try.`;
 
 export const SPEC_HOUSE =
-  `amdai’s default is ${COMPARE_MODEL} Unsloth UD-Q5_K_XL, llama.cpp Vulkan, one R9700, 262144 context, f16 KV. That launch has no -md. Hermes’s Flash runs on Strata UD-Q6_K_XL with no MTP. Do not turn on a 2-bit / Q2-class MTP head to “make Flash faster.”`;
+  `the house default is ${COMPARE_MODEL} Unsloth UD-Q5_K_XL, llama.cpp Vulkan, one R9700, 262144 context, f16 KV. That launch has no -md. Hermes’s Flash runs on Strata UD-Q6_K_XL with no MTP. Do not turn on a 2-bit / Q2-class MTP head to “make Flash faster.”`;
 
 export const SPEC_LAUNCH = [
-  '# Shape only — draft decode is not measured on local-desktop. Draft stays Q4+.',
+  '# Shape only — draft decode is not measured on the local desktop. Draft stays Q4+.',
   '# Pick a real Q4+ same-family draft from the model card. Do not invent a filename.',
   './build-vk/bin/llama-server \\',
   '  -m ~/models/Qwen3.6-35B-A3B-UD-Q5_K_XL.gguf \\',
@@ -154,7 +154,7 @@ export const SPEC_FAQ: SpecFaq[] = [
   {
     id: 'have-we-measured-it',
     question: 'Did AMDai measure a draft speed-up on the R9700?',
-    answer: `No. Draft decode and acceptance stay ${SPEC_UNMEASURED}. Baseline 35B decode (no draft) is the official local-desktop llama.cpp Vulkan sweep in the table. Open the Stack Lab planner, then record an amdai-bench card.`,
+    answer: `No. Draft decode and acceptance stay ${SPEC_UNMEASURED}. Baseline 35B decode (no draft) is the official local desktop llama.cpp Vulkan sweep in the table. Open the Stack Lab planner, then record an amdai-bench card.`,
     links: [
       { href: '/stack-lab', label: 'Stack Lab' },
       { href: '/amdai-bench', label: 'amdai-bench' },
@@ -280,7 +280,7 @@ export function specMeasuredRows(cards: RunCard[]): SpecQuantRow[] {
       kind: 'measured',
       decode4k: at4k?.one.decode ?? SPEC_UNMEASURED,
       decode32k: at32k?.one.decode ?? SPEC_UNMEASURED,
-      note: 'Official local-desktop llama.cpp Vulkan, one R9700. No draft.',
+      note: 'Official local desktop llama.cpp Vulkan, one R9700. No draft.',
       runIds: [...new Set([...(at4k?.one.runIds ?? []), ...(at32k?.one.runIds ?? [])])],
     };
   });
@@ -289,7 +289,7 @@ export function specMeasuredRows(cards: RunCard[]): SpecQuantRow[] {
     kind: 'q3-estimate',
     decode4k: 'not measured',
     decode32k: 'not measured',
-    note: `${COMPARE_Q3_CITE}. Q3 is a labeled estimate — not a local-desktop run, not a draft.`,
+    note: `${COMPARE_Q3_CITE}. Q3 is a labeled estimate — not a local desktop run, not a draft.`,
     runIds: [],
   });
   return rows;

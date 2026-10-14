@@ -31,7 +31,7 @@ describe('Thinking / reasoning mode on Radeon', () => {
     assert.equal(THINK_TITLE, 'Thinking / reasoning mode on Radeon');
     assert.ok(THINK_DESCRIPTION.length >= 70);
     assert.ok(THINK_DESCRIPTION.length <= 160);
-    assert.equal(THINK_CITED_LABEL, 'Cited llama.cpp + Qwen3.6 card · tokens not measured on local-desktop');
+    assert.equal(THINK_CITED_LABEL, 'Cited llama.cpp + Qwen3.6 card · tokens not measured on the local desktop');
     assert.ok(THINK_STEPS.length >= 7);
     assert.ok(THINK_SOURCES.every((row) => row.href.startsWith('https://')));
     assert.match(THINK_OFF, /--reasoning off/);

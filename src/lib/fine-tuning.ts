@@ -8,7 +8,7 @@ import { CONSUMER_NAV_LINKS } from './consumer-gpu';
 import { RAM_FULL_LABEL, RAM_MIN_LABEL } from './ram-surfaces';
 
 export const FINE_TUNING_PUBLISHED = '2026-10-14';
-export const FINE_TUNING_CITED_LABEL = 'Cited, not measured on local-desktop';
+export const FINE_TUNING_CITED_LABEL = 'Cited, not measured on the local desktop';
 export const FINE_TUNING_SPEED_LABEL = 'not yet measured on our R9700s';
 
 export type FineTuningLink = { href: string; label: string };
@@ -65,7 +65,7 @@ export const FINE_TUNING_LEAD = `
   Fine-tuning here means LoRA or QLoRA (4-bit) on a consumer Radeon, then
   export back to a GGUF for llama.cpp. PyTorch ROCm wheels exist. Tooling
   that officially documents AMD or ROCm support is listed with its cite.
-  Anything a tool does not state, or that we have not run on local-desktop, stays
+  Anything a tool does not state, or that we have not run on the local desktop, stays
   not verified on Radeon. Training speed is ${FINE_TUNING_SPEED_LABEL}.
 `.replace(/\s+/g, ' ').trim();
 
@@ -161,7 +161,7 @@ export const FINE_TUNING_TOOLS: FineTuningTool[] = [
 export const FINE_TUNING_VRAM_NOTE = `
   Unsloth publishes an absolute-minimum VRAM table: QLoRA is 4-bit, LoRA is
   16-bit, and “sometimes more VRAM is required depending on the model.”
-  Those numbers are Unsloth’s table, not a local-desktop measurement and not a
+  Those numbers are Unsloth’s table, not a local desktop measurement and not a
   consumer-Radeon run. AMD’s Radeon playbook (Gemma 3 4B) says LoRA and
   QLoRA need at least 16 GB dedicated GPU memory and 32 GB system RAM, and
   that Linux does not fall back to shared GPU memory when VRAM runs out.
@@ -253,7 +253,7 @@ export const FINE_TUNING_STEPS: FineTuningStep[] = [
     id: 'windows',
     title: 'Windows is a second path',
     body:
-      'Inference first-run on Windows is /setup/windows — llama.cpp Vulkan, not measured on local-desktop. WSL2 ROCm is a 10.1 technical preview at /setup/wsl. Unsloth’s AMD page lists Windows + WSL + Linux for RDNA 3/4. AMD’s Radeon playbook: bitsandbytes is not well supported on Windows, so QLoRA is Linux-only there; Windows uses LoRA or full fine-tuning. Unsloth: AMD multi-GPU training is Linux-only. We have not measured training on Windows or WSL.',
+      'Inference first-run on Windows is /setup/windows — llama.cpp Vulkan, not measured on the local desktop. WSL2 ROCm is a 10.1 technical preview at /setup/wsl. Unsloth’s AMD page lists Windows + WSL + Linux for RDNA 3/4. AMD’s Radeon playbook: bitsandbytes is not well supported on Windows, so QLoRA is Linux-only there; Windows uses LoRA or full fine-tuning. Unsloth: AMD multi-GPU training is Linux-only. We have not measured training on Windows or WSL.',
     links: [
       { href: '/setup/windows', label: 'Windows setup' },
       { href: '/setup/wsl', label: 'WSL2 setup' },
@@ -298,7 +298,7 @@ export const FINE_TUNING_FIT_ROWS: FineTuningFitRow[] = [
       { href: '/gpus/rx-7900-xtx', label: 'RX 7900 XTX' },
       { href: '/gpus/rx-7900-xt', label: 'RX 7900 XT' },
     ],
-    fit: 'Unsloth 27B QLoRA minimum is 22 GB. Unsloth 27B LoRA is 64 GB — not this class. AMD playbook LoRA “typical VRAM” for its 4B example is 24–32 GB. Confirm the tool’s own memory notes. Labeled estimate. No cited local-desktop training run.',
+    fit: 'Unsloth 27B QLoRA minimum is 22 GB. Unsloth 27B LoRA is 64 GB — not this class. AMD playbook LoRA “typical VRAM” for its 4B example is 24–32 GB. Confirm the tool’s own memory notes. Labeled estimate. No cited local desktop training run.',
     speed: FINE_TUNING_SPEED_LABEL,
   },
   {
@@ -477,7 +477,7 @@ export function assertFineTuningValid(): string[] {
   const errors: string[] = [];
   const blob = fineTuningBlob();
   const hrefs = new Set(fineTuningHrefs());
-  if (FINE_TUNING_CITED_LABEL !== 'Cited, not measured on local-desktop') errors.push('cited label drifted');
+  if (FINE_TUNING_CITED_LABEL !== 'Cited, not measured on the local desktop') errors.push('cited label drifted');
   if (FINE_TUNING_SPEED_LABEL !== 'not yet measured on our R9700s') errors.push('speed label drifted');
   if (FINE_TUNING_DESCRIPTION.length < 70 || FINE_TUNING_DESCRIPTION.length > 160) {
     errors.push('description length');

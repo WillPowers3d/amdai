@@ -173,7 +173,7 @@ export function flashCiteRows(cards: RunCard[]): FlashCiteRow[] {
       runHref: runPath(card.run_id),
       citedPair,
       note: citedPair
-        ? 'Prior first-party Flash Q6 on local-desktop. Card count was not published; recorded on the two-R9700 host.'
+        ? 'Prior first-party Flash Q6 on the local desktop. Card count was not published; recorded on the two-R9700 host.'
         : FLASH_RERUN_NOTE,
     };
   });

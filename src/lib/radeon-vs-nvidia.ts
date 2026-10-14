@@ -1,6 +1,6 @@
 /**
  * Cited Radeon vs NVIDIA shopper page at /compare/radeon-vs-nvidia.
- * Spec cells cite vendor pages. R9700 tok/s come from local-desktop run cards.
+ * Spec cells cite vendor pages. R9700 tok/s come from local desktop run cards.
  * NVIDIA speed stays “no cited number yet” unless a third-party figure is ingested.
  * No prices. Q3 is a labeled estimate. Q1/Q2 stay off.
  */
@@ -239,7 +239,7 @@ export const SOFTWARE_ROWS: SoftwareRow[] = [
     id: 'llamacpp-vulkan',
     name: 'llama.cpp · Vulkan',
     radeon:
-      'Consumer default on AMDai. House daily driver is one R9700, Vulkan, UD-Q5_K_XL, 262K, f16 KV. Measured on local-desktop.',
+      'Consumer default on AMDai. House daily driver is one R9700, Vulkan, UD-Q5_K_XL, 262K, f16 KV. Measured on the local desktop.',
     nvidia:
       'llama.cpp also builds CUDA. We have no ingested first-party or cited third-party 35B Vulkan/CUDA tok/s for the RTX cards on this page.',
     hrefs: [
@@ -274,7 +274,7 @@ export const SOFTWARE_ROWS: SoftwareRow[] = [
     id: 'vllm',
     name: 'vLLM',
     radeon:
-      'Advanced / experimental here. Default pip install is CUDA. ROCm is a pin (AMD 10.0 supported combo is still 0.27 + PyTorch 2.13; community 0.31 is a try). No invented local-desktop 0.31 tok/s.',
+      'Advanced / experimental here. Default pip install is CUDA. ROCm is a pin (AMD 10.0 supported combo is still 0.27 + PyTorch 2.13; community 0.31 is a try). No invented local desktop 0.31 tok/s.',
     nvidia:
       'This is where NVIDIA wins on day-one maturity: CUDA vLLM is the upstream default. Broader engine and model coverage on launch week. Still not our measured 35B path.',
     hrefs: [
@@ -352,7 +352,7 @@ export const DECISION_CASES: DecisionCase[] = [
     title: 'Two-card builds',
     pick: 'A second R9700 is measured. A second RTX card is not, on this site.',
     body:
-      'Two R9700s on local-desktop: a split of the same 35B is often slower than one card at short context (UD-Q5 4K is 102.39 tok/s on one vs 82.78 on the split). Two copies serve two requests — that is concurrency, not 2× one chat. Desktop 2 (dual R9700 + 192 GB DDR5) is planned, not measured. We have no cited two-RTX 35B llama.cpp figure. Do not assume tensor parallel is free speed.',
+      'Two R9700s on the local desktop: a split of the same 35B is often slower than one card at short context (UD-Q5 4K is 102.39 tok/s on one vs 82.78 on the split). Two copies serve two requests — that is concurrency, not 2× one chat. Desktop 2 (dual R9700 + 192 GB DDR5) is planned, not measured. We have no cited two-RTX 35B llama.cpp figure. Do not assume tensor parallel is free speed.',
     ram: 'daily',
     links: [
       { href: '/multi-gpu', label: 'Dual / multi-GPU' },
@@ -365,7 +365,7 @@ export const DECISION_CASES: DecisionCase[] = [
     title: 'Windows vs Linux',
     pick: 'Linux if you want our measured Radeon path. Windows CUDA if you need day-one NVIDIA apps.',
     body:
-      'Ubuntu LTS on AMD’s current ROCm matrix is the path we write. llama.cpp Vulkan is the honest Windows path for tokens on Radeon. Full ROCm userspace is a Linux product. ROCm 10.1 lists WSL2 as a technical preview — not a measured local-desktop daily driver. NVIDIA’s CUDA stack is the broader Windows day-one story (vLLM, more app binaries). We do not have Windows tok/s on either camp.',
+      'Ubuntu LTS on AMD’s current ROCm matrix is the path we write. llama.cpp Vulkan is the honest Windows path for tokens on Radeon. Full ROCm userspace is a Linux product. ROCm 10.1 lists WSL2 as a technical preview — not a measured local desktop daily driver. NVIDIA’s CUDA stack is the broader Windows day-one story (vLLM, more app binaries). We do not have Windows tok/s on either camp.',
     ram: 'daily',
     links: [
       { href: '/setup', label: 'First-run setup' },
@@ -377,7 +377,7 @@ export const DECISION_CASES: DecisionCase[] = [
 
 export const LEAD = {
   winsRadeon:
-    'Radeon wins the VRAM-per-dollar class we actually shop: 32 GB on the R9700, 24 / 20 / 16 GB on the RX 7900 / 7800 sheets, and two-card layouts we have measured on local-desktop. Buttons say Check price — we do not print a figure.',
+    'Radeon wins the VRAM-per-dollar class we actually shop: 32 GB on the R9700, 24 / 20 / 16 GB on the RX 7900 / 7800 sheets, and two-card layouts we have measured on the local desktop. Buttons say Check price — we do not print a figure.',
   winsNvidia:
     'NVIDIA wins the software day-one: CUDA is the default for vLLM and a long tail of engines, and more models and apps land there first. That is ecosystem maturity, not a tok/s we measured on an RTX card.',
   honest:
@@ -385,7 +385,7 @@ export const LEAD = {
 };
 
 export const SPEED_NOTE =
-  'R9700 decode is measured on local-desktop (amdai-bench/run@1, llama.cpp Vulkan). Any NVIDIA speed figure on this site must be third-party, linked to the exact source, and labeled not apples-to-apples (different engine, quant, or context). We have no ingested cited NVIDIA 35B number for these SKUs, so those cells say “no cited number yet.” We will not estimate one.';
+  'R9700 decode is measured on the local desktop (amdai-bench/run@1, llama.cpp Vulkan). Any NVIDIA speed figure on this site must be third-party, linked to the exact source, and labeled not apples-to-apples (different engine, quant, or context). We have no ingested cited NVIDIA 35B number for these SKUs, so those cells say “no cited number yet.” We will not estimate one.';
 
 export const REQUIRED_PAGE_HREFS = [
   '/compare',

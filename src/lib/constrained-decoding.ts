@@ -1,7 +1,7 @@
 /**
  * Cited guide: constrained decoding (JSON / GBNF) on a Radeon GPU with llama.cpp.
  * Reuse /tuning, /harnesses, /setup/coding-assistant, /backends, /moe.
- * Grammar decode is not measured on local-desktop — point at Stack Lab grammar-ab/1.
+ * Grammar decode is not measured on the local desktop — point at Stack Lab grammar-ab/1.
  * Q3 is a labeled estimate. Q1/Q2 stay off. Do not invent tok/s or a pack deep link.
  */
 
@@ -33,7 +33,7 @@ export const CD_PATH = '/constrained-decoding';
 export const CD_NAME = 'Constrained decoding on Radeon';
 export const CD_HEADING = 'Constrained decoding (JSON / GBNF) on a Radeon GPU with llama.cpp';
 export const CD_PUBLISHED = '2026-10-14';
-export const CD_CITED_LABEL = 'Cited llama.cpp grammar · decode vs free-form not measured on local-desktop';
+export const CD_CITED_LABEL = 'Cited llama.cpp grammar · decode vs free-form not measured on the local desktop';
 export const CD_UNMEASURED = 'not measured yet — run Stack Lab grammar-ab/1';
 export const CD_PACK = 'grammar-ab/1';
 
@@ -72,7 +72,7 @@ export const CD_DESCRIPTION =
   'Constrained decoding on Radeon with llama.cpp. Cited GBNF and JSON schema. Measure decode vs free-form on Stack Lab grammar-ab/1. Q3 is a labeled estimate.';
 
 export const CD_LEAD =
-  `Hermes, coding tools, and recipe export need JSON that actually parses. llama.cpp can force the next tokens to match a GBNF grammar or a JSON Schema (converted to GBNF). Official flags live on the llama.cpp server README and grammars/README.md (checked 2026-10-14). AMDai has not measured grammar decode versus free-form on local-desktop, so every grammar tok/s and success cell stays ${CD_UNMEASURED}. Stack Lab ships that A/B as pack ${CD_PACK} — free-form versus grammar / JSON-schema, recorded as amdai-bench metrics. That pack is not an allowlisted Open-in-Stack-Lab deep link on this site. Open the planner, then record a card. House daily driver is ${COMPARE_MODEL} UD-Q5_K_XL on ${COMPARE_ENGINE} Vulkan, one R9700, 262144 context, f16 KV. ${COMPARE_Q3} is a labeled estimate (${COMPARE_Q3_CITE}). Q1/Q2 stay off. Draft / speculative decoding is a different /tuning knob, not a grammar.`;
+  `Hermes, coding tools, and recipe export need JSON that actually parses. llama.cpp can force the next tokens to match a GBNF grammar or a JSON Schema (converted to GBNF). Official flags live on the llama.cpp server README and grammars/README.md (checked 2026-10-14). AMDai has not measured grammar decode versus free-form on the local desktop, so every grammar tok/s and success cell stays ${CD_UNMEASURED}. Stack Lab ships that A/B as pack ${CD_PACK} — free-form versus grammar / JSON-schema, recorded as amdai-bench metrics. That pack is not an allowlisted Open-in-Stack-Lab deep link on this site. Open the planner, then record a card. House daily driver is ${COMPARE_MODEL} UD-Q5_K_XL on ${COMPARE_ENGINE} Vulkan, one R9700, 262144 context, f16 KV. ${COMPARE_Q3} is a labeled estimate (${COMPARE_Q3_CITE}). Q1/Q2 stay off. Draft / speculative decoding is a different /tuning knob, not a grammar.`;
 
 export const CD_WHAT =
   'Constrained decoding is grammar sampling. llama.cpp only keeps tokens that still match the grammar. GBNF (GGML BNF) is the native format. A JSON Schema is converted to GBNF — that path is official on grammars/README.md and common/json-schema-to-grammar.cpp. The schema is not injected into the prompt except during tool calling, so describe the shape in the prompt. Tool-call attach stays on /harnesses and /setup/coding-assistant; this page is the GBNF / JSON-schema how-to.';
@@ -87,7 +87,7 @@ export const CD_COST =
   `A grammar can change decode speed and can stall on a sloppy rule. llama.cpp documents performance gotchas on grammars/README.md and issue #4218 — write x{0,N} instead of a long chain of x? x? x?. AMDai does not invent an overhead tok/s. Measure free-form versus grammar on Stack Lab ${CD_PACK} and keep the card on /amdai-bench. Quality of the GGUF does not change; the token set does.`;
 
 export const CD_HOUSE =
-  `amdai’s default is ${COMPARE_MODEL} Unsloth UD-Q5_K_XL, llama.cpp Vulkan, one R9700, 262144 context, f16 KV, no grammar flag. Add --json-schema or --grammar-file only when the client needs structured JSON. House /v1 is http://127.0.0.1:8080/v1 with model id qwen — same pin as /setup/coding-assistant. A grammar does not add GGUF weight. Fit is still Q6 / Q5 / Q4 on the calculator; ${COMPARE_Q3} stays a labeled estimate.`;
+  `the house default is ${COMPARE_MODEL} Unsloth UD-Q5_K_XL, llama.cpp Vulkan, one R9700, 262144 context, f16 KV, no grammar flag. Add --json-schema or --grammar-file only when the client needs structured JSON. House /v1 is http://127.0.0.1:8080/v1 with model id qwen — same pin as /setup/coding-assistant. A grammar does not add GGUF weight. Fit is still Q6 / Q5 / Q4 on the calculator; ${COMPARE_Q3} stays a labeled estimate.`;
 
 export const CD_LAUNCH = [
   '# House daily-driver shape — no grammar. Same flags as /tuning.',
@@ -101,7 +101,7 @@ export const CD_LAUNCH = [
 ].join('\n');
 
 export const CD_LAUNCH_SCHEMA = [
-  '# Shape only — grammar decode is not measured on local-desktop.',
+  '# Shape only — grammar decode is not measured on the local desktop.',
   '# Official example schema: {"type":"object"} (server README --json-schema).',
   './build-vk/bin/llama-server \\',
   '  -m ~/models/Qwen3.6-35B-A3B-UD-Q5_K_XL.gguf \\',
@@ -327,7 +327,7 @@ export function cdMeasuredRows(cards: RunCard[]): CdQuantRow[] {
       kind: 'measured',
       decode4k,
       decode32k,
-      note: 'Official local-desktop llama.cpp Vulkan, one R9700. Free-form — no grammar flag.',
+      note: 'Official local desktop llama.cpp Vulkan, one R9700. Free-form — no grammar flag.',
       runIds,
     };
   });
@@ -336,7 +336,7 @@ export function cdMeasuredRows(cards: RunCard[]): CdQuantRow[] {
     kind: 'q3-estimate',
     decode4k: CD_UNMEASURED,
     decode32k: CD_UNMEASURED,
-    note: `${COMPARE_Q3_CITE}. Q3 is a labeled estimate — not a local-desktop run, not a grammar.`,
+    note: `${COMPARE_Q3_CITE}. Q3 is a labeled estimate — not a local desktop run, not a grammar.`,
     runIds: [],
   });
   return rows;

@@ -16,7 +16,7 @@ flowchart_fallback:
   - Daily driver already works and you want the Flash agent → Strata v0.1.42.
   - Several clients / continuous batching → vLLM ROCm, advanced. Not default PyPI.
   - Want a GUI → LM Studio only if a GPU meter moves. Else back to llama.cpp.
-  - Lemonade → AMD llama.cpp wrapper on :13305/api/v1. Vulkan first on this site. Not measured on local-desktop.
+  - Lemonade → AMD llama.cpp wrapper on :13305/api/v1. Vulkan first on this site. Not measured on the local desktop.
   - Ollama → only if the backend log and a GPU meter agree. gfx1201 is still cited pain.
   - SGLang, ExLlama/TabbyAPI, MLC-LLM, KTransformers, raw PyTorch → specialized. Not the first home box.
 

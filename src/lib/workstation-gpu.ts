@@ -231,7 +231,7 @@ const VS_CONSUMER: Record<WorkstationRecipeId, { title: string; body: string }[]
     },
     {
       title: 'W7900 vs the measured R9700',
-      body: 'The R9700 is the measured 32 GB gfx1201 north star (640 GB/s, 300 W TBP on its product page). The W7900 is 48 GB gfx1100, 864 GB/s, 295 W TBP, official on the cited ROCm 10.1 row — and not measured on local-desktop. More VRAM on the sticker is not a measured decode claim.',
+      body: 'The R9700 is the measured 32 GB gfx1201 north star (640 GB/s, 300 W TBP on its product page). The W7900 is 48 GB gfx1100, 864 GB/s, 295 W TBP, official on the cited ROCm 10.1 row — and not measured on the local desktop. More VRAM on the sticker is not a measured decode claim.',
     },
     {
       title: 'Dual Slot sibling',
@@ -245,7 +245,7 @@ const VS_CONSUMER: Record<WorkstationRecipeId, { title: string; body: string }[]
     },
     {
       title: 'W7800 vs the measured R9700',
-      body: 'Both are 32 GB workstation stickers. The R9700 is gfx1201, 640 GB/s, 300 W TBP, and measured on local-desktop. The W7800 is gfx1100, 576 GB/s, 260 W TBP, official on the cited ROCm 10.1 row — not measured. Same VRAM class is not the same LLVM target.',
+      body: 'Both are 32 GB workstation stickers. The R9700 is gfx1201, 640 GB/s, 300 W TBP, and measured on the local desktop. The W7800 is gfx1100, 576 GB/s, 260 W TBP, official on the cited ROCm 10.1 row — not measured. Same VRAM class is not the same LLVM target.',
     },
     {
       title: 'W7800 vs consumer gfx1100',
@@ -263,7 +263,7 @@ const VS_CONSUMER: Record<WorkstationRecipeId, { title: string; body: string }[]
     },
     {
       title: 'W7700 vs the measured R9700',
-      body: 'The R9700 is 32 GB gfx1201 and measured. The W7700 is 16 GB gfx1101, official on the cited ROCm row, and not measured on local-desktop. House 35B Q4–Q6 files do not sit in 16 GB on the calculator.',
+      body: 'The R9700 is 32 GB gfx1201 and measured. The W7700 is 16 GB gfx1101, official on the cited ROCm row, and not measured on the local desktop. House 35B Q4–Q6 files do not sit in 16 GB on the calculator.',
     },
   ],
   w6800: [
@@ -273,7 +273,7 @@ const VS_CONSUMER: Record<WorkstationRecipeId, { title: string; body: string }[]
     },
     {
       title: 'W6800 vs the measured R9700',
-      body: 'Both are 32 GB workstation stickers. The R9700 is gfx1201 RDNA 4, 640 GB/s, 300 W TBP, measured on local-desktop. The W6800 is gfx1030 RDNA 2, 512 GB/s, 250 W TBP, still listed on the cited 10.1 matrix — not measured. Same VRAM class, older architecture.',
+      body: 'Both are 32 GB workstation stickers. The R9700 is gfx1201 RDNA 4, 640 GB/s, 300 W TBP, measured on the local desktop. The W6800 is gfx1030 RDNA 2, 512 GB/s, 250 W TBP, still listed on the cited 10.1 matrix — not measured. Same VRAM class, older architecture.',
     },
     {
       title: 'W6800 vs the 32 GB W7800',
@@ -449,7 +449,7 @@ function stackTips(id: WorkstationRecipeId, gfx: string): WorkstationStackTip[] 
       },
       {
         title: 'Setup, then Stack Lab doctor',
-        body: 'First-run setup is Ubuntu. Open Stack Lab doctor for the gfx110x install family, then record an amdai-bench/run@1 card if you measure this SKU. House daily and Flash profiles are R9700 / local-desktop — they do not apply here. Packages are not published yet.',
+        body: 'First-run setup is Ubuntu. Open Stack Lab doctor for the gfx110x install family, then record an amdai-bench/run@1 card if you measure this SKU. House daily and Flash profiles are R9700 / local desktop — they do not apply here. Packages are not published yet.',
       },
     ];
   }
@@ -469,7 +469,7 @@ function stackTips(id: WorkstationRecipeId, gfx: string): WorkstationStackTip[] 
       },
       {
         title: 'Setup, then Stack Lab doctor',
-        body: 'First-run setup is Ubuntu. Open Stack Lab doctor for the gfx110x install family, then record an amdai-bench/run@1 card if you measure this SKU. House daily and Flash profiles are R9700 / local-desktop — they do not apply here. Packages are not published yet.',
+        body: 'First-run setup is Ubuntu. Open Stack Lab doctor for the gfx110x install family, then record an amdai-bench/run@1 card if you measure this SKU. House daily and Flash profiles are R9700 / local desktop — they do not apply here. Packages are not published yet.',
       },
     ];
   }
@@ -489,7 +489,7 @@ function stackTips(id: WorkstationRecipeId, gfx: string): WorkstationStackTip[] 
       },
       {
         title: 'Setup, then Stack Lab doctor',
-        body: 'First-run setup is Ubuntu. Open Stack Lab doctor for the gfx110x install family, then record an amdai-bench/run@1 card if you measure this SKU. House daily and Flash profiles are R9700 / local-desktop — they do not apply here. Packages are not published yet.',
+        body: 'First-run setup is Ubuntu. Open Stack Lab doctor for the gfx110x install family, then record an amdai-bench/run@1 card if you measure this SKU. House daily and Flash profiles are R9700 / local desktop — they do not apply here. Packages are not published yet.',
       },
     ];
   }
@@ -508,7 +508,7 @@ function stackTips(id: WorkstationRecipeId, gfx: string): WorkstationStackTip[] 
     },
     {
       title: 'Setup, then Stack Lab doctor',
-      body: 'First-run setup is Ubuntu. Open Stack Lab doctor for the install family rocminfo actually prints, then record an amdai-bench/run@1 card if you measure this SKU. House daily and Flash profiles are R9700 / local-desktop — they do not apply here. Packages are not published yet.',
+      body: 'First-run setup is Ubuntu. Open Stack Lab doctor for the install family rocminfo actually prints, then record an amdai-bench/run@1 card if you measure this SKU. House daily and Flash profiles are R9700 / local desktop — they do not apply here. Packages are not published yet.',
     },
   ];
 }
@@ -601,7 +601,7 @@ export function workstationRecipePage(id: WorkstationRecipeId): WorkstationRecip
     name: card.name,
     shortName,
     title: shortName,
-    description: `${shortName} recipe sheet — ${vramGb} GB, ${card.gfx}, cited ROCm matrix row. Q6/Q5/Q4 plus labeled ${COMPARE_Q3}; 1 and 2 GPU estimates. Not measured on local-desktop.`,
+    description: `${shortName} recipe sheet — ${vramGb} GB, ${card.gfx}, cited ROCm matrix row. Q6/Q5/Q4 plus labeled ${COMPARE_Q3}; 1 and 2 GPU estimates. Not measured on the local desktop.`,
     family: card.family,
     arch: card.arch,
     gfx: card.gfx,
@@ -762,7 +762,7 @@ export function assertWorkstationGpuValid(pages: WorkstationRecipePage[] = works
       errors.push(`${page.id} full kit ${page.ramNeed.atFullContext.kitGb} is not a real DIMM size`);
     }
     if (page.ramNeed.atSelected.measured || page.ramNeed.atFullContext.measured) {
-      errors.push(`${page.id} must not overlay local-desktop measured RAM`);
+      errors.push(`${page.id} must not overlay local desktop measured RAM`);
     }
 
     const blob = workstationBlob(page);

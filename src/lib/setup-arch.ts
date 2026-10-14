@@ -1,5 +1,5 @@
 /**
- * Cited Arch Linux first-run path. Not verified on our rig / not measured on local-desktop.
+ * Cited Arch Linux first-run path. Not verified on our rig / not measured on the local desktop.
  * Sources: ROCm 10.1 matrix (Arch is not an official OS row), Arch Wiki AMDGPU /
  * Vulkan / GPGPU / llama.cpp, AMD Linux prerequisites, llama.cpp build docs.
  * Do not invent drivers, version pins, tok/s, or “works on” claims.
@@ -110,7 +110,7 @@ export const SETUP_ARCH_STEPS: SetupArchStep[] = [
     id: 'release',
     title: 'Rolling release and kernel notes',
     body:
-      'AMD’s 10.1 matrix does not list Arch. Arch is rolling — there is no “Arch 24.04” row to pin. Prefer the stock linux kernel and the in-tree amdgpu module Arch Wiki AMDGPU documents. A custom kernel, linux-zen experiment, or DKMS amdgpu is not verified on our rig. Dual-boot Ubuntu 24.04.5 if you want the measured local-desktop path.',
+      'AMD’s 10.1 matrix does not list Arch. Arch is rolling — there is no “Arch 24.04” row to pin. Prefer the stock linux kernel and the in-tree amdgpu module Arch Wiki AMDGPU documents. A custom kernel, linux-zen experiment, or DKMS amdgpu is not verified on our rig. Dual-boot Ubuntu 24.04.5 if you want the measured local desktop path.',
     links: [
       { href: '/setup', label: 'Ubuntu setup (measured)' },
       { href: '/gpus/r9700', label: 'R9700 measured page' },
@@ -174,7 +174,7 @@ export const SETUP_ARCH_STEPS: SetupArchStep[] = [
     id: 'quant',
     title: 'Pick Q6, Q5, or Q4 — Q3 is a labeled estimate',
     body:
-      'Download the same official-instruct GGUF the Ubuntu recipes name. Start at Q6, Q5, or Q4 and check VRAM + KV on the calculator. Q3 stays a labeled estimate unless an Arch run card exists — none does in this repo. Q1/Q2 stay off. Tok/s on /benchmarks and /results are Ubuntu llama-bench on local-desktop. Treat them as comparison, not an Arch promise.',
+      'Download the same official-instruct GGUF the Ubuntu recipes name. Start at Q6, Q5, or Q4 and check VRAM + KV on the calculator. Q3 stays a labeled estimate unless an Arch run card exists — none does in this repo. Q1/Q2 stay off. Tok/s on /benchmarks and /results are Ubuntu llama-bench on the local desktop. Treat them as comparison, not an Arch promise.',
     links: [
       { href: '/calculator', label: 'Calculator' },
       { href: '/recipes/qwen36-35b.llamacpp-vulkan.262k', label: '35B recipe' },
@@ -186,7 +186,7 @@ export const SETUP_ARCH_STEPS: SetupArchStep[] = [
     id: 'fit',
     title: 'Fit VRAM and the two RAM lines',
     body:
-      'The calculator prints Minimum system RAM needed (the load at the context you picked) and RAM needed at full context (262144 for the house 35B). Overnight UD-Q5 one-GPU Ubuntu peaks are 37.32 GB at 4K and 42.9 GB at 256K — measured on local-desktop, not an Arch kit. Keep the GGUF on NVMe. Not verified on our rig.',
+      'The calculator prints Minimum system RAM needed (the load at the context you picked) and RAM needed at full context (262144 for the house 35B). Overnight UD-Q5 one-GPU Ubuntu peaks are 37.32 GB at 4K and 42.9 GB at 256K — measured on the local desktop, not an Arch kit. Keep the GGUF on NVMe. Not verified on our rig.',
     links: [
       { href: '/calculator', label: 'Calculator' },
       { href: '/flash-ram-offload', label: 'Flash RAM offload' },
@@ -197,7 +197,7 @@ export const SETUP_ARCH_STEPS: SetupArchStep[] = [
     id: 'first-token',
     title: 'First-run command (Ubuntu-measured shape)',
     body:
-      'Use the house daily-driver launch from the 35B recipe / tuning guide: ./build-vk/bin/llama-server -m ~/models/Qwen3.6-35B-A3B-UD-Q5_K_XL.gguf -ngl 99 -c 262144 --cache-type-k f16 --cache-type-v f16 --host 127.0.0.1 --port 8080. That command is the Ubuntu local-desktop shape. On Arch it is not verified on our rig and not measured on local-desktop — confirm vulkaninfo, then tokens, then a loopback /v1. Do not copy Ubuntu tok/s onto this box. Read the 4K run card to see what “good” looked like on the measured path.',
+      'Use the house daily-driver launch from the 35B recipe / tuning guide: ./build-vk/bin/llama-server -m ~/models/Qwen3.6-35B-A3B-UD-Q5_K_XL.gguf -ngl 99 -c 262144 --cache-type-k f16 --cache-type-v f16 --host 127.0.0.1 --port 8080. That command is the Ubuntu local desktop shape. On Arch it is not verified on our rig and not measured on the local desktop — confirm vulkaninfo, then tokens, then a loopback /v1. Do not copy Ubuntu tok/s onto this box. Read the 4K run card to see what “good” looked like on the measured path.',
     links: [
       { href: '/recipes/qwen36-35b.llamacpp-vulkan.262k', label: '35B recipe' },
       { href: '/results/local-desktop-20261012-2311-35b-udq5kxl-1gpu-4k-llamacpp-f16', label: '4K run card' },
@@ -304,7 +304,7 @@ export function assertSetupArchValid(): string[] {
   if (!/llama\.cpp/i.test(blob)) errors.push('must say llama.cpp');
   if (!/Vulkan first/i.test(blob)) errors.push('must say Vulkan first');
   if (!/not verified on our rig/i.test(blob)) errors.push('must say not verified on our rig');
-  if (!/not measured on local-desktop/i.test(blob)) errors.push('must say not measured on local-desktop');
+  if (!/not measured on the local desktop/i.test(blob)) errors.push('must say not measured on the local desktop');
   if (!/Q3 stays a labeled estimate/i.test(blob)) errors.push('Q3 must stay a labeled estimate');
   if (!blob.includes(RAM_MIN_LABEL) || !blob.includes(RAM_FULL_LABEL)) {
     errors.push('RAM lines missing');

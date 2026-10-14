@@ -1,6 +1,6 @@
 /**
  * Two-R9700 Qwen 3.6 35B page. Logic lives here so tests never import YAML via ?raw.
- * Allowed figures are the local-desktop dual-card set plus the cited single-card reference.
+ * Allowed figures are the local desktop dual-card set plus the cited single-card reference.
  */
 
 export const MEASURED_ON_OUR_RIG = 'Measured on our rig, 2026-10';
@@ -82,7 +82,7 @@ function asSources(value: unknown): DualSource[] {
   });
 }
 
-export function parselocal-desktopDual(raw: unknown): DualFile {
+export function parseLocalDesktopDual(raw: unknown): DualFile {
   const rec = (raw ?? {}) as Record<string, unknown>;
   const kit = (rec.kit ?? {}) as Record<string, unknown>;
   const split = (rec.split ?? {}) as Record<string, unknown>;
@@ -181,7 +181,7 @@ export function collectDualNumbers(file: DualFile): number[] {
 
 export function assertDualValid(file: DualFile): string[] {
   const errors: string[] = [];
-  if (file.host !== 'local-desktop') errors.push('host must be local-desktop');
+  if (file.host !== 'local desktop') errors.push('host must be local desktop');
   if (file.label !== MEASURED_ON_OUR_RIG) errors.push('label must be the house measured string');
   if (!/llama\.cpp/.test(file.engine)) errors.push('engine must be llama.cpp');
   if (!/UD-Q5_K_XL/.test(file.quant)) errors.push('quant must be UD-Q5_K_XL');

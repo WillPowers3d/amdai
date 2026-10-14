@@ -14,7 +14,7 @@ import {
   REQUIRED_FOOTER_HREFS,
   TERMS,
   TRUST_PUBLISHED,
-  amdai,
+  AMDAI_CREDIT,
   assertTrustValid,
   contactEmail,
   contactEmailWarning,
@@ -25,12 +25,12 @@ import {
 const here = dirname(fileURLToPath(import.meta.url));
 
 describe('trust / E-E-A-T pack', () => {
-  it('keeps amdai provenance, labeled Q3, and no invented contact', () => {
+  it('keeps AMDai provenance, labeled Q3, and no invented contact', () => {
     assert.deepEqual(assertTrustValid(), []);
     assert.equal(TRUST_PUBLISHED, '2026-10-13');
-    assert.equal(amdai.display, 'amdai');
-    assert.equal(amdai.handle, 'amdai');
-    assert.equal(amdai.rig, 'local-desktop');
+    assert.equal(AMDAI_CREDIT.display, 'AMDai');
+    assert.equal(AMDAI_CREDIT.handle, 'amdai');
+    assert.equal(AMDAI_CREDIT.rig, 'local-desktop');
     assert.match(ABOUT.rig.body, /256 GB DDR5-5200/);
     assert.match(ABOUT.rig.body, /Strata/);
     assert.match(ABOUT.rig.body, /motherboard model is not published/i);
@@ -64,7 +64,7 @@ describe('trust / E-E-A-T pack', () => {
       assert.equal(isSitemapExcluded(path), false);
       assert.ok(documentTitle(path).endsWith(' · AMDai'));
     }
-    assert.match(pageDescription('/about'), /local-desktop/);
+    assert.match(pageDescription('/about'), /local desktop/);
     assert.match(pageDescription('/methodology'), /amdai-bench/);
     const ld = aboutPageJsonLd({
       name: 'About AMDai',

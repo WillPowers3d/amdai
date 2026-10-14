@@ -21,7 +21,7 @@ describe('local speech guide', () => {
   it('stays cited, whisper.cpp-first, and invents no speeds', () => {
     assert.deepEqual(assertSpeechValid(), []);
     assert.equal(SPEECH_TITLE, 'Local speech on Radeon');
-    assert.equal(SPEECH_CITED_LABEL, 'Cited, not measured on local-desktop');
+    assert.equal(SPEECH_CITED_LABEL, 'Cited, not measured on the local desktop');
     assert.equal(SPEECH_SPEED_LABEL, 'not yet measured by AMDai');
     assert.ok(SPEECH_DESCRIPTION.length >= 70);
     assert.ok(SPEECH_DESCRIPTION.length <= 160);

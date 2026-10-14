@@ -71,7 +71,7 @@ settings:
         cite: rocm_bar
       - text: ROCm’s BAR guidance says to enable the BIOS option named Above 4G Decoding, and to keep the high MMIO aperture inside the device physical-address limit (the docs use a 44-bit example with MMIO High Base / MMIO High Size).
         cite: rocm_bar
-      - text: Two 32 GB cards plus a 256 GB host map a large prefetchable BAR. We have not measured a tok/s delta with Above 4G off on local-desktop.
+      - text: Two 32 GB cards plus a 256 GB host map a large prefetchable BAR. We have not measured a tok/s delta with Above 4G off on the local desktop.
         todo: true
 
   - id: rebar-sam
@@ -135,7 +135,7 @@ settings:
         cite: intel_xmp
       - text: EXPO and XMP are overclocking, not the JEDEC default. A two-DIMM kit profile is not a four-DIMM guarantee. Check the board QVL for the kit you actually bought.
         todo: true
-      - text: local-desktop has 256 GB DDR5. The motherboard model, DIMM count, and whether EXPO is enabled are not published. Do not invent a frequency.
+      - text: local desktop has 256 GB DDR5. The motherboard model, DIMM count, and whether EXPO is enabled are not published. Do not invent a frequency.
         todo: true
 
   - id: iommu-sriov
@@ -162,7 +162,7 @@ settings:
     claims:
       - text: AMD Instinct OS-tuning docs discuss restricting CPU C-states (`processor.max_cstate=0`, or disabling C2 after boot) when the BIOS has not already limited them, as a latency/responsiveness setting for Instinct systems.
         cite: instinct_cstates
-      - text: Those pages are Instinct system-acceptance guidance. We have not measured llama.cpp tok/s or hang rate with C-states on versus off on local-desktop.
+      - text: Those pages are Instinct system-acceptance guidance. We have not measured llama.cpp tok/s or hang rate with C-states on versus off on the local desktop.
         todo: true
       - text: The R9700 product page publishes 300 W TBP and a 750 W minimum PSU recommendation. That is electrical, not a C-state switch.
         cite: r9700
@@ -176,7 +176,7 @@ settings:
         cite: instinct_aspm
       - text: That ASPM note is Instinct system-acceptance guidance. Effect on a desktop R9700 llama.cpp session is not measured.
         todo: true
-      - text: Motherboard fan and pump curves are vendor BIOS or a vendor app. No local-desktop fan curve is published.
+      - text: Motherboard fan and pump curves are vendor BIOS or a vendor app. No local desktop fan curve is published.
         todo: true
 
 chipsets:
@@ -255,7 +255,7 @@ chipsets:
       - text: Intel BIOS labels for VT-d (IOMMU), Resizable BAR, and Above 4G Decoding vary. Record them on a board row.
         todo: true
 
-# Community submissions only. Do not invent a local-desktop motherboard.
+# Community submissions only. Do not invent a local desktop motherboard.
 boards: []
 
 submit:

@@ -15,14 +15,14 @@ const submittedCount = cards.filter((card) => !card.submitted_by.verified).lengt
 
 <Base
   title="Official test-run cards"
-  description="amdai-bench/run@1 cards from overnight local-desktop tests — credited to the submitter, with the exact launch command. Verified amdai rows feed the model, GPU, and 35B tables."
+  description="amdai-bench/run@1 cards from overnight local desktop tests — credited to the submitter, with the exact launch command. Verified AMDai rows feed the model, GPU, and 35B tables."
 >
   <main id="main" class="mx-auto max-w-6xl px-4 py-10 sm:px-6">
     <p class="kicker">{RUN_SCHEMA}</p>
     <h1 class="display mt-3 text-4xl sm:text-5xl">Official test-run cards</h1>
     <p class="mt-4 max-w-2xl text-lg leading-relaxed text-muted">
-      Every overnight local-desktop drop lands here as one card, credited to the person who ran it.
-      amdai’s verified rows show the badge. A measured Qwen 3.8 Flash Q3 run is an approved
+      Every overnight local desktop drop lands here as one card, credited to AMDai.
+      The house verified rows show the badge. A measured Qwen 3.8 Flash Q3 run is an approved
       one-time exception — when that jsonl line arrives, it will show as measured.
     </p>
     <div class="mt-6 flex flex-wrap gap-3">
@@ -48,8 +48,8 @@ const submittedCount = cards.filter((card) => !card.submitted_by.verified).lengt
     </Callout>
 
     <Callout type="check" title="Verified vs submitted">
-      Green <strong class="text-ink">Verified</strong> cards were measured on local-desktop and credited to the submitter.
-      This snapshot has {officialCount} official amdai cards.
+      Green <strong class="text-ink">Verified</strong> cards were measured on the local desktop and credited to AMDai.
+      This snapshot has {officialCount} official AMDai cards.
       <strong class="text-ink">Submitted</strong> is the badge for a community jsonl line that matches
       <code>{RUN_SCHEMA}</code> and has not been rerun here. There are {submittedCount} submitted cards.
       Unverified rows do not fill the model, GPU, or 35B tables.

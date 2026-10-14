@@ -1,5 +1,5 @@
 # Community lab write-up from Shannon (@iamMrDuncan).
-# Every published claim is cited. Nothing here is measured on local-desktop.
+# Every published claim is cited. Nothing here is measured on the local desktop.
 # Do not invent tok/s, prices, or a Thermite repo URL.
 as_of: 2026-10-13
 cited_label: Cited, not measured by AMDai
@@ -47,7 +47,7 @@ ideas:
       Lab-wide agent and machine access. Official Herdr is a terminal workspace
       for several coding agents at once — detach without stopping work, list
       which pane is working or blocked, drive panes from a CLI. Shannon’s
-      write-up is why it appears on this site. Not used on local-desktop.
+      write-up is why it appears on this site. Not used on the local desktop.
   - id: coolify
     group: harnesses
     title: Coolify
@@ -60,7 +60,7 @@ ideas:
     group: harnesses
     title: Hermes multi-profile and desktop bot mode
     body: >
-      Next to amdai’s Hermes on local-desktop (Strata :8083 and llama-server :8080),
+      Next to the house Hermes on the local desktop (Strata :8083 and llama-server :8080),
       Shannon describes a multi-profile Hermes setup and Hermes desktop bot
       mode. That layout is his. We have not reproduced it. Official Hermes
       docs stay the attach path. llama.cpp first.
@@ -79,7 +79,7 @@ ideas:
     body: >
       Shannon’s 2026-10-05 post cites Qwen 3.8 27B at about 33 tok/s with MTP
       on a P100. That is NVIDIA, cited context only. It is not a Radeon
-      figure and not a local-desktop card. Do not paste it into a Radeon table.
+      figure and not a local desktop card. Do not paste it into a Radeon table.
   - id: secure-lab
     group: secure
     title: Isolated command enclave
@@ -88,14 +88,14 @@ ideas:
       own router, Proxmox VMs that split the agent host from the knowledge-base
       host, a guardrail / prompt-injection layer in front of agents, models on
       a separate NVMe, and offsite backup. Cited layout only. We have not
-      built this on local-desktop.
+      built this on the local desktop.
   - id: thermite
     group: autoresearch
     title: Thermite harness
     body: >
       Shannon wrote that Thermite, the harness that steers those experiments,
       is intended to be open-sourced. There is no public repo URL on this
-      site. Do not invent a GitHub path. Not used on local-desktop.
+      site. Do not invent a GitHub path. Not used on the local desktop.
   - id: autoresearch
     group: autoresearch
     title: Container-per-GPU experiment loop

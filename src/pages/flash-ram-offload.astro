@@ -7,7 +7,7 @@ import {
   FLASH_OFFLOAD_CONTEXT_LABEL,
   LLAMA_EXPERT_OFFLOAD_LAUNCH,
   MEASURED_ON_OUR_RIG,
-  NOT_MEASURED_ON_local-desktop,
+  NOT_MEASURED_ON_LOCAL_DESKTOP,
   STRATA_EXPERT_OFFLOAD_LAUNCH,
   dimmSpeedRows,
   flashOffloadEmptyNotes,
@@ -34,12 +34,12 @@ const strata8k = dimm.find((row) => row.backend === 'Strata' && row.context === 
   description="Run Qwen 3.8 Flash with experts on DDR5. System RAM at 262K, kit picks for 128 / 192 / 256 GB, measured DIMM-speed decode, and the expert-offload launch shape."
 >
   <main id="main" class="mx-auto max-w-6xl px-4 py-10 sm:px-6">
-    <p class="kicker">local-desktop · Qwen 3.8 Flash</p>
+    <p class="kicker">local desktop · Qwen 3.8 Flash</p>
     <h1 class="display mt-3 text-4xl sm:text-5xl">Flash with RAM offload</h1>
     <p class="mt-4 max-w-2xl text-lg leading-relaxed text-muted">
       Qwen 3.8 Flash does not fit in one 32 GB card. Hot experts stay in VRAM. The rest lands on DDR5.
       Decode cells come from verified <code>amdai-bench/run@1</code> Flash cards.
-      Empty stays <strong class="text-ink">{NOT_MEASURED_ON_local-desktop}</strong>.
+      Empty stays <strong class="text-ink">{NOT_MEASURED_ON_LOCAL_DESKTOP}</strong>.
       RAM kits are calculator estimates (file size + KV), labeled as such.
       MoE vs dense, and why 35B-A3B is a different fit, live on
       <a class="underline decoration-accent/40" href="/moe">/moe</a>.
@@ -55,11 +55,11 @@ const strata8k = dimm.find((row) => row.backend === 'Strata' && row.context === 
 
     <Callout type="check" title="What we measured">
       Two-card UD-Q6_K_XL at 262K load. llama.cpp at 8K is
-      <strong class="text-ink">{llama8k?.at3600.text ?? NOT_MEASURED_ON_local-desktop}</strong> on DDR5-3600
-      → <strong class="text-ink">{llama8k?.at5200.text ?? NOT_MEASURED_ON_local-desktop}</strong> on DDR5-5200.
+      <strong class="text-ink">{llama8k?.at3600.text ?? NOT_MEASURED_ON_LOCAL_DESKTOP}</strong> on DDR5-3600
+      → <strong class="text-ink">{llama8k?.at5200.text ?? NOT_MEASURED_ON_LOCAL_DESKTOP}</strong> on DDR5-5200.
       Strata at 8K is
-      <strong class="text-ink">{strata8k?.at3600.text ?? NOT_MEASURED_ON_local-desktop}</strong> on 3600
-      → <strong class="text-ink">{strata8k?.at5200.text ?? NOT_MEASURED_ON_local-desktop}</strong> on 5200.
+      <strong class="text-ink">{strata8k?.at3600.text ?? NOT_MEASURED_ON_LOCAL_DESKTOP}</strong> on 3600
+      → <strong class="text-ink">{strata8k?.at5200.text ?? NOT_MEASURED_ON_LOCAL_DESKTOP}</strong> on 5200.
       {MEASURED_ON_OUR_RIG}.
     </Callout>
 
@@ -99,7 +99,7 @@ const strata8k = dimm.find((row) => row.backend === 'Strata' && row.context === 
       </div>
 
       <h3 class="mt-10 font-serif text-2xl">One R9700 · 32 GB VRAM</h3>
-      <p class="mt-2 text-sm text-muted">More of the file lands on DDR5. Decode at this card count is {NOT_MEASURED_ON_local-desktop}.</p>
+      <p class="mt-2 text-sm text-muted">More of the file lands on DDR5. Decode at this card count is {NOT_MEASURED_ON_LOCAL_DESKTOP}.</p>
       <div class="card mt-4 overflow-x-auto">
         <table class="table-lab min-w-[52rem]">
           <thead>
@@ -140,7 +140,7 @@ const strata8k = dimm.find((row) => row.backend === 'Strata' && row.context === 
       <h2 id="kits-heading" class="mt-2 font-serif text-3xl">Recommended setup per RAM kit</h2>
       <p class="mt-3 max-w-2xl text-muted">
         Picks follow the calculator kit rounding. They are not a tok/s promise.
-        256 GB is what local-desktop ships (~249 GB usable).
+        256 GB is what local desktop ships (~249 GB usable).
       </p>
       <div class="mt-6 grid gap-4 lg:grid-cols-3">
         {kits.map((kit) => (
@@ -207,7 +207,7 @@ const strata8k = dimm.find((row) => row.backend === 'Strata' && row.context === 
       <p class="mt-3 max-w-2xl text-muted">
         Same two-card Q6, same 262K load. Only the DIMM clock changes.
         llama.cpp at 8K is the 15.9 → 18.5 pair. Strata at 8K is the 32.0 → 32.8 pair.
-        Missing contexts stay {NOT_MEASURED_ON_local-desktop}.
+        Missing contexts stay {NOT_MEASURED_ON_LOCAL_DESKTOP}.
       </p>
       <div class="card mt-6 overflow-x-auto">
         <table class="table-lab min-w-[36rem]">

@@ -1,6 +1,6 @@
 /**
  * Cited LM Studio first-run on Radeon.
- * Not measured on local-desktop. Official sources only: LM Studio docs / CLI,
+ * Not measured on the local desktop. Official sources only: LM Studio docs / CLI,
  * AMD LM Studio playbook, llama.cpp docs.
  * Do not invent LM Studio versions, tok/s, prices, or a bundled-ROCm GPU whitelist.
  */
@@ -9,7 +9,7 @@ import { RAM_FULL_LABEL, RAM_MIN_LABEL } from './ram-surfaces';
 import { COMPARE_Q3, COMPARE_Q3_CITE } from './local-desktop-compare';
 
 export const SETUP_LM_STUDIO_PUBLISHED = '2026-10-14';
-export const SETUP_LM_STUDIO_CITED_LABEL = 'Cited, not measured on local-desktop';
+export const SETUP_LM_STUDIO_CITED_LABEL = 'Cited, not measured on the local desktop';
 
 export const SETUP_LM_STUDIO_SERVER = 'http://127.0.0.1:1234/v1';
 export const SETUP_LM_STUDIO_HOUSE_FILE = 'Qwen3.6-35B-A3B-UD-Q5_K_XL.gguf';
@@ -104,7 +104,7 @@ export const SETUP_LM_STUDIO_TRACKS: SetupLmStudioTrack[] = [
       with Ctrl+Shift+R (AMD playbook) or run lms runtime ls / get / select
       (LM Studio CLI). Download the Vulkan llama.cpp engine. Do not take a CUDA
       runtime on a Radeon. Watch a GPU meter: if it stays idle, you are on CPU.
-      Not measured on local-desktop.
+      Not measured on the local desktop.
     `.replace(/\s+/g, ' ').trim(),
     gpus:
       'RDNA 2, RDNA 3, RDNA 4, and the R9700 (gfx1201) use Vulkan first on AMDai. That is this site’s llama.cpp rule, not an LM Studio SKU table — official LM Studio docs do not publish a per-card Radeon list.',
@@ -116,13 +116,13 @@ export const SETUP_LM_STUDIO_TRACKS: SetupLmStudioTrack[] = [
     body: `
       The same AMD playbook documents an AMD ROCm runtime next to Vulkan.
       gfx completeness of that bundled engine is what the picker shows — not a
-      measured local-desktop card, and not a whitelist we invent. We do not claim the
+      measured local desktop card, and not a whitelist we invent. We do not claim the
       bundled ROCm blob lists gfx1201 / R9700, gfx110x (7900 / 7800), or gfx1030
       (official RDNA 2 row). If the ROCm runtime is missing, the card is absent,
       or the GPU meter stays idle, stay on Vulkan or move to plain llama.cpp on
       /setup. Do not invent an HSA_OVERRIDE on gfx1201. gfx1031 (RX 6700 XT)
       HSA_OVERRIDE is unofficial community note, not a recommendation — prefer
-      Vulkan. Not measured on local-desktop.
+      Vulkan. Not measured on the local desktop.
     `.replace(/\s+/g, ' ').trim(),
     gpus:
       'RDNA 2 / 3 / 4 and R9700: only load the ROCm runtime if LM Studio’s picker lists this card’s gfx. Official docs do not publish that list here. Missing or idle → Vulkan, or /setup.',
@@ -134,7 +134,7 @@ export const SETUP_LM_STUDIO_QUANTS: SetupLmStudioQuant[] = [
     quant: 'Q6_K',
     role: 'Higher-quality 35B sibling',
     llamaCpp:
-      'Measured on llama.cpp Vulkan on local-desktop, not inside LM Studio: Q6_K 1-GPU 4K decode 103.23 tok/s (23:55 card). 32K and up is partly on DDR5 — that row says so.',
+      'Measured on llama.cpp Vulkan on the local desktop, not inside LM Studio: Q6_K 1-GPU 4K decode 103.23 tok/s (23:55 card). 32K and up is partly on DDR5 — that row says so.',
     note: `Fit VRAM and both RAM lines (${RAM_MIN_LABEL}, ${RAM_FULL_LABEL}) before you download. Not an LM Studio tok/s.`,
     estimate: false,
   },
@@ -142,7 +142,7 @@ export const SETUP_LM_STUDIO_QUANTS: SetupLmStudioQuant[] = [
     quant: 'UD-Q5_K_XL',
     role: 'House default on one R9700 at 262K',
     llamaCpp:
-      'Measured on llama.cpp Vulkan on local-desktop, not inside LM Studio: 102.39 tok/s decode at 4K, 90.52 at 32K, 66.43 at 128K, 44.4 at 256K. Peak VRAM 25.97 GB at 4K and 29.34 GB at 256K; peak system RAM 37.32 GB and 42.9 GB (Linux GB). Publisher listing 26.6 GB.',
+      'Measured on llama.cpp Vulkan on the local desktop, not inside LM Studio: 102.39 tok/s decode at 4K, 90.52 at 32K, 66.43 at 128K, 44.4 at 256K. Peak VRAM 25.97 GB at 4K and 29.34 GB at 256K; peak system RAM 37.32 GB and 42.9 GB (Linux GB). Publisher listing 26.6 GB.',
     note: `Daily-driver file ${SETUP_LM_STUDIO_HOUSE_FILE}. Set context to ${SETUP_LM_STUDIO_CONTEXT}, GPU offload max. Those tok/s are llama.cpp llama-bench cards, not LM Studio.`,
     estimate: false,
   },
@@ -150,7 +150,7 @@ export const SETUP_LM_STUDIO_QUANTS: SetupLmStudioQuant[] = [
     quant: 'Q4_K_M',
     role: 'Smaller measured 35B sibling',
     llamaCpp:
-      'Measured on llama.cpp Vulkan on local-desktop, not inside LM Studio: Q4_K_M 32K decode 117.69 tok/s; prefill 1902.1 tok/s. One R9700, f16 KV.',
+      'Measured on llama.cpp Vulkan on the local desktop, not inside LM Studio: Q4_K_M 32K decode 117.69 tok/s; prefill 1902.1 tok/s. One R9700, f16 KV.',
     note: `Still check ${RAM_MIN_LABEL} and ${RAM_FULL_LABEL}. Not an LM Studio tok/s.`,
     estimate: false,
   },
@@ -158,7 +158,7 @@ export const SETUP_LM_STUDIO_QUANTS: SetupLmStudioQuant[] = [
     quant: COMPARE_Q3,
     role: 'Cited Q3 option — labeled estimate',
     llamaCpp: `${COMPARE_Q3_CITE}. No 35B overnight tok/s on this site. We do not invent an LM Studio Q3 speed.`,
-    note: 'Labeled estimate unless a run card exists — none does for 35B Q3 on local-desktop. Q1/Q2 stay off.',
+    note: 'Labeled estimate unless a run card exists — none does for 35B Q3 on the local desktop. Q1/Q2 stay off.',
     estimate: true,
   },
 ];
@@ -168,7 +168,7 @@ export const SETUP_LM_STUDIO_STEPS: SetupLmStudioStep[] = [
     id: 'windows',
     title: 'Windows install',
     body:
-      'Download the installer from lmstudio.ai/download and install. LM Studio’s system-requirements page: Windows x64 and ARM (Snapdragon X Elite); x64 needs AVX2; at least 16 GB of RAM recommended; at least 4 GB of dedicated VRAM recommended. AMD’s playbook says launch once so the lms CLI initializes. Adrenalin is AMD’s Windows driver path on that playbook — we do not invent a version pin. Official 35B cards on this site are Ubuntu llama.cpp, not Windows LM Studio. Not measured on local-desktop.',
+      'Download the installer from lmstudio.ai/download and install. LM Studio’s system-requirements page: Windows x64 and ARM (Snapdragon X Elite); x64 needs AVX2; at least 16 GB of RAM recommended; at least 4 GB of dedicated VRAM recommended. AMD’s playbook says launch once so the lms CLI initializes. Adrenalin is AMD’s Windows driver path on that playbook — we do not invent a version pin. Official 35B cards on this site are Ubuntu llama.cpp, not Windows LM Studio. Not measured on the local desktop.',
     links: [
       { href: '/setup/windows', label: 'Windows setup' },
       { href: '/setup', label: 'Ubuntu setup (measured)' },
@@ -179,7 +179,7 @@ export const SETUP_LM_STUDIO_STEPS: SetupLmStudioStep[] = [
     id: 'linux',
     title: 'Linux AppImage on Ubuntu 24.04+',
     body:
-      'LM Studio documents Linux as an AppImage (x64 and ARM64). Required: Ubuntu 20.04 or newer. Official note: Ubuntu versions newer than 22 are not well tested. Ubuntu 24.04.5 is the measured AMDai llama.cpp OS — that is not an LM Studio test claim. AMD’s playbook: download the AppImage from lmstudio.ai/download?os=linux, then sudo apt install libfuse2, chmod +x LM-Studio-*.AppImage, ./LM-Studio-*.AppImage. Launch once so lms initializes. Add the login to render and video (AMD playbook). The playbook also mentions a .deb; this page follows the AppImage they spell out. Fedora and Arch can run the same AppImage as a cited try — not verified on our rig. Not measured on local-desktop.',
+      'LM Studio documents Linux as an AppImage (x64 and ARM64). Required: Ubuntu 20.04 or newer. Official note: Ubuntu versions newer than 22 are not well tested. Ubuntu 24.04.5 is the measured AMDai llama.cpp OS — that is not an LM Studio test claim. AMD’s playbook: download the AppImage from lmstudio.ai/download?os=linux, then sudo apt install libfuse2, chmod +x LM-Studio-*.AppImage, ./LM-Studio-*.AppImage. Launch once so lms initializes. Add the login to render and video (AMD playbook). The playbook also mentions a .deb; this page follows the AppImage they spell out. Fedora and Arch can run the same AppImage as a cited try — not verified on our rig. Not measured on the local desktop.',
     links: [
       { href: '/setup', label: 'Ubuntu setup (measured)' },
       { href: '/setup/fedora', label: 'Fedora setup' },
@@ -191,7 +191,7 @@ export const SETUP_LM_STUDIO_STEPS: SetupLmStudioStep[] = [
     id: 'runtime',
     title: 'Pick the Vulkan llama.cpp runtime — ROCm only if this gfx is listed',
     body:
-      'Ctrl+Shift+R opens Runtime Selections (AMD playbook). CLI: lms runtime ls, lms runtime get, lms runtime select. Take the Vulkan llama.cpp engine first on RDNA 2, RDNA 3, RDNA 4, and the R9700. The bundled ROCm engine is second, and only if the picker lists this card’s gfx — we do not invent that list. CUDA is the wrong family on a Radeon. Not measured on local-desktop.',
+      'Ctrl+Shift+R opens Runtime Selections (AMD playbook). CLI: lms runtime ls, lms runtime get, lms runtime select. Take the Vulkan llama.cpp engine first on RDNA 2, RDNA 3, RDNA 4, and the R9700. The bundled ROCm engine is second, and only if the picker lists this card’s gfx — we do not invent that list. CUDA is the wrong family on a Radeon. Not measured on the local desktop.',
     links: [
       { href: '/rocm/vulkan-hip', label: 'Vulkan vs HIP' },
       { href: '/backends/lmstudio', label: 'LM Studio backend' },
@@ -214,7 +214,7 @@ export const SETUP_LM_STUDIO_STEPS: SetupLmStudioStep[] = [
   {
     id: 'offload',
     title: 'GPU offload max, context 262K, both RAM lines',
-    body: `AMD playbook GUI: Model Loader (Ctrl+L), show advanced settings, GPU Offload maximum, Flash Attention On, Remember settings. Their playbook context example is 4096 for their sample models — that is not the house 262K window. LM Studio CLI: ${SETUP_LM_STUDIO_LOAD}. --gpu accepts off, max, or a 0–1 fraction; if omitted, LM Studio picks. --context-length sets the token window. The calculator still prints ${RAM_MIN_LABEL} (the load at the context you picked) and ${RAM_FULL_LABEL} (262144 for the house 35B). Overnight UD-Q5 one-GPU Ubuntu llama.cpp peaks are 37.32 GB at 4K and 42.9 GB at 256K — measured on llama.cpp on local-desktop, not inside LM Studio. When a file spills to system RAM, round ${RAM_MIN_LABEL} to a real kit (192 or 256 GB) with a breakdown and keep it a labeled estimate until measured. Not measured on local-desktop.`,
+    body: `AMD playbook GUI: Model Loader (Ctrl+L), show advanced settings, GPU Offload maximum, Flash Attention On, Remember settings. Their playbook context example is 4096 for their sample models — that is not the house 262K window. LM Studio CLI: ${SETUP_LM_STUDIO_LOAD}. --gpu accepts off, max, or a 0–1 fraction; if omitted, LM Studio picks. --context-length sets the token window. The calculator still prints ${RAM_MIN_LABEL} (the load at the context you picked) and ${RAM_FULL_LABEL} (262144 for the house 35B). Overnight UD-Q5 one-GPU Ubuntu llama.cpp peaks are 37.32 GB at 4K and 42.9 GB at 256K — measured on llama.cpp on the local desktop, not inside LM Studio. When a file spills to system RAM, round ${RAM_MIN_LABEL} to a real kit (192 or 256 GB) with a breakdown and keep it a labeled estimate until measured. Not measured on the local desktop.`,
     links: [
       { href: '/calculator', label: 'Calculator' },
       { href: '/flash-ram-offload', label: 'Flash RAM offload' },
@@ -225,7 +225,7 @@ export const SETUP_LM_STUDIO_STEPS: SetupLmStudioStep[] = [
   {
     id: 'server',
     title: 'Local OpenAI-compatible server — then Hermes or another harness',
-    body: `Developer tab (Ctrl+2) → Server Settings → Status on (AMD playbook). Documented bind is typically ${SETUP_LM_STUDIO_SERVER.replace('/v1', '')}. LM Studio OpenAI-compat docs: point the client base URL at http://localhost:1234/v1. Endpoints include GET /v1/models and POST /v1/chat/completions plus /v1/responses. Confirm with curl -s ${SETUP_LM_STUDIO_SERVER.replace(/\/v1$/, '')}/v1/models. Keep the bind on 127.0.0.1 unless you mean to share the LAN (playbook: Serve on Local Network). Hermes and other harnesses can use that OpenAI-shaped /v1 the same way they use llama-server — house Hermes on this site talks to :8080 / Strata :8083, not a measured LM Studio attach. Not measured on local-desktop.`,
+    body: `Developer tab (Ctrl+2) → Server Settings → Status on (AMD playbook). Documented bind is typically ${SETUP_LM_STUDIO_SERVER.replace('/v1', '')}. LM Studio OpenAI-compat docs: point the client base URL at http://localhost:1234/v1. Endpoints include GET /v1/models and POST /v1/chat/completions plus /v1/responses. Confirm with curl -s ${SETUP_LM_STUDIO_SERVER.replace(/\/v1$/, '')}/v1/models. Keep the bind on 127.0.0.1 unless you mean to share the LAN (playbook: Serve on Local Network). Hermes and other harnesses can use that OpenAI-shaped /v1 the same way they use llama-server — house Hermes on this site talks to :8080 / Strata :8083, not a measured LM Studio attach. Not measured on the local desktop.`,
     links: [
       { href: '/harnesses', label: 'Harnesses' },
       { href: '/harnesses/lm-studio', label: 'LM Studio harness' },
@@ -237,7 +237,7 @@ export const SETUP_LM_STUDIO_STEPS: SetupLmStudioStep[] = [
     id: 'plain',
     title: 'When to move to plain llama.cpp',
     body:
-      'Leave LM Studio when you need this site’s compile flags, llama-bench cards, or a Stack Lab recipe that matches local-desktop. The measured daily driver is llama.cpp Vulkan you built — llama-server on 127.0.0.1:8080, not the bundled engine on :1234. Read First-run setup and Backends. Docker / Podman is the isolated official-image path. We do not invent an LM Studio tok/s or a speed delta versus llama.cpp. Not measured on local-desktop.',
+      'Leave LM Studio when you need this site’s compile flags, llama-bench cards, or a Stack Lab recipe that matches local desktop. The measured daily driver is llama.cpp Vulkan you built — llama-server on 127.0.0.1:8080, not the bundled engine on :1234. Read First-run setup and Backends. Docker / Podman is the isolated official-image path. We do not invent an LM Studio tok/s or a speed delta versus llama.cpp. Not measured on the local desktop.',
     links: [
       { href: '/setup', label: 'Ubuntu setup (measured)' },
       { href: '/backends', label: 'Backends' },
@@ -250,7 +250,7 @@ export const SETUP_LM_STUDIO_STEPS: SetupLmStudioStep[] = [
     id: 'breaks',
     title: 'Common Radeon gotchas',
     body:
-      'GPU meter idle: wrong runtime (CPU or CUDA on a Radeon) or no offload — set GPU Offload max and confirm Vulkan. ROCm runtime missing this gfx: stay Vulkan; do not invent an override on gfx1201. gfx1031 HSA_OVERRIDE is unofficial — prefer Vulkan. AppImage on Ubuntu 24.04: LM Studio says versions newer than 22 are not well tested; libfuse2 is the AMD playbook package. Permission on /dev/dri or /dev/kfd: render and video groups. Start from /troubleshoot and paste a log in the error matcher. Cited rows live on /rocm-problems. Stack Lab remains the Ubuntu companion — packages are not published yet and there is no LM Studio package. Not measured on local-desktop.',
+      'GPU meter idle: wrong runtime (CPU or CUDA on a Radeon) or no offload — set GPU Offload max and confirm Vulkan. ROCm runtime missing this gfx: stay Vulkan; do not invent an override on gfx1201. gfx1031 HSA_OVERRIDE is unofficial — prefer Vulkan. AppImage on Ubuntu 24.04: LM Studio says versions newer than 22 are not well tested; libfuse2 is the AMD playbook package. Permission on /dev/dri or /dev/kfd: render and video groups. Start from /troubleshoot and paste a log in the error matcher. Cited rows live on /rocm-problems. Stack Lab remains the Ubuntu companion — packages are not published yet and there is no LM Studio package. Not measured on the local desktop.',
     links: [
       { href: '/troubleshoot', label: 'Troubleshoot' },
       { href: '/troubleshoot/errors', label: 'Error paste' },
@@ -339,7 +339,7 @@ export function assertSetupLmStudioValid(): string[] {
   const errors: string[] = [];
   const blob = setupLmStudioBlob();
   const hrefs = new Set(setupLmStudioHrefs());
-  if (SETUP_LM_STUDIO_CITED_LABEL !== 'Cited, not measured on local-desktop') errors.push('cited label drifted');
+  if (SETUP_LM_STUDIO_CITED_LABEL !== 'Cited, not measured on the local desktop') errors.push('cited label drifted');
   if (SETUP_LM_STUDIO_TRACKS.length !== 2) errors.push('need vulkan and rocm tracks');
   if (!SETUP_LM_STUDIO_TRACKS.find((row) => row.id === 'vulkan')?.recommend) {
     errors.push('Vulkan runtime should be the try');
@@ -366,7 +366,7 @@ export function assertSetupLmStudioValid(): string[] {
   if (/TODO|TBD|FIXME|lorem ipsum|coming soon/i.test(blob)) errors.push('leftover copy');
   if (/\$\d|\bMSRP\b/i.test(blob)) errors.push('invented price');
   if (!/llama\.cpp/i.test(blob)) errors.push('must say llama.cpp');
-  if (!/not measured on local-desktop/i.test(blob)) errors.push('must say not measured on local-desktop');
+  if (!/not measured on the local desktop/i.test(blob)) errors.push('must say not measured on the local desktop');
   if (!/not inside LM Studio/i.test(blob)) errors.push('must label llama.cpp numbers as not inside LM Studio');
   if (!/Q3 is a labeled estimate/i.test(blob) && !/labeled estimate/i.test(blob)) {
     errors.push('Q3 must stay a labeled estimate');

@@ -17,7 +17,7 @@ Audience: home-lab and enthusiast users. Not enterprise Instinct marketing.
 | Daily driver | Qwen3.6-35B-A3B | Unsloth UD-Q5_K_XL | llama.cpp Vulkan | One R9700, 262K, f16 KV, 0% RAM offload. Measured on our rig, 2026-10: 102.39 tok/s short / 90.52 at 32K / 66.43 at 128K / 44.4 at 256K |
 | Fast agent | Qwen 3.8 Flash | Unsloth UD-Q6_K_XL | Strata v0.1.42 | Two-card 262K: 32.8 tok/s at 8K/32K, 31.8 at 100K. Prior first-party ~32.6 vs llama.cpp ~16 — Measured on our rig, 2026-10 |
 
-Official llama-bench cards (c060ca974 Vulkan, f16 KV, overnight sweep 2026-10-12) live in `data/runs/`. Credited to amdai / local-desktop. UD-Q5_K_XL peak VRAM is 25.97 GB at 4K / 29.34 GB at 256K. Sibling 35B points: Q5_K_M 109.73 tok/s (24.68 GB VRAM); Q4_K_M 117.69 tok/s decode, 1902.1 tok/s prefill at 32K. Q6_K 1-GPU 4K table cell is 103.23 tok/s (23:55; the earlier 82.62 card stays on /results). The whole sweep is measured, pending re-verify after the DDR5-5200 RAM fix. Flash / Strata / Q3 are pending a DDR5 rerun.
+Official llama-bench cards (c060ca974 Vulkan, f16 KV, overnight sweep 2026-10-12) live in `data/runs/`. Credited to AMDai / local desktop. UD-Q5_K_XL peak VRAM is 25.97 GB at 4K / 29.34 GB at 256K. Sibling 35B points: Q5_K_M 109.73 tok/s (24.68 GB VRAM); Q4_K_M 117.69 tok/s decode, 1902.1 tok/s prefill at 32K. Q6_K 1-GPU 4K table cell is 103.23 tok/s (23:55; the earlier 82.62 card stays on /results). The whole sweep is measured, pending re-verify after the DDR5-5200 RAM fix. Flash / Strata / Q3 are pending a DDR5 rerun.
 
 House rules: prefer llama.cpp over vLLM; prefer Q5 over Q4; Q3 is listed as estimate/community unless measured; Q1/Q2 stay off; fast NVMe only; one LLM per GPU unless you deliberately combine.
 
@@ -58,13 +58,13 @@ Public site URL is `https://amdai.net` (`site` in `astro.config.mjs`; override w
 | `/` | Home + living status card |
 | `/start` | Short hub — Ubuntu setup, measured recipe, benchmarks, optional Stack Lab |
 | `/setup` | First-run setup — Ubuntu 24.04+ measured path; Windows card links to `/setup/windows`; Ubuntu-based note for Mint / Pop!_OS / Kubuntu |
-| `/setup/windows` | Cited Windows ROCm + llama.cpp Vulkan first-run — not measured on local-desktop |
+| `/setup/windows` | Cited Windows ROCm + llama.cpp Vulkan first-run — not measured on the local desktop |
 | `/setup/fedora` | Cited Fedora distro ROCm + llama.cpp Vulkan — not verified on our rig |
 | `/setup/arch` | Cited Arch Wiki RADV + llama.cpp Vulkan — not verified on our rig |
-| `/gpus/strix-halo` | Cited Ryzen AI Max+ 395 / Strix Halo APU guide — shared memory, not measured on local-desktop |
+| `/gpus/strix-halo` | Cited Ryzen AI Max+ 395 / Strix Halo APU guide — shared memory, not measured on the local desktop |
 | `/stacks` | Recommended stack cards from the test rig |
 | `/qwen` | Master 3.6 / 3.8 comparison table — one row per model × quant, measured tok/s from run cards |
-| `/compare` | Cited 35B decisions from local-desktop cards — one vs split, Q6 / Q5 / Q4 plus a Q3 estimate, Radeon vs NVIDIA |
+| `/compare` | Cited 35B decisions from local desktop cards — one vs split, Q6 / Q5 / Q4 plus a Q3 estimate, Radeon vs NVIDIA |
 | `/compare/one-vs-two-gpu` | One R9700 vs split: decode, prefill, VRAM, system RAM |
 | `/compare/q4-q5-q6` | Same 35B quants side by side; Q3 column labeled estimate |
 | `/compare/radeon-vs-nvidia` | Cited Radeon vs NVIDIA for local-LLM shoppers — vendor specs, measured R9700, empty RTX speed until cited |
@@ -78,9 +78,9 @@ Public site URL is `https://amdai.net` (`site` in `astro.config.mjs`; override w
 | `/quants` | Q3–Q8, UD dynamic, KV types, why Q1/Q2 stay off |
 | `/gpus` | GPU directory — gfx IDs, VRAM, official ROCm rows, links to `/gpus/<id>` |
 | `/gpus/r9700` | Radeon AI PRO R9700 measured hero — 32 GB, 35B llama.cpp tables, Start → setup → recipe → Stack Lab |
-| `/gpus/rx-7900-xtx` | RX 7900 XTX consumer recipe sheet — 24 GB, gfx1100, calculator fit estimates; not measured on local-desktop |
-| `/gpus/rx-7900-xt` | RX 7900 XT consumer recipe sheet — 20 GB, gfx1100, calculator fit estimates; not measured on local-desktop |
-| `/gpus/rx-7800-xt` | RX 7800 XT consumer recipe sheet — 16 GB, gfx1101, calculator fit estimates; not measured on local-desktop |
+| `/gpus/rx-7900-xtx` | RX 7900 XTX consumer recipe sheet — 24 GB, gfx1100, calculator fit estimates; not measured on the local desktop |
+| `/gpus/rx-7900-xt` | RX 7900 XT consumer recipe sheet — 20 GB, gfx1100, calculator fit estimates; not measured on the local desktop |
+| `/gpus/rx-7800-xt` | RX 7800 XT consumer recipe sheet — 16 GB, gfx1101, calculator fit estimates; not measured on the local desktop |
 | `/gpus/<id>` | One card: recipe table, launch command, estimate sheet when listed, or “no tested recipe yet” |
 | `/models` | House Qwen models — daily drivers first; names without a cited row stay contribute |
 | `/models/qwen36` | Qwen3.6-35B-A3B recipe page — measured config table, RAM lines, llama.cpp launch, Stack Lab |
@@ -88,12 +88,12 @@ Public site URL is `https://amdai.net` (`site` in `astro.config.mjs`; override w
 | `/recipes/<id>` | One launch: gates, command, RAM, withdrawal |
 | `/contribute` | Download recipe JSON (log required) |
 | `/wanted` | Card × model gaps — no bounty amounts |
-| `/credits` | Sybil / 0xSero MIT notice, local-desktop first-party set, and Shannon’s cited lab write-up |
-| `/labs` | Community labs index — cited write-ups, not measured on local-desktop |
+| `/credits` | Sybil / 0xSero MIT notice, local desktop first-party set, and Shannon’s cited lab write-up |
+| `/labs` | Community labs index — cited write-ups, not measured on the local desktop |
 | `/labs/shannon` | Shannon (@iamMrDuncan) How I run my Lab — cited, not measured by AMDai |
 | `/secure-lab` | Cited secure-lab layout — isolated enclave, Proxmox split, guardrails, separate NVMe, offsite backup |
 | `/autoresearch` | Cited amdai-bench idea — container per GPU, Prometheus/Grafana, bot steering; Thermite has no public repo here |
-| `/about` | Who runs AMDai, the published local-desktop kit, editorial independence, affiliate links |
+| `/about` | Who runs AMDai, the published local desktop kit, editorial independence, affiliate links |
 | `/methodology` | How we test — amdai-bench/run@1 cards, labeled estimates, citations, corrections |
 | `/contact` | Honest routes — contribute, ROCm problems; email only if `CONTACT_EMAIL` is set |
 | `/terms` | Short terms of use — informational, no warranty, hardware/BIOS at your risk |
@@ -120,7 +120,7 @@ Public site URL is `https://amdai.net` (`site` in `astro.config.mjs`; override w
 | `/rocm-problems/works` | Works on my rig (saved-rig form) |
 | `/rocm-problems/contribute` | Contributor guidelines for this site |
 | `/backends` | Inference engines compared — table + flowchart, llama.cpp default |
-| `/benchmarks` | First-party tok/s from the R9700 rig — methodology + local-desktop table |
+| `/benchmarks` | First-party tok/s from the R9700 rig — methodology + local desktop table |
 | `/results` | Official `amdai-bench/run@1` cards — credited to the submitter, page per run |
 | `/results/<id>` | One test-run card, including the exact launch command |
 | `/bios` | Motherboard BIOS for local AI on Radeon — cited chipset notes, empty board table |
@@ -187,7 +187,7 @@ Public site URL is `https://amdai.net` (`site` in `astro.config.mjs`; override w
 | `src/data/flash-daily.yaml` | `/flash-daily` Q3–Q6 RAM + measured Q6 |
 | `src/data/strata-deep.yaml` | `/backends/strata` deep dive + dated community cites |
 | `src/data/benchmarks.yaml` | `/benchmarks` first-party tok/s |
-| `data/runs/*.jsonl` | Official `amdai-bench/run@1` cards (overnight local-desktop drops). Schema: `docs/amdai-bench-run.schema.json` |
+| `data/runs/*.jsonl` | Official `amdai-bench/run@1` cards (overnight local desktop drops). Schema: `docs/amdai-bench-run.schema.json` |
 | `src/data/amdai-bench.v1.json` | Derived 35B-only compatibility snapshot — live `/amdai-bench.v1.json` comes from the run cards |
 | `src/data/bios.yaml` | `/bios` chipset notes + community board table |
 | `src/data/version-matrix.yaml` | ROCm × engine × card (or “no data”) |

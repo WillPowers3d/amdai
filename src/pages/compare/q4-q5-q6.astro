@@ -22,7 +22,7 @@ const quantOrder = [...COMPARE_QUANTS, COMPARE_Q3];
 
 <Base
   title="Q6 vs Q5 vs Q4 (Q3 estimate)"
-  description="Qwen3.6-35B-A3B on local-desktop: Q6_K, UD-Q5_K_XL, Q5_K_M, and Q4_K_M from official llama.cpp cards, plus a labeled UD-Q3_K_XL estimate. 1-GPU or split."
+  description="Qwen3.6-35B-A3B on the local desktop: Q6_K, UD-Q5_K_XL, Q5_K_M, and Q4_K_M from official llama.cpp cards, plus a labeled UD-Q3_K_XL estimate. 1-GPU or split."
 >
   <main id="main" class="mx-auto max-w-6xl px-4 py-10 sm:px-6">
     <p class="kicker">
@@ -32,8 +32,8 @@ const quantOrder = [...COMPARE_QUANTS, COMPARE_Q3];
     <h1 class="display mt-3 text-4xl sm:text-5xl">Which quant on this 35B?</h1>
     <p class="mt-4 max-w-3xl text-lg leading-relaxed text-muted">
       Quality vs speed vs VRAM for the house 35B on llama.cpp Vulkan.
-      Q6 / UD-Q5 / Q5_K_M / Q4 are measured on local-desktop.
-      <strong class="text-ink">{COMPARE_Q3}</strong> is a labeled estimate ({COMPARE_Q3_CITE}) — not a local-desktop run.
+      Q6 / UD-Q5 / Q5_K_M / Q4 are measured on the local desktop.
+      <strong class="text-ink">{COMPARE_Q3}</strong> is a labeled estimate ({COMPARE_Q3_CITE}) — not a local desktop run.
       Prefer Q5 over Q4 when the file still fits. Q1/Q2 stay off.
       To convert and quantize a new GGUF, use
       <a class="underline decoration-accent/40" href="/guides/quantize-gguf">/guides/quantize-gguf</a>.
@@ -154,7 +154,7 @@ const quantOrder = [...COMPARE_QUANTS, COMPARE_Q3];
           <h2 class="font-serif text-2xl">{row.gpuCount === 1 ? 'One R9700' : 'Split'} · {row.contextLabel}</h2>
           <div class="mt-4 overflow-x-auto">
             <table class="table-lab compare-sticky min-w-[64rem]">
-              <caption>Q6, Q5, and Q4 on the same 35B file, plus a labeled Q3 estimate. Figures from local-desktop run cards.</caption>
+              <caption>Q6, Q5, and Q4 on the same 35B file, plus a labeled Q3 estimate. Figures from local desktop run cards.</caption>
               <thead>
                 <tr>
                   <th scope="col">Metric</th>

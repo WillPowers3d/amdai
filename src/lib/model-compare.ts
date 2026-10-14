@@ -505,7 +505,7 @@ function launchesFor(id: ModelCompareId): ModelCompareLaunch[] {
       label: `${MODEL_COMPARE_SHORT[id]} llama.cpp ${quant}`,
       backend: 'llama.cpp',
       command: [
-        '# Shape only — not a measured local-desktop recipe.',
+        '# Shape only — not a measured local desktop recipe.',
         './build-vk/bin/llama-server \\',
         `  -m ~/models/${file} \\`,
         '  -ngl 99 \\',
@@ -588,7 +588,7 @@ function r9700MeasuredDecode(
       decode: 'not measured',
       kind: 'q3-estimate',
       runIds: [],
-      note: `${spec.label} is a labeled estimate — not a local-desktop run.`,
+      note: `${spec.label} is a labeled estimate — not a local desktop run.`,
     };
   }
   if (modelId !== 'qwen36' || gpuId !== 'r9700') {
@@ -596,7 +596,7 @@ function r9700MeasuredDecode(
       decode: 'not measured',
       kind: 'estimate',
       runIds: [],
-      note: 'No official local-desktop cell for this model × card. Empty stays not measured.',
+      note: 'No official local desktop cell for this model × card. Empty stays not measured.',
     };
   }
   const row = oneVsTwoRows(cards).find((item) => item.quant === spec.label && item.context === context);
@@ -606,14 +606,14 @@ function r9700MeasuredDecode(
       decode: 'not measured',
       kind: 'estimate',
       runIds: [],
-      note: 'No official local-desktop cell for this quant × context. Empty stays not measured.',
+      note: 'No official local desktop cell for this quant × context. Empty stays not measured.',
     };
   }
   return {
     decode,
     kind: 'measured',
     runIds: row.one.runIds,
-    note: 'Official local-desktop llama.cpp Vulkan card on one R9700.',
+    note: 'Official local desktop llama.cpp Vulkan card on one R9700.',
   };
 }
 
@@ -695,10 +695,10 @@ function pairLead(left: ModelCompareSide, right: ModelCompareSide): string {
           ? `Shopper Q4 fits ${right.shortName} on one R9700 at 4K and spills on ${left.shortName}.`
           : `Shopper Q4 does not sit in one R9700 VRAM on either side — expect RAM offload.`;
   const measuredBit = left.measured
-    ? `${left.shortName} has measured llama.cpp cells on local-desktop. ${right.shortName} speed stays not measured.`
+    ? `${left.shortName} has measured llama.cpp cells on the local desktop. ${right.shortName} speed stays not measured.`
     : right.measured
-      ? `${right.shortName} has measured llama.cpp cells on local-desktop. ${left.shortName} speed stays not measured.`
-      : `Neither model was measured on local-desktop. Fit numbers are calculator estimates.`;
+      ? `${right.shortName} has measured llama.cpp cells on the local desktop. ${left.shortName} speed stays not measured.`
+      : `Neither model was measured on the local desktop. Fit numbers are calculator estimates.`;
   return `${sizeBit} ${quantBit} ${fitBit} ${measuredBit} llama.cpp first.`;
 }
 
@@ -716,7 +716,7 @@ function useCases(left: ModelCompareSide, right: ModelCompareSide): ModelCompare
 
   const chat =
     leftQ4 && rightQ4
-      ? `Both models hold a shopper Q4 file on one R9700 at 4K on the calculator. ${measured ? `${measured.shortName} is the measured local-desktop side — read those cards, do not copy a decode figure onto ${other.shortName}.` : 'Neither side has a local-desktop decode cell. Pick on size, active params, and VRAM headroom, not a speed we invent.'}`
+      ? `Both models hold a shopper Q4 file on one R9700 at 4K on the calculator. ${measured ? `${measured.shortName} is the measured local desktop side — read those cards, do not copy a decode figure onto ${other.shortName}.` : 'Neither side has a local desktop decode cell. Pick on size, active params, and VRAM headroom, not a speed we invent.'}`
       : leftQ4 !== rightQ4
         ? `${leftQ4 ? left.shortName : right.shortName} holds shopper Q4 on one R9700 at 4K. ${leftQ4 ? right.shortName : left.shortName} needs RAM offload or its listed Q3 file — that Q3 is a labeled estimate.`
         : `Neither model holds shopper Q4 in one R9700 VRAM on the calculator. Chat still works with RAM offload — read ${RAM_MIN_LABEL} and ${RAM_FULL_LABEL} below — or a listed Q3 estimate.`;
@@ -725,7 +725,7 @@ function useCases(left: ModelCompareSide, right: ModelCompareSide): ModelCompare
     measured && measured.id === 'qwen36'
       ? `Coding agents want the file in VRAM and a stable llama.cpp server. The house daily-driver recipe is measured on the R9700 for ${measured.shortName}. ${other.shortName} is ${other.paramsLine} — size Q4 on the calculator before you assume that recipe applies. We do not invent an agent decode figure for ${other.shortName}.`
       : leftQ4 || rightQ4
-        ? `Keep llama.cpp first. The side that holds Q4 in VRAM (${leftQ4 ? left.shortName : ''}${leftQ4 && rightQ4 ? ' and ' : ''}${rightQ4 ? right.shortName : ''}) is the less painful coding-agent host. House Flash / agent pins stay R9700 / local-desktop — they do not transfer. No invented agent speed.`
+        ? `Keep llama.cpp first. The side that holds Q4 in VRAM (${leftQ4 ? left.shortName : ''}${leftQ4 && rightQ4 ? ' and ' : ''}${rightQ4 ? right.shortName : ''}) is the less painful coding-agent host. House Flash / agent pins stay R9700 / local desktop — they do not transfer. No invented agent speed.`
         : `Both sides offload shopper Q4 on one R9700. A coding agent will share that RAM spill. ${RAM_MIN_LABEL} and ${RAM_FULL_LABEL} are the shopper lines. We do not invent a tokens-per-tool figure.`;
 
   const longCtx = `Cited context is ${left.contextLabel} vs ${right.contextLabel}. KV grows with context. Q4 at 32K ${leftQ432 ? `fits ${left.shortName}` : `spills on ${left.shortName}`} and ${rightQ432 ? `fits ${right.shortName}` : `spills on ${right.shortName}`} on one R9700. Read /long-context for measured R9700 35B 128K–262K cards. We do not invent a 128K decode figure here.`;
@@ -873,7 +873,7 @@ export function modelCompareBlob(page: ModelComparePairPage): string {
 }
 
 export const MODEL_COMPARE_HUB_LEAD =
-  `Pick two models that already have cited AMDai /models pages — Qwen3.6-35B, Qwen 3.8 Flash, gpt-oss 20B, Gemma 3 27B, Llama 3.3 70B, GLM 5.3 Flash, Qwen3.6 27B, and Qwen3.8 27B. Each pair page uses official-card sizes and context claims, calculator fit on the existing R9700 / RX 7900 XTX / RX 7900 XT / RX 7800 XT sheets at Q6 / Q5 / Q4 plus a labeled Q3 estimate, and llama.cpp-first commands already on those model pages. Measured decode appears only from existing local-desktop run cards. We do not invent a price or a benchmark. ${RAM_MIN_LABEL} and ${RAM_FULL_LABEL} print wherever a file spills to system RAM.`;
+  `Pick two models that already have cited AMDai /models pages — Qwen3.6-35B, Qwen 3.8 Flash, gpt-oss 20B, Gemma 3 27B, Llama 3.3 70B, GLM 5.3 Flash, Qwen3.6 27B, and Qwen3.8 27B. Each pair page uses official-card sizes and context claims, calculator fit on the existing R9700 / RX 7900 XTX / RX 7900 XT / RX 7800 XT sheets at Q6 / Q5 / Q4 plus a labeled Q3 estimate, and llama.cpp-first commands already on those model pages. Measured decode appears only from existing local desktop run cards. We do not invent a price or a benchmark. ${RAM_MIN_LABEL} and ${RAM_FULL_LABEL} print wherever a file spills to system RAM.`;
 
 export function modelCompareHrefs(page: ModelComparePairPage): string[] {
   return [

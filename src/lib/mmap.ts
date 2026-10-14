@@ -94,7 +94,7 @@ export const MM_LEAD = `
   the GGUF unless a device cannot. --load-mode none is the cited replacement
   for --no-mmap. --load-mode mlock is the cited replacement for --no-mmap
   --mlock. --load-mode mmap+mlock keeps a mapped file resident. AMDai has not
-  ingested a Model loading A/B card on local-desktop, so load time, TTFT, decode,
+  ingested a Model loading A/B card on the local desktop, so load time, TTFT, decode,
   prefill, and mmap-vs-mlock peak RAM stay ${MM_UNMEASURED}. Stack Lab’s
   ${MM_PACK} is mmap default vs --no-mmap vs --mlock. That pack is not an
   allowlisted Open-in-Stack-Lab deep link — open the planner, then ingest a
@@ -144,7 +144,7 @@ export const MM_RAM = `
 
 export const MM_HOUSE = `# House daily driver as recorded (no --load-mode / --mmap / --no-mmap / --mlock pin).
 # llama-server README: --load-mode default auto (mmap unless a device cannot).
-# That default is official docs — not a local-desktop pin we will invent.
+# That default is official docs — not a local desktop pin we will invent.
 ./build-vk/bin/llama-server \\
   -m /path/to/nvme/${MM_HOUSE_FILE} \\
   ${MM_HOUSE_SERVER_FLAGS}`;
@@ -358,7 +358,7 @@ export const MM_FAQ: MmFaq[] = [
     id: 'what-is-mmap',
     question: 'What is llama.cpp mmap versus --no-mmap versus --mlock on a Radeon?',
     answer:
-      'Official --load-mode auto memory-maps the GGUF (mmap default). --load-mode none replaces deprecated --no-mmap and copies weights into RAM. --load-mode mlock locks a non-mapped copy; mmap+mlock locks a mapped copy. AMDai has not measured load time or RSS across those arms on local-desktop — not yet measured. Run Stack Lab Model loading A/B. Q3 is a labeled estimate. llama.cpp first.',
+      'Official --load-mode auto memory-maps the GGUF (mmap default). --load-mode none replaces deprecated --no-mmap and copies weights into RAM. --load-mode mlock locks a non-mapped copy; mmap+mlock locks a mapped copy. AMDai has not measured load time or RSS across those arms on the local desktop — not yet measured. Run Stack Lab Model loading A/B. Q3 is a labeled estimate. llama.cpp first.',
     links: [
       { href: '/mmap', label: 'mmap / mlock' },
       { href: '/out-of-vram', label: 'Out of VRAM' },

@@ -16,7 +16,7 @@ import {
   winnerSummary,
 } from './local-desktop-compare';
 
-describe('local-desktop compare tables', () => {
+describe('local desktop compare tables', () => {
   it('builds 1-vs-2 and Q4/Q5/Q6 tables from official cards only', () => {
     assert.deepEqual(assertCompareValid(runs), []);
     const rows = oneVsTwoRows(runs);

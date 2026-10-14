@@ -25,7 +25,7 @@ if (!card) throw new Error(`unknown run ${Astro.props.id}`);
     <h1 class="display mt-3 text-4xl sm:text-5xl">Test-run {card.run_id}</h1>
     <p class="mt-4 max-w-2xl text-lg leading-relaxed text-muted">
       Official {RUN_SCHEMA} card. Credited to {card.submitted_by.display}.
-      {card.submitted_by.verified ? 'Verified on local-desktop.' : 'Submitted — not rerun here.'}
+      {card.submitted_by.verified ? 'Verified on the local desktop.' : 'Submitted — not rerun here.'}
       {cardPendingReverify(card) ? ` ${SWEEP_REVERIFY}` : ''}
     </p>
     <div class="mt-8">

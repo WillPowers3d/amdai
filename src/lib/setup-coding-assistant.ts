@@ -1,6 +1,6 @@
 /**
  * Cited local coding-assistant path on Radeon.
- * llama-server flags and 35B decode are measured on llama.cpp on local-desktop.
+ * llama-server flags and 35B decode are measured on llama.cpp on the local desktop.
  * Aider / Cline / Continue attach is cited from each tool’s docs — not measured.
  * Official sources only. No invented tok/s, prices, or Qwen2.5 / Qwen3-8B.
  */
@@ -9,7 +9,7 @@ import { RAM_FULL_LABEL, RAM_MIN_LABEL } from './ram-surfaces';
 import { COMPARE_Q3, COMPARE_Q3_CITE } from './local-desktop-compare';
 
 export const SETUP_CODING_PUBLISHED = '2026-10-14';
-export const SETUP_CODING_CITED_LABEL = 'Cited attach; llama.cpp measured on local-desktop';
+export const SETUP_CODING_CITED_LABEL = 'Cited attach; llama.cpp measured on the local desktop';
 
 export const SETUP_CODING_SERVER = 'http://127.0.0.1:8080/v1';
 export const SETUP_CODING_HOST = '127.0.0.1';
@@ -133,7 +133,7 @@ export const SETUP_CODING_TRACKS: SetupCodingTrack[] = [
       Upstream default --port is 9931 in the current README — we pin
       --port ${SETUP_CODING_PORT} so harnesses on this site keep
       ${SETUP_CODING_SERVER}. Confirm with curl -s ${SETUP_CODING_SERVER.replace(/\/v1$/, '')}/v1/models.
-      Those flags and the 35B decode table are measured on llama.cpp on local-desktop.
+      Those flags and the 35B decode table are measured on llama.cpp on the local desktop.
     `.replace(/\s+/g, ' ').trim(),
   },
   {
@@ -146,7 +146,7 @@ export const SETUP_CODING_TRACKS: SetupCodingTrack[] = [
       Ollama is another wrapper; it is not the house stack and has no dedicated
       first-run page here yet. Do not let a harness download a CUDA llama.cpp on
       a Radeon. House Hermes on this site talks to :8080, not :1234. Attach is
-      cited, not measured on local-desktop.
+      cited, not measured on the local desktop.
     `.replace(/\s+/g, ' ').trim(),
   },
 ];
@@ -155,19 +155,19 @@ export const SETUP_CODING_QUANTS: SetupCodingQuant[] = [
   {
     quant: 'Q6_K',
     role: 'Higher-quality 35B sibling',
-    note: 'Measured on llama.cpp Vulkan on local-desktop, not inside Aider/Cline/Continue: Q6_K 1-GPU 4K decode 103.23 tok/s (23:55 card). 32K+ is partly on DDR5. Size VRAM on the calculator.',
+    note: 'Measured on llama.cpp Vulkan on the local desktop, not inside Aider/Cline/Continue: Q6_K 1-GPU 4K decode 103.23 tok/s (23:55 card). 32K+ is partly on DDR5. Size VRAM on the calculator.',
     estimate: false,
   },
   {
     quant: 'UD-Q5_K_XL',
     role: 'House default on one R9700',
-    note: `Measured on llama.cpp Vulkan on local-desktop: 102.39 tok/s decode at 4K, 90.52 at 32K, 66.43 at 128K, 44.4 at 256K. Peak VRAM 25.97 GB / 29.34 GB; peak system RAM 37.32 GB / 42.9 GB. File ${SETUP_CODING_HOUSE_FILE}. Not an Aider tok/s.`,
+    note: `Measured on llama.cpp Vulkan on the local desktop: 102.39 tok/s decode at 4K, 90.52 at 32K, 66.43 at 128K, 44.4 at 256K. Peak VRAM 25.97 GB / 29.34 GB; peak system RAM 37.32 GB / 42.9 GB. File ${SETUP_CODING_HOUSE_FILE}. Not an Aider tok/s.`,
     estimate: false,
   },
   {
     quant: 'Q4_K_M',
     role: 'Smaller measured 35B sibling',
-    note: 'Measured on llama.cpp Vulkan on local-desktop: Q4_K_M 32K decode 117.69 tok/s; prefill 1902.1 tok/s. One R9700, f16 KV. Still check both RAM lines.',
+    note: 'Measured on llama.cpp Vulkan on the local desktop: Q4_K_M 32K decode 117.69 tok/s; prefill 1902.1 tok/s. One R9700, f16 KV. Still check both RAM lines.',
     estimate: false,
   },
   {
@@ -190,21 +190,21 @@ export const SETUP_CODING_TIERS: SetupCodingTier[] = [
     id: '24gb',
     vram: '24 GB',
     title: 'RX 7900 XTX — size 35B on the calculator',
-    body: `Same Qwen3.6-35B-A3B family from /models/qwen36. Q6 / Q5 / Q4 first; ${COMPARE_Q3} stays a labeled estimate. House 35B at long context may spill — print ${RAM_MIN_LABEL} and ${RAM_FULL_LABEL} before you download. Not measured on local-desktop.`,
+    body: `Same Qwen3.6-35B-A3B family from /models/qwen36. Q6 / Q5 / Q4 first; ${COMPARE_Q3} stays a labeled estimate. House 35B at long context may spill — print ${RAM_MIN_LABEL} and ${RAM_FULL_LABEL} before you download. Not measured on the local desktop.`,
     href: '/gpus/rx-7900-xtx',
   },
   {
     id: '16gb',
     vram: '16 GB',
     title: '16 GB cards — denser /models files, not house 35B in VRAM',
-    body: `House 35B Q6 / Q5 / Q4 do not fit 16 GB on the calculator (RX 7800 XT, RX 9070 XT, RX 9060 XT, RX 7600 XT, RX 6800 XT). Point the assistant at a file already on /models that does: Qwen3.6-27B, Qwen3.8-27B, Gemma 3 27B, or gpt-oss-20B. Each catalog page lists Q6 / Q5 / Q4 plus a cited Q3 estimate. 35B still works with RAM offload — both RAM lines stay labeled estimate. Not measured on local-desktop.`,
+    body: `House 35B Q6 / Q5 / Q4 do not fit 16 GB on the calculator (RX 7800 XT, RX 9070 XT, RX 9060 XT, RX 7600 XT, RX 6800 XT). Point the assistant at a file already on /models that does: Qwen3.6-27B, Qwen3.8-27B, Gemma 3 27B, or gpt-oss-20B. Each catalog page lists Q6 / Q5 / Q4 plus a cited Q3 estimate. 35B still works with RAM offload — both RAM lines stay labeled estimate. Not measured on the local desktop.`,
     href: '/models',
   },
   {
     id: '12gb',
     vram: '12 GB / 8 GB',
     title: 'Smaller VRAM — gpt-oss-20B or offload',
-    body: `RX 7700 XT (12 GB), RX 9070 GRE (12 GB), RX 6700 XT (12 GB), RX 7600 (8 GB): house 35B Q4–Q6 need offload. Prefer gpt-oss-20B or another /models file the calculator says fits. Q6 / Q5 / Q4 plus a cited Q3 estimate. Nothing below Q3. Not measured on local-desktop.`,
+    body: `RX 7700 XT (12 GB), RX 9070 GRE (12 GB), RX 6700 XT (12 GB), RX 7600 (8 GB): house 35B Q4–Q6 need offload. Prefer gpt-oss-20B or another /models file the calculator says fits. Q6 / Q5 / Q4 plus a cited Q3 estimate. Nothing below Q3. Not measured on the local desktop.`,
     href: '/models/gpt-oss-20b',
   },
 ];
@@ -261,7 +261,7 @@ models:
 # provider: llama.cpp
 # apiBase: http://${SETUP_CODING_HOST}:${SETUP_CODING_PORT}
 `,
-    note: 'Continue openai provider wants apiBase including /v1. The native llama.cpp provider uses the host without /v1. Attach is cited, not measured on local-desktop.',
+    note: 'Continue openai provider wants apiBase including /v1. The native llama.cpp provider uses the host without /v1. Attach is cited, not measured on the local desktop.',
   },
 ];
 
@@ -305,7 +305,7 @@ export const SETUP_CODING_STEPS: SetupCodingStep[] = [
   {
     id: 'clients',
     title: 'Point Aider, Cline, and Continue at :8080/v1',
-    body: `Copy the blocks below. Base URL is ${SETUP_CODING_SERVER}. Model id must match GET /v1/models (house placeholder ${SETUP_CODING_MODEL}; llama-server --alias sets it). API key is the non-empty placeholder ${SETUP_CODING_API_KEY} — Aider requires it even locally. LM Studio is :1234 if you already followed /setup/lm-studio. House Hermes on local-desktop uses this same :8080. Attach is cited, not measured on local-desktop. For reliable tool-arg JSON, cite llama.cpp --json-schema / GBNF on /constrained-decoding — grammar decode is not a harness tok/s.`,
+    body: `Copy the blocks below. Base URL is ${SETUP_CODING_SERVER}. Model id must match GET /v1/models (house placeholder ${SETUP_CODING_MODEL}; llama-server --alias sets it). API key is the non-empty placeholder ${SETUP_CODING_API_KEY} — Aider requires it even locally. LM Studio is :1234 if you already followed /setup/lm-studio. House Hermes on the local desktop uses this same :8080. Attach is cited, not measured on the local desktop. For reliable tool-arg JSON, cite llama.cpp --json-schema / GBNF on /constrained-decoding — grammar decode is not a harness tok/s.`,
     links: [
       { href: '/harnesses', label: 'Harnesses' },
       { href: '/harnesses/aider', label: 'Aider' },
@@ -423,7 +423,7 @@ export function assertSetupCodingValid(): string[] {
   const errors: string[] = [];
   const blob = setupCodingBlob();
   const hrefs = new Set(setupCodingHrefs());
-  if (SETUP_CODING_CITED_LABEL !== 'Cited attach; llama.cpp measured on local-desktop') {
+  if (SETUP_CODING_CITED_LABEL !== 'Cited attach; llama.cpp measured on the local desktop') {
     errors.push('cited label drifted');
   }
   if (SETUP_CODING_TRACKS.length !== 2) errors.push('need llama.cpp and secondary tracks');
@@ -460,7 +460,7 @@ export function assertSetupCodingValid(): string[] {
   if (!/Do not append \/chat\/completions/.test(blob)) errors.push('must cite Cline base URL note');
   if (!/apiBase/.test(blob)) errors.push('must cite Continue apiBase');
   if (!/9931/.test(blob)) errors.push('must cite upstream default port vs house 8080');
-  if (!/not measured on local-desktop/i.test(blob)) errors.push('must label unmeasured attach');
+  if (!/not measured on the local desktop/i.test(blob)) errors.push('must label unmeasured attach');
   if (/\bmeasured in Aider\b|\bAider decode \d|\bCline tok\/s\b/i.test(blob)) {
     errors.push('must not claim harness tok/s');
   }

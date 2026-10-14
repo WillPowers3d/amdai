@@ -29,7 +29,7 @@ describe('local coding assistant setup', () => {
   it('keeps llama.cpp first, cited clients, and house rules', () => {
     assert.deepEqual(assertSetupCodingValid(), []);
     assert.equal(SETUP_CODING_PUBLISHED, '2026-10-14');
-    assert.equal(SETUP_CODING_CITED_LABEL, 'Cited attach; llama.cpp measured on local-desktop');
+    assert.equal(SETUP_CODING_CITED_LABEL, 'Cited attach; llama.cpp measured on the local desktop');
     assert.equal(SETUP_CODING_TRACKS[0]?.id, 'llamacpp');
     assert.equal(SETUP_CODING_TRACKS[1]?.recommend, false);
     assert.equal(SETUP_CODING_HOUSE_FILE, 'Qwen3.6-35B-A3B-UD-Q5_K_XL.gguf');

@@ -80,7 +80,7 @@ const payload = rows.map((row) => ({
 
 <Base
   title="Qwen 3.6 and 3.8 comparison"
-  description="Sortable comparison of every current Qwen 3.6 and 3.8 model × quant. Measured tok/s from local-desktop run cards; VRAM and fit are calculator estimates."
+  description="Sortable comparison of every current Qwen 3.6 and 3.8 model × quant. Measured tok/s from local desktop run cards; VRAM and fit are calculator estimates."
 >
   <main id="main" class="mx-auto max-w-[96rem] px-4 py-10 sm:px-6">
     <p class="kicker">Qwen 3.6 · Qwen 3.8 · one row per file</p>
@@ -131,7 +131,7 @@ const payload = rows.map((row) => ({
 
     <Callout type="note" title="Measured cells stay empty until a card lands">
       <p>
-        {measuredCount} of {rows.length} rows have at least one measured tok/s cell from local-desktop.
+        {measuredCount} of {rows.length} rows have at least one measured tok/s cell from local desktop.
         Coder390 sizes are cited from the
         <a class="underline decoration-accent/40" href={CODER390_HF}>nerkyor Hugging Face GGUF page</a>
         (Q4 LynnStyle 19.6 GB, Q6_K-MTP 23.2 GB, Q8_0-MTP 29.1 GB).
@@ -264,7 +264,7 @@ const payload = rows.map((row) => ({
 
       <div class="qwen-table-wrap mt-6 hidden overflow-auto lg:block">
         <table class="table-lab qwen-table min-w-[84rem]" id="qwen-table">
-          <caption>Qwen 3.6 and 3.8 model × quant comparison. Measured tok/s from local-desktop run cards; VRAM and fit are calculator estimates unless a card recorded a peak.</caption>
+          <caption>Qwen 3.6 and 3.8 model × quant comparison. Measured tok/s from local desktop run cards; VRAM and fit are calculator estimates unless a card recorded a peak.</caption>
           <thead>
             <tr>
               {QWEN_ALL_COLS.map((col) => (

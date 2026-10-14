@@ -1,6 +1,6 @@
 /**
  * First-party benches. Logic lives here so tests never import YAML via ?raw.
- * Allowed tok/s are the local-desktop set only. null = not measured.
+ * Allowed tok/s are the local desktop set only. null = not measured.
  */
 
 export const MEASURED_LABEL = 'Measured on our rig, 2026-10';

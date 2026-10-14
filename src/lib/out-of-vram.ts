@@ -391,7 +391,7 @@ export const OOM_STEPS: OomStep[] = [
     id: 'partial-ngl',
     title: 'Partial -ngl — leave some layers on DDR5',
     flag: '-ngl / --n-gpu-layers',
-    body: `-ngl is how many transformer layers llama.cpp tries to keep on the GPU. -ngl 99 is the house “offload what fits” pin. Partial -ngl is the 16 GB / 12 GB move when Q4 still spills. Leftover layers are system RAM — print ${RAM_MIN_LABEL} and ${RAM_FULL_LABEL}. House daily driver on one R9700 uses -ngl 99 and 0% RAM offload. Partial -ngl tok/s is not measured yet on local-desktop except where a card already names --fit-target.`,
+    body: `-ngl is how many transformer layers llama.cpp tries to keep on the GPU. -ngl 99 is the house “offload what fits” pin. Partial -ngl is the 16 GB / 12 GB move when Q4 still spills. Leftover layers are system RAM — print ${RAM_MIN_LABEL} and ${RAM_FULL_LABEL}. House daily driver on one R9700 uses -ngl 99 and 0% RAM offload. Partial -ngl tok/s is not measured yet on the local desktop except where a card already names --fit-target.`,
     links: [
       { href: '/tuning', label: 'Speed up llama.cpp' },
       { href: '/glossary#offload', label: 'Offload' },
@@ -402,7 +402,7 @@ export const OOM_STEPS: OomStep[] = [
     id: 'split-gpus',
     title: 'Split across GPUs (-ts / --split-mode)',
     flag: '--split-mode / -sm and --tensor-split / -ts',
-    body: 'Official default is --split-mode layer (short -sm layer). Overnight 35B split on local-desktop used layer mode. --tensor-split / -ts and --split-mode row are documented and not measured on local-desktop. llama.cpp multi-gpu.md requires FA for --split-mode tensor. One R9700 usually decodes the house 35B faster than the split. Read Dual / multi-GPU before you split. Do not invent a -ts pair.',
+    body: 'Official default is --split-mode layer (short -sm layer). Overnight 35B split on the local desktop used layer mode. --tensor-split / -ts and --split-mode row are documented and not measured on the local desktop. llama.cpp multi-gpu.md requires FA for --split-mode tensor. One R9700 usually decodes the house 35B faster than the split. Read Dual / multi-GPU before you split. Do not invent a -ts pair.',
     links: [
       { href: '/setup/multi-gpu', label: 'Multi-GPU llama.cpp' },
       { href: '/multi-gpu', label: 'Dual / multi-GPU' },

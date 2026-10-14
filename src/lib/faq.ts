@@ -63,7 +63,7 @@ export const FAQ_ENTRIES: FaqItem[] = [
     group: 'about',
     question: 'What is AMDai?',
     answer:
-      'AMDai is an independent consumer notebook for local AI on AMD Radeon and ROCm. It is not an AMD publication, not a store, and not a scraped leaderboard. Official numbers come from amdai-bench/run@1 cards on the local-desktop R9700 rig unless a cell says estimate or cited. Who runs it and how we test live on About and Methodology.',
+      'AMDai is an independent consumer notebook for local AI on AMD Radeon and ROCm. It is not an AMD publication, not a store, and not a scraped leaderboard. Official numbers come from amdai-bench/run@1 cards on the local desktop R9700 rig unless a cell says estimate or cited. Who runs it and how we test live on About and Methodology.',
     links: [
       { href: '/about', label: 'About' },
       { href: '/methodology', label: 'How we test' },
@@ -114,7 +114,7 @@ export const FAQ_ENTRIES: FaqItem[] = [
     group: 'getting-started',
     question: 'Which GPU should I start with?',
     answer:
-      'The measured house box is one AMD Radeon AI PRO R9700 (32 GB, gfx1201). There is no consumer RX 9700. A 16 GB RX 9070 XT is the same generation with half the VRAM — see the RX 9070 XT recipe sheet for calculator fit estimates, not local-desktop tok/s. The non-XT RX 9070 is the 16 GB / 220 W gfx1201 sheet next to it; the 12 GB RX 9070 GRE is the 192-bit / 432 GB/s GRE sheet. The cheaper 16 GB RDNA 4 pick is the RX 9060 XT (gfx1200) — same estimate-sheet rules, different family package. The 24 GB RX 7900 XTX is the RDNA 3 gfx1100 used-card sheet — AMD cites 24 GB GDDR6 and 355 W typical board power; official on the cited ROCm 10.1 matrix. The 20 GB RX 7900 XT is the same gfx1100 family with AMD citing 315 W TBP — not the 24 GB XTX and not the 16 GB 7900 GRE. The 16 GB RX 7800 XT is the gfx1101 used-card sheet — AMD cites 16 GB GDDR6 and 263 W typical board power; official on that same 10.1 matrix. The 16 GB 7900 GRE sits between the 7900 XT and 7800 XT on the gfx1100 pin. The 12 GB 7700 XT is the next smaller gfx1101 sheet after the 7800 XT. The 16 GB 7600 XT is the gfx1102 budget 16 GB sheet — not the 8 GB RX 7600, which has its own estimate sheet. The 16 GB RX 6800 XT is the RDNA 2 gfx1030 estimate sheet — unofficial on the current Radeon ROCm row, Vulkan first. The shared RX 6950 XT / 6900 XT sheet is the other 16 GB gfx1030 consumer pair (335 W / 576 GB/s vs 300 W / 512 GB/s). The 12 GB RX 6700 XT is the RDNA 2 gfx1031 used-card sheet — not the 6800 XT and not the 10 GB non-XT 6700; AMD cites 12 GB GDDR6 and 230 W typical board power. Workstation PRO sheets: W7900 is 48 GB gfx1100 (864 GB/s, 295 W TBP); W7800 is 32 GB gfx1100 (576 GB/s, 260 W TBP) with a separate AMD-listed 48 GB SKU; W7700 is 16 GB gfx1101 (576 GB/s, 190 W TBP); W6800 is the official 32 GB gfx1030 RDNA 2 row (512 GB/s, 250 W TBP). None of those four are measured on local-desktop. Mini-PCs on Ryzen AI Max / Strix Halo (Radeon 8060S, gfx1151) are a shared-memory APU, not a discrete VRAM card — see that cited guide. Confirm the SKU on the R9700 measured page and the GPU directory, then size the file on the calculator before you buy a second card.',
+      'The measured house box is one AMD Radeon AI PRO R9700 (32 GB, gfx1201). There is no consumer RX 9700. A 16 GB RX 9070 XT is the same generation with half the VRAM — see the RX 9070 XT recipe sheet for calculator fit estimates, not local desktop tok/s. The non-XT RX 9070 is the 16 GB / 220 W gfx1201 sheet next to it; the 12 GB RX 9070 GRE is the 192-bit / 432 GB/s GRE sheet. The cheaper 16 GB RDNA 4 pick is the RX 9060 XT (gfx1200) — same estimate-sheet rules, different family package. The 24 GB RX 7900 XTX is the RDNA 3 gfx1100 used-card sheet — AMD cites 24 GB GDDR6 and 355 W typical board power; official on the cited ROCm 10.1 matrix. The 20 GB RX 7900 XT is the same gfx1100 family with AMD citing 315 W TBP — not the 24 GB XTX and not the 16 GB 7900 GRE. The 16 GB RX 7800 XT is the gfx1101 used-card sheet — AMD cites 16 GB GDDR6 and 263 W typical board power; official on that same 10.1 matrix. The 16 GB 7900 GRE sits between the 7900 XT and 7800 XT on the gfx1100 pin. The 12 GB 7700 XT is the next smaller gfx1101 sheet after the 7800 XT. The 16 GB 7600 XT is the gfx1102 budget 16 GB sheet — not the 8 GB RX 7600, which has its own estimate sheet. The 16 GB RX 6800 XT is the RDNA 2 gfx1030 estimate sheet — unofficial on the current Radeon ROCm row, Vulkan first. The shared RX 6950 XT / 6900 XT sheet is the other 16 GB gfx1030 consumer pair (335 W / 576 GB/s vs 300 W / 512 GB/s). The 12 GB RX 6700 XT is the RDNA 2 gfx1031 used-card sheet — not the 6800 XT and not the 10 GB non-XT 6700; AMD cites 12 GB GDDR6 and 230 W typical board power. Workstation PRO sheets: W7900 is 48 GB gfx1100 (864 GB/s, 295 W TBP); W7800 is 32 GB gfx1100 (576 GB/s, 260 W TBP) with a separate AMD-listed 48 GB SKU; W7700 is 16 GB gfx1101 (576 GB/s, 190 W TBP); W6800 is the official 32 GB gfx1030 RDNA 2 row (512 GB/s, 250 W TBP). None of those four are measured on the local desktop. Mini-PCs on Ryzen AI Max / Strix Halo (Radeon 8060S, gfx1151) are a shared-memory APU, not a discrete VRAM card — see that cited guide. Confirm the SKU on the R9700 measured page and the GPU directory, then size the file on the calculator before you buy a second card.',
     links: [
       { href: '/gpus/r9700', label: 'R9700 measured page' },
       { href: '/compare/gpus', label: 'Compare GPUs' },
@@ -177,7 +177,7 @@ export const FAQ_ENTRIES: FaqItem[] = [
     group: 'getting-started',
     question: 'Radeon or NVIDIA for a local LLM?',
     answer:
-      'Radeon wins the VRAM class we shop — 32 GB on the R9700, 24 / 20 / 16 GB on the RX 7900 / 7800 sheets, two-card layouts we measured on local-desktop, and our cited llama.cpp numbers. NVIDIA wins CUDA day-one: vLLM and a longer tail of engines and models land there first. Specs cite the vendor page. NVIDIA tok/s stay “no cited number yet” unless a third-party figure is linked. Buttons say Check price — we do not print a figure. The shopper page is Radeon vs NVIDIA.',
+      'Radeon wins the VRAM class we shop — 32 GB on the R9700, 24 / 20 / 16 GB on the RX 7900 / 7800 sheets, two-card layouts we measured on the local desktop, and our cited llama.cpp numbers. NVIDIA wins CUDA day-one: vLLM and a longer tail of engines and models land there first. Specs cite the vendor page. NVIDIA tok/s stay “no cited number yet” unless a third-party figure is linked. Buttons say Check price — we do not print a figure. The shopper page is Radeon vs NVIDIA.',
     links: [
       { href: '/compare/radeon-vs-nvidia', label: 'Radeon vs NVIDIA' },
       { href: '/compare/radeon-vs-mac', label: 'Radeon vs Mac' },
@@ -205,7 +205,7 @@ export const FAQ_ENTRIES: FaqItem[] = [
     group: 'getting-started',
     question: 'Can I run a local Qwen on a Ryzen AI Max / Strix Halo mini-PC?',
     answer:
-      'Yes as a cited path, not a measured local-desktop card. Ryzen AI Max+ 395 with Radeon 8060S is gfx1151 on AMD’s ROCm 10.1 matrix. It is an APU: the GPU uses shared system memory (we size 64 GB and 128 GB kits). llama.cpp Vulkan is the first token. HIP is second. The MES REMOVE_QUEUE hang is on the ROCm problems tracker. Size the file on the calculator. We do not invent tok/s for this box.',
+      'Yes as a cited path, not a measured local desktop card. Ryzen AI Max+ 395 with Radeon 8060S is gfx1151 on AMD’s ROCm 10.1 matrix. It is an APU: the GPU uses shared system memory (we size 64 GB and 128 GB kits). llama.cpp Vulkan is the first token. HIP is second. The MES REMOVE_QUEUE hang is on the ROCm problems tracker. Size the file on the calculator. We do not invent tok/s for this box.',
     links: [
       { href: '/gpus/strix-halo', label: 'Strix Halo guide' },
       { href: '/calculator', label: 'Calculator' },
@@ -219,7 +219,7 @@ export const FAQ_ENTRIES: FaqItem[] = [
     group: 'getting-started',
     question: 'Can I run a local Qwen on a Ryzen 780M or 890M iGPU?',
     answer:
-      'Yes as a cited path, not a measured local-desktop card. Radeon 780M / 760M are gfx1103 (Phoenix / Hawk Point). Radeon 880M / 890M are gfx1150 (Strix Point). The iGPU uses system RAM — size a 32 / 64 / 96 GB kit on the calculator. llama.cpp Vulkan is first and does not need ROCm. Hawk Point and Strix Point are named on the ROCm 10.1 matrix; desktop 8700G is not named there. HSA_OVERRIDE_GFX_VERSION is unofficial. We do not invent tok/s. Strix Halo (8060S, gfx1151) is a different sheet.',
+      'Yes as a cited path, not a measured local desktop card. Radeon 780M / 760M are gfx1103 (Phoenix / Hawk Point). Radeon 880M / 890M are gfx1150 (Strix Point). The iGPU uses system RAM — size a 32 / 64 / 96 GB kit on the calculator. llama.cpp Vulkan is first and does not need ROCm. Hawk Point and Strix Point are named on the ROCm 10.1 matrix; desktop 8700G is not named there. HSA_OVERRIDE_GFX_VERSION is unofficial. We do not invent tok/s. Strix Halo (8060S, gfx1151) is a different sheet.',
     links: [
       { href: '/gpus/ryzen-igpu', label: 'Ryzen iGPU guide' },
       { href: '/gpus/strix-halo', label: 'Strix Halo' },
@@ -233,7 +233,7 @@ export const FAQ_ENTRIES: FaqItem[] = [
     group: 'getting-started',
     question: 'Ubuntu or Windows for a first local LLM box?',
     answer:
-      'Ubuntu LTS named on AMD’s current ROCm matrix is the path we write. First-run setup walks Ubuntu 24.04+ to the first token. Linux Mint, Pop!_OS, and Kubuntu are Ubuntu-based but are not on that 10.1 OS row — follow /setup only as unofficial, not verified on our rig. Cited Fedora and Arch guides live at /setup/fedora and /setup/arch. Docker or Podman is a cited isolated path at /setup/docker — official llama.cpp images, not a container tok/s card. LM Studio is a cited desktop llama.cpp wrapper at /setup/lm-studio — Vulkan runtime first on Radeon, local /v1 on :1234, not an LM Studio tok/s card. Lemonade Server is AMD’s own llama.cpp wrapper at /setup/lemonade — Vulkan first, local /api/v1 on :13305, not a Lemonade tok/s card. The Windows guide at /setup/windows is cited vendor docs, not measured on local-desktop. The WSL2 guide at /setup/wsl is the same preview AMD names in the 10.1 notes — KFD tools out of scope, AMD SMI monitoring-only, not a measured local-desktop daily driver. Radeon Stack Lab follows that Ubuntu path — packages are not published yet. Vulkan llama.cpp is the honest Windows path for tokens. Full ROCm userspace is a Linux product. We do not have Windows, WSL, Fedora, Arch, container, LM Studio, or Lemonade tok/s cards.',
+      'Ubuntu LTS named on AMD’s current ROCm matrix is the path we write. First-run setup walks Ubuntu 24.04+ to the first token. Linux Mint, Pop!_OS, and Kubuntu are Ubuntu-based but are not on that 10.1 OS row — follow /setup only as unofficial, not verified on our rig. Cited Fedora and Arch guides live at /setup/fedora and /setup/arch. Docker or Podman is a cited isolated path at /setup/docker — official llama.cpp images, not a container tok/s card. LM Studio is a cited desktop llama.cpp wrapper at /setup/lm-studio — Vulkan runtime first on Radeon, local /v1 on :1234, not an LM Studio tok/s card. Lemonade Server is AMD’s own llama.cpp wrapper at /setup/lemonade — Vulkan first, local /api/v1 on :13305, not a Lemonade tok/s card. The Windows guide at /setup/windows is cited vendor docs, not measured on the local desktop. The WSL2 guide at /setup/wsl is the same preview AMD names in the 10.1 notes — KFD tools out of scope, AMD SMI monitoring-only, not a measured local desktop daily driver. Radeon Stack Lab follows that Ubuntu path — packages are not published yet. Vulkan llama.cpp is the honest Windows path for tokens. Full ROCm userspace is a Linux product. We do not have Windows, WSL, Fedora, Arch, container, LM Studio, or Lemonade tok/s cards.',
     links: [
       { href: '/setup', label: 'First-run setup' },
       { href: '/setup/windows', label: 'Windows setup' },
@@ -255,7 +255,7 @@ export const FAQ_ENTRIES: FaqItem[] = [
     group: 'getting-started',
     question: 'Can I run llama.cpp on Radeon in Docker or Podman?',
     answer:
-      'Yes as a cited path, not a measured local-desktop card. Official ggml-org images are server-vulkan first and server-rocm second. Pass /dev/dri for Vulkan; add /dev/kfd and optional seccomp=unconfined for ROCm. Bind the published port to 127.0.0.1. Rootless Podman needs keep-groups; Fedora SELinux needs container_use_devices. Q6/Q5/Q4 first; Q3 stays a labeled estimate. We do not invent container tok/s or a speed delta versus bare metal.',
+      'Yes as a cited path, not a measured local desktop card. Official ggml-org images are server-vulkan first and server-rocm second. Pass /dev/dri for Vulkan; add /dev/kfd and optional seccomp=unconfined for ROCm. Bind the published port to 127.0.0.1. Rootless Podman needs keep-groups; Fedora SELinux needs container_use_devices. Q6/Q5/Q4 first; Q3 stays a labeled estimate. We do not invent container tok/s or a speed delta versus bare metal.',
     links: [
       { href: '/setup/docker', label: 'Docker / Podman' },
       { href: '/setup', label: 'Ubuntu setup (measured)' },
@@ -270,7 +270,7 @@ export const FAQ_ENTRIES: FaqItem[] = [
     group: 'getting-started',
     question: 'Can I run LM Studio on a Radeon GPU?',
     answer:
-      'Yes as a cited path, not a measured local-desktop card. LM Studio is a desktop llama.cpp wrapper. AMD’s playbook documents Vulkan and ROCm runtimes; Vulkan is the first pick on RDNA 2 / 3 / 4 and the R9700. Official LM Studio docs do not publish a per-SKU Radeon list — if the ROCm runtime is missing or the GPU meter stays idle, stay Vulkan or move to /setup. Windows installer or Linux AppImage (Ubuntu 20.04+; versions newer than 22 are not well tested). GPU offload max, house file Qwen3.6-35B-A3B UD-Q5_K_XL at 262K. Q6/Q5/Q4 first; Q3 stays a labeled estimate. Local OpenAI-compatible /v1 is http://127.0.0.1:1234/v1 for harnesses like Hermes. Decode numbers on this site are Ubuntu llama.cpp llama-bench, not measured inside LM Studio. We do not invent an LM Studio tok/s.',
+      'Yes as a cited path, not a measured local desktop card. LM Studio is a desktop llama.cpp wrapper. AMD’s playbook documents Vulkan and ROCm runtimes; Vulkan is the first pick on RDNA 2 / 3 / 4 and the R9700. Official LM Studio docs do not publish a per-SKU Radeon list — if the ROCm runtime is missing or the GPU meter stays idle, stay Vulkan or move to /setup. Windows installer or Linux AppImage (Ubuntu 20.04+; versions newer than 22 are not well tested). GPU offload max, house file Qwen3.6-35B-A3B UD-Q5_K_XL at 262K. Q6/Q5/Q4 first; Q3 stays a labeled estimate. Local OpenAI-compatible /v1 is http://127.0.0.1:1234/v1 for harnesses like Hermes. Decode numbers on this site are Ubuntu llama.cpp llama-bench, not measured inside LM Studio. We do not invent an LM Studio tok/s.',
     links: [
       { href: '/setup/lm-studio', label: 'LM Studio on Radeon' },
       { href: '/setup', label: 'Ubuntu setup (measured)' },
@@ -302,7 +302,7 @@ export const FAQ_ENTRIES: FaqItem[] = [
     group: 'getting-started',
     question: 'Can I run Ollama on a Radeon GPU?',
     answer:
-      'Yes as a cited path, not a measured local-desktop card. Ollama is a packaged llama.cpp / ROCm (or Vulkan) runtime. Linux first: curl -fsSL https://ollama.com/install.sh | sh, then the AMD ROCm tarball. Official gpu.mdx lists R9700 / 9070 XT on Linux ROCm v7; the Windows ROCm table does not name those cards. Prove the GPU with ollama ps. Default context is 4096 — set OLLAMA_CONTEXT_LENGTH. KV grows with OLLAMA_NUM_PARALLEL. House family is Qwen3.6-35B-A3B; official library Q4 is qwen3.6:35b-a3b-q4_K_M; import the house UD-Q5 GGUF for the file we measure. Q3 stays a labeled estimate. Decode numbers on this site are Ubuntu llama.cpp llama-bench, not Ollama tok/s. llama.cpp you compile remains the daily driver. gfx1201 tensiles and Windows R9700 CPU fallback live on /rocm-problems.',
+      'Yes as a cited path, not a measured local desktop card. Ollama is a packaged llama.cpp / ROCm (or Vulkan) runtime. Linux first: curl -fsSL https://ollama.com/install.sh | sh, then the AMD ROCm tarball. Official gpu.mdx lists R9700 / 9070 XT on Linux ROCm v7; the Windows ROCm table does not name those cards. Prove the GPU with ollama ps. Default context is 4096 — set OLLAMA_CONTEXT_LENGTH. KV grows with OLLAMA_NUM_PARALLEL. House family is Qwen3.6-35B-A3B; official library Q4 is qwen3.6:35b-a3b-q4_K_M; import the house UD-Q5 GGUF for the file we measure. Q3 stays a labeled estimate. Decode numbers on this site are Ubuntu llama.cpp llama-bench, not Ollama tok/s. llama.cpp you compile remains the daily driver. gfx1201 tensiles and Windows R9700 CPU fallback live on /rocm-problems.',
     links: [
       { href: '/setup/ollama', label: 'Ollama on Radeon' },
       { href: '/setup', label: 'Ubuntu setup (measured)' },
@@ -319,7 +319,7 @@ export const FAQ_ENTRIES: FaqItem[] = [
     group: 'getting-started',
     question: 'Can I run Lemonade Server on a Radeon GPU?',
     answer:
-      'Yes as a cited path, not a measured local-desktop card. Lemonade is AMD’s own local AI server. The primary LLM recipe wraps llama.cpp. Ubuntu 24.04+ first: sudo add-apt-repository ppa:lemonade-team/stable then sudo apt install lemonade-server (docs checked 2026-10-14; latest GitHub tag v2026.41.1, 2026-10-07). Windows is the MSI from lemonade-server.ai. Install llamacpp:vulkan first on this site; llamacpp:rocm is second and only on the gfx their docs name (RX 6000/7000 RDNA2/RDNA3/RDNA4, Ryzen AI iGPUs; nightly bins gfx1150 / gfx1151 / gfx103X / gfx110X / gfx120X). OpenAI-compatible base is http://127.0.0.1:13305/api/v1 — note /api/v1, not /v1. House family is Qwen3.6-35B-A3B; pull shape unsloth/Qwen3.6-35B-A3B-GGUF:UD-Q5_K_XL. Q6/Q5/Q4 first; Q3 stays a labeled estimate. Decode numbers on this site are Ubuntu llama.cpp llama-bench, not Lemonade tok/s. llama.cpp you compile remains the daily driver. amdai runs Lemonade on local-desktop; there is still no Lemonade speed card.',
+      'Yes as a cited path, not a measured local desktop card. Lemonade is AMD’s own local AI server. The primary LLM recipe wraps llama.cpp. Ubuntu 24.04+ first: sudo add-apt-repository ppa:lemonade-team/stable then sudo apt install lemonade-server (docs checked 2026-10-14; latest GitHub tag v2026.41.1, 2026-10-07). Windows is the MSI from lemonade-server.ai. Install llamacpp:vulkan first on this site; llamacpp:rocm is second and only on the gfx their docs name (RX 6000/7000 RDNA2/RDNA3/RDNA4, Ryzen AI iGPUs; nightly bins gfx1150 / gfx1151 / gfx103X / gfx110X / gfx120X). OpenAI-compatible base is http://127.0.0.1:13305/api/v1 — note /api/v1, not /v1. House family is Qwen3.6-35B-A3B; pull shape unsloth/Qwen3.6-35B-A3B-GGUF:UD-Q5_K_XL. Q6/Q5/Q4 first; Q3 stays a labeled estimate. Decode numbers on this site are Ubuntu llama.cpp llama-bench, not Lemonade tok/s. llama.cpp you compile remains the daily driver. AMDai runs Lemonade on the local desktop; there is still no Lemonade speed card.',
     links: [
       { href: '/setup/lemonade', label: 'Lemonade Server on Radeon' },
       { href: '/setup', label: 'Ubuntu setup (measured)' },
@@ -336,7 +336,7 @@ export const FAQ_ENTRIES: FaqItem[] = [
     group: 'getting-started',
     question: 'Can I run Open WebUI on a Radeon GPU?',
     answer:
-      'Yes as a cited path, not a measured local-desktop card. Open WebUI is a browser chat UI. It does not run the GGUF. Start llama.cpp llama-server first (Vulkan on Ubuntu 24.04+), then Docker or pip. Official Docker maps 3000:8080; pip defaults to :8080 so use --port 3000 or it collides with house llama-server. Connections → OpenAI URL http://127.0.0.1:8080/v1 (host.docker.internal from a container). House file is Qwen3.6-35B-A3B UD-Q5_K_XL. Q6/Q5/Q4 first; Q3 stays a labeled estimate. Do not pull the :cuda image on a Radeon. Decode numbers on this site are Ubuntu llama.cpp llama-bench, not Open WebUI. Ollama is a secondary connection.',
+      'Yes as a cited path, not a measured local desktop card. Open WebUI is a browser chat UI. It does not run the GGUF. Start llama.cpp llama-server first (Vulkan on Ubuntu 24.04+), then Docker or pip. Official Docker maps 3000:8080; pip defaults to :8080 so use --port 3000 or it collides with house llama-server. Connections → OpenAI URL http://127.0.0.1:8080/v1 (host.docker.internal from a container). House file is Qwen3.6-35B-A3B UD-Q5_K_XL. Q6/Q5/Q4 first; Q3 stays a labeled estimate. Do not pull the :cuda image on a Radeon. Decode numbers on this site are Ubuntu llama.cpp llama-bench, not Open WebUI. Ollama is a secondary connection.',
     links: [
       { href: '/setup/open-webui', label: 'Open WebUI on Radeon' },
       { href: '/setup', label: 'Ubuntu setup (measured)' },
@@ -352,7 +352,7 @@ export const FAQ_ENTRIES: FaqItem[] = [
     group: 'getting-started',
     question: 'Can I run local AI on a Radeon under Windows WSL2?',
     answer:
-      'Yes as a cited technical preview, not a measured local-desktop card. ROCm 10.1.0 lists WSL2 in TheRock artifacts: Ubuntu 26.04 / 24.04 / 22.04 guests, host Adrenalin then guest ROCm via /dev/dxg. Profiling, debugging, and KFD-dependent tools are out of scope; AMD SMI is monitoring-only. Native Linux at /setup is still the measured path. Native Windows first token is llama.cpp Vulkan at /setup/windows. Inside the guest, llama.cpp HIP (GGML_HIP=ON) is the documented GPU build — we do not invent Vulkan-in-WSL. Q6/Q5/Q4 first; Q3 stays a labeled estimate. Nothing on /setup/wsl was measured on local-desktop.',
+      'Yes as a cited technical preview, not a measured local desktop card. ROCm 10.1.0 lists WSL2 in TheRock artifacts: Ubuntu 26.04 / 24.04 / 22.04 guests, host Adrenalin then guest ROCm via /dev/dxg. Profiling, debugging, and KFD-dependent tools are out of scope; AMD SMI is monitoring-only. Native Linux at /setup is still the measured path. Native Windows first token is llama.cpp Vulkan at /setup/windows. Inside the guest, llama.cpp HIP (GGML_HIP=ON) is the documented GPU build — we do not invent Vulkan-in-WSL. Q6/Q5/Q4 first; Q3 stays a labeled estimate. Nothing on /setup/wsl was measured on the local desktop.',
     links: [
       { href: '/setup/wsl', label: 'WSL2 on Radeon' },
       { href: '/setup/windows', label: 'Windows setup' },
@@ -481,7 +481,7 @@ export const FAQ_ENTRIES: FaqItem[] = [
     group: 'getting-started',
     question: 'Vulkan or ROCm HIP?',
     answer:
-      'Consumer default on AMDai is llama.cpp Vulkan for the daily-driver 35B. HIP is the ROCm compile when you need it, and it is also where gfx1201 “no binary for GPU” reports show up. If HIP configure is a mess, try Vulkan first and read the cited problem row. The shopper compare is /compare/vulkan-vs-rocm. HIP decode on local-desktop stays pending. Engine notes live on the backends pages — llama.cpp first.',
+      'Consumer default on AMDai is llama.cpp Vulkan for the daily-driver 35B. HIP is the ROCm compile when you need it, and it is also where gfx1201 “no binary for GPU” reports show up. If HIP configure is a mess, try Vulkan first and read the cited problem row. The shopper compare is /compare/vulkan-vs-rocm. HIP decode on the local desktop stays pending. Engine notes live on the backends pages — llama.cpp first.',
     links: [
       { href: '/compare/vulkan-vs-rocm', label: 'Vulkan vs ROCm' },
       { href: '/backends', label: 'Backends' },
@@ -545,7 +545,7 @@ export const FAQ_ENTRIES: FaqItem[] = [
     group: 'getting-started',
     question: 'Should I start with vLLM?',
     answer:
-      'No. Consumers start on llama.cpp. vLLM is the multi-client serve try. AMD’s 10.0 supported combo is still 0.27 + PyTorch 2.13. Community / ROCm 0.31 is this week’s serve try. Default pip install vllm is CUDA. We do not invent a local-desktop 0.31 tok/s.',
+      'No. Consumers start on llama.cpp. vLLM is the multi-client serve try. AMD’s 10.0 supported combo is still 0.27 + PyTorch 2.13. Community / ROCm 0.31 is this week’s serve try. Default pip install vllm is CUDA. We do not invent a local desktop 0.31 tok/s.',
     links: [
       { href: '/backends', label: 'Backends' },
       { href: '/software', label: 'AI software' },
@@ -559,7 +559,7 @@ export const FAQ_ENTRIES: FaqItem[] = [
     group: 'models-quants',
     question: 'Can my Radeon run this model?',
     answer:
-      'Use /can-run. Each cited GPU sheet × cited /models page has a calculator verdict: fits fully on GPU, fits with RAM offload, needs 2 GPUs, or does not fit. Q6 / Q5 / Q4 plus a labeled Q3 estimate. Measured decode is only the official local-desktop 35B llama.cpp Vulkan sweep on R9700. Everything else stays not measured yet. llama.cpp first.',
+      'Use /can-run. Each cited GPU sheet × cited /models page has a calculator verdict: fits fully on GPU, fits with RAM offload, needs 2 GPUs, or does not fit. Q6 / Q5 / Q4 plus a labeled Q3 estimate. Measured decode is only the official local desktop 35B llama.cpp Vulkan sweep on R9700. Everything else stays not measured yet. llama.cpp first.',
     links: [
       { href: '/can-run', label: 'Can my Radeon run it?' },
       { href: '/calculator', label: 'Calculator' },
@@ -572,7 +572,7 @@ export const FAQ_ENTRIES: FaqItem[] = [
     group: 'models-quants',
     question: 'How do I speed up llama.cpp on Radeon?',
     answer:
-      'Fit the file first, then turn one cited knob at a time: -ngl, --threads, --threads-batch, -b / -ub, -fa, KV type, --split-mode, a Q4+ draft, or a vendor power cap. The shopper guide is /tuning. Flash Attention has its own page at /flash-attention. Prefill / batch has its own page at /prefill. Measured decode is the official local-desktop 35B llama.cpp Vulkan sweep. Everything else stays not measured yet. Q3 is a labeled estimate. Draft models stay Q4 and up. llama.cpp first.',
+      'Fit the file first, then turn one cited knob at a time: -ngl, --threads, --threads-batch, -b / -ub, -fa, KV type, --split-mode, a Q4+ draft, or a vendor power cap. The shopper guide is /tuning. Flash Attention has its own page at /flash-attention. Prefill / batch has its own page at /prefill. Measured decode is the official local desktop 35B llama.cpp Vulkan sweep. Everything else stays not measured yet. Q3 is a labeled estimate. Draft models stay Q4 and up. llama.cpp first.',
     links: [
       { href: '/tuning', label: 'Speed up llama.cpp' },
       { href: '/flash-attention', label: 'Flash Attention' },
@@ -589,7 +589,7 @@ export const FAQ_ENTRIES: FaqItem[] = [
     group: 'models-quants',
     question: 'Does speculative decoding speed up llama.cpp on a Radeon?',
     answer:
-      'AMDai has not measured a draft pair on local-desktop. A Q4+ same-family draft can help when acceptance is high (code, repetitive text) and both files fit. The house 35B-A3B already decodes fast on one R9700, so a draft can also waste VRAM. Draft speed stays not measured yet — run the Stack Lab speculative decoding A/B. Drafts stay Q4 and up. Q3 is a labeled estimate for the main file. The shopper page is /speculative-decoding. llama.cpp first.',
+      'AMDai has not measured a draft pair on the local desktop. A Q4+ same-family draft can help when acceptance is high (code, repetitive text) and both files fit. The house 35B-A3B already decodes fast on one R9700, so a draft can also waste VRAM. Draft speed stays not measured yet — run the Stack Lab speculative decoding A/B. Drafts stay Q4 and up. Q3 is a labeled estimate for the main file. The shopper page is /speculative-decoding. llama.cpp first.',
     links: [
       { href: '/speculative-decoding', label: 'Speculative decoding' },
       { href: '/tuning', label: 'Speed up llama.cpp' },
@@ -603,7 +603,7 @@ export const FAQ_ENTRIES: FaqItem[] = [
     group: 'models-quants',
     question: 'How do I force llama.cpp to emit valid JSON on a Radeon?',
     answer:
-      'Use constrained decoding: a GBNF grammar or a JSON Schema that llama.cpp converts to GBNF. Official flags are --grammar / --grammar-file, -j / --json-schema, -jf / --json-schema-file, plus response_format on /v1/chat/completions. Describe the shape in the prompt — the schema is not injected except during tool calling. Grammar decode versus free-form is not measured on local-desktop; run Stack Lab grammar-ab/1 and record an amdai-bench card. Q3 is a labeled estimate. llama.cpp first.',
+      'Use constrained decoding: a GBNF grammar or a JSON Schema that llama.cpp converts to GBNF. Official flags are --grammar / --grammar-file, -j / --json-schema, -jf / --json-schema-file, plus response_format on /v1/chat/completions. Describe the shape in the prompt — the schema is not injected except during tool calling. Grammar decode versus free-form is not measured on the local desktop; run Stack Lab grammar-ab/1 and record an amdai-bench card. Q3 is a labeled estimate. llama.cpp first.',
     links: [
       { href: '/constrained-decoding', label: 'Constrained decoding' },
       { href: '/setup/coding-assistant', label: 'Coding assistant' },
@@ -617,7 +617,7 @@ export const FAQ_ENTRIES: FaqItem[] = [
     group: 'models-quants',
     question: 'How do I get OpenAI-style tool calls from llama-server on a Radeon?',
     answer:
-      'Start llama-server with --jinja and send a tools array on /v1/chat/completions. The shopper page is /guides/tool-calling. Official docs are llama.cpp function-calling.md and the server README. Native handlers exist for several families; unrecognized templates fall back to Generic. Structured JSON uses response_format, a JSON Schema, or GBNF — measure grammar cost on Stack Lab grammar-ab/1. Tool-call success is not measured on local-desktop. Q3 is a labeled estimate. llama.cpp first.',
+      'Start llama-server with --jinja and send a tools array on /v1/chat/completions. The shopper page is /guides/tool-calling. Official docs are llama.cpp function-calling.md and the server README. Native handlers exist for several families; unrecognized templates fall back to Generic. Structured JSON uses response_format, a JSON Schema, or GBNF — measure grammar cost on Stack Lab grammar-ab/1. Tool-call success is not measured on the local desktop. Q3 is a labeled estimate. llama.cpp first.',
     links: [
       { href: '/guides/tool-calling', label: 'Tool calling' },
       { href: '/setup/coding-assistant', label: 'Coding assistant' },
@@ -645,7 +645,7 @@ export const FAQ_ENTRIES: FaqItem[] = [
     group: 'speed-vram',
     question: 'Should I turn Flash Attention (-fa) on for llama.cpp on a Radeon?',
     answer:
-      'Overnight 35B Vulkan llama-bench recorded -fa 1. Official values are on|off|auto (default auto). llama.cpp multi-gpu.md requires FA for tensor split and/or a quantized V cache. llama-server FA on versus off is not measured on local-desktop — run Stack Lab Flash Attention A/B. The shopper page is /flash-attention. House recipes stay Q4 and up. Q3 is a labeled estimate. llama.cpp first.',
+      'Overnight 35B Vulkan llama-bench recorded -fa 1. Official values are on|off|auto (default auto). llama.cpp multi-gpu.md requires FA for tensor split and/or a quantized V cache. llama-server FA on versus off is not measured on the local desktop — run Stack Lab Flash Attention A/B. The shopper page is /flash-attention. House recipes stay Q4 and up. Q3 is a labeled estimate. llama.cpp first.',
     links: [
       { href: '/flash-attention', label: 'Flash Attention' },
       { href: '/tuning', label: 'Speed up llama.cpp' },
@@ -659,7 +659,7 @@ export const FAQ_ENTRIES: FaqItem[] = [
     group: 'speed-vram',
     question: 'How do I speed up llama.cpp prompt processing (prefill) on a Radeon?',
     answer:
-      'Official flags are -b / --batch-size (logical, default 2048) and -ub / --ubatch-size (physical, default 512). House llama-server does not record a pin. Overnight llama-bench prefill cells are not a llama-server -b / -ub A/B. AMDai has not measured server batch on local-desktop — run Stack Lab prefill-ab/1 (amdai-bench ab-prefill). The shopper page is /prefill. House recipes stay Q4 and up. Q3 is a labeled estimate. llama.cpp first.',
+      'Official flags are -b / --batch-size (logical, default 2048) and -ub / --ubatch-size (physical, default 512). House llama-server does not record a pin. Overnight llama-bench prefill cells are not a llama-server -b / -ub A/B. AMDai has not measured server batch on the local desktop — run Stack Lab prefill-ab/1 (amdai-bench ab-prefill). The shopper page is /prefill. House recipes stay Q4 and up. Q3 is a labeled estimate. llama.cpp first.',
     links: [
       { href: '/prefill', label: 'Prefill' },
       { href: '/tuning', label: 'Speed up llama.cpp' },
@@ -673,7 +673,7 @@ export const FAQ_ENTRIES: FaqItem[] = [
     group: 'speed-vram',
     question: 'What does llama.cpp prompt / prefix cache do on a Radeon, and when does it help TTFT?',
     answer:
-      'Official llama-server reuses processed prefix tokens so a later request only prefills the new suffix. --cache-prompt is on by default. --cache-reuse N is KV-shift reuse (default 0 = off). --cache-ram is the MiB ceiling (default 8192). --slot-save-path enables POST /slots save/restore. AMDai has not measured TTFT with versus without the cache on local-desktop — not yet measured. Run Stack Lab prompt-cache-ab/1 (amdai-bench ab-prompt-cache). The shopper page is /prompt-cache. House recipes stay Q4 and up. Q3 is a labeled estimate. llama.cpp first.',
+      'Official llama-server reuses processed prefix tokens so a later request only prefills the new suffix. --cache-prompt is on by default. --cache-reuse N is KV-shift reuse (default 0 = off). --cache-ram is the MiB ceiling (default 8192). --slot-save-path enables POST /slots save/restore. AMDai has not measured TTFT with versus without the cache on the local desktop — not yet measured. Run Stack Lab prompt-cache-ab/1 (amdai-bench ab-prompt-cache). The shopper page is /prompt-cache. House recipes stay Q4 and up. Q3 is a labeled estimate. llama.cpp first.',
     links: [
       { href: '/prompt-cache', label: 'Prompt cache' },
       { href: '/kv-cache', label: 'KV cache' },
@@ -688,7 +688,7 @@ export const FAQ_ENTRIES: FaqItem[] = [
     group: 'context-ram',
     question: 'What is llama.cpp mmap versus --no-mmap versus --mlock on a Radeon?',
     answer:
-      'Official --load-mode auto memory-maps the GGUF (mmap default). --load-mode none replaces deprecated --no-mmap. --load-mode mlock locks a non-mapped copy; mmap+mlock locks a mapped copy. AMDai has not measured load time or extra RSS on local-desktop — not yet measured. Run Stack Lab Model loading A/B. The shopper page is /mmap. House recipes stay Q4 and up. Q3 is a labeled estimate. llama.cpp first.',
+      'Official --load-mode auto memory-maps the GGUF (mmap default). --load-mode none replaces deprecated --no-mmap. --load-mode mlock locks a non-mapped copy; mmap+mlock locks a mapped copy. AMDai has not measured load time or extra RSS on the local desktop — not yet measured. Run Stack Lab Model loading A/B. The shopper page is /mmap. House recipes stay Q4 and up. Q3 is a labeled estimate. llama.cpp first.',
     links: [
       { href: '/mmap', label: 'mmap / mlock' },
       { href: '/out-of-vram', label: 'Out of VRAM' },
@@ -744,7 +744,7 @@ export const FAQ_ENTRIES: FaqItem[] = [
     group: 'models-quants',
     question: 'How do I turn thinking / reasoning mode off on llama.cpp?',
     answer:
-      'Cited path: llama-server --reasoning off, and/or reasoning_effort none, and/or chat_template_kwargs {"enable_thinking": false}. Official Qwen3.6 card thinks by default and does not support /think or /nothink. The shopper page is /thinking. Thinking-token counts and wall-clock stay not measured on local-desktop. Q3 is a labeled estimate. llama.cpp first.',
+      'Cited path: llama-server --reasoning off, and/or reasoning_effort none, and/or chat_template_kwargs {"enable_thinking": false}. Official Qwen3.6 card thinks by default and does not support /think or /nothink. The shopper page is /thinking. Thinking-token counts and wall-clock stay not measured on the local desktop. Q3 is a labeled estimate. llama.cpp first.',
     links: [
       { href: '/thinking', label: 'Thinking mode' },
       { href: '/tutorials/serve-qwen', label: 'Serve Qwen' },
@@ -819,7 +819,7 @@ export const FAQ_ENTRIES: FaqItem[] = [
     group: 'models-quants',
     question: 'Q6, Q5, or Q4 — what should I pick?',
     answer:
-      'Those letters are GGUF quant recipes, not a speed ranking we invent. The overnight local-desktop sweep measured UD-Q5_K_XL, Q5_K_M, Q4_K_M, and Q6_K on llama.cpp Vulkan. Read the cells on /benchmarks and the side-by-side on /compare. Q6 on one card at 32K and up is partly on DDR5 — that row says so. Fit the file on the calculator.',
+      'Those letters are GGUF quant recipes, not a speed ranking we invent. The overnight local desktop sweep measured UD-Q5_K_XL, Q5_K_M, Q4_K_M, and Q6_K on llama.cpp Vulkan. Read the cells on /benchmarks and the side-by-side on /compare. Q6 on one card at 32K and up is partly on DDR5 — that row says so. Fit the file on the calculator.',
     links: [
       { href: '/benchmarks', label: 'Benchmarks' },
       { href: '/compare', label: 'Compare 35B' },
@@ -857,7 +857,7 @@ export const FAQ_ENTRIES: FaqItem[] = [
     group: 'speed-vram',
     question: 'How do I read /benchmarks and /results?',
     answer:
-      'llama.cpp llama-bench prints pp (prefill) and tg (decode). Decode is the chat tok/s. /benchmarks is the 33-card local-desktop overnight matrix: UD-Q5, Q5, Q4, Q6 × 4K / 32K / 128K / 256K × one GPU and split. Each cell links to its amdai-bench/run@1 card on /results — launch command, VRAM per card, VRAM total, peak system RAM. Empty stays not measured. The overnight cards recorded llama-bench, not llama-server.',
+      'llama.cpp llama-bench prints pp (prefill) and tg (decode). Decode is the chat tok/s. /benchmarks is the 33-card local desktop overnight matrix: UD-Q5, Q5, Q4, Q6 × 4K / 32K / 128K / 256K × one GPU and split. Each cell links to its amdai-bench/run@1 card on /results — launch command, VRAM per card, VRAM total, peak system RAM. Empty stays not measured. The overnight cards recorded llama-bench, not llama-server.',
     links: [
       { href: '/benchmarks', label: 'Benchmarks' },
       { href: '/results', label: 'Run cards' },
@@ -953,7 +953,7 @@ export const FAQ_ENTRIES: FaqItem[] = [
     group: 'context-ram',
     question: "What's the biggest context I can run on a Radeon GPU with llama.cpp?",
     answer:
-      'Native max is the model-card window. The real ceiling is the largest -c that still loads and serves. Stack Lab ctx-ceiling/1 (amdai-bench ab-ctx-ceiling) climbs a lean ladder on one GPU and on all GPUs. AMDai has not ingested a winner on local-desktop — not yet measured. House overnight llama-bench did run 262144 on UD-Q5, one R9700. The shopper page is /context-ceiling. Q3 is a labeled estimate. llama.cpp first.',
+      'Native max is the model-card window. The real ceiling is the largest -c that still loads and serves. Stack Lab ctx-ceiling/1 (amdai-bench ab-ctx-ceiling) climbs a lean ladder on one GPU and on all GPUs. AMDai has not ingested a winner on the local desktop — not yet measured. House overnight llama-bench did run 262144 on UD-Q5, one R9700. The shopper page is /context-ceiling. Q3 is a labeled estimate. llama.cpp first.',
     links: [
       { href: '/context-ceiling', label: 'Context ceiling' },
       { href: '/long-context', label: 'Long context' },
@@ -1024,7 +1024,7 @@ export const FAQ_ENTRIES: FaqItem[] = [
     group: 'stack-lab',
     question: 'Do I need a harness?',
     answer:
-      'No. You need tokens on the GPU first. Hermes or OpenClaw come after a loopback /v1 works. Local Hermes on local-desktop points at Strata :8083 and llama-server. Snippets: connect. Catalog: harnesses. A slow harness is usually a backend problem, not a card-reputation problem.',
+      'No. You need tokens on the GPU first. Hermes or OpenClaw come after a loopback /v1 works. Local Hermes on the local desktop points at Strata :8083 and llama-server. Snippets: connect. Catalog: harnesses. A slow harness is usually a backend problem, not a card-reputation problem.',
     links: [
       { href: '/harnesses', label: 'Harnesses' },
       { href: '/harnesses/connect', label: 'Connect' },
@@ -1066,7 +1066,7 @@ export const FAQ_ENTRIES: FaqItem[] = [
     group: 'troubleshooting',
     question: 'Which BIOS settings matter for local AI?',
     answer:
-      'Cited chipset notes: Above 4G, ReBAR/SAM, CSM off, and matching GPU lane widths (x8/x8 or x16/x16 — not a leftover x4). The per-board table is empty until submissions. We do not invent a motherboard for local-desktop. Read /bios before you file “ROCm is broken” on a firmware miss.',
+      'Cited chipset notes: Above 4G, ReBAR/SAM, CSM off, and matching GPU lane widths (x8/x8 or x16/x16 — not a leftover x4). The per-board table is empty until submissions. We do not invent a motherboard for local desktop. Read /bios before you file “ROCm is broken” on a firmware miss.',
     links: [
       { href: '/bios', label: 'BIOS' },
       { href: '/hardware', label: 'Hardware' },

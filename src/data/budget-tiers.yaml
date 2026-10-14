@@ -42,7 +42,7 @@ tiers:
         show: [size, speed]
       - model: Qwen3.6-35B-A3B
         quant: UD-Q3_K_XL
-        note: Estimate / community. Unsloth listing 16.8 GB (UD-Q3_K_XL). Not measured on local-desktop. Still expect RAM offload plus KV on 16 GB.
+        note: Estimate / community. Unsloth listing 16.8 GB (UD-Q3_K_XL). Not measured on the local desktop. Still expect RAM offload plus KV on 16 GB.
         calculator: /calculator?gpu=rx9070xt&vram=16&n=1&split=0&ram=64&model=qwen36&tp=35&ap=3&layers=40&kvl=10&kvh=2&hd=256&quant=q3_k_xl&ctx=8192&kv=f16&oh=1
         tested: false
         show: [size]
@@ -103,7 +103,7 @@ tiers:
         show: [size]
       - model: Qwen3.6-35B-A3B
         quant: Q3_K_M
-        note: Estimate / community. Unsloth UD-Q3_K_M listing 16.6 GB. Not measured on local-desktop. A 24 GB card may hold Q3 + modest context (calculator estimate).
+        note: Estimate / community. Unsloth UD-Q3_K_M listing 16.6 GB. Not measured on the local desktop. A 24 GB card may hold Q3 + modest context (calculator estimate).
         calculator: /calculator?gpu=rx7900xtx&vram=24&n=1&split=0&ram=64&model=qwen36&tp=35&ap=3&layers=40&kvl=10&kvh=2&hd=256&quant=q3_k_m&ctx=32768&kv=f16&oh=1
         tested: false
         show: [size]
@@ -151,7 +151,7 @@ tiers:
         show: [size]
       - model: Qwen 3.8 Flash
         quant: UD-Q3_K_XL
-        note: Estimate / community. Hugging Face folder ~90 GB. Still overflows one 32 GB card. Q1/Q2 stay off. Not measured on local-desktop.
+        note: Estimate / community. Hugging Face folder ~90 GB. Still overflows one 32 GB card. Q1/Q2 stay off. Not measured on the local desktop.
         calculator: /calculator?gpu=r9700&vram=32&n=1&split=0&ram=64&model=flash&tp=125&ap=6&layers=48&kvl=12&kvh=2&hd=256&quant=q3_k_xl&ctx=262144&kv=f16&oh=1
         tested: false
         show: [size]
@@ -200,7 +200,7 @@ tiers:
         show: [size]
       - model: Qwen 3.8 Flash
         quant: UD-Q3_K_XL
-        note: Estimate / community. Hugging Face folder ~90 GB. Not measured on local-desktop. Shown so the size ladder includes the listed Q3 step.
+        note: Estimate / community. Hugging Face folder ~90 GB. Not measured on the local desktop. Shown so the size ladder includes the listed Q3 step.
         calculator: /calculator?gpu=r9700&vram=32&n=1&split=0&ram=256&model=flash&tp=125&ap=6&layers=48&kvl=12&kvh=2&hd=256&quant=q3_k_xl&ctx=262144&kv=f16&oh=1
         tested: false
         show: [size]

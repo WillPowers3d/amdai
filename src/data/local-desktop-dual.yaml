@@ -1,7 +1,7 @@
 # Qwen 3.6 35B on two R9700s. First-party numbers only, plus cited vLLM image.
 # Do not invent tok/s, VRAM, or soak figures.
 as_of: 2026-10-13
-host: local-desktop
+host: local desktop
 label: Measured on our rig, 2026-10
 engine: llama.cpp Vulkan
 quant: Unsloth UD-Q5_K_XL

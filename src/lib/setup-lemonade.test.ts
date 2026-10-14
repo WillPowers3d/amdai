@@ -29,7 +29,7 @@ describe('Lemonade Server Radeon setup', () => {
   it('keeps llama.cpp first, cited install, and house rules', () => {
     assert.deepEqual(assertSetupLemonadeValid(), []);
     assert.equal(SETUP_LEMONADE_PUBLISHED, '2026-10-14');
-    assert.equal(SETUP_LEMONADE_CITED_LABEL, 'Cited, not measured on local-desktop');
+    assert.equal(SETUP_LEMONADE_CITED_LABEL, 'Cited, not measured on the local desktop');
     assert.equal(SETUP_LEMONADE_TITLE, 'Lemonade Server on a Radeon GPU');
     assert.equal(SETUP_LEMONADE_TRACKS[0]?.id, 'llamacpp');
     assert.equal(SETUP_LEMONADE_TRACKS[1]?.recommend, false);

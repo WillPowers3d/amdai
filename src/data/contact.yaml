@@ -1,4 +1,4 @@
 # Public inbox printed on /contact.
-# Leave empty until amdai sets a real address. Do not invent an @amdai.net mailbox.
+# Leave empty until AMDai sets a real address. Do not invent an @amdai.net mailbox.
 # The content QA gate warns (does not fail the build) when this and CONTACT_EMAIL are both empty.
 email: ""

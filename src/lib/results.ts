@@ -194,7 +194,7 @@ export function assertAmdaiBenchValid(file: AmdaiBenchFile): string[] {
   if (file?.version !== AMDAI_BENCH_VERSION) errors.push(`version must be ${AMDAI_BENCH_VERSION}`);
   if (!file?.as_of) errors.push('missing as_of');
   if (file?.label !== MEASURED_LABEL) errors.push(`label must be ${MEASURED_LABEL}`);
-  if (!file?.source || !/local-desktop/.test(file.source)) errors.push('source must name local-desktop');
+  if (!file?.source || !/local desktop/.test(file.source)) errors.push('source must name local desktop');
   if (!Array.isArray(file?.results) || file.results.length === 0) errors.push('no results');
 
   const ids = new Set<string>();

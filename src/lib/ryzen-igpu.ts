@@ -1,7 +1,7 @@
 /**
  * Cited Ryzen iGPU guide at /gpus/ryzen-igpu.
  * 780M / 760M (gfx1103) and 880M / 890M (gfx1150). Shared system memory.
- * Not measured on local-desktop. Calculator math only.
+ * Not measured on the local desktop. Calculator math only.
  * Do not invent tok/s, prices, GB/s, or a Stack Lab package.
  * Strix Halo (gfx1151 / 8060S) stays on /gpus/strix-halo.
  */
@@ -35,7 +35,7 @@ import { parse } from 'yaml';
 export const RYZEN_IGPU_ID = 'ryzen-igpu';
 export const RYZEN_IGPU_PATH = '/gpus/ryzen-igpu';
 export const RYZEN_IGPU_PUBLISHED = '2026-10-14';
-export const RYZEN_IGPU_CITED_LABEL = 'Cited, not measured on local-desktop';
+export const RYZEN_IGPU_CITED_LABEL = 'Cited, not measured on the local desktop';
 export const RYZEN_IGPU_NAME = 'AMD Ryzen iGPU (Radeon 780M / 890M)';
 export const RYZEN_IGPU_SHORT = 'Ryzen iGPU';
 export const RYZEN_IGPU_HEADING = 'Local AI on a Ryzen iGPU (Radeon 780M, 880M, 890M)';
@@ -380,7 +380,7 @@ export function ryzenIgpuPage() {
     heading: RYZEN_IGPU_HEADING,
     title: 'Local AI on a Ryzen iGPU',
     description:
-      'Cited Ryzen 780M / 760M (gfx1103) and 880M / 890M (gfx1150) local-AI guide. Shared system RAM, llama.cpp Vulkan first. Not measured on local-desktop.',
+      'Cited Ryzen 780M / 760M (gfx1103) and 880M / 890M (gfx1150) local-AI guide. Shared system RAM, llama.cpp Vulkan first. Not measured on the local desktop.',
     family: card.family,
     arch: card.arch,
     gfx: card.gfx,
@@ -400,7 +400,7 @@ export function ryzenIgpuPage() {
     supportBody:
       'llama.cpp Vulkan is the AMDai first token. It does not need ROCm. Official build.md covers the Vulkan backend on Linux. HIP / ROCm is second, and only after rocminfo lists your gfx. ROCm 10.1.0 names Hawk Point 780M / 760M as gfx1103 and Strix Point 880M / 890M as gfx1150. Desktop Phoenix 8700G / 8600G use the same 780M / 760M marketing names and the GPU-specs table lists Phoenix 7840U 780M as gfx1103, but those 8000G desktop SKUs are not named on the 10.1 compatibility matrix — do not claim official ROCm for 8700G. HSA_OVERRIDE_GFX_VERSION is unofficial. Do not spoof gfx1100 on gfx1103; Vulkan does not need the override.',
     speedsBody:
-      'No cited tok/s on this page. local-desktop has no 780M / 890M card, and this repo has no third-party Ryzen iGPU speed row we can quote. Memory type and official max speed (DDR5-5200 on 8700G; DDR5-5600 / LPDDR5X-8000 on HX 370) are the bandwidth story — we do not invent a GB/s figure. Empty stays empty. Record a card with amdai-bench / Stack Lab on your own box.',
+      'No cited tok/s on this page. local desktop has no 780M / 890M card, and this repo has no third-party Ryzen iGPU speed row we can quote. Memory type and official max speed (DDR5-5200 on 8700G; DDR5-5600 / LPDDR5X-8000 on HX 370) are the bandwidth story — we do not invent a GB/s figure. Empty stays empty. Record a card with amdai-bench / Stack Lab on your own box.',
     upgrade:
       'Add a discrete card when the file plus KV no longer fit the kit, or when you want the measured 35B in-VRAM path. The R9700 sheet is the measured 32 GB discrete page. Used and budget boards live on /gpus, /budget, /calculator, and /can-run. Strix Halo is the larger shared-memory APU (AMD max 128 GB on that SKU), not a faster 890M. Two discrete cards are a different layout.',
     stackLab:
@@ -479,7 +479,7 @@ export function assertRyzenIgpuValid(page: RyzenIgpuPage = ryzenIgpuPage()): str
   if (page.citedLabel !== RYZEN_IGPU_CITED_LABEL) errors.push('cited label drifted');
   if (page.support !== 'official') errors.push('support column drifted');
   if (!page.matrixHref.startsWith('https://rocm.docs.amd.com/')) errors.push('matrix href');
-  if (!/not measured on local-desktop/i.test(blob)) errors.push('must say not measured on local-desktop');
+  if (!/not measured on the local desktop/i.test(blob)) errors.push('must say not measured on the local desktop');
   if (!/llama\.cpp/i.test(blob)) errors.push('must say llama.cpp');
   if (!/Vulkan/i.test(blob)) errors.push('must say Vulkan');
   if (!/Dynamic \+ carveout/.test(blob)) errors.push('must cite Dynamic + carveout');

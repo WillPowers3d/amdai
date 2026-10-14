@@ -9,7 +9,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parse } from 'yaml';
 import { COMPARE_Q3, COMPARE_Q3_CITE } from './local-desktop-compare';
-import { amdai, amdai, RUN_SCHEMA } from './run-card';
+import { AMDAI_CREDIT, RUN_SCHEMA } from './run-card';
 import { LAB_NOTES_FEED } from './feed';
 
 export const TRUST_PUBLISHED = '2026-10-13';
@@ -69,7 +69,7 @@ export const ABOUT = {
   who: {
     title: 'Who runs it',
     body:
-      `Official first-party cards are credited to ${amdai.display} (handle ${amdai.handle}; also ${amdai.handle} / ${amdai.display} on overnight rows). Verified submitter, rig ${amdai.rig}. That is the provenance already printed on amdai-bench/run@1 cards. This page does not add a biography, job title, city, or photo.`,
+      `Official first-party cards are credited to ${AMDAI_CREDIT.display} (handle ${AMDAI_CREDIT.handle}). Verified submitter, rig ${AMDAI_CREDIT.rig}. That is the provenance already printed on amdai-bench/run@1 cards. This page does not add a biography, job title, city, or photo.`,
   },
   what: {
     title: 'What this site is',
@@ -77,9 +77,9 @@ export const ABOUT = {
       'Consumer Radeon / ROCm lab notes for running local LLMs at home. It is not a store, not a leaderboard scrape, and not an AMD channel. Use Benchmarks, run cards, and Stack Lab for the measured path; Privacy and the affiliate disclosure for how the site is funded.',
   },
   rig: {
-    title: 'The test rig (local-desktop)',
+    title: 'The test rig (local desktop)',
     body:
-      'local-desktop is the house box named on official cards: two AMD Radeon AI PRO R9700 32 GB (gfx1201), 256 GB DDR5-5200 (about 249 GB usable — Linux GiB labeled GB), Ubuntu 24.04+ for the measured path. llama.cpp first. Strata is the engine on the published Flash daily-driver row. The motherboard model is not published on this site. Desktop 2 (dual R9700 + 192 GB DDR5) is a planned kit, not a measured local-desktop result.',
+      'The local desktop is the house box named on official cards: two AMD Radeon AI PRO R9700 32 GB (gfx1201), 256 GB DDR5-5200 (about 249 GB usable — Linux GiB labeled GB), Ubuntu 24.04+ for the measured path. llama.cpp first. Strata is the engine on the published Flash daily-driver row. The motherboard model is not published on this site. Desktop 2 (dual R9700 + 192 GB DDR5) is a planned kit, not a measured local desktop result.',
   },
   independence: {
     title: 'Editorial independence',
@@ -101,7 +101,7 @@ export const METHODOLOGY = {
   cards: {
     title: 'How measured numbers are produced',
     body:
-      'Stack Lab and overnight local-desktop drops emit one JSON object per line (schema amdai-bench/run@1) under data/runs/. A card records hardware, software pins, GPU layout (single, split, dual-instance), the exact launch command, prefill (pp) and decode (tg) tok/s, VRAM per card / total, and peak system RAM when sampled. Official 35B tables use llama.cpp Vulkan, f16 KV, contexts 4K / 32K / 128K / 256K, one R9700 versus a split. llama.cpp first. The overnight 35B sweep recorded llama-bench, not llama-server.',
+      'Stack Lab and overnight local desktop drops emit one JSON object per line (schema amdai-bench/run@1) under data/runs/. A card records hardware, software pins, GPU layout (single, split, dual-instance), the exact launch command, prefill (pp) and decode (tg) tok/s, VRAM per card / total, and peak system RAM when sampled. Official 35B tables use llama.cpp Vulkan, f16 KV, contexts 4K / 32K / 128K / 256K, one R9700 versus a split. llama.cpp first. The overnight 35B sweep recorded llama-bench, not llama-server.',
   },
   labels: {
     title: 'Measured, cited, and estimate',
@@ -111,7 +111,7 @@ export const METHODOLOGY = {
   estimates: {
     title: 'How estimates are labeled',
     body:
-      `Calculator totals (weights, KV, overhead, DIMM-kit rounding) are estimates unless a tested badge cites a card. Official 35B tables print the measured Q6, Q5, and Q4 cards from local-desktop. ${COMPARE_Q3} is a labeled estimate (${COMPARE_Q3_CITE}) — not a local-desktop run. Q3 stays on the table as that estimate. Q1/Q2 stay off, including draft and MTP examples. House daily driver is Q5 when the file fits. We do not treat Q3 as the pick.`,
+      `Calculator totals (weights, KV, overhead, DIMM-kit rounding) are estimates unless a tested badge cites a card. Official 35B tables print the measured Q6, Q5, and Q4 cards from local desktop. ${COMPARE_Q3} is a labeled estimate (${COMPARE_Q3_CITE}) — not a local desktop run. Q3 stays on the table as that estimate. Q1/Q2 stay off, including draft and MTP examples. House daily driver is Q5 when the file fits. We do not treat Q3 as the pick.`,
   },
   submit: {
     title: 'How to send a result',
@@ -151,7 +151,7 @@ export const TERMS = {
     {
       title: 'Informational content',
       body:
-        'Pages describe what we ran on local-desktop and what public docs say. They are not professional, legal, or safety advice. Product names belong to their owners. AMDai is not affiliated with AMD.',
+        'Pages describe what we ran on the local desktop and what public docs say. They are not professional, legal, or safety advice. Product names belong to their owners. AMDai is not affiliated with AMD.',
     },
     {
       title: 'No warranty',
@@ -214,9 +214,8 @@ export function trustBlob(): string {
     AMDAI_BENCH_HUB.lead,
     HOW_WE_TEST.body,
     RUN_SCHEMA,
-    amdai.display,
-    amdai.handle,
-    amdai.handle,
+    AMDAI_CREDIT.display,
+    AMDAI_CREDIT.handle,
     'Minimum system RAM needed',
     'RAM needed at full context',
   ].join('\n');
@@ -255,9 +254,9 @@ export function assertTrustValid(): string[] {
   const errors: string[] = [];
   const blob = trustBlob();
   const hrefs = new Set(trustHrefs());
-  if (ABOUT.who.body.includes(amdai.display) === false) errors.push('about must name amdai');
-  if (!ABOUT.who.body.includes(amdai.handle)) errors.push('about must use the run-card handle');
-  if (!/local-desktop/.test(ABOUT.rig.body)) errors.push('about must name local-desktop');
+  if (ABOUT.who.body.includes(AMDAI_CREDIT.display) === false) errors.push('about must name AMDai');
+  if (!ABOUT.who.body.includes(AMDAI_CREDIT.handle)) errors.push('about must use the run-card handle');
+  if (!/local desktop/.test(ABOUT.rig.body)) errors.push('about must name local desktop');
   if (!/256 GB/.test(ABOUT.rig.body) || !/R9700/.test(ABOUT.rig.body)) errors.push('about must cite the published kit');
   if (/motherboard model is not published/i.test(ABOUT.rig.body) === false) {
     errors.push('about must not invent a motherboard');
@@ -296,4 +295,4 @@ export function assertTrustValid(): string[] {
   return [...new Set(errors)];
 }
 
-export { COMPARE_Q3, COMPARE_Q3_CITE, RUN_SCHEMA, amdai, amdai };
+export { COMPARE_Q3, COMPARE_Q3_CITE, RUN_SCHEMA, AMDAI_CREDIT };

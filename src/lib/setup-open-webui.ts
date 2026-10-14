@@ -1,6 +1,6 @@
 /**
  * Cited Open WebUI first-run on Radeon.
- * Not measured on local-desktop. Official sources only: Open WebUI docs,
+ * Not measured on the local desktop. Official sources only: Open WebUI docs,
  * llama.cpp server README, AMD/ROCm/Mesa for the GPU path.
  * Open WebUI is the chat UI. Inference stays on llama-server.
  * Do not invent Open WebUI tok/s, prices, VRAM numbers, or compose flags.
@@ -10,7 +10,7 @@ import { RAM_FULL_LABEL, RAM_MIN_LABEL } from './ram-surfaces';
 import { COMPARE_Q3, COMPARE_Q3_CITE } from './local-desktop-compare';
 
 export const SETUP_OPEN_WEBUI_PUBLISHED = '2026-10-14';
-export const SETUP_OPEN_WEBUI_CITED_LABEL = 'Cited, not measured on local-desktop';
+export const SETUP_OPEN_WEBUI_CITED_LABEL = 'Cited, not measured on the local desktop';
 
 export const SETUP_OPEN_WEBUI_LLAMA = 'http://127.0.0.1:8080/v1';
 export const SETUP_OPEN_WEBUI_DOCKER_LLAMA = 'http://host.docker.internal:8080/v1';
@@ -121,7 +121,7 @@ export const SETUP_OPEN_WEBUI_TRACKS: SetupOpenWebuiTrack[] = [
       harnesses stay on ${SETUP_OPEN_WEBUI_LLAMA}. GPU work is llama.cpp
       Vulkan (HIP second) on /rocm/vulkan-hip — not an Open WebUI ROCm claim.
       Docker UI uses ${SETUP_OPEN_WEBUI_DOCKER_LLAMA}. Do not take the
-      :cuda image or a CUDA Ollama blob on a Radeon. Not measured on local-desktop.
+      :cuda image or a CUDA Ollama blob on a Radeon. Not measured on the local desktop.
     `.replace(/\s+/g, ' ').trim(),
   },
   {
@@ -134,7 +134,7 @@ export const SETUP_OPEN_WEBUI_TRACKS: SetupOpenWebuiTrack[] = [
       stack. House recipes use llama.cpp. If you already followed /setup/ollama,
       you can add that URL as an Ollama connection — still prove ollama ps is
       not 100% CPU, and do not present llama.cpp tok/s as an Ollama or Open
-      WebUI result. Not measured on local-desktop.
+      WebUI result. Not measured on the local desktop.
     `.replace(/\s+/g, ' ').trim(),
   },
 ];
@@ -143,19 +143,19 @@ export const SETUP_OPEN_WEBUI_QUANTS: SetupOpenWebuiQuant[] = [
   {
     quant: 'Q6_K',
     role: 'Higher-quality 35B sibling',
-    note: 'Measured on llama.cpp Vulkan on local-desktop, not inside Open WebUI: Q6_K 1-GPU 4K decode 103.23 tok/s (23:55 card). 32K+ is partly on DDR5. Size VRAM on the calculator.',
+    note: 'Measured on llama.cpp Vulkan on the local desktop, not inside Open WebUI: Q6_K 1-GPU 4K decode 103.23 tok/s (23:55 card). 32K+ is partly on DDR5. Size VRAM on the calculator.',
     estimate: false,
   },
   {
     quant: 'UD-Q5_K_XL',
     role: 'House default on one R9700',
-    note: `Measured on llama.cpp Vulkan on local-desktop, not inside Open WebUI: 102.39 tok/s decode at 4K, 90.52 at 32K, 66.43 at 128K, 44.4 at 256K. Peak VRAM 25.97 / 29.34 GB; peak RAM 37.32 / 42.9 GB. File ${SETUP_OPEN_WEBUI_HOUSE_FILE}.`,
+    note: `Measured on llama.cpp Vulkan on the local desktop, not inside Open WebUI: 102.39 tok/s decode at 4K, 90.52 at 32K, 66.43 at 128K, 44.4 at 256K. Peak VRAM 25.97 / 29.34 GB; peak RAM 37.32 / 42.9 GB. File ${SETUP_OPEN_WEBUI_HOUSE_FILE}.`,
     estimate: false,
   },
   {
     quant: 'Q4_K_M',
     role: 'Smaller measured 35B sibling',
-    note: 'Measured on llama.cpp Vulkan on local-desktop, not inside Open WebUI: Q4_K_M 32K decode 117.69 tok/s. Still check both RAM lines.',
+    note: 'Measured on llama.cpp Vulkan on the local desktop, not inside Open WebUI: Q4_K_M 32K decode 117.69 tok/s. Still check both RAM lines.',
     estimate: false,
   },
   {
@@ -182,7 +182,7 @@ export const SETUP_OPEN_WEBUI_STEPS: SetupOpenWebuiStep[] = [
   {
     id: 'install',
     title: 'Install Open WebUI — Docker first, pip second, Podman cited',
-    body: `Official Quick Start: Docker is the recommended path. ${SETUP_OPEN_WEBUI_DOCKER}. UI is ${SETUP_OPEN_WEBUI_UI} (container 8080 mapped to host 3000). Keep :main or :slim. Do not pull :cuda on a Radeon. pip / uv: pip install open-webui, then ${SETUP_OPEN_WEBUI_PIP} — official default is localhost:8080, which collides with house llama-server; --port 3000 is documented. Their pip note about a ROCm PyTorch wheel is for Open WebUI’s own embeddings / speech stack, not the chat model. Chat tokens stay on llama-server. Podman: official podman run on 3000:8080; reach the host with ${SETUP_OPEN_WEBUI_PODMAN_LLAMA}. Generate WEBUI_SECRET_KEY with openssl rand -hex 32. Not measured on local-desktop.`,
+    body: `Official Quick Start: Docker is the recommended path. ${SETUP_OPEN_WEBUI_DOCKER}. UI is ${SETUP_OPEN_WEBUI_UI} (container 8080 mapped to host 3000). Keep :main or :slim. Do not pull :cuda on a Radeon. pip / uv: pip install open-webui, then ${SETUP_OPEN_WEBUI_PIP} — official default is localhost:8080, which collides with house llama-server; --port 3000 is documented. Their pip note about a ROCm PyTorch wheel is for Open WebUI’s own embeddings / speech stack, not the chat model. Chat tokens stay on llama-server. Podman: official podman run on 3000:8080; reach the host with ${SETUP_OPEN_WEBUI_PODMAN_LLAMA}. Generate WEBUI_SECRET_KEY with openssl rand -hex 32. Not measured on the local desktop.`,
     links: [
       { href: '/setup/docker', label: 'Docker / Podman' },
       { href: '/setup/fedora', label: 'Fedora setup' },
@@ -193,7 +193,7 @@ export const SETUP_OPEN_WEBUI_STEPS: SetupOpenWebuiStep[] = [
   {
     id: 'connect',
     title: 'Point Connections at llama-server /v1',
-    body: `Avatar → Settings → Admin → Connections → OpenAI → Add Connection. URL: ${SETUP_OPEN_WEBUI_LLAMA} on pip, ${SETUP_OPEN_WEBUI_DOCKER_LLAMA} in Docker, ${SETUP_OPEN_WEBUI_PODMAN_LLAMA} in Podman. Note the /v1. Auth none / placeholder key if the server has no auth. Advanced → Provider llama.cpp unlocks the Loaded marker and Eject. Models appear after the connection saves. Official LM Studio page uses the same OpenAI-shaped fields at :1234 — secondary only, /setup/lm-studio. House Hermes on local-desktop talks to :8080, not a measured Open WebUI attach.`,
+    body: `Avatar → Settings → Admin → Connections → OpenAI → Add Connection. URL: ${SETUP_OPEN_WEBUI_LLAMA} on pip, ${SETUP_OPEN_WEBUI_DOCKER_LLAMA} in Docker, ${SETUP_OPEN_WEBUI_PODMAN_LLAMA} in Podman. Note the /v1. Auth none / placeholder key if the server has no auth. Advanced → Provider llama.cpp unlocks the Loaded marker and Eject. Models appear after the connection saves. Official LM Studio page uses the same OpenAI-shaped fields at :1234 — secondary only, /setup/lm-studio. House Hermes on the local desktop talks to :8080, not a measured Open WebUI attach.`,
     links: [
       { href: '/harnesses/connect', label: 'Connect a harness' },
       { href: '/harnesses/open-webui', label: 'Open WebUI' },
@@ -217,7 +217,7 @@ export const SETUP_OPEN_WEBUI_STEPS: SetupOpenWebuiStep[] = [
   {
     id: 'nvme',
     title: 'Stage the GGUF on fast NVMe — never /mnt/bulk',
-    body: 'The chat UI does not load weights. llama-server does. Keep the GGUF on fast NVMe (house ~/models), not a spinning disk and not a slow bulk mount such as /mnt/bulk. Prefill stalls with an idle GPU meter are often the disk. Staging is not RAM offload. Docker volume open-webui is UI data (chats, users) — that is not the model file. Not measured on local-desktop.',
+    body: 'The chat UI does not load weights. llama-server does. Keep the GGUF on fast NVMe (house ~/models), not a spinning disk and not a slow bulk mount such as /mnt/bulk. Prefill stalls with an idle GPU meter are often the disk. Staging is not RAM offload. Docker volume open-webui is UI data (chats, users) — that is not the model file. Not measured on the local desktop.',
     links: [
       { href: '/glossary', label: 'Glossary (NVMe staging)' },
       { href: '/calculator', label: 'Calculator' },
@@ -227,7 +227,7 @@ export const SETUP_OPEN_WEBUI_STEPS: SetupOpenWebuiStep[] = [
   {
     id: 'context',
     title: 'Context and both RAM lines stay on the server',
-    body: `Open WebUI’s UI does not replace llama-server -c. House window is 262144. Size it on the calculator. Wherever a file spills, the two labels stay ${RAM_MIN_LABEL} (rounded kit estimate with a breakdown — 192 or 256 GB when a 35B file spills) and ${RAM_FULL_LABEL} when we have a measured llama.cpp peak (37.32 GB at 4K, 42.9 GB at 256K on UD-Q5). Those peaks are llama.cpp on local-desktop, not Open WebUI. Label estimate unless measured.`,
+    body: `Open WebUI’s UI does not replace llama-server -c. House window is 262144. Size it on the calculator. Wherever a file spills, the two labels stay ${RAM_MIN_LABEL} (rounded kit estimate with a breakdown — 192 or 256 GB when a 35B file spills) and ${RAM_FULL_LABEL} when we have a measured llama.cpp peak (37.32 GB at 4K, 42.9 GB at 256K on UD-Q5). Those peaks are llama.cpp on the local desktop, not Open WebUI. Label estimate unless measured.`,
     links: [
       { href: '/calculator', label: 'Calculator' },
       { href: '/long-context', label: 'Long context' },
@@ -323,7 +323,7 @@ export function assertSetupOpenWebuiValid(): string[] {
   const errors: string[] = [];
   const blob = setupOpenWebuiBlob();
   const hrefs = new Set(setupOpenWebuiHrefs());
-  if (SETUP_OPEN_WEBUI_CITED_LABEL !== 'Cited, not measured on local-desktop') {
+  if (SETUP_OPEN_WEBUI_CITED_LABEL !== 'Cited, not measured on the local desktop') {
     errors.push('cited label drifted');
   }
   if (SETUP_OPEN_WEBUI_TRACKS.length !== 2) errors.push('need llama.cpp and Ollama tracks');

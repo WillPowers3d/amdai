@@ -1,4 +1,4 @@
-# Recipe gaps we actually want. No bounty amounts — amdai has not signed those off.
+# Recipe gaps we actually want. No bounty amounts — AMDai has not signed those off.
 as_of: 2026-10
 rule: Gaps only. A wanted row is not a speed claim. No invented tok/s or prices.
 items:
@@ -30,7 +30,7 @@ items:
     card: r9700
     card_name: Radeon AI PRO R9700
     model: ComfyUI SDXL / Flux-class
-    why: ComfyUI already runs on local-desktop. AMDai has no first-party amdai-bench/run@1 image-gen card, so speeds stay not yet measured by AMDai.
+    why: ComfyUI already runs on the local desktop. AMDai has no first-party amdai-bench/run@1 image-gen card, so speeds stay not yet measured by AMDai.
     request: First-party image-gen card on one R9700. Log plus screenshot. Do not invent seconds-per-image or VRAM megabytes.
   - id: r9700-whisper
     card: r9700

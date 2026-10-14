@@ -28,7 +28,7 @@ describe('LM Studio Radeon setup', () => {
   it('keeps cited runtimes, house 35B, and house rules', () => {
     assert.deepEqual(assertSetupLmStudioValid(), []);
     assert.equal(SETUP_LM_STUDIO_PUBLISHED, '2026-10-14');
-    assert.equal(SETUP_LM_STUDIO_CITED_LABEL, 'Cited, not measured on local-desktop');
+    assert.equal(SETUP_LM_STUDIO_CITED_LABEL, 'Cited, not measured on the local desktop');
     assert.equal(SETUP_LM_STUDIO_TRACKS[0]?.id, 'vulkan');
     assert.equal(SETUP_LM_STUDIO_TRACKS[1]?.id, 'rocm');
     assert.equal(SETUP_LM_STUDIO_TRACKS[1]?.recommend, false);
@@ -45,7 +45,7 @@ describe('LM Studio Radeon setup', () => {
     assert.doesNotMatch(blob, /\b(?:IQ[12]_[A-Z0-9]+|Q[12]_[A-Z0-9]+)\b/);
     assert.doesNotMatch(blob, /floor is q4|q4 floor|q4 and up only/i);
     assert.match(blob, /llama\.cpp/);
-    assert.match(blob, /not measured on local-desktop/i);
+    assert.match(blob, /not measured on the local desktop/i);
     assert.match(blob, /not inside LM Studio/);
     assert.match(blob, /Minimum system RAM needed/);
     assert.match(blob, /RAM needed at full context/);
@@ -65,7 +65,7 @@ describe('LM Studio Radeon setup', () => {
   it('wires the dedicated page and stays in the sitemap', () => {
     const page = readFileSync(join(here, '../pages/setup/lm-studio.astro'), 'utf8');
     const hub = readFileSync(join(here, '../pages/setup.astro'), 'utf8');
-    assert.match(page, /not measured on local-desktop/i);
+    assert.match(page, /not measured on the local desktop/i);
     assert.match(page, /llama\.cpp/);
     assert.match(page, /not inside LM Studio/);
     assert.match(page, /Open in Stack Lab/);

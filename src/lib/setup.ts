@@ -77,63 +77,63 @@ export const SETUP_MORE_PATHS = [
   {
     href: '/setup/docker',
     label: 'Docker / Podman',
-    kicker: 'Cited, not measured on local-desktop',
+    kicker: 'Cited, not measured on the local desktop',
     summary:
       'Official llama.cpp Vulkan or ROCm images. Localhost /v1. No container tok/s on AMDai.',
   },
   {
     href: '/setup/lm-studio',
     label: 'LM Studio',
-    kicker: 'Cited, not measured on local-desktop',
+    kicker: 'Cited, not measured on the local desktop',
     summary:
       'Desktop llama.cpp wrapper. Vulkan runtime first on Radeon. Local /v1 on :1234. No LM Studio tok/s on AMDai.',
   },
   {
     href: '/setup/coding-assistant',
     label: 'Coding assistant',
-    kicker: 'Cited attach; llama.cpp measured on local-desktop',
+    kicker: 'Cited attach; llama.cpp measured on the local desktop',
     summary:
       'Aider, Cline, and Continue on llama-server /v1. Vulkan first. No harness tok/s on AMDai.',
   },
   {
     href: '/setup/ollama',
     label: 'Ollama',
-    kicker: 'Cited, not measured on local-desktop',
+    kicker: 'Cited, not measured on the local desktop',
     summary:
       'Easy on-ramp. llama.cpp stays the daily driver. Local /v1 on :11434. No Ollama tok/s on AMDai.',
   },
   {
     href: '/setup/lemonade',
     label: 'Lemonade',
-    kicker: 'Cited, not measured on local-desktop',
+    kicker: 'Cited, not measured on the local desktop',
     summary:
       'AMD llama.cpp wrapper. Vulkan first on Radeon. Local /api/v1 on :13305. No Lemonade tok/s on AMDai.',
   },
   {
     href: '/setup/open-webui',
     label: 'Open WebUI',
-    kicker: 'Cited, not measured on local-desktop',
+    kicker: 'Cited, not measured on the local desktop',
     summary:
       'Browser chat against llama-server /v1. Docker or pip. No Open WebUI tok/s on AMDai.',
   },
   {
     href: '/setup/wsl',
     label: 'WSL2',
-    kicker: 'Cited, not measured on local-desktop',
+    kicker: 'Cited, not measured on the local desktop',
     summary:
       'ROCm 10.1 WSL2 technical preview. Native Linux stays measured. llama.cpp HIP in the guest. No WSL tok/s on AMDai.',
   },
   {
     href: '/setup/comfyui',
     label: 'ComfyUI',
-    kicker: 'Cited, not measured on local-desktop',
+    kicker: 'Cited, not measured on the local desktop',
     summary:
       'Image gen on HIP/ROCm PyTorch. Ubuntu git clone first. Fit tables stay on /image-gen. No ComfyUI speeds on AMDai.',
   },
   {
     href: '/setup/multi-gpu',
     label: 'Multi-GPU llama.cpp',
-    kicker: 'Cited how-to; 35B split measured on local-desktop',
+    kicker: 'Cited how-to; 35B split measured on the local desktop',
     summary:
       'Run llama.cpp across two Radeon GPUs. Layer split or two pinned servers. 35B split numbers are the overnight cards. No invented tok/s.',
   },
@@ -149,7 +149,7 @@ export const SETUP_MORE_PATHS = [
 export const SETUP_UBUNTU_BASED = {
   title: 'Ubuntu-based distros',
   body:
-    'Linux Mint, Pop!_OS, and Kubuntu are Ubuntu-based. AMD’s ROCm 10.1.0 compatibility matrix lists Ubuntu 26.04.1, 24.04.5, and 22.04.5 by name — not Mint, Pop!_OS, or Kubuntu. Official docs do not put those derivatives on the 10.1 OS row, so we do not invent official AMD support. Follow the Ubuntu steps on this page only as unofficial; that path is not verified on our rig.     Prefer stock Ubuntu 24.04.5 if you want the measured local-desktop cards to match the box. Fedora, Arch, Docker / Podman, LM Studio, the coding-assistant guide, Ollama, Lemonade, Open WebUI, WSL2, ComfyUI, the multi-GPU llama.cpp how-to, and the always-on systemd server have their own cited pages.',
+    'Linux Mint, Pop!_OS, and Kubuntu are Ubuntu-based. AMD’s ROCm 10.1.0 compatibility matrix lists Ubuntu 26.04.1, 24.04.5, and 22.04.5 by name — not Mint, Pop!_OS, or Kubuntu. Official docs do not put those derivatives on the 10.1 OS row, so we do not invent official AMD support. Follow the Ubuntu steps on this page only as unofficial; that path is not verified on our rig.     Prefer stock Ubuntu 24.04.5 if you want the measured local desktop cards to match the box. Fedora, Arch, Docker / Podman, LM Studio, the coding-assistant guide, Ollama, Lemonade, Open WebUI, WSL2, ComfyUI, the multi-GPU llama.cpp how-to, and the always-on systemd server have their own cited pages.',
   links: [
     { href: '/setup/fedora', label: 'Fedora setup' },
     { href: '/setup/arch', label: 'Arch setup' },
@@ -171,7 +171,7 @@ export const SETUP_PATHS: SetupPath[] = [
   {
     id: 'ubuntu',
     label: 'Ubuntu 24.04+ (recommended)',
-    kicker: 'Measured on local-desktop',
+    kicker: 'Measured on the local desktop',
     summary:
       'Ubuntu 24.04.5 is on the ROCm 10.1 Radeon OS row. This is the path that produced the official 35B llama.cpp cards. Dual-boot or a spare drive beats forcing Windows on day one.',
     recommended: true,
@@ -253,14 +253,14 @@ export const SETUP_PATHS: SetupPath[] = [
     label: 'Windows',
     kicker: 'Honest limits',
     summary:
-      'Cited Windows guide at /setup/windows. Vulkan llama.cpp is the honest first token. Full ROCm userspace is a Linux product. ROCm 10.1 lists WSL2 as a technical preview — cited walk at /setup/wsl. local-desktop cards are Ubuntu — we do not have Windows or WSL tok/s.',
+      'Cited Windows guide at /setup/windows. Vulkan llama.cpp is the honest first token. Full ROCm userspace is a Linux product. ROCm 10.1 lists WSL2 as a technical preview — cited walk at /setup/wsl. local desktop cards are Ubuntu — we do not have Windows or WSL tok/s.',
     recommended: false,
     steps: [
       {
         id: 'windows-hardware',
         title: 'Hardware check',
         body:
-          'Same SKU check as Ubuntu. The measured speeds on AMDai are still the Ubuntu local-desktop cards. BIOS notes apply on the same board. We do not invent a Windows-only motherboard list.',
+          'Same SKU check as Ubuntu. The measured speeds on AMDai are still the Ubuntu local desktop cards. BIOS notes apply on the same board. We do not invent a Windows-only motherboard list.',
         measured: false,
         links: [
           { href: '/gpus', label: 'GPU directory' },
@@ -300,7 +300,7 @@ export const SETUP_PATHS: SetupPath[] = [
         id: 'windows-recipe',
         title: 'Same files, Linux-measured speeds',
         body:
-          'You can download the same GGUF the recipes name. The tok/s, VRAM, and RAM figures on /benchmarks and /results are Ubuntu llama-bench on local-desktop. Treat them as a comparison, not a Windows promise. Q3 stays a labeled estimate. Q1/Q2 stay off.',
+          'You can download the same GGUF the recipes name. The tok/s, VRAM, and RAM figures on /benchmarks and /results are Ubuntu llama-bench on the local desktop. Treat them as a comparison, not a Windows promise. Q3 stays a labeled estimate. Q1/Q2 stay off.',
         measured: false,
         links: [
           { href: '/recipes/qwen36-35b.llamacpp-vulkan.262k', label: '35B recipe' },

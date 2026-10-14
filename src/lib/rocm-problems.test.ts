@@ -18,7 +18,7 @@ const file = parseRocmProblems(parse(raw));
 const problems: RocmProblem[] = file.problems;
 
 const r9700Linux: SavedRigMatch = {
-  name: 'local-desktop',
+  name: 'local desktop',
   gpu: 'Radeon AI PRO R9700',
   gfx: 'gfx1201',
   rocmVersion: '10.1.0',

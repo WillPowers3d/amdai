@@ -1,7 +1,7 @@
 /**
  * Cited llama.cpp multi-GPU how-to at /setup/multi-gpu.
  * Flags from llama.cpp docs/multi-gpu.md and AMD mGPU / isolation pages.
- * 35B split and Flash two-card speeds are existing local-desktop cards — do not invent tok/s.
+ * 35B split and Flash two-card speeds are existing local desktop cards — do not invent tok/s.
  * Do not invent flags, prices, Q2/Q1, or a dual-card PSU SKU.
  */
 
@@ -10,7 +10,7 @@ import { RAM_FULL_LABEL, RAM_MIN_LABEL } from './ram-surfaces';
 import { COMPARE_Q3, COMPARE_Q3_CITE } from './local-desktop-compare';
 
 export const SETUP_MULTI_GPU_PUBLISHED = '2026-10-14';
-export const SETUP_MULTI_GPU_CITED_LABEL = 'Cited how-to; 35B split measured on local-desktop';
+export const SETUP_MULTI_GPU_CITED_LABEL = 'Cited how-to; 35B split measured on the local desktop';
 
 export const SETUP_MULTI_GPU_PORT_A = '127.0.0.1:8080';
 export const SETUP_MULTI_GPU_PORT_B = '127.0.0.1:8081';
@@ -45,7 +45,7 @@ export const SETUP_MULTI_GPU_Q5_LISTING_GB = 26.6;
 export const SETUP_MULTI_GPU_Q3_LISTING_GB = 16.8;
 export const SETUP_MULTI_GPU_FLASH_Q6_GB = 169;
 
-export const SETUP_MULTI_GPU_SYSTEMD_SPLIT = `# Example only — not a measured local-desktop unit.
+export const SETUP_MULTI_GPU_SYSTEMD_SPLIT = `# Example only — not a measured local desktop unit.
 # /etc/systemd/system/llama-split.service
 [Unit]
 Description=llama-server layer split across visible Radeon GPUs
@@ -59,7 +59,7 @@ Restart=on-failure
 [Install]
 WantedBy=multi-user.target`;
 
-export const SETUP_MULTI_GPU_SYSTEMD_COMBO_A = `# Example only — not a measured local-desktop unit.
+export const SETUP_MULTI_GPU_SYSTEMD_COMBO_A = `# Example only — not a measured local desktop unit.
 # /etc/systemd/system/llama-35b.service
 [Unit]
 Description=llama-server 35B pinned to one Radeon
@@ -74,7 +74,7 @@ Restart=on-failure
 [Install]
 WantedBy=multi-user.target`;
 
-export const SETUP_MULTI_GPU_SYSTEMD_COMBO_B = `# Example only — not a measured local-desktop unit.
+export const SETUP_MULTI_GPU_SYSTEMD_COMBO_B = `# Example only — not a measured local desktop unit.
 # /etc/systemd/system/llama-second.service
 [Unit]
 Description=llama-server second model pinned to the other Radeon
@@ -171,14 +171,14 @@ export const SETUP_MULTI_GPU_TRACKS: SetupMultiGpuTrack[] = [
       Official llama.cpp default is --split-mode layer (short -sm layer): each
       GPU holds a contiguous slice of layers. The KV cache for layer l lives
       on the GPU that owns layer l. Reach for a split when the file does not
-      fit one card. Overnight 35B cards on local-desktop recorded
+      fit one card. Overnight 35B cards on the local desktop recorded
       ${SETUP_MULTI_GPU_OVERNIGHT} on llama-bench, not llama-server. That
       UD-Q5 split at 4K is ${SETUP_MULTI_GPU_SPLIT_4K} tok/s versus
       ${SETUP_MULTI_GPU_ONE_4K} on one R9700 — a topology tax, not 2× chat.
       --split-mode row is deprecated in the current docs. --split-mode tensor
       is experimental; official docs say it is not implemented for many MoE
       architectures (LLAMA_SPLIT_MODE_TENSOR not implemented). House 35B is
-      a MoE file. We have not measured row or tensor tok/s on local-desktop.
+      a MoE file. We have not measured row or tensor tok/s on the local desktop.
     `.replace(/\s+/g, ' ').trim(),
   },
   {
@@ -186,7 +186,7 @@ export const SETUP_MULTI_GPU_TRACKS: SetupMultiGpuTrack[] = [
     title: 'Two llama-server copies, one card each',
     recommend: false,
     body: `
-      House rule: one LLM per GPU unless you deliberately split. amdai’s
+      House rule: one LLM per GPU unless you deliberately split. the house
       combo preset is Flash on one card and the 35B daily driver on the
       other — two processes, two visible-device pins, two ports. Official
       --split-mode none confines a process to one GPU; pick it with
@@ -195,7 +195,7 @@ export const SETUP_MULTI_GPU_TRACKS: SetupMultiGpuTrack[] = [
       llama-server copy ${SETUP_MULTI_GPU_PORT_B}, Strata Flash
       ${SETUP_MULTI_GPU_PORT_STRATA}. That is concurrency or two models,
       not a faster single chat. Combo llama-server tok/s is not measured
-      on local-desktop — point a new card at amdai-bench / Stack Lab.
+      on the local desktop — point a new card at amdai-bench / Stack Lab.
     `.replace(/\s+/g, ' ').trim(),
   },
 ];
@@ -222,7 +222,7 @@ export const SETUP_MULTI_GPU_QUANTS: SetupMultiGpuQuant[] = [
   {
     quant: COMPARE_Q3,
     role: 'Cited Q3 option — labeled estimate',
-    note: `${COMPARE_Q3_CITE}. Not a local-desktop run. Q3 stays a labeled estimate. Nothing below Q3.`,
+    note: `${COMPARE_Q3_CITE}. Not a local desktop run. Q3 stays a labeled estimate. Nothing below Q3.`,
     estimate: true,
   },
 ];
@@ -265,7 +265,7 @@ export const SETUP_MULTI_GPU_STEPS: SetupMultiGpuStep[] = [
   {
     id: 'split-flags',
     title: '--split-mode, --tensor-split, --main-gpu, and KV',
-    body: `Official flags (same for llama-cli and llama-server): --split-mode / -sm none | layer (default) | tensor. Current docs mark row deprecated (older tensor-parallel-shaped path; superseded by tensor). --tensor-split / -ts is comma-separated proportions in --device order; official example ${SETUP_MULTI_GPU_TS_EXAMPLE} puts 75 % on GPU 0 and 25 % on GPU 1 (same as 75,25). Omit -ts and layer splits proportional to memory. Do not invent a local-desktop ratio — overnight named -sm layer, not a -ts pair. --main-gpu / -mg (default 0) is the single GPU in --split-mode none. Layer mode: KV for layer l lives on the GPU that owns layer l. Tensor mode also splits KV; official docs require non-quantized KV (f16 / bf16 / f32) and flash-attn on. House cards used f16 KV. --n-gpu-layers / -ngl 999 or all to push layers to the GPUs. --fit is on by default except in tensor mode.`,
+    body: `Official flags (same for llama-cli and llama-server): --split-mode / -sm none | layer (default) | tensor. Current docs mark row deprecated (older tensor-parallel-shaped path; superseded by tensor). --tensor-split / -ts is comma-separated proportions in --device order; official example ${SETUP_MULTI_GPU_TS_EXAMPLE} puts 75 % on GPU 0 and 25 % on GPU 1 (same as 75,25). Omit -ts and layer splits proportional to memory. Do not invent a local desktop ratio — overnight named -sm layer, not a -ts pair. --main-gpu / -mg (default 0) is the single GPU in --split-mode none. Layer mode: KV for layer l lives on the GPU that owns layer l. Tensor mode also splits KV; official docs require non-quantized KV (f16 / bf16 / f32) and flash-attn on. House cards used f16 KV. --n-gpu-layers / -ngl 999 or all to push layers to the GPUs. --fit is on by default except in tensor mode.`,
     links: [
       { href: 'https://github.com/ggml-org/llama.cpp/blob/master/docs/multi-gpu.md', label: 'llama.cpp flag table' },
       { href: '/compare/one-vs-two-gpu', label: 'One vs split' },
@@ -276,7 +276,7 @@ export const SETUP_MULTI_GPU_STEPS: SetupMultiGpuStep[] = [
   {
     id: 'split-run',
     title: 'Pattern A — one llama-server, layer split',
-    body: `Cited shape: ${SETUP_MULTI_GPU_SPLIT}. Keep the GGUF on fast NVMe, not /mnt/bulk. Bind 127.0.0.1. Overnight recorded llama-bench with ${SETUP_MULTI_GPU_OVERNIGHT} — those are bench flags, not a llama-server promise. A 35B that already fits one 32 GB card is faster on one card. Split the file that does not fit. systemd-style unit is an example only, not a measured local-desktop service.`,
+    body: `Cited shape: ${SETUP_MULTI_GPU_SPLIT}. Keep the GGUF on fast NVMe, not /mnt/bulk. Bind 127.0.0.1. Overnight recorded llama-bench with ${SETUP_MULTI_GPU_OVERNIGHT} — those are bench flags, not a llama-server promise. A 35B that already fits one 32 GB card is faster on one card. Split the file that does not fit. systemd-style unit is an example only, not a measured local desktop service.`,
     links: [
       { href: '/tutorials/serve-qwen', label: 'Serve Qwen' },
       { href: '/tutorials/run-local-llm', label: 'Run a local Qwen' },
@@ -311,7 +311,7 @@ export const SETUP_MULTI_GPU_STEPS: SetupMultiGpuStep[] = [
   {
     id: 'ram',
     title: 'System RAM — both shopper labels wherever offload appears',
-    body: `${RAM_MIN_LABEL} is the load at the context you picked (a kit estimate rounded to a real size unless a card measured the peak). ${RAM_FULL_LABEL} is the 262144 line for the house 35B and Flash. 35B daily driver is 0% system-RAM offload on one 32 GB card — measured peaks ${SETUP_MULTI_GPU_RAM_4K} GB at 4K and ${SETUP_MULTI_GPU_RAM_256K} GB at 256K. Flash Q6 two-card still offloads experts; those RAM lines are calculator estimates unless a card is measured. Desktop 2 is planned as dual R9700 + 192 GB DDR5 — not measured. local-desktop kit is 256 GB. GB here is Linux GiB printed as GB.`,
+    body: `${RAM_MIN_LABEL} is the load at the context you picked (a kit estimate rounded to a real size unless a card measured the peak). ${RAM_FULL_LABEL} is the 262144 line for the house 35B and Flash. 35B daily driver is 0% system-RAM offload on one 32 GB card — measured peaks ${SETUP_MULTI_GPU_RAM_4K} GB at 4K and ${SETUP_MULTI_GPU_RAM_256K} GB at 256K. Flash Q6 two-card still offloads experts; those RAM lines are calculator estimates unless a card is measured. Desktop 2 is planned as dual R9700 + 192 GB DDR5 — not measured. local desktop kit is 256 GB. GB here is Linux GiB printed as GB.`,
     links: [
       { href: '/calculator', label: 'Calculator' },
       { href: '/flash-ram-offload', label: 'Flash RAM offload' },
@@ -335,7 +335,7 @@ export const SETUP_MULTI_GPU_STEPS: SetupMultiGpuStep[] = [
   {
     id: 'hardware',
     title: 'Hardware — PCIe split, PSU, airflow, mixing generations',
-    body: `AMD AM5 chipset table: CPU graphics is 1×16 or 2×8 (PCIe 5.0 on X870E and X670E; PCIe 4.0 on B650). AMD’s mGPU page wants identical width on the slots the GPUs use (x16+x16 or x8+x8); mixed x16+x8 is not recommended; use CPU-connected slots, not chipset leftovers. R9700 product page: 300 W TBP and a 750 W minimum PSU recommendation per card. Two 300 W cards plus 750 W minimum per card is not a dual-card PSU SKU we will invent — check the unit you buy; /power and /budget keep the existing /go/ links, no prices here. Double-slot active cooling; leave the adjacent slot empty. Mixing RDNA 2 / 3 / 4 is not measured on local-desktop. Identical PCIe width still applies. HSA_OVERRIDE_GFX_VERSION is unofficial — do not spray it on gfx1201. BIOS notes (Above 4G, ReBAR/SAM, CSM) stay on /bios.`,
+    body: `AMD AM5 chipset table: CPU graphics is 1×16 or 2×8 (PCIe 5.0 on X870E and X670E; PCIe 4.0 on B650). AMD’s mGPU page wants identical width on the slots the GPUs use (x16+x16 or x8+x8); mixed x16+x8 is not recommended; use CPU-connected slots, not chipset leftovers. R9700 product page: 300 W TBP and a 750 W minimum PSU recommendation per card. Two 300 W cards plus 750 W minimum per card is not a dual-card PSU SKU we will invent — check the unit you buy; /power and /budget keep the existing /go/ links, no prices here. Double-slot active cooling; leave the adjacent slot empty. Mixing RDNA 2 / 3 / 4 is not measured on the local desktop. Identical PCIe width still applies. HSA_OVERRIDE_GFX_VERSION is unofficial — do not spray it on gfx1201. BIOS notes (Above 4G, ReBAR/SAM, CSM) stay on /bios.`,
     links: [
       { href: '/hardware', label: 'Hardware' },
       { href: '/power', label: 'Power and PSU' },
@@ -368,7 +368,7 @@ export const SETUP_MULTI_GPU_TROUBLE: SetupMultiGpuTrouble[] = [
   {
     id: 'tensor-moe',
     title: 'LLAMA_SPLIT_MODE_TENSOR not implemented',
-    body: 'Official llama.cpp docs: tensor mode is experimental and missing for many MoE architectures. House 35B is MoE. Use --split-mode layer. We have not measured tensor on local-desktop.',
+    body: 'Official llama.cpp docs: tensor mode is experimental and missing for many MoE architectures. House 35B is MoE. Use --split-mode layer. We have not measured tensor on the local desktop.',
   },
   {
     id: 'split-tax',
@@ -462,7 +462,7 @@ export function assertSetupMultiGpuValid(): string[] {
   const errors: string[] = [];
   const blob = setupMultiGpuBlob();
   const hrefs = new Set(setupMultiGpuHrefs());
-  if (SETUP_MULTI_GPU_CITED_LABEL !== 'Cited how-to; 35B split measured on local-desktop') {
+  if (SETUP_MULTI_GPU_CITED_LABEL !== 'Cited how-to; 35B split measured on the local desktop') {
     errors.push('cited label drifted');
   }
   if (SETUP_MULTI_GPU_TRACKS.length !== 2) errors.push('need split and combo tracks');

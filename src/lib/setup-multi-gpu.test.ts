@@ -26,7 +26,7 @@ describe('llama.cpp multi-GPU setup', () => {
   it('keeps official flags, two patterns, and house rules', () => {
     assert.deepEqual(assertSetupMultiGpuValid(), []);
     assert.equal(SETUP_MULTI_GPU_PUBLISHED, '2026-10-14');
-    assert.equal(SETUP_MULTI_GPU_CITED_LABEL, 'Cited how-to; 35B split measured on local-desktop');
+    assert.equal(SETUP_MULTI_GPU_CITED_LABEL, 'Cited how-to; 35B split measured on the local desktop');
     assert.equal(SETUP_MULTI_GPU_TRACKS[0]?.id, 'split');
     assert.equal(SETUP_MULTI_GPU_TRACKS[1]?.recommend, false);
     assert.ok(SETUP_MULTI_GPU_STEPS.length >= 9);

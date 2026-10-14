@@ -25,7 +25,7 @@ describe('WSL2 Radeon setup', () => {
   it('keeps native Linux first, preview WSL, and house rules', () => {
     assert.deepEqual(assertSetupWslValid(), []);
     assert.equal(SETUP_WSL_PUBLISHED, '2026-10-14');
-    assert.equal(SETUP_WSL_CITED_LABEL, 'Cited, not measured on local-desktop');
+    assert.equal(SETUP_WSL_CITED_LABEL, 'Cited, not measured on the local desktop');
     assert.equal(SETUP_WSL_TRACKS[0]?.id, 'linux');
     assert.equal(SETUP_WSL_TRACKS[0]?.recommend, true);
     assert.equal(SETUP_WSL_TRACKS[1]?.id, 'windows');

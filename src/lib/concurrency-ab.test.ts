@@ -35,7 +35,7 @@ describe('Parallel slots (-np) on Radeon', () => {
     assert.equal(NP_TITLE, 'Parallel slots (-np) on Radeon');
     assert.ok(NP_DESCRIPTION.length >= 70);
     assert.ok(NP_DESCRIPTION.length <= 160);
-    assert.equal(NP_CITED_LABEL, 'Cited llama.cpp --parallel · slots not measured on local-desktop');
+    assert.equal(NP_CITED_LABEL, 'Cited llama.cpp --parallel · slots not measured on the local desktop');
     assert.equal(NP_PACK, 'concurrency-ab/1');
     assert.match(NP_UNMEASURED, /concurrency-ab\/1/);
     assert.ok(NP_STEPS.length >= 6);

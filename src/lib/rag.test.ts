@@ -24,7 +24,7 @@ describe('local RAG guide', () => {
   it('stays cited, llama.cpp-first, and invents no retrieval scores', () => {
     assert.deepEqual(assertRagValid(), []);
     assert.equal(RAG_TITLE, 'Local RAG on Radeon');
-    assert.equal(RAG_CITED_LABEL, 'Cited, not measured on local-desktop');
+    assert.equal(RAG_CITED_LABEL, 'Cited, not measured on the local desktop');
     assert.equal(RAG_SPEED_LABEL, 'not yet measured by AMDai');
     assert.equal(RAG_PUBLISHED, '2026-10-14');
     assert.ok(RAG_DESCRIPTION.length >= 70);

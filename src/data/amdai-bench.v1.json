@@ -3,7 +3,7 @@
   "version": 1,
   "as_of": "2026-10-13",
   "label": "Measured on our rig, 2026-10",
-  "source": "local-desktop official run cards (amdai-bench/run@1)",
+  "source": "local desktop official run cards (amdai-bench/run@1)",
   "results": [
     {
       "id": "local-desktop-qwen36-ud-q5-k-xl",

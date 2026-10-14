@@ -430,7 +430,7 @@ function vramNoteFor(id: GpuCompareId): string {
   if (id === 'strix-halo') {
     return `Unified LPDDR5x, not a discrete sticker. ${STRIX_HALO_USABLE_PCT}% usable is a house estimate so the OS keeps a slice. A 128 GB kit exists — size it on the Strix Halo sheet.`;
   }
-  if (id === 'r9700') return 'Cited 32 GB workstation sticker. Measured north star on local-desktop.';
+  if (id === 'r9700') return 'Cited 32 GB workstation sticker. Measured north star on the local desktop.';
   if (id === 'w7900') return 'Cited 48 GB workstation sticker. AMD also lists a Dual Slot sibling in the same 48 GB class.';
   if (id === 'w7800') return 'Cited 32 GB workstation sticker. AMD also lists a separate 48 GB W7800 SKU — read the sticker.';
   if (id === 'w7700') return 'Cited 16 GB workstation sticker. Not the 12 GB consumer 7700 XT.';
@@ -496,7 +496,7 @@ function r9700MeasuredDecode(
       decode: 'not measured',
       kind: 'q3-estimate',
       runIds: [],
-      note: `${COMPARE_Q3_CITE}. Q3 is an option labeled estimate — not a local-desktop run.`,
+      note: `${COMPARE_Q3_CITE}. Q3 is an option labeled estimate — not a local desktop run.`,
     };
   }
   const row = oneVsTwoRows(cards).find((item) => item.quant === quant && item.context === context);
@@ -506,14 +506,14 @@ function r9700MeasuredDecode(
       decode: 'not measured',
       kind: 'estimate',
       runIds: [],
-      note: 'No official local-desktop cell for this quant × context. Empty stays not measured.',
+      note: 'No official local desktop cell for this quant × context. Empty stays not measured.',
     };
   }
   return {
     decode,
     kind: 'measured',
     runIds: row.one.runIds,
-    note: 'Official local-desktop llama.cpp Vulkan card on one R9700.',
+    note: 'Official local desktop llama.cpp Vulkan card on one R9700.',
   };
 }
 
@@ -536,7 +536,7 @@ function fitCell(
     speed: measured?.decode ?? (id === 'r9700' ? 'not measured' : 'not measured'),
     speedKind: measured?.kind ?? (q3 ? 'q3-estimate' : 'estimate'),
     runIds: measured?.runIds ?? [],
-    note: measured?.note ?? (q3 ? `${COMPARE_Q3_CITE}. Q3 is an option labeled estimate.` : 'Calculator estimate. Not measured on local-desktop.'),
+    note: measured?.note ?? (q3 ? `${COMPARE_Q3_CITE}. Q3 is an option labeled estimate.` : 'Calculator estimate. Not measured on the local desktop.'),
   };
 }
 
@@ -577,10 +577,10 @@ function pairLead(left: GpuCompareSide, right: GpuCompareSide): string {
           ? `House 35B Q4–Q6 files fit ${right.shortName} at 4K on the calculator and spill on ${left.shortName}.`
           : `House 35B Q4–Q6 files do not sit in either VRAM on the calculator — expect RAM offload or a listed Q3 file, both estimates.`;
   const measuredBit = left.measured
-    ? `${left.shortName} has measured 35B llama.cpp cards on local-desktop. ${right.shortName} speed stays not measured.`
+    ? `${left.shortName} has measured 35B llama.cpp cards on the local desktop. ${right.shortName} speed stays not measured.`
     : right.measured
-      ? `${right.shortName} has measured 35B llama.cpp cards on local-desktop. ${left.shortName} speed stays not measured.`
-      : `Neither card was measured on local-desktop. Fit numbers are calculator estimates.`;
+      ? `${right.shortName} has measured 35B llama.cpp cards on the local desktop. ${left.shortName} speed stays not measured.`
+      : `Neither card was measured on the local desktop. Fit numbers are calculator estimates.`;
   return `${gfxBit} ${vramBit} ${fitBit} ${measuredBit} llama.cpp first.`;
 }
 
@@ -626,7 +626,7 @@ function useCases(left: GpuCompareSide, right: GpuCompareSide): GpuCompareUseCas
 
   const chat =
     leftQ4 && rightQ4
-      ? `Both cards hold house 35B Q4_K_M at 4K on the calculator. ${measured ? `${measured.shortName} is the measured local-desktop card — read those tok/s, do not copy them onto ${smaller.shortName}.` : 'Neither side has a local-desktop tok/s. Pick on VRAM headroom and the gfx package you can install, not a speed we invent.'}`
+      ? `Both cards hold house 35B Q4_K_M at 4K on the calculator. ${measured ? `${measured.shortName} is the measured local desktop card — read those tok/s, do not copy them onto ${smaller.shortName}.` : 'Neither side has a local desktop tok/s. Pick on VRAM headroom and the gfx package you can install, not a speed we invent.'}`
       : leftQ4 !== rightQ4
         ? `${leftQ4 ? left.shortName : right.shortName} holds house 35B Q4 at 4K in the calculator VRAM pool. ${leftQ4 ? right.shortName : left.shortName} needs RAM offload or a listed ${COMPARE_Q3} file — that Q3 is a labeled estimate (${COMPARE_Q3_CITE}).`
         : `Neither card holds house 35B Q4–Q6 in VRAM on the calculator. Chat still works with RAM offload — read ${RAM_MIN_LABEL} and ${RAM_FULL_LABEL} below — or a listed ${COMPARE_Q3} estimate. ${bigger.shortName} has the larger memory class on this pair.`;
@@ -635,7 +635,7 @@ function useCases(left: GpuCompareSide, right: GpuCompareSide): GpuCompareUseCas
     measured && measured.id === 'r9700'
       ? `Coding agents want the file in VRAM and a stable llama.cpp server. The house daily-driver and agent recipes are measured on the R9700. ${smaller.shortName} is ${smaller.vramLabel} — size Q4 on the calculator before you assume that recipe applies. We do not invent an agent tok/s for ${smaller.shortName}.`
       : leftQ4 || rightQ4
-        ? `Keep llama.cpp first. The side that holds Q4 in VRAM (${leftQ4 ? left.shortName : ''}${leftQ4 && rightQ4 ? ' and ' : ''}${rightQ4 ? right.shortName : ''}) is the less painful coding-agent host. House Flash / agent pins stay R9700 / local-desktop — they do not transfer. No invented agent speed.`
+        ? `Keep llama.cpp first. The side that holds Q4 in VRAM (${leftQ4 ? left.shortName : ''}${leftQ4 && rightQ4 ? ' and ' : ''}${rightQ4 ? right.shortName : ''}) is the less painful coding-agent host. House Flash / agent pins stay R9700 / local desktop — they do not transfer. No invented agent speed.`
         : `Both sides offload house 35B Q4. A coding agent will share that RAM spill. ${RAM_MIN_LABEL} and ${RAM_FULL_LABEL} are the shopper lines. We do not invent a tokens-per-tool figure.`;
 
   const longCtx =

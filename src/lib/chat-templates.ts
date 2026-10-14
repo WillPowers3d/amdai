@@ -112,7 +112,7 @@ export const CT_PICK = `
 `.replace(/\s+/g, ' ').trim();
 
 export const CT_HARNESS = `
-  Hermes (amdai’s harness), Open WebUI, and coding tools talk to
+  Hermes (the house harness), Open WebUI, and coding tools talk to
   /v1/chat/completions. That path applies the server template. A client
   that posts a raw string to /completion must wrap roles itself — or call
   POST /apply-template first. House /v1 is http://127.0.0.1:${CT_PORT}/v1
@@ -374,7 +374,7 @@ export const CT_STEPS: CtStep[] = [
   {
     id: 'qwen-kwargs',
     title: 'Copy Qwen kwargs only from the official card',
-    body: 'Qwen3.6-35B and Qwen 3.8 Flash cards document chat_template_kwargs.enable_thinking and preserve_thinking. Flash also documents reasoning_effort. Those are card fields, not a local-desktop pin. Other /models pages are not quoted for a Jinja string on this page.',
+    body: 'Qwen3.6-35B and Qwen 3.8 Flash cards document chat_template_kwargs.enable_thinking and preserve_thinking. Flash also documents reasoning_effort. Those are card fields, not a local desktop pin. Other /models pages are not quoted for a Jinja string on this page.',
     links: [
       { href: '/thinking', label: 'Thinking mode' },
       { href: '/qwen', label: 'Qwen compare' },

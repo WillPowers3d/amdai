@@ -1,7 +1,7 @@
 /**
  * Radeon AI PRO R9700 measured hero at /gpus/r9700.
  * Numbers come from validated amdai-bench/run@1 cards. Q3 is estimate only.
- * Do not invent tok/s, prices, or a Q3 local-desktop run.
+ * Do not invent tok/s, prices, or a Q3 local desktop run.
  */
 
 import { DIMM_KIT_GB } from './calculator';
@@ -44,7 +44,7 @@ export const R9700_DAILY_RECIPE = 'qwen36-35b.llamacpp-vulkan.262k';
 export const R9700_FLASH_RECIPE = 'qwen38-flash.strata.262k';
 
 export const R9700_DIGEST =
-  'Measured 35B llama.cpp on the Radeon AI PRO R9700 — 32 GB VRAM, one GPU vs two, cited decode and prefill from local-desktop run cards.';
+  'Measured 35B llama.cpp on the Radeon AI PRO R9700 — 32 GB VRAM, one GPU vs two, cited decode and prefill from local desktop run cards.';
 
 export type R9700Link = { href: string; label: string };
 
@@ -75,7 +75,7 @@ export const R9700_PATH_STEPS = [
   {
     href: '/setup',
     label: 'First-run setup',
-    body: 'Ubuntu 24.04+ is the measured path to a first token. Windows first-run lives on /setup/windows — cited, not measured on local-desktop.',
+    body: 'Ubuntu 24.04+ is the measured path to a first token. Windows first-run lives on /setup/windows — cited, not measured on the local desktop.',
   },
   {
     href: `/recipes/${R9700_DAILY_RECIPE}`,
@@ -118,7 +118,7 @@ export const R9700_MORE: R9700MoreLink[] = [
   {
     href: '/benchmarks',
     label: 'Benchmarks',
-    body: '33-card local-desktop matrix. Every cell links a run card.',
+    body: '33-card local desktop matrix. Every cell links a run card.',
   },
   {
     href: '/compare',
@@ -178,7 +178,7 @@ export const R9700_MORE: R9700MoreLink[] = [
   {
     href: '/setup/multi-gpu',
     label: 'Multi-GPU llama.cpp how-to',
-    body: 'Hands-on --split-mode, --tensor-split, device pins, and two-server combo. 35B split measured on local-desktop.',
+    body: 'Hands-on --split-mode, --tensor-split, device pins, and two-server combo. 35B split measured on the local desktop.',
   },
   {
     href: '/two-r9700',

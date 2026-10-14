@@ -8,7 +8,7 @@ import { CONSUMER_NAV_LINKS } from './consumer-gpu';
 import { RAM_FULL_LABEL, RAM_MIN_LABEL } from './ram-surfaces';
 
 export const SPEECH_PUBLISHED = '2026-10-13';
-export const SPEECH_CITED_LABEL = 'Cited, not measured on local-desktop';
+export const SPEECH_CITED_LABEL = 'Cited, not measured on the local desktop';
 export const SPEECH_SPEED_LABEL = 'not yet measured by AMDai';
 
 export type SpeechLink = { href: string; label: string };
@@ -192,7 +192,7 @@ export const SPEECH_LINUX_STEPS: SpeechStep[] = [
     id: 'os',
     title: 'Ubuntu 24.04+ first',
     body:
-      'Bare-metal Ubuntu 24.04+ is the AMDai measured path for ROCm on local-desktop. Speech follows that OS even though we have no first-party speech card. See the GPU in rocminfo before you pick a HIP gfx pin. Windows is a cited second path, not the first try.',
+      'Bare-metal Ubuntu 24.04+ is the AMDai measured path for ROCm on the local desktop. Speech follows that OS even though we have no first-party speech card. See the GPU in rocminfo before you pick a HIP gfx pin. Windows is a cited second path, not the first try.',
     links: [
       { href: '/setup', label: 'First-run setup' },
       { href: '/gpus/r9700', label: 'R9700 measured page' },
@@ -240,7 +240,7 @@ export const SPEECH_WINDOWS_STEPS: SpeechStep[] = [
     id: 'windows-official',
     title: 'What whisper.cpp officially documents',
     body:
-      'Vulkan is the cross-vendor GPU build the whisper.cpp README documents. That is the honest Windows STT path AMDai will name — same idea as llama.cpp Vulkan on /setup/windows. HIP/ROCm userspace stays a Linux product. Cited, not measured on local-desktop. We do not invent a Windows real-time factor.',
+      'Vulkan is the cross-vendor GPU build the whisper.cpp README documents. That is the honest Windows STT path AMDai will name — same idea as llama.cpp Vulkan on /setup/windows. HIP/ROCm userspace stays a Linux product. Cited, not measured on the local desktop. We do not invent a Windows real-time factor.',
     links: [
       { href: '/setup/windows', label: 'Windows setup' },
       { href: 'https://github.com/ggml-org/whisper.cpp', label: 'whisper.cpp README' },
@@ -251,7 +251,7 @@ export const SPEECH_WINDOWS_STEPS: SpeechStep[] = [
     id: 'windows-piper',
     title: 'Piper on Windows is the documented pip install',
     body:
-      'pip install piper-tts is what the Piper README documents. Do not invent a Windows ROCm Piper pin. Ubuntu 24.04+ on bare metal is still the OS that matches local-desktop. WSL2 ROCm is a technical preview on the 10.1 notes — not a measured speech path.',
+      'pip install piper-tts is what the Piper README documents. Do not invent a Windows ROCm Piper pin. Ubuntu 24.04+ on bare metal is still the OS that matches local desktop. WSL2 ROCm is a technical preview on the 10.1 notes — not a measured speech path.',
     links: [
       { href: 'https://github.com/OHF-Voice/piper1-gpl', label: 'Piper repo' },
       { href: '/setup', label: 'Ubuntu setup' },
@@ -378,7 +378,7 @@ export const SPEECH_ALONGSIDE = `
   CPU/ONNX process unless a cited ROCm path appears. On a second card, read
   /multi-gpu. Stack Lab’s Speech (STT + TTS) workload is the companion —
   Lab Notes hands off with amdai-stack-lab:speech, not a house 35B recipe id.
-  We have not measured speech-plus-LLM on local-desktop.
+  We have not measured speech-plus-LLM on the local desktop.
 `.replace(/\s+/g, ' ').trim();
 
 const BANNED = /Qwen2\.5|Qwen3-8B/i;
@@ -418,7 +418,7 @@ export function assertSpeechValid(): string[] {
   const errors: string[] = [];
   const blob = speechBlob();
   const hrefs = new Set(speechHrefs());
-  if (SPEECH_CITED_LABEL !== 'Cited, not measured on local-desktop') errors.push('cited label drifted');
+  if (SPEECH_CITED_LABEL !== 'Cited, not measured on the local desktop') errors.push('cited label drifted');
   if (SPEECH_SPEED_LABEL !== 'not yet measured by AMDai') errors.push('speed label drifted');
   if (!blob.includes(SPEECH_SPEED_LABEL)) errors.push('must say not yet measured by AMDai');
   if (!/whisper\.cpp/i.test(blob)) errors.push('must name whisper.cpp');

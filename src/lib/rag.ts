@@ -8,7 +8,7 @@ import { CONSUMER_NAV_LINKS } from './consumer-gpu';
 import { RAM_FULL_LABEL, RAM_MIN_LABEL } from './ram-surfaces';
 
 export const RAG_PUBLISHED = '2026-10-14';
-export const RAG_CITED_LABEL = 'Cited, not measured on local-desktop';
+export const RAG_CITED_LABEL = 'Cited, not measured on the local desktop';
 export const RAG_SPEED_LABEL = 'not yet measured by AMDai';
 export const RAG_EMPTY = 'not measured yet';
 export const RAG_NOMIC_HREF = 'https://huggingface.co/nomic-ai/nomic-embed-text-v1.5-GGUF';
@@ -67,7 +67,7 @@ export type RagError = {
 
 export const RAG_TITLE = 'Local RAG on Radeon';
 export const RAG_DESCRIPTION =
-  'Chat with your own PDFs on Radeon. Cited nomic-embed Q6/Q5/Q4 plus labeled Q3. llama.cpp first. Not measured on local-desktop.';
+  'Chat with your own PDFs on Radeon. Cited nomic-embed Q6/Q5/Q4 plus labeled Q3. llama.cpp first. Not measured on the local desktop.';
 
 export const RAG_LEAD = `
   Local RAG means you chunk your files, embed the chunks, retrieve the ones
@@ -135,7 +135,7 @@ export const RAG_MODELS: RagModel[] = [
     id: 'nomic-q3',
     name: 'nomic-embed-text-v1.5 Q3_K_M',
     size: '65 MiB',
-    note: 'Official listing. Labeled estimate — not a local-desktop run. Q1 and Q2 stay off.',
+    note: 'Official listing. Labeled estimate — not a local desktop run. Q1 and Q2 stay off.',
     href: RAG_NOMIC_HREF,
     kind: 'estimate',
   },
@@ -214,7 +214,7 @@ export const RAG_FIT_BANDS: RagFitBand[] = [
     kind: 'q3-estimate',
     kindLabel: 'Q3 estimate',
     standalone:
-      'Official listing 65 MiB. Labeled estimate — not a local-desktop run. Runtime VRAM is not measured.',
+      'Official listing 65 MiB. Labeled estimate — not a local desktop run. Runtime VRAM is not measured.',
     sidecar: 'Same sidecar rule: the LLM is the limiter. Q3 stays a labeled estimate.',
     speed: RAG_SPEED_LABEL,
   },
@@ -226,7 +226,7 @@ export const RAG_FIT_ROWS: RagFitRow[] = [
     vramClass: '32 GB discrete',
     cards: [{ href: '/gpus/r9700', label: 'Radeon AI PRO R9700' }],
     pick: 'Q6_K (108 MiB official). Q8_0 (140 MiB) and F16 (262 MiB) stay cited larger files.',
-    fit: 'Estimate for the pair. The measured house 35B daily driver already sits on one R9700. Official nomic Q6_K is 108 MiB — the embed file is not the limiter. We have not measured embed-plus-LLM VRAM on local-desktop. Size the chat sidecar on the calculator.',
+    fit: 'Estimate for the pair. The measured house 35B daily driver already sits on one R9700. Official nomic Q6_K is 108 MiB — the embed file is not the limiter. We have not measured embed-plus-LLM VRAM on the local desktop. Size the chat sidecar on the calculator.',
     speed: RAG_SPEED_LABEL,
     offload: false,
   },
@@ -336,7 +336,7 @@ export const RAG_WINDOWS_STEPS: RagStep[] = [
     id: 'windows-official',
     title: 'Windows follows /setup/windows',
     body:
-      'llama.cpp Vulkan is the honest Windows path AMDai already documents for tokens. The same Vulkan build can serve --embeddings. HIP/ROCm userspace stays a Linux product. Cited, not measured on local-desktop. Ubuntu 24.04+ on bare metal remains the measured default. We do not invent a Windows retrieval score.',
+      'llama.cpp Vulkan is the honest Windows path AMDai already documents for tokens. The same Vulkan build can serve --embeddings. HIP/ROCm userspace stays a Linux product. Cited, not measured on the local desktop. Ubuntu 24.04+ on bare metal remains the measured default. We do not invent a Windows retrieval score.',
     links: [
       { href: '/setup/windows', label: 'Windows setup' },
       { href: '/setup', label: 'Ubuntu setup' },
@@ -350,7 +350,7 @@ export const RAG_ERRORS: RagError[] = [
     id: 'oom-embed',
     title: 'OOM while embedding or next to the chat sidecar',
     body:
-      `Official nomic Q6_K is 108 MiB and F16 is 262 MiB. That can still starve a card that already holds a 35B GGUF if you load both into the same VRAM pool. Size the LLM on the calculator first. Run the embed server as its own process. When the sidecar offloads, shopper lines stay ${RAM_MIN_LABEL} and ${RAM_FULL_LABEL}. A second card is a /multi-gpu question — we have not measured RAG-plus-LLM on local-desktop.`,
+      `Official nomic Q6_K is 108 MiB and F16 is 262 MiB. That can still starve a card that already holds a 35B GGUF if you load both into the same VRAM pool. Size the LLM on the calculator first. Run the embed server as its own process. When the sidecar offloads, shopper lines stay ${RAM_MIN_LABEL} and ${RAM_FULL_LABEL}. A second card is a /multi-gpu question — we have not measured RAG-plus-LLM on the local desktop.`,
     links: [
       { href: '/troubleshoot#oom-context', label: 'OOM at long context' },
       { href: '/troubleshoot#mmap-ram', label: 'System RAM too small' },
@@ -396,7 +396,7 @@ export const RAG_FAQ = [
     id: 'which-embed',
     question: 'Which embedding file should I start with?',
     answer:
-      'Cite the nomic-embed-text-v1.5 GGUF table: Q6_K is 108 MiB, Q5_K_M is 95 MiB, Q4_K_M is 81 MiB. Q3_K_M (65 MiB) is a labeled estimate — not a local-desktop run. Q8_0 (140 MiB) and F16 (262 MiB) stay cited larger files. BGE small is 33.4M params and BGE base is 0.1B params on the official cards — we do not invent those GGUF disk sizes. Q1 and Q2 stay off.',
+      'Cite the nomic-embed-text-v1.5 GGUF table: Q6_K is 108 MiB, Q5_K_M is 95 MiB, Q4_K_M is 81 MiB. Q3_K_M (65 MiB) is a labeled estimate — not a local desktop run. Q8_0 (140 MiB) and F16 (262 MiB) stay cited larger files. BGE small is 33.4M params and BGE base is 0.1B params on the official cards — we do not invent those GGUF disk sizes. Q1 and Q2 stay off.',
     links: [
       { href: 'https://huggingface.co/nomic-ai/nomic-embed-text-v1.5-GGUF', label: 'nomic-embed GGUF' },
       { href: '/quants', label: 'Quants' },
@@ -477,7 +477,7 @@ export const RAG_ALONGSIDE = `
   Stack Lab recipe for RAG. ${RAM_MIN_LABEL} and ${RAM_FULL_LABEL} stay the
   shopper RAM lines when the chat sidecar offloads. A 64 GB kit estimate is
   the consumer shopper default — labeled estimate, not a measured RAG peak.
-  We have not measured embed-plus-LLM on local-desktop.
+  We have not measured embed-plus-LLM on the local desktop.
 `.replace(/\s+/g, ' ').trim();
 
 export const RAG_WHAT = `
@@ -530,7 +530,7 @@ export function assertRagValid(): string[] {
   const errors: string[] = [];
   const blob = ragBlob();
   const hrefs = ragHrefs();
-  if (RAG_CITED_LABEL !== 'Cited, not measured on local-desktop') errors.push('cited label drifted');
+  if (RAG_CITED_LABEL !== 'Cited, not measured on the local desktop') errors.push('cited label drifted');
   if (RAG_SPEED_LABEL !== 'not yet measured by AMDai') errors.push('speed label drifted');
   if (RAG_EMPTY !== 'not measured yet') errors.push('empty-cell label drifted');
   if (!blob.includes(RAG_SPEED_LABEL)) errors.push('must say not yet measured by AMDai');

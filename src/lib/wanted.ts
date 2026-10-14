@@ -22,7 +22,7 @@ export type WantedFile = z.infer<typeof wantedSchema>;
 export function parseWanted(raw: unknown): WantedFile {
   const file = wantedSchema.parse(raw);
   if (/\$\d+|bounty/i.test(JSON.stringify(file))) {
-    throw new Error('wanted.yaml: bounty amounts need amdai’s sign-off');
+    throw new Error('wanted.yaml: bounty amounts need the house sign-off');
   }
   if (/Qwen2\.5|Qwen3-8B/i.test(JSON.stringify(file))) {
     throw new Error('wanted.yaml: banned model name');

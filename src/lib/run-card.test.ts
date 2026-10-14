@@ -14,8 +14,7 @@ import {
   Q6_4K_VARIANCE_NOTE,
   RUN_SCHEMA,
   SWEEP_REVERIFY,
-  amdai,
-  amdai,
+  AMDAI_CREDIT,
   assertRunSetValid,
   deriveV1Catalog,
   flashQ3FromRuns,
@@ -55,17 +54,17 @@ describe('amdai-bench/run@1', () => {
     assert.deepEqual(assertRunSetValid(runs), []);
   });
 
-  it('credits every seeded card to verified amdai / amdai on local-desktop and keeps Flash Q3 empty', () => {
+  it('credits every seeded card to verified AMDai / AMDai on the local desktop and keeps Flash Q3 empty', () => {
     assert.ok(runs.length >= 22);
     assert.equal(officialAmdaiRuns(runs).length, runs.length);
     assert.ok(runs.every((card) => card.schema === RUN_SCHEMA));
     assert.ok(runs.every((card) => houseHandle(card.submitted_by.handle)));
-    assert.ok(runs.every((card) => card.submitted_by.rig === amdai.rig));
+    assert.ok(runs.every((card) => card.submitted_by.rig === AMDAI_CREDIT.rig));
     assert.ok(runs.every((card) => card.submitted_by.verified));
     const sweep = runs.filter(isSweep35bCard);
     assert.equal(sweep.length, 33);
-    assert.ok(sweep.every((card) => card.submitted_by.handle === amdai.handle));
-    assert.ok(sweep.every((card) => card.submitted_by.display === amdai.display));
+    assert.ok(sweep.every((card) => card.submitted_by.handle === AMDAI_CREDIT.handle));
+    assert.ok(sweep.every((card) => card.submitted_by.display === AMDAI_CREDIT.display));
     assert.ok(sweep.every((card) => (card.notes ?? '').includes(SWEEP_REVERIFY)));
     const q6pair = sweep.filter(
       (card) => card.model.quant === 'Q6_K' && card.config.context_tokens === 4096 && card.hardware.gpu_count_used === 1,

@@ -19,7 +19,7 @@ qwen36_measured:
     - One R9700, llama.cpp Vulkan, f16 KV. Official llama-bench c060ca974 (2026-10-12/13).
     - UD-Q5_K_XL peak VRAM is 25.97 GB at 4K / 29.34 GB at 256K. Q5_K_M VRAM is 24.68 GB at 4K.
     - Q6_K 4K table cell is 103.23 tok/s (23:55). Q6_K at 32K and up partly offloaded to DDR5.
-    - Flash, Strata, and Q3 runs are pending a rerun after amdai stabilizes the DDR5.
+    - Flash, Strata, and Q3 runs are pending a rerun after AMDai stabilizes the DDR5.
   rows:
     - quant: UD-Q5_K_XL
       decode_short: 102.39 tok/s

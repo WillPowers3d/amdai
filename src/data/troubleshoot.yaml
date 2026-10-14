@@ -284,7 +284,7 @@ symptoms:
     causes:
       - Weights plus KV plus overhead exceed the card.
       - You compared a publisher GGUF size to VRAM and ignored KV.
-      - Consumer 16–24 GB sheets are calculator estimates — not measured on local-desktop.
+      - Consumer 16–24 GB sheets are calculator estimates — not measured on the local desktop.
     fix: >
       Use the calculator against the card you own. Q3 is a labeled estimate.
       Q1 and Q2 stay off. Do not invent a Q3 to force a 35B onto a 16 GB card.
@@ -373,7 +373,7 @@ symptoms:
     title: Two cards slower than one
     symptom: >
       A 35B that fits one 32 GB card is slower when split across two. That is
-      a measured topology tax on local-desktop, not a broken second card.
+      a measured topology tax on the local desktop, not a broken second card.
     checks:
       - command: llama-cli --list-devices
         good: Both discrete GPUs are visible. Pin one process per card when you want two models, not a split.
@@ -396,7 +396,7 @@ symptoms:
         label: 35B on two cards
     citations:
       - href: /multi-gpu
-        label: Dual / multi-GPU — cited local-desktop 35B split tax
+        label: Dual / multi-GPU — cited local desktop 35B split tax
       - href: /compare
         label: Compare 35B — one GPU vs split from run cards
 
@@ -412,10 +412,10 @@ symptoms:
     causes:
       - AMD’s AM5 chipset table lists CPU graphics as 1×16 or 2×8. ROCm on Radeon multi-GPU wants identical width (x16+x16 or x8+x8). A mixed x16+x8 pair is listed as not recommended.
       - ROCm BAR guidance says to enable Above 4G Decoding. ReBAR / Smart Access Memory is AMD’s name for a full CPU view of graphics memory.
-      - Instinct OS-tuning docs discuss restricting CPU C-states. That is not a measured R9700 desktop recipe — we have not measured llama.cpp tok/s with C-states on versus off on local-desktop.
+      - Instinct OS-tuning docs discuss restricting CPU C-states. That is not a measured R9700 desktop recipe — we have not measured llama.cpp tok/s with C-states on versus off on the local desktop.
     fix: >
       Read /bios before you file “ROCm is broken” on a firmware miss. Keep GPUs
-      on CPU-connected slots. Do not invent a motherboard for local-desktop. Power and
+      on CPU-connected slots. Do not invent a motherboard for local desktop. Power and
       C-state switches stay labeled Instinct guidance, not a house speed fix.
     links:
       - href: /bios
@@ -480,9 +480,9 @@ symptoms:
       - command: dmesg | grep -i amdgpu
         good: Separate a GPU MODE1 line from a host memory oops. The 2026-10-12 sweep oops was a RAM event, not a MODE1 row.
     causes:
-      - First-party local-desktop note — DDR5-5200 later proved unstable. A kernel oops at 00:14 CT aborted the overnight sweep. All 33 cards predate that oops.
+      - First-party local desktop note — DDR5-5200 later proved unstable. A kernel oops at 00:14 CT aborted the overnight sweep. All 33 cards predate that oops.
       - AMD EXPO is AMD’s DDR5 overclocking-profile standard for Ryzen on socket AM5. EXPO is overclocking, not the JEDEC default.
-      - The motherboard model and whether EXPO was enabled on local-desktop are not published.
+      - The motherboard model and whether EXPO was enabled on the local desktop are not published.
     fix: >
       Treat EXPO / XMP as an overclock profile. A two-DIMM kit profile is not
       a four-DIMM guarantee. We do not invent a frequency as the only cause.
@@ -521,7 +521,7 @@ symptoms:
     fix: >
       On Windows, use Vulkan llama.cpp (or Ollama’s Vulkan path) and do not
       expect a full ROCm userspace. Linux + llama.cpp is the path this site
-      documents for HIP. Windows steps on /setup/windows stay labeled cited, not measured on local-desktop. We
+      documents for HIP. Windows steps on /setup/windows stay labeled cited, not measured on the local desktop. We
       do not publish a Windows tok/s card.
     links:
       - href: /setup/windows

@@ -24,7 +24,7 @@ recommendations:
     serve: "llama.cpp Vulkan. Overnight cards recorded llama-bench (not llama-server): -dev Vulkan1 -sm layer -ngl 99 -fitt 1024 -fa 1 -ctk f16 -ctv f16. llama-server flags are not on the card."
     vram_32gb: >
       Publisher listing for Qwen3.6-35B-A3B-UD-Q5_K_XL.gguf is 26.6 GB (Hugging Face).
-      Measured peak VRAM total on one R9700: 25.97 GB at 4K, 29.34 GB at 256K (local-desktop run cards).
+      Measured peak VRAM total on one R9700: 25.97 GB at 4K, 29.34 GB at 256K (local desktop run cards).
       Peak system RAM 37.32 GB at 4K, 42.9 GB at 256K.
     notes: >
       Weights from unsloth/Qwen3.6-35B-A3B-GGUF. Keep the file on NVMe. See /stacks

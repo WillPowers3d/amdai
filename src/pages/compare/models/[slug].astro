@@ -48,7 +48,7 @@ const sides = [page.left, page.right] as const;
         <a class="underline decoration-accent/40" href={page.right.path}>{page.right.shortName}</a>
         pages. Fit totals are calculator estimates on published GPU sheets.
         <strong class="text-ink">{page.q3Left}</strong> and <strong class="text-ink">{page.q3Right}</strong>
-        are labeled estimates. Measured tok/s appear only where a local-desktop card already exists.
+        are labeled estimates. Measured tok/s appear only where a local desktop card already exists.
         We do not invent a price.
       </p>
     </Callout>
@@ -58,7 +58,7 @@ const sides = [page.left, page.right] as const;
       <div class="mt-6 grid gap-4 md:grid-cols-2">
         {sides.map((side) => (
           <article class="rounded-2xl border border-line bg-raised/50 p-5">
-            <p class="kicker">{side.measured ? 'Measured on local-desktop' : 'Cited, not measured on local-desktop'}</p>
+            <p class="kicker">{side.measured ? 'Measured on the local desktop' : 'Cited, not measured on the local desktop'}</p>
             <h3 class="mt-2 font-serif text-2xl tracking-tight">
               <a class="hover:text-accent-ink" href={side.path}>{side.shortName}</a>
             </h3>
@@ -197,7 +197,7 @@ const sides = [page.left, page.right] as const;
     <section id="launch" class="mt-12" aria-labelledby="launch-heading">
       <h2 id="launch-heading" class="font-serif text-3xl tracking-tight">llama.cpp first</h2>
       <p class="mt-3 max-w-3xl text-sm leading-relaxed text-muted">
-        Commands and recipes already on the model pages. Cited-model shapes are not measured local-desktop recipes.
+        Commands and recipes already on the model pages. Cited-model shapes are not measured local desktop recipes.
         House Flash keeps its existing Strata recipe plus the llama.cpp backend page.
       </p>
       <div class="mt-6 grid gap-4 md:grid-cols-2">

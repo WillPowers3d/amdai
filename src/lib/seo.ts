@@ -10,7 +10,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { BRAND, site } from './site';
 import { GUIDE_UPDATED, rocmPages } from './rocm-guide';
-import { amdai, amdai, type RunCard } from './run-card';
+import { AMDAI_CREDIT, type RunCard } from './run-card';
 import { forumCategories } from './forum-categories';
 import { canRunSeoRows } from './can-run';
 import { gpuCompareSeoRows } from './gpu-compare';
@@ -359,13 +359,13 @@ setDate('/start', '2026-10-13');
 setMeta(
   '/setup',
   'First-run setup',
-  'Ubuntu 24.04+ first token on a Radeon, plus an honest Windows path. llama.cpp first. Measured local-desktop cards, no invented tok/s.',
+  'Ubuntu 24.04+ first token on a Radeon, plus an honest Windows path. llama.cpp first. Measured local desktop cards, no invented tok/s.',
 );
 setDate('/setup', '2026-10-13');
 setMeta(
   '/setup/windows',
   'Windows first-run setup',
-  'Cited Windows ROCm + llama.cpp Vulkan first-run on Radeon. Ubuntu 24.04+ stays the measured AMDai path. Not measured on local-desktop.',
+  'Cited Windows ROCm + llama.cpp Vulkan first-run on Radeon. Ubuntu 24.04+ stays the measured AMDai path. Not measured on the local desktop.',
 );
 setDate('/setup/windows', '2026-10-13');
 setMeta(
@@ -383,13 +383,13 @@ setDate('/setup/arch', '2026-10-14');
 setMeta(
   '/setup/docker',
   'Run llama.cpp on Radeon in Docker or Podman',
-  'Cited official llama.cpp Vulkan and ROCm images on Radeon. Localhost /v1. Not measured on local-desktop.',
+  'Cited official llama.cpp Vulkan and ROCm images on Radeon. Localhost /v1. Not measured on the local desktop.',
 );
 setDate('/setup/docker', '2026-10-14');
 setMeta(
   '/setup/lm-studio',
   'Run LM Studio on a Radeon GPU',
-  'Cited LM Studio Vulkan or ROCm llama.cpp runtime on Radeon. Local OpenAI /v1 on :1234. Not measured on local-desktop.',
+  'Cited LM Studio Vulkan or ROCm llama.cpp runtime on Radeon. Local OpenAI /v1 on :1234. Not measured on the local desktop.',
 );
 setDate('/setup/lm-studio', '2026-10-14');
 setMeta(
@@ -419,7 +419,7 @@ setDate('/setup/open-webui', '2026-10-14');
 setMeta(
   '/setup/wsl',
   'Run local AI on Radeon under Windows WSL2',
-  'Cited ROCm WSL2 preview on Radeon: listed cards, Ubuntu guest, llama.cpp HIP. Native Linux stays measured. Not measured on local-desktop.',
+  'Cited ROCm WSL2 preview on Radeon: listed cards, Ubuntu guest, llama.cpp HIP. Native Linux stays measured. Not measured on the local desktop.',
 );
 setDate('/setup/wsl', '2026-10-14');
 setMeta(
@@ -431,7 +431,7 @@ setDate('/setup/comfyui', '2026-10-14');
 setMeta(
   '/setup/multi-gpu',
   'Run llama.cpp across two (or more) Radeon GPUs',
-  'Cited llama.cpp multi-GPU on Radeon: Vulkan and HIP device pins, --split-mode layer, --tensor-split, two-server combo. 35B split measured on local-desktop. No invented tok/s.',
+  'Cited llama.cpp multi-GPU on Radeon: Vulkan and HIP device pins, --split-mode layer, --tensor-split, two-server combo. 35B split measured on the local desktop. No invented tok/s.',
 );
 setDate('/setup/multi-gpu', '2026-10-14');
 setMeta(
@@ -455,7 +455,7 @@ setDate('/guides/quantize-gguf', '2026-10-14');
 setMeta(
   '/image-gen',
   'Local image gen on Radeon',
-  'Cited ComfyUI-first guide for Stable Diffusion, SDXL, and Flux-class models on Radeon. Linux ROCm PyTorch first. Fit estimates, not measured on local-desktop.',
+  'Cited ComfyUI-first guide for SD, SDXL, and Flux-class models on Radeon. Linux ROCm PyTorch first. Fit estimates, not measured on the local desktop.',
 );
 setDate('/image-gen', '2026-10-13');
 setMeta(
@@ -467,7 +467,7 @@ setDate('/speech', '2026-10-13');
 setMeta(
   '/long-context',
   'Long context on Radeon',
-  'Run 128K–262K locally on Radeon. Measured 35B llama.cpp cards from local-desktop. f16 KV default. Empty cells stay not measured yet.',
+  'Run 128K–262K locally on Radeon. Measured 35B llama.cpp cards from local desktop. f16 KV default. Empty cells stay not measured yet.',
 );
 setDate('/long-context', '2026-10-13');
 setMeta(
@@ -485,7 +485,7 @@ setDate('/kv-cache', '2026-10-14');
 setMeta(
   '/rag',
   'Local RAG on Radeon',
-  'Chat with your own PDFs on Radeon. Cited nomic-embed Q6/Q5/Q4 plus labeled Q3. llama.cpp first. Not measured on local-desktop.',
+  'Chat with your own PDFs on Radeon. Cited nomic-embed Q6/Q5/Q4 plus labeled Q3. llama.cpp first. Not measured on the local desktop.',
 );
 setDate('/rag', '2026-10-14');
 setMeta(
@@ -515,7 +515,7 @@ setDate('/tuning', '2026-10-14');
 setMeta(
   '/speculative-decoding',
   'Speculative decoding on Radeon',
-  'Speculative decoding on Radeon with llama.cpp. Cited -md flags. Measured 35B only. Draft speed not measured on local-desktop. Q3 is a labeled estimate.',
+  'Speculative decoding on Radeon with llama.cpp. Cited -md flags. Measured 35B only. Draft speed not measured on the local desktop. Q3 is a labeled estimate.',
 );
 setDate('/speculative-decoding', '2026-10-14');
 setMeta(
@@ -533,7 +533,7 @@ setDate('/guides/tool-calling', '2026-10-14');
 setMeta(
   '/thinking',
   'Thinking / reasoning mode on Radeon',
-  'Thinking / reasoning mode on a Radeon GPU with llama.cpp. Cited --reasoning and Qwen3.6 enable_thinking. Tokens not measured on local-desktop.',
+  'Thinking / reasoning mode on a Radeon GPU with llama.cpp. Cited --reasoning and Qwen3.6 enable_thinking. Tokens not measured on the local desktop.',
 );
 setDate('/thinking', '2026-10-14');
 setMeta(
@@ -598,22 +598,22 @@ setMeta(
 setMeta(
   '/qwen',
   'Qwen 3.6 / 3.8 compare',
-  'Every current Qwen 3.6 and 3.8 file × quant on AMDai, with measured cells from official local-desktop run cards.',
+  'Every current Qwen 3.6 and 3.8 file × quant on AMDai, with measured cells from official local desktop run cards.',
 );
 setMeta(
   '/compare',
-  'Compare 35B on local-desktop',
-  'Cited 35B decisions from official local-desktop llama.cpp cards: one GPU versus split, and Q6 / Q5 / Q4 plus a labeled Q3 estimate.',
+  'Compare 35B on the local desktop',
+  'Cited 35B decisions from official local desktop llama.cpp cards: one GPU versus split, and Q6 / Q5 / Q4 plus a labeled Q3 estimate.',
 );
 setMeta(
   '/compare/one-vs-two-gpu',
   'One R9700 vs two',
-  'Qwen3.6-35B-A3B on local-desktop: one R9700 versus a split across both cards — decode, prefill, VRAM, and RAM from run cards.',
+  'Qwen3.6-35B-A3B on the local desktop: one R9700 versus a split across both cards — decode, prefill, VRAM, and RAM from run cards.',
 );
 setMeta(
   '/compare/q4-q5-q6',
   'Q6 vs Q5 vs Q4',
-  'Same 35B on local-desktop at Q6_K, UD-Q5_K_XL, Q5_K_M, and Q4_K_M, plus a labeled UD-Q3_K_XL estimate. 1-GPU or split.',
+  'Same 35B on the local desktop at Q6_K, UD-Q5_K_XL, Q5_K_M, and Q4_K_M, plus a labeled UD-Q3_K_XL estimate. 1-GPU or split.',
 );
 setMeta(
   '/compare/radeon-vs-nvidia',
@@ -651,12 +651,12 @@ for (const row of canRunSeoRows()) {
 setMeta(
   '/qwen36-dual',
   '35B on two R9700s',
-  'Split versus two copies of UD-Q5_K_XL on two R9700s — soak and concurrency from official local-desktop cards.',
+  'Split versus two copies of UD-Q5_K_XL on two R9700s — soak and concurrency from official local desktop cards.',
 );
 setMeta(
   '/multi-gpu',
   'Dual / multi-GPU',
-  'When a second Radeon AI PRO R9700 helps or hurts: llama.cpp first, measured local-desktop 35B and Flash, plus cited PCIe and PSU. No invented tok/s.',
+  'When a second Radeon AI PRO R9700 helps or hurts: llama.cpp first, measured local desktop 35B and Flash, plus cited PCIe and PSU. No invented tok/s.',
 );
 setDate('/multi-gpu', '2026-10-13');
 setMeta(
@@ -672,7 +672,7 @@ setMeta(
 setMeta(
   '/benchmarks',
   '35B llama.cpp matrix',
-  'Qwen3.6-35B-A3B on llama.cpp Vulkan: UD-Q5, Q5, Q4, and Q6 at 4K–256K, one GPU and split. Decode, prefill, VRAM, and RAM from official local-desktop run cards.',
+  'Qwen3.6-35B-A3B on llama.cpp Vulkan: UD-Q5, Q5, Q4, and Q6 at 4K–256K, one GPU and split. Decode, prefill, VRAM, and RAM from official local desktop run cards.',
 );
 setMeta(
   '/benchmarks/methodology',
@@ -682,7 +682,7 @@ setMeta(
 setMeta(
   '/results',
   'Official run cards',
-  'amdai-bench/run@1 cards from overnight local-desktop tests — credited to amdai, with the exact launch command.',
+  'amdai-bench/run@1 cards from overnight local desktop tests — credited to AMDai, with the exact launch command.',
 );
 setMeta(
   '/budget',
@@ -707,127 +707,127 @@ setMeta(
 setMeta(
   '/gpus/r9700',
   'Radeon AI PRO R9700',
-  'Measured 35B llama.cpp on the Radeon AI PRO R9700 — 32 GB VRAM, one GPU vs two, cited decode and prefill from local-desktop run cards.',
+  'Measured 35B llama.cpp on the Radeon AI PRO R9700 — 32 GB VRAM, one GPU vs two, cited decode and prefill from local desktop run cards.',
 );
 setDate('/gpus/r9700', '2026-10-13');
 setMeta(
   '/gpus/strix-halo',
   'Ryzen AI Max / Strix Halo',
-  'Cited Ryzen AI Max+ 395 (Radeon 8060S, gfx1151) local-AI guide. Shared system memory, llama.cpp Vulkan first. Not measured on local-desktop.',
+  'Cited Ryzen AI Max+ 395 (Radeon 8060S, gfx1151) local-AI guide. Shared system memory, llama.cpp Vulkan first. Not measured on the local desktop.',
 );
 setDate('/gpus/strix-halo', '2026-10-13');
 setMeta(
   '/gpus/ryzen-igpu',
   'Local AI on a Ryzen iGPU',
-  'Cited Ryzen 780M / 760M (gfx1103) and 880M / 890M (gfx1150) local-AI guide. Shared system RAM, llama.cpp Vulkan first. Not measured on local-desktop.',
+  'Cited Ryzen 780M / 760M (gfx1103) and 880M / 890M (gfx1150) local-AI guide. Shared system RAM, llama.cpp Vulkan first. Not measured on the local desktop.',
 );
 setDate('/gpus/ryzen-igpu', '2026-10-14');
 setMeta(
   '/gpus/rx-7900-xtx',
   'RX 7900 XTX',
-  'RX 7900 XTX recipe sheet — 24 GB, gfx1100, cited ROCm matrix row. 35B Q6/Q5/Q4 VRAM fit estimates; UD-Q3_K_XL labeled estimate. Not measured on local-desktop.',
+  'RX 7900 XTX recipe sheet — 24 GB, gfx1100, cited ROCm row. 35B Q6/Q5/Q4 fit estimates; UD-Q3_K_XL labeled estimate. Not measured on the local desktop.',
 );
 setDate('/gpus/rx-7900-xtx', '2026-10-14');
 setMeta(
   '/gpus/rx-7900-xt',
   'RX 7900 XT',
-  'RX 7900 XT recipe sheet — 20 GB, gfx1100, cited ROCm matrix row. 35B Q6/Q5/Q4 VRAM fit estimates; UD-Q3_K_XL labeled estimate. Not measured on local-desktop.',
+  'RX 7900 XT recipe sheet — 20 GB, gfx1100, cited ROCm row. 35B Q6/Q5/Q4 fit estimates; UD-Q3_K_XL labeled estimate. Not measured on the local desktop.',
 );
 setDate('/gpus/rx-7900-xt', '2026-10-14');
 setMeta(
   '/gpus/rx-7800-xt',
   'RX 7800 XT',
-  'RX 7800 XT recipe sheet — 16 GB, gfx1101, cited ROCm matrix row. 35B Q6/Q5/Q4 VRAM fit estimates; UD-Q3_K_XL labeled estimate. Not measured on local-desktop.',
+  'RX 7800 XT recipe sheet — 16 GB, gfx1101, cited ROCm row. 35B Q6/Q5/Q4 fit estimates; UD-Q3_K_XL labeled estimate. Not measured on the local desktop.',
 );
 setDate('/gpus/rx-7800-xt', '2026-10-14');
 setMeta(
   '/gpus/rx-9070-xt',
   'RX 9070 XT',
-  'RX 9070 XT recipe sheet — 16 GB, gfx1201, cited ROCm matrix row. 35B Q6/Q5/Q4 VRAM fit estimates; UD-Q3_K_XL labeled estimate. Not measured on local-desktop.',
+  'RX 9070 XT recipe sheet — 16 GB, gfx1201, cited ROCm row. 35B Q6/Q5/Q4 fit estimates; UD-Q3_K_XL labeled estimate. Not measured on the local desktop.',
 );
 setDate('/gpus/rx-9070-xt', '2026-10-13');
 setMeta(
   '/gpus/rx-9060-xt',
   'RX 9060 XT',
-  'RX 9060 XT recipe sheet — 16 GB, gfx1200, cited ROCm matrix row. 35B Q6/Q5/Q4 VRAM fit estimates; UD-Q3_K_XL labeled estimate. Not measured on local-desktop.',
+  'RX 9060 XT recipe sheet — 16 GB, gfx1200, cited ROCm row. 35B Q6/Q5/Q4 fit estimates; UD-Q3_K_XL labeled estimate. Not measured on the local desktop.',
 );
 setDate('/gpus/rx-9060-xt', '2026-10-13');
 setMeta(
   '/gpus/rx-7900-gre',
   'RX 7900 GRE',
-  'RX 7900 GRE recipe sheet — 16 GB, gfx1100, cited ROCm matrix row. 35B Q6/Q5/Q4 VRAM fit estimates; UD-Q3_K_XL labeled estimate. Not measured on local-desktop.',
+  'RX 7900 GRE recipe sheet — 16 GB, gfx1100, cited ROCm row. 35B Q6/Q5/Q4 fit estimates; UD-Q3_K_XL labeled estimate. Not measured on the local desktop.',
 );
 setDate('/gpus/rx-7900-gre', '2026-10-13');
 setMeta(
   '/gpus/rx-7700-xt',
   'RX 7700 XT',
-  'RX 7700 XT recipe sheet — 12 GB, gfx1101, cited ROCm matrix row. 35B Q6/Q5/Q4 VRAM fit estimates; UD-Q3_K_XL labeled estimate. Not measured on local-desktop.',
+  'RX 7700 XT recipe sheet — 12 GB, gfx1101, cited ROCm row. 35B Q6/Q5/Q4 fit estimates; UD-Q3_K_XL labeled estimate. Not measured on the local desktop.',
 );
 setDate('/gpus/rx-7700-xt', '2026-10-13');
 setMeta(
   '/gpus/rx-7600-xt',
   'RX 7600 XT',
-  'RX 7600 XT recipe sheet — 16 GB, gfx1102, cited ROCm matrix row. 35B Q6/Q5/Q4 VRAM fit estimates; UD-Q3_K_XL labeled estimate. Not measured on local-desktop.',
+  'RX 7600 XT recipe sheet — 16 GB, gfx1102, cited ROCm row. 35B Q6/Q5/Q4 fit estimates; UD-Q3_K_XL labeled estimate. Not measured on the local desktop.',
 );
 setDate('/gpus/rx-7600-xt', '2026-10-13');
 setMeta(
   '/gpus/rx-7600',
   'RX 7600',
-  'RX 7600 recipe sheet — 8 GB, gfx1102, cited ROCm matrix row. 35B Q6/Q5/Q4 VRAM fit estimates; UD-Q3_K_XL labeled estimate. Not measured on local-desktop.',
+  'RX 7600 recipe sheet — 8 GB, gfx1102, cited ROCm row. 35B Q6/Q5/Q4 fit estimates; UD-Q3_K_XL labeled estimate. Not measured on the local desktop.',
 );
 setDate('/gpus/rx-7600', '2026-10-13');
 setMeta(
   '/gpus/rx-6800-xt',
   'RX 6800 XT',
-  'RX 6800 XT recipe sheet — 16 GB, gfx1030, cited RDNA 2 directory row. 35B Q6/Q5/Q4 VRAM fit estimates; UD-Q3_K_XL labeled estimate. Not measured on local-desktop.',
+  'RX 6800 XT recipe sheet — 16 GB, gfx1030, cited RDNA 2 row. 35B Q6/Q5/Q4 fit estimates; UD-Q3_K_XL labeled estimate. Not measured on the local desktop.',
 );
 setDate('/gpus/rx-6800-xt', '2026-10-14');
 setMeta(
   '/gpus/rx-6700-xt',
   'RX 6700 XT',
-  'RX 6700 XT recipe sheet — 12 GB, gfx1031, cited RDNA 2 directory row. 35B Q6/Q5/Q4 VRAM fit estimates; UD-Q3_K_XL labeled estimate. Not measured on local-desktop.',
+  'RX 6700 XT recipe sheet — 12 GB, gfx1031, cited RDNA 2 row. 35B Q6/Q5/Q4 fit estimates; UD-Q3_K_XL labeled estimate. Not measured on the local desktop.',
 );
 setDate('/gpus/rx-6700-xt', '2026-10-14');
 setMeta(
   '/gpus/rx-9070',
   'RX 9070',
-  'RX 9070 recipe sheet — 16 GB, gfx1201, cited ROCm matrix row. 35B Q6/Q5/Q4 VRAM fit estimates; UD-Q3_K_XL labeled estimate. Not measured on local-desktop.',
+  'RX 9070 recipe sheet — 16 GB, gfx1201, cited ROCm row. 35B Q6/Q5/Q4 fit estimates; UD-Q3_K_XL labeled estimate. Not measured on the local desktop.',
 );
 setDate('/gpus/rx-9070', '2026-10-14');
 setMeta(
   '/gpus/rx-9070-gre',
   'RX 9070 GRE',
-  'RX 9070 GRE recipe sheet — 12 GB, gfx1201, cited ROCm matrix row. 35B Q6/Q5/Q4 VRAM fit estimates; UD-Q3_K_XL labeled estimate. Not measured on local-desktop.',
+  'RX 9070 GRE recipe sheet — 12 GB, gfx1201, cited ROCm row. 35B Q6/Q5/Q4 fit estimates; UD-Q3_K_XL labeled estimate. Not measured on the local desktop.',
 );
 setDate('/gpus/rx-9070-gre', '2026-10-14');
 setMeta(
   '/gpus/rx-6950-xt',
   'RX 6950 XT',
-  'RX 6950 XT / 6900 XT sheet — 16 GB gfx1030 RDNA 2. 35B Q6/Q5/Q4 fit estimates; UD-Q3_K_XL labeled estimate. Not measured on local-desktop.',
+  'RX 6950 XT / 6900 XT sheet — 16 GB gfx1030 RDNA 2. 35B Q6/Q5/Q4 fit estimates; UD-Q3_K_XL labeled estimate. Not measured on the local desktop.',
 );
 setDate('/gpus/rx-6950-xt', '2026-10-14');
 setMeta(
   '/gpus/w7900',
   'PRO W7900',
-  'PRO W7900 recipe sheet — 48 GB, gfx1100, cited ROCm matrix row. Q6/Q5/Q4 plus labeled UD-Q3_K_XL; 1 and 2 GPU estimates. Not measured on local-desktop.',
+  'PRO W7900 recipe sheet — 48 GB, gfx1100, cited ROCm matrix row. Q6/Q5/Q4 plus labeled UD-Q3_K_XL; 1 and 2 GPU estimates. Not measured on the local desktop.',
 );
 setDate('/gpus/w7900', '2026-10-14');
 setMeta(
   '/gpus/w7800',
   'PRO W7800',
-  'PRO W7800 recipe sheet — 32 GB, gfx1100, cited ROCm matrix row. Q6/Q5/Q4 plus labeled UD-Q3_K_XL; 1 and 2 GPU estimates. Not measured on local-desktop.',
+  'PRO W7800 recipe sheet — 32 GB, gfx1100, cited ROCm matrix row. Q6/Q5/Q4 plus labeled UD-Q3_K_XL; 1 and 2 GPU estimates. Not measured on the local desktop.',
 );
 setDate('/gpus/w7800', '2026-10-14');
 setMeta(
   '/gpus/w7700',
   'PRO W7700',
-  'PRO W7700 recipe sheet — 16 GB, gfx1101, cited ROCm matrix row. Q6/Q5/Q4 plus labeled UD-Q3_K_XL; 1 and 2 GPU estimates. Not measured on local-desktop.',
+  'PRO W7700 recipe sheet — 16 GB, gfx1101, cited ROCm matrix row. Q6/Q5/Q4 plus labeled UD-Q3_K_XL; 1 and 2 GPU estimates. Not measured on the local desktop.',
 );
 setDate('/gpus/w7700', '2026-10-14');
 setMeta(
   '/gpus/w6800',
   'PRO W6800',
-  'PRO W6800 recipe sheet — 32 GB, gfx1030, cited ROCm matrix row. Q6/Q5/Q4 plus labeled UD-Q3_K_XL; 1 and 2 GPU estimates. Not measured on local-desktop.',
+  'PRO W6800 recipe sheet — 32 GB, gfx1030, cited ROCm matrix row. Q6/Q5/Q4 plus labeled UD-Q3_K_XL; 1 and 2 GPU estimates. Not measured on the local desktop.',
 );
 setDate('/gpus/w6800', '2026-10-14');
 setMeta(
@@ -839,7 +839,7 @@ setDate('/models', '2026-10-14');
 setMeta(
   '/models/qwen36',
   'Qwen3.6-35B-A3B',
-  'Qwen3.6-35B-A3B on one R9700 — Unsloth UD-Q5_K_XL, llama.cpp Vulkan, 262K. Measured local-desktop cards; Q3 is a labeled estimate.',
+  'Qwen3.6-35B-A3B on one R9700 — Unsloth UD-Q5_K_XL, llama.cpp Vulkan, 262K. Measured local desktop cards; Q3 is a labeled estimate.',
 );
 setDate('/models/qwen36', '2026-10-13');
 setMeta(
@@ -923,7 +923,7 @@ setDate('/hardware', '2026-10-13');
 setMeta(
   '/labs',
   'Community labs',
-  'Cited home-lab write-ups that are not measured on local-desktop. Shannon’s How I run my Lab is the first. Not measured by AMDai.',
+  'Cited home-lab write-ups that are not measured on the local desktop. Shannon’s How I run my Lab is the first. Not measured by AMDai.',
 );
 setDate('/labs', '2026-10-13');
 setMeta(
@@ -1074,7 +1074,7 @@ setMeta(
 setMeta(
   '/about',
   'About AMDai',
-  'Who runs AMDai, what the local-desktop Radeon test rig is, editorial independence, and how affiliate links work.',
+  'Who runs AMDai, what the local desktop Radeon test rig is, editorial independence, and how affiliate links work.',
 );
 setDate('/about', '2026-10-13');
 setMeta(
@@ -1120,7 +1120,7 @@ setMeta(
 setMeta(
   '/credits',
   'Credits',
-  'Sybil / 0xSero attribution for the recipe idea, the local-desktop first-party set credited to amdai, and Shannon’s cited lab write-up.',
+  'Sybil / 0xSero attribution for the recipe idea, the local desktop first-party set credited to AMDai, and Shannon’s cited lab write-up.',
 );
 setMeta(
   '/disclosure',
@@ -1396,8 +1396,7 @@ export function articleDates(pathname: string): { published: string; modified: s
 }
 
 export const DATASET_CREATOR = {
-  name: amdai.display,
-  alternateName: [amdai.handle, amdai.handle, amdai.display, amdai.rig],
+  name: AMDAI_CREDIT.display,
 } as const;
 
 /** Run-card notes are first-party lab measurements published on amdai.net. */

@@ -33,7 +33,7 @@ describe('Strix Halo / Ryzen AI Max guide', () => {
     const page = strixHaloPage();
     assert.deepEqual(assertStrixHaloValid(page), []);
     assert.equal(STRIX_HALO_PUBLISHED, '2026-10-13');
-    assert.equal(STRIX_HALO_CITED_LABEL, 'Cited, not measured on local-desktop');
+    assert.equal(STRIX_HALO_CITED_LABEL, 'Cited, not measured on the local desktop');
     assert.equal(STRIX_HALO_PATH, '/gpus/strix-halo');
     assert.equal(page.gfx, 'gfx1151');
     assert.equal(page.usablePct, 70);
@@ -79,7 +79,7 @@ describe('Strix Halo / Ryzen AI Max guide', () => {
   it('wires the dedicated page and stays in the sitemap', () => {
     const page = readFileSync(join(here, '../pages/gpus/strix-halo.astro'), 'utf8');
     const hub = readFileSync(join(here, '../content/guides/gpus.mdx'), 'utf8');
-    assert.match(page, /Cited, not measured on local-desktop/);
+    assert.match(page, /Cited, not measured on the local desktop/);
     assert.match(page, /llama\.cpp/);
     assert.match(page, /NextSteps/);
     assert.match(page, /Minimum system RAM needed/);

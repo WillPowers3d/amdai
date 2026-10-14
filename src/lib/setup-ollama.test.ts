@@ -27,7 +27,7 @@ describe('Ollama Radeon setup', () => {
   it('keeps llama.cpp first, cited install, and house rules', () => {
     assert.deepEqual(assertSetupOllamaValid(), []);
     assert.equal(SETUP_OLLAMA_PUBLISHED, '2026-10-14');
-    assert.equal(SETUP_OLLAMA_CITED_LABEL, 'Cited, not measured on local-desktop');
+    assert.equal(SETUP_OLLAMA_CITED_LABEL, 'Cited, not measured on the local desktop');
     assert.equal(SETUP_OLLAMA_TRACKS[0]?.id, 'llamacpp');
     assert.equal(SETUP_OLLAMA_TRACKS[1]?.recommend, false);
     assert.equal(SETUP_OLLAMA_HOUSE_FILE, 'Qwen3.6-35B-A3B-UD-Q5_K_XL.gguf');

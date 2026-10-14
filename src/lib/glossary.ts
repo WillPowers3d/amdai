@@ -1,7 +1,7 @@
 /**
  * Consumer glossary for /glossary.
  * Plain-English jargon the rest of AMDai uses. No invented prices or tok/s.
- * Cite official local-desktop cards only when a figure helps; otherwise link /results.
+ * Cite official local desktop cards only when a figure helps; otherwise link /results.
  */
 
 export type GlossaryLink = {
@@ -121,7 +121,7 @@ export const GLOSSARY: GlossaryEntry[] = [
       'A chip that combines CPU and GPU and shares one memory pool. There is no discrete VRAM sticker. The shopper box on AMDai is Ryzen AI Max+ 395 with Radeon 8060S (gfx1151) — Strix Halo in mini-PCs and laptops.',
     why: 'A 64 GB or 128 GB kit is both system RAM and GPU memory. Size the file on the calculator before you assume a 35B Q5 “fits like an R9700.” Official tok/s on this site are still the discrete R9700 cards.',
     deeper:
-      'AMD’s ROCm 10.1.0 GPU table prints VRAM for this SKU as Dynamic + carveout. BIOS UMA reserves a slice; GTT / dynamic allocation grows into the rest of the same kit. llama.cpp Vulkan first. Not measured on local-desktop.',
+      'AMD’s ROCm 10.1.0 GPU table prints VRAM for this SKU as Dynamic + carveout. BIOS UMA reserves a slice; GTT / dynamic allocation grows into the rest of the same kit. llama.cpp Vulkan first. Not measured on the local desktop.',
     links: [
       { href: '/gpus/strix-halo', label: 'Strix Halo guide' },
       { href: '/gpus/ryzen-igpu', label: 'Ryzen iGPU' },
@@ -171,7 +171,7 @@ export const GLOSSARY: GlossaryEntry[] = [
     letter: 'C',
     definition:
       'How many tokens of prompt plus conversation the model can keep in the KV cache. House daily driver on one R9700 is 262144 (262K). Tables on this site also show 4K, 32K, 128K, and 256K because speed and RAM change with length.',
-    why: 'Longer context grows KV and usually slows decode. Official UD-Q5_K_XL on local-desktop: 102.39 tok/s at 4K and 44.4 tok/s at 256K — same file, one GPU, f16 KV. Size the window on the calculator before you set -c.',
+    why: 'Longer context grows KV and usually slows decode. Official UD-Q5_K_XL on the local desktop: 102.39 tok/s at 4K and 44.4 tok/s at 256K — same file, one GPU, f16 KV. Size the window on the calculator before you set -c.',
     deeper:
       'House -c 262144 is the 262K daily-driver window. Tables also publish 4K, 32K, 128K, and 256K because KV and decode move. Official UD-Q5_K_XL 1-GPU: 102.39 / 90.52 / 66.43 / 44.4 tok/s at those four lengths.',
     links: [
@@ -189,7 +189,7 @@ export const GLOSSARY: GlossaryEntry[] = [
     letter: 'C',
     definition:
       'The largest llama.cpp -c that still loads and serves on a given box. Native max is the model-card window. The ceiling is what VRAM and RAM actually hold.',
-    why: 'Shoppers search max context Radeon and 262K VRAM. Stack Lab ctx-ceiling/1 (amdai-bench ab-ctx-ceiling) climbs a lean ladder on one GPU and on all GPUs. AMDai has not ingested a winner on local-desktop — not yet measured.',
+    why: 'Shoppers search max context Radeon and 262K VRAM. Stack Lab ctx-ceiling/1 (amdai-bench ab-ctx-ceiling) climbs a lean ladder on one GPU and on all GPUs. AMDai has not ingested a winner on the local desktop — not yet measured.',
     deeper:
       'House overnight llama-bench ran 262144 on UD-Q5, one R9700, f16 KV. That is not a ctx-ceiling winner. Minimum system RAM needed is the lean step rounded to a kit. RAM needed at full context is the winner peak first. The shopper page is /context-ceiling.',
     links: [
@@ -206,7 +206,7 @@ export const GLOSSARY: GlossaryEntry[] = [
     letter: 'C',
     definition:
       'llama.cpp grammar sampling so every next token still matches a GBNF grammar or a JSON Schema converted to GBNF. Used for tool args, calculator output, and recipe export.',
-    why: 'Hermes and coding tools need JSON that parses. Official flags are --grammar / --json-schema and response_format. Grammar decode versus free-form is not measured on local-desktop — run Stack Lab grammar-ab/1. The schema is not injected into the prompt except during tool calling.',
+    why: 'Hermes and coding tools need JSON that parses. Official flags are --grammar / --json-schema and response_format. Grammar decode versus free-form is not measured on the local desktop — run Stack Lab grammar-ab/1. The schema is not injected into the prompt except during tool calling.',
     deeper:
       'llama.cpp server README (checked 2026-10-14): --grammar, --grammar-file, -j / --json-schema, -jf / --json-schema-file, plus grammar / json_schema body fields. grammars/README.md: JSON Schemas → GBNF; performance gotchas on issue #4218. Shopper how-to: /constrained-decoding.',
     links: [
@@ -223,7 +223,7 @@ export const GLOSSARY: GlossaryEntry[] = [
     letter: 'C',
     definition:
       'An isolated process that runs an official llama.cpp image instead of a host build. On AMDai that is ggml-org’s GHCR server-vulkan first, server-rocm second. The host still owns /dev/dri and, for HIP, /dev/kfd.',
-    why: 'People search “rocm docker llama.cpp.” The cited path is /setup/docker. It is not a measured local-desktop card. We do not invent a container tok/s or a speed delta versus bare metal. Bind the published port to 127.0.0.1.',
+    why: 'People search “rocm docker llama.cpp.” The cited path is /setup/docker. It is not a measured local desktop card. We do not invent a container tok/s or a speed delta versus bare metal. Bind the published port to 127.0.0.1.',
     deeper:
       'docker.md names ghcr.io/ggml-org/llama.cpp:server-vulkan and :server-rocm and says GPU images are not currently tested by CI beyond being built. AMD’s ROCm 10.1 container page documents --device /dev/kfd --device /dev/dri and optional seccomp=unconfined. Rootless Podman needs --group-add keep-groups; Fedora SELinux needs container_use_devices plus :z / :Z on the model volume.',
     links: [
@@ -343,7 +343,7 @@ export const GLOSSARY: GlossaryEntry[] = [
     letter: 'D',
     definition:
       'Two R9700s can run two full copies of a model (two clients) or one split / tensor-parallel copy (one larger or shared request). They are different layouts; AMDai does not treat “two GPUs” as free 2× speed.',
-    why: 'On local-desktop, two copies of UD-Q5_K_XL sit near 100 tok/s per request. A split 4K pass is 82.78 tok/s total versus 102.39 on one card. Prefer two copies unless you deliberately need one shared context. House rule: one LLM per GPU unless you combine on purpose.',
+    why: 'On local desktop, two copies of UD-Q5_K_XL sit near 100 tok/s per request. A split 4K pass is 82.78 tok/s total versus 102.39 on one card. Prefer two copies unless you deliberately need one shared context. House rule: one LLM per GPU unless you combine on purpose.',
     deeper:
       'Layouts on amdai-bench cards: single, split, dual-instance. Two copies: about 100 tok/s per request, 172 at two concurrent, 177 at 4–8, 423 soak requests, 0 errors. Split 4K max total 82.78 versus 102.39 on one card. Consumer why: /multi-gpu. Hands-on llama.cpp flags: /setup/multi-gpu.',
     links: [
@@ -609,7 +609,7 @@ export const GLOSSARY: GlossaryEntry[] = [
     letter: 'F',
     definition:
       'A fused attention kernel in llama.cpp. Official flag is -fa / --flash-attn on|off|auto (default auto). Overnight house 35B Vulkan llama-bench recorded -fa 1.',
-    why: 'Usually cuts attention VRAM and can help long context. llama.cpp multi-gpu.md requires it for tensor split and/or a quantized V cache. llama-server FA on versus off is not measured on local-desktop — run Stack Lab Flash Attention A/B.',
+    why: 'Usually cuts attention VRAM and can help long context. llama.cpp multi-gpu.md requires it for tensor split and/or a quantized V cache. llama-server FA on versus off is not measured on the local desktop — run Stack Lab Flash Attention A/B.',
     deeper:
       'House default KV is f16. Turn -fa on before -ctv q8_0 or -ctv q4_0. HIP / ROCm documents the same flag; HIP FA deltas stay not measured. That A/B is not an allowlisted Open-in-Stack-Lab deep link. House recipes stay Q4 and up.',
     links: [
@@ -627,7 +627,7 @@ export const GLOSSARY: GlossaryEntry[] = [
     letter: 'P',
     definition:
       'llama-server keeps processed prompt tokens so a later request that shares a prefix skips that prefill. Official --cache-prompt / --no-cache-prompt (default on; env LLAMA_ARG_CACHE_PROMPT). The completion API field cache_prompt does the same per request (default true).',
-    why: 'Hermes, coding tools, and chat UIs resend a long system prompt every turn. The cache helps when that prefix stays put. AMDai has not measured TTFT with versus without the cache on local-desktop — not yet measured. Run Stack Lab prompt-cache-ab/1.',
+    why: 'Hermes, coding tools, and chat UIs resend a long system prompt every turn. The cache helps when that prefix stays put. AMDai has not measured TTFT with versus without the cache on the local desktop — not yet measured. Run Stack Lab prompt-cache-ab/1.',
     deeper:
       'Official docs warn logits are not guaranteed bit-for-bit identical across batch sizes, so cache_prompt can be nondeterministic. House llama-server does not record a --cache-reuse, --cache-ram, or --slot-save-path pin. The shopper page is /prompt-cache.',
     links: [
@@ -696,7 +696,7 @@ export const GLOSSARY: GlossaryEntry[] = [
     letter: 'T',
     definition:
       'Time to first token — how long the user waits after send before the first decode token. Prompt / prefix cache aims to cut that wait when a long system prompt is resent.',
-    why: 'Shoppers search why is time to first token slow. AMDai has not measured llama-server TTFT with versus without the cache on local-desktop. Every cache-hit, miss, and first-token cell on /prompt-cache stays not yet measured.',
+    why: 'Shoppers search why is time to first token slow. AMDai has not measured llama-server TTFT with versus without the cache on the local desktop. Every cache-hit, miss, and first-token cell on /prompt-cache stays not yet measured.',
     deeper:
       'Do not copy the overnight 102.39 tok/s 4K decode cell as a cache-hit TTFT. That number is llama-bench, one client, not a prefix-cache A/B. Run amdai-bench ab-prompt-cache and ingest a lab-notes-report/1 pack.',
     links: [
@@ -751,7 +751,7 @@ export const GLOSSARY: GlossaryEntry[] = [
     letter: 'L',
     definition:
       'A desktop chat app that wraps llama.cpp. You download a Vulkan or ROCm llama.cpp runtime, load a GGUF, and optionally serve an OpenAI-compatible /v1 on 127.0.0.1:1234.',
-    why: 'People search “LM Studio Radeon.” The cited first-run is /setup/lm-studio. It is not a measured local-desktop card. Decode numbers on this site are Ubuntu llama.cpp llama-bench, not measured inside LM Studio. Vulkan first; bundled ROCm only if the picker lists this gfx.',
+    why: 'People search “LM Studio Radeon.” The cited first-run is /setup/lm-studio. It is not a measured local desktop card. Decode numbers on this site are Ubuntu llama.cpp llama-bench, not measured inside LM Studio. Vulkan first; bundled ROCm only if the picker lists this gfx.',
     deeper:
       'AMD’s playbook documents Ctrl+Shift+R runtime picker, GPU Offload max, Flash Attention On, and http://127.0.0.1:1234. Linux is an AppImage (libfuse2); Ubuntu newer than 22 is not well tested per LM Studio. House file is still Qwen3.6-35B-A3B UD-Q5_K_XL at 262K. Leave the app for compile flags and matching cards — /setup and /backends/llamacpp.',
     links: [
@@ -769,7 +769,7 @@ export const GLOSSARY: GlossaryEntry[] = [
     letter: 'O',
     definition:
       'A pull-and-run daemon that wraps a packaged llama.cpp / ROCm or Vulkan runtime. Local API on 127.0.0.1:11434, including an OpenAI-shaped /v1.',
-    why: 'People search “Ollama AMD GPU.” The cited first-run is /setup/ollama. It is not a measured local-desktop card. Decode numbers on this site are Ubuntu llama.cpp llama-bench, not measured inside Ollama. llama.cpp you compile stays the daily driver.',
+    why: 'People search “Ollama AMD GPU.” The cited first-run is /setup/ollama. It is not a measured local desktop card. Decode numbers on this site are Ubuntu llama.cpp llama-bench, not measured inside Ollama. llama.cpp you compile stays the daily driver.',
     deeper:
       'Official Linux install is their script plus an AMD ROCm tarball. gpu.mdx lists R9700 / 9070 XT on Linux ROCm v7; the Windows ROCm table does not. ollama ps is how you prove GPU vs CPU. Default context is 4096; KV grows with OLLAMA_NUM_PARALLEL. House family is still Qwen3.6-35B-A3B. gfx1201 tensiles and Windows R9700 CPU fallback live on /rocm-problems.',
     links: [
@@ -787,9 +787,9 @@ export const GLOSSARY: GlossaryEntry[] = [
     letter: 'L',
     definition:
       'AMD’s own local AI server. The primary LLM recipe wraps llama.cpp (Vulkan or ROCm). OpenAI-compatible API on 127.0.0.1:13305/api/v1 — note /api/v1, not /v1.',
-    why: 'People search “Lemonade AMD GPU.” The cited first-run is /setup/lemonade. It is not a measured local-desktop card. Decode numbers on this site are Ubuntu llama.cpp llama-bench, not measured inside Lemonade. llama.cpp you compile stays the daily driver. Vulkan first; ROCm only on the gfx their docs name.',
+    why: 'People search “Lemonade AMD GPU.” The cited first-run is /setup/lemonade. It is not a measured local desktop card. Decode numbers on this site are Ubuntu llama.cpp llama-bench, not measured inside Lemonade. llama.cpp you compile stays the daily driver. Vulkan first; ROCm only on the gfx their docs name.',
     deeper:
-      'Ubuntu 24.04+ PPA is ppa:lemonade-team/stable; Windows is the MSI. Latest GitHub tag we checked is v2026.41.1 (2026-10-07) — ROCm backends move to ROCm 10. lemonade backends install llamacpp:vulkan or llamacpp:rocm. Nightly ROCm bins: gfx1150, gfx1151, gfx103X, gfx110X, gfx120X. House family is still Qwen3.6-35B-A3B. amdai runs Lemonade on local-desktop; there is still no Lemonade tok/s card.',
+      'Ubuntu 24.04+ PPA is ppa:lemonade-team/stable; Windows is the MSI. Latest GitHub tag we checked is v2026.41.1 (2026-10-07) — ROCm backends move to ROCm 10. lemonade backends install llamacpp:vulkan or llamacpp:rocm. Nightly ROCm bins: gfx1150, gfx1151, gfx103X, gfx110X, gfx120X. House family is still Qwen3.6-35B-A3B. AMDai runs Lemonade on the local desktop; there is still no Lemonade tok/s card.',
     links: [
       { href: '/setup/lemonade', label: 'Lemonade on Radeon' },
       { href: '/backends/lemonade', label: 'Lemonade backend' },
@@ -805,7 +805,7 @@ export const GLOSSARY: GlossaryEntry[] = [
     letter: 'O',
     definition:
       'A self-hosted browser chat UI. It talks to an OpenAI-compatible /v1. On AMDai that server is llama.cpp llama-server on 127.0.0.1:8080. The UI itself does not run the GGUF.',
-    why: 'People search “Open WebUI AMD GPU.” The cited first-run is /setup/open-webui. It is not a measured local-desktop card. Decode numbers on this site are Ubuntu llama.cpp llama-bench, not measured inside Open WebUI. llama.cpp you compile stays the daily driver.',
+    why: 'People search “Open WebUI AMD GPU.” The cited first-run is /setup/open-webui. It is not a measured local desktop card. Decode numbers on this site are Ubuntu llama.cpp llama-bench, not measured inside Open WebUI. llama.cpp you compile stays the daily driver.',
     deeper:
       'Official Docker maps host 3000 to container 8080. pip defaults to :8080 — use --port 3000 so it does not steal house llama-server. Admin → Connections → OpenAI, Provider llama.cpp. Do not pull the :cuda image on a Radeon. Ollama :11434 is a secondary path. House file is still Qwen3.6-35B-A3B UD-Q5_K_XL.',
     links: [
@@ -825,7 +825,7 @@ export const GLOSSARY: GlossaryEntry[] = [
       'An editor or CLI agent that talks to a local OpenAI-compatible /v1. On AMDai that server is llama.cpp llama-server on 127.0.0.1:8080. Aider, Cline, and Continue are the cited first three.',
     why: 'People search “aider llama.cpp radeon” and “cline local model.” The cited walk is /setup/coding-assistant. Decode numbers on this site are Ubuntu llama.cpp llama-bench, not Aider tok/s. Vulkan llama-server first; LM Studio :1234 is secondary.',
     deeper:
-      'Aider prefixes the model with openai/ and requires a non-empty API key. Cline uses the OpenAI Compatible provider — do not append /chat/completions. Continue openai provider wants apiBase including /v1. House file is still Qwen3.6-35B-A3B UD-Q5_K_XL. Hermes is the house agent on local-desktop against the same :8080.',
+      'Aider prefixes the model with openai/ and requires a non-empty API key. Cline uses the OpenAI Compatible provider — do not append /chat/completions. Continue openai provider wants apiBase including /v1. House file is still Qwen3.6-35B-A3B UD-Q5_K_XL. Hermes is the house agent on the local desktop against the same :8080.',
     links: [
       { href: '/setup/coding-assistant', label: 'Coding assistant' },
       { href: '/harnesses/aider', label: 'Aider' },
@@ -931,7 +931,7 @@ export const GLOSSARY: GlossaryEntry[] = [
     letter: 'M',
     definition:
       'Official llama.cpp default model load. --load-mode auto memory-maps the GGUF unless a device cannot (env LLAMA_ARG_LOAD_MODE). The kernel pages the file from NVMe instead of copying the whole weight blob into anonymous RAM.',
-    why: 'Shoppers search llama.cpp mlock and why is system RAM full after load. mmap still faults pages into RSS as you run. AMDai has not measured mmap versus --no-mmap RSS on local-desktop — not yet measured. Run Stack Lab Model loading A/B.',
+    why: 'Shoppers search llama.cpp mlock and why is system RAM full after load. mmap still faults pages into RSS as you run. AMDai has not measured mmap versus --no-mmap RSS on the local desktop — not yet measured. Run Stack Lab Model loading A/B.',
     deeper:
       'PR #20834 folded --mmap / --no-mmap / --mlock into --load-mode. --lazy-mode can leave huge tensors on disk and requires mmap. House llama-server does not record a load-mode pin. The shopper page is /mmap.',
     links: [
@@ -1052,10 +1052,10 @@ export const GLOSSARY: GlossaryEntry[] = [
     aliases: ['Q6', 'Q5', 'Q4', 'Q3', 'Q6_K', 'Q5_K_M', 'Q4_K_M', 'quantization', 'bpw'],
     letter: 'Q',
     definition:
-      'A stored-weight encoding that shrinks the GGUF. AMDai lists Q3 through BF16. Q6 / Q5 / Q4 are measured on local-desktop for the 35B file. Q3 rows are options labeled estimate or community unless a run card says measured.',
+      'A stored-weight encoding that shrinks the GGUF. AMDai lists Q3 through BF16. Q6 / Q5 / Q4 are measured on the local desktop for the 35B file. Q3 rows are options labeled estimate or community unless a run card says measured.',
     why: 'Prefer Q5 over Q4 when the file still fits; UD-Q5_K_XL is the daily driver. Q3 is a listed size step, not a secret “must stay at Q4” floor. This site never invents Q1 or Q2 guidance — those stay off, including draft heads.',
     deeper:
-      'Nominal llama.cpp-family bits in the calculator: Q3_K_S 3.50, Q3_K_M / UD-Q3_K_XL 3.91, Q4_K_M 4.85, Q5 family 5.69, Q6 family 6.56, Q8_0 8.5, BF16 16. Q3 file sizes are Unsloth listings, not local-desktop quality scores. Q1/Q2 stay off.',
+      'Nominal llama.cpp-family bits in the calculator: Q3_K_S 3.50, Q3_K_M / UD-Q3_K_XL 3.91, Q4_K_M 4.85, Q5 family 5.69, Q6 family 6.56, Q8_0 8.5, BF16 16. Q3 file sizes are Unsloth listings, not local desktop quality scores. Q1/Q2 stay off.',
     links: [
       { href: '/quants', label: 'Quant explainer' },
       { href: '/guides/quantize-gguf', label: 'Make GGUF quants' },
@@ -1071,7 +1071,7 @@ export const GLOSSARY: GlossaryEntry[] = [
     letter: 'Q',
     definition:
       'LoRA plus a 4-bit quantized base. Unsloth’s table treats QLoRA as 4-bit. bitsandbytes is the usual loader. AMD’s Radeon playbook: QLoRA is Linux-only because bitsandbytes is not well supported on Windows.',
-    why: 'The memory-efficient path on a home Radeon. Unsloth 27B QLoRA minimum is 22 GB; 70B is 41 GB. Those are Unsloth minima, not local-desktop runs. Training speed is not yet measured on our R9700s.',
+    why: 'The memory-efficient path on a home Radeon. Unsloth 27B QLoRA minimum is 22 GB; 70B is 41 GB. Those are Unsloth minima, not local desktop runs. Training speed is not yet measured on our R9700s.',
     deeper:
       'HF TRL documents load_in_4bit with peft_config. Unsloth documents bitsandbytes QLoRA on Radeon and CDNA. After training, merge the adapter and convert to GGUF — llama.cpp first for tokens.',
     links: [
@@ -1107,7 +1107,7 @@ export const GLOSSARY: GlossaryEntry[] = [
     letter: 'R',
     definition:
       'The AMD workstation / local-AI card this notebook is grounded in: 32 GB, gfx1201, RDNA 4. Official product name — there is no consumer “RX 9700.” The gaming sibling is the RX 9070 series (also gfx1201, 16 GB on the XT).',
-    why: 'local-desktop has two of them. One card holds the daily-driver 35B Q5 in VRAM; two cards are for copies or Flash offload, not automatic 2× speed. Check the GPU directory before you buy a PSU.',
+    why: 'local desktop has two of them. One card holds the daily-driver 35B Q5 in VRAM; two cards are for copies or Flash offload, not automatic 2× speed. Check the GPU directory before you buy a PSU.',
     deeper:
       '32 GB workstation SKU, gfx1201. Official product name is AMD Radeon AI PRO R9700. One card is the daily driver; two cards are copies or Flash offload, not automatic 2× decode. Size a PSU on /hardware — we do not invent a wattage.',
     links: [
@@ -1149,7 +1149,7 @@ export const GLOSSARY: GlossaryEntry[] = [
     letter: 'R',
     definition:
       'A BIOS feature that lets the CPU see the GPU’s full VRAM window instead of a small aperture. AMD’s consumer name is Smart Access Memory. Menu labels vary by board.',
-    why: 'On a home Radeon box, turn it on with Above 4G Decoding and CSM off — RDNA 4 is UEFI-only. AMDai has not measured llama.cpp or Strata tok/s with Resizable BAR on versus off on local-desktop, so do not invent a speed claim.',
+    why: 'On a home Radeon box, turn it on with Above 4G Decoding and CSM off — RDNA 4 is UEFI-only. AMDai has not measured llama.cpp or Strata tok/s with Resizable BAR on versus off on the local desktop, so do not invent a speed claim.',
     deeper:
       'ROCm BAR notes also mention keeping the high MMIO aperture inside the device physical-address limit. Two 32 GB cards plus a 256 GB host map a large prefetchable BAR. Record the exact BIOS string on a board row; do not assume one label.',
     links: [
@@ -1186,7 +1186,7 @@ export const GLOSSARY: GlossaryEntry[] = [
     letter: 'R',
     definition:
       'One official amdai-bench/run@1 measurement published on /results: who ran it, which GPU layout, the exact launch command, prefill/decode tok/s, VRAM, and peak system RAM when recorded.',
-    why: 'AMDai does not invent a number to fill a table cell. If the 35B page shows 102.39 or 42.9 GB, click through to the card. The 2026-10-12 overnight sweep is 33 cards from local-desktop — measured, pending re-verify after the DDR5 oops.',
+    why: 'AMDai does not invent a number to fill a table cell. If the 35B page shows 102.39 or 42.9 GB, click through to the card. The 2026-10-12 overnight sweep is 33 cards from local desktop — measured, pending re-verify after the DDR5 oops.',
     deeper:
       'Each /results page shows the launch command and pins. The 35B table links cells to cards instead of inventing a missing figure. Q6_K 1-GPU 4K uses the 23:55 card (103.23 tok/s). The earlier 82.62 card stays on /results and is not averaged.',
     links: [
@@ -1202,7 +1202,7 @@ export const GLOSSARY: GlossaryEntry[] = [
     aliases: ['draft model', 'model-draft', '--model-draft', '-md', 'spec decode'],
     letter: 'S',
     definition:
-      'A smaller draft GGUF guesses the next tokens; the target accepts or rejects them. llama.cpp documents -md / --model-draft on the server README. AMDai has not measured a draft pair on local-desktop.',
+      'A smaller draft GGUF guesses the next tokens; the target accepts or rejects them. llama.cpp documents -md / --model-draft on the server README. AMDai has not measured a draft pair on the local desktop.',
     why: 'A good draft can raise decode. A bad one wastes VRAM. Draft files stay Q4 and up. Q3 is a labeled estimate for the main file, not a house draft. MTP heads stay off.',
     deeper:
       'Official current flags are --spec-draft-model, --spec-draft-n-max, --spec-draft-n-min, and -ngld. Old --draft-max / --draft-min were removed. Measure draft off vs on with the Stack Lab A/B. House 35B launches have no draft. Hermes’s Flash path is Strata with no MTP.',
@@ -1254,10 +1254,10 @@ export const GLOSSARY: GlossaryEntry[] = [
     aliases: ['DDR5', 'DIMM', 'host RAM', 'usable RAM'],
     letter: 'S',
     definition:
-      'Memory on the motherboard (DDR5 on local-desktop: 4×64 GB, 256 GB kit). Separate from VRAM. It holds the OS, offloaded tensors, and some KV when the file does not fit the GPU.',
+      'Memory on the motherboard (DDR5 on the local desktop: 4×64 GB, 256 GB kit). Separate from VRAM. It holds the OS, offloaded tensors, and some KV when the file does not fit the GPU.',
     why: 'Official UD-Q5_K_XL 1-GPU at 256K peaked at 42.9 GB system RAM — that is why the calculator can show a measured RAM line. Flash offload needs a much larger kit; spinning the DIMMs is not free speed.',
     deeper:
-      'local-desktop kit is 256 GB (4×64 GB DDR5-5200); usable pool in the calculator is 249 GB. Daily-driver 256K peak 42.9 GB is a measured overlay, not an estimate. Flash offload kits are labeled estimates against that usable pool.',
+      'local desktop kit is 256 GB (4×64 GB DDR5-5200); usable pool in the calculator is 249 GB. Daily-driver 256K peak 42.9 GB is a measured overlay, not an estimate. Flash offload kits are labeled estimates against that usable pool.',
     links: [
       { href: '/calculator', label: 'Calculator' },
       { href: '/flash-ram-offload', label: 'Flash RAM offload' },
@@ -1287,7 +1287,7 @@ export const GLOSSARY: GlossaryEntry[] = [
     letter: 'T',
     definition:
       'A chat-template behavior where the model writes a hidden thought block, then a final answer. llama.cpp documents --reasoning on|off|auto, --reasoning-effort, --reasoning-budget, and chat_template_kwargs.enable_thinking.',
-    why: 'Official Qwen3.6 cards think by default. Hidden tokens burn context and wall-clock. Turn it off with --reasoning off or reasoning_effort none. Thinking-token counts are not measured on local-desktop.',
+    why: 'Official Qwen3.6 cards think by default. Hidden tokens burn context and wall-clock. Turn it off with --reasoning off or reasoning_effort none. Thinking-token counts are not measured on the local desktop.',
     deeper:
       'Server README (checked 2026-10-14): reasoning_effort none disables thinking when the template honors it. Official Qwen3.6 card does not support /think or /nothink. --reasoning-format deepseek fills message.reasoning_content. Strata Flash thinking is not verified here.',
     links: [
@@ -1374,7 +1374,7 @@ export const GLOSSARY: GlossaryEntry[] = [
     letter: 'T',
     definition:
       'An OpenAI-shaped /v1/chat/completions request that includes a tools array. The model returns tool_calls when --jinja is on and the chat template understands tools.',
-    why: 'Hermes, Cline, Continue, and Roo need this path. Official docs are llama.cpp function-calling.md and the server README. Parallel / multiple tool calls stay off unless the payload sets parallel_tool_calls: true. Success is not measured on local-desktop.',
+    why: 'Hermes, Cline, Continue, and Roo need this path. Official docs are llama.cpp function-calling.md and the server README. Parallel / multiple tool calls stay off unless the payload sets parallel_tool_calls: true. Success is not measured on the local desktop.',
     deeper:
       'Native handlers exist for several families; unrecognized templates fall back to Generic. House 35B: start llama-server with --jinja on :8080. Strata :8083 tool calls are not verified here. Structured JSON is a different knob — response_format / GBNF. Measure grammar-ab/1.',
     links: [
@@ -1525,7 +1525,7 @@ export const GLOSSARY: GlossaryEntry[] = [
     letter: 'W',
     definition:
       'Windows Subsystem for Linux 2. ROCm 10.1.0 lists it as a technical preview: Ubuntu guest, Windows host Adrenalin, GPU via /dev/dxg. Profiling, debugging, and KFD-dependent tools are out of scope. AMD SMI is discovery and monitoring only.',
-    why: 'People search “ROCm WSL2 Radeon” and “llama.cpp WSL AMD GPU.” The cited walk is /setup/wsl. It is not a measured local-desktop card. Native Linux stays the measured path. Native Windows first token is llama.cpp Vulkan.',
+    why: 'People search “ROCm WSL2 Radeon” and “llama.cpp WSL AMD GPU.” The cited walk is /setup/wsl. It is not a measured local desktop card. Native Linux stays the measured path. Native Windows first token is llama.cpp Vulkan.',
     deeper:
       'TheRock artifacts ship Ubuntu .deb and Python wheels, not RPM. rocminfo prints “WSL2 environment detected.” Missing /dev/kfd is a cited preview limit. Microsoft documents .wslconfig memory= (default 50% of Windows RAM). llama.cpp’s documented GPU path in a Linux guest is HIP (GGML_HIP=ON). We do not invent Vulkan-in-WSL.',
     links: [
@@ -1538,11 +1538,11 @@ export const GLOSSARY: GlossaryEntry[] = [
   },
   {
     id: 'local-desktop',
-    term: 'local-desktop',
-    aliases: ['amdai', 'AMDai', 'house rig'],
-    letter: 'W',
+    term: 'local desktop',
+    aliases: ['house box', 'house rig', 'test rig'],
+    letter: 'L',
     definition:
-      'The house test host: Ryzen 9 9950X, 4×64 GB DDR5-5200, two Radeon AI PRO R9700 32 GB, Ubuntu 24.04.5. Official 35B cards credit amdai / AMDai and llama.cpp c060ca974 Vulkan, ROCm 7.2.0, Mesa RADV 25.2.8.',
+      'The house test host: Ryzen 9 9950X, 4×64 GB DDR5-5200, two Radeon AI PRO R9700 32 GB, Ubuntu 24.04.5. Official 35B cards credit AMDai and llama.cpp c060ca974 Vulkan, ROCm 7.2.0, Mesa RADV 25.2.8.',
     why: 'Every “measured on our rig” figure on AMDai is this box. The 2026-10-12 overnight sweep is 33 cards — measured, pending re-verify after a DDR5-5200 oops at 00:14 CT. Do not treat a different kit as the same RAM line.',
     deeper:
       'Software on the official 35B cards: Ubuntu 24.04.5, llama.cpp c060ca974 Vulkan, ROCm 7.2.0, Mesa RADV 25.2.8, f16 KV. Whole sweep labeled measured, pending re-verify after RAM fix. Flash / Strata / Q3 were excluded from that drop.',

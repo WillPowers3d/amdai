@@ -4,7 +4,7 @@
  * Q4_K_M. Unsloth UD-*_XL is the house default (download, do not claim stock
  * llama-quantize reproduces it). Q3 is a labeled estimate only — never a
  * house-rig quantize command. Q1/Q2 stay off. File sizes from HF listings;
- * computed sums stay labeled estimate. Measured decode from local-desktop cards.
+ * computed sums stay labeled estimate. Measured decode from local desktop cards.
  */
 
 import {
@@ -33,8 +33,8 @@ export const QUANTIZE_GGUF_NAME = 'Make your own GGUF quants';
 export const QUANTIZE_GGUF_DESCRIPTION =
   'Make your own GGUF quants for a Radeon GPU with llama.cpp. Convert, optional imatrix, then Q6/Q5/Q4. Unsloth UD is the house default.';
 export const QUANTIZE_GGUF_PUBLISHED = '2026-10-14';
-export const QUANTIZE_GGUF_CITED_LABEL = 'Cited llama.cpp + Unsloth docs · convert not measured on local-desktop';
-export const QUANTIZE_GGUF_UNMEASURED = 'not measured on local-desktop';
+export const QUANTIZE_GGUF_CITED_LABEL = 'Cited llama.cpp + Unsloth docs · convert not measured on the local desktop';
+export const QUANTIZE_GGUF_UNMEASURED = 'not measured on the local desktop';
 export const QUANTIZE_GGUF_HOUSE_QUANTS = ['Q6_K', 'Q5_K_M', 'Q4_K_M'] as const;
 
 export const LLAMA_IMATRIX =
@@ -374,7 +374,7 @@ export function quantizeQualityRows(cards: RunCard[]): QuantizeQualityRow[] {
       size,
       decode4k: at4k?.decode ?? QUANTIZE_GGUF_UNMEASURED,
       decode32k: at32k?.decode ?? QUANTIZE_GGUF_UNMEASURED,
-      quality: 'PPL / KLD not measured on local-desktop — run llama-perplexity',
+      quality: 'PPL / KLD not measured on the local desktop — run llama-perplexity',
       estimate: false,
       href,
     };

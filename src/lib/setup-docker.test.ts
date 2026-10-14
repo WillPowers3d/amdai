@@ -26,7 +26,7 @@ describe('Docker / Podman llama.cpp setup', () => {
   it('keeps cited tracks, official images, and house rules', () => {
     assert.deepEqual(assertSetupDockerValid(), []);
     assert.equal(SETUP_DOCKER_PUBLISHED, '2026-10-14');
-    assert.equal(SETUP_DOCKER_CITED_LABEL, 'Cited, not measured on local-desktop');
+    assert.equal(SETUP_DOCKER_CITED_LABEL, 'Cited, not measured on the local desktop');
     assert.equal(SETUP_DOCKER_TRACKS[0]?.id, 'vulkan');
     assert.equal(SETUP_DOCKER_TRACKS[1]?.id, 'rocm');
     assert.equal(SETUP_DOCKER_TRACKS[1]?.recommend, false);
@@ -39,7 +39,7 @@ describe('Docker / Podman llama.cpp setup', () => {
     assert.doesNotMatch(blob, /\b(?:IQ[12]_[A-Z0-9]+|Q[12]_[A-Z0-9]+)\b/);
     assert.doesNotMatch(blob, /floor is q4|q4 floor|q4 and up only/i);
     assert.match(blob, /llama\.cpp/);
-    assert.match(blob, /not measured on local-desktop/i);
+    assert.match(blob, /not measured on the local desktop/i);
     assert.match(blob, /Minimum system RAM needed/);
     assert.match(blob, /RAM needed at full context/);
     assert.match(blob, /\/dev\/kfd/);
@@ -57,7 +57,7 @@ describe('Docker / Podman llama.cpp setup', () => {
   it('wires the dedicated page and stays in the sitemap', () => {
     const page = readFileSync(join(here, '../pages/setup/docker.astro'), 'utf8');
     const hub = readFileSync(join(here, '../pages/setup.astro'), 'utf8');
-    assert.match(page, /not measured on local-desktop/i);
+    assert.match(page, /not measured on the local desktop/i);
     assert.match(page, /llama\.cpp/);
     assert.match(page, /Open in Stack Lab/);
     assert.match(page, /NextSteps/);

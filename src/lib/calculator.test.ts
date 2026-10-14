@@ -11,8 +11,8 @@ import {
   MEASURED_ON_OUR_RIG,
   MODEL_PRESETS,
   QUANTS,
-  local-desktop_DDR5_GB,
-  local-desktop_USABLE_RAM_GB,
+  LOCAL_DESKTOP_DDR5_GB,
+  LOCAL_DESKTOP_USABLE_RAM_GB,
   roundUpToDimmKitGb,
   systemRamNeed,
   applyModelPreset,
@@ -278,8 +278,8 @@ describe('calculator math and modes', () => {
     assert.ok((DIMM_KIT_GB as readonly number[]).includes(ram.atSelected.kitGb));
     assert.ok((DIMM_KIT_GB as readonly number[]).includes(ram.atFullContext.kitGb));
     assert.ok(ram.atSelected.rawGiB < ram.atSelected.kitGb + 1e-9);
-    assert.equal(local-desktop_DDR5_GB, 256);
-    assert.equal(local-desktop_USABLE_RAM_GB, 249);
+    assert.equal(LOCAL_DESKTOP_DDR5_GB, 256);
+    assert.equal(LOCAL_DESKTOP_USABLE_RAM_GB, 249);
   });
 
   it('rounds host RAM up to a real DIMM kit', () => {

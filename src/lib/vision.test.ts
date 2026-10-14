@@ -24,7 +24,7 @@ describe('local vision guide', () => {
   it('stays cited, llama.cpp mmproj-first, and invents no speeds', () => {
     assert.deepEqual(assertVisionValid(), []);
     assert.equal(VISION_TITLE, 'Local vision on Radeon');
-    assert.equal(VISION_CITED_LABEL, 'Cited, not measured on local-desktop');
+    assert.equal(VISION_CITED_LABEL, 'Cited, not measured on the local desktop');
     assert.equal(VISION_SPEED_LABEL, 'not yet measured by AMDai');
     assert.ok(VISION_DESCRIPTION.length >= 70);
     assert.ok(VISION_DESCRIPTION.length <= 160);

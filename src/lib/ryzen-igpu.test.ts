@@ -34,7 +34,7 @@ describe('Ryzen iGPU guide', () => {
     const page = ryzenIgpuPage();
     assert.deepEqual(assertRyzenIgpuValid(page), []);
     assert.equal(RYZEN_IGPU_PUBLISHED, '2026-10-14');
-    assert.equal(RYZEN_IGPU_CITED_LABEL, 'Cited, not measured on local-desktop');
+    assert.equal(RYZEN_IGPU_CITED_LABEL, 'Cited, not measured on the local desktop');
     assert.equal(RYZEN_IGPU_PATH, '/gpus/ryzen-igpu');
     assert.equal(RYZEN_IGPU_HEADING, 'Local AI on a Ryzen iGPU (Radeon 780M, 880M, 890M)');
     assert.equal(page.gfx, 'gfx1103 / gfx1150');
@@ -85,7 +85,7 @@ describe('Ryzen iGPU guide', () => {
     const page = readFileSync(join(here, '../pages/gpus/ryzen-igpu.astro'), 'utf8');
     const hub = readFileSync(join(here, '../content/guides/gpus.mdx'), 'utf8');
     const halo = readFileSync(join(here, '../pages/gpus/strix-halo.astro'), 'utf8');
-    assert.match(page, /Cited, not measured on local-desktop/);
+    assert.match(page, /Cited, not measured on the local desktop/);
     assert.match(page, /llama\.cpp/);
     assert.match(page, /NextSteps/);
     assert.match(page, /Minimum system RAM needed/);

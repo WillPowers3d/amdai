@@ -1,5 +1,5 @@
 /**
- * Cited WSL2 first-run path for Radeon. Not measured on local-desktop.
+ * Cited WSL2 first-run path for Radeon. Not measured on the local desktop.
  * Sources: AMD ROCm 10.1.0 docs / release notes, Microsoft WSL docs,
  * llama.cpp HIP build docs. Do not invent drivers, pins, tok/s, or prices.
  */
@@ -8,7 +8,7 @@ import { RAM_FULL_LABEL, RAM_MIN_LABEL } from './ram-surfaces';
 import { COMPARE_Q3, COMPARE_Q3_CITE } from './local-desktop-compare';
 
 export const SETUP_WSL_PUBLISHED = '2026-10-14';
-export const SETUP_WSL_CITED_LABEL = 'Cited, not measured on local-desktop';
+export const SETUP_WSL_CITED_LABEL = 'Cited, not measured on the local desktop';
 
 export const SETUP_WSL_HOUSE_FILE = 'Qwen3.6-35B-A3B-UD-Q5_K_XL.gguf';
 
@@ -173,19 +173,19 @@ export const SETUP_WSL_QUANTS: SetupWslQuant[] = [
   {
     quant: 'Q6_K',
     role: 'Higher-quality 35B sibling',
-    note: 'Measured on llama.cpp Vulkan on local-desktop, not inside WSL: Q6_K 1-GPU 4K decode 103.23 tok/s (23:55 card). 32K+ is partly on DDR5. Size VRAM on the calculator.',
+    note: 'Measured on llama.cpp Vulkan on the local desktop, not inside WSL: Q6_K 1-GPU 4K decode 103.23 tok/s (23:55 card). 32K+ is partly on DDR5. Size VRAM on the calculator.',
     estimate: false,
   },
   {
     quant: 'UD-Q5_K_XL',
     role: 'House default on one R9700',
-    note: `Measured on llama.cpp Vulkan on local-desktop, not inside WSL: 102.39 tok/s decode at 4K, 90.52 at 32K, 66.43 at 128K, 44.4 at 256K. Peak VRAM 25.97 / 29.34 GB; peak RAM 37.32 / 42.9 GB. File ${SETUP_WSL_HOUSE_FILE}.`,
+    note: `Measured on llama.cpp Vulkan on the local desktop, not inside WSL: 102.39 tok/s decode at 4K, 90.52 at 32K, 66.43 at 128K, 44.4 at 256K. Peak VRAM 25.97 / 29.34 GB; peak RAM 37.32 / 42.9 GB. File ${SETUP_WSL_HOUSE_FILE}.`,
     estimate: false,
   },
   {
     quant: 'Q4_K_M',
     role: 'Smaller measured 35B sibling',
-    note: 'Measured on llama.cpp Vulkan on local-desktop, not inside WSL: Q4_K_M 32K decode 117.69 tok/s. Still check both RAM lines.',
+    note: 'Measured on llama.cpp Vulkan on the local desktop, not inside WSL: Q4_K_M 32K decode 117.69 tok/s. Still check both RAM lines.',
     estimate: false,
   },
   {
@@ -213,7 +213,7 @@ export const SETUP_WSL_STEPS: SetupWslStep[] = [
     id: 'host-driver',
     title: 'Install the Windows host Adrenalin driver first',
     body:
-      'AMD’s 10.1 blog: install the Windows driver, then install ROCm in the Ubuntu guest. The GPU reaches the guest through paravirtualization, not a native Linux amdgpu DKMS in WSL. AMD’s 10.1 install page points at the Adrenalin / ROCm 10.1 download note (RN-RAD-ROCM-10-01). The matrix names Adrenalin 26.10.41.05 on the Radeon row — we do not invent a different pin. Confirm the discrete Radeon in AMD Software or Device Manager before you open a guest. BIOS notes (Above 4G, ReBAR/SAM, CSM off) still apply on the same board. Cited, not measured on local-desktop.',
+      'AMD’s 10.1 blog: install the Windows driver, then install ROCm in the Ubuntu guest. The GPU reaches the guest through paravirtualization, not a native Linux amdgpu DKMS in WSL. AMD’s 10.1 install page points at the Adrenalin / ROCm 10.1 download note (RN-RAD-ROCM-10-01). The matrix names Adrenalin 26.10.41.05 on the Radeon row — we do not invent a different pin. Confirm the discrete Radeon in AMD Software or Device Manager before you open a guest. BIOS notes (Above 4G, ReBAR/SAM, CSM off) still apply on the same board. Cited, not measured on the local desktop.',
     links: [
       { href: '/setup/windows', label: 'Windows setup (Vulkan first)' },
       { href: '/bios', label: 'BIOS' },
@@ -247,7 +247,7 @@ export const SETUP_WSL_STEPS: SetupWslStep[] = [
     id: 'rocm-guest',
     title: 'Install ROCm 10.1 in the Ubuntu guest',
     body:
-      'Follow AMD’s Install ROCm 10.1.0 page for the WSL2 + Ubuntu selector — Ubuntu .deb and Python wheels, not RPM. Register the ROCm 10.1 apt repo AMD documents, then install the gfx meta package that matches the card (amdrocm10.1-gfx1201 for the house R9700 generation). Do not apt install rocm from Ubuntu’s archive. Do not install a native Linux amdgpu DKMS into the guest; the Windows host already owns the display driver. AMD lists profiling packages as installable but unavailable on WSL2. After packages land, rerun rocminfo. Cited, not measured on local-desktop.',
+      'Follow AMD’s Install ROCm 10.1.0 page for the WSL2 + Ubuntu selector — Ubuntu .deb and Python wheels, not RPM. Register the ROCm 10.1 apt repo AMD documents, then install the gfx meta package that matches the card (amdrocm10.1-gfx1201 for the house R9700 generation). Do not apt install rocm from Ubuntu’s archive. Do not install a native Linux amdgpu DKMS into the guest; the Windows host already owns the display driver. AMD lists profiling packages as installable but unavailable on WSL2. After packages land, rerun rocminfo. Cited, not measured on the local desktop.',
     links: [
       { href: '/tutorials/install-rocm', label: 'Install ROCm' },
       { href: '/rocm/versions', label: 'ROCm versions' },
@@ -270,7 +270,7 @@ export const SETUP_WSL_STEPS: SetupWslStep[] = [
   {
     id: 'quant',
     title: 'Pick Q6, Q5, or Q4 — Q3 is a labeled estimate',
-    body: `Download the same official-instruct GGUF the Linux recipes name. House file is ${SETUP_WSL_HOUSE_FILE}. Start at Q6, Q5, or Q4 and size VRAM + KV on the calculator. Q3 stays a cited labeled estimate unless a WSL run card exists — none does. Q1/Q2 stay off. Tok/s, VRAM, and RAM on /benchmarks and /results are Ubuntu llama-bench on local-desktop. Treat them as comparison, not a WSL promise. Stay on the house Qwen3.6 family already on /models.`,
+    body: `Download the same official-instruct GGUF the Linux recipes name. House file is ${SETUP_WSL_HOUSE_FILE}. Start at Q6, Q5, or Q4 and size VRAM + KV on the calculator. Q3 stays a cited labeled estimate unless a WSL run card exists — none does. Q1/Q2 stay off. Tok/s, VRAM, and RAM on /benchmarks and /results are Ubuntu llama-bench on the local desktop. Treat them as comparison, not a WSL promise. Stay on the house Qwen3.6 family already on /models.`,
     links: [
       { href: '/models/qwen36', label: 'Qwen3.6-35B' },
       { href: '/models', label: 'Models' },
@@ -283,7 +283,7 @@ export const SETUP_WSL_STEPS: SetupWslStep[] = [
     id: 'nvme',
     title: 'Keep the GGUF on the Linux filesystem, not /mnt/c',
     body:
-      'Microsoft’s WSL environment guide: store project files in the Linux file system, not on a Windows drive mounted under /mnt. Prefill stalls with an idle GPU meter are often the disk. Staging is not RAM offload. House Linux warns off /mnt/bulk; the WSL equivalent is “do not serve a GGUF from /mnt/c.” Put the file in ~/models inside the guest. Not measured on local-desktop.',
+      'Microsoft’s WSL environment guide: store project files in the Linux file system, not on a Windows drive mounted under /mnt. Prefill stalls with an idle GPU meter are often the disk. Staging is not RAM offload. House Linux warns off /mnt/bulk; the WSL equivalent is “do not serve a GGUF from /mnt/c.” Put the file in ~/models inside the guest. Not measured on the local desktop.',
     links: [
       { href: '/glossary', label: 'Glossary (NVMe staging)' },
       { href: '/calculator', label: 'Calculator' },
@@ -293,7 +293,7 @@ export const SETUP_WSL_STEPS: SetupWslStep[] = [
   {
     id: 'fit',
     title: 'Fit VRAM and the two RAM lines',
-    body: `Wherever a file spills, the two labels stay ${RAM_MIN_LABEL} (the load at the context you picked) and ${RAM_FULL_LABEL} (262144 for the house 35B). Overnight UD-Q5 one-GPU Ubuntu peaks are 37.32 GB at 4K and 42.9 GB at 256K — measured on llama.cpp on local-desktop, not inside WSL. Label estimate unless measured. Microsoft documents .wslconfig memory= (default 50% of Windows RAM) at %UserProfile%\\.wslconfig; run wsl --shutdown after edits. We do not invent a recommended pin. If the guest looks RAM-starved, read that file before you blame ROCm.`,
+    body: `Wherever a file spills, the two labels stay ${RAM_MIN_LABEL} (the load at the context you picked) and ${RAM_FULL_LABEL} (262144 for the house 35B). Overnight UD-Q5 one-GPU Ubuntu peaks are 37.32 GB at 4K and 42.9 GB at 256K — measured on llama.cpp on the local desktop, not inside WSL. Label estimate unless measured. Microsoft documents .wslconfig memory= (default 50% of Windows RAM) at %UserProfile%\\.wslconfig; run wsl --shutdown after edits. We do not invent a recommended pin. If the guest looks RAM-starved, read that file before you blame ROCm.`,
     links: [
       { href: '/calculator', label: 'Calculator' },
       { href: '/flash-ram-offload', label: 'Flash RAM offload' },
@@ -381,7 +381,7 @@ export function assertSetupWslValid(): string[] {
   const errors: string[] = [];
   const blob = setupWslBlob();
   const hrefs = new Set(setupWslHrefs());
-  if (SETUP_WSL_CITED_LABEL !== 'Cited, not measured on local-desktop') {
+  if (SETUP_WSL_CITED_LABEL !== 'Cited, not measured on the local desktop') {
     errors.push('cited label drifted');
   }
   if (SETUP_WSL_TRACKS.length !== 3) errors.push('need linux, windows, and WSL tracks');
@@ -421,7 +421,7 @@ export function assertSetupWslValid(): string[] {
   if (/\bmeasured in WSL\b|\bWSL decode \d/i.test(blob)) {
     errors.push('must not claim WSL tok/s');
   }
-  if (!/not measured on local-desktop/i.test(blob)) errors.push('must say not measured on local-desktop');
+  if (!/not measured on the local desktop/i.test(blob)) errors.push('must say not measured on the local desktop');
   if (!/26\.10\.41\.05/.test(blob)) errors.push('must cite Adrenalin version AMD names');
   for (const source of SETUP_WSL_SOURCES) {
     if (!/^https:\/\//.test(source.href)) errors.push(`source ${source.id} must be https`);

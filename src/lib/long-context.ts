@@ -1,6 +1,6 @@
 /**
  * Cited consumer guide for long context (128K–262K) on Radeon.
- * Numbers come from existing local-desktop amdai-bench/run@1 cards only.
+ * Numbers come from existing local desktop amdai-bench/run@1 cards only.
  * Empty cells stay “not measured yet.” Q3 is a labeled estimate.
  */
 
@@ -32,7 +32,7 @@ export const LONG_CONTEXT_PUBLISHED = '2026-10-13';
 export const LONG_CONTEXT_EMPTY = 'not measured yet';
 export const LONG_CONTEXT_TITLE = 'Long context on Radeon';
 export const LONG_CONTEXT_DESCRIPTION =
-  'Run 128K–262K locally on Radeon. Measured 35B llama.cpp cards from local-desktop. f16 KV default. Empty cells stay not measured yet.';
+  'Run 128K–262K locally on Radeon. Measured 35B llama.cpp cards from local desktop. f16 KV default. Empty cells stay not measured yet.';
 
 export type LongContextLink = { href: string; label: string };
 
@@ -102,7 +102,7 @@ export const LONG_CONTEXT_FAQ = [
     id: 'kv-type',
     question: 'Should I switch from f16 KV to q8_0 to fit more context?',
     answer:
-      'House default is f16 KV. q8_0 KV is about one byte per element instead of two, so the cache is smaller. That quality trade is not measured on local-desktop — treat any q8_0 KV speed or recall claim as a labeled estimate. Do not confuse q8_0 KV with Q8 weights.',
+      'House default is f16 KV. q8_0 KV is about one byte per element instead of two, so the cache is smaller. That quality trade is not measured on the local desktop — treat any q8_0 KV speed or recall claim as a labeled estimate. Do not confuse q8_0 KV with Q8 weights.',
     links: [
       { href: '/kv-cache', label: 'KV cache' },
       { href: '/quants', label: 'Quants · KV types' },
@@ -124,7 +124,7 @@ export const LONG_CONTEXT_FAQ = [
     id: 'recall',
     question: 'Does a 262K window mean the model still finds a fact from the start of the prompt?',
     answer:
-      'No score on this site answers that. The long-context gate means the stated window actually ran — not a planted-token recall percentage. Liu et al. 2023 (Lost in the Middle) document that many models miss the middle of a long prompt. We have not run that test on local-desktop.',
+      'No score on this site answers that. The long-context gate means the stated window actually ran — not a planted-token recall percentage. Liu et al. 2023 (Lost in the Middle) document that many models miss the middle of a long prompt. We have not run that test on the local desktop.',
     links: [
       { href: '/benchmarks/methodology', label: 'Methodology' },
       { href: 'https://arxiv.org/abs/2307.03172', label: 'Lost in the Middle' },
@@ -167,7 +167,7 @@ export const LONG_CONTEXT_ENGINE = [
   {
     id: 'split',
     title: 'Two GPUs: --split-mode layer',
-    body: 'Overnight 35B split used -sm layer (--split-mode layer), the documented llama.cpp multi-GPU default. On this 35B, one card usually decodes faster than the split. --split-mode row is documented and not measured on local-desktop. Read Dual / multi-GPU before you split.',
+    body: 'Overnight 35B split used -sm layer (--split-mode layer), the documented llama.cpp multi-GPU default. On this 35B, one card usually decodes faster than the split. --split-mode row is documented and not measured on the local desktop. Read Dual / multi-GPU before you split.',
     links: [
       { href: '/multi-gpu', label: 'Dual / multi-GPU' },
       { href: '/compare/one-vs-two-gpu', label: 'One vs split' },
@@ -214,7 +214,7 @@ export const LONG_CONTEXT_TIERS = [
   {
     id: '24gb',
     title: '24 GB discrete',
-    body: 'More VRAM than the 16 GB class. Q4 may fit at a shorter window; Q5 at 262K still needs the calculator. Speed on this class is not measured yet on local-desktop.',
+    body: 'More VRAM than the 16 GB class. Q4 may fit at a shorter window; Q5 at 262K still needs the calculator. Speed on this class is not measured yet on the local desktop.',
     hrefs: [
       { href: '/calculator?model=qwen36&quant=q4_k_m&ctx=131072&gpu=rx7900xtx', label: 'Calculator · 24 GB · 128K' },
       { href: '/gpus/rx-7900-xtx', label: 'RX 7900 XTX sheet' },
@@ -311,7 +311,7 @@ export const REQUIRED_LONG_CONTEXT_HREFS = [
 ] as const;
 
 function emptyCell(text: string): string {
-  if (!text || text === 'not measured' || text === 'not measured on local-desktop') return LONG_CONTEXT_EMPTY;
+  if (!text || text === 'not measured' || text === 'not measured on the local desktop') return LONG_CONTEXT_EMPTY;
   return text;
 }
 
@@ -369,14 +369,14 @@ export const LONG_CONTEXT_RECALL = `
 export const LONG_CONTEXT_KV = `
   House default is f16 KV (2 bytes). Overnight 35B cards recorded -ctk f16
   -ctv f16. q8_0 KV is the smaller type the calculator lists (~1 byte). That
-  trade — less VRAM, unknown quality — is not measured yet on local-desktop. q8_0 as
+  trade — less VRAM, unknown quality — is not measured yet on the local desktop. q8_0 as
   cache is not “running Q8 weights.” ${RAM_MIN_LABEL} and ${RAM_FULL_LABEL}
   stay the shopper RAM lines when offload or long context appears.
   The cited shopper page is /kv-cache.
 `.replace(/\s+/g, ' ').trim();
 
 export const LONG_CONTEXT_QUANTS = `
-  Measured 35B llama.cpp quants on local-desktop: ${COMPARE_QUANTS.join(', ')}.
+  Measured 35B llama.cpp quants on the local desktop: ${COMPARE_QUANTS.join(', ')}.
   ${COMPARE_Q3} is a labeled estimate (${COMPARE_Q3_CITE}) — decode stays
   ${LONG_CONTEXT_EMPTY}. Prefer Q5 over Q4 when the file still fits.
   Q1 and Q2 stay off. Nothing below Q4 runs on our rig.

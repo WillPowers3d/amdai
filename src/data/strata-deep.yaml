@@ -29,7 +29,7 @@ why_faster: >-
 limits:
   - title: Prefill can regress
     body: >-
-      On local-desktop, Strata prefill drops 9–20% at DDR5-5200 versus 3600. Unexplained.
+      On local desktop, Strata prefill drops 9–20% at DDR5-5200 versus 3600. Unexplained.
       Upstream issue #1910 (dual RTX 2080 Ti, IQ3_S, cold ~27K prefix) reported
       v0.1.42 prefill about 790 tok/s against v0.1.41 about 1150–1280 — 35–55%
       slower — and later traced extra PLE-shard mmap reads. Official v0.1.43.1
@@ -60,11 +60,11 @@ community:
     date: 2026-10-08
     figures: >-
       Decode 101.9 tok/s at 1K, 96.4 at 4K, 95.6 at 32K, 87.6 at 128K. Official
-      Strata report, not local-desktop. IQ3_S, not a house Q3.
+      Strata report, not local desktop. IQ3_S, not a house Q3.
   - title: lcchan0525sg — R9700 IQ3_S tuned rates
     href: https://github.com/lcchan0525sg/Qwen-Flash-Next-Strata-for-AMD-R9700
     date: 2026-10-09
-    figures: Tuned output 46.54–57.22 tok/s on one R9700. Not measured on local-desktop.
+    figures: Tuned output 46.54–57.22 tok/s on one R9700. Not measured on the local desktop.
   - title: "Issue #1910 — prefill 35–55% slower on 0.1.42 vs 0.1.41"
     href: https://github.com/Niko1221/Strata/issues/1910
     date: retrieved 2026-10-13

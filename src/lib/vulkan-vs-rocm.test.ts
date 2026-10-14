@@ -31,7 +31,7 @@ describe('Vulkan vs ROCm compare page', () => {
     assert.equal(VULKAN_VS_ROCM_PATH, '/compare/vulkan-vs-rocm');
     assert.equal(VULKAN_VS_ROCM_TITLE, 'llama.cpp on Radeon: Vulkan vs ROCm (HIP)');
     assert.equal(VULKAN_VS_ROCM_CITED_LABEL, 'Cited llama.cpp + AMD docs · measured 35B Vulkan cells only');
-    assert.equal(VULKAN_VS_ROCM_PENDING, 'pending — not measured on local-desktop');
+    assert.equal(VULKAN_VS_ROCM_PENDING, 'pending — not measured on the local desktop');
     assert.equal(VULKAN_VS_ROCM_PUBLISHED, '2026-10-14');
     assert.ok(VULKAN_VS_ROCM_DESCRIPTION.length >= 70);
     assert.ok(VULKAN_VS_ROCM_DESCRIPTION.length <= 160);
@@ -41,7 +41,7 @@ describe('Vulkan vs ROCm compare page', () => {
     assert.match(blob, /GGML_HIP=ON/);
     assert.match(blob, /HSA_OVERRIDE_GFX_VERSION/);
     assert.match(blob, /Mesa RADV/);
-    assert.match(blob, /pending — not measured on local-desktop/);
+    assert.match(blob, /pending — not measured on the local desktop/);
     assert.match(blob, /labeled estimate/);
     assert.ok(blob.includes(RAM_MIN_LABEL));
     assert.ok(blob.includes(RAM_FULL_LABEL));

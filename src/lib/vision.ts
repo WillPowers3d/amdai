@@ -8,7 +8,7 @@ import { CONSUMER_NAV_LINKS } from './consumer-gpu';
 import { RAM_FULL_LABEL, RAM_MIN_LABEL } from './ram-surfaces';
 
 export const VISION_PUBLISHED = '2026-10-14';
-export const VISION_CITED_LABEL = 'Cited, not measured on local-desktop';
+export const VISION_CITED_LABEL = 'Cited, not measured on the local desktop';
 export const VISION_SPEED_LABEL = 'not yet measured by AMDai';
 export const VISION_EMPTY = 'not measured yet';
 
@@ -97,7 +97,7 @@ export const VISION_STEPS: VisionStep[] = [
     id: 'linux',
     title: 'Build llama-mtmd-cli on Ubuntu',
     body:
-      'Ubuntu 24.04+ is the measured AMDai OS. The Gemma 3 vision notes in llama.cpp say: cmake -B build, then cmake --build build --target llama-mtmd-cli. Vulkan llama.cpp stays first for tokens. Confirm the GPU with rocminfo before you download a pair of files. Windows is a cited second path, not measured on local-desktop.',
+      'Ubuntu 24.04+ is the measured AMDai OS. The Gemma 3 vision notes in llama.cpp say: cmake -B build, then cmake --build build --target llama-mtmd-cli. Vulkan llama.cpp stays first for tokens. Confirm the GPU with rocminfo before you download a pair of files. Windows is a cited second path, not measured on the local desktop.',
     links: [
       { href: '/setup', label: 'Ubuntu setup' },
       { href: '/setup/windows', label: 'Windows setup' },
@@ -118,7 +118,7 @@ export const VISION_STEPS: VisionStep[] = [
     id: 'offload',
     title: 'Know where the projector sits',
     body:
-      `The multimodal doc: the projector is offloaded to GPU by default. --no-mmproj-offload keeps it off the GPU. That is a RAM / VRAM trade, not a measured local-desktop split. ${RAM_MIN_LABEL} and ${RAM_FULL_LABEL} for any text sidecar stay on the calculator. Do not invent an mmproj VRAM megabyte.`,
+      `The multimodal doc: the projector is offloaded to GPU by default. --no-mmproj-offload keeps it off the GPU. That is a RAM / VRAM trade, not a measured local desktop split. ${RAM_MIN_LABEL} and ${RAM_FULL_LABEL} for any text sidecar stay on the calculator. Do not invent an mmproj VRAM megabyte.`,
     links: [
       { href: '/calculator', label: 'Calculator' },
       { href: '/flash-ram-offload', label: 'Flash RAM offload' },
@@ -198,7 +198,7 @@ export const VISION_FAQ: VisionFaq[] = [
     id: 'which-model',
     question: 'Which vision model should I start with?',
     answer:
-      'Cite the ggml-org multimodal GGUF collection and the llama.cpp multimodal doc. Their ready examples include Gemma 3 4B / 12B / 27B via -hf (the 1B variant has no vision). Most ready files list Q4_K_M. Q3 is a labeled estimate. Start from that collection, not a retired Qwen family. We have no local-desktop vision tok/s.',
+      'Cite the ggml-org multimodal GGUF collection and the llama.cpp multimodal doc. Their ready examples include Gemma 3 4B / 12B / 27B via -hf (the 1B variant has no vision). Most ready files list Q4_K_M. Q3 is a labeled estimate. Start from that collection, not a retired Qwen family. We have no local desktop vision tok/s.',
     links: [
       { href: '/models', label: 'House models' },
       { href: '/wanted', label: 'Wanted' },
@@ -303,7 +303,7 @@ export function assertVisionValid(): string[] {
   const errors: string[] = [];
   const blob = visionBlob();
   const hrefs = new Set(visionHrefs());
-  if (VISION_CITED_LABEL !== 'Cited, not measured on local-desktop') errors.push('cited label drifted');
+  if (VISION_CITED_LABEL !== 'Cited, not measured on the local desktop') errors.push('cited label drifted');
   if (VISION_SPEED_LABEL !== 'not yet measured by AMDai') errors.push('speed label drifted');
   if (!/llama\.cpp/i.test(blob)) errors.push('must keep llama.cpp first');
   if (!/--mmproj/.test(blob)) errors.push('must cite --mmproj');

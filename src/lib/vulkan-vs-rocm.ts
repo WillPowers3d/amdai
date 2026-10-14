@@ -1,6 +1,6 @@
 /**
  * Cited shopper compare: llama.cpp Vulkan vs ROCm (HIP) on Radeon.
- * Measured 35B cells are the official local-desktop llama.cpp Vulkan sweep only.
+ * Measured 35B cells are the official local desktop llama.cpp Vulkan sweep only.
  * HIP decode/prefill stay pending until a first-party card lands.
  * Q3 is a labeled estimate. No invented tok/s or prices. llama.cpp first.
  */
@@ -21,7 +21,7 @@ import type { RunCard } from './run-card';
 export const VULKAN_VS_ROCM_PATH = '/compare/vulkan-vs-rocm';
 export const VULKAN_VS_ROCM_PUBLISHED = '2026-10-14';
 export const VULKAN_VS_ROCM_CITED_LABEL = 'Cited llama.cpp + AMD docs · measured 35B Vulkan cells only';
-export const VULKAN_VS_ROCM_PENDING = 'pending — not measured on local-desktop';
+export const VULKAN_VS_ROCM_PENDING = 'pending — not measured on the local desktop';
 export const VULKAN_VS_ROCM_UNMEASURED = 'not measured yet';
 
 export const LLAMA_BUILD_MD = 'https://github.com/ggml-org/llama.cpp/blob/master/docs/build.md';
@@ -75,7 +75,7 @@ export const VULKAN_VS_ROCM_DESCRIPTION =
   'llama.cpp on Radeon: Vulkan vs ROCm (HIP). Why the house 35B daily driver is Vulkan. HIP stays a cited second compile. Q3 is a labeled estimate.';
 
 export const VULKAN_VS_ROCM_LEAD =
-  `Shoppers search “llama.cpp vulkan vs rocm” and “which backend for AMD GPU.” On AMDai the house daily driver is ${COMPARE_MODEL} Unsloth UD-Q5_K_XL on one R9700, ${COMPARE_ENGINE} Vulkan, 262144 context, f16 KV, 0% RAM offload. That is a Vulkan build. HIP is the ROCm compile when rocminfo already lists this gfx. Measured decode is the official local-desktop Vulkan sweep. HIP cells stay ${VULKAN_VS_ROCM_PENDING}. Quant ladder is Q6_K / UD-Q5_K_XL / Q5_K_M / Q4_K_M plus ${COMPARE_Q3} as a labeled estimate (${COMPARE_Q3_CITE}). Q1/Q2 stay off. llama.cpp first.`;
+  `Shoppers search “llama.cpp vulkan vs rocm” and “which backend for AMD GPU.” On AMDai the house daily driver is ${COMPARE_MODEL} Unsloth UD-Q5_K_XL on one R9700, ${COMPARE_ENGINE} Vulkan, 262144 context, f16 KV, 0% RAM offload. That is a Vulkan build. HIP is the ROCm compile when rocminfo already lists this gfx. Measured decode is the official local desktop Vulkan sweep. HIP cells stay ${VULKAN_VS_ROCM_PENDING}. Quant ladder is Q6_K / UD-Q5_K_XL / Q5_K_M / Q4_K_M plus ${COMPARE_Q3} as a labeled estimate (${COMPARE_Q3_CITE}). Q1/Q2 stay off. llama.cpp first.`;
 
 export const VULKAN_VS_ROCM_DECISION = `
   Start with llama.cpp Vulkan (Mesa RADV, GGML_VULKAN=ON) for first tokens
@@ -113,9 +113,9 @@ export const VULKAN_VS_ROCM_AXES: VulkanVsRocmAxis[] = [
     title: 'Decode vs prefill',
     kind: 'pending',
     vulkan:
-      'Measured on local-desktop llama.cpp Vulkan only. Official overnight 35B decode cells live in the table below and on /benchmarks. Those are Vulkan cards, not a HIP verdict. Prefill appears on some Vulkan cards in that same sweep — still not a HIP number.',
+      'Measured on the local desktop llama.cpp Vulkan only. Official overnight 35B decode cells live in the table below and on /benchmarks. Those are Vulkan cards, not a HIP verdict. Prefill appears on some Vulkan cards in that same sweep — still not a HIP number.',
     hip:
-      'HIP decode and prefill for the house 35B sweep stay pending — not measured on local-desktop. Do not copy a community HIP tok/s onto this page. Measure with amdai-bench.',
+      'HIP decode and prefill for the house 35B sweep stay pending — not measured on the local desktop. Do not copy a community HIP tok/s onto this page. Measure with amdai-bench.',
   },
   {
     id: 'multi-gpu',
@@ -124,7 +124,7 @@ export const VULKAN_VS_ROCM_AXES: VulkanVsRocmAxis[] = [
     vulkan:
       'Cited walk is /setup/multi-gpu: --list-devices, then --device or GGML_VK_VISIBLE_DEVICES. Official default --split-mode layer. Overnight 35B split cards are llama.cpp Vulkan. Combo-preset tok/s is not measured.',
     hip:
-      'HIP_VISIBLE_DEVICES / ROCR_VISIBLE_DEVICES after rocminfo. Same llama.cpp --split-mode flags. HIP split of the house 35B is pending — not measured on local-desktop. Mixing RDNA gens stays a /multi-gpu question.',
+      'HIP_VISIBLE_DEVICES / ROCR_VISIBLE_DEVICES after rocminfo. Same llama.cpp --split-mode flags. HIP split of the house 35B is pending — not measured on the local desktop. Mixing RDNA gens stays a /multi-gpu question.',
   },
   {
     id: 'fa-kv',
@@ -133,14 +133,14 @@ export const VULKAN_VS_ROCM_AXES: VulkanVsRocmAxis[] = [
     vulkan:
       'Overnight 35B llama-bench cards recorded -fa 1 and -ctk f16 -ctv f16. That is the house Vulkan pin. llama-server flags are not on that card — copy -fa only when your build documents it. The shopper page is /flash-attention. q8_0 KV is listed on the calculator; quality and tok/s stay not measured yet.',
     hip:
-      'llama.cpp documents the same --cache-type-k/v and -fa flags on the HIP build. HIP -fa / q8_0 KV for the house 35B sweep stay pending — not measured on local-desktop. Do not invent a HIP flash-attn delta. Shopper page: /flash-attention.',
+      'llama.cpp documents the same --cache-type-k/v and -fa flags on the HIP build. HIP -fa / q8_0 KV for the house 35B sweep stay pending — not measured on the local desktop. Do not invent a HIP flash-attn delta. Shopper page: /flash-attention.',
   },
   {
     id: 'windows',
     title: 'Windows / WSL',
     kind: 'cited',
     vulkan:
-      'Native Windows first token is llama.cpp Vulkan (LunarG SDK, GGML_VULKAN=ON, or a Windows x64 Vulkan release). Cited at /setup/windows. Not measured on local-desktop.',
+      'Native Windows first token is llama.cpp Vulkan (LunarG SDK, GGML_VULKAN=ON, or a Windows x64 Vulkan release). Cited at /setup/windows. Not measured on the local desktop.',
     hip:
       'ROCm 10.1 lists WSL2 as a tech preview. llama.cpp’s documented GPU path in a Linux guest is HIP (GGML_HIP=ON). We do not invent Vulkan-in-WSL. Native Linux at /setup stays the measured path. Cited at /setup/wsl.',
   },
@@ -165,7 +165,7 @@ export const VULKAN_VS_ROCM_GPUS: VulkanVsRocmGpuRow[] = [
     gfx: 'gfx110x',
     vulkan: 'Always-works consumer path. Mesa RADV + GGML_VULKAN=ON.',
     hip: 'Official on the ROCm 10.1 matrix for listed gfx1100 / gfx1101 / gfx1102 rows. Pin AMDGPU_TARGETS to the string rocminfo prints. Do not paste gfx1201 onto a 7900.',
-    note: 'Decode on these cards is not a local-desktop 35B HIP card. Size Q6/Q5/Q4 on the calculator.',
+    note: 'Decode on these cards is not a local desktop 35B HIP card. Size Q6/Q5/Q4 on the calculator.',
     links: [
       { href: '/gpus/rx-7900-xtx', label: 'RX 7900 XTX' },
       { href: '/gpus/rx-7800-xt', label: 'RX 7800 XT' },
@@ -242,7 +242,7 @@ export const VULKAN_VS_ROCM_STACK_LAB = `
   card on your box — Vulkan build-vk versus HIP build-hip, one knob at a
   time. The house daily recipe is the measured Vulkan pin. There is no
   invented HIP recipe id. HIP cells on this page stay pending until a
-  first-party local-desktop card lands.
+  first-party local desktop card lands.
 `.replace(/\s+/g, ' ').trim();
 
 export const VULKAN_VS_ROCM_FAQ: VulkanVsRocmFaq[] = [
@@ -348,7 +348,7 @@ export const VULKAN_VS_ROCM_HOWTO_STEPS = [
   },
   {
     name: 'Measure both builds on your box',
-    text: 'HIP cells on local-desktop stay pending. Open Stack Lab planner and record an amdai-bench card. Do not invent a HIP tok/s.',
+    text: 'HIP cells on the local desktop stay pending. Open Stack Lab planner and record an amdai-bench card. Do not invent a HIP tok/s.',
   },
 ];
 
@@ -367,7 +367,7 @@ export function vulkanVsRocmMeasuredRows(cards: RunCard[]): VulkanVsRocmMeasured
       vulkan4k,
       vulkan32k,
       hip: VULKAN_VS_ROCM_PENDING,
-      note: 'Official local-desktop llama.cpp Vulkan, one R9700. HIP column pending.',
+      note: 'Official local desktop llama.cpp Vulkan, one R9700. HIP column pending.',
       runIds,
     };
   });
@@ -377,7 +377,7 @@ export function vulkanVsRocmMeasuredRows(cards: RunCard[]): VulkanVsRocmMeasured
     vulkan4k: VULKAN_VS_ROCM_UNMEASURED,
     vulkan32k: VULKAN_VS_ROCM_UNMEASURED,
     hip: VULKAN_VS_ROCM_UNMEASURED,
-    note: `${COMPARE_Q3_CITE}. Q3 is a labeled estimate — not a local-desktop run.`,
+    note: `${COMPARE_Q3_CITE}. Q3 is a labeled estimate — not a local desktop run.`,
     runIds: [],
   });
   return rows;
@@ -466,7 +466,7 @@ export function assertVulkanVsRocmValid(cards: RunCard[] = []): string[] {
   if (VULKAN_VS_ROCM_DESCRIPTION.length < 70 || VULKAN_VS_ROCM_DESCRIPTION.length > 160) {
     errors.push('description length');
   }
-  if (VULKAN_VS_ROCM_PENDING !== 'pending — not measured on local-desktop') errors.push('pending label drifted');
+  if (VULKAN_VS_ROCM_PENDING !== 'pending — not measured on the local desktop') errors.push('pending label drifted');
   if (!/llama\.cpp/i.test(blob)) errors.push('must keep llama.cpp first');
   if (!/GGML_VULKAN=ON/.test(blob) || !/GGML_HIP=ON/.test(blob)) errors.push('must cite both CMake flags');
   if (!/AMDGPU_TARGETS/.test(blob)) errors.push('must cite HIP gfx pin');

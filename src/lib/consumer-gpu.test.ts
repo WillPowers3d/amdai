@@ -192,7 +192,7 @@ describe('consumer GPU recipe sheets', () => {
       assert.equal(page.ramNeed.atSelected.measured, false);
 
       const blob = consumerBlob(page);
-      assert.match(blob, /not measured on local-desktop/i);
+      assert.match(blob, /not measured on the local desktop/i);
       assert.match(blob, /Radeon AI PRO R9700/);
       assert.ok(blob.includes(RAM_MIN_LABEL));
       assert.ok(blob.includes(RAM_FULL_LABEL));
@@ -272,7 +272,7 @@ describe('consumer GPU recipe sheets', () => {
       assert.ok(documentTitle(page.path).endsWith(' · AMDai'));
       const desc = pageDescription(page.path);
       assert.match(desc, /estimate/i);
-      assert.match(desc, /not measured on local-desktop/i);
+      assert.match(desc, /not measured on the local desktop/i);
       assert.doesNotMatch(desc, /tok\/s/);
     }
   });

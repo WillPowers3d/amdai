@@ -17,7 +17,7 @@ import {
 import { officialLinks } from './site';
 
 export const POWER_PUBLISHED = '2026-10-14';
-export const POWER_CITED_LABEL = 'Cited, not measured on local-desktop';
+export const POWER_CITED_LABEL = 'Cited, not measured on the local desktop';
 export const POWER_EMPTY = 'not recorded';
 export const POWER_PSU_EMPTY = 'not recorded — check the product page';
 export const POWER_SEARCH_GUIDANCE = '1000W-class is search guidance, not a SKU';
@@ -336,7 +336,7 @@ export const POWER_STEPS: PowerStep[] = [
     id: 'dual-r9700',
     title: 'Two R9700s are not a PSU SKU we invent',
     body:
-      'AMD publishes 300 W TBP and a 750 W minimum PSU recommendation per R9700 (product page). Two 300 W TBP cards plus 750 W minimum per card is not a dual-card PSU number we will invent. Check the unit you buy. A second card on local-desktop is copies or Flash offload, not automatic 2× decode. llama.cpp first.',
+      'AMD publishes 300 W TBP and a 750 W minimum PSU recommendation per R9700 (product page). Two 300 W TBP cards plus 750 W minimum per card is not a dual-card PSU number we will invent. Check the unit you buy. A second card on the local desktop is copies or Flash offload, not automatic 2× decode. llama.cpp first.',
     links: [
       { href: '/multi-gpu', label: 'Dual / multi-GPU' },
       { href: '/qwen36-dual', label: '35B on two cards' },
@@ -357,7 +357,7 @@ export const POWER_STEPS: PowerStep[] = [
 ];
 
 export const POWER_DUAL = `
-  local-desktop seats two Radeon AI PRO R9700 cards. AMD publishes 300 W TBP and a
+  The local desktop seats two Radeon AI PRO R9700 cards. AMD publishes 300 W TBP and a
   750 W minimum PSU recommendation per card (product page). That is electrical,
   not a street price. Two 300 W TBP cards plus 750 W minimum per card is not
   a dual-card PSU SKU we will invent. ${POWER_SEARCH_GUIDANCE}. Check the unit
@@ -372,7 +372,7 @@ export const POWER_FAQ: PowerFaq[] = [
     id: 'what-is-tbp',
     question: 'What is TBP?',
     answer:
-      'Total board power. AMD publishes it on the product page for the SKU. The cited rows here copy those pages. It is not a measured wall-plug number from local-desktop and not a street price.',
+      'Total board power. AMD publishes it on the product page for the SKU. The cited rows here copy those pages. It is not a measured wall-plug number from local desktop and not a street price.',
     links: [
       { href: '/compare/radeon-vs-nvidia', label: 'Radeon vs NVIDIA' },
       { href: '/gpus/r9700', label: 'R9700 measured page' },
@@ -510,7 +510,7 @@ export function assertPowerValid(): string[] {
   const errors: string[] = [];
   const blob = powerBlob();
   const hrefs = new Set(powerHrefs());
-  if (POWER_CITED_LABEL !== 'Cited, not measured on local-desktop') errors.push('cited label drifted');
+  if (POWER_CITED_LABEL !== 'Cited, not measured on the local desktop') errors.push('cited label drifted');
   if (!/llama\.cpp/i.test(blob)) errors.push('must keep llama.cpp in view');
   if (!/300 W/.test(blob) || !/750 W/.test(blob)) errors.push('must cite AMD 300 W TBP and 750 W min PSU');
   if (!/355 W/.test(blob) || !/315 W/.test(blob) || !/263 W/.test(blob)) {

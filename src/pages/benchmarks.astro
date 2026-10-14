@@ -36,7 +36,7 @@ const launch = citedDailyLaunch(runs);
 
 <Base
   title="35B llama.cpp matrix"
-  description="Qwen3.6-35B-A3B on llama.cpp Vulkan: UD-Q5, Q5, Q4, and Q6 at 4K–256K, one GPU and split. Decode, prefill, VRAM, and RAM from official local-desktop run cards."
+  description="Qwen3.6-35B-A3B on llama.cpp Vulkan: UD-Q5, Q5, Q4, and Q6 at 4K–256K, one GPU and split. Decode, prefill, VRAM, and RAM from official local desktop run cards."
 >
   <main id="main" class="mx-auto max-w-6xl px-4 py-10 sm:px-6">
     <p class="kicker">{MEASURED_LABEL} · {file.test_rig.host}</p>
@@ -260,7 +260,7 @@ const launch = citedDailyLaunch(runs);
       <div class="card mt-8 hidden overflow-x-auto lg:block" id="matrix-table">
         <table class="table-lab compare-sticky min-w-[72rem]">
           <caption>
-            {MATRIX_MODEL} on {MATRIX_ENGINE} {MATRIX_BACKEND}, {MATRIX_KV} KV. Decode, prefill, peak VRAM, and peak system RAM from official local-desktop run cards.
+            {MATRIX_MODEL} on {MATRIX_ENGINE} {MATRIX_BACKEND}, {MATRIX_KV} KV. Decode, prefill, peak VRAM, and peak system RAM from official local desktop run cards.
           </caption>
           <thead>
             <tr>
@@ -301,7 +301,7 @@ const launch = citedDailyLaunch(runs);
         </table>
       </div>
       <p class="mt-3 text-xs text-faint">
-        {MEASURED_LABEL}. Source: official local-desktop run cards ({MATRIX_ENGINE} c060ca974 {MATRIX_BACKEND}).
+        {MEASURED_LABEL}. Source: official local desktop run cards ({MATRIX_ENGINE} c060ca974 {MATRIX_BACKEND}).
       </p>
     </section>
 
@@ -316,7 +316,7 @@ const launch = citedDailyLaunch(runs);
 
       <div class="card mt-6 overflow-x-auto">
         <table class="table-lab min-w-[36rem]">
-          <caption>Cited prior Flash Q6 pair on local-desktop. Same file, two engines, 262K.</caption>
+          <caption>Cited prior Flash Q6 pair on the local desktop. Same file, two engines, 262K.</caption>
           <thead>
             <tr>
               <th scope="col">Engine</th>
@@ -344,7 +344,7 @@ const launch = citedDailyLaunch(runs);
         </table>
       </div>
       <p class="mt-3 text-xs text-faint">
-        {flashPair[0]?.note ?? 'Prior first-party Flash Q6 on local-desktop.'}
+        {flashPair[0]?.note ?? 'Prior first-party Flash Q6 on the local desktop.'}
       </p>
 
       {flashExtra.length ? (

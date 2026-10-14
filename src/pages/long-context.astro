@@ -119,7 +119,7 @@ function runCardHref(col: QuantColumn): string | null {
     </section>
 
     <section id="measured" class="mt-12 scroll-mt-36" aria-labelledby="measured-heading">
-      <h2 id="measured-heading" class="font-serif text-3xl tracking-tight">Measured 35B on local-desktop</h2>
+      <h2 id="measured-heading" class="font-serif text-3xl tracking-tight">Measured 35B on the local desktop</h2>
       <p class="mt-3 max-w-3xl leading-relaxed text-muted">
         {COMPARE_MODEL} on {COMPARE_ENGINE} Vulkan, f16 KV. Every tok/s and measured GB
         is from official amdai-bench/run@1 cards. A missing cell says
@@ -137,7 +137,7 @@ function runCardHref(col: QuantColumn): string | null {
             <div class="mt-4 overflow-x-auto">
               <table class="min-w-[64rem] border-collapse text-left text-sm">
                 <caption class="sr-only">
-                  {COMPARE_MODEL} {row.gpuCount === 1 ? 'one GPU' : 'split'} at {row.contextLabel}. Figures from local-desktop run cards.
+                  {COMPARE_MODEL} {row.gpuCount === 1 ? 'one GPU' : 'split'} at {row.contextLabel}. Figures from local desktop run cards.
                 </caption>
                 <thead>
                   <tr class="border-b border-line">
@@ -233,7 +233,7 @@ function runCardHref(col: QuantColumn): string | null {
       </p>
       <div class="mt-6 overflow-x-auto">
         <table class="min-w-[48rem] border-collapse text-left text-sm">
-          <caption class="sr-only">Flash decode at 4K / 32K / 128K / 256K from local-desktop cards. Rows with no measured cell are omitted.</caption>
+          <caption class="sr-only">Flash decode at 4K / 32K / 128K / 256K from local desktop cards. Rows with no measured cell are omitted.</caption>
           <thead>
             <tr class="border-b border-line">
               <th scope="col" class="py-3 pr-4 font-medium text-ink">Quant · cards · engine</th>
@@ -268,7 +268,7 @@ function runCardHref(col: QuantColumn): string | null {
       </p>
       <div class="mt-4 overflow-x-auto">
         <table class="min-w-[40rem] border-collapse text-left text-sm">
-          <caption class="sr-only">Flash Q6 two-card decode at 3600 and 5200 MT/s. Speeds from local-desktop Flash cards.</caption>
+          <caption class="sr-only">Flash Q6 two-card decode at 3600 and 5200 MT/s. Speeds from local desktop Flash cards.</caption>
           <thead>
             <tr class="border-b border-line">
               <th scope="col" class="py-3 pr-4 font-medium text-ink">Engine · context</th>

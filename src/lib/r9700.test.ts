@@ -76,7 +76,7 @@ describe('R9700 measured hero', () => {
     assert.equal(isSitemapExcluded('/gpus/r9700'), false);
     assert.ok(documentTitle('/gpus/r9700').endsWith(' · AMDai'));
     assert.match(pageDescription('/gpus/r9700'), /32 GB/);
-    assert.match(pageDescription('/gpus/r9700'), /measured|local-desktop/i);
+    assert.match(pageDescription('/gpus/r9700'), /measured|local desktop/i);
     const ld = techArticleJsonLd({
       headline: R9700_SHORT,
       description: 'Measured 35B llama.cpp on the Radeon AI PRO R9700.',

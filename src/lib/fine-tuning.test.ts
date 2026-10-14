@@ -25,7 +25,7 @@ describe('fine-tuning guide', () => {
   it('stays cited, llama.cpp-first after export, and invents no speeds', () => {
     assert.deepEqual(assertFineTuningValid(), []);
     assert.equal(FINE_TUNING_TITLE, 'Fine-tuning on Radeon');
-    assert.equal(FINE_TUNING_CITED_LABEL, 'Cited, not measured on local-desktop');
+    assert.equal(FINE_TUNING_CITED_LABEL, 'Cited, not measured on the local desktop');
     assert.equal(FINE_TUNING_SPEED_LABEL, 'not yet measured on our R9700s');
     assert.ok(FINE_TUNING_DESCRIPTION.length >= 70);
     assert.ok(FINE_TUNING_DESCRIPTION.length <= 160);

@@ -444,7 +444,7 @@ function measuredDecode(
       decode: CAN_RUN_UNMEASURED,
       kind: 'q3-estimate',
       runIds: [],
-      note: `${spec.label} is a labeled estimate — not a local-desktop run.`,
+      note: `${spec.label} is a labeled estimate — not a local desktop run.`,
     };
   }
   if (modelId !== 'qwen36' || gpuId !== 'r9700') {
@@ -452,7 +452,7 @@ function measuredDecode(
       decode: CAN_RUN_UNMEASURED,
       kind: 'estimate',
       runIds: [],
-      note: 'No official local-desktop cell for this model × card. Empty stays not measured yet.',
+      note: 'No official local desktop cell for this model × card. Empty stays not measured yet.',
     };
   }
   const row = oneVsTwoRows(cards).find((item) => item.quant === spec.label && item.context === context);
@@ -463,7 +463,7 @@ function measuredDecode(
       decode: CAN_RUN_UNMEASURED,
       kind: 'estimate',
       runIds: [],
-      note: 'No official local-desktop cell for this quant × context. Empty stays not measured yet.',
+      note: 'No official local desktop cell for this quant × context. Empty stays not measured yet.',
     };
   }
   return {
@@ -471,8 +471,8 @@ function measuredDecode(
     kind: 'measured',
     runIds: cell.runIds,
     note: gpuCount === 2
-      ? 'Official local-desktop llama.cpp Vulkan split on two R9700s.'
-      : 'Official local-desktop llama.cpp Vulkan card on one R9700.',
+      ? 'Official local desktop llama.cpp Vulkan split on two R9700s.'
+      : 'Official local desktop llama.cpp Vulkan card on one R9700.',
   };
 }
 
@@ -538,7 +538,7 @@ function launchesFor(modelId: CanRunModelId): CanRunLaunch[] {
         : {
             href: '/backends/llamacpp',
             label: `${MODEL_COMPARE_SHORT[modelId]} llama.cpp`,
-            note: 'Shape only — not a measured local-desktop recipe. Copy the cited GGUF name from the model page.',
+            note: 'Shape only — not a measured local desktop recipe. Copy the cited GGUF name from the model page.',
           };
   return [
     {
@@ -579,7 +579,7 @@ function pairLead(
   shopper: string,
 ): string {
   const fit = CAN_RUN_VERDICT_LABEL[verdict];
-  return `${gpuShort} (${vramLabel}) × ${modelShort}. Shopper file is ${shopper} at 4K. Calculator verdict: ${fit.toLowerCase()}. llama.cpp first (Vulkan, then HIP). Q3 is a labeled estimate, not a house pick. Measured decode appears only where a local-desktop card already exists. We do not invent a price.`;
+  return `${gpuShort} (${vramLabel}) × ${modelShort}. Shopper file is ${shopper} at 4K. Calculator verdict: ${fit.toLowerCase()}. llama.cpp first (Vulkan, then HIP). Q3 is a labeled estimate, not a house pick. Measured decode appears only where a local desktop card already exists. We do not invent a price.`;
 }
 
 function pairFaq(page: {
@@ -616,7 +616,7 @@ function pairFaq(page: {
     {
       id: 'measured-speed',
       question: 'How fast is it?',
-      answer: `Measured decode is only the official local-desktop 35B llama.cpp Vulkan sweep on one or two R9700s. Every other model × card stays ${CAN_RUN_UNMEASURED}. Record a card with amdai-bench.`,
+      answer: `Measured decode is only the official local desktop 35B llama.cpp Vulkan sweep on one or two R9700s. Every other model × card stays ${CAN_RUN_UNMEASURED}. Record a card with amdai-bench.`,
       links: [
         { href: '/contribute', label: 'Contribute' },
         { href: '/amdai-bench', label: 'amdai-bench' },
@@ -817,7 +817,7 @@ export function canRunSeoRows(): Array<{ path: string; title: string; descriptio
 }
 
 export const CAN_RUN_HUB_LEAD =
-  `Search “can RX 7900 XTX run Qwen3.6-35B” or “GLM 5.3 Flash on 16 GB Radeon.” Each pair uses the calculator already on AMDai — the same VRAM math as /calculator, the cited /gpus sheets, and the cited /models pages. Q6 / Q5 / Q4 plus a labeled Q3 estimate. Measured decode is only the official local-desktop 35B llama.cpp Vulkan sweep on R9700. Everything else stays ${CAN_RUN_UNMEASURED}. llama.cpp first. We do not invent a price.`;
+  `Search “can RX 7900 XTX run Qwen3.6-35B” or “GLM 5.3 Flash on 16 GB Radeon.” Each pair uses the calculator already on AMDai — the same VRAM math as /calculator, the cited /gpus sheets, and the cited /models pages. Q6 / Q5 / Q4 plus a labeled Q3 estimate. Measured decode is only the official local desktop 35B llama.cpp Vulkan sweep on R9700. Everything else stays ${CAN_RUN_UNMEASURED}. llama.cpp first. We do not invent a price.`;
 
 export const CAN_RUN_HUB_FAQ: CanRunFaq[] = [
   {

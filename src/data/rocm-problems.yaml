@@ -328,7 +328,7 @@ problems:
       Cited HIP / ROCm reports on Ryzen AI Max / Strix Halo (gfx1151) hang the
       GPU. dmesg prints `MES failed to respond to msg=REMOVE_QUEUE` (ROCm
       #5590). A related firmware row (ROCm #5724) describes MES 0x83 hangs and
-      memory-access faults on the same gfx. This is not a local-desktop measurement.
+      memory-access faults on the same gfx. This is not a local desktop measurement.
     impact: >-
       A HIP first-run on a mini-PC can look installed and still lock the
       desktop. People then blame the APU. Vulkan llama.cpp is the consumer
@@ -337,7 +337,7 @@ problems:
     workaround: >-
       Use llama.cpp Vulkan for a first token. Read the two upstream issues
       before you copy a kernel flag from a comment. We have not reproduced
-      this hang on local-desktop and we do not invent a firmware pin.
+      this hang on the local desktop and we do not invent a firmware pin.
     affected_gpus:
       - Strix Halo
       - Ryzen AI Max+ 395

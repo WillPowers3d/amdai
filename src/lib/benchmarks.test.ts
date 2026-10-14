@@ -18,7 +18,7 @@ describe('benchmarks catalog', () => {
   it('seeds only the allowed first-party tok/s and labels them', () => {
     assert.deepEqual(assertBenchmarksValid(file), []);
     assert.equal(file.label, MEASURED_LABEL);
-    assert.match(file.source, /local-desktop/);
+    assert.match(file.source, /local desktop/);
     const values = file.runs.map((run) => run.tok_s).filter((n): n is number => n != null);
     for (const n of values) {
       assert.ok(ALLOWED_TOK_S.includes(n as (typeof ALLOWED_TOK_S)[number]), String(n));

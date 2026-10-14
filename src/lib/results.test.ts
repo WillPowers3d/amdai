@@ -25,12 +25,12 @@ const snapshot = parseAmdaiBench(JSON.parse(raw));
 const file = amdaiBenchFile;
 
 describe('amdai-bench v1 catalog', () => {
-  it('is version 1 and seeds only the cited 35B local-desktop numbers', () => {
+  it('is version 1 and seeds only the cited 35B local desktop numbers', () => {
     assert.deepEqual(assertAmdaiBenchValid(file), []);
     assert.equal(file.schema, AMDAI_BENCH_SCHEMA);
     assert.equal(file.version, AMDAI_BENCH_VERSION);
     assert.equal(file.label, MEASURED_LABEL);
-    assert.match(file.source, /local-desktop/);
+    assert.match(file.source, /local desktop/);
     assert.ok(file.results.every((result) => result.trust === 'verified'));
     assert.ok(file.results.every((result) => result.pins.model.includes('35B')));
   });

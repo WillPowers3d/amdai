@@ -345,7 +345,7 @@ export function pickHarness(answers: QuizAnswers, list: Harness[]): QuizResult {
       primary: requireId(list, 'hermes'),
       alternates: present(list, ['goose']),
       reason:
-        'Hermes Agent is amdai’s daily setup on local-desktop — desktop/CLI on top of Strata :8083 and llama-server. Goose is the other local-first desktop/CLI agent with an OpenAI host override.',
+        'Hermes Agent is the house daily setup on the local desktop — desktop/CLI on top of Strata :8083 and llama-server. Goose is the other local-first desktop/CLI agent with an OpenAI host override.',
       usageNote: usageNote(usage),
     };
   }
@@ -354,7 +354,7 @@ export function pickHarness(answers: QuizAnswers, list: Harness[]): QuizResult {
     primary: requireId(list, 'hermes'),
     alternates: present(list, ['aider', 'opencode', 'goose']),
     reason:
-      'CLI agent on a local /v1. Hermes is used on our rig (local-desktop), pointed at Strata :8083 and llama-server. Aider and OpenCode are the other well-documented terminal attaches.',
+      'CLI agent on a local /v1. Hermes is used on our rig (local desktop), pointed at Strata :8083 and llama-server. Aider and OpenCode are the other well-documented terminal attaches.',
     usageNote: usageNote(usage),
   };
 }
@@ -789,7 +789,7 @@ GENERIC_OPEN_AI_API_KEY=sk-123abc
 `,
         {
           applicable: false,
-          note: 'Not a llama-server /v1 attach. Cited from Shannon’s How I run my Lab — not used on local-desktop.',
+          note: 'Not a llama-server /v1 attach. Cited from Shannon’s How I run my Lab — not used on the local desktop.',
         },
       );
 
@@ -807,7 +807,7 @@ GENERIC_OPEN_AI_API_KEY=sk-123abc
 `,
         {
           applicable: false,
-          note: 'Not a llama-server /v1 attach. Cited from Shannon’s How I run my Lab — not used on local-desktop.',
+          note: 'Not a llama-server /v1 attach. Cited from Shannon’s How I run my Lab — not used on the local desktop.',
         },
       );
 

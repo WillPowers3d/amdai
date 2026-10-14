@@ -11,7 +11,7 @@ const file = parse(raw) as { updates: Array<Parameters<typeof normalizeUpdate>[0
 const updates: StackUpdate[] = file.updates.map((row) => normalizeUpdate(row));
 
 const r9700Vulkan: SavedRigMatch = {
-  name: 'local-desktop daily',
+  name: 'local desktop daily',
   gpu: 'Radeon AI PRO R9700',
   gfx: 'gfx1201',
   rocmVersion: '10.1.0',

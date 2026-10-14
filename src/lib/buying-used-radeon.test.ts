@@ -29,7 +29,7 @@ describe('Buying a used Radeon for local AI', () => {
     assert.equal(BUYING_USED_PUBLISHED, '2026-10-14');
     assert.equal(BUYING_USED_PATH, '/guides/buying-used-radeon');
     assert.equal(BUYING_USED_TITLE, 'Buying a used Radeon for local AI');
-    assert.equal(BUYING_USED_CITED_LABEL, 'Cited, not measured on local-desktop');
+    assert.equal(BUYING_USED_CITED_LABEL, 'Cited, not measured on the local desktop');
     assert.equal(BUYING_USED_SPEED_LABEL, 'not measured');
     assert.ok(BUYING_USED_STEPS.length >= 8);
     const classes = buyingUsedVramClasses();

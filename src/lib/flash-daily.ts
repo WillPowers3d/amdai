@@ -5,8 +5,8 @@
 
 import {
   DEFAULT_INPUT,
-  local-desktop_DDR5_GB,
-  local-desktop_USABLE_RAM_GB,
+  LOCAL_DESKTOP_DDR5_GB,
+  LOCAL_DESKTOP_USABLE_RAM_GB,
   applyModelPreset,
   compute,
   formatGiB,
@@ -18,7 +18,7 @@ import {
 } from './calculator';
 
 export const MEASURED_ON_OUR_RIG = 'Measured on our rig, 2026-10';
-export const NOT_MEASURED_ON_local-desktop = 'not measured on local-desktop';
+export const NOT_MEASURED_ON_LOCAL_DESKTOP = 'not measured on the local desktop';
 
 export const ALLOWED_FLASH_NUMBERS = [
   32.8, 31.8, 18.5, 18.2, 17.9, 15.9, 15.6, 15.3, 32.6, 16, 111, 169, 90, 158.3, 81.96, 249, 256, 9,
@@ -203,11 +203,11 @@ export function collectFlashMeasuredNumbers(file: FlashDailyFile): number[] {
 
 export function assertFlashDailyValid(file: FlashDailyFile): string[] {
   const errors: string[] = [];
-  if (file.host !== 'local-desktop') errors.push('host must be local-desktop');
+  if (file.host !== 'local desktop') errors.push('host must be local desktop');
   if (file.label !== MEASURED_ON_OUR_RIG) errors.push('label must be the house measured string');
   if (file.full_context !== 262144) errors.push('full context must be 262144');
-  if (file.kit.dimm_gb !== local-desktop_DDR5_GB) errors.push('kit must be 256 GB');
-  if (file.kit.usable_gb !== local-desktop_USABLE_RAM_GB) errors.push('usable must be 249');
+  if (file.kit.dimm_gb !== LOCAL_DESKTOP_DDR5_GB) errors.push('kit must be 256 GB');
+  if (file.kit.usable_gb !== LOCAL_DESKTOP_USABLE_RAM_GB) errors.push('usable must be 249');
   if (!Array.isArray(file.overnight_results_json_rows)) errors.push('overnight rows missing');
   const shorts = file.files.map((row) => row.short);
   for (const required of ['Q3', 'Q4', 'Q5', 'Q6']) {
@@ -225,8 +225,8 @@ export function assertFlashDailyValid(file: FlashDailyFile): string[] {
     else if (!isAllowed(n)) errors.push(`unsourced flash figure ${n}`);
   }
   for (const row of file.community_speeds) {
-    if (row.label !== NOT_MEASURED_ON_local-desktop) {
-      errors.push(`${row.quant} community row must say ${NOT_MEASURED_ON_local-desktop}`);
+    if (row.label !== NOT_MEASURED_ON_LOCAL_DESKTOP) {
+      errors.push(`${row.quant} community row must say ${NOT_MEASURED_ON_LOCAL_DESKTOP}`);
     }
     if (!/^https:\/\//.test(row.href)) errors.push(`community ${row.quant} needs https`);
   }
@@ -248,7 +248,7 @@ export function flashRamInput(quantId: QuantId, cards: 1 | 2): CalcInput {
     vramGb: 32,
     gpuCount: cards,
     split: cards === 2,
-    ramGb: local-desktop_DDR5_GB,
+    ramGb: LOCAL_DESKTOP_DDR5_GB,
     backendId: 'strata',
     pathId: 'hip',
     context: 262144,
@@ -295,7 +295,7 @@ export function flashRamRow(short: FlashQuantShort, cards: 1 | 2, fileGb: number
     ram,
     result,
     labelKind: 'estimate',
-    kitVsUsable: `${local-desktop_DDR5_GB} GB kit · about ${local-desktop_USABLE_RAM_GB} GB usable (Linux GiB labeled GB)`,
+    kitVsUsable: `${LOCAL_DESKTOP_DDR5_GB} GB kit · about ${LOCAL_DESKTOP_USABLE_RAM_GB} GB usable (Linux GiB labeled GB)`,
   };
 }
 

@@ -86,7 +86,7 @@ export const KV_CACHE_FLAGS = `
 `.replace(/\s+/g, ' ').trim();
 
 export const KV_CACHE_WHY_F16 = `
-  amdai’s house box runs f16 KV at the full 262144 window on one R9700
+  the house house box runs f16 KV at the full 262144 window on one R9700
   because that is what the overnight llama-bench cards recorded, and the
   peak (29.34 GB at 256K) still fits 32 GB with 0% RAM offload. Switching
   to q8_0 or q4_0 would shrink the estimated cache. It would also leave
@@ -98,7 +98,7 @@ export const KV_CACHE_WHY_F16 = `
 export const KV_CACHE_QUALITY = `
   No AMDai score ranks f16 vs q8_0 vs q4_0 KV. llama.cpp documents the
   types. It does not publish a house quality delta. Treat any “quantized
-  KV is fine” claim as ${KV_CACHE_EMPTY} unless a local-desktop card says otherwise.
+  KV is fine” claim as ${KV_CACHE_EMPTY} unless a local desktop card says otherwise.
 `.replace(/\s+/g, ' ').trim();
 
 export const KV_CACHE_RAM = `
@@ -385,7 +385,7 @@ export function kvFitRows(): KvFitRow[] {
     q4: fitCell('q4_k_m', card.gpuId, card.gpuCount, true),
     q3: {
       ...fitCell('q3_k_xl', card.gpuId, card.gpuCount, true),
-      text: `${COMPARE_Q3} ${COMPARE_Q3_CITE}. ${fitCell('q3_k_xl', card.gpuId, card.gpuCount, true).text} Labeled estimate — no Q3 download or run on local-desktop.`,
+      text: `${COMPARE_Q3} ${COMPARE_Q3_CITE}. ${fitCell('q3_k_xl', card.gpuId, card.gpuCount, true).text} Labeled estimate — no Q3 download or run on the local desktop.`,
     },
   }));
 }

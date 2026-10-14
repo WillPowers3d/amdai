@@ -17,7 +17,7 @@ import Base from '../layouts/Base.astro';
     <p class="mt-3 text-sm text-muted">
       Q1 and Q2 stay off. Q3 is allowed only as estimate/community unless you measured it.
       llama.cpp first. No older 2.5-class or 8B names. No invented tok/s.
-      Bounty amounts are not listed — that needs amdai’s sign-off.
+      Bounty amounts are not listed — that needs the house sign-off.
     </p>
     <p class="mt-4 flex flex-wrap gap-3 text-sm">
       <a class="btn-secondary" href="/wanted">Wanted board</a>
@@ -173,7 +173,7 @@ import Base from '../layouts/Base.astro';
         lines: ['# Attach the command you actually ran.', '# Do not invent flags.'],
       },
       calculator: `/calculator?gpu=${data.get('card')}&n=${data.get('card_count')}&model=${modelId}&ctx=${ctx}`,
-      notes: [String(data.get('log')), 'Community submission — not measured on local-desktop until a moderator says so.'],
+      notes: [String(data.get('log')), 'Community submission — not measured on the local desktop until a moderator says so.'],
     };
   }
 

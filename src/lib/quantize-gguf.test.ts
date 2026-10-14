@@ -74,7 +74,7 @@ describe('Make your own GGUF quants for a Radeon GPU with llama.cpp', () => {
     assert.ok(q5);
     assert.match(q5!.decode4k, /102\.39/);
     assert.ok(q3?.estimate);
-    assert.equal(q3?.decode4k, 'not measured on local-desktop');
+    assert.equal(q3?.decode4k, 'not measured on the local desktop');
     assert.match(q3!.size, /16\.8/);
   });
 

@@ -1,5 +1,5 @@
 /**
- * Cited Windows first-run path. Not measured on local-desktop.
+ * Cited Windows first-run path. Not measured on the local desktop.
  * Sources: AMD HIP SDK Windows docs, ROCm 10.1 WSL2 notes, llama.cpp Vulkan build docs.
  * Do not invent drivers, version pins, tok/s, or “works on” claims.
  */
@@ -7,7 +7,7 @@
 import { RAM_FULL_LABEL, RAM_MIN_LABEL } from './ram-surfaces';
 
 export const SETUP_WINDOWS_PUBLISHED = '2026-10-13';
-export const SETUP_WINDOWS_CITED_LABEL = 'Cited, not measured on local-desktop';
+export const SETUP_WINDOWS_CITED_LABEL = 'Cited, not measured on the local desktop';
 
 export type SetupWindowsLink = { href: string; label: string };
 
@@ -86,7 +86,7 @@ export const SETUP_WINDOWS_TRACKS: SetupWindowsTrack[] = [
     recommend: true,
     body: `
       AMD’s HIP SDK for Windows is a documented subset of ROCm (runtime, HIP APIs, tooling),
-      not the full Linux userspace we measure on local-desktop. The 2026-07-31 Windows requirements
+      not the full Linux userspace we measure on the local desktop. The 2026-07-31 Windows requirements
       table lists Radeon AI PRO R9700 and several consumer RDNA3/RDNA4 cards as Runtime + HIP SDK.
       For a first token, follow llama.cpp’s Windows Vulkan build docs: install the LunarG Vulkan
       SDK, then build with GGML_VULKAN=ON, or use a llama.cpp Windows x64 Vulkan release.
@@ -113,7 +113,7 @@ export const SETUP_WINDOWS_STEPS: SetupWindowsStep[] = [
     id: 'gpu-driver',
     title: 'See the discrete GPU',
     body:
-      'Confirm the SKU in AMD Software (Adrenalin) or Device Manager. The HIP SDK Windows installer can bundle a display driver — we do not pin an Adrenalin version. Install the LunarG Vulkan SDK that llama.cpp’s Windows Vulkan docs require, then run vulkaninfo and look for the discrete Radeon. If vulkaninfo is empty, stop; do not guess a driver. BIOS notes (Above 4G, ReBAR/SAM, CSM off) apply on the same board. Cited, not measured on local-desktop.',
+      'Confirm the SKU in AMD Software (Adrenalin) or Device Manager. The HIP SDK Windows installer can bundle a display driver — we do not pin an Adrenalin version. Install the LunarG Vulkan SDK that llama.cpp’s Windows Vulkan docs require, then run vulkaninfo and look for the discrete Radeon. If vulkaninfo is empty, stop; do not guess a driver. BIOS notes (Above 4G, ReBAR/SAM, CSM off) apply on the same board. Cited, not measured on the local desktop.',
     links: [
       { href: '/gpus/r9700', label: 'R9700 measured page' },
       { href: '/gpus', label: 'GPU directory' },
@@ -137,7 +137,7 @@ export const SETUP_WINDOWS_STEPS: SetupWindowsStep[] = [
     id: 'quant',
     title: 'Pick Q6, Q5, or Q4 — Q3 is a labeled estimate',
     body:
-      'Download the same official-instruct GGUF the Linux recipes name. Start at Q6, Q5, or Q4 and check VRAM + KV on the calculator. Q3 stays a cited labeled estimate unless a Windows run card exists — none does in this repo. Q1/Q2 stay off. Tok/s, VRAM, and RAM on /benchmarks and /results are Ubuntu llama-bench on local-desktop. Treat them as comparison, not a Windows promise.',
+      'Download the same official-instruct GGUF the Linux recipes name. Start at Q6, Q5, or Q4 and check VRAM + KV on the calculator. Q3 stays a cited labeled estimate unless a Windows run card exists — none does in this repo. Q1/Q2 stay off. Tok/s, VRAM, and RAM on /benchmarks and /results are Ubuntu llama-bench on the local desktop. Treat them as comparison, not a Windows promise.',
     links: [
       { href: '/calculator', label: 'Calculator' },
       { href: '/recipes/qwen36-35b.llamacpp-vulkan.262k', label: '35B recipe' },
@@ -149,7 +149,7 @@ export const SETUP_WINDOWS_STEPS: SetupWindowsStep[] = [
     id: 'fit',
     title: 'Fit VRAM and the two RAM lines',
     body:
-      'The calculator prints Minimum system RAM needed (the load at the context you picked) and RAM needed at full context (262144 for the house 35B). Overnight UD-Q5 one-GPU Ubuntu peaks are 37.32 GB at 4K and 42.9 GB at 256K — measured on local-desktop, not a Windows kit. Keep the GGUF on NVMe.',
+      'The calculator prints Minimum system RAM needed (the load at the context you picked) and RAM needed at full context (262144 for the house 35B). Overnight UD-Q5 one-GPU Ubuntu peaks are 37.32 GB at 4K and 42.9 GB at 256K — measured on the local desktop, not a Windows kit. Keep the GGUF on NVMe.',
     links: [
       { href: '/calculator', label: 'Calculator' },
       { href: '/flash-ram-offload', label: 'Flash RAM offload' },
@@ -257,7 +257,7 @@ export function assertSetupWindowsValid(): string[] {
   const errors: string[] = [];
   const blob = setupWindowsBlob();
   const hrefs = new Set(setupWindowsHrefs());
-  if (SETUP_WINDOWS_CITED_LABEL !== 'Cited, not measured on local-desktop') errors.push('cited label drifted');
+  if (SETUP_WINDOWS_CITED_LABEL !== 'Cited, not measured on the local desktop') errors.push('cited label drifted');
   if (SETUP_WINDOWS_TRACKS.length !== 2) errors.push('need native and WSL tracks');
   if (!SETUP_WINDOWS_TRACKS.find((row) => row.id === 'native')?.recommend) {
     errors.push('native Vulkan track should be the Windows try');
@@ -283,7 +283,7 @@ export function assertSetupWindowsValid(): string[] {
     errors.push('Stack Lab must stay unpublished on Windows');
   }
   if (!/technical preview/i.test(blob)) errors.push('WSL must stay a technical preview');
-  if (!/not measured on local-desktop/i.test(blob)) errors.push('must say not measured on local-desktop');
+  if (!/not measured on the local desktop/i.test(blob)) errors.push('must say not measured on the local desktop');
   for (const source of SETUP_WINDOWS_SOURCES) {
     if (!/^https:\/\//.test(source.href)) errors.push(`source ${source.id} must be https`);
   }

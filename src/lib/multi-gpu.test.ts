@@ -14,7 +14,7 @@ import {
   MULTI_GPU_PATH,
   MULTI_GPU_PUBLISHED,
   REQUIRED_MULTI_GPU_HREFS,
-  local-desktop_KIT_GB,
+  LOCAL_DESKTOP_KIT_GB,
   assertMultiGpuValid,
   multiGpuBlob,
   multiGpuDailyRow,
@@ -23,20 +23,20 @@ import {
 import { runs } from './run-card-data';
 import { documentTitle, isSitemapExcluded, pageDescription, shouldNoindex } from './seo';
 import { primaryNav } from './site';
-import { parselocal-desktopDual } from './local-desktop-dual';
+import { parseLocalDesktopDual } from './local-desktop-dual';
 
 const here = dirname(fileURLToPath(import.meta.url));
-const dual = parselocal-desktopDual(parse(readFileSync(new URL('../data/local-desktop-dual.yaml', import.meta.url), 'utf8')));
+const dual = parseLocalDesktopDual(parse(readFileSync(new URL('../data/local-desktop-dual.yaml', import.meta.url), 'utf8')));
 const flash = parseFlashDaily(parse(readFileSync(new URL('../data/flash-daily.yaml', import.meta.url), 'utf8')));
 
 describe('dual / multi-GPU guide', () => {
-  it('cites only measured local-desktop figures and keeps house rules', () => {
+  it('cites only measured local desktop figures and keeps house rules', () => {
     assert.deepEqual(assertMultiGpuValid(runs, dual, flash), []);
     assert.equal(MULTI_GPU_PATH, '/multi-gpu');
     assert.equal(MULTI_GPU_NAME, 'Dual / multi-GPU');
     assert.equal(MULTI_GPU_PUBLISHED, '2026-10-13');
     assert.equal(DESKTOP2_KIT_GB, 192);
-    assert.equal(local-desktop_KIT_GB, 256);
+    assert.equal(LOCAL_DESKTOP_KIT_GB, 256);
     assert.ok((DIMM_KIT_GB as readonly number[]).includes(DESKTOP2_KIT_GB));
 
     const hrefs = multiGpuHrefs();

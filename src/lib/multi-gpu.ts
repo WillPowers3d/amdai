@@ -1,6 +1,6 @@
 /**
  * Consumer dual / multi-GPU guide at /multi-gpu.
- * Centered on 2× Radeon AI PRO R9700. Numbers come from local-desktop cards, the dual file,
+ * Centered on 2× Radeon AI PRO R9700. Numbers come from local desktop cards, the dual file,
  * Flash two-card points, and cited AMD / llama.cpp / ROCm docs.
  * Desktop 2 (dual R9700 + 192 GB DDR5) is planned — not measured. Do not invent tok/s.
  */
@@ -30,10 +30,10 @@ export const MULTI_GPU_PATH = '/multi-gpu';
 export const MULTI_GPU_NAME = 'Dual / multi-GPU';
 export const MULTI_GPU_PUBLISHED = '2026-10-13';
 export const DESKTOP2_KIT_GB = 192;
-export const local-desktop_KIT_GB = 256;
+export const LOCAL_DESKTOP_KIT_GB = 256;
 
 export const MULTI_GPU_DIGEST =
-  'When a second Radeon AI PRO R9700 helps or hurts — llama.cpp first, measured local-desktop 35B and Flash, cited PCIe and PSU. Desktop 2 192 GB is planned, not measured.';
+  'When a second Radeon AI PRO R9700 helps or hurts — llama.cpp first, measured local desktop 35B and Flash, cited PCIe and PSU. Desktop 2 192 GB is planned, not measured.';
 
 export type MultiGpuLink = { href: string; label: string };
 
@@ -74,11 +74,11 @@ export const MULTI_GPU_LLAMA = {
   lead:
     'llama.cpp is the consumer default. Overnight split cards recorded -sm layer. Pin one process per card when you want two models, not a split.',
   splitLayer:
-    '--split-mode layer (short -sm layer) splits layers across the visible GPUs. That is the overnight 35B split on local-desktop. It is the documented llama.cpp default for multi-GPU. It is slower on this 35B than one card.',
+    '--split-mode layer (short -sm layer) splits layers across the visible GPUs. That is the overnight 35B split on the local desktop. It is the documented llama.cpp default for multi-GPU. It is slower on this 35B than one card.',
   splitRow:
-    '--split-mode row splits tensor rows (a tensor-parallel-shaped layout). llama.cpp documents the flag. We have not measured row split tok/s on local-desktop — treat any row-split speed as an estimate, not a house number.',
+    '--split-mode row splits tensor rows (a tensor-parallel-shaped layout). llama.cpp documents the flag. We have not measured row split tok/s on the local desktop — treat any row-split speed as an estimate, not a house number.',
   tensorSplit:
-    '--tensor-split / -ts sets the fraction of the model on each GPU (comma-separated). Do not invent a local-desktop ratio. Copy the flag from llama.cpp --help after --list-devices; measure. Overnight cards name -sm layer, not a -ts pair.',
+    '--tensor-split / -ts sets the fraction of the model on each GPU (comma-separated). Do not invent a local desktop ratio. Copy the flag from llama.cpp --help after --list-devices; measure. Overnight cards name -sm layer, not a -ts pair.',
   mainGpu:
     '--main-gpu / -mg picks the GPU for scratch and small tensors, or the only GPU with --split-mode none. Use it when one process should own one card.',
   vulkan:
@@ -113,14 +113,14 @@ export const MULTI_GPU_QUANTS = {
   lead:
     'House 35B compare is Q6_K, UD-Q5_K_XL, Q5_K_M, and Q4_K_M from overnight cards. UD-Q3_K_XL is a labeled estimate from the Unsloth listing. Q1/Q2 stay off. Q3 stays on the table as that labeled estimate.',
   q3:
-    `${COMPARE_Q3} is not a local-desktop run. Cite: ${COMPARE_Q3_CITE}. Flash Q3 file rows on /flash-daily are the same rule — estimate unless a card is measured.`,
+    `${COMPARE_Q3} is not a local desktop run. Cite: ${COMPARE_Q3_CITE}. Flash Q3 file rows on /flash-daily are the same rule — estimate unless a card is measured.`,
 };
 
 export const MULTI_GPU_OFFLOAD = {
   lead:
     'The 35B daily driver is 0% system-RAM offload on one 32 GB card. RAM offload shows up when the file does not fit — Flash Q6 is the measured house example. The calculator always prints two lines: “Minimum system RAM needed” (the load at the context you picked) and “RAM needed at full context” (262144 for the house 35B and Flash).',
   desktop2:
-    'amdai’s Desktop 2 is planned as dual Radeon AI PRO R9700 + 192 GB DDR5. 192 GB is a real DIMM kit label on the calculator. That box is not measured. Do not treat 192 GB as a local-desktop result — the measured kit is 256 GB DDR5-5200 (about 249 GB usable, Linux GiB labeled GB). No Desktop 2 tok/s exists on this site.',
+    'the house Desktop 2 is planned as dual Radeon AI PRO R9700 + 192 GB DDR5. 192 GB is a real DIMM kit label on the calculator. That box is not measured. Do not treat 192 GB as a local desktop result — the measured kit is 256 GB DDR5-5200 (about 249 GB usable, Linux GiB labeled GB). No Desktop 2 tok/s exists on this site.',
 };
 
 export const MULTI_GPU_MORE: { href: string; label: string; body: string }[] = [
@@ -202,7 +202,7 @@ export const MULTI_GPU_MORE: { href: string; label: string; body: string }[] = [
   {
     href: '/benchmarks',
     label: 'Benchmarks',
-    body: '33-card local-desktop matrix. Every cell links a run card.',
+    body: '33-card local desktop matrix. Every cell links a run card.',
   },
   {
     href: '/results',
@@ -340,8 +340,8 @@ export function assertMultiGpuValid(cards: RunCard[], dual: DualFile, flash: Fla
     errors.push('missing cited UD-Q5 1× 256K decode');
   }
 
-  if (dual.host !== 'local-desktop') errors.push('dual host must be local-desktop');
-  if (dual.kit.dimm_gb !== local-desktop_KIT_GB) errors.push('measured kit is 256 GB');
+  if (dual.host !== 'local desktop') errors.push('dual host must be local desktop');
+  if (dual.kit.dimm_gb !== LOCAL_DESKTOP_KIT_GB) errors.push('measured kit is 256 GB');
   if (flash.measured_q6_two_cards.cards !== 2) errors.push('Flash Q6 two-card row must name two cards');
   if (flash.measured_q6_two_cards.strata_8k_tok_s !== 32.8) errors.push('Flash two-card 8K must stay 32.8');
   if (flash.measured_q6_two_cards.strata_100k_tok_s !== 31.8) errors.push('Flash two-card 100K must stay 31.8');
@@ -352,7 +352,7 @@ export function assertMultiGpuValid(cards: RunCard[], dual: DualFile, flash: Fla
   if (!/planned/i.test(MULTI_GPU_OFFLOAD.desktop2) || !/not measured/i.test(MULTI_GPU_OFFLOAD.desktop2)) {
     errors.push('Desktop 2 must stay planned / not measured');
   }
-  if (!/256/.test(MULTI_GPU_OFFLOAD.desktop2)) errors.push('must name the 256 GB local-desktop kit');
+  if (!/256/.test(MULTI_GPU_OFFLOAD.desktop2)) errors.push('must name the 256 GB local desktop kit');
 
   if (!/--split-mode layer/.test(blob) || !/--split-mode row/.test(blob)) {
     errors.push('must name both llama.cpp split modes');

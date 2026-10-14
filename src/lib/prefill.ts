@@ -99,7 +99,7 @@ export const PP_LEAD = `
   logical maximum batch (default 2048; env LLAMA_ARG_BATCH). -ub /
   --ubatch-size is the physical micro-batch that hits the GPU (default 512;
   env LLAMA_ARG_UBATCH). AMDai has not measured llama-server -b / -ub on
-  local-desktop, so every server batch delta stays ${PP_UNMEASURED}. Stack Lab’s
+  local desktop, so every server batch delta stays ${PP_UNMEASURED}. Stack Lab’s
   A/B is pack ${PP_PACK} (amdai-bench ${PP_BENCH_ID}). That pack is not an
   allowlisted Open-in-Stack-Lab deep link — open the planner, then record a
   card. House daily driver is ${PP_HOUSE_FILE} on llama.cpp Vulkan, one
@@ -186,7 +186,7 @@ export const PP_RAM = `
 
 export const PP_HOUSE = `# House daily driver as recorded (no -b / -ub pin).
 # llama-server README defaults: -b 2048 (LLAMA_ARG_BATCH), -ub 512 (LLAMA_ARG_UBATCH).
-# Those defaults are official docs — not a local-desktop pin we will invent.
+# Those defaults are official docs — not a local desktop pin we will invent.
 ./build-vk/bin/llama-server \\
   -m /path/to/nvme/${PP_HOUSE_FILE} \\
   ${PP_HOUSE_SERVER_FLAGS}`;
@@ -467,7 +467,7 @@ export const PP_FAQ: PpFaq[] = [
     id: 'when-raise-ub',
     question: 'When should I raise -ub on a Radeon?',
     answer:
-      'After the file and KV fit, and only if unused VRAM remains for the compute buffer. Overnight UD-Q5 on one 32 GB R9700 peaks at 29.34 GB at 256K. llama.cpp #14836 failed compute pp buffers at -b 4096 -ub 4096. AMDai has not measured a larger -ub on local-desktop — run Stack Lab prefill-ab/1. Do not copy a llama-bench prefill cell as a batch speedup.',
+      'After the file and KV fit, and only if unused VRAM remains for the compute buffer. Overnight UD-Q5 on one 32 GB R9700 peaks at 29.34 GB at 256K. llama.cpp #14836 failed compute pp buffers at -b 4096 -ub 4096. AMDai has not measured a larger -ub on the local desktop — run Stack Lab prefill-ab/1. Do not copy a llama-bench prefill cell as a batch speedup.',
     links: [
       { href: '/out-of-vram', label: 'Out of VRAM' },
       { href: '/gpus/r9700', label: 'R9700' },

@@ -26,7 +26,7 @@ describe('board power and PSU guide', () => {
   it('stays cited, lists TBP per GPU, and invents no dual-card watts', () => {
     assert.deepEqual(assertPowerValid(), []);
     assert.equal(POWER_TITLE, 'Board power and PSU on Radeon');
-    assert.equal(POWER_CITED_LABEL, 'Cited, not measured on local-desktop');
+    assert.equal(POWER_CITED_LABEL, 'Cited, not measured on the local desktop');
     assert.ok(POWER_DESCRIPTION.length >= 70);
     assert.ok(POWER_DESCRIPTION.length <= 160);
     const blob = powerBlob();

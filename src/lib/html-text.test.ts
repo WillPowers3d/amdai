@@ -32,7 +32,7 @@ describe('html sentence separators', () => {
     assert.deepEqual(assertHtmlTextSeparated(fixed), []);
   });
 
-  it('flags the amdai glue patterns and leaves measured numbers alone', () => {
+  it('flags the AMDai glue patterns and leaves measured numbers alone', () => {
     const hits = gluedSentenceHits('wheels.HIP is the API.[2]Vulkan is 100.8 tok/s and gfx1201.');
     assert.ok(hits.some((hit) => hit.match === 's.H'));
     assert.ok(hits.some((hit) => hit.match === ']V'));

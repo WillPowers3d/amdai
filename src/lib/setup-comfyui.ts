@@ -1,6 +1,6 @@
 /**
  * Cited ComfyUI first-run on Radeon.
- * Not measured on local-desktop. Official sources only: ComfyUI docs/GitHub,
+ * Not measured on the local desktop. Official sources only: ComfyUI docs/GitHub,
  * AMD ComfyUI + PyTorch-for-ROCm pages. Image gen is HIP/ROCm PyTorch.
  * llama.cpp stays first for LLMs. ComfyUI does not speak llama-server /v1.
  * Do not invent seconds-per-image, prices, VRAM megabytes, or flags.
@@ -10,7 +10,7 @@ import { RAM_FULL_LABEL, RAM_MIN_LABEL } from './ram-surfaces';
 import { COMPARE_Q3, COMPARE_Q3_CITE } from './local-desktop-compare';
 
 export const SETUP_COMFYUI_PUBLISHED = '2026-10-14';
-export const SETUP_COMFYUI_CITED_LABEL = 'Cited, not measured on local-desktop';
+export const SETUP_COMFYUI_CITED_LABEL = 'Cited, not measured on the local desktop';
 export const SETUP_COMFYUI_SPEED_LABEL = 'not yet measured by AMDai';
 
 export const SETUP_COMFYUI_UI = 'http://127.0.0.1:8188';
@@ -110,7 +110,7 @@ export const SETUP_COMFYUI_TRACKS: SetupComfyuiTrack[] = [
       the measured ROCm line for this site’s GGUF path. Confirm rocminfo and
       that PyTorch sees the GPU before you download a checkpoint. Instinct
       Docker tags are not R9700 pins. ComfyUI has no official Docker image.
-      Not measured on local-desktop.
+      Not measured on the local desktop.
     `.replace(/\s+/g, ' ').trim(),
   },
   {
@@ -126,7 +126,7 @@ export const SETUP_COMFYUI_TRACKS: SetupComfyuiTrack[] = [
       XT). Official docs also list RDNA 2 / 3 / 3.5 / 4. The Nvidia portable
       is not a Radeon path. HIP SDK is AMD’s documented Windows runtime
       subset; ComfyUI’s Windows ROCm 10.0 note says a separate HIP SDK is
-      not needed when you use those wheels. Cited, not measured on local-desktop.
+      not needed when you use those wheels. Cited, not measured on the local desktop.
     `.replace(/\s+/g, ' ').trim(),
   },
 ];
@@ -219,7 +219,7 @@ export const SETUP_COMFYUI_STEPS: SetupComfyuiStep[] = [
   {
     id: 'checkpoints',
     title: 'Put checkpoints on fast NVMe — models/checkpoints',
-    body: `Official first-generation page: models live under ComfyUI/models/ with subfolders checkpoints, embeddings, vae, lora, and extra_model_paths.yaml for more roots. README: put SD checkpoints in models/checkpoints and VAE in models/vae. Git-clone path is ${SETUP_COMFYUI_CHECKPOINTS}. Keep files on fast NVMe (house ~/models or the clone’s models/), not a spinning disk and not a slow bulk mount such as /mnt/bulk. Staging is not RAM offload. Refresh with R after you drop a file. Not measured on local-desktop.`,
+    body: `Official first-generation page: models live under ComfyUI/models/ with subfolders checkpoints, embeddings, vae, lora, and extra_model_paths.yaml for more roots. README: put SD checkpoints in models/checkpoints and VAE in models/vae. Git-clone path is ${SETUP_COMFYUI_CHECKPOINTS}. Keep files on fast NVMe (house ~/models or the clone’s models/), not a spinning disk and not a slow bulk mount such as /mnt/bulk. Staging is not RAM offload. Refresh with R after you drop a file. Not measured on the local desktop.`,
     links: [
       { href: '/glossary', label: 'Glossary (NVMe staging)' },
       { href: '/image-gen', label: 'Image gen' },
@@ -252,7 +252,7 @@ export const SETUP_COMFYUI_STEPS: SetupComfyuiStep[] = [
   {
     id: 'portable',
     title: 'Portable and Desktop notes — do not take the Nvidia zip on Radeon',
-    body: `ComfyUI’s README: Windows portable Nvidia is for Nvidia or CPU-only. The AMD zip is ${SETUP_COMFYUI_PORTABLE_AMD}. Desktop exists for Windows, macOS, and Linux (AppImage / .deb) and tracks stable; portable or git gets latest commits. AMDai’s Linux first try stays the AMD-documented git clone so the venv is the ROCm wheel. Community DirectML forks and unofficial wrappers stay unofficial. Cited, not measured on local-desktop.`,
+    body: `ComfyUI’s README: Windows portable Nvidia is for Nvidia or CPU-only. The AMD zip is ${SETUP_COMFYUI_PORTABLE_AMD}. Desktop exists for Windows, macOS, and Linux (AppImage / .deb) and tracks stable; portable or git gets latest commits. AMDai’s Linux first try stays the AMD-documented git clone so the venv is the ROCm wheel. Community DirectML forks and unofficial wrappers stay unofficial. Cited, not measured on the local desktop.`,
     links: [
       { href: '/setup/windows', label: 'Windows setup' },
       { href: 'https://github.com/comfyanonymous/ComfyUI', label: 'ComfyUI README' },
@@ -262,7 +262,7 @@ export const SETUP_COMFYUI_STEPS: SetupComfyuiStep[] = [
   {
     id: 'multi',
     title: 'Two cards — no invented ComfyUI split',
-    body: `The AMD ComfyUI page and ComfyUI README we cite do not walk a two-GPU ComfyUI --tensor-split. We do not invent one. On a second card, read /multi-gpu for the llama.cpp job. A local LLM and ComfyUI can share a box; they do not share a /v1. On one card, VRAM is one pool — do not stack two full loads and guess. We have not measured image-gen-plus-LLM on local-desktop.`,
+    body: `The AMD ComfyUI page and ComfyUI README we cite do not walk a two-GPU ComfyUI --tensor-split. We do not invent one. On a second card, read /multi-gpu for the llama.cpp job. A local LLM and ComfyUI can share a box; they do not share a /v1. On one card, VRAM is one pool — do not stack two full loads and guess. We have not measured image-gen-plus-LLM on the local desktop.`,
     links: [
       { href: '/multi-gpu', label: 'Dual / multi-GPU' },
       { href: '/compare/one-vs-two-gpu', label: 'One vs two GPU' },
@@ -351,7 +351,7 @@ export function assertSetupComfyuiValid(): string[] {
   const errors: string[] = [];
   const blob = setupComfyuiBlob();
   const hrefs = new Set(setupComfyuiHrefs());
-  if (SETUP_COMFYUI_CITED_LABEL !== 'Cited, not measured on local-desktop') {
+  if (SETUP_COMFYUI_CITED_LABEL !== 'Cited, not measured on the local desktop') {
     errors.push('cited label drifted');
   }
   if (SETUP_COMFYUI_SPEED_LABEL !== 'not yet measured by AMDai') {

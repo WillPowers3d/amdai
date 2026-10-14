@@ -4,7 +4,7 @@ import Callout from '../components/Callout.astro';
 import OvernightRows from '../components/OvernightRows.astro';
 import SystemRamNeed from '../components/SystemRamNeed.astro';
 import { officialLinks } from '../lib/site';
-import { formatLinuxGb, flashRamTable, NOT_MEASURED_ON_local-desktop } from '../lib/flash-daily';
+import { formatLinuxGb, flashRamTable, NOT_MEASURED_ON_LOCAL_DESKTOP } from '../lib/flash-daily';
 import { flashDaily as file } from '../lib/flash-daily-data';
 import { FLASH_RERUN_NOTE, flashQ3FromRuns, formatTokCell } from '../lib/run-card';
 import { runs } from '../lib/run-card-data';
@@ -155,7 +155,7 @@ const flashQ3Cell = flashQ3
                   ) : row.short === 'Q3' && flashQ3 && flashQ3.hardware.gpu_count_used === 2 && flashQ3Cell ? (
                     <span>{flashQ3Cell}</span>
                   ) : (
-                    <span class="text-faint">{NOT_MEASURED_ON_local-desktop}</span>
+                    <span class="text-faint">{NOT_MEASURED_ON_LOCAL_DESKTOP}</span>
                   )}
                 </td>
               </tr>
@@ -194,7 +194,7 @@ const flashQ3Cell = flashQ3
                   {row.short === 'Q3' && flashQ3 && flashQ3.hardware.gpu_count_used === 1 ? (
                     <span>{flashQ3Cell}</span>
                   ) : (
-                    <span class="text-faint">{NOT_MEASURED_ON_local-desktop} at this card count</span>
+                    <span class="text-faint">{NOT_MEASURED_ON_LOCAL_DESKTOP} at this card count</span>
                   )}
                 </td>
               </tr>
@@ -218,7 +218,7 @@ const flashQ3Cell = flashQ3
     </section>
 
     <section id="community" class="mt-12 scroll-mt-28" aria-labelledby="community-heading">
-      <p class="kicker">Community · {NOT_MEASURED_ON_local-desktop}</p>
+      <p class="kicker">Community · {NOT_MEASURED_ON_LOCAL_DESKTOP}</p>
       <h2 id="community-heading" class="mt-2 font-serif text-3xl">Q3 and Q5 speeds we did not run</h2>
       <p class="mt-3 max-w-2xl text-muted">
         Q3 and Q5 decode on this page is only what other people posted.

@@ -162,7 +162,7 @@ export function shannonBlob(file: ShannonFile = loadShannonLab()): string {
 
 export const SHANNON_HUB_LINKS: ShannonLink[] = [
   { href: '/harnesses', label: 'Harnesses' },
-  { href: '/harnesses/hermes', label: 'amdai’s Hermes' },
+  { href: '/harnesses/hermes', label: 'the house Hermes' },
   { href: '/harnesses/herdr', label: 'Herdr' },
   { href: '/harnesses/coolify', label: 'Coolify' },
   { href: '/hardware', label: 'Hardware' },

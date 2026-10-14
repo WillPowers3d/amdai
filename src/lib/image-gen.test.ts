@@ -20,7 +20,7 @@ describe('local image-gen guide', () => {
   it('stays cited, ComfyUI-first, and invents no speeds', () => {
     assert.deepEqual(assertImageGenValid(), []);
     assert.equal(IMAGE_GEN_TITLE, 'Local image gen on Radeon');
-    assert.equal(IMAGE_GEN_CITED_LABEL, 'Cited, not measured on local-desktop');
+    assert.equal(IMAGE_GEN_CITED_LABEL, 'Cited, not measured on the local desktop');
     assert.equal(IMAGE_GEN_SPEED_LABEL, 'not yet measured by AMDai');
     assert.ok(IMAGE_GEN_DESCRIPTION.length >= 70);
     assert.ok(IMAGE_GEN_DESCRIPTION.length <= 160);

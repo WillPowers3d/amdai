@@ -1,5 +1,5 @@
 /**
- * Write official amdai / local-desktop run cards. Numbers only from published first-party set.
+ * Write official AMDai / local desktop run cards. Numbers only from published first-party set.
  * Do not invent tok/s, VRAM, flags, or a Flash Q3 score.
  * 35B singles/split from this seed are retired — use data/runs/local-desktop-35b-20261013.jsonl.
  */
@@ -7,7 +7,7 @@
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { amdai, emitRunCard, runCardToJsonl, type RunCard } from '../lib/run-card';
+import { AMDAI_CREDIT, emitRunCard, runCardToJsonl, type RunCard } from '../lib/run-card';
 
 const R9700 = { model: 'AMD Radeon AI PRO R9700', gfx: 'gfx1201', vram_gb: 32, pcie: null as string | null };
 
@@ -67,7 +67,7 @@ function card(partial: Omit<RunCard, 'schema' | 'submitted_by' | 'started_at' | 
   measured?: boolean;
 }): RunCard {
   return emitRunCard({
-    submitted_by: { ...amdai },
+    submitted_by: { ...AMDAI_CREDIT },
     started_at: null,
     finished_at: null,
     measured: true,

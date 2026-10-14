@@ -1,6 +1,6 @@
 /**
  * Cited Ryzen AI Max / Strix Halo consumer guide at /gpus/strix-halo.
- * Shared system memory. Not measured on local-desktop. Calculator math only.
+ * Shared system memory. Not measured on the local desktop. Calculator math only.
  * Do not invent tok/s, prices, bandwidth, or a Windows / Stack Lab package.
  */
 
@@ -33,7 +33,7 @@ import { parse } from 'yaml';
 export const STRIX_HALO_ID = 'strix-halo';
 export const STRIX_HALO_PATH = '/gpus/strix-halo';
 export const STRIX_HALO_PUBLISHED = '2026-10-13';
-export const STRIX_HALO_CITED_LABEL = 'Cited, not measured on local-desktop';
+export const STRIX_HALO_CITED_LABEL = 'Cited, not measured on the local desktop';
 export const STRIX_HALO_NAME = 'AMD Ryzen AI Max+ 395 (Radeon 8060S)';
 export const STRIX_HALO_SHORT = 'Ryzen AI Max / Strix Halo';
 export const STRIX_HALO_GFX = 'gfx1151';
@@ -307,7 +307,7 @@ export function strixHaloPage() {
     shortName: STRIX_HALO_SHORT,
     title: 'Ryzen AI Max / Strix Halo',
     description:
-      'Cited Ryzen AI Max+ 395 (Radeon 8060S, gfx1151) local-AI guide. Shared system memory, llama.cpp Vulkan first. Not measured on local-desktop.',
+      'Cited Ryzen AI Max+ 395 (Radeon 8060S, gfx1151) local-AI guide. Shared system memory, llama.cpp Vulkan first. Not measured on the local desktop.',
     family: card.family,
     arch: card.arch,
     gfx: card.gfx,
@@ -323,7 +323,7 @@ export function strixHaloPage() {
     supportBody:
       'ROCm 10.1.0 lists AMD Ryzen AI Max+ 395 (Radeon 8060S) as gfx1151 on the Ryzen APU table. That is official support on the cited matrix, not a tok/s card. llama.cpp Vulkan is the AMDai first token — same rule as other consumer Radeon pages. HIP / ROCm is second, and only after rocminfo lists gfx1151. RDNA 3.5 notes add kernel-version caveats for Ryzen AI Max. The known MES queue-removal hang lives on /rocm-problems — this page does not retell it.',
     speedsBody:
-      'No cited tok/s on this page. local-desktop has no Strix Halo card, and this repo has no third-party Strix Halo 64 GB or 128 GB speed row we can quote. Empty stays empty. Do not reuse R9700 numbers.',
+      'No cited tok/s on this page. local desktop has no Strix Halo card, and this repo has no third-party Strix Halo 64 GB or 128 GB speed row we can quote. Empty stays empty. Do not reuse R9700 numbers.',
     vsR9700:
       'Capacity versus bandwidth. Strix Halo can address a much larger shared pool (AMD max 128 GB). The R9700 is a 32 GB discrete card we actually measured, with a cited 640 GB/s figure. We do not invent an LPDDR5x GB/s number for the APU. Buy the APU when the file is bigger than 32 GB and you accept shared-memory speed. Buy the R9700 when you want the measured 35B in-VRAM path, or a second card. Two discrete cards are a different layout — see /multi-gpu. Against a Mac Studio, the shopper compare is /compare/radeon-vs-mac.',
     stackLab:
@@ -394,7 +394,7 @@ export function assertStrixHaloValid(page: StrixHaloPage = strixHaloPage()): str
   if (page.citedLabel !== STRIX_HALO_CITED_LABEL) errors.push('cited label drifted');
   if (page.support !== 'official') errors.push('invented unofficial support');
   if (!page.matrixHref.startsWith('https://rocm.docs.amd.com/')) errors.push('matrix href');
-  if (!/not measured on local-desktop/i.test(blob)) errors.push('must say not measured on local-desktop');
+  if (!/not measured on the local desktop/i.test(blob)) errors.push('must say not measured on the local desktop');
   if (!/llama\.cpp/i.test(blob)) errors.push('must say llama.cpp');
   if (!/Vulkan/i.test(blob)) errors.push('must say Vulkan');
   if (!/Dynamic \+ carveout/.test(blob)) errors.push('must cite Dynamic + carveout');

@@ -1,7 +1,7 @@
 /**
  * Cited shopper hub: Mixture-of-Experts on a Radeon GPU.
  * Official cards only for param / active / VRAM listings.
- * Measured 35B cells come from existing local-desktop llama.cpp Vulkan cards.
+ * Measured 35B cells come from existing local desktop llama.cpp Vulkan cards.
  * Q3 is a labeled estimate. Nothing below Q3. No invented tok/s or prices.
  * llama.cpp first. Strata only on the house Flash path already cited.
  */
@@ -63,7 +63,7 @@ export const MOE_DESCRIPTION =
   'Mixture-of-Experts on a Radeon GPU. Why 35B-A3B fits one 32 GB R9700 while dense 27B and Flash differ. llama.cpp first. Q3 is a labeled estimate.';
 
 export const MOE_LEAD =
-  `A mixture-of-experts (MoE) model keeps a large pile of expert weights on disk and activates only a slice per token. A dense model runs every parameter. That is why amdai’s daily driver — ${COMPARE_MODEL} — fits one 32 GB Radeon AI PRO R9700 at UD-Q5_K_XL, while the dense 27B rows on /qwen and Flash-class MoE are different fit stories. Official cards only for param / active / file figures. Measured decode and VRAM are the official local-desktop ${COMPARE_MODEL} ${COMPARE_ENGINE} Vulkan sweep. Empty cells stay ${MOE_UNMEASURED}. ${COMPARE_Q3} is a labeled estimate (${COMPARE_Q3_CITE}). Q1/Q2 stay off. llama.cpp first.`;
+  `A mixture-of-experts (MoE) model keeps a large pile of expert weights on disk and activates only a slice per token. A dense model runs every parameter. That is why the house daily driver — ${COMPARE_MODEL} — fits one 32 GB Radeon AI PRO R9700 at UD-Q5_K_XL, while the dense 27B rows on /qwen and Flash-class MoE are different fit stories. Official cards only for param / active / file figures. Measured decode and VRAM are the official local desktop ${COMPARE_MODEL} ${COMPARE_ENGINE} Vulkan sweep. Empty cells stay ${MOE_UNMEASURED}. ${COMPARE_Q3} is a labeled estimate (${COMPARE_Q3_CITE}). Q1/Q2 stay off. llama.cpp first.`;
 
 export const MOE_WHAT = `
   Think of MoE as a library of specialists and a small dispatcher. Each token
@@ -152,7 +152,7 @@ export const MOE_QUANT_ROWS: MoeQuantRow[] = [
     size: 'Publisher GB not listed on this row',
     vram: 'Overnight card — see measured table',
     speed: 'Overnight card — see measured table',
-    note: 'Official local-desktop llama.cpp Vulkan sweep. No Hugging Face GB on this row — do not invent one.',
+    note: 'Official local desktop llama.cpp Vulkan sweep. No Hugging Face GB on this row — do not invent one.',
   },
   {
     id: '35b-q5xl',
@@ -174,7 +174,7 @@ export const MOE_QUANT_ROWS: MoeQuantRow[] = [
     size: 'Publisher GB not listed on this row',
     vram: 'Overnight card — see measured table',
     speed: 'Overnight card — see measured table',
-    note: 'Official local-desktop llama.cpp Vulkan sweep. No Hugging Face GB on this row.',
+    note: 'Official local desktop llama.cpp Vulkan sweep. No Hugging Face GB on this row.',
   },
   {
     id: '35b-q4',
@@ -185,7 +185,7 @@ export const MOE_QUANT_ROWS: MoeQuantRow[] = [
     size: 'Publisher GB not listed on this row',
     vram: 'Overnight card — see measured table',
     speed: 'Overnight card — see measured table',
-    note: 'Official local-desktop llama.cpp Vulkan sweep. No Hugging Face GB on this row.',
+    note: 'Official local desktop llama.cpp Vulkan sweep. No Hugging Face GB on this row.',
   },
   {
     id: '35b-q3',
@@ -194,9 +194,9 @@ export const MOE_QUANT_ROWS: MoeQuantRow[] = [
     kind: 'q3-estimate',
     kindLabel: 'Q3 estimate',
     size: '16.8 GB listing',
-    vram: 'Estimate — not a local-desktop run',
+    vram: 'Estimate — not a local desktop run',
     speed: MOE_UNMEASURED,
-    note: `${COMPARE_Q3_CITE}. Q3 is a labeled estimate — not a local-desktop run. Q1/Q2 stay off.`,
+    note: `${COMPARE_Q3_CITE}. Q3 is a labeled estimate — not a local desktop run. Q1/Q2 stay off.`,
   },
   {
     id: 'd36-q6',
@@ -238,7 +238,7 @@ export const MOE_QUANT_ROWS: MoeQuantRow[] = [
     kind: 'q3-estimate',
     kindLabel: 'Q3 estimate',
     size: '14.47 GB listing',
-    vram: 'Estimate — not a local-desktop run',
+    vram: 'Estimate — not a local desktop run',
     speed: MOE_UNMEASURED,
     note: 'Hugging Face LFS size for unsloth/Qwen3.6-27B-GGUF Qwen3.6-27B-UD-Q3_K_XL.gguf (14.47 GB). Q3 is a labeled estimate.',
   },
@@ -282,7 +282,7 @@ export const MOE_QUANT_ROWS: MoeQuantRow[] = [
     kind: 'q3-estimate',
     kindLabel: 'Q3 estimate',
     size: '13.15 GB listing',
-    vram: 'Estimate — not a local-desktop run',
+    vram: 'Estimate — not a local desktop run',
     speed: MOE_UNMEASURED,
     note: 'Hugging Face LFS size for unsloth/Qwen3.8-27B-GGUF Qwen3.8-27B-UD-Q3_K_XL.gguf (13.15 GB). Q3 is a labeled estimate.',
   },
@@ -326,7 +326,7 @@ export const MOE_QUANT_ROWS: MoeQuantRow[] = [
     kind: 'q3-estimate',
     kindLabel: 'Q3 estimate',
     size: '~90 GB listing',
-    vram: 'Estimate — not a local-desktop run we treat as house',
+    vram: 'Estimate — not a local desktop run we treat as house',
     speed: MOE_UNMEASURED,
     note: 'Hugging Face folder listing for UD-Q3_K_XL (~90 GB across 3 shards; LFS sizes sum 89.99 GB). Q3 is a labeled estimate.',
   },
@@ -391,7 +391,7 @@ export const MOE_FAQ: MoeFaq[] = [
   {
     id: 'which-quant',
     question: 'Which 35B quant should I start with?',
-    answer: `House daily driver is UD-Q5_K_XL (26.6 GB listing). The overnight llama.cpp Vulkan sweep also recorded Q6_K, Q5_K_M, and Q4_K_M. ${COMPARE_Q3} (16.8 GB listing) is a labeled estimate — not a local-desktop run. Nothing below Q3. Size a different card on /can-run and the calculator.`,
+    answer: `House daily driver is UD-Q5_K_XL (26.6 GB listing). The overnight llama.cpp Vulkan sweep also recorded Q6_K, Q5_K_M, and Q4_K_M. ${COMPARE_Q3} (16.8 GB listing) is a labeled estimate — not a local desktop run. Nothing below Q3. Size a different card on /can-run and the calculator.`,
     links: [
       { href: '/quants', label: 'Quants' },
       { href: '/compare/q4-q5-q6', label: 'Q6 / Q5 / Q4 + Q3 estimate' },
@@ -527,7 +527,7 @@ export function moeMeasuredRows(cards: RunCard[]): MoeMeasuredRow[] {
       kind: 'measured',
       decode4k,
       decode32k,
-      note: 'Official local-desktop llama.cpp Vulkan, one R9700.',
+      note: 'Official local desktop llama.cpp Vulkan, one R9700.',
       runIds,
     };
   });
@@ -536,7 +536,7 @@ export function moeMeasuredRows(cards: RunCard[]): MoeMeasuredRow[] {
     kind: 'q3-estimate',
     decode4k: MOE_UNMEASURED,
     decode32k: MOE_UNMEASURED,
-    note: `${COMPARE_Q3_CITE}. Q3 is a labeled estimate — not a local-desktop run.`,
+    note: `${COMPARE_Q3_CITE}. Q3 is a labeled estimate — not a local desktop run.`,
     runIds: [],
   });
   return rows;

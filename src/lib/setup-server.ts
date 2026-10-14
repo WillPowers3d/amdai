@@ -53,7 +53,7 @@ export type SetupServerStep = {
 };
 
 export const SETUP_SERVER_LEAD = `
-  Shoppers want a 24/7 llama-server the way local-desktop serves Hermes, Open WebUI,
+  Shoppers want a 24/7 llama-server the way local desktop serves Hermes, Open WebUI,
   coding tools, and phones — without leaving a terminal open. This AMDai page
   is the Linux systemd unit for one house 35B on loopback. llama.cpp Vulkan
   first. Dual-card systemd pins stay on /setup/multi-gpu — this page extends
@@ -106,7 +106,7 @@ export const SETUP_SERVER_SOURCES: SetupServerSource[] = [
   },
 ];
 
-export const SETUP_SERVER_UNIT = `# Example only — not a measured local-desktop service.
+export const SETUP_SERVER_UNIT = `# Example only — not a measured local desktop service.
 # /etc/systemd/system/llama-server.service
 # Copy house flags from /tutorials/serve-qwen. Replace the binary and GGUF paths.
 [Unit]
@@ -166,7 +166,7 @@ export const SETUP_SERVER_STEPS: SetupServerStep[] = [
   {
     id: 'unit',
     title: 'Write one systemd unit for the house 35B',
-    body: `Drop a Type=simple unit under /etc/systemd/system/llama-server.service. systemd.service documents Type, ExecStart, Restart, and User. Run as the login that already reaches /dev/dri — not root. Restart=on-failure. The ExecStart line is the serve-qwen command, not a new flag set. This is an example, not a measured local-desktop service. Two-card split or combo units stay on /setup/multi-gpu.`,
+    body: `Drop a Type=simple unit under /etc/systemd/system/llama-server.service. systemd.service documents Type, ExecStart, Restart, and User. Run as the login that already reaches /dev/dri — not root. Restart=on-failure. The ExecStart line is the serve-qwen command, not a new flag set. This is an example, not a measured local desktop service. Two-card split or combo units stay on /setup/multi-gpu.`,
     links: [
       { href: '/tutorials/serve-qwen', label: 'Serve Qwen' },
       { href: '/setup/multi-gpu', label: 'Multi-GPU systemd notes' },
@@ -176,7 +176,7 @@ export const SETUP_SERVER_STEPS: SetupServerStep[] = [
   {
     id: 'enable',
     title: 'daemon-reload, enable --now, then status',
-    body: 'systemctl daemon-reload after you install the file. systemctl enable --now llama-server starts it and keeps it across reboot. systemctl status llama-server is the first check. Those verbs are from the systemctl man page. Not a measured local-desktop service.',
+    body: 'systemctl daemon-reload after you install the file. systemctl enable --now llama-server starts it and keeps it across reboot. systemctl status llama-server is the first check. Those verbs are from the systemctl man page. Not a measured local desktop service.',
     links: [
       { href: '/setup', label: 'Ubuntu setup' },
       { href: '/backends/llamacpp', label: 'llama.cpp' },
@@ -195,7 +195,7 @@ export const SETUP_SERVER_STEPS: SetupServerStep[] = [
   {
     id: 'ram',
     title: 'Both RAM lines for the house 35B',
-    body: `Where context and offload appear, AMDai prints ${RAM_MIN_LABEL} and ${RAM_FULL_LABEL}. Overnight UD-Q5 one-GPU peaks are ${SETUP_SERVER_RAM_4K} GB at 4K and ${SETUP_SERVER_RAM_256K} GB at 256K — measured llama-bench on local-desktop, Linux GB. Round ${RAM_MIN_LABEL} to a ${SETUP_SERVER_KIT_GB} GB kit for this file on one R9700. Q3 stays a labeled estimate. Do not invent a systemd RAM number.`,
+    body: `Where context and offload appear, AMDai prints ${RAM_MIN_LABEL} and ${RAM_FULL_LABEL}. Overnight UD-Q5 one-GPU peaks are ${SETUP_SERVER_RAM_4K} GB at 4K and ${SETUP_SERVER_RAM_256K} GB at 256K — measured llama-bench on the local desktop, Linux GB. Round ${RAM_MIN_LABEL} to a ${SETUP_SERVER_KIT_GB} GB kit for this file on one R9700. Q3 stays a labeled estimate. Do not invent a systemd RAM number.`,
     links: [
       { href: '/calculator', label: 'Calculator' },
       { href: '/gpus/r9700', label: 'R9700 measured page' },

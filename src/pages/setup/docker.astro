@@ -19,7 +19,7 @@ import {
 
 <Base
   title="Run llama.cpp on Radeon in Docker or Podman"
-  description="Cited official llama.cpp Vulkan and ROCm images on Radeon. Localhost /v1. Not measured on local-desktop."
+  description="Cited official llama.cpp Vulkan and ROCm images on Radeon. Localhost /v1. Not measured on the local desktop."
 >
   <main id="main" class="mx-auto max-w-3xl px-4 py-10 sm:px-6">
     <p class="kicker">{SETUP_DOCKER_CITED_LABEL}</p>
@@ -48,7 +48,7 @@ import {
       ))}
     </ul>
 
-    <Callout type="warn" title="Not measured on local-desktop">
+    <Callout type="warn" title="Not measured on the local desktop">
       <p>
         Official 35B decode numbers on AMDai are Ubuntu llama-bench cards. A Docker or
         Podman box can still get a first token. It cannot claim those tok/s, and we do
@@ -101,7 +101,7 @@ import {
       <p class="mt-3 leading-relaxed text-muted">
         Cited shape only. Replace the NVMe host path. HIP adds
         <code>/dev/kfd</code> and optional <code>seccomp=unconfined</code> from AMD’s
-        ROCm 10.1 container page. Not measured on local-desktop.
+        ROCm 10.1 container page. Not measured on the local desktop.
       </p>
       <h3 class="mt-6 font-serif text-2xl tracking-tight">One card, Vulkan</h3>
       <pre class="mt-3 overflow-x-auto rounded-2xl border border-line bg-raised/50 p-4 text-sm leading-relaxed text-ink"><code>{SETUP_DOCKER_COMPOSE.trim()}</code></pre>

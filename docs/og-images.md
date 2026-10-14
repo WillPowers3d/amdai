@@ -40,7 +40,7 @@ Required slugs (must exist): `home`, `gpus-r9700`, `benchmarks`, `compare`, `cal
 | `multi-gpu` | `/multi-gpu` | no — cites measured pages; lede stays static |
 | `image-gen` | `/image-gen` | no — ComfyUI first; speeds not yet measured by AMDai |
 | `speech` | `/speech` | no — whisper.cpp first; speeds not yet measured by AMDai |
-| `long-context` | `/long-context` | 35B cards from local-desktop; empty stays not measured yet |
+| `long-context` | `/long-context` | 35B cards from local desktop; empty stays not measured yet |
 | `rag` | `/rag` | no — llama.cpp embeddings first; speeds not yet measured by AMDai |
 | `about` | `/about` | no |
 | `methodology` | `/methodology` | no |

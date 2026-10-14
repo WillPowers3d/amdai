@@ -1,7 +1,7 @@
 /**
  * Consumer GPU recipe sheets for cards shoppers buy next to the R9700.
  * Fit / VRAM / RAM come from the calculator and stay labeled Estimate.
- * Speed stays “not measured” — no first-party amdai-bench/run@1 cards on local-desktop.
+ * Speed stays “not measured” — no first-party amdai-bench/run@1 cards on the local desktop.
  * Only add an id when gpus.yaml already has a cited row and GPU_PRESETS lists it.
  */
 
@@ -218,33 +218,33 @@ const BUDGET_ANCHOR: Record<ConsumerRecipeId, { href: string; label: string }> =
 
 const LEAD: Record<ConsumerRecipeId, string> = {
   rx7900xtx:
-    '24 GB gfx1100 RDNA 3 — the 7900 XTX, not the 20 GB 7900 XT. AMD product page cites 24 GB GDDR6, RDNA 3, and 355 W typical board power. Official on the cited ROCm 10.1 matrix as gfx1100; install the gfx110x family package, not the gfx1201 pin used on the measured R9700. Size Qwen3.6-35B-A3B on the calculator before you assume a Q5 file sits in VRAM at long context. Buy the R9700 when you want measured 32 GB recipes. Not a measured local-desktop card.',
+    '24 GB gfx1100 RDNA 3 — the 7900 XTX, not the 20 GB 7900 XT. AMD product page cites 24 GB GDDR6, RDNA 3, and 355 W typical board power. Official on the cited ROCm 10.1 matrix as gfx1100; install the gfx110x family package, not the gfx1201 pin used on the measured R9700. Size Qwen3.6-35B-A3B on the calculator before you assume a Q5 file sits in VRAM at long context. Buy the R9700 when you want measured 32 GB recipes. Not a measured local desktop card.',
   rx7900xt:
-    '20 GB gfx1100 RDNA 3 — the 7900 XT, not the 24 GB XTX and not the 16 GB 7900 GRE. AMD product page cites 20 GB GDDR6, RDNA 3, and 315 W typical board power. Official on the cited ROCm 10.1 matrix as gfx1100. Size Qwen3.6-35B-A3B on the calculator before you assume a Q5 file sits in VRAM. House 35B Q4–Q6 files may need RAM offload at long context — both RAM lines stay labeled estimate. Buy the R9700 when you want measured 32 GB recipes. Not a measured local-desktop card.',
+    '20 GB gfx1100 RDNA 3 — the 7900 XT, not the 24 GB XTX and not the 16 GB 7900 GRE. AMD product page cites 20 GB GDDR6, RDNA 3, and 315 W typical board power. Official on the cited ROCm 10.1 matrix as gfx1100. Size Qwen3.6-35B-A3B on the calculator before you assume a Q5 file sits in VRAM. House 35B Q4–Q6 files may need RAM offload at long context — both RAM lines stay labeled estimate. Buy the R9700 when you want measured 32 GB recipes. Not a measured local desktop card.',
   rx7800xt:
-    '16 GB gfx1101 RDNA 3 — the 7800 XT, not the 12 GB 7700 XT on the same gfx. AMD product page cites 16 GB GDDR6, RDNA 3, and 263 W typical board power. Official on the cited ROCm 10.1 matrix as gfx1101. House 35B Q4–Q6 files do not fit this VRAM on the calculator — expect RAM offload or a listed Q3 file, both estimates. Buy the 7900 XT when you want 20 GB on gfx1100, or the R9700 when you want measured 32 GB recipes. Not a measured local-desktop card.',
+    '16 GB gfx1101 RDNA 3 — the 7800 XT, not the 12 GB 7700 XT on the same gfx. AMD product page cites 16 GB GDDR6, RDNA 3, and 263 W typical board power. Official on the cited ROCm 10.1 matrix as gfx1101. House 35B Q4–Q6 files do not fit this VRAM on the calculator — expect RAM offload or a listed Q3 file, both estimates. Buy the 7900 XT when you want 20 GB on gfx1100, or the R9700 when you want measured 32 GB recipes. Not a measured local desktop card.',
   rx9070xt:
-    '16 GB RDNA 4 gaming sibling of the measured 32 GB R9700. Same gfx1201 LLVM target — half the VRAM. Size 35B Q6/Q5/Q4 on the calculator before you buy; those files do not sit in this VRAM. A listed Q3 is a labeled estimate. The non-XT RX 9070 is the 220 W / 16 GB sheet at /gpus/rx-9070; the 12 GB GRE is /gpus/rx-9070-gre. Buy the R9700 when you want the same-arch card with 32 GB and measured house recipes. Not a measured local-desktop card.',
+    '16 GB RDNA 4 gaming sibling of the measured 32 GB R9700. Same gfx1201 LLVM target — half the VRAM. Size 35B Q6/Q5/Q4 on the calculator before you buy; those files do not sit in this VRAM. A listed Q3 is a labeled estimate. The non-XT RX 9070 is the 220 W / 16 GB sheet at /gpus/rx-9070; the 12 GB GRE is /gpus/rx-9070-gre. Buy the R9700 when you want the same-arch card with 32 GB and measured house recipes. Not a measured local desktop card.',
   rx9060xt:
-    '16 GB gfx1200 RDNA 4 — the cheaper 16 GB 9000-series card next to the 9070 XT. Official on the cited ROCm 10.1 matrix as gfx1200; do not mix a gfx1201 (R9700 / 9070 XT) or gfx110x (7900) family package. House 35B Q4–Q6 files do not fit this VRAM on the calculator — expect RAM offload or a listed Q3 file, both estimates. An 8 GB XT LP listing exists; treat it as a different SKU and size it on the calculator, not this 16 GB sheet. Not a measured local-desktop card.',
+    '16 GB gfx1200 RDNA 4 — the cheaper 16 GB 9000-series card next to the 9070 XT. Official on the cited ROCm 10.1 matrix as gfx1200; do not mix a gfx1201 (R9700 / 9070 XT) or gfx110x (7900) family package. House 35B Q4–Q6 files do not fit this VRAM on the calculator — expect RAM offload or a listed Q3 file, both estimates. An 8 GB XT LP listing exists; treat it as a different SKU and size it on the calculator, not this 16 GB sheet. Not a measured local desktop card.',
   rx7900gre:
-    '16 GB gfx1100 RDNA 3 — mid-tier 7900 between the 20 GB 7900 XT and the 16 GB 7800 XT (gfx1101). Same gfx1100 family package as the 7900 XT / XTX; do not mix a gfx1201 (R9700 / 9070 XT) pin. House 35B Q4–Q6 files do not fit this VRAM on the calculator — expect RAM offload or a listed Q3 file, both estimates. Buy the 7900 XT when you want 20 GB on the same gfx, or the R9700 when you want measured 32 GB recipes. Not a measured local-desktop card.',
+    '16 GB gfx1100 RDNA 3 — mid-tier 7900 between the 20 GB 7900 XT and the 16 GB 7800 XT (gfx1101). Same gfx1100 family package as the 7900 XT / XTX; do not mix a gfx1201 (R9700 / 9070 XT) pin. House 35B Q4–Q6 files do not fit this VRAM on the calculator — expect RAM offload or a listed Q3 file, both estimates. Buy the 7900 XT when you want 20 GB on the same gfx, or the R9700 when you want measured 32 GB recipes. Not a measured local desktop card.',
   rx7700xt:
-    '12 GB gfx1101 RDNA 3 — smaller VRAM than the 16 GB 7800 XT on the same gfx1101 family package. Official on the cited ROCm matrix. House 35B Q4–Q6 files do not fit this VRAM on the calculator — expect RAM offload or a listed Q3 file, both estimates. Buy the 7800 XT when you want 16 GB on this gfx, or the R9700 when you want measured 32 GB recipes. The bare RX 7700 is a different listing — confirm VRAM there. Not a measured local-desktop card.',
+    '12 GB gfx1101 RDNA 3 — smaller VRAM than the 16 GB 7800 XT on the same gfx1101 family package. Official on the cited ROCm matrix. House 35B Q4–Q6 files do not fit this VRAM on the calculator — expect RAM offload or a listed Q3 file, both estimates. Buy the 7800 XT when you want 16 GB on this gfx, or the R9700 when you want measured 32 GB recipes. The bare RX 7700 is a different listing — confirm VRAM there. Not a measured local desktop card.',
   rx7600xt:
-    '16 GB gfx1102 RDNA 3 — the 16 GB 7600-class card, not the 8 GB RX 7600. Same LLVM target as the cited 8 GB 7600 row on the ROCm 10.1 matrix; do not mix a gfx1101 (7800 / 7700 XT) or gfx1201 pin. House 35B Q4–Q6 files do not fit this VRAM on the calculator — expect RAM offload or a listed Q3 file, both estimates. Buy the 7800 XT when you want 16 GB on gfx1101, or the R9700 when you want measured 32 GB recipes. Not a measured local-desktop card.',
+    '16 GB gfx1102 RDNA 3 — the 16 GB 7600-class card, not the 8 GB RX 7600. Same LLVM target as the cited 8 GB 7600 row on the ROCm 10.1 matrix; do not mix a gfx1101 (7800 / 7700 XT) or gfx1201 pin. House 35B Q4–Q6 files do not fit this VRAM on the calculator — expect RAM offload or a listed Q3 file, both estimates. Buy the 7800 XT when you want 16 GB on gfx1101, or the R9700 when you want measured 32 GB recipes. Not a measured local desktop card.',
   rx7600:
-    '8 GB gfx1102 RDNA 3 — the non-XT 7600, not the 16 GB RX 7600 XT. Same LLVM target as the cited 16 GB XT row on the ROCm 10.1 matrix; do not mix a gfx1101 (7800 / 7700 XT) or gfx1201 pin. House 35B Q4–Q6 files do not fit this VRAM on the calculator — expect RAM offload or a listed Q3 file, both estimates. Buy the 7600 XT when you want 16 GB on this gfx, or the R9700 when you want measured 32 GB recipes. Not a measured local-desktop card.',
+    '8 GB gfx1102 RDNA 3 — the non-XT 7600, not the 16 GB RX 7600 XT. Same LLVM target as the cited 16 GB XT row on the ROCm 10.1 matrix; do not mix a gfx1101 (7800 / 7700 XT) or gfx1201 pin. House 35B Q4–Q6 files do not fit this VRAM on the calculator — expect RAM offload or a listed Q3 file, both estimates. Buy the 7600 XT when you want 16 GB on this gfx, or the R9700 when you want measured 32 GB recipes. Not a measured local desktop card.',
   rx6800xt:
-    '16 GB gfx1030 RDNA 2 — the 6800 XT, not the 32 GB PRO W6800 and not the 16 GB 6950 XT / 6900 XT shared sheet. Consumer RDNA 2 is unofficial on the current Radeon ROCm row the way W6800 is official. Vulkan llama.cpp stays first. House 35B Q4–Q6 files do not fit this VRAM on the calculator — expect RAM offload or a listed Q3 file, both estimates. Buy the R9700 when you want measured 32 GB recipes. Not a measured local-desktop card.',
+    '16 GB gfx1030 RDNA 2 — the 6800 XT, not the 32 GB PRO W6800 and not the 16 GB 6950 XT / 6900 XT shared sheet. Consumer RDNA 2 is unofficial on the current Radeon ROCm row the way W6800 is official. Vulkan llama.cpp stays first. House 35B Q4–Q6 files do not fit this VRAM on the calculator — expect RAM offload or a listed Q3 file, both estimates. Buy the R9700 when you want measured 32 GB recipes. Not a measured local desktop card.',
   rx6700xt:
-    '12 GB gfx1031 RDNA 2 — the 6700 XT, not the 16 GB 6800 XT and not the 10 GB non-XT 6700. AMD product page cites 12 GB GDDR6, RDNA 2, and 230 W typical board power. gfx1031 is not the official gfx1030 W6800 row. Consumer RDNA 2 is unofficial on the current Radeon ROCm matrix. Vulkan llama.cpp stays first. House 35B Q4–Q6 files do not fit this VRAM on the calculator — expect RAM offload or a listed Q3 file, both estimates. Buy the R9700 when you want measured 32 GB recipes. Not a measured local-desktop card.',
+    '12 GB gfx1031 RDNA 2 — the 6700 XT, not the 16 GB 6800 XT and not the 10 GB non-XT 6700. AMD product page cites 12 GB GDDR6, RDNA 2, and 230 W typical board power. gfx1031 is not the official gfx1030 W6800 row. Consumer RDNA 2 is unofficial on the current Radeon ROCm matrix. Vulkan llama.cpp stays first. House 35B Q4–Q6 files do not fit this VRAM on the calculator — expect RAM offload or a listed Q3 file, both estimates. Buy the R9700 when you want measured 32 GB recipes. Not a measured local desktop card.',
   rx9070:
-    '16 GB gfx1201 RDNA 4 — the non-XT 9070, not the 16 GB 9070 XT and not the 12 GB 9070 GRE. AMD product page and driver listing cite 16 GB GDDR6, up to 640 GB/s, a 256-bit bus on the AMD 9000-series quick-reference, and 220 W typical board power. Official on the cited ROCm 10.1 matrix as gfx1201 — same LLVM target as the measured R9700, half the VRAM. House 35B Q4–Q6 files do not fit this VRAM on the calculator — expect RAM offload or a listed Q3 file, both estimates. Buy the R9700 when you want measured 32 GB recipes. Not a measured local-desktop card.',
+    '16 GB gfx1201 RDNA 4 — the non-XT 9070, not the 16 GB 9070 XT and not the 12 GB 9070 GRE. AMD product page and driver listing cite 16 GB GDDR6, up to 640 GB/s, a 256-bit bus on the AMD 9000-series quick-reference, and 220 W typical board power. Official on the cited ROCm 10.1 matrix as gfx1201 — same LLVM target as the measured R9700, half the VRAM. House 35B Q4–Q6 files do not fit this VRAM on the calculator — expect RAM offload or a listed Q3 file, both estimates. Buy the R9700 when you want measured 32 GB recipes. Not a measured local desktop card.',
   rx9070gre:
-    '12 GB gfx1201 RDNA 4 — the GRE SKU, not the 16 GB 9070 or 9070 XT. AMD product page cites 12 GB GDDR6, 192-bit interface, up to 432 GB/s, and 220 W typical board power. Official on the cited ROCm 10.1 matrix as gfx1201. Confirm the 12 GB sticker — do not assume the 16 GB 9070 listing. House 35B Q4–Q6 files do not fit this VRAM on the calculator — expect RAM offload or a listed Q3 file, both estimates. Buy the non-XT 9070 when you want 16 GB on this gfx, or the R9700 when you want measured 32 GB recipes. Not a measured local-desktop card.',
+    '12 GB gfx1201 RDNA 4 — the GRE SKU, not the 16 GB 9070 or 9070 XT. AMD product page cites 12 GB GDDR6, 192-bit interface, up to 432 GB/s, and 220 W typical board power. Official on the cited ROCm 10.1 matrix as gfx1201. Confirm the 12 GB sticker — do not assume the 16 GB 9070 listing. House 35B Q4–Q6 files do not fit this VRAM on the calculator — expect RAM offload or a listed Q3 file, both estimates. Buy the non-XT 9070 when you want 16 GB on this gfx, or the R9700 when you want measured 32 GB recipes. Not a measured local desktop card.',
   rx6950xt:
-    '16 GB gfx1030 RDNA 2 shared sheet for the RX 6950 XT and the RX 6900 XT. AMD 6950 XT product page: 16 GB GDDR6, 256-bit, up to 576 GB/s, 335 W typical board power. AMD 6900 XT product page: same 16 GB / 256-bit class at up to 16 Gbps / 512 GB/s and 300 W typical board power. Consumer RDNA 2 is unofficial on the current Radeon ROCm row the way W6800 is official. Vulkan llama.cpp stays first. House 35B Q4–Q6 files do not fit this VRAM on the calculator — expect RAM offload or a listed Q3 file, both estimates. Buy the R9700 when you want measured 32 GB recipes. Not a measured local-desktop card.',
+    '16 GB gfx1030 RDNA 2 shared sheet for the RX 6950 XT and the RX 6900 XT. AMD 6950 XT product page: 16 GB GDDR6, 256-bit, up to 576 GB/s, 335 W typical board power. AMD 6900 XT product page: same 16 GB / 256-bit class at up to 16 Gbps / 512 GB/s and 300 W typical board power. Consumer RDNA 2 is unofficial on the current Radeon ROCm row the way W6800 is official. Vulkan llama.cpp stays first. House 35B Q4–Q6 files do not fit this VRAM on the calculator — expect RAM offload or a listed Q3 file, both estimates. Buy the R9700 when you want measured 32 GB recipes. Not a measured local desktop card.',
 };
 
 export type ConsumerFitKind = 'estimate' | 'q3-estimate';
@@ -380,7 +380,7 @@ function stackTips(id: ConsumerRecipeId, gfx: string): ConsumerStackTip[] {
       },
       {
         title: 'Setup, then Stack Lab doctor',
-        body: 'First-run setup is Ubuntu. Open Stack Lab doctor for the gfx110x install family. House daily and Flash profiles are R9700 / local-desktop — they do not apply to this 24 GB card. Packages are not published yet.',
+        body: 'First-run setup is Ubuntu. Open Stack Lab doctor for the gfx110x install family. House daily and Flash profiles are R9700 / local desktop — they do not apply to this 24 GB card. Packages are not published yet.',
       },
     ];
   }
@@ -400,7 +400,7 @@ function stackTips(id: ConsumerRecipeId, gfx: string): ConsumerStackTip[] {
       },
       {
         title: 'Setup, then Stack Lab doctor',
-        body: 'First-run setup is Ubuntu. Open Stack Lab doctor for the gfx110x install family. House daily and Flash profiles are R9700 / local-desktop — they do not apply to this 20 GB card. Packages are not published yet.',
+        body: 'First-run setup is Ubuntu. Open Stack Lab doctor for the gfx110x install family. House daily and Flash profiles are R9700 / local desktop — they do not apply to this 20 GB card. Packages are not published yet.',
       },
     ];
   }
@@ -420,7 +420,7 @@ function stackTips(id: ConsumerRecipeId, gfx: string): ConsumerStackTip[] {
       },
       {
         title: 'Setup, then Stack Lab doctor',
-        body: 'First-run setup is Ubuntu. Open Stack Lab doctor for the gfx110x install family. House daily and Flash profiles are R9700 / local-desktop — they do not apply to this 16 GB card. Packages are not published yet.',
+        body: 'First-run setup is Ubuntu. Open Stack Lab doctor for the gfx110x install family. House daily and Flash profiles are R9700 / local desktop — they do not apply to this 16 GB card. Packages are not published yet.',
       },
     ];
   }
@@ -440,7 +440,7 @@ function stackTips(id: ConsumerRecipeId, gfx: string): ConsumerStackTip[] {
       },
       {
         title: 'Setup, then Stack Lab doctor',
-        body: 'First-run setup is Ubuntu. Open Stack Lab doctor for the gfx110x install family. House daily and Flash profiles are R9700 / local-desktop — they do not apply to this 8 GB card. Packages are not published yet.',
+        body: 'First-run setup is Ubuntu. Open Stack Lab doctor for the gfx110x install family. House daily and Flash profiles are R9700 / local desktop — they do not apply to this 8 GB card. Packages are not published yet.',
       },
     ];
   }
@@ -460,7 +460,7 @@ function stackTips(id: ConsumerRecipeId, gfx: string): ConsumerStackTip[] {
       },
       {
         title: 'Setup, then Stack Lab doctor',
-        body: 'First-run setup is Ubuntu. Open Stack Lab doctor for the gfx110x install family. House daily and Flash profiles are R9700 / local-desktop — they do not apply to this 16 GB card. Packages are not published yet.',
+        body: 'First-run setup is Ubuntu. Open Stack Lab doctor for the gfx110x install family. House daily and Flash profiles are R9700 / local desktop — they do not apply to this 16 GB card. Packages are not published yet.',
       },
     ];
   }
@@ -480,7 +480,7 @@ function stackTips(id: ConsumerRecipeId, gfx: string): ConsumerStackTip[] {
       },
       {
         title: 'Setup, then Stack Lab doctor',
-        body: 'First-run setup is Ubuntu. Open Stack Lab doctor for the install family rocminfo actually prints. House daily and Flash profiles are R9700 / local-desktop — they do not apply to this 16 GB card. Packages are not published yet.',
+        body: 'First-run setup is Ubuntu. Open Stack Lab doctor for the install family rocminfo actually prints. House daily and Flash profiles are R9700 / local desktop — they do not apply to this 16 GB card. Packages are not published yet.',
       },
     ];
   }
@@ -500,7 +500,7 @@ function stackTips(id: ConsumerRecipeId, gfx: string): ConsumerStackTip[] {
       },
       {
         title: 'Setup, then Stack Lab doctor',
-        body: 'First-run setup is Ubuntu. Open Stack Lab doctor for the install family rocminfo actually prints. House daily and Flash profiles are R9700 / local-desktop — they do not apply to this 12 GB card. Packages are not published yet.',
+        body: 'First-run setup is Ubuntu. Open Stack Lab doctor for the install family rocminfo actually prints. House daily and Flash profiles are R9700 / local desktop — they do not apply to this 12 GB card. Packages are not published yet.',
       },
     ];
   }
@@ -520,7 +520,7 @@ function stackTips(id: ConsumerRecipeId, gfx: string): ConsumerStackTip[] {
       },
       {
         title: 'Setup, then Stack Lab doctor',
-        body: 'First-run setup is Ubuntu. Open Stack Lab doctor for the gfx110x install family. House daily and Flash profiles are R9700 / local-desktop — they do not apply to this 12 GB card. Packages are not published yet.',
+        body: 'First-run setup is Ubuntu. Open Stack Lab doctor for the gfx110x install family. House daily and Flash profiles are R9700 / local desktop — they do not apply to this 12 GB card. Packages are not published yet.',
       },
     ];
   }
@@ -540,7 +540,7 @@ function stackTips(id: ConsumerRecipeId, gfx: string): ConsumerStackTip[] {
       },
       {
         title: 'Setup, then Stack Lab doctor',
-        body: 'First-run setup is Ubuntu. Open Stack Lab doctor for the gfx110x install family. House daily and Flash profiles are R9700 / local-desktop — they do not apply to this 16 GB card. Packages are not published yet.',
+        body: 'First-run setup is Ubuntu. Open Stack Lab doctor for the gfx110x install family. House daily and Flash profiles are R9700 / local desktop — they do not apply to this 16 GB card. Packages are not published yet.',
       },
     ];
   }
@@ -560,7 +560,7 @@ function stackTips(id: ConsumerRecipeId, gfx: string): ConsumerStackTip[] {
       },
       {
         title: 'Setup, then Stack Lab doctor',
-        body: 'First-run setup is Ubuntu. Open Stack Lab doctor for the gfx1200 install family. House daily and Flash profiles are R9700 / local-desktop — they do not apply to this 16 GB card. Packages are not published yet.',
+        body: 'First-run setup is Ubuntu. Open Stack Lab doctor for the gfx1200 install family. House daily and Flash profiles are R9700 / local desktop — they do not apply to this 16 GB card. Packages are not published yet.',
       },
     ];
   }
@@ -580,7 +580,7 @@ function stackTips(id: ConsumerRecipeId, gfx: string): ConsumerStackTip[] {
       },
       {
         title: 'Setup, then Stack Lab doctor',
-        body: 'First-run setup is Ubuntu. Open Stack Lab doctor for the gfx1201 install family. House daily and Flash profiles are R9700 / local-desktop — they do not apply to this 16 GB card. Packages are not published yet.',
+        body: 'First-run setup is Ubuntu. Open Stack Lab doctor for the gfx1201 install family. House daily and Flash profiles are R9700 / local desktop — they do not apply to this 16 GB card. Packages are not published yet.',
       },
     ];
   }
@@ -600,7 +600,7 @@ function stackTips(id: ConsumerRecipeId, gfx: string): ConsumerStackTip[] {
       },
       {
         title: 'Setup, then Stack Lab doctor',
-        body: 'First-run setup is Ubuntu. Open Stack Lab doctor for the gfx1201 install family. House daily and Flash profiles are R9700 / local-desktop — they do not apply to this 16 GB card. Packages are not published yet.',
+        body: 'First-run setup is Ubuntu. Open Stack Lab doctor for the gfx1201 install family. House daily and Flash profiles are R9700 / local desktop — they do not apply to this 16 GB card. Packages are not published yet.',
       },
     ];
   }
@@ -620,7 +620,7 @@ function stackTips(id: ConsumerRecipeId, gfx: string): ConsumerStackTip[] {
       },
       {
         title: 'Setup, then Stack Lab doctor',
-        body: 'First-run setup is Ubuntu. Open Stack Lab doctor for the gfx1201 install family. House daily and Flash profiles are R9700 / local-desktop — they do not apply to this 12 GB card. Packages are not published yet.',
+        body: 'First-run setup is Ubuntu. Open Stack Lab doctor for the gfx1201 install family. House daily and Flash profiles are R9700 / local desktop — they do not apply to this 12 GB card. Packages are not published yet.',
       },
     ];
   }
@@ -640,7 +640,7 @@ function stackTips(id: ConsumerRecipeId, gfx: string): ConsumerStackTip[] {
       },
       {
         title: 'Setup, then Stack Lab doctor',
-        body: 'First-run setup is Ubuntu. Open Stack Lab doctor for the install family rocminfo actually prints. House daily and Flash profiles are R9700 / local-desktop — they do not apply to this 16 GB pair. Packages are not published yet.',
+        body: 'First-run setup is Ubuntu. Open Stack Lab doctor for the install family rocminfo actually prints. House daily and Flash profiles are R9700 / local desktop — they do not apply to this 16 GB pair. Packages are not published yet.',
       },
     ];
   }
@@ -659,7 +659,7 @@ function stackTips(id: ConsumerRecipeId, gfx: string): ConsumerStackTip[] {
     },
     {
       title: 'Setup, then Stack Lab notes',
-      body: 'First-run setup is Ubuntu. Stack Lab packages are not published yet. House daily and Flash profiles are R9700 / local-desktop — they do not apply to this card. There is no Open in Stack Lab handoff here.',
+      body: 'First-run setup is Ubuntu. Stack Lab packages are not published yet. House daily and Flash profiles are R9700 / local desktop — they do not apply to this card. There is no Open in Stack Lab handoff here.',
     },
   ];
 }
@@ -710,8 +710,8 @@ export function consumerRecipePage(id: ConsumerRecipeId): ConsumerRecipePage {
     title: shortName,
     description:
       card.support === 'unofficial'
-        ? `${shortName} recipe sheet — ${vramGb} GB, ${card.gfx}, cited RDNA 2 directory row. 35B Q6/Q5/Q4 VRAM fit estimates; ${COMPARE_Q3} labeled estimate. Not measured on local-desktop.`
-        : `${shortName} recipe sheet — ${vramGb} GB, ${card.gfx}, cited ROCm matrix row. 35B Q6/Q5/Q4 VRAM fit estimates; ${COMPARE_Q3} labeled estimate. Not measured on local-desktop.`,
+        ? `${shortName} recipe sheet — ${vramGb} GB, ${card.gfx}, cited RDNA 2 row. 35B Q6/Q5/Q4 fit estimates; ${COMPARE_Q3} labeled estimate. Not measured on the local desktop.`
+        : `${shortName} recipe sheet — ${vramGb} GB, ${card.gfx}, cited ROCm row. 35B Q6/Q5/Q4 fit estimates; ${COMPARE_Q3} labeled estimate. Not measured on the local desktop.`,
     family: card.family,
     arch: card.arch,
     gfx: card.gfx,
@@ -725,7 +725,7 @@ export function consumerRecipePage(id: ConsumerRecipeId): ConsumerRecipePage {
     productHref,
     lead: LEAD[id],
     notMeasured:
-      'This SKU was not measured on local-desktop. The Radeon AI PRO R9700 remains the measured north star. Fit, VRAM, and system RAM below are calculator estimates. Speed cells stay not measured.',
+      'This SKU was not measured on the local desktop. The Radeon AI PRO R9700 remains the measured north star. Fit, VRAM, and system RAM below are calculator estimates. Speed cells stay not measured.',
     model: CONSUMER_MODEL,
     engine: CONSUMER_ENGINE,
     q3: COMPARE_Q3,
@@ -800,7 +800,7 @@ export function assertConsumerGpuValid(pages: ConsumerRecipePage[] = consumerRec
     }
     if (!page.matrixHref.startsWith('https://rocm.docs.amd.com/')) errors.push(`${page.id} matrix href`);
     if (!page.linuxReqsHref.startsWith('https://rocm.docs.amd.com/')) errors.push(`${page.id} linux_reqs href`);
-    if (!/not measured on local-desktop/i.test(page.notMeasured)) errors.push(`${page.id} must say not measured on local-desktop`);
+    if (!/not measured on the local desktop/i.test(page.notMeasured)) errors.push(`${page.id} must say not measured on the local desktop`);
     if (!/Radeon AI PRO R9700/.test(page.notMeasured)) errors.push(`${page.id} must name the measured R9700`);
 
     const quants = page.fitRows.map((row) => row.quant);
@@ -836,7 +836,7 @@ export function assertConsumerGpuValid(pages: ConsumerRecipePage[] = consumerRec
       errors.push(`${page.id} full kit ${page.ramNeed.atFullContext.kitGb} is not a real DIMM size`);
     }
     if (page.ramNeed.atSelected.measured || page.ramNeed.atFullContext.measured) {
-      errors.push(`${page.id} must not overlay local-desktop measured RAM`);
+      errors.push(`${page.id} must not overlay local desktop measured RAM`);
     }
 
     const blob = consumerBlob(page);

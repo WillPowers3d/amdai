@@ -8,7 +8,7 @@ import { CONSUMER_NAV_LINKS } from './consumer-gpu';
 import { RAM_FULL_LABEL, RAM_MIN_LABEL } from './ram-surfaces';
 
 export const IMAGE_GEN_PUBLISHED = '2026-10-13';
-export const IMAGE_GEN_CITED_LABEL = 'Cited, not measured on local-desktop';
+export const IMAGE_GEN_CITED_LABEL = 'Cited, not measured on the local desktop';
 export const IMAGE_GEN_SPEED_LABEL = 'not yet measured by AMDai';
 
 export type ImageGenLink = { href: string; label: string };
@@ -51,14 +51,14 @@ export type ImageGenError = {
 
 export const IMAGE_GEN_TITLE = 'Local image gen on Radeon';
 export const IMAGE_GEN_DESCRIPTION =
-  'Cited ComfyUI-first guide for Stable Diffusion, SDXL, and Flux-class models on Radeon. Linux ROCm PyTorch first. Fit estimates, not measured on local-desktop.';
+  'Cited ComfyUI-first guide for SD, SDXL, and Flux-class models on Radeon. Linux ROCm PyTorch first. Fit estimates, not measured on the local desktop.';
 
 export const IMAGE_GEN_LEAD = `
   Local image generation means a diffusion checkpoint runs on your own GPU and
   writes a picture from a prompt — Stable Diffusion, SDXL, or Flux-class
   families — without sending the job to a hosted API. On AMDai the first
   engine is ComfyUI: a node graph on HIP/ROCm PyTorch. It already runs on the
-  local-desktop R9700 box. It is not llama.cpp Vulkan, and it does not speak
+  local desktop R9700 box. It is not llama.cpp Vulkan, and it does not speak
   llama-server or Strata /v1. llama.cpp stays first for local LLMs.
 `.replace(/\s+/g, ' ').trim();
 
@@ -207,7 +207,7 @@ export const IMAGE_GEN_LINUX_STEPS: ImageGenStep[] = [
     id: 'os',
     title: 'Ubuntu 24.04+ first',
     body:
-      'Bare-metal Ubuntu 24.04+ is the AMDai measured path for ROCm on local-desktop. Image-gen follows that OS even though we have no first-party image-gen card yet. See the GPU in rocminfo before you download a checkpoint. Windows is a cited second path, not the first try.',
+      'Bare-metal Ubuntu 24.04+ is the AMDai measured path for ROCm on the local desktop. Image-gen follows that OS even though we have no first-party image-gen card yet. See the GPU in rocminfo before you download a checkpoint. Windows is a cited second path, not the first try.',
     links: [
       { href: '/setup', label: 'First-run setup' },
       { href: '/setup/comfyui', label: 'ComfyUI setup' },
@@ -256,7 +256,7 @@ export const IMAGE_GEN_WINDOWS_STEPS: ImageGenStep[] = [
     id: 'windows-official',
     title: 'What AMD and ComfyUI officially document',
     body:
-      'AMD’s ComfyUI page documents a Windows install after ROCm-enabled PyTorch: pip install -r ComfyUI\\requirements.txt, then python ComfyUI\\main.py, same 127.0.0.1:8188 GUI. That page also warns ComfyUI might not start if Smart App Control is enabled. HIP SDK for Windows is AMD’s documented Windows runtime subset. The Radeon limitations page is Windows PyTorch-only, with WSL caveats. Cited, not measured on local-desktop.',
+      'AMD’s ComfyUI page documents a Windows install after ROCm-enabled PyTorch: pip install -r ComfyUI\\requirements.txt, then python ComfyUI\\main.py, same 127.0.0.1:8188 GUI. That page also warns ComfyUI might not start if Smart App Control is enabled. HIP SDK for Windows is AMD’s documented Windows runtime subset. The Radeon limitations page is Windows PyTorch-only, with WSL caveats. Cited, not measured on the local desktop.',
     links: [
       { href: '/setup/windows', label: 'Windows setup' },
       { href: 'https://rocm.docs.amd.com/projects/ai-ecosystem/en/latest/inference/comfy.html', label: 'AMD ComfyUI on ROCm' },
@@ -268,7 +268,7 @@ export const IMAGE_GEN_WINDOWS_STEPS: ImageGenStep[] = [
     id: 'windows-wheels',
     title: 'PyTorch wheels stay Linux-first',
     body:
-      'PyTorch’s official Get started locally matrix is the wheel picker AMDai cites. The ROCm wheel path AMD documents is Linux + pip + ROCm. Do not invent a Windows ROCm pip pin. Ubuntu 24.04+ on bare metal is still the path that matches local-desktop. WSL2 ROCm is a technical preview on the 10.1 notes — not a measured image-gen path.',
+      'PyTorch’s official Get started locally matrix is the wheel picker AMDai cites. The ROCm wheel path AMD documents is Linux + pip + ROCm. Do not invent a Windows ROCm pip pin. Ubuntu 24.04+ on bare metal is still the path that matches local desktop. WSL2 ROCm is a technical preview on the 10.1 notes — not a measured image-gen path.',
     links: [
       { href: 'https://pytorch.org/get-started/locally/', label: 'PyTorch get started' },
       { href: '/setup', label: 'Ubuntu setup' },
@@ -392,7 +392,7 @@ export const IMAGE_GEN_ALONGSIDE = `
   LLM. A 64 GB kit estimate is the consumer shopper default (8 GB OS/desktop
   plus 16 GB headroom plus whatever the LLM offload and PyTorch need) —
   labeled estimate, not a measured ComfyUI peak. On a second card, read
-  /multi-gpu. We have not measured image-gen-plus-LLM on local-desktop.
+  /multi-gpu. We have not measured image-gen-plus-LLM on the local desktop.
 `.replace(/\s+/g, ' ').trim();
 
 const BANNED = /Qwen2\.5|Qwen3-8B/i;
@@ -432,7 +432,7 @@ export function assertImageGenValid(): string[] {
   const errors: string[] = [];
   const blob = imageGenBlob();
   const hrefs = new Set(imageGenHrefs());
-  if (IMAGE_GEN_CITED_LABEL !== 'Cited, not measured on local-desktop') errors.push('cited label drifted');
+  if (IMAGE_GEN_CITED_LABEL !== 'Cited, not measured on the local desktop') errors.push('cited label drifted');
   if (IMAGE_GEN_SPEED_LABEL !== 'not yet measured by AMDai') errors.push('speed label drifted');
   if (!blob.includes(IMAGE_GEN_SPEED_LABEL)) errors.push('must say not yet measured by AMDai');
   if (!/ComfyUI/i.test(blob)) errors.push('must name ComfyUI');

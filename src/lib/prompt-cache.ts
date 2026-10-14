@@ -81,7 +81,7 @@ export const PC_LEAD = `
   Official llama.cpp prompt caching reuses the common prefix so only the new
   suffix is prefilled. Shoppers search llama.cpp prompt cache AMD, llama-server
   cache-reuse, slot save restore, and why time to first token is slow. AMDai
-  has not measured llama-server TTFT with versus without the cache on local-desktop,
+  has not measured llama-server TTFT with versus without the cache on the local desktop,
   so every cache hit, miss, and first-token cell stays ${PC_UNMEASURED}. Stack
   Lab’s A/B is pack ${PC_PACK} (amdai-bench ${PC_BENCH_ID}, plus
   ${PC_STATUS_ID}). That pack is not an allowlisted Open-in-Stack-Lab deep
@@ -153,7 +153,7 @@ export const PC_RAM = `
 
 export const PC_HOUSE = `# House daily driver as recorded (no --cache-reuse / --cache-ram / --slot-save-path pin).
 # llama-server README: --cache-prompt default on; --cache-reuse 0; --cache-ram 8192 MiB.
-# Those defaults are official docs — not a local-desktop pin we will invent.
+# Those defaults are official docs — not a local desktop pin we will invent.
 ./build-vk/bin/llama-server \\
   -m /path/to/nvme/${PC_HOUSE_FILE} \\
   ${PC_HOUSE_SERVER_FLAGS}`;
@@ -171,7 +171,7 @@ export const PC_DOCS = `# Official llama.cpp defaults from the server README —
 
 export const PC_SLOT_SAVE = `# Slot save/restore. Official --slot-save-path default is disabled.
 # POST /slots/{id_slot}?action=save and action=restore write under this directory.
-# Not a local-desktop pin. Slot TTFT stays ${PC_UNMEASURED}.
+# Not a local desktop pin. Slot TTFT stays ${PC_UNMEASURED}.
 ./build-vk/bin/llama-server \\
   -m /path/to/nvme/${PC_HOUSE_FILE} \\
   -ngl 99 -c 262144 --slot-save-path /path/to/slot-cache \\
@@ -317,7 +317,7 @@ export const PC_FAQ: PcFaq[] = [
     id: 'what-is-prompt-cache',
     question: 'What does llama.cpp prompt / prefix cache do on a Radeon?',
     answer:
-      'Official llama-server reuses processed prefix tokens so a later request only prefills the new suffix. --cache-prompt is on by default. --cache-reuse N is KV-shift reuse (default 0 = off). AMDai has not measured TTFT with versus without the cache on local-desktop — not yet measured. Run Stack Lab prompt-cache-ab/1 (amdai-bench ab-prompt-cache). Q3 is a labeled estimate. llama.cpp first.',
+      'Official llama-server reuses processed prefix tokens so a later request only prefills the new suffix. --cache-prompt is on by default. --cache-reuse N is KV-shift reuse (default 0 = off). AMDai has not measured TTFT with versus without the cache on the local desktop — not yet measured. Run Stack Lab prompt-cache-ab/1 (amdai-bench ab-prompt-cache). Q3 is a labeled estimate. llama.cpp first.',
     links: [
       { href: '/prompt-cache', label: 'Prompt cache' },
       { href: '/kv-cache', label: 'KV cache' },

@@ -1,6 +1,6 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
-import { NOT_MEASURED_ON_local-desktop } from './flash-daily';
+import { NOT_MEASURED_ON_LOCAL_DESKTOP } from './flash-daily';
 import { primaryNav } from './site';
 import { runs } from './run-card-data';
 import {
@@ -38,7 +38,7 @@ describe('Flash RAM-offload page', () => {
     assert.equal(strata8k?.at3600.text, '32.0 tok/s');
     assert.equal(strata8k?.at5200.text, '32.8 tok/s');
     const strata32k3600 = dimm.find((row) => row.backend === 'Strata' && row.context === 32768);
-    assert.equal(strata32k3600?.at3600.text, NOT_MEASURED_ON_local-desktop);
+    assert.equal(strata32k3600?.at3600.text, NOT_MEASURED_ON_LOCAL_DESKTOP);
   });
 
   it('keeps Q3/Q4/Q5, one-card, 4K, and 128K cells empty until jsonl lands', () => {
@@ -87,7 +87,7 @@ describe('Flash RAM-offload page', () => {
     const k256 = kits.find((kit) => kit.kitGb === 256);
     assert.match(k128?.headline ?? '', /128/);
     assert.match(k192?.headline ?? '', /192/);
-    assert.match(k256?.headline ?? '', /local-desktop/);
+    assert.match(k256?.headline ?? '', /local desktop/);
     assert.ok(k128?.lines.some((line) => /Q6/.test(line) && /2×/.test(line)));
     assert.ok(k192?.headline.includes('estimate') || k192?.lines.some((line) => /estimate/.test(line)));
   });

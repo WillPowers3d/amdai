@@ -212,7 +212,7 @@ export const STACK_LAB_HANDOFFS: StackLabHandoff[] = [
     href: '/benchmarks',
     label: 'Benchmarks ↔ amdai-bench',
     body:
-      '33-card local-desktop matrix. Each cell links a run card. Open in Stack Lab here uses amdai-stack-lab:library. Stack Lab records those cards; Lab Notes renders them.',
+      '33-card local desktop matrix. Each cell links a run card. Open in Stack Lab here uses amdai-stack-lab:library. Stack Lab records those cards; Lab Notes renders them.',
   },
   {
     href: '/results',

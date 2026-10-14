@@ -2,18 +2,18 @@ import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { parse } from 'yaml';
-import { local-desktop_DDR5_GB, local-desktop_USABLE_RAM_GB } from './calculator';
+import { LOCAL_DESKTOP_DDR5_GB, LOCAL_DESKTOP_USABLE_RAM_GB } from './calculator';
 import {
   ALLOWED_DUAL_NUMBERS,
   MEASURED_ON_OUR_RIG,
   assertDualValid,
   collectDualNumbers,
-  parselocal-desktopDual,
+  parseLocalDesktopDual,
 } from './local-desktop-dual';
 import {
   ALLOWED_FLASH_NUMBERS,
   FLASH_RAM_QUANTS,
-  NOT_MEASURED_ON_local-desktop,
+  NOT_MEASURED_ON_LOCAL_DESKTOP,
   assertFlashDailyValid,
   collectFlashMeasuredNumbers,
   flashRamTable,
@@ -23,14 +23,14 @@ import {
 import { assertStrataDeepValid, parseStrataDeep } from './strata-deep';
 import { primaryNav } from './site';
 
-const dual = parselocal-desktopDual(parse(readFileSync(new URL('../data/local-desktop-dual.yaml', import.meta.url), 'utf8')));
+const dual = parseLocalDesktopDual(parse(readFileSync(new URL('../data/local-desktop-dual.yaml', import.meta.url), 'utf8')));
 const flash = parseFlashDaily(parse(readFileSync(new URL('../data/flash-daily.yaml', import.meta.url), 'utf8')));
 const strata = parseStrataDeep(parse(readFileSync(new URL('../data/strata-deep.yaml', import.meta.url), 'utf8')));
 
-describe('local-desktop dual 35B page', () => {
+describe('local desktop dual 35B page', () => {
   it('seeds only the measured two-card set and prefers two copies', () => {
     assert.deepEqual(assertDualValid(dual), []);
-    assert.equal(dual.host, 'local-desktop');
+    assert.equal(dual.host, 'local desktop');
     assert.equal(dual.label, MEASURED_ON_OUR_RIG);
     assert.equal(dual.split.single_request_tok_s, 42.03);
     assert.equal(dual.split.max_total_tok_s, 82.78);
@@ -44,8 +44,8 @@ describe('local-desktop dual 35B page', () => {
     assert.equal(dual.copies.ddr5_gb, 13);
     assert.match(dual.recommendation, /two single-card copies/i);
     assert.equal(dual.overnight_results_json_rows.length, 0);
-    assert.equal(dual.kit.usable_gb, local-desktop_USABLE_RAM_GB);
-    assert.equal(dual.kit.dimm_gb, local-desktop_DDR5_GB);
+    assert.equal(dual.kit.usable_gb, LOCAL_DESKTOP_USABLE_RAM_GB);
+    assert.equal(dual.kit.dimm_gb, LOCAL_DESKTOP_DDR5_GB);
     assert.equal(dual.vllm.image, 'stilldeadcode/vllm-radiance:0.5.8');
     assert.equal(dual.vllm.tok_s_low, 50);
     assert.equal(dual.vllm.tok_s_high, 61);
@@ -100,7 +100,7 @@ describe('Flash daily-driver page', () => {
       );
     }
     for (const row of flash.community_speeds) {
-      assert.equal(row.label, NOT_MEASURED_ON_local-desktop);
+      assert.equal(row.label, NOT_MEASURED_ON_LOCAL_DESKTOP);
     }
     const q5 = flash.community_speeds.find((row) => row.quant === 'Q5');
     assert.equal(q5?.figures, '');
