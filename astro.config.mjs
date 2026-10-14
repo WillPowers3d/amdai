@@ -11,66 +11,6 @@ import { canRunRedirects } from './src/lib/can-run.ts';
 import { gpuCompareRedirects } from './src/lib/gpu-compare.ts';
 import { modelCompareRedirects } from './src/lib/model-compare.ts';
 
-/** Old /results/local-desktop-* cards now live at /results/local-desktop-*. Build-time only. */
-const LOCAL_DESKTOP_RESULT_SUFFIXES = [
-  '20261012-2311-35b-udq5kxl-1gpu-4k-llamacpp-f16',
-  '20261012-2312-35b-udq5kxl-1gpu-32k-llamacpp-f16',
-  '20261012-2312-35b-udq5kxl-1gpu-128k-llamacpp-f16',
-  '20261012-2314-35b-udq5kxl-1gpu-256k-llamacpp-f16',
-  '20261012-2319-35b-udq5kxl-2gpu-4k-llamacpp-f16',
-  '20261012-2319-35b-udq5kxl-2gpu-32k-llamacpp-f16',
-  '20261012-2320-35b-udq5kxl-2gpu-128k-llamacpp-f16',
-  '20261012-2321-35b-udq5kxl-2gpu-256k-llamacpp-f16',
-  '20261012-2326-35b-q6k-1gpu-4k-llamacpp-f16',
-  '20261012-2327-35b-q5km-1gpu-4k-llamacpp-f16',
-  '20261012-2327-35b-q5km-1gpu-32k-llamacpp-f16',
-  '20261012-2328-35b-q5km-1gpu-128k-llamacpp-f16',
-  '20261012-2329-35b-q5km-1gpu-256k-llamacpp-f16',
-  '20261012-2334-35b-q5km-2gpu-4k-llamacpp-f16',
-  '20261012-2335-35b-q5km-2gpu-32k-llamacpp-f16',
-  '20261012-2335-35b-q5km-2gpu-128k-llamacpp-f16',
-  '20261012-2337-35b-q5km-2gpu-256k-llamacpp-f16',
-  '20261012-2341-35b-q4km-1gpu-4k-llamacpp-f16',
-  '20261012-2342-35b-q4km-1gpu-32k-llamacpp-f16',
-  '20261012-2342-35b-q4km-1gpu-128k-llamacpp-f16',
-  '20261012-2344-35b-q4km-1gpu-256k-llamacpp-f16',
-  '20261012-2349-35b-q4km-2gpu-4k-llamacpp-f16',
-  '20261012-2349-35b-q4km-2gpu-32k-llamacpp-f16',
-  '20261012-2349-35b-q4km-2gpu-128k-llamacpp-f16',
-  '20261012-2351-35b-q4km-2gpu-256k-llamacpp-f16',
-  '20261012-2355-35b-q6k-1gpu-4k-llamacpp-f16',
-  '20261012-2356-35b-q6k-1gpu-32k-llamacpp-f16',
-  '20261012-2356-35b-q6k-1gpu-128k-llamacpp-f16',
-  '20261012-2358-35b-q6k-1gpu-256k-llamacpp-f16',
-  '20261013-0005-35b-q6k-2gpu-4k-llamacpp-f16',
-  '20261013-0005-35b-q6k-2gpu-32k-llamacpp-f16',
-  '20261013-0005-35b-q6k-2gpu-128k-llamacpp-f16',
-  '20261013-0007-35b-q6k-2gpu-256k-llamacpp-f16',
-  'qwen36-udq5-dual-1',
-  'qwen36-udq5-dual-2',
-  'qwen36-udq5-dual-soak',
-  'flash-q6-strata-prior',
-  'flash-q6-llamacpp-prior',
-  'flash-q6-strata-8k',
-  'flash-q6-strata-3600-8k',
-  'flash-q6-strata-32k',
-  'flash-q6-strata-100k',
-  'flash-q6-llamacpp-5200-8k',
-  'flash-q6-llamacpp-5200-32k',
-  'flash-q6-llamacpp-5200-100k',
-  'flash-q6-llamacpp-3600-8k',
-  'flash-q6-llamacpp-3600-32k',
-  'flash-q6-llamacpp-3600-100k',
-  'qwen36-vllm-int4-band',
-];
-
-const localDesktopResultRedirects = Object.fromEntries(
-  LOCAL_DESKTOP_RESULT_SUFFIXES.map((suffix) => [
-    `/results/local-desktop-${suffix}`,
-    `/results/local-desktop-${suffix}`,
-  ]),
-);
-
 const accountsOn = process.env.ACCOUNTS_ENABLED === '1' || process.env.ACCOUNTS_ENABLED === 'true';
 const newsletterOn = process.env.NEWSLETTER_ENABLED === '1' || process.env.NEWSLETTER_ENABLED === 'true';
 const forumOn = process.env.FORUM_ENABLED === '1' || process.env.FORUM_ENABLED === 'true';
@@ -162,7 +102,6 @@ export default defineConfig({
     '/gpus/radeon-pro-w6800': '/gpus/w6800',
     '/gpus/pro-w6800': '/gpus/w6800',
     '/embeddings': '/rag',
-    ...localDesktopResultRedirects,
     ...gpuCompareRedirects(),
     ...modelCompareRedirects(),
     ...canRunRedirects(),
