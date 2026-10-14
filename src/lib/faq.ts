@@ -267,6 +267,22 @@ export const FAQ_ENTRIES: FaqItem[] = [
     ],
   },
   {
+    id: 'ollama-on-radeon',
+    group: 'getting-started',
+    question: 'Can I run Ollama on a Radeon GPU?',
+    answer:
+      'Yes as a cited path, not a measured local-desktop card. Ollama is a packaged llama.cpp / ROCm (or Vulkan) runtime. Linux first: curl -fsSL https://ollama.com/install.sh | sh, then the AMD ROCm tarball. Official gpu.mdx lists R9700 / 9070 XT on Linux ROCm v7; the Windows ROCm table does not name those cards. Prove the GPU with ollama ps. Default context is 4096 — set OLLAMA_CONTEXT_LENGTH. KV grows with OLLAMA_NUM_PARALLEL. House family is Qwen3.6-35B-A3B; official library Q4 is qwen3.6:35b-a3b-q4_K_M; import the house UD-Q5 GGUF for the file we measure. Q3 stays a labeled estimate. Decode numbers on this site are Ubuntu llama.cpp llama-bench, not Ollama tok/s. llama.cpp you compile remains the daily driver. gfx1201 tensiles and Windows R9700 CPU fallback live on /rocm-problems.',
+    links: [
+      { href: '/setup/ollama', label: 'Ollama on Radeon' },
+      { href: '/setup', label: 'Ubuntu setup (measured)' },
+      { href: '/backends/ollama', label: 'Ollama backend' },
+      { href: '/backends/llamacpp', label: 'llama.cpp' },
+      { href: '/rocm-problems/ollama-gfx1201-tensile', label: 'gfx1201 tensiles' },
+      { href: '/rocm-problems/ollama-r9700-windows', label: 'R9700 Windows' },
+      { href: '/setup/lm-studio', label: 'LM Studio' },
+    ],
+  },
+  {
     id: 'local-image-gen',
     group: 'getting-started',
     question: 'Can I run Stable Diffusion or Flux on a Radeon, not just a local LLM?',
@@ -734,6 +750,7 @@ export const REQUIRED_FAQ_HREFS = [
   '/setup/docker',
   '/setup/lm-studio',
   '/setup/coding-assistant',
+  '/setup/ollama',
 ] as const;
 
 const BANNED_VISIBLE = /Qwen2\.5|Qwen3-8B/i;

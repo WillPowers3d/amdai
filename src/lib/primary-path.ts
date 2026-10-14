@@ -127,6 +127,7 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
     { href: '/setup/docker', label: 'Docker / Podman' },
     { href: '/setup/lm-studio', label: 'LM Studio' },
     { href: '/setup/coding-assistant', label: 'Coding assistant' },
+    { href: '/setup/ollama', label: 'Ollama' },
   ],
   '/setup/windows': [
     { href: '/setup', label: 'First-run setup' },
@@ -139,6 +140,7 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
     { href: '/setup/docker', label: 'Docker / Podman' },
     { href: '/setup/lm-studio', label: 'LM Studio' },
     { href: '/setup/coding-assistant', label: 'Coding assistant' },
+    { href: '/setup/ollama', label: 'Ollama' },
   ],
   '/setup/fedora': [
     { href: '/setup', label: 'First-run setup' },
@@ -147,6 +149,7 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
     { href: '/setup/docker', label: 'Docker / Podman' },
     { href: '/setup/lm-studio', label: 'LM Studio' },
     { href: '/setup/coding-assistant', label: 'Coding assistant' },
+    { href: '/setup/ollama', label: 'Ollama' },
     { href: '/gpus/r9700', label: 'R9700 measured page' },
     { href: '/backends/llamacpp', label: 'llama.cpp' },
     { href: '/troubleshoot', label: 'Troubleshoot' },
@@ -159,6 +162,7 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
     { href: '/setup/docker', label: 'Docker / Podman' },
     { href: '/setup/lm-studio', label: 'LM Studio' },
     { href: '/setup/coding-assistant', label: 'Coding assistant' },
+    { href: '/setup/ollama', label: 'Ollama' },
     { href: '/gpus/r9700', label: 'R9700 measured page' },
     { href: '/backends/llamacpp', label: 'llama.cpp' },
     { href: '/troubleshoot', label: 'Troubleshoot' },
@@ -175,6 +179,7 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
     { href: '/stack-lab', label: 'Stack Lab' },
     { href: '/setup/lm-studio', label: 'LM Studio' },
     { href: '/setup/coding-assistant', label: 'Coding assistant' },
+    { href: '/setup/ollama', label: 'Ollama' },
   ],
   '/setup/lm-studio': [
     { href: '/setup', label: 'First-run setup' },
@@ -186,6 +191,7 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
     { href: '/setup/docker', label: 'Docker / Podman' },
     { href: '/stack-lab', label: 'Stack Lab' },
     { href: '/setup/coding-assistant', label: 'Coding assistant' },
+    { href: '/setup/ollama', label: 'Ollama' },
   ],
   '/setup/coding-assistant': [
     { href: '/setup', label: 'First-run setup' },
@@ -195,7 +201,18 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
     { href: '/harnesses/continue', label: 'Continue' },
     { href: '/harnesses/hermes', label: 'Hermes' },
     { href: '/setup/lm-studio', label: 'LM Studio' },
+    { href: '/setup/ollama', label: 'Ollama' },
     { href: '/long-context', label: 'Long context' },
+  ],
+  '/setup/ollama': [
+    { href: '/setup', label: 'First-run setup' },
+    { href: '/backends/llamacpp', label: 'llama.cpp' },
+    { href: '/backends/ollama', label: 'Ollama backend' },
+    { href: '/setup/lm-studio', label: 'LM Studio' },
+    { href: '/rocm-problems/ollama-gfx1201-tensile', label: 'gfx1201 tensiles' },
+    { href: '/calculator', label: 'Calculator' },
+    { href: '/troubleshoot', label: 'Troubleshoot' },
+    { href: '/setup/windows', label: 'Windows setup' },
   ],
   '/faq': [
     { href: '/start', label: 'Getting started' },

@@ -448,7 +448,25 @@ export const GLOSSARY: GlossaryEntry[] = [
       { href: '/harnesses/lm-studio', label: 'LM Studio harness' },
       { href: '/setup', label: 'Ubuntu setup (measured)' },
     ],
-    seeAlso: ['llamacpp', 'vulkan', 'offload', 'coding-assistant'],
+    seeAlso: ['llamacpp', 'vulkan', 'offload', 'coding-assistant', 'ollama'],
+  },
+  {
+    id: 'ollama',
+    term: 'Ollama',
+    aliases: [':11434', 'ollama serve', 'ollama ps'],
+    letter: 'O',
+    definition:
+      'A pull-and-run daemon that wraps a packaged llama.cpp / ROCm or Vulkan runtime. Local API on 127.0.0.1:11434, including an OpenAI-shaped /v1.',
+    why: 'People search “Ollama AMD GPU.” The cited first-run is /setup/ollama. It is not a measured local-desktop card. Decode numbers on this site are Ubuntu llama.cpp llama-bench, not measured inside Ollama. llama.cpp you compile stays the daily driver.',
+    deeper:
+      'Official Linux install is their script plus an AMD ROCm tarball. gpu.mdx lists R9700 / 9070 XT on Linux ROCm v7; the Windows ROCm table does not. ollama ps is how you prove GPU vs CPU. Default context is 4096; KV grows with OLLAMA_NUM_PARALLEL. House family is still Qwen3.6-35B-A3B. gfx1201 tensiles and Windows R9700 CPU fallback live on /rocm-problems.',
+    links: [
+      { href: '/setup/ollama', label: 'Ollama on Radeon' },
+      { href: '/backends/ollama', label: 'Ollama backend' },
+      { href: '/backends/llamacpp', label: 'llama.cpp' },
+      { href: '/rocm-problems/ollama-gfx1201-tensile', label: 'gfx1201 tensiles' },
+    ],
+    seeAlso: ['llamacpp', 'lm-studio', 'context-length'],
   },
   {
     id: 'coding-assistant',

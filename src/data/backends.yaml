@@ -274,6 +274,8 @@ engines:
         href: https://github.com/ollama/ollama/issues/11555
       - title: This site — Ollama gfx1201 tracker
         href: https://amdai.net/rocm-problems/ollama-gfx1201-tensile
+      - title: This site — Run Ollama on a Radeon GPU
+        href: https://amdai.net/setup/ollama
 
   - id: lmstudio
     name: LM Studio

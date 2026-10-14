@@ -263,6 +263,7 @@ export const SETUP_DOCKER_HUB_LINKS: SetupDockerLink[] = [
   { href: '/setup/windows', label: 'Windows setup' },
   { href: '/setup/lm-studio', label: 'LM Studio' },
   { href: '/setup/coding-assistant', label: 'Coding assistant' },
+  { href: '/setup/ollama', label: 'Ollama' },
   { href: '/gpus/r9700', label: 'R9700' },
   { href: '/benchmarks', label: 'Benchmarks' },
   { href: '/start', label: 'Getting started' },

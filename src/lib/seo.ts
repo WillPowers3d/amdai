@@ -229,6 +229,7 @@ export const CRUMB_LABELS: Record<string, string> = {
   '/setup/docker': 'Docker / Podman',
   '/setup/lm-studio': 'LM Studio',
   '/setup/coding-assistant': 'Coding assistant',
+  '/setup/ollama': 'Ollama',
   '/stack-lab': 'Stack Lab',
   '/stacks': 'Stacks',
   '/calculator': 'Calculator',
@@ -370,6 +371,12 @@ setMeta(
   'Cited Aider, Cline, and Continue on llama-server /v1. Vulkan first. Measured 35B llama.cpp speeds, not harness tok/s.',
 );
 setDate('/setup/coding-assistant', '2026-10-14');
+setMeta(
+  '/setup/ollama',
+  'Run Ollama on a Radeon GPU',
+  'Cited Ollama on consumer Radeon. Linux first. llama.cpp stays the daily driver. No Ollama tok/s on AMDai.',
+);
+setDate('/setup/ollama', '2026-10-14');
 setMeta(
   '/image-gen',
   'Local image gen on Radeon',

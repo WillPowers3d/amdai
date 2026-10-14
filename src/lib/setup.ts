@@ -37,6 +37,7 @@ export const SETUP_INTRO_LINKS: SetupLink[] = [
   { href: '/setup/docker', label: 'Docker / Podman' },
   { href: '/setup/lm-studio', label: 'LM Studio' },
   { href: '/setup/coding-assistant', label: 'Coding assistant' },
+  { href: '/setup/ollama', label: 'Ollama' },
   { href: '/fine-tuning', label: 'Fine-tuning' },
 ];
 
@@ -87,12 +88,19 @@ export const SETUP_MORE_PATHS = [
     summary:
       'Aider, Cline, and Continue on llama-server /v1. Vulkan first. No harness tok/s on AMDai.',
   },
+  {
+    href: '/setup/ollama',
+    label: 'Ollama',
+    kicker: 'Cited, not measured on local-desktop',
+    summary:
+      'Easy on-ramp. llama.cpp stays the daily driver. Local /v1 on :11434. No Ollama tok/s on AMDai.',
+  },
 ] as const;
 
 export const SETUP_UBUNTU_BASED = {
   title: 'Ubuntu-based distros',
   body:
-    'Linux Mint, Pop!_OS, and Kubuntu are Ubuntu-based. AMD’s ROCm 10.1.0 compatibility matrix lists Ubuntu 26.04.1, 24.04.5, and 22.04.5 by name — not Mint, Pop!_OS, or Kubuntu. Official docs do not put those derivatives on the 10.1 OS row, so we do not invent official AMD support. Follow the Ubuntu steps on this page only as unofficial; that path is not verified on our rig.     Prefer stock Ubuntu 24.04.5 if you want the measured local-desktop cards to match the box. Fedora, Arch, Docker / Podman, LM Studio, and the coding-assistant guide have their own cited pages.',
+    'Linux Mint, Pop!_OS, and Kubuntu are Ubuntu-based. AMD’s ROCm 10.1.0 compatibility matrix lists Ubuntu 26.04.1, 24.04.5, and 22.04.5 by name — not Mint, Pop!_OS, or Kubuntu. Official docs do not put those derivatives on the 10.1 OS row, so we do not invent official AMD support. Follow the Ubuntu steps on this page only as unofficial; that path is not verified on our rig.     Prefer stock Ubuntu 24.04.5 if you want the measured local-desktop cards to match the box. Fedora, Arch, Docker / Podman, LM Studio, the coding-assistant guide, and Ollama have their own cited pages.',
   links: [
     { href: '/setup/fedora', label: 'Fedora setup' },
     { href: '/setup/arch', label: 'Arch setup' },
@@ -100,6 +108,7 @@ export const SETUP_UBUNTU_BASED = {
     { href: '/setup/docker', label: 'Docker / Podman' },
     { href: '/setup/lm-studio', label: 'LM Studio' },
     { href: '/setup/coding-assistant', label: 'Coding assistant' },
+    { href: '/setup/ollama', label: 'Ollama' },
   ] satisfies SetupLink[],
 };
 
@@ -327,6 +336,7 @@ export const REQUIRED_SETUP_HREFS = [
   '/setup/docker',
   '/setup/lm-studio',
   '/setup/coding-assistant',
+  '/setup/ollama',
   '/fine-tuning',
 ] as const;
 

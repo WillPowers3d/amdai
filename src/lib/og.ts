@@ -248,6 +248,12 @@ export const OG_CARDS: OgCard[] = [
     alt: 'AMDai coding assistant — cited Aider Cline Continue on llama-server /v1',
   },
   {
+    slug: 'setup-ollama',
+    title: 'Ollama on Radeon',
+    lede: 'Cited easy on-ramp. Not measured on local-desktop',
+    alt: 'AMDai Ollama — cited Radeon on-ramp, not measured on local-desktop',
+  },
+  {
     slug: 'stack-lab',
     title: 'Radeon Stack Lab',
     lede: 'Packages not published yet',
