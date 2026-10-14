@@ -10,6 +10,7 @@ import { OG_SITE_NAME } from './site';
 import { gluedSentenceHits, htmlToVisibleText } from './html-text';
 import { isRamOffloadSurface, missingRamLabels } from './ram-surfaces';
 import { isAllowlistedStackLabHref } from './stack-lab-open';
+import { isSitemapExcluded } from './seo';
 
 export const SITE_ORIGIN_DEFAULT = 'https://amdai.net';
 
@@ -320,6 +321,16 @@ export function checkSitemapAndRedirects(index: DistIndex): QaIssue[] {
       if (!pathExists(index, ref.path)) {
         issues.push(issue('sitemap', sitemap0, `sitemap loc 404 ${loc}`));
       }
+    }
+  }
+  const listed = new Set(sitemapPaths(index));
+  for (const [path, file] of index.pages) {
+    if (isSitemapExcluded(path)) continue;
+    const html = readFileSync(file, 'utf8');
+    if (isRedirectHtml(html)) continue;
+    if (/<meta\s[^>]*name=["']robots["'][^>]*content=["'][^"']*noindex/i.test(html)) continue;
+    if (!listed.has(path)) {
+      issues.push(issue('sitemap', file, `built page missing from sitemap: ${path}`));
     }
   }
   for (const [from, to] of index.redirects) {
