@@ -66,6 +66,7 @@ export const RAM_OFFLOAD_SURFACES = [
   '/image-gen',
   '/speech',
   '/long-context',
+  '/context-ceiling',
   '/kv-cache',
   '/rag',
   '/vision',
@@ -156,6 +157,7 @@ export function assertRamSurfacesValid(): string[] {
   if (!RAM_OFFLOAD_SURFACES.includes('/image-gen')) errors.push('missing /image-gen');
   if (!RAM_OFFLOAD_SURFACES.includes('/speech')) errors.push('missing /speech');
   if (!RAM_OFFLOAD_SURFACES.includes('/long-context')) errors.push('missing /long-context');
+  if (!RAM_OFFLOAD_SURFACES.includes('/context-ceiling')) errors.push('missing /context-ceiling');
   if (!RAM_OFFLOAD_SURFACES.includes('/kv-cache')) errors.push('missing /kv-cache');
   if (!RAM_OFFLOAD_SURFACES.includes('/rag')) errors.push('missing /rag');
   if (!RAM_OFFLOAD_SURFACES.includes('/vision')) errors.push('missing /vision');

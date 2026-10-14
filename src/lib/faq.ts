@@ -909,14 +909,30 @@ export const FAQ_ENTRIES: FaqItem[] = [
     group: 'context-ram',
     question: 'Can I run 128K–262K locally on a Radeon?',
     answer:
-      'Yes on the measured house path: Qwen3.6-35B-A3B on llama.cpp Vulkan, f16 KV, one R9700 at 262144. Official UD-Q5_K_XL decode is 66.43 tok/s at 128K and 44.4 tok/s at 256K. The shopper guide is /long-context. Empty cells stay not measured yet. Q3 is a labeled estimate. We do not publish a planted-token recall score. llama.cpp first.',
+      'Yes on the measured house path: Qwen3.6-35B-A3B on llama.cpp Vulkan, f16 KV, one R9700 at 262144. Official UD-Q5_K_XL decode is 66.43 tok/s at 128K and 44.4 tok/s at 256K. The shopper guide is /long-context. Find the real ceiling with /context-ceiling (Stack Lab ctx-ceiling/1 — not yet ingested). Empty cells stay not measured yet. Q3 is a labeled estimate. We do not publish a planted-token recall score. llama.cpp first.',
     links: [
       { href: '/long-context', label: 'Long context on Radeon' },
+      { href: '/context-ceiling', label: 'Context ceiling' },
       { href: '/kv-cache', label: 'KV cache' },
       { href: '/calculator', label: 'Calculator' },
       { href: '/compare', label: 'Compare 35B' },
       { href: '/gpus/r9700', label: 'R9700' },
       { href: '/troubleshoot#oom-context', label: 'Long-context OOM' },
+    ],
+  },
+  {
+    id: 'context-ceiling',
+    group: 'context-ram',
+    question: "What's the biggest context I can run on a Radeon GPU with llama.cpp?",
+    answer:
+      'Native max is the model-card window. The real ceiling is the largest -c that still loads and serves. Stack Lab ctx-ceiling/1 (amdai-bench ab-ctx-ceiling) climbs a lean ladder on one GPU and on all GPUs. AMDai has not ingested a winner on local-desktop — not yet measured. House overnight llama-bench did run 262144 on UD-Q5, one R9700. The shopper page is /context-ceiling. Q3 is a labeled estimate. llama.cpp first.',
+    links: [
+      { href: '/context-ceiling', label: 'Context ceiling' },
+      { href: '/long-context', label: 'Long context' },
+      { href: '/kv-cache', label: 'KV cache' },
+      { href: '/calculator', label: 'Calculator' },
+      { href: '/stack-lab', label: 'Stack Lab' },
+      { href: '/amdai-bench', label: 'amdai-bench' },
     ],
   },
   {
@@ -1102,6 +1118,7 @@ export const REQUIRED_FAQ_HREFS = [
   '/image-gen',
   '/speech',
   '/long-context',
+  '/context-ceiling',
   '/kv-cache',
   '/rag',
   '/vision',

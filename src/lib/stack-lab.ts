@@ -52,6 +52,7 @@ export const STACK_LAB_INTRO_LINKS: StackLabLink[] = [
   { href: '/out-of-vram', label: 'Out of VRAM' },
   { href: '/mmap', label: 'mmap / mlock' },
   { href: '/sampling', label: 'Sampling' },
+  { href: '/context-ceiling', label: 'Context ceiling' },
 ];
 
 export const STACK_LAB_JOBS: StackLabJob[] = [
@@ -258,6 +259,12 @@ export const STACK_LAB_HANDOFFS: StackLabHandoff[] = [
       'Cited llama.cpp --temp, --top-p, --min-p, penalties, DRY, XTC, and --samplers. House llama-server does not record a sampler pin. Sampler speed stays not measured yet on this site. Open the planner.',
   },
   {
+    href: '/context-ceiling',
+    label: 'Context ceiling',
+    body:
+      'Cited Stack Lab ctx-ceiling/1 (amdai-bench ab-ctx-ceiling). House overnight 35B ran 262144 on llama-bench — not a finder winner. Measure from the planner. Ceiling stays not yet ingested on this site.',
+  },
+  {
     href: '/speech',
     label: 'Speech on Radeon',
     body:
@@ -324,6 +331,7 @@ export const REQUIRED_STACK_LAB_HREFS = [
   '/prompt-cache',
   '/mmap',
   '/sampling',
+  '/context-ceiling',
 ] as const;
 
 const BANNED_VISIBLE = /Qwen2\.5|Qwen3-8B/i;

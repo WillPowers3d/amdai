@@ -198,6 +198,7 @@ export const KV_CACHE_FAQ = [
 
 export const KV_CACHE_HUB: KvCacheLink[] = [
   { href: '/long-context', label: 'Long context' },
+  { href: '/context-ceiling', label: 'Context ceiling' },
   { href: '/flash-attention', label: 'Flash Attention' },
   { href: '/prefill', label: 'Prefill' },
   { href: '/prompt-cache', label: 'Prompt cache' },
@@ -228,6 +229,7 @@ export const KV_CACHE_SECTIONS = [
 
 export const REQUIRED_KV_CACHE_HREFS = [
   '/long-context',
+  '/context-ceiling',
   '/flash-attention',
   '/prefill',
   '/prompt-cache',

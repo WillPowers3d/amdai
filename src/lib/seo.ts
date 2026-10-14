@@ -220,6 +220,7 @@ export const CRUMB_LABELS: Record<string, string> = {
   '/image-gen': 'Image gen',
   '/speech': 'Speech',
   '/long-context': 'Long context',
+  '/context-ceiling': 'Context ceiling',
   '/kv-cache': 'KV cache',
   '/rag': 'RAG',
   '/vision': 'Vision',
@@ -468,6 +469,12 @@ setMeta(
   'Run 128K–262K locally on Radeon. Measured 35B llama.cpp cards from local-desktop. f16 KV default. Empty cells stay not measured yet.',
 );
 setDate('/long-context', '2026-10-13');
+setMeta(
+  '/context-ceiling',
+  'Biggest context on a Radeon GPU',
+  'What is the biggest context I can run on a Radeon GPU with llama.cpp. Measure Stack Lab ctx-ceiling/1. Q3 is a labeled estimate.',
+);
+setDate('/context-ceiling', '2026-10-14');
 setMeta(
   '/kv-cache',
   'KV cache on a Radeon GPU',

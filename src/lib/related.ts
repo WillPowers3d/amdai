@@ -71,6 +71,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/qwen36-dual', label: '35B on two cards' },
       { href: '/calculator', label: 'Calculator' },
       { href: '/long-context', label: 'Long context' },
+      { href: '/context-ceiling', label: 'Context ceiling' },
       { href: '/flash-attention', label: 'Flash Attention' },
       { href: '/guides/buying-used-radeon', label: 'Buying a used Radeon' },
     ];
@@ -98,6 +99,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/methodology', label: 'How we test' },
       { href: '/amdai-bench', label: 'amdai-bench' },
       { href: '/long-context', label: 'Long context' },
+      { href: '/context-ceiling', label: 'Context ceiling' },
     ];
   }
   if (
@@ -374,6 +376,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/flash-attention', label: 'Flash Attention' },
       { href: '/setup/multi-gpu', label: 'Multi-GPU llama.cpp' },
       { href: '/long-context', label: 'Long context' },
+      { href: '/context-ceiling', label: 'Context ceiling' },
       { href: '/troubleshoot', label: 'Troubleshoot' },
       { href: '/gpus/r9700', label: 'R9700 measured page' },
       { href: '/rocm-problems', label: 'ROCm problems' },
@@ -472,6 +475,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/moe', label: 'MoE on Radeon' },
       { href: '/setup', label: 'First-run setup' },
       { href: '/long-context', label: 'Long context' },
+      { href: '/context-ceiling', label: 'Context ceiling' },
       { href: '/tuning', label: 'Speed up llama.cpp' },
     ];
   }
@@ -567,7 +571,7 @@ function topicLinks(path: string): RelatedLink[] {
   }
   if (path === '/long-context') {
     return [
-      { href: '/long-context', label: 'Long context' },
+      { href: '/context-ceiling', label: 'Context ceiling' },
       { href: '/kv-cache', label: 'KV cache' },
       { href: '/compare', label: 'Compare 35B' },
       { href: '/compare/one-vs-two-gpu', label: 'One vs split' },
@@ -585,9 +589,26 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/out-of-vram', label: 'Out of VRAM' },
     ];
   }
+  if (path === '/context-ceiling') {
+    return [
+      { href: '/long-context', label: 'Long context' },
+      { href: '/kv-cache', label: 'KV cache' },
+      { href: '/out-of-vram', label: 'Out of VRAM' },
+      { href: '/multi-gpu', label: 'Dual / multi-GPU' },
+      { href: '/calculator', label: 'Calculator' },
+      { href: '/benchmarks', label: 'Benchmarks' },
+      { href: '/gpus/r9700', label: 'R9700 measured page' },
+      { href: '/compare/one-vs-two-gpu', label: 'One vs split' },
+      { href: '/stack-lab', label: 'Stack Lab' },
+      { href: '/amdai-bench', label: 'amdai-bench' },
+      { href: '/models/qwen36', label: 'Qwen3.6-35B' },
+      { href: '/backends/llamacpp', label: 'llama.cpp' },
+    ];
+  }
   if (path === '/kv-cache') {
     return [
       { href: '/long-context', label: 'Long context' },
+      { href: '/context-ceiling', label: 'Context ceiling' },
       { href: '/tuning', label: 'Speed up llama.cpp' },
       { href: '/quants', label: 'Quants' },
       { href: '/calculator', label: 'Calculator' },
@@ -612,6 +633,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/calculator', label: 'Calculator' },
       { href: '/quants', label: 'Quants' },
       { href: '/long-context', label: 'Long context' },
+      { href: '/context-ceiling', label: 'Context ceiling' },
       { href: '/tuning', label: 'Speed up llama.cpp' },
       { href: '/out-of-vram', label: 'Out of VRAM' },
       { href: '/mmap', label: 'mmap / mlock' },
@@ -763,6 +785,7 @@ export function relatedFor(pathname: string): RelatedLink[] {
     add(out, seen, '/fine-tuning', 'Fine-tuning on Radeon');
     add(out, seen, '/tuning', 'Speed up llama.cpp');
     add(out, seen, '/kv-cache', 'KV cache');
+    add(out, seen, '/context-ceiling', 'Context ceiling');
     add(out, seen, '/can-run', 'Can my Radeon run it?');
     if (id) {
       const canGpu = canRunGpuIdFromInput(id);
@@ -983,6 +1006,7 @@ export function assertRelatedValid(
     '/vision',
     '/speech',
     '/long-context',
+    '/context-ceiling',
     '/kv-cache',
     '/rag',
     '/power',

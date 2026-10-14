@@ -172,6 +172,7 @@ describe('primary path and nav IA', () => {
       '/prompt-cache': '../pages/prompt-cache.astro',
       '/out-of-vram': '../pages/out-of-vram.astro',
       '/mmap': '../pages/mmap.astro',
+      '/context-ceiling': '../pages/context-ceiling.astro',
       '/moe': '../pages/moe.astro',
       '/can-run': '../pages/can-run/index.astro',
     };

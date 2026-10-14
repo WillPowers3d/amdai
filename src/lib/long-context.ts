@@ -258,6 +258,7 @@ export const LONG_CONTEXT_SECTIONS = [
 
 export const LONG_CONTEXT_HUB: LongContextLink[] = [
   { href: '/kv-cache', label: 'KV cache' },
+  { href: '/context-ceiling', label: 'Context ceiling' },
   { href: '/flash-attention', label: 'Flash Attention' },
   { href: '/prefill', label: 'Prefill' },
   { href: '/prompt-cache', label: 'Prompt cache' },
@@ -284,6 +285,7 @@ export const LONG_CONTEXT_FLASH_GAPS = [
 
 export const REQUIRED_LONG_CONTEXT_HREFS = [
   '/kv-cache',
+  '/context-ceiling',
   '/flash-attention',
   '/prefill',
   '/prompt-cache',

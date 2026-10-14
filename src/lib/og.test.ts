@@ -113,6 +113,7 @@ describe('OG catalog', () => {
     assert.equal(ogSlug('/prompt-cache'), 'prompt-cache');
     assert.equal(ogSlug('/out-of-vram'), 'out-of-vram');
     assert.equal(ogSlug('/mmap'), 'mmap');
+    assert.equal(ogSlug('/context-ceiling'), 'context-ceiling');
     assert.equal(ogSlug('/moe'), 'moe');
     assert.equal(ogSlug('/can-run'), 'can-run');
     assert.equal(ogSlug('/can-run/qwen36-35b-on-rx-7900-xtx'), 'can-run');

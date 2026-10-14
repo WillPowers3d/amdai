@@ -112,6 +112,8 @@ const ALLOWED_HREFS = new Set([
   '/tuning',
   '/speculative-decoding',
   '/kv-cache',
+  '/context-ceiling',
+  '/long-context',
   '/constrained-decoding',
   '/thinking',
   '/sampling',

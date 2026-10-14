@@ -173,10 +173,28 @@ export const GLOSSARY: GlossaryEntry[] = [
       'House -c 262144 is the 262K daily-driver window. Tables also publish 4K, 32K, 128K, and 256K because KV and decode move. Official UD-Q5_K_XL 1-GPU: 102.39 / 90.52 / 66.43 / 44.4 tok/s at those four lengths.',
     links: [
       { href: '/calculator', label: 'Calculator' },
+      { href: '/context-ceiling', label: 'Context ceiling' },
       { href: '/qwen', label: 'Qwen compare' },
       { href: '/results', label: 'Run cards' },
     ],
-    seeAlso: ['kv-cache', 'prefill-decode', 'quant'],
+    seeAlso: ['context-ceiling', 'kv-cache', 'prefill-decode', 'quant'],
+  },
+  {
+    id: 'context-ceiling',
+    term: 'Context ceiling',
+    aliases: ['max context', 'ctx-ceiling', 'biggest context', 'ab-ctx-ceiling'],
+    letter: 'C',
+    definition:
+      'The largest llama.cpp -c that still loads and serves on a given box. Native max is the model-card window. The ceiling is what VRAM and RAM actually hold.',
+    why: 'Shoppers search max context Radeon and 262K VRAM. Stack Lab ctx-ceiling/1 (amdai-bench ab-ctx-ceiling) climbs a lean ladder on one GPU and on all GPUs. AMDai has not ingested a winner on local-desktop — not yet measured.',
+    deeper:
+      'House overnight llama-bench ran 262144 on UD-Q5, one R9700, f16 KV. That is not a ctx-ceiling winner. Minimum system RAM needed is the lean step rounded to a kit. RAM needed at full context is the winner peak first. The shopper page is /context-ceiling.',
+    links: [
+      { href: '/context-ceiling', label: 'Context ceiling' },
+      { href: '/long-context', label: 'Long context' },
+      { href: '/calculator', label: 'Calculator' },
+    ],
+    seeAlso: ['context-length', 'kv-cache', 'vram'],
   },
   {
     id: 'constrained-decoding',

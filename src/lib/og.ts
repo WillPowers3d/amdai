@@ -510,6 +510,12 @@ export const OG_CARDS: OgCard[] = [
     alt: 'AMDai long context on Radeon — measured 35B cards, f16 KV default',
   },
   {
+    slug: 'context-ceiling',
+    title: 'Biggest context on Radeon',
+    lede: 'Cited Stack Lab ctx-ceiling/1. Finder not yet ingested',
+    alt: 'AMDai biggest context on a Radeon GPU with llama.cpp — cited ctx-ceiling/1, finder not yet ingested',
+  },
+  {
     slug: 'kv-cache',
     title: 'KV cache on a Radeon GPU',
     lede: 'f16 vs q8_0 vs q4_0. Measured 35B VRAM. Estimates labeled',
