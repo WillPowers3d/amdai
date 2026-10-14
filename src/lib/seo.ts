@@ -138,6 +138,7 @@ export const CRUMB_LABELS: Record<string, string> = {
   '/compare/one-vs-two-gpu': 'One vs two GPUs',
   '/compare/q4-q5-q6': 'Q6 Q5 Q4',
   '/compare/radeon-vs-nvidia': 'Radeon vs NVIDIA',
+  '/compare/radeon-vs-mac': 'Radeon vs Mac',
   '/compare/vulkan-vs-rocm': 'Vulkan vs ROCm',
   '/harnesses': 'Harnesses',
   '/harnesses/compare': 'Compare harnesses',
@@ -499,6 +500,12 @@ setMeta(
   'Cited Radeon vs NVIDIA for a local LLM: vendor specs, measured R9700 35B, and an honest CUDA vs ROCm software split. No invented prices.',
 );
 setDate('/compare/radeon-vs-nvidia', '2026-10-13');
+setMeta(
+  '/compare/radeon-vs-mac',
+  'Radeon vs Mac',
+  'Radeon vs Mac (Apple Silicon) for local LLMs. Cited AMD/Apple specs. Measured R9700 35B. Mac speed stays not measured here. Q3 is a labeled estimate.',
+);
+setDate('/compare/radeon-vs-mac', '2026-10-14');
 setMeta(
   '/compare/vulkan-vs-rocm',
   'llama.cpp on Radeon: Vulkan vs ROCm (HIP)',

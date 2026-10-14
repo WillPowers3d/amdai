@@ -35,6 +35,7 @@ export const RAM_OFFLOAD_SURFACES = [
   '/compare/one-vs-two-gpu',
   '/compare/q4-q5-q6',
   '/compare/radeon-vs-nvidia',
+  '/compare/radeon-vs-mac',
   '/compare/vulkan-vs-rocm',
   '/calculator',
   '/budget',
@@ -120,6 +121,7 @@ export function assertRamSurfacesValid(): string[] {
   if (!RAM_OFFLOAD_SURFACES.includes('/gpus/w7700')) errors.push('missing /gpus/w7700');
   if (!RAM_OFFLOAD_SURFACES.includes('/gpus/w6800')) errors.push('missing /gpus/w6800');
   if (!RAM_OFFLOAD_SURFACES.includes('/compare/radeon-vs-nvidia')) errors.push('missing /compare/radeon-vs-nvidia');
+  if (!RAM_OFFLOAD_SURFACES.includes('/compare/radeon-vs-mac')) errors.push('missing /compare/radeon-vs-mac');
   if (!RAM_OFFLOAD_SURFACES.includes('/compare/vulkan-vs-rocm')) errors.push('missing /compare/vulkan-vs-rocm');
   if (!RAM_OFFLOAD_SURFACES.includes('/compare/gpus')) errors.push('missing /compare/gpus');
   if (!RAM_OFFLOAD_SURFACES.includes('/compare/models')) errors.push('missing /compare/models');

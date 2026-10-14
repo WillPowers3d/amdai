@@ -180,8 +180,23 @@ export const FAQ_ENTRIES: FaqItem[] = [
       'Radeon wins the VRAM class we shop — 32 GB on the R9700, 24 / 20 / 16 GB on the RX 7900 / 7800 sheets, two-card layouts we measured on local-desktop, and our cited llama.cpp numbers. NVIDIA wins CUDA day-one: vLLM and a longer tail of engines and models land there first. Specs cite the vendor page. NVIDIA tok/s stay “no cited number yet” unless a third-party figure is linked. Buttons say Check price — we do not print a figure. The shopper page is Radeon vs NVIDIA.',
     links: [
       { href: '/compare/radeon-vs-nvidia', label: 'Radeon vs NVIDIA' },
+      { href: '/compare/radeon-vs-mac', label: 'Radeon vs Mac' },
       { href: '/gpus/r9700', label: 'R9700 measured page' },
       { href: '/backends', label: 'Backends' },
+      { href: '/calculator', label: 'Calculator' },
+    ],
+  },
+  {
+    id: 'radeon-vs-mac',
+    group: 'getting-started',
+    question: 'Radeon or a Mac (Apple Silicon) for a local LLM?',
+    answer:
+      'Radeon wins the path we measured: one R9700, llama.cpp Vulkan, house 35B. A 7900 XTX is the 24 GB discrete sibling. Two R9700s are 64 GB of VRAM we have split cards for. Strix Halo is AMD’s unified-memory option (max 128 GB). A Mac Studio lists larger soldered unified kits and llama.cpp Metal — Mac speed stays not measured here unless a third-party llama.cpp figure is linked. Buttons say Check price. The shopper page is Radeon vs Mac.',
+    links: [
+      { href: '/compare/radeon-vs-mac', label: 'Radeon vs Mac' },
+      { href: '/gpus/r9700', label: 'R9700 measured page' },
+      { href: '/gpus/strix-halo', label: 'Strix Halo' },
+      { href: '/compare/radeon-vs-nvidia', label: 'Radeon vs NVIDIA' },
       { href: '/calculator', label: 'Calculator' },
     ],
   },
@@ -828,6 +843,7 @@ export const REQUIRED_FAQ_HREFS = [
   '/multi-gpu',
   '/amdai-bench',
   '/compare/radeon-vs-nvidia',
+  '/compare/radeon-vs-mac',
   '/compare/vulkan-vs-rocm',
   '/troubleshoot',
   '/image-gen',
@@ -933,6 +949,7 @@ export function assertFaqValid(items: FaqItem[] = FAQ_ENTRIES): string[] {
     'min-ram-vs-full-context',
     'when-is-q3-an-estimate',
     'radeon-vs-nvidia',
+    'radeon-vs-mac',
   ]) {
     if (!items.some((item) => item.id === required)) errors.push(`missing ${required}`);
   }

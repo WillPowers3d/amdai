@@ -400,6 +400,12 @@ export function compareHubCards() {
       body: 'Cited specs and an honest software split for shoppers picking an R9700 / RX 7900-class card versus an RTX 5090, 4090, 3090, 5080, 5070 Ti, or 5060 Ti 16GB. Measured R9700 tok/s; NVIDIA speed stays empty until a cited figure exists.',
     },
     {
+      href: '/compare/radeon-vs-mac',
+      kicker: 'Camp',
+      title: 'Radeon vs Mac (Apple Silicon)',
+      body: 'Cited AMD and Apple specs for R9700, 7900 XTX, dual R9700, Strix Halo, and Mac Studio. Measured R9700 35B tok/s; Mac and Strix Halo speed stay not measured here. Q3 is a labeled estimate.',
+    },
+    {
       href: '/compare/vulkan-vs-rocm',
       kicker: 'Backend',
       title: 'llama.cpp Vulkan vs ROCm (HIP)',

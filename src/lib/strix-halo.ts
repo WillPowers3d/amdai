@@ -110,6 +110,7 @@ export const REQUIRED_STRIX_HALO_HREFS = [
   '/gpus/r9700',
   '/compare',
   '/compare/gpus',
+  '/compare/radeon-vs-mac',
   '/multi-gpu',
   '/budget',
   '/rocm-problems/strix-halo-mes-remove-queue',
@@ -323,7 +324,7 @@ export function strixHaloPage() {
     speedsBody:
       'No cited tok/s on this page. local-desktop has no Strix Halo card, and this repo has no third-party Strix Halo 64 GB or 128 GB speed row we can quote. Empty stays empty. Do not reuse R9700 numbers.',
     vsR9700:
-      'Capacity versus bandwidth. Strix Halo can address a much larger shared pool (AMD max 128 GB). The R9700 is a 32 GB discrete card we actually measured, with a cited 640 GB/s figure. We do not invent an LPDDR5x GB/s number for the APU. Buy the APU when the file is bigger than 32 GB and you accept shared-memory speed. Buy the R9700 when you want the measured 35B in-VRAM path, or a second card. Two discrete cards are a different layout — see /multi-gpu.',
+      'Capacity versus bandwidth. Strix Halo can address a much larger shared pool (AMD max 128 GB). The R9700 is a 32 GB discrete card we actually measured, with a cited 640 GB/s figure. We do not invent an LPDDR5x GB/s number for the APU. Buy the APU when the file is bigger than 32 GB and you accept shared-memory speed. Buy the R9700 when you want the measured 35B in-VRAM path, or a second card. Two discrete cards are a different layout — see /multi-gpu. Against a Mac Studio, the shopper compare is /compare/radeon-vs-mac.',
     stackLab:
       'Radeon Stack Lab house profiles are the Ubuntu R9700 recipes. There is no Strix Halo package and no public download. Open in Stack Lab is not on this page because those profiles do not apply.',
     q3: COMPARE_Q3,

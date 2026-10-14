@@ -127,6 +127,7 @@ export const primaryNav: NavItem[] = [
   { href: '/compare/gpus', label: 'Compare GPUs', description: 'Pick two Radeon sheets — VRAM, 35B Q6/Q5/Q4 fit estimates, labeled Q3. No invented prices', group: 'tools' },
   { href: '/compare/models', label: 'Compare models', description: 'Pick two cited /models pages — sizes, context, Q6/Q5/Q4 fit estimates, labeled Q3. No invented prices', group: 'tools' },
   { href: '/compare/vulkan-vs-rocm', label: 'Vulkan vs ROCm', description: 'llama.cpp on Radeon: Vulkan vs ROCm (HIP). House 35B is Vulkan. HIP cells stay pending. Q3 is a labeled estimate', group: 'tools' },
+  { href: '/compare/radeon-vs-mac', label: 'Radeon vs Mac', description: 'Radeon vs Mac (Apple Silicon) for local LLMs. Cited AMD/Apple specs. Measured R9700 35B. Mac speed stays not measured here', group: 'tools' },
   { href: '/can-run', label: 'Can my Radeon run it?', description: 'GPU × model fit from the calculator — Q6/Q5/Q4 plus a labeled Q3 estimate. No invented speeds', group: 'tools' },
   { href: '/qwen', label: 'Qwen compare', description: 'Every current 3.6 / 3.8 model × quant — sortable, filterable, measured cells from run cards', group: 'tools' },
   { href: '/benchmarks', label: 'Benchmarks', description: 'Cited 35B llama.cpp matrix from local-desktop run cards — Flash stays its own block', group: 'tools' },

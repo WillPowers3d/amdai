@@ -875,6 +875,7 @@ export const GLOSSARY: GlossaryEntry[] = [
       'Same pool as system RAM. The two shopper labels stay Minimum system RAM needed and RAM needed at full context, adapted for what is left after the GPU share. Link /bios and /gpus/strix-halo.',
     links: [
       { href: '/gpus/strix-halo', label: 'Strix Halo guide' },
+      { href: '/compare/radeon-vs-mac', label: 'Radeon vs Mac' },
       { href: '/bios', label: 'BIOS' },
       { href: '/calculator', label: 'Calculator' },
     ],

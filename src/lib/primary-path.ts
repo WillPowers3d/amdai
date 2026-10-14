@@ -277,6 +277,7 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
     { href: '/benchmarks', label: 'Benchmarks' },
     { href: '/compare', label: 'Compare 35B' },
     { href: '/compare/radeon-vs-nvidia', label: 'Radeon vs NVIDIA' },
+    { href: '/compare/radeon-vs-mac', label: 'Radeon vs Mac' },
     { href: '/stack-lab', label: 'Stack Lab' },
   ],
   '/gpus/strix-halo': [
@@ -284,6 +285,7 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
     { href: '/gpus/r9700', label: 'R9700 measured page' },
     { href: '/setup', label: 'First-run setup' },
     { href: '/compare/gpus', label: 'Compare GPUs' },
+    { href: '/compare/radeon-vs-mac', label: 'Radeon vs Mac' },
     { href: '/compare', label: 'Compare 35B' },
     { href: '/bios', label: 'BIOS' },
     { href: '/rocm-problems/strix-halo-mes-remove-queue', label: 'MES hang' },
@@ -516,6 +518,16 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
   '/compare/radeon-vs-nvidia': [
     { href: '/gpus/r9700', label: 'R9700 measured page' },
     { href: '/compare', label: 'Compare 35B' },
+    { href: '/compare/radeon-vs-mac', label: 'Radeon vs Mac' },
+    { href: '/calculator', label: 'Calculator' },
+    { href: '/budget', label: 'Budget' },
+    { href: '/faq', label: 'FAQ' },
+  ],
+  '/compare/radeon-vs-mac': [
+    { href: '/gpus/r9700', label: 'R9700 measured page' },
+    { href: '/gpus/strix-halo', label: 'Strix Halo' },
+    { href: '/compare', label: 'Compare 35B' },
+    { href: '/compare/radeon-vs-nvidia', label: 'Radeon vs NVIDIA' },
     { href: '/calculator', label: 'Calculator' },
     { href: '/budget', label: 'Budget' },
     { href: '/faq', label: 'FAQ' },

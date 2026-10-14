@@ -1,0 +1,441 @@
+---
+import Base from '../../layouts/Base.astro';
+import BuyButtons from '../../components/BuyButtons.astro';
+import Callout from '../../components/Callout.astro';
+import HowWeTest from '../../components/HowWeTest.astro';
+import HouseRam from '../../components/HouseRam.astro';
+import NewsletterSignup from '../../components/NewsletterSignup.astro';
+import NextSteps from '../../components/NextSteps.astro';
+import SystemRamNeed from '../../components/SystemRamNeed.astro';
+import { runs } from '../../lib/run-card-data';
+import { SWEEP_REVERIFY } from '../../lib/run-card';
+import {
+  COMPARE_ENGINE,
+  COMPARE_MODEL,
+  COMPARE_Q3,
+  COMPARE_Q3_CITE,
+} from '../../lib/local-desktop-compare';
+import {
+  AXIS_ROWS,
+  DECISION_CASES,
+  FIT_KITS,
+  LEAD,
+  MAC_SPEED_EMPTY,
+  RADEON_VS_MAC_HEADING,
+  RADEON_VS_MAC_NAME,
+  SOFTWARE_ROWS,
+  SPEC_ROWS,
+  SPEED_NOTE,
+  dailyRamNeed,
+  fitRows,
+  measuredSpeedRows,
+  q3EstimateRam,
+  radeonProductIds,
+  strixRamNeed,
+  xtxOffloadRamNeed,
+} from '../../lib/radeon-vs-mac';
+
+const speed = measuredSpeedRows(runs);
+const fit = fitRows();
+const q3Ram = q3EstimateRam();
+const xtxRam = xtxOffloadRamNeed();
+const strixRam = strixRamNeed();
+const dailyRam = dailyRamNeed();
+const radeonSpecs = SPEC_ROWS.filter((row) => row.camp === 'radeon');
+const macSpecs = SPEC_ROWS.filter((row) => row.camp === 'mac');
+const productIds = radeonProductIds();
+
+function ramFor(kind: (typeof DECISION_CASES)[number]['ram']) {
+  if (kind === 'xtx') return xtxRam;
+  if (kind === 'q3') return q3Ram;
+  if (kind === 'strix') return strixRam;
+  return null;
+}
+---
+
+<Base
+  title={RADEON_VS_MAC_NAME}
+  description="Radeon vs Mac (Apple Silicon) for local LLMs. Cited AMD/Apple specs. Measured R9700 35B. Mac speed stays not measured here. Q3 is a labeled estimate."
+>
+  <main id="main" class="mx-auto max-w-6xl px-4 py-10 sm:px-6">
+    <p class="kicker">
+      <a class="underline decoration-accent/40" href="/compare">Compare</a>
+      · {COMPARE_MODEL} · {COMPARE_ENGINE}
+    </p>
+    <h1 class="display mt-3 text-4xl sm:text-5xl">{RADEON_VS_MAC_HEADING}</h1>
+    <p class="mt-4 max-w-3xl text-lg leading-relaxed text-muted">{LEAD.honest}</p>
+    <div class="mt-4">
+      <HowWeTest />
+    </div>
+    <div class="mt-6">
+      <HouseRam which="daily" compact />
+    </div>
+
+    <Callout type="check" title="Which should I buy?">
+      <p>{LEAD.decision}</p>
+    </Callout>
+
+    <section id="honest" class="mt-10 grid gap-4 md:grid-cols-2" aria-labelledby="honest-heading">
+      <h2 id="honest-heading" class="sr-only">Where each camp wins</h2>
+      <article class="rounded-2xl border border-line bg-raised/50 p-5">
+        <p class="kicker">Where Radeon wins</p>
+        <h3 class="mt-2 font-serif text-2xl tracking-tight">Measured 35B, swappable cards, Linux</h3>
+        <p class="mt-3 leading-relaxed text-muted">{LEAD.winsRadeon}</p>
+        <p class="mt-3 text-sm text-muted">
+          Sheets:
+          <a class="underline decoration-accent/40" href="/gpus/r9700">R9700</a>
+          ·
+          <a class="underline decoration-accent/40" href="/gpus/rx-7900-xtx">RX 7900 XTX</a>
+          ·
+          <a class="underline decoration-accent/40" href="/gpus/strix-halo">Strix Halo</a>
+          ·
+          <a class="underline decoration-accent/40" href="/compare/radeon-vs-nvidia">Radeon vs NVIDIA</a>
+          ·
+          <a class="underline decoration-accent/40" href="/compare/vulkan-vs-rocm">Vulkan vs ROCm</a>
+        </p>
+      </article>
+      <article class="rounded-2xl border border-line bg-raised/50 p-5">
+        <p class="kicker">Where a Mac wins</p>
+        <h3 class="mt-2 font-serif text-2xl tracking-tight">Soldered unified kits, macOS, Metal</h3>
+        <p class="mt-3 leading-relaxed text-muted">{LEAD.winsMac}</p>
+        <p class="mt-3 text-sm text-muted">
+          Official specs:
+          <a class="underline decoration-accent/40" href="https://support.apple.com/en-us/122211" rel="noopener">Mac Studio (2025)</a>
+          ·
+          <a class="underline decoration-accent/40" href="https://www.apple.com/mac-studio/specs/" rel="noopener">Current Mac Studio</a>.
+        </p>
+      </article>
+    </section>
+
+    <Callout type="warn" title="Overnight sweep, 2026-10-12">
+      <p>{SWEEP_REVERIFY}</p>
+    </Callout>
+
+    <section id="axes" class="mt-12" aria-labelledby="axes-heading">
+      <h2 id="axes-heading" class="font-serif text-3xl tracking-tight">Memory, bandwidth, stack, Linux</h2>
+      <p class="mt-3 max-w-3xl leading-relaxed text-muted">
+        Hardware numbers cite AMD or Apple. Mac and Strix Halo speed stay
+        <strong class="text-ink">{MAC_SPEED_EMPTY}</strong>. Q6 / Q5 / Q4 first.
+        {COMPARE_Q3} is a labeled estimate.
+      </p>
+      <ul class="mt-6 grid gap-4">
+        {AXIS_ROWS.map((row) => (
+          <li id={row.id} class="scroll-mt-28 rounded-2xl border border-line bg-raised/50 p-5">
+            <h3 class="font-serif text-2xl tracking-tight">{row.title}</h3>
+            <p class="mt-1 text-xs uppercase tracking-[0.14em] text-faint">{row.kind}</p>
+            <dl class="mt-4 grid gap-4 text-sm md:grid-cols-2">
+              <div>
+                <dt class="text-faint">Radeon / Strix Halo</dt>
+                <dd class="mt-1 leading-relaxed text-muted">{row.radeon}</dd>
+              </div>
+              <div>
+                <dt class="text-faint">Mac</dt>
+                <dd class="mt-1 leading-relaxed text-muted">{row.mac}</dd>
+              </div>
+            </dl>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section id="specs" class="mt-12" aria-labelledby="specs-heading">
+      <h2 id="specs-heading" class="font-serif text-3xl tracking-tight">Vendor specs</h2>
+      <p class="mt-3 max-w-3xl leading-relaxed text-muted">
+        Memory, bandwidth, and power. Each cell links the vendor spec page.
+        TBP is AMD’s board label. Mac Studio 480 W is Apple’s maximum continuous
+        enclosure figure, not a chip TDP we invent. Buttons say Check price — we
+        do not show a live or stale figure. Apple SKUs have no /go/ button.
+      </p>
+
+      <div class="mt-8 overflow-x-auto">
+        <table class="table-lab min-w-[56rem]">
+          <caption>Cited AMD and Apple memory, bandwidth, and power for the Radeon and Mac Studio kits on this page.</caption>
+          <thead>
+            <tr>
+              <th scope="col">Kit</th>
+              <th scope="col">Camp</th>
+              <th scope="col">Memory</th>
+              <th scope="col">Bandwidth</th>
+              <th scope="col">Power</th>
+            </tr>
+          </thead>
+          <tbody>
+            {SPEC_ROWS.map((row) => (
+              <tr>
+                <th scope="row">
+                  <a class="underline decoration-accent/40" href={row.href} rel="noopener">{row.name}</a>
+                </th>
+                <td>{row.camp === 'radeon' ? 'Radeon' : 'Mac'}</td>
+                <td>
+                  <a class="underline decoration-accent/40" href={row.memory.href} rel="noopener">{row.memory.value}</a>
+                  <span class="mt-1 block text-xs text-faint">{row.memory.source}</span>
+                </td>
+                <td>
+                  <a class="underline decoration-accent/40" href={row.bandwidth.href} rel="noopener">{row.bandwidth.value}</a>
+                  <span class="mt-1 block text-xs text-faint">{row.bandwidth.source}</span>
+                </td>
+                <td>
+                  <a class="underline decoration-accent/40" href={row.power.href} rel="noopener">{row.power.value}</a>
+                  <span class="mt-1 block text-xs text-faint">{row.power.source}</span>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <p class="mt-4 text-sm text-faint">
+        Radeon / APU pages: {radeonSpecs.map((row) => row.name).join(', ')}.
+        Apple pages: {macSpecs.map((row) => row.name).join(', ')}.
+      </p>
+      <BuyButtons products={productIds} />
+    </section>
+
+    <section id="speed" class="mt-12" aria-labelledby="speed-heading">
+      <h2 id="speed-heading" class="font-serif text-3xl tracking-tight">Speed</h2>
+      <p class="mt-3 max-w-3xl leading-relaxed text-muted">{SPEED_NOTE}</p>
+      <p class="mt-3 text-sm text-muted">
+        Full 4K / 32K / 128K / 256K matrix including Q6_K:
+        <a class="underline decoration-accent/40" href="/compare/one-vs-two-gpu">one vs two GPU</a>
+        ·
+        <a class="underline decoration-accent/40" href="/benchmarks">benchmarks</a>
+        ·
+        <a class="underline decoration-accent/40" href="/results">run cards</a>.
+      </p>
+
+      <div class="mt-8 overflow-x-auto">
+        <table class="table-lab min-w-[56rem]">
+          <caption>
+            Measured {COMPARE_MODEL} llama.cpp Vulkan decode on one R9700, plus Mac and Strix Halo cells that stay not measured here.
+          </caption>
+          <thead>
+            <tr>
+              <th scope="col">Quant</th>
+              <th scope="col">Context</th>
+              <th scope="col">1× R9700 decode</th>
+              <th scope="col">Mac Studio (Metal / MLX)</th>
+              <th scope="col">Strix Halo</th>
+            </tr>
+          </thead>
+          <tbody>
+            {speed.map((row) => (
+              <tr>
+                <th scope="row">{row.quant}</th>
+                <td>{row.contextLabel}</td>
+                <td class="tabular-nums">
+                  {row.one.runIds.length ? (
+                    <a class="underline decoration-accent/40" href={row.one.href}>{row.one.decode}</a>
+                  ) : (
+                    row.one.decode
+                  )}
+                  <span class="mt-1 block text-xs text-faint">Measured · local-desktop</span>
+                </td>
+                <td>
+                  {row.mac}
+                  <span class="mt-1 block text-xs text-faint">Third-party only if linked — empty on purpose</span>
+                </td>
+                <td>
+                  {row.strix}
+                  <span class="mt-1 block text-xs text-faint">No local-desktop card — empty on purpose</span>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="fit" class="mt-12" aria-labelledby="fit-heading">
+      <h2 id="fit-heading" class="font-serif text-3xl tracking-tight">What fits — Q6 / Q5 / Q4 + Q3 estimate</h2>
+      <p class="mt-3 max-w-3xl leading-relaxed text-muted">
+        House {COMPARE_MODEL} on llama.cpp, f16 KV, 32K. Discrete kits use the VRAM sticker.
+        Unified kits use the calculator’s 70% slice — an estimate, not a Metal or BIOS reading.
+        {COMPARE_Q3} is a labeled estimate ({COMPARE_Q3_CITE}). Nothing below Q3.
+      </p>
+      <div class="mt-8 overflow-x-auto">
+        <table class="table-lab min-w-[64rem]">
+          <caption>Calculator fit estimates for house 35B Q6/Q5/Q4 plus a labeled Q3 estimate.</caption>
+          <thead>
+            <tr>
+              <th scope="col">Quant</th>
+              <th scope="col">Weights</th>
+              {FIT_KITS.map((kit) => (
+                <th scope="col">{kit.name}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {fit.map((row) => (
+              <tr>
+                <th scope="row">
+                  {row.quant}
+                  <span class="mt-1 block text-xs text-faint">{row.kind === 'q3-estimate' ? 'Q3 estimate' : 'Estimate'}</span>
+                </th>
+                <td class="tabular-nums">{row.weightsGb}</td>
+                {row.cells.map((cell) => (
+                  <td>
+                    <span class="text-ink">{cell.verdictLabel}</span>
+                    <span class="mt-1 block text-xs text-faint">{cell.totalGb} of {cell.usableGb} usable · {cell.note}</span>
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <aside class="mt-10 rounded-2xl border border-line bg-raised/40 p-5" aria-labelledby="q3-heading">
+      <p class="kicker">Q3 estimate</p>
+      <h2 id="q3-heading" class="mt-2 font-serif text-2xl tracking-tight">{COMPARE_Q3}</h2>
+      <p class="mt-3 text-sm leading-relaxed text-muted">
+        Q6 / Q5 / Q4 above are calculator estimates; the speed table’s Q5 / Q4 cells are
+        measured Vulkan. <strong class="text-ink">{COMPARE_Q3}</strong> is a labeled
+        estimate ({COMPARE_Q3_CITE}) — not a local-desktop run. Decode stays not measured.
+        Full Q3 column:
+        <a class="underline decoration-accent/40" href="/compare/q4-q5-q6">Q6 / Q5 / Q4 + Q3 estimate</a>.
+      </p>
+      <div class="mt-4">
+        <SystemRamNeed need={q3Ram} compact />
+      </div>
+    </aside>
+
+    <section id="ram" class="mt-12" aria-labelledby="ram-heading">
+      <h2 id="ram-heading" class="font-serif text-3xl tracking-tight">System RAM</h2>
+      <p class="mt-3 max-w-3xl leading-relaxed text-muted">
+        When -ngl leaves layers on the host, print {dailyRam ? 'both shopper labels' : 'both shopper labels'}:
+        Minimum system RAM needed and RAM needed at full context. House 35B UD-Q5_K_XL
+        on one 32 GB R9700 does not offload. A 24 GB 7900 XTX with a Q6 file at 262K
+        is the offload example. Strix Halo / Mac unified is one shared pool — same two labels.
+      </p>
+      {dailyRam && (
+        <div class="mt-6">
+          <h3 class="font-serif text-2xl tracking-tight">House 35B · in-VRAM on one R9700</h3>
+          <div class="mt-4">
+            <HouseRam which="daily" compact />
+          </div>
+        </div>
+      )}
+      <div class="mt-8">
+        <h3 class="font-serif text-2xl tracking-tight">Offload example · 24 GB + 35B Q6</h3>
+        <p class="mt-2 text-sm text-muted">
+          7900 XTX, Q6_K, 262K, f16 KV. Estimate. Backend (Vulkan or Metal) does not change the kit math.
+        </p>
+        <div class="mt-4">
+          <SystemRamNeed need={xtxRam} compact />
+        </div>
+      </div>
+      <div class="mt-8">
+        <h3 class="font-serif text-2xl tracking-tight">Unified example · 128 GB kit + 35B Q4</h3>
+        <p class="mt-2 text-sm text-muted">
+          Strix Halo calculator preset, 70% usable, Q4_K_M at 32K. Estimate, not a Metal reading.
+          A Mac 128 GB unified kit uses the same estimate rule in the table above.
+        </p>
+        <div class="mt-4">
+          <SystemRamNeed need={strixRam} compact />
+        </div>
+      </div>
+    </section>
+
+    <section id="software" class="mt-12" aria-labelledby="software-heading">
+      <h2 id="software-heading" class="font-serif text-3xl tracking-tight">Software reality</h2>
+      <p class="mt-3 max-w-3xl leading-relaxed text-muted">
+        llama.cpp first (Vulkan on Radeon, Metal on a Mac). HIP, MLX, and Asahi stay
+        labeled. Longer notes:
+        <a class="underline decoration-accent/40" href="/backends">/backends</a>,
+        <a class="underline decoration-accent/40" href="/compare/vulkan-vs-rocm">/compare/vulkan-vs-rocm</a>,
+        <a class="underline decoration-accent/40" href="/setup">/setup</a>.
+      </p>
+      <ul class="mt-8 grid gap-4">
+        {SOFTWARE_ROWS.map((row) => (
+          <li class="rounded-2xl border border-line bg-raised/50 p-5">
+            <h3 class="font-serif text-2xl tracking-tight">{row.name}</h3>
+            <dl class="mt-4 grid gap-4 md:grid-cols-2 text-sm leading-relaxed">
+              <div>
+                <dt class="text-faint">Radeon</dt>
+                <dd class="mt-1 text-muted">{row.radeon}</dd>
+              </div>
+              <div>
+                <dt class="text-faint">Mac</dt>
+                <dd class="mt-1 text-muted">{row.mac}</dd>
+              </div>
+            </dl>
+            <p class="mt-3 text-sm">
+              {row.hrefs.map((link, index) => (
+                <>
+                  {index > 0 ? ' · ' : ''}
+                  <a
+                    class="underline decoration-accent/40"
+                    href={link.href}
+                    rel={link.href.startsWith('http') ? 'noopener' : undefined}
+                  >
+                    {link.label}
+                  </a>
+                </>
+              ))}
+            </p>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section id="which" class="mt-12" aria-labelledby="which-heading">
+      <h2 id="which-heading" class="font-serif text-3xl tracking-tight">Which should you buy?</h2>
+      <p class="mt-3 max-w-3xl leading-relaxed text-muted">
+        Use case first, then memory class, then software. Size vs speed still changes
+        the pick on
+        <a class="underline decoration-accent/40" href="/budget">setup by budget</a>
+        and the
+        <a class="underline decoration-accent/40" href="/calculator">calculator</a>.
+        FAQ:
+        <a class="underline decoration-accent/40" href="/faq">/faq</a>.
+      </p>
+      <ul class="mt-8 grid gap-4">
+        {DECISION_CASES.map((row) => {
+          const need = ramFor(row.ram);
+          return (
+            <li class="rounded-2xl border border-line bg-raised/50 p-5">
+              <p class="kicker">{row.title}</p>
+              <h3 class="mt-2 font-serif text-2xl tracking-tight">{row.pick}</h3>
+              <p class="mt-3 leading-relaxed text-muted">{row.body}</p>
+              {row.ram === 'daily' ? (
+                <div class="mt-4">
+                  <HouseRam which="daily" compact />
+                </div>
+              ) : need ? (
+                <div class="mt-4">
+                  <SystemRamNeed need={need} compact />
+                </div>
+              ) : null}
+              <p class="mt-3 text-sm">
+                {row.links.map((link, index) => (
+                  <>
+                    {index > 0 ? ' · ' : ''}
+                    <a class="underline decoration-accent/40" href={link.href}>{link.label}</a>
+                  </>
+                ))}
+              </p>
+            </li>
+          );
+        })}
+      </ul>
+    </section>
+
+    <p class="mt-10 text-sm text-muted">
+      Also:
+      <a class="underline decoration-accent/40" href="/compare">Compare hub</a>
+      ·
+      <a class="underline decoration-accent/40" href="/compare/radeon-vs-nvidia">Radeon vs NVIDIA</a>
+      ·
+      <a class="underline decoration-accent/40" href="/glossary#uma">UMA</a>
+      ·
+      <a class="underline decoration-accent/40" href="/disclosure">Affiliate disclosure</a>
+      ·
+      <a class="underline decoration-accent/40" href="/methodology">How we test</a>
+    </p>
+    <NextSteps path="/compare/radeon-vs-mac" />
+    <div class="mt-12">
+      <NewsletterSignup variant="article" />
+    </div>
+  </main>
+</Base>

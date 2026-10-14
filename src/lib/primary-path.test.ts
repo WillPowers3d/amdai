@@ -130,6 +130,7 @@ describe('primary path and nav IA', () => {
       '/compare/gpus': '../pages/compare/gpus.astro',
       '/compare/models': '../pages/compare/models.astro',
       '/compare/radeon-vs-nvidia': '../pages/compare/radeon-vs-nvidia.astro',
+      '/compare/radeon-vs-mac': '../pages/compare/radeon-vs-mac.astro',
       '/compare/vulkan-vs-rocm': '../pages/compare/vulkan-vs-rocm.astro',
       '/stack-lab': '../pages/stack-lab.astro',
       '/about': '../pages/about.astro',

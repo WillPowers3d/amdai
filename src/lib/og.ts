@@ -341,6 +341,12 @@ export const OG_CARDS: OgCard[] = [
     measured: true,
   },
   {
+    slug: 'compare-radeon-vs-mac',
+    title: 'Radeon vs Mac',
+    lede: 'Cited AMD/Apple specs. Mac speed not measured here',
+    alt: 'AMDai Radeon vs Mac Apple Silicon — cited specs, measured R9700 only',
+  },
+  {
     slug: 'compare-vulkan-vs-rocm',
     title: 'Vulkan vs ROCm (HIP)',
     lede: 'llama.cpp on Radeon. HIP cells stay pending',
