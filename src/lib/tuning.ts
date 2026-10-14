@@ -333,6 +333,7 @@ export const TUNING_KNOBS: TuningKnob[] = [
       'Pick a real Q4+ draft of the same family from the model card. Do not invent a filename or a speed. Measure on your box.',
     stackLab: 'Stack Lab A/B: speculative decoding. Measure it on your box via /stack-lab planner and /amdai-bench.',
     links: [
+      { href: '/speculative-decoding', label: 'Speculative decoding' },
       { href: '/quants', label: 'Quants' },
       { href: '/calculator', label: 'Calculator' },
       { href: '/backends/llamacpp', label: 'llama.cpp' },
@@ -448,6 +449,7 @@ export const TUNING_SECTIONS = [
 ] as const;
 
 export const TUNING_HUB_LINKS: TuningLink[] = [
+  { href: '/speculative-decoding', label: 'Speculative decoding' },
   { href: '/backends/llamacpp', label: 'llama.cpp' },
   { href: '/long-context', label: 'Long context' },
   { href: '/multi-gpu', label: 'Dual / multi-GPU' },
@@ -462,6 +464,7 @@ export const TUNING_HUB_LINKS: TuningLink[] = [
 ];
 
 export const REQUIRED_TUNING_HREFS = [
+  '/speculative-decoding',
   '/long-context',
   '/multi-gpu',
   '/power',

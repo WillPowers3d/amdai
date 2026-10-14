@@ -1,0 +1,397 @@
+---
+import Base from '../layouts/Base.astro';
+import Callout from '../components/Callout.astro';
+import HowWeTest from '../components/HowWeTest.astro';
+import HouseRam from '../components/HouseRam.astro';
+import NewsletterSignup from '../components/NewsletterSignup.astro';
+import NextSteps from '../components/NextSteps.astro';
+import OpenInStackLab from '../components/OpenInStackLab.astro';
+import SystemRamNeed from '../components/SystemRamNeed.astro';
+import { HOUSE_STACK_LAB } from '../lib/stack-lab-open';
+import { runPath } from '../lib/run-card';
+import { runs } from '../lib/run-card-data';
+import {
+  COMPARE_MODEL,
+  COMPARE_Q3,
+  RAM_FULL_LABEL,
+  RAM_MIN_LABEL,
+  SPEC_CITED_LABEL,
+  SPEC_DESCRIPTION,
+  SPEC_DRAFT_RULE,
+  SPEC_FAQ,
+  SPEC_FLAGS,
+  SPEC_HEADING,
+  SPEC_HOUSE,
+  SPEC_HUB_LINKS,
+  SPEC_LAUNCH,
+  SPEC_LEAD,
+  SPEC_NAME,
+  SPEC_PATH,
+  SPEC_RAM_NOTE,
+  SPEC_SECTIONS,
+  SPEC_SOURCES,
+  SPEC_UNMEASURED,
+  SPEC_WHAT,
+  SPEC_WHEN_HELPS,
+  SPEC_WHEN_NOT,
+  specDailyRamNeed,
+  specFitNote,
+  specFitRows,
+  specMeasuredRows,
+  specOffloadRamNeed,
+  specQ3RamNeed,
+} from '../lib/speculative-decoding';
+
+const measured = specMeasuredRows(runs);
+const fit32k = specFitRows(1, 32768);
+const fit262k = specFitRows(1, 262144);
+const fitDual = specFitRows(2, 32768);
+const dailyRam = specDailyRamNeed();
+const offloadRam = specOffloadRamNeed();
+const q3Ram = specQ3RamNeed();
+---
+
+<Base title={SPEC_NAME} description={SPEC_DESCRIPTION}>
+  <main id="main" class="mx-auto max-w-4xl px-4 py-10 sm:px-6">
+    <p class="kicker">{SPEC_CITED_LABEL}</p>
+    <h1 class="display mt-3 text-4xl sm:text-5xl">{SPEC_HEADING}</h1>
+    <p class="mt-4 max-w-3xl text-lg leading-relaxed text-muted">{SPEC_LEAD}</p>
+    <ul class="mt-4 flex flex-wrap gap-2">
+      {SPEC_HUB_LINKS.map((link) => (
+        <li>
+          <a
+            class="inline-flex min-h-11 items-center rounded-full border border-line bg-canvas px-3 text-sm text-ink hover:border-accent/50 hover:text-accent-ink"
+            href={link.href}
+          >
+            {link.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+    <div class="mt-4">
+      <HowWeTest />
+    </div>
+    {dailyRam && (
+      <div class="mt-6">
+        <HouseRam which="daily" compact />
+      </div>
+    )}
+    <div class="mt-4 grid gap-3">
+      <OpenInStackLab {...HOUSE_STACK_LAB.planner} compact />
+    </div>
+
+    <Callout type="warn" title="Draft speed is not measured here">
+      <p>
+        {SPEC_UNMEASURED}. Baseline 35B decode (no draft) is the official local-desktop
+        llama.cpp Vulkan sweep. {SPEC_DRAFT_RULE}. {COMPARE_Q3} is a labeled estimate.
+      </p>
+    </Callout>
+
+    <nav
+      class="sticky z-20 -mx-4 mt-8 border-y border-line bg-canvas/95 px-4 py-2 backdrop-blur-md sm:-mx-6 sm:px-6"
+      aria-label="Speculative decoding sections"
+    >
+      <p class="mb-2 font-mono text-[0.68rem] uppercase tracking-[0.16em] text-faint">Jump to section</p>
+      <ol class="flex flex-wrap gap-2">
+        {SPEC_SECTIONS.map((section) => (
+          <li>
+            <a
+              class="inline-flex min-h-11 items-center rounded-full border border-line bg-raised px-3 text-sm text-ink hover:border-accent/50 hover:text-accent-ink"
+              href={`#${section.id}`}
+            >
+              {section.label}
+            </a>
+          </li>
+        ))}
+      </ol>
+    </nav>
+
+    <section id="what" class="mt-12 scroll-mt-28" aria-labelledby="what-heading">
+      <h2 id="what-heading" class="font-serif text-3xl tracking-tight">What a draft does</h2>
+      <p class="mt-3 max-w-3xl leading-relaxed text-muted">{SPEC_WHAT}</p>
+    </section>
+
+    <section id="house" class="mt-12 scroll-mt-28" aria-labelledby="house-heading">
+      <h2 id="house-heading" class="font-serif text-3xl tracking-tight">House context</h2>
+      <p class="mt-3 max-w-3xl leading-relaxed text-muted">{SPEC_HOUSE}</p>
+      <p class="mt-3 text-sm text-muted">
+        Daily-driver recipe:
+        <a class="underline decoration-accent/40" href="/recipes/qwen36-35b.llamacpp-vulkan.262k">qwen36-35b.llamacpp-vulkan.262k</a>
+        · Flash:
+        <a class="underline decoration-accent/40" href="/models/flash">/models/flash</a>
+        · Strata (no MTP):
+        <a class="underline decoration-accent/40" href="/backends/strata">/backends/strata</a>.
+      </p>
+    </section>
+
+    <section id="flags" class="mt-12 scroll-mt-28" aria-labelledby="flags-heading">
+      <h2 id="flags-heading" class="font-serif text-3xl tracking-tight">llama.cpp flags</h2>
+      <p class="mt-3 max-w-3xl text-sm leading-relaxed text-muted">
+        Cited from the
+        <a class="underline decoration-accent/40" href="https://github.com/ggml-org/llama.cpp/blob/master/tools/server/README.md" rel="noopener">llama.cpp server README</a>.
+        Vulkan first; HIP after rocminfo lists the gfx —
+        <a class="underline decoration-accent/40" href="/compare/vulkan-vs-rocm">Vulkan vs ROCm</a>.
+      </p>
+      <ul class="mt-6 grid gap-4">
+        {SPEC_FLAGS.map((row) => (
+          <li class="rounded-2xl border border-line bg-raised/50 p-5">
+            <h3 class="font-mono text-sm text-accent-ink">{row.flag}</h3>
+            <p class="mt-2 text-sm leading-relaxed text-muted">{row.meaning}</p>
+            <p class="mt-2 text-xs text-faint">{row.cite}</p>
+          </li>
+        ))}
+      </ul>
+      <pre class="mt-6 overflow-x-auto rounded-2xl border border-line bg-canvas p-4 text-xs">{SPEC_LAUNCH}</pre>
+      <p class="mt-3 text-sm text-faint">
+        Shape only. The other knobs (-ngl, threads, batch, -fa, KV, split) live on
+        <a class="underline decoration-accent/40" href="/tuning">/tuning</a>.
+      </p>
+    </section>
+
+    <section id="measured" class="mt-12 scroll-mt-28" aria-labelledby="measured-heading">
+      <h2 id="measured-heading" class="font-serif text-3xl tracking-tight">Measured 35B — no draft</h2>
+      <p class="mt-3 max-w-3xl text-sm leading-relaxed text-muted">
+        Official {COMPARE_MODEL} llama.cpp Vulkan cells from existing run cards.
+        These launches have no -md. Draft-on cells stay unmeasured.
+        {COMPARE_Q3} is a labeled estimate. Full matrix:
+        <a class="underline decoration-accent/40" href="/benchmarks">/benchmarks</a>.
+      </p>
+      <div class="mt-6 overflow-x-auto">
+        <table class="min-w-full text-left text-sm">
+          <caption class="sr-only">{COMPARE_MODEL} decode on one R9700 without a draft</caption>
+          <thead>
+            <tr class="border-b border-line text-faint">
+              <th class="py-2 pr-3 font-normal" scope="col">Quant</th>
+              <th class="py-2 pr-3 font-normal" scope="col">Kind</th>
+              <th class="py-2 pr-3 font-normal" scope="col">4K decode</th>
+              <th class="py-2 pr-3 font-normal" scope="col">32K decode</th>
+              <th class="py-2 font-normal" scope="col">Note</th>
+            </tr>
+          </thead>
+          <tbody>
+            {measured.map((row) => (
+              <tr class="border-b border-line/70 align-top">
+                <th class="py-3 pr-3 font-medium" scope="row">{row.quant}</th>
+                <td class="py-3 pr-3 text-muted">{row.kind === 'q3-estimate' ? 'Q3 estimate' : 'Measured'}</td>
+                <td class="py-3 pr-3">
+                  {row.kind === 'measured' && /tok\/s/.test(row.decode4k) ? (
+                    <span class="text-accent-ink">{row.decode4k}</span>
+                  ) : (
+                    <span class="text-faint">{row.decode4k}</span>
+                  )}
+                </td>
+                <td class="py-3 pr-3">
+                  {row.kind === 'measured' && /tok\/s/.test(row.decode32k) ? (
+                    <span class="text-accent-ink">{row.decode32k}</span>
+                  ) : (
+                    <span class="text-faint">{row.decode32k}</span>
+                  )}
+                </td>
+                <td class="py-3 text-xs text-faint">
+                  {row.note}
+                  {row.runIds.length > 0 && (
+                    <p class="mt-1">
+                      {row.runIds.map((id) => (
+                        <a class="mr-2 underline decoration-accent/40" href={runPath(id)}>{id}</a>
+                      ))}
+                    </p>
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="fit" class="mt-12 scroll-mt-28" aria-labelledby="fit-heading">
+      <h2 id="fit-heading" class="font-serif text-3xl tracking-tight">VRAM fit — main + leftover for a draft</h2>
+      <p class="mt-3 max-w-3xl text-sm leading-relaxed text-muted">{specFitNote()}</p>
+
+      <h3 class="mt-8 font-serif text-2xl tracking-tight">One R9700 · 32K</h3>
+      <div class="mt-4 overflow-x-auto">
+        <table class="min-w-full text-left text-sm">
+          <caption class="sr-only">Calculator leftover VRAM after house 35B at 32K on one R9700</caption>
+          <thead>
+            <tr class="border-b border-line text-faint">
+              <th class="py-2 pr-3 font-normal" scope="col">Quant</th>
+              <th class="py-2 pr-3 font-normal" scope="col">Weights</th>
+              <th class="py-2 pr-3 font-normal" scope="col">Total</th>
+              <th class="py-2 pr-3 font-normal" scope="col">Usable</th>
+              <th class="py-2 font-normal" scope="col">Leftover for a draft</th>
+            </tr>
+          </thead>
+          <tbody>
+            {fit32k.map((row) => (
+              <tr class="border-b border-line/70 align-top">
+                <th class="py-3 pr-3 font-medium" scope="row">
+                  {row.quant}
+                  <span class="mt-1 block text-xs text-faint">{row.kind === 'q3-estimate' ? 'Q3 estimate' : 'Estimate'}</span>
+                </th>
+                <td class="py-3 pr-3 tabular-nums">{row.weightsGb}</td>
+                <td class="py-3 pr-3 tabular-nums">{row.totalGb}</td>
+                <td class="py-3 pr-3 tabular-nums">{row.usableGb}</td>
+                <td class="py-3 text-xs text-muted">{row.leftover}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="mt-8 font-serif text-2xl tracking-tight">One R9700 · 262K</h3>
+      <p class="mt-2 text-sm text-muted">KV grows. Leftover shrinks. Size the window on <a class="underline decoration-accent/40" href="/long-context">/long-context</a>.</p>
+      <div class="mt-4 overflow-x-auto">
+        <table class="min-w-full text-left text-sm">
+          <caption class="sr-only">Calculator leftover VRAM after house 35B at 262K on one R9700</caption>
+          <thead>
+            <tr class="border-b border-line text-faint">
+              <th class="py-2 pr-3 font-normal" scope="col">Quant</th>
+              <th class="py-2 pr-3 font-normal" scope="col">Total</th>
+              <th class="py-2 font-normal" scope="col">Leftover for a draft</th>
+            </tr>
+          </thead>
+          <tbody>
+            {fit262k.map((row) => (
+              <tr class="border-b border-line/70 align-top">
+                <th class="py-3 pr-3 font-medium" scope="row">{row.quant}</th>
+                <td class="py-3 pr-3 tabular-nums">{row.totalGb} of {row.usableGb}</td>
+                <td class="py-3 text-xs text-muted">{row.leftover}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="when" class="mt-12 scroll-mt-28" aria-labelledby="when-heading">
+      <h2 id="when-heading" class="font-serif text-3xl tracking-tight">When it helps — and when it does not</h2>
+      <dl class="mt-6 grid gap-4 md:grid-cols-2 text-sm">
+        <div class="rounded-2xl border border-line bg-raised/50 p-5">
+          <dt class="font-serif text-2xl tracking-tight">Can help</dt>
+          <dd class="mt-3 leading-relaxed text-muted">{SPEC_WHEN_HELPS}</dd>
+        </div>
+        <div class="rounded-2xl border border-line bg-raised/50 p-5">
+          <dt class="font-serif text-2xl tracking-tight">Often does not</dt>
+          <dd class="mt-3 leading-relaxed text-muted">{SPEC_WHEN_NOT}</dd>
+        </div>
+      </dl>
+    </section>
+
+    <section id="two-gpu" class="mt-12 scroll-mt-28" aria-labelledby="two-gpu-heading">
+      <h2 id="two-gpu-heading" class="font-serif text-3xl tracking-tight">One vs two R9700s</h2>
+      <p class="mt-3 max-w-3xl text-sm leading-relaxed text-muted">
+        Two cards are 64 GB of VRAM (2 × 32 GB). Leftover below is the calculator on a split
+        35B — not a measured draft-on-GPU-2 pin. Official <code class="text-ink">--device-draft</code>
+        exists; we have not recorded one. Split tax:
+        <a class="underline decoration-accent/40" href="/compare/one-vs-two-gpu">one vs two GPU</a>
+        ·
+        <a class="underline decoration-accent/40" href="/multi-gpu">dual / multi-GPU</a>.
+      </p>
+      <div class="mt-6 overflow-x-auto">
+        <table class="min-w-full text-left text-sm">
+          <caption class="sr-only">Calculator leftover after house 35B split across two R9700s at 32K</caption>
+          <thead>
+            <tr class="border-b border-line text-faint">
+              <th class="py-2 pr-3 font-normal" scope="col">Quant</th>
+              <th class="py-2 pr-3 font-normal" scope="col">Total</th>
+              <th class="py-2 font-normal" scope="col">Leftover (estimate)</th>
+            </tr>
+          </thead>
+          <tbody>
+            {fitDual.map((row) => (
+              <tr class="border-b border-line/70 align-top">
+                <th class="py-3 pr-3 font-medium" scope="row">{row.quant}</th>
+                <td class="py-3 pr-3 tabular-nums">{row.totalGb} of {row.usableGb}</td>
+                <td class="py-3 text-xs text-muted">{row.leftover}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <aside class="mt-10 rounded-2xl border border-line bg-raised/40 p-5" aria-labelledby="q3-heading">
+      <p class="kicker">Q3 estimate</p>
+      <h2 id="q3-heading" class="mt-2 font-serif text-2xl tracking-tight">{COMPARE_Q3}</h2>
+      <p class="mt-3 text-sm leading-relaxed text-muted">
+        Main-file Q6 / Q5 / Q4 above include this labeled estimate. It is not a draft
+        and not a house pick. Draft GGUFs stay Q4 and up.
+      </p>
+      <div class="mt-4">
+        <SystemRamNeed need={q3Ram} compact />
+      </div>
+    </aside>
+
+    <section id="ram" class="mt-12 scroll-mt-28" aria-labelledby="ram-heading">
+      <h2 id="ram-heading" class="font-serif text-3xl tracking-tight">System RAM</h2>
+      <p class="mt-3 max-w-3xl leading-relaxed text-muted">{SPEC_RAM_NOTE}</p>
+      {dailyRam && (
+        <div class="mt-6">
+          <h3 class="font-serif text-2xl tracking-tight">House 35B · in-VRAM on one R9700</h3>
+          <div class="mt-4">
+            <HouseRam which="daily" compact />
+          </div>
+        </div>
+      )}
+      <div class="mt-8">
+        <h3 class="font-serif text-2xl tracking-tight">Offload example · 16 GB + 35B Q4</h3>
+        <p class="mt-2 text-sm text-muted">
+          {RAM_MIN_LABEL} and {RAM_FULL_LABEL}. Estimate. A draft that misses leftover VRAM adds more host weight.
+        </p>
+        <div class="mt-4">
+          <SystemRamNeed need={offloadRam} compact />
+        </div>
+      </div>
+    </section>
+
+    <section id="faq" class="mt-12 scroll-mt-28" aria-labelledby="faq-heading">
+      <h2 id="faq-heading" class="font-serif text-3xl tracking-tight">FAQ</h2>
+      <ul class="mt-6 grid gap-4">
+        {SPEC_FAQ.map((row) => (
+          <li class="rounded-2xl border border-line bg-raised/50 p-5">
+            <h3 class="font-serif text-2xl tracking-tight">{row.question}</h3>
+            <p class="mt-3 text-sm leading-relaxed text-muted">{row.answer}</p>
+            <p class="mt-3 text-sm">
+              {row.links.map((link, index) => (
+                <>
+                  {index > 0 ? ' · ' : ''}
+                  <a class="underline decoration-accent/40" href={link.href}>{link.label}</a>
+                </>
+              ))}
+            </p>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section id="sources" class="mt-12 scroll-mt-28" aria-labelledby="sources-heading">
+      <h2 id="sources-heading" class="font-serif text-3xl tracking-tight">Sources</h2>
+      <ul class="mt-4 grid gap-2 text-sm">
+        {SPEC_SOURCES.map((source) => (
+          <li>
+            <a
+              class="underline decoration-accent/40"
+              href={source.href}
+              rel={source.href.startsWith('http') ? 'noopener' : undefined}
+            >
+              {source.title}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <p class="mt-10 text-sm text-muted">
+      Also:
+      <a class="underline decoration-accent/40" href="/tuning">Speed up llama.cpp</a>
+      ·
+      <a class="underline decoration-accent/40" href="/glossary">Glossary</a>
+      ·
+      <a class="underline decoration-accent/40" href="/faq">FAQ</a>.
+    </p>
+    <NextSteps path={SPEC_PATH} />
+    <div class="mt-12">
+      <NewsletterSignup variant="article" />
+    </div>
+  </main>
+</Base>

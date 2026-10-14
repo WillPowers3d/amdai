@@ -781,6 +781,24 @@ export const GLOSSARY: GlossaryEntry[] = [
     seeAlso: ['amdai-bench', 'local-desktop', 'prefill-decode'],
   },
   {
+    id: 'speculative-decoding',
+    term: 'Speculative decoding',
+    aliases: ['draft model', 'model-draft', '--model-draft', '-md', 'spec decode'],
+    letter: 'S',
+    definition:
+      'A smaller draft GGUF guesses the next tokens; the target accepts or rejects them. llama.cpp documents -md / --model-draft on the server README. AMDai has not measured a draft pair on local-desktop.',
+    why: 'A good draft can raise decode. A bad one wastes VRAM. Draft files stay Q4 and up. Q3 is a labeled estimate for the main file, not a house draft. MTP heads stay off.',
+    deeper:
+      'Official current flags are --spec-draft-model, --spec-draft-n-max, --spec-draft-n-min, and -ngld. Old --draft-max / --draft-min were removed. Measure draft off vs on with the Stack Lab A/B. House 35B launches have no draft. Hermes’s Flash path is Strata with no MTP.',
+    links: [
+      { href: '/speculative-decoding', label: 'Speculative decoding' },
+      { href: '/tuning', label: 'Speed up llama.cpp' },
+      { href: '/backends/llamacpp', label: 'llama.cpp' },
+      { href: '/stack-lab', label: 'Stack Lab' },
+    ],
+    seeAlso: ['llamacpp', 'quant', 'prefill-decode', 'strata'],
+  },
+  {
     id: 'stack-lab',
     term: 'Stack Lab',
     aliases: ['Radeon Stack Lab', 'qwen-reliable', 'companion app'],
