@@ -1,0 +1,136 @@
+---
+import Base from '../layouts/Base.astro';
+import Callout from '../components/Callout.astro';
+import HouseRam from '../components/HouseRam.astro';
+import HowWeTest from '../components/HowWeTest.astro';
+import NextSteps from '../components/NextSteps.astro';
+import OpenInStackLab from '../components/OpenInStackLab.astro';
+import { HOUSE_STACK_LAB } from '../lib/stack-lab-open';
+import {
+  THINK_BUDGET,
+  THINK_CITED_LABEL,
+  THINK_CURL_OFF,
+  THINK_CURL_ON,
+  THINK_DESCRIPTION,
+  THINK_HUB_LINKS,
+  THINK_LEAD,
+  THINK_OFF,
+  THINK_ON,
+  THINK_SOURCES,
+  THINK_STEPS,
+  THINK_TITLE,
+} from '../lib/thinking';
+---
+
+<Base title={THINK_TITLE} description={THINK_DESCRIPTION}>
+  <main id="main" class="mx-auto max-w-3xl px-4 py-10 sm:px-6">
+    <p class="kicker">{THINK_CITED_LABEL}</p>
+    <h1 class="mt-3 font-serif text-4xl tracking-tight sm:text-5xl">
+      Thinking / reasoning mode on a Radeon GPU with llama.cpp
+    </h1>
+    <p class="mt-4 text-lg leading-relaxed text-muted">{THINK_LEAD}</p>
+    <ul class="mt-4 flex flex-wrap gap-2">
+      {THINK_HUB_LINKS.map((link) => (
+        <li>
+          <a
+            class="inline-flex min-h-9 items-center rounded-full border border-line bg-canvas px-3 text-sm text-ink hover:border-accent/50 hover:text-accent-ink"
+            href={link.href}
+          >
+            {link.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+
+    <Callout type="linux" title="Official Qwen3.6 thinks by default">
+      <p>
+        The card does not officially support <code>/think</code> or
+        <code>/nothink</code>. Use <code>--reasoning off</code> or
+        <code>enable_thinking: false</code>. Thinking-token counts stay
+        not measured on local-desktop.
+      </p>
+    </Callout>
+
+    <section id="flags" class="mt-12 scroll-mt-28" aria-labelledby="flags-heading">
+      <h2 id="flags-heading" class="font-serif text-3xl tracking-tight">Cited flags</h2>
+      <p class="mt-3 leading-relaxed text-muted">
+        Vulkan <code>llama-server</code>, house 35B, loopback. Replace the binary
+        and GGUF paths. These are examples, not a measured thinking card.
+      </p>
+      <pre class="mt-4 overflow-x-auto rounded-2xl border border-line bg-raised/50 p-4 text-sm leading-relaxed text-ink"><code>{THINK_OFF.trim()}</code></pre>
+      <pre class="mt-4 overflow-x-auto rounded-2xl border border-line bg-raised/50 p-4 text-sm leading-relaxed text-ink"><code>{THINK_ON.trim()}</code></pre>
+      <pre class="mt-4 overflow-x-auto rounded-2xl border border-line bg-raised/50 p-4 text-sm leading-relaxed text-ink"><code>{THINK_CURL_OFF.trim()}</code></pre>
+      <pre class="mt-4 overflow-x-auto rounded-2xl border border-line bg-raised/50 p-4 text-sm leading-relaxed text-ink"><code>{THINK_CURL_ON.trim()}</code></pre>
+      <pre class="mt-4 overflow-x-auto rounded-2xl border border-line bg-raised/50 p-4 text-sm leading-relaxed text-ink"><code>{THINK_BUDGET.trim()}</code></pre>
+    </section>
+
+    <section id="checklist" class="mt-12 scroll-mt-28" aria-labelledby="checklist-heading">
+      <h2 id="checklist-heading" class="font-serif text-3xl tracking-tight">Zero to a thinking toggle</h2>
+      <ol class="mt-8 space-y-6">
+        {THINK_STEPS.map((step, index) => (
+          <li id={step.id} class="scroll-mt-28 rounded-2xl border border-line bg-raised/50 p-5">
+            <p class="font-mono text-[0.68rem] uppercase tracking-[0.14em] text-faint">
+              {index + 1} · {THINK_CITED_LABEL}
+            </p>
+            <h3 class="mt-2 font-serif text-2xl tracking-tight">{step.title}</h3>
+            <p class="mt-3 leading-relaxed text-ink">{step.body}</p>
+            <ul class="mt-4 flex flex-wrap gap-2">
+              {step.links.map((link) => (
+                <li>
+                  <a
+                    class="inline-flex min-h-9 items-center rounded-full border border-line bg-canvas px-3 text-sm text-ink hover:border-accent/50 hover:text-accent-ink"
+                    href={link.href}
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <section id="fit-ram" class="mt-12 scroll-mt-28" aria-labelledby="fit-ram-heading">
+      <h2 id="fit-ram-heading" class="font-serif text-3xl tracking-tight">RAM lines (Ubuntu-measured)</h2>
+      <p class="mt-3 leading-relaxed text-muted">
+        <strong class="text-ink">Minimum system RAM needed</strong>
+        and
+        <strong class="text-ink">RAM needed at full context</strong>
+        for the house 35B. Those peaks are llama-bench on local-desktop, not a
+        thinking-token measurement.
+      </p>
+      <div class="mt-4">
+        <HouseRam which="daily" compact />
+      </div>
+    </section>
+
+    <section id="stack-lab-cta" class="mt-12 scroll-mt-28" aria-labelledby="stack-lab-cta-heading">
+      <h2 id="stack-lab-cta-heading" class="font-serif text-3xl tracking-tight">Open in Stack Lab</h2>
+      <p class="mt-3 leading-relaxed text-muted">
+        Stack Lab remains Ubuntu-first. Packages are not published yet and there is no
+        public download. Use the planner — do not invent a thinking pack id.
+      </p>
+      <div class="mt-4">
+        <OpenInStackLab {...HOUSE_STACK_LAB.planner} compact />
+      </div>
+    </section>
+
+    <section id="sources" class="mt-12 scroll-mt-28" aria-labelledby="sources-heading">
+      <h2 id="sources-heading" class="font-serif text-3xl tracking-tight">Sources</h2>
+      <ul class="mt-4 list-disc space-y-2 pl-5 text-sm leading-relaxed text-muted">
+        {THINK_SOURCES.map((source) => (
+          <li>
+            <a class="underline decoration-accent/40" href={source.href} rel="noopener">{source.title}</a>
+            {source.official ? '' : ' — unofficial for llama.cpp'}
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <div class="mt-8">
+      <HowWeTest />
+    </div>
+    <NextSteps path="/thinking" />
+  </main>
+</Base>
