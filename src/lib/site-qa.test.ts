@@ -85,7 +85,7 @@ describe('site QA helpers', () => {
        <body><main id="main"><a href="/nope">gone</a><a href="#missing">jump</a><p>ok.</p></main></body></html>`,
     );
     writeFileSync(join(root, 'sitemap-index.xml'), '<sitemapindex><loc>https://amdai.net/sitemap-0.xml</loc></sitemapindex>');
-    writeFileSync(join(root, 'sitemap-0.xml'), '<urlset><url><loc>https://amdai.net/ghost/</loc></url></urlset>');
+    writeFileSync(join(root, 'sitemap-0.xml'), '<urlset><url><loc>https://amdai.net/</loc></url><url><loc>https://amdai.net/ghost/</loc></url></urlset>');
     const index = indexDist(root, 'https://amdai.net', `redirects: { '/old': '/gone' }`);
     const links = checkInternalLinks(index);
     assert.ok(links.some((i) => i.kind === 'link' && i.message.includes('/nope')));
