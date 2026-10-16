@@ -1,6 +1,5 @@
 ---
 import Base from '../layouts/Base.astro';
-import Callout from '../components/Callout.astro';
 import NextSteps from '../components/NextSteps.astro';
 import {
   FIT_VRAM,
@@ -22,6 +21,7 @@ const makers = makersOf(file);
 const fallback = JSON.stringify(file).replaceAll('<', '\\u003c');
 const count = file.days.reduce((n, day) => n + day.models.length, 0);
 const asOf = file.as_of ? file.as_of.slice(0, 10) : '';
+const selected = file.days[0]?.models[0] ?? null;
 
 function paramsLabel(row: (typeof file.days)[number]['models'][number]): string {
   if (row.params_b == null) return 'not listed';
@@ -31,10 +31,21 @@ function paramsLabel(row: (typeof file.days)[number]['models'][number]): string 
       : '';
   return `${row.params_b}B${active}`;
 }
+
+function enginesShort(row: (typeof file.days)[number]['models'][number]): string {
+  const ids = yesEngineIds(row.runs_on);
+  return ids.length ? ids.map((id) => engineLabel(id)).join(' · ') : 'unknown';
+}
+
+function fitClass(verdict: string): string {
+  if (verdict === 'fits') return 'is-ok';
+  if (verdict === 'tight') return 'is-warn';
+  return '';
+}
 ---
 
 <Base title={NEW_MODELS_TITLE} description={NEW_MODELS_DESCRIPTION}>
-  <main id="main" class="mx-auto max-w-[96rem] px-4 py-10 sm:px-6">
+  <main id="main" class="nm-page mx-auto max-w-[64rem] px-4 py-10 sm:px-6">
     <p class="kicker">{NEW_MODELS_KICKER}</p>
     <h1 class="display mt-3 text-4xl sm:text-5xl">{NEW_MODELS_H1}</h1>
     <p class="mt-4 max-w-3xl text-lg leading-relaxed text-muted">
@@ -58,120 +69,136 @@ function paramsLabel(row: (typeof file.days)[number]['models'][number]): string 
       Feed:
       <a class="underline decoration-accent/40" href={NEW_MODELS_FEED}>{NEW_MODELS_FEED}</a>.
     </p>
-    <p class="mt-4 flex flex-wrap gap-3">
+    <p class="mt-5 flex flex-wrap gap-3">
+      <a class="btn-primary" href="/calculator">Open calculator</a>
       <a class="btn-secondary" href="/models">House models</a>
-      <a class="btn-secondary" href="/calculator">Calculator</a>
       <a class="btn-ghost" href="/quants">Quants</a>
       <a class="btn-ghost" href="/can-run">Can my Radeon run it?</a>
       <a class="btn-ghost" href="/methodology">How we test</a>
     </p>
 
-    <Callout type="note" title="Estimates stay labeled">
-      Param counts come from Hub safetensors metadata or config. Q4_K_M GiB is a Hub file
-      size when a pack lists one, otherwise params × 4.85 bits. Fit adds 1.5 GiB overhead
-      against 16 / 24 / 32 / 2×32 GB. Empty cells stay not listed — we do not invent a model.
-    </Callout>
+    <div class="nm-stack mt-10" id="table">
+      <section class="nm-card" aria-labelledby="table-heading">
+        <div class="nm-card-head">
+          <div>
+            <p class="kicker">Filter</p>
+            <h2 id="table-heading" class="nm-card-title">The last 90 days</h2>
+          </div>
+          <p id="nm-count" class="text-sm text-muted" aria-live="polite">{count} rows</p>
+        </div>
+        <p class="mt-2 text-sm text-muted">
+          Newest release first, grouped by day. Click a column to sort inside each day.
+          Select a row for the detail card. Without JavaScript the fallback table stays visible.
+        </p>
 
-    <section id="table" class="mt-12 scroll-mt-28" aria-labelledby="table-heading">
-      <div class="flex flex-wrap items-end justify-between gap-4">
-        <div>
-          <p class="kicker">Releases</p>
-          <h2 id="table-heading" class="mt-2 font-serif text-3xl">Filter the days</h2>
-          <p class="mt-2 max-w-2xl text-sm text-muted">
-            Maker, size band, GGUF, engine, and a Radeon VRAM class. Click a column to sort inside
-            each day. Without JavaScript the full fallback table stays visible.
+        <form id="nm-filters" class="nm-filters" aria-controls="nm-table">
+          <div class="nm-field">
+            <label class="nm-label" for="nm-maker">Maker</label>
+            <select id="nm-maker" class="field" name="maker">
+              <option value="">Any maker</option>
+              {makers.map((maker) => <option value={maker}>{maker}</option>)}
+            </select>
+          </div>
+
+          <div class="nm-field">
+            <p class="nm-label" id="nm-band-label">Size band</p>
+            <div class="nm-tabs" role="group" aria-labelledby="nm-band-label">
+              <button type="button" class="nm-tab is-on" data-filter="band" data-value="" aria-pressed="true">Any</button>
+              <button type="button" class="nm-tab" data-filter="band" data-value="<8B" aria-pressed="false">&lt;8B</button>
+              <button type="button" class="nm-tab" data-filter="band" data-value="8-20B" aria-pressed="false">8–20B</button>
+              <button type="button" class="nm-tab" data-filter="band" data-value="20-40B" aria-pressed="false">20–40B</button>
+              <button type="button" class="nm-tab" data-filter="band" data-value="40-80B" aria-pressed="false">40–80B</button>
+              <button type="button" class="nm-tab" data-filter="band" data-value="80B+" aria-pressed="false">80B+</button>
+            </div>
+          </div>
+
+          <div class="nm-pair">
+            <div class="nm-field">
+              <p class="nm-label" id="nm-gguf-label">GGUF</p>
+              <div class="nm-tabs" role="group" aria-labelledby="nm-gguf-label">
+                <button type="button" class="nm-tab is-on" data-filter="gguf" data-value="" aria-pressed="true">Any</button>
+                <button type="button" class="nm-tab" data-filter="gguf" data-value="yes" aria-pressed="false">Has GGUF</button>
+                <button type="button" class="nm-tab" data-filter="gguf" data-value="no" aria-pressed="false">No GGUF yet</button>
+              </div>
+            </div>
+            <div class="nm-field">
+              <p class="nm-label" id="nm-gpu-label">Fits my GPU</p>
+              <div class="nm-tabs" role="group" aria-labelledby="nm-gpu-label">
+                <button type="button" class="nm-tab is-on" data-filter="gpu" data-value="" aria-pressed="true">Any</button>
+                {Object.keys(FIT_VRAM).map((key) => (
+                  <button type="button" class="nm-tab" data-filter="gpu" data-value={key} aria-pressed="false">
+                    {key === '2x32' ? '2×32 GB' : `${key} GB`}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <div class="nm-field">
+            <p class="nm-label" id="nm-engine-label">Runs on</p>
+            <div class="mt-2 flex flex-wrap gap-2" role="group" aria-labelledby="nm-engine-label">
+              <button type="button" class="chip is-on" data-filter="engine" data-value="" aria-pressed="true">Any</button>
+              {RUN_ENGINES.map((engine) => (
+                <button type="button" class="chip" data-filter="engine" data-value={engine.id} aria-pressed="false">
+                  {engine.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <p class="nm-actions"><button type="reset" class="btn-ghost">Clear</button></p>
+          <p class="nm-estimate">
+            Estimate — not a measured card. Param counts come from Hub safetensors or config.
+            Q4_K_M GiB is a Hub file size when a pack lists one, otherwise params × 4.85 bits.
+            Fit adds 1.5 GiB overhead against 16 / 24 / 32 / 2×32 GB. Empty cells stay not listed.
           </p>
-        </div>
-        <p id="nm-count" class="text-sm text-muted" aria-live="polite">{count} rows</p>
-      </div>
+        </form>
+      </section>
 
-      <form id="nm-filters" class="mt-6 space-y-4" aria-controls="nm-table">
-        <div>
-          <label class="font-mono text-[0.68rem] uppercase tracking-[0.12em] text-faint" for="nm-maker">Maker</label>
-          <select id="nm-maker" class="field mt-2 max-w-sm" name="maker">
-            <option value="">Any maker</option>
-            {makers.map((maker) => <option value={maker}>{maker}</option>)}
-          </select>
-        </div>
-        <div>
-          <p class="font-mono text-[0.68rem] uppercase tracking-[0.12em] text-faint">Size band</p>
-          <div class="mt-2 flex flex-wrap gap-2" role="group" aria-label="Size band">
-            <button type="button" class="chip is-on" data-filter="band" data-value="" aria-pressed="true">Any</button>
-            <button type="button" class="chip" data-filter="band" data-value="<8B" aria-pressed="false">&lt;8B</button>
-            <button type="button" class="chip" data-filter="band" data-value="8-20B" aria-pressed="false">8–20B</button>
-            <button type="button" class="chip" data-filter="band" data-value="20-40B" aria-pressed="false">20–40B</button>
-            <button type="button" class="chip" data-filter="band" data-value="40-80B" aria-pressed="false">40–80B</button>
-            <button type="button" class="chip" data-filter="band" data-value="80B+" aria-pressed="false">80B+</button>
+      <section class="nm-card nm-table-card" aria-labelledby="nm-results-heading">
+        <div class="nm-card-head">
+          <div>
+            <p class="kicker">Releases</p>
+            <h2 id="nm-results-heading" class="nm-card-title">Newest first</h2>
           </div>
         </div>
-        <div>
-          <p class="font-mono text-[0.68rem] uppercase tracking-[0.12em] text-faint">GGUF</p>
-          <div class="mt-2 flex flex-wrap gap-2" role="group" aria-label="Has GGUF">
-            <button type="button" class="chip is-on" data-filter="gguf" data-value="" aria-pressed="true">Any</button>
-            <button type="button" class="chip" data-filter="gguf" data-value="yes" aria-pressed="false">Has GGUF</button>
-            <button type="button" class="chip" data-filter="gguf" data-value="no" aria-pressed="false">No GGUF yet</button>
-          </div>
-        </div>
-        <div>
-          <p class="font-mono text-[0.68rem] uppercase tracking-[0.12em] text-faint">Runs on</p>
-          <div class="mt-2 flex flex-wrap gap-2" role="group" aria-label="Runs on engine">
-            <button type="button" class="chip is-on" data-filter="engine" data-value="" aria-pressed="true">Any</button>
-            {RUN_ENGINES.map((engine) => (
-              <button type="button" class="chip" data-filter="engine" data-value={engine.id} aria-pressed="false">
-                {engine.label}
-              </button>
-            ))}
-          </div>
-        </div>
-        <div>
-          <p class="font-mono text-[0.68rem] uppercase tracking-[0.12em] text-faint">Fits my GPU</p>
-          <div class="mt-2 flex flex-wrap gap-2" role="group" aria-label="Fits my GPU">
-            <button type="button" class="chip is-on" data-filter="gpu" data-value="" aria-pressed="true">Any</button>
-            {Object.keys(FIT_VRAM).map((key) => (
-              <button type="button" class="chip" data-filter="gpu" data-value={key} aria-pressed="false">
-                {key === '2x32' ? '2×32 GB' : `${key} GB`}
-              </button>
-            ))}
-          </div>
-        </div>
-        <button type="reset" class="btn-ghost">Clear</button>
-      </form>
-
-      <div id="nm-table" class="mt-8 space-y-10">
-        {file.days.length === 0 ? (
-          <p class="text-sm text-muted">
-            No Hub rows in the last 90 days on this build. Run
-            <code class="font-mono">node scripts/new-models-sync.mjs</code>
-            to seed <code class="font-mono">public/data/new-models.json</code>.
-          </p>
-        ) : (
-          file.days.map((day) => (
-            <section data-day={day.date} aria-labelledby={`day-${day.date}`}>
-              <h3 id={`day-${day.date}`} class="font-serif text-2xl tracking-tight">{day.date}</h3>
-              <div class="mt-3 overflow-x-auto rounded-2xl border border-line">
-                <table class="table-lab min-w-[72rem]">
-                  <caption class="sr-only">Open-weight releases on {day.date}</caption>
-                  <thead>
-                    <tr>
-                      <th scope="col"><button type="button" class="nm-sort" data-sort="name">Model</button></th>
-                      <th scope="col"><button type="button" class="nm-sort" data-sort="maker">Maker</button></th>
-                      <th scope="col"><button type="button" class="nm-sort" data-sort="params">Params</button></th>
-                      <th scope="col"><button type="button" class="nm-sort" data-sort="arch">Arch</button></th>
-                      <th scope="col"><button type="button" class="nm-sort" data-sort="runs">Runs on</button></th>
-                      <th scope="col"><button type="button" class="nm-sort" data-sort="ctx">Ctx</button></th>
-                      <th scope="col"><button type="button" class="nm-sort" data-sort="license">License</button></th>
-                      <th scope="col">GGUF</th>
-                      <th scope="col"><button type="button" class="nm-sort" data-sort="q4">Q4_K_M</button></th>
-                      <th scope="col">16</th>
-                      <th scope="col">24</th>
-                      <th scope="col">32</th>
-                      <th scope="col">2×32</th>
+        <div id="nm-table" class="nm-table-wrap">
+          {file.days.length === 0 ? (
+            <p class="text-sm text-muted">
+              No Hub rows in the last 90 days on this build. Run
+              <code class="font-mono">node scripts/new-models-sync.mjs</code>
+              to seed <code class="font-mono">public/data/new-models.json</code>.
+            </p>
+          ) : (
+            <table class="table-lab nm-table">
+              <caption class="sr-only">Open-weight releases, newest day first</caption>
+              <thead>
+                <tr>
+                  <th scope="col" aria-sort="descending">
+                    <button type="button" class="nm-sort is-on" data-sort="released">Released</button>
+                  </th>
+                  <th scope="col"><button type="button" class="nm-sort" data-sort="name">Model</button></th>
+                  <th scope="col"><button type="button" class="nm-sort" data-sort="maker">Maker</button></th>
+                  <th scope="col"><button type="button" class="nm-sort" data-sort="params">Params</button></th>
+                  <th scope="col"><button type="button" class="nm-sort" data-sort="runs">Runs on</button></th>
+                  <th scope="col">GGUF</th>
+                  <th scope="col"><button type="button" class="nm-sort" data-sort="q4">Q4_K_M</button></th>
+                  <th scope="col">16</th>
+                  <th scope="col">24</th>
+                  <th scope="col">32</th>
+                  <th scope="col">2×32</th>
+                </tr>
+              </thead>
+              <tbody>
+                {file.days.map((day) => (
+                  <>
+                    <tr class="nm-day" data-day={day.date}>
+                      <th scope="rowgroup" colspan="11">{day.date}</th>
                     </tr>
-                  </thead>
-                  <tbody>
                     {day.models.map((row) => (
                       <tr
                         id={rowAnchor(row.id)}
+                        class:list={['nm-row', selected?.id === row.id && 'is-on']}
                         data-id={row.id}
                         data-maker={row.maker}
                         data-band={row.size_band}
@@ -183,71 +210,119 @@ function paramsLabel(row: (typeof file.days)[number]['models'][number]): string 
                         data-fit-2x32={row.fit['2x32']}
                         data-name={row.name}
                         data-params={row.params_b ?? ''}
-                        data-arch={row.architecture ?? ''}
-                        data-ctx={row.context ?? ''}
-                        data-license={row.license ?? ''}
-                        data-q4={row.q4_k_m_gib ?? ''}
+                        data-released={row.released}
+                        data-updated={row.updated}
                       >
+                        <td class="nm-num">{row.released.slice(5)}</td>
                         <th scope="row">
-                          <a class="underline decoration-accent/40" href={row.href} rel="noopener">{row.name}</a>
-                          <p class="mt-1 text-xs text-faint">{row.modalities.join(' · ')}</p>
+                          <button type="button" class="nm-pick" data-pick={row.id} aria-pressed={selected?.id === row.id ? 'true' : 'false'}>
+                            {row.name}
+                          </button>
                         </th>
                         <td>{row.maker}</td>
-                        <td>{paramsLabel(row)}</td>
-                        <td class="text-sm">{row.architecture ?? 'not listed'}</td>
-                        <td class="text-sm">
-                          {yesEngineIds(row.runs_on).length === 0 ? (
-                            'unknown'
-                          ) : (
-                            <ul class="space-y-1">
-                              {row.runs_on
-                                .filter((hit) => hit.status === 'yes')
-                                .map((hit) => (
-                                  <li>
-                                    <a class="nm-engine underline decoration-accent/40" href={RUN_ENGINES.find((e) => e.id === hit.id)?.href ?? '/backends'}>
-                                      <span>{engineLabel(hit.id)}</span>
-                                      <span class="text-xs text-faint">{engineNote(hit.id)}</span>
-                                    </a>
-                                  </li>
-                                ))}
-                            </ul>
-                          )}
+                        <td class="nm-num">{paramsLabel(row)}</td>
+                        <td class="nm-runs">{enginesShort(row)}</td>
+                        <td>{row.gguf.length ? 'yes' : 'none'}</td>
+                        <td class="nm-num">
+                          {row.q4_k_m_gib != null ? `${row.q4_k_m_gib}` : '—'}
                         </td>
-                        <td>{row.context != null ? row.context.toLocaleString('en-US') : 'not listed'}</td>
-                        <td class="text-sm">{row.license ?? 'not listed'}</td>
-                        <td class="text-sm">
-                          {row.gguf.length === 0 ? (
-                            'none listed'
-                          ) : (
-                            <ul class="space-y-1">
-                              {row.gguf.map((pack) => (
-                                <li>
-                                  <a class="underline decoration-accent/40" href={pack.href} rel="noopener">{pack.org}</a>
-                                  {' · '}
-                                  {pack.quants.join(', ')}
-                                </li>
-                              ))}
-                            </ul>
-                          )}
-                        </td>
-                        <td>
-                          {row.q4_k_m_gib != null ? `${row.q4_k_m_gib} GiB` : 'unknown'}
-                          <span class="block text-xs text-faint">{row.q4_k_m_kind}</span>
-                        </td>
-                        <td>{row.fit['16']}</td>
-                        <td>{row.fit['24']}</td>
-                        <td>{row.fit['32']}</td>
-                        <td>{row.fit['2x32']}</td>
+                        <td class:list={['nm-num', 'nm-fit', fitClass(row.fit['16'])]}>{row.fit['16']}</td>
+                        <td class:list={['nm-num', 'nm-fit', fitClass(row.fit['24'])]}>{row.fit['24']}</td>
+                        <td class:list={['nm-num', 'nm-fit', fitClass(row.fit['32'])]}>{row.fit['32']}</td>
+                        <td class:list={['nm-num', 'nm-fit', fitClass(row.fit['2x32'])]}>{row.fit['2x32']}</td>
                       </tr>
                     ))}
-                  </tbody>
-                </table>
+                  </>
+                ))}
+              </tbody>
+            </table>
+          )}
+        </div>
+      </section>
+
+      <section class="nm-card" id="nm-detail" aria-labelledby="nm-detail-heading" aria-live="polite">
+        <p class="kicker">This model</p>
+        {selected ? (
+          <>
+            <h2 id="nm-detail-heading" class="nm-card-title">{selected.name}</h2>
+            <p class="mt-1 text-sm text-muted">{selected.maker} · {selected.released}</p>
+            <dl class="nm-kv">
+              <div><dt>Maker</dt><dd>{selected.maker}</dd></div>
+              <div><dt>Released</dt><dd>{selected.released}</dd></div>
+              <div><dt>Params</dt><dd>{paramsLabel(selected)}</dd></div>
+              <div><dt>Architecture</dt><dd>{selected.architecture ?? 'not listed'}</dd></div>
+              <div><dt>Context</dt><dd>{selected.context != null ? selected.context.toLocaleString('en-US') : 'not listed'}</dd></div>
+              <div><dt>License</dt><dd>{selected.license ?? 'not listed'}</dd></div>
+              <div>
+                <dt>GGUF</dt>
+                <dd>
+                  {selected.gguf.length === 0 ? (
+                    'none listed'
+                  ) : (
+                    <ul>
+                      {selected.gguf.map((pack) => (
+                        <li>
+                          <a class="underline decoration-accent/40" href={pack.href} rel="noopener">{pack.org}</a>
+                          {' · '}
+                          {pack.quants.join(', ')}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </dd>
               </div>
-            </section>
-          ))
+              <div>
+                <dt>Q4_K_M</dt>
+                <dd>
+                  {selected.q4_k_m_gib != null ? `${selected.q4_k_m_gib} GiB` : 'unknown'}
+                  {' '}
+                  <span class="text-faint">{selected.q4_k_m_kind}</span>
+                </dd>
+              </div>
+              <div>
+                <dt>16 / 24 / 32 / 2×32</dt>
+                <dd>
+                  {selected.fit['16']} · {selected.fit['24']} · {selected.fit['32']} · {selected.fit['2x32']}
+                </dd>
+              </div>
+            </dl>
+            <p class="nm-label mt-5">Runs on</p>
+            {yesEngineIds(selected.runs_on).length === 0 ? (
+              <p class="mt-2 text-sm text-muted">unknown</p>
+            ) : (
+              <ul class="nm-engine-list">
+                {selected.runs_on
+                  .filter((hit) => hit.status === 'yes')
+                  .map((hit) => (
+                    <li>
+                      <a class="nm-engine underline decoration-accent/40" href={RUN_ENGINES.find((e) => e.id === hit.id)?.href ?? '/backends'}>
+                        <span>{engineLabel(hit.id)}</span>
+                        <span class="text-xs text-faint">{engineNote(hit.id)}</span>
+                      </a>
+                    </li>
+                  ))}
+              </ul>
+            )}
+            <p class="mt-5">
+              <a class="btn-primary" href={selected.href} rel="noopener">Open on Hub</a>
+            </p>
+          </>
+        ) : (
+          <h2 id="nm-detail-heading" class="nm-card-title">No row selected</h2>
         )}
-      </div>
-    </section>
+        <details class="nm-sources">
+          <summary>Sources</summary>
+          <p>
+            Hugging Face Hub public API. GGUF filenames from unsloth, bartowski, lmstudio-community,
+            and ggml-org. Runs-on from llama.cpp convert architecture names or a listed GGUF pack,
+            the vLLM supported-architectures registry, Ollama library slugs, Strata Qwen 3.8 Flash
+            notes on /backends, and SGLang architecture names when listed. LM Studio and Lemonade
+            follow GGUF. MLX is excluded. Not llama-bench.
+          </p>
+        </details>
+      </section>
+    </div>
+
     <NextSteps path={NEW_MODELS_PATH} />
   </main>
   <script type="application/json" id="nm-fallback" set:html={fallback}></script>
@@ -261,6 +336,7 @@ function paramsLabel(row: (typeof file.days)[number]['models'][number]): string 
     href: string;
     maker: string;
     released: string;
+    updated: string;
     params_b: number | null;
     active_params_b: number | null;
     architecture: string | null;
@@ -287,8 +363,9 @@ function paramsLabel(row: (typeof file.days)[number]['models'][number]): string 
   };
 
   const filters = { maker: '', band: '', gguf: '', gpu: '', engine: '' };
-  let sortKey = 'name';
-  let sortDir = 1;
+  let sortKey = 'released';
+  let sortDir = -1;
+  let selectedId = '';
   let file: FileShape = { days: [] };
 
   function escapeHtml(value: string): string {
@@ -327,51 +404,37 @@ function paramsLabel(row: (typeof file.days)[number]['models'][number]): string 
     return (row.runs_on || []).filter((hit) => hit.status === 'yes' && hit.id !== 'mlx').map((hit) => hit.id);
   }
 
-  function runsOnHtml(row: Row): string {
+  function enginesShort(row: Row): string {
     const yes = yesEngines(row);
     if (!yes.length) return 'unknown';
-    const items = yes
-      .map((id) => {
-        const meta = engineMeta[id] || { label: id, note: '', href: '/backends' };
-        const note = meta.note ? `<span class="text-xs text-faint">${escapeHtml(meta.note)}</span>` : '';
-        return `<li><a class="nm-engine underline decoration-accent/40" href="${escapeHtml(meta.href)}"><span>${escapeHtml(meta.label)}</span>${note}</a></li>`;
-      })
-      .join('');
-    return `<ul class="space-y-1">${items}</ul>`;
+    return yes.map((id) => engineMeta[id]?.label || id).join(' · ');
   }
 
-  function ggufHtml(row: Row): string {
-    if (!row.gguf.length) return 'none listed';
-    const items = row.gguf
-      .map(
-        (pack) =>
-          `<li><a class="underline decoration-accent/40" href="${escapeHtml(pack.href)}" rel="noopener">${escapeHtml(pack.org)}</a> · ${escapeHtml(pack.quants.join(', '))}</li>`,
-      )
-      .join('');
-    return `<ul class="space-y-1">${items}</ul>`;
+  function fitClass(verdict: string): string {
+    if (verdict === 'fits') return 'is-ok';
+    if (verdict === 'tight') return 'is-warn';
+    return '';
   }
 
   function sortRows(rows: Row[]): Row[] {
     const key = sortKey;
     const dir = sortDir;
     return rows.slice().sort((a, b) => {
+      if (key === 'released') {
+        const byDay = b.released.localeCompare(a.released) || (b.updated || '').localeCompare(a.updated || '');
+        return (dir < 0 ? byDay : -byDay) || a.name.localeCompare(b.name) || a.id.localeCompare(b.id);
+      }
       const av =
         key === 'params' ? a.params_b ?? -1
-        : key === 'ctx' ? a.context ?? -1
         : key === 'q4' ? a.q4_k_m_gib ?? -1
         : key === 'maker' ? a.maker
-        : key === 'arch' ? a.architecture ?? ''
         : key === 'runs' ? yesEngines(a).join(' ')
-        : key === 'license' ? a.license ?? ''
         : a.name;
       const bv =
         key === 'params' ? b.params_b ?? -1
-        : key === 'ctx' ? b.context ?? -1
         : key === 'q4' ? b.q4_k_m_gib ?? -1
         : key === 'maker' ? b.maker
-        : key === 'arch' ? b.architecture ?? ''
         : key === 'runs' ? yesEngines(b).join(' ')
-        : key === 'license' ? b.license ?? ''
         : b.name;
       if (typeof av === 'number' && typeof bv === 'number') return (av - bv) * dir;
       return String(av).localeCompare(String(bv)) * dir || a.id.localeCompare(b.id);
@@ -389,6 +452,93 @@ function paramsLabel(row: (typeof file.days)[number]['models'][number]): string 
       (!filters.engine || engines.includes(filters.engine)) &&
       (!filters.gpu || fit === 'fits' || fit === 'tight')
     );
+  }
+
+  function visibleRows(next: FileShape): Row[] {
+    return next.days.flatMap((day) => sortRows(day.models.filter(rowVisible)));
+  }
+
+  function findRow(id: string): Row | undefined {
+    for (const day of file.days) {
+      const hit = day.models.find((row) => row.id === id);
+      if (hit) return hit;
+    }
+    return undefined;
+  }
+
+  function renderDetail(row: Row | undefined) {
+    const root = document.getElementById('nm-detail');
+    if (!root) return;
+    if (!row) {
+      root.innerHTML = '<p class="kicker">This model</p><h2 id="nm-detail-heading" class="nm-card-title">No row selected</h2>';
+      return;
+    }
+    const yes = yesEngines(row);
+    const engines = yes.length
+      ? `<ul class="nm-engine-list">${yes
+          .map((id) => {
+            const meta = engineMeta[id] || { label: id, note: '', href: '/backends' };
+            const note = meta.note ? `<span class="text-xs text-faint">${escapeHtml(meta.note)}</span>` : '';
+            return `<li><a class="nm-engine underline decoration-accent/40" href="${escapeHtml(meta.href)}"><span>${escapeHtml(meta.label)}</span>${note}</a></li>`;
+          })
+          .join('')}</ul>`
+      : '<p class="mt-2 text-sm text-muted">unknown</p>';
+    const gguf = row.gguf.length
+      ? `<ul>${row.gguf
+          .map(
+            (pack) =>
+              `<li><a class="underline decoration-accent/40" href="${escapeHtml(pack.href)}" rel="noopener">${escapeHtml(pack.org)}</a> · ${escapeHtml(pack.quants.join(', '))}</li>`,
+          )
+          .join('')}</ul>`
+      : 'none listed';
+    root.innerHTML = `
+      <p class="kicker">This model</p>
+      <h2 id="nm-detail-heading" class="nm-card-title">${escapeHtml(row.name)}</h2>
+      <p class="mt-1 text-sm text-muted">${escapeHtml(row.maker)} · ${escapeHtml(row.released)}</p>
+      <dl class="nm-kv">
+        <div><dt>Maker</dt><dd>${escapeHtml(row.maker)}</dd></div>
+        <div><dt>Released</dt><dd>${escapeHtml(row.released)}</dd></div>
+        <div><dt>Params</dt><dd>${escapeHtml(paramsLabel(row))}</dd></div>
+        <div><dt>Architecture</dt><dd>${escapeHtml(row.architecture ?? 'not listed')}</dd></div>
+        <div><dt>Context</dt><dd>${row.context != null ? escapeHtml(row.context.toLocaleString('en-US')) : 'not listed'}</dd></div>
+        <div><dt>License</dt><dd>${escapeHtml(row.license ?? 'not listed')}</dd></div>
+        <div><dt>GGUF</dt><dd>${gguf}</dd></div>
+        <div><dt>Q4_K_M</dt><dd>${row.q4_k_m_gib != null ? `${row.q4_k_m_gib} GiB` : 'unknown'} <span class="text-faint">${escapeHtml(row.q4_k_m_kind)}</span></dd></div>
+        <div><dt>16 / 24 / 32 / 2×32</dt><dd>${escapeHtml(row.fit['16'])} · ${escapeHtml(row.fit['24'])} · ${escapeHtml(row.fit['32'])} · ${escapeHtml(row.fit['2x32'])}</dd></div>
+      </dl>
+      <p class="nm-label mt-5">Runs on</p>
+      ${engines}
+      <p class="mt-5"><a class="btn-primary" href="${escapeHtml(row.href)}" rel="noopener">Open on Hub</a></p>
+      <details class="nm-sources">
+        <summary>Sources</summary>
+        <p>
+          Hugging Face Hub public API. GGUF filenames from unsloth, bartowski, lmstudio-community,
+          and ggml-org. Runs-on from llama.cpp convert architecture names or a listed GGUF pack,
+          the vLLM supported-architectures registry, Ollama library slugs, Strata Qwen 3.8 Flash
+          notes on /backends, and SGLang architecture names when listed. LM Studio and Lemonade
+          follow GGUF. MLX is excluded. Not llama-bench.
+        </p>
+      </details>`;
+  }
+
+  function selectRow(id: string, scroll = false) {
+    selectedId = id;
+    document.querySelectorAll<HTMLTableRowElement>('.nm-row').forEach((tr) => {
+      const on = tr.dataset.id === id;
+      tr.classList.toggle('is-on', on);
+    });
+    document.querySelectorAll<HTMLButtonElement>('.nm-pick').forEach((btn) => {
+      btn.setAttribute('aria-pressed', btn.dataset.pick === id ? 'true' : 'false');
+    });
+    renderDetail(findRow(id));
+    if (scroll && id) {
+      const node = document.getElementById(rowAnchor(id));
+      node?.scrollIntoView({ block: 'nearest' });
+    }
+    if (id) {
+      const next = `#${rowAnchor(id)}`;
+      if (location.hash !== next) history.replaceState(null, '', next);
+    }
   }
 
   function render(next: FileShape) {
@@ -410,62 +560,70 @@ function paramsLabel(row: (typeof file.days)[number]['models'][number]): string 
         '<p class="text-sm text-muted">No Hub rows in the last 90 days on this build. Run <code class="font-mono">node scripts/new-models-sync.mjs</code> to seed <code class="font-mono">public/data/new-models.json</code>.</p>';
       const count = document.getElementById('nm-count');
       if (count) count.textContent = '0 rows';
+      renderDetail(undefined);
       return;
     }
-    root.innerHTML = next.days
+    const days = next.days.slice().sort((a, b) => b.date.localeCompare(a.date));
+    const headSort = (key: string, label: string) => {
+      const on = sortKey === key;
+      const aria = on ? (sortDir < 0 ? 'descending' : 'ascending') : undefined;
+      const ariaAttr = aria ? ` aria-sort="${aria}"` : '';
+      return `<th scope="col"${ariaAttr}><button type="button" class="nm-sort${on ? ' is-on' : ''}" data-sort="${key}">${label}</button></th>`;
+    };
+    const body = days
       .map((day) => {
         const rows = sortRows(day.models.filter(rowVisible));
-        const body = rows
+        if (!rows.length) return '';
+        const trs = rows
           .map((row) => {
             const gguf = row.gguf.length ? 'yes' : 'no';
             const engines = yesEngines(row).join(' ');
-            return `<tr id="${escapeHtml(rowAnchor(row.id))}" data-id="${escapeHtml(row.id)}" data-maker="${escapeHtml(row.maker)}" data-band="${escapeHtml(row.size_band)}" data-gguf="${gguf}" data-engines="${escapeHtml(engines)}" data-fit-16="${row.fit['16']}" data-fit-24="${row.fit['24']}" data-fit-32="${row.fit['32']}" data-fit-2x32="${row.fit['2x32']}">
-              <th scope="row"><a class="underline decoration-accent/40" href="${escapeHtml(row.href)}" rel="noopener">${escapeHtml(row.name)}</a><p class="mt-1 text-xs text-faint">${escapeHtml((row.modalities || []).join(' · '))}</p></th>
+            const on = row.id === selectedId ? ' is-on' : '';
+            const pressed = row.id === selectedId ? 'true' : 'false';
+            return `<tr id="${escapeHtml(rowAnchor(row.id))}" class="nm-row${on}" data-id="${escapeHtml(row.id)}" data-maker="${escapeHtml(row.maker)}" data-band="${escapeHtml(row.size_band)}" data-gguf="${gguf}" data-engines="${escapeHtml(engines)}" data-fit-16="${row.fit['16']}" data-fit-24="${row.fit['24']}" data-fit-32="${row.fit['32']}" data-fit-2x32="${row.fit['2x32']}" data-released="${escapeHtml(row.released)}" data-updated="${escapeHtml(row.updated || '')}">
+              <td class="nm-num">${escapeHtml(row.released.slice(5))}</td>
+              <th scope="row"><button type="button" class="nm-pick" data-pick="${escapeHtml(row.id)}" aria-pressed="${pressed}">${escapeHtml(row.name)}</button></th>
               <td>${escapeHtml(row.maker)}</td>
-              <td>${escapeHtml(paramsLabel(row))}</td>
-              <td class="text-sm">${escapeHtml(row.architecture ?? 'not listed')}</td>
-              <td class="text-sm">${runsOnHtml(row)}</td>
-              <td>${row.context != null ? escapeHtml(row.context.toLocaleString('en-US')) : 'not listed'}</td>
-              <td class="text-sm">${escapeHtml(row.license ?? 'not listed')}</td>
-              <td class="text-sm">${ggufHtml(row)}</td>
-              <td>${row.q4_k_m_gib != null ? `${row.q4_k_m_gib} GiB` : 'unknown'}<span class="block text-xs text-faint">${escapeHtml(row.q4_k_m_kind)}</span></td>
-              <td>${row.fit['16']}</td>
-              <td>${row.fit['24']}</td>
-              <td>${row.fit['32']}</td>
-              <td>${row.fit['2x32']}</td>
+              <td class="nm-num">${escapeHtml(paramsLabel(row))}</td>
+              <td class="nm-runs">${escapeHtml(enginesShort(row))}</td>
+              <td>${row.gguf.length ? 'yes' : 'none'}</td>
+              <td class="nm-num">${row.q4_k_m_gib != null ? row.q4_k_m_gib : '—'}</td>
+              <td class="nm-num nm-fit ${fitClass(row.fit['16'])}">${row.fit['16']}</td>
+              <td class="nm-num nm-fit ${fitClass(row.fit['24'])}">${row.fit['24']}</td>
+              <td class="nm-num nm-fit ${fitClass(row.fit['32'])}">${row.fit['32']}</td>
+              <td class="nm-num nm-fit ${fitClass(row.fit['2x32'])}">${row.fit['2x32']}</td>
             </tr>`;
           })
           .join('');
-        return `<section data-day="${escapeHtml(day.date)}" ${rows.length ? '' : 'hidden'} aria-labelledby="day-${escapeHtml(day.date)}">
-          <h3 id="day-${escapeHtml(day.date)}" class="font-serif text-2xl tracking-tight">${escapeHtml(day.date)}</h3>
-          <div class="mt-3 overflow-x-auto rounded-2xl border border-line">
-            <table class="table-lab min-w-[72rem]">
-              <caption class="sr-only">Open-weight releases on ${escapeHtml(day.date)}</caption>
-              <thead><tr>
-                <th scope="col"><button type="button" class="nm-sort" data-sort="name">Model</button></th>
-                <th scope="col"><button type="button" class="nm-sort" data-sort="maker">Maker</button></th>
-                <th scope="col"><button type="button" class="nm-sort" data-sort="params">Params</button></th>
-                <th scope="col"><button type="button" class="nm-sort" data-sort="arch">Arch</button></th>
-                <th scope="col"><button type="button" class="nm-sort" data-sort="runs">Runs on</button></th>
-                <th scope="col"><button type="button" class="nm-sort" data-sort="ctx">Ctx</button></th>
-                <th scope="col"><button type="button" class="nm-sort" data-sort="license">License</button></th>
-                <th scope="col">GGUF</th>
-                <th scope="col"><button type="button" class="nm-sort" data-sort="q4">Q4_K_M</button></th>
-                <th scope="col">16</th>
-                <th scope="col">24</th>
-                <th scope="col">32</th>
-                <th scope="col">2×32</th>
-              </tr></thead>
-              <tbody>${body}</tbody>
-            </table>
-          </div>
-        </section>`;
+        return `<tr class="nm-day" data-day="${escapeHtml(day.date)}"><th scope="rowgroup" colspan="11">${escapeHtml(day.date)}</th></tr>${trs}`;
       })
       .join('');
+    root.innerHTML = `<table class="table-lab nm-table">
+      <caption class="sr-only">Open-weight releases, newest day first</caption>
+      <thead><tr>
+        ${headSort('released', 'Released')}
+        ${headSort('name', 'Model')}
+        ${headSort('maker', 'Maker')}
+        ${headSort('params', 'Params')}
+        ${headSort('runs', 'Runs on')}
+        <th scope="col">GGUF</th>
+        ${headSort('q4', 'Q4_K_M')}
+        <th scope="col">16</th>
+        <th scope="col">24</th>
+        <th scope="col">32</th>
+        <th scope="col">2×32</th>
+      </tr></thead>
+      <tbody>${body}</tbody>
+    </table>`;
     bindSort();
-    const visible = next.days.reduce((n, day) => n + day.models.filter(rowVisible).length, 0);
+    bindPicks();
+    const visible = visibleRows(next);
+    if (!visible.some((row) => row.id === selectedId)) {
+      selectedId = visible[0]?.id ?? '';
+    }
+    selectRow(selectedId);
     const count = document.getElementById('nm-count');
-    if (count) count.textContent = `${visible} rows`;
+    if (count) count.textContent = `${visible.length} rows`;
     const asof = document.getElementById('nm-asof');
     if (asof && next.as_of) {
       const total = next.days.reduce((n, day) => n + day.models.length, 0);
@@ -483,11 +641,15 @@ function paramsLabel(row: (typeof file.days)[number]['models'][number]): string 
         const key = btn.dataset.filter as keyof typeof filters;
         const value = btn.dataset.value ?? '';
         filters[key] = value;
-        document.querySelectorAll<HTMLButtonElement>(`[data-filter="${key}"]`).forEach((other) => {
-          const on = other === btn;
-          other.classList.toggle('is-on', on);
-          other.setAttribute('aria-pressed', on ? 'true' : 'false');
-        });
+        const group = btn.classList.contains('nm-tab') ? '.nm-tab' : '.chip';
+        btn
+          .closest('[role="group"]')
+          ?.querySelectorAll<HTMLButtonElement>(`[data-filter="${key}"]${group === '.nm-tab' ? '.nm-tab' : ''}`)
+          .forEach((other) => {
+            const on = other === btn;
+            other.classList.toggle('is-on', on);
+            other.setAttribute('aria-pressed', on ? 'true' : 'false');
+          });
         apply();
       });
     });
@@ -502,6 +664,8 @@ function paramsLabel(row: (typeof file.days)[number]['models'][number]): string 
       filters.gguf = '';
       filters.gpu = '';
       filters.engine = '';
+      sortKey = 'released';
+      sortDir = -1;
       document.querySelectorAll<HTMLButtonElement>('[data-filter]').forEach((btn) => {
         const on = (btn.dataset.value ?? '') === '';
         btn.classList.toggle('is-on', on);
@@ -514,27 +678,41 @@ function paramsLabel(row: (typeof file.days)[number]['models'][number]): string 
   function bindSort() {
     document.querySelectorAll<HTMLButtonElement>('.nm-sort').forEach((btn) => {
       btn.addEventListener('click', () => {
-        const key = btn.dataset.sort || 'name';
+        const key = btn.dataset.sort || 'released';
         if (sortKey === key) sortDir *= -1;
         else {
           sortKey = key;
-          sortDir = 1;
+          sortDir = key === 'released' ? -1 : 1;
         }
         apply();
       });
     });
   }
 
+  function bindPicks() {
+    document.querySelectorAll<HTMLButtonElement>('.nm-pick').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const id = btn.dataset.pick || '';
+        if (id) selectRow(id);
+      });
+    });
+  }
+
   async function hydrate() {
     file = parseFallback();
+    const hash = decodeURIComponent(location.hash.replace(/^#/, ''));
+    const fromHash = file.days.flatMap((day) => day.models).find((row) => rowAnchor(row.id) === hash);
+    selectedId = fromHash?.id || file.days[0]?.models[0]?.id || '';
     bindChips();
     bindSort();
+    bindPicks();
+    if (selectedId) selectRow(selectedId);
     try {
       const res = await fetch('/data/new-models.json', { cache: 'no-store' });
       if (!res.ok) return;
       const live = (await res.json()) as FileShape;
       if (!live?.days) return;
-      if (live.as_of && live.as_of === file.as_of) return;
+      if (live.as_of && live.as_of === file.as_of && selectedId) return;
       render(live);
     } catch {
       /* keep static fallback */
@@ -544,7 +722,154 @@ function paramsLabel(row: (typeof file.days)[number]['models'][number]): string 
   hydrate();
 </script>
 
-<style>
+<style is:global>
+  .nm-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .nm-card {
+    border: 1px solid var(--line);
+    background: var(--raised);
+    border-radius: 1rem;
+    padding: 1.15rem 1.2rem 1.25rem;
+  }
+  .nm-card-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 0.75rem;
+  }
+  .nm-card-title {
+    margin-top: 0.35rem;
+    font-family: var(--font-sans);
+    font-size: 1.35rem;
+    font-weight: 560;
+    letter-spacing: -0.03em;
+    line-height: 1.15;
+  }
+  .nm-filters {
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+    margin-top: 1.1rem;
+  }
+  .nm-field {
+    min-width: 0;
+  }
+  .nm-label {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--faint);
+  }
+  .nm-pair {
+    display: grid;
+    gap: 1rem;
+  }
+  @media (min-width: 40rem) {
+    .nm-pair {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .nm-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0;
+    margin-top: 0.35rem;
+    border-bottom: 1px solid var(--line);
+  }
+  .nm-tab {
+    display: inline-flex;
+    min-height: 2.75rem;
+    align-items: center;
+    padding: 0.35rem 0.7rem;
+    border: 0;
+    border-bottom: 2px solid transparent;
+    background: none;
+    color: var(--muted);
+    font-size: 0.9rem;
+    cursor: pointer;
+  }
+  .nm-tab.is-on,
+  .nm-tab[aria-pressed="true"] {
+    color: var(--ink);
+    border-bottom-color: var(--ember);
+  }
+  .nm-actions {
+    margin: 0;
+  }
+  .nm-estimate {
+    margin: 0;
+    padding-top: 0.85rem;
+    border-top: 1px solid var(--line);
+    color: var(--faint);
+    font-size: 0.78rem;
+    line-height: 1.45;
+  }
+  .nm-table-wrap {
+    margin-top: 0.85rem;
+    overflow-x: auto;
+    max-width: 100%;
+    -webkit-overflow-scrolling: touch;
+  }
+  .nm-table.table-lab {
+    font-variant-numeric: tabular-nums;
+    font-size: 0.86rem;
+  }
+  .nm-table.table-lab th,
+  .nm-table.table-lab td {
+    padding: 0.15rem 0.55rem;
+    vertical-align: middle;
+    border-bottom: 1px solid color-mix(in srgb, var(--line) 80%, transparent);
+  }
+  .nm-table.table-lab thead th {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    background: var(--raised);
+  }
+  .nm-table.table-lab tbody tr:hover td,
+  .nm-table.table-lab tbody tr:hover th {
+    background: transparent;
+  }
+  .nm-day th {
+    padding-top: 1rem !important;
+    font-family: var(--font-sans);
+    font-size: 1.05rem;
+    font-weight: 560;
+    letter-spacing: -0.02em;
+    text-transform: none;
+    color: var(--ink);
+    background: var(--raised);
+  }
+  .nm-num {
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  .nm-runs {
+    max-width: 12rem;
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
+  .nm-fit.is-ok {
+    color: var(--ok);
+  }
+  .nm-fit.is-warn {
+    color: var(--warn);
+  }
+  .nm-row.is-on td,
+  .nm-row.is-on th {
+    background: color-mix(in srgb, var(--ember) 8%, transparent);
+  }
+  .nm-row.is-on .nm-num {
+    color: var(--ember);
+  }
+  [data-theme="light"] .nm-row.is-on .nm-num {
+    color: var(--accent-ink);
+  }
   .nm-sort {
     display: inline-flex;
     min-height: 2.75rem;
@@ -559,16 +884,86 @@ function paramsLabel(row: (typeof file.days)[number]['models'][number]): string 
     padding: 0.2rem 0.15rem;
     cursor: pointer;
   }
+  .nm-sort.is-on,
   .nm-sort:hover,
   .nm-sort:focus-visible {
     color: var(--ink);
   }
-  :global(.nm-engine) {
+  .nm-pick {
+    display: inline-flex;
+    min-height: 2.75rem;
+    min-width: 2.75rem;
+    align-items: center;
+    text-align: left;
+    font: inherit;
+    font-weight: 500;
+    color: inherit;
+    background: none;
+    border: 0;
+    padding: 0.15rem 0;
+    cursor: pointer;
+  }
+  .nm-pick:hover,
+  .nm-pick:focus-visible {
+    color: var(--ember);
+  }
+  .nm-kv {
+    display: grid;
+    gap: 0.55rem 1.25rem;
+    margin: 1rem 0 0;
+  }
+  .nm-kv > div {
+    display: grid;
+    grid-template-columns: 8.5rem 1fr;
+    gap: 0.75rem;
+    align-items: start;
+  }
+  .nm-kv dt {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--faint);
+    padding-top: 0.2rem;
+  }
+  .nm-kv dd {
+    margin: 0;
+    color: var(--ink);
+  }
+  .nm-engine-list {
+    display: grid;
+    gap: 0.15rem;
+    margin: 0.35rem 0 0;
+  }
+  .nm-engine {
     display: flex;
     min-height: 2.75rem;
     min-width: 2.75rem;
     flex-direction: column;
     justify-content: center;
     padding: 0.2rem 0.15rem;
+  }
+  .nm-sources {
+    margin-top: 1.1rem;
+    padding-top: 0.85rem;
+    border-top: 1px solid var(--line);
+    color: var(--muted);
+    font-size: 0.85rem;
+  }
+  .nm-sources summary {
+    display: flex;
+    min-height: 2.75rem;
+    align-items: center;
+    cursor: pointer;
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--faint);
+  }
+  .nm-sources p {
+    margin: 0.35rem 0 0;
+    max-width: 40rem;
+    line-height: 1.5;
   }
 </style>

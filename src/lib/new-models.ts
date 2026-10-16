@@ -160,6 +160,17 @@ export function flattenModels(file: NewModelsFile): NewModelRow[] {
   return file.days.flatMap((day) => day.models);
 }
 
+/** Newest release first; same-day rows use updated, then name. */
+export function sortModelsNewestFirst(models: NewModelRow[]): NewModelRow[] {
+  return models.slice().sort(
+    (a, b) =>
+      b.released.localeCompare(a.released) ||
+      (b.updated || '').localeCompare(a.updated || '') ||
+      a.name.localeCompare(b.name) ||
+      a.id.localeCompare(b.id),
+  );
+}
+
 export function groupByDay(models: NewModelRow[]): NewModelsDay[] {
   const map = new Map<string, NewModelRow[]>();
   for (const row of models) {
@@ -172,7 +183,7 @@ export function groupByDay(models: NewModelRow[]): NewModelsDay[] {
     .sort((a, b) => b[0].localeCompare(a[0]))
     .map(([date, rows]) => ({
       date,
-      models: rows.sort((a, b) => a.name.localeCompare(b.name) || a.id.localeCompare(b.id)),
+      models: sortModelsNewestFirst(rows),
     }));
 }
 
@@ -194,13 +205,18 @@ export function loadNewModelsFile(cwd = process.cwd()): NewModelsFile {
       if (parsed?.schema === NEW_MODELS_SCHEMA && Array.isArray(parsed.days)) {
         return {
           ...parsed,
-          days: parsed.days.map((day) => ({
-            ...day,
-            models: day.models.map((row) => ({
-              ...row,
-              runs_on: normalizeRunsOn(row.runs_on ?? deriveRunsOn(row)),
+          days: parsed.days
+            .slice()
+            .sort((a, b) => b.date.localeCompare(a.date))
+            .map((day) => ({
+              ...day,
+              models: sortModelsNewestFirst(
+                day.models.map((row) => ({
+                  ...row,
+                  runs_on: normalizeRunsOn(row.runs_on ?? deriveRunsOn(row)),
+                })),
+              ),
             })),
-          })),
         };
       }
     } catch {

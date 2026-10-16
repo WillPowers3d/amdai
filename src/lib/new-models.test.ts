@@ -27,6 +27,7 @@ import {
   estimateQ4KMGIB,
   fitForQ4,
   fitVerdict,
+  groupByDay,
   loadNewModelsFile,
   newModelsFeedItems,
   normalizeRunsOn,
@@ -34,6 +35,7 @@ import {
   renderNewModelsRss,
   rowAnchor,
   sizeBand,
+  sortModelsNewestFirst,
   temporalCoverage,
   type NewModelRow,
   type NewModelsFile,
@@ -120,6 +122,15 @@ describe('new open-weight models table', () => {
     assert.deepEqual(allowedQuants(['Q4_K_M', 'Q2_K', 'Q8_0', 'Q4_K_M']), ['Q4_K_M', 'Q8_0']);
     assert.equal(rowAnchor('LiquidAI/LFM2.5-24B-A2B'), 'LiquidAI--LFM2.5-24B-A2B');
     assert.deepEqual(assertNewModelsValid(EMPTY_NEW_MODELS), []);
+    const grouped = groupByDay([
+      sampleRow({ id: 'lab/old', name: 'Old', released: '2026-10-01', updated: '2026-10-01' }),
+      sampleRow({ id: 'lab/new', name: 'New', released: '2026-10-12', updated: '2026-10-12' }),
+      sampleRow({ id: 'lab/mid', name: 'Mid', released: '2026-10-12', updated: '2026-10-13' }),
+    ]);
+    assert.equal(grouped[0]?.date, '2026-10-12');
+    assert.deepEqual(grouped[0]?.models.map((row) => row.name), ['Mid', 'New']);
+    assert.equal(grouped[1]?.date, '2026-10-01');
+    assert.equal(sortModelsNewestFirst(grouped[0]!.models)[0]?.name, 'Mid');
   });
 
   it('validates the seeded Hub file and never invents a banned row', () => {
@@ -173,9 +184,14 @@ describe('new open-weight models table', () => {
     const page = readFileSync(join(here, '../pages/new-models.astro'), 'utf8');
     assert.match(page, /NEW_MODELS_H1/);
     assert.match(page, /nm-filters/);
+    assert.match(page, /nm-detail/);
+    assert.match(page, /This model/);
+    assert.match(page, /nm-stack/);
     assert.match(page, /fits my GPU/i);
     assert.match(page, /Runs on/);
     assert.match(page, /data-filter="engine"/);
+    assert.match(page, /data-sort="released"/);
+    assert.match(page, /sortKey = 'released'/);
     assert.match(page, /llama\.cpp/);
     assert.match(page, /MLX is off/);
     assert.match(page, /NEW_MODELS_JSON/);
