@@ -280,6 +280,7 @@ export const CRUMB_LABELS: Record<string, string> = {
   '/about': 'About',
   '/methodology': 'How we test',
   '/contact': 'Contact',
+  '/sponsor': 'Sponsor',
   '/terms': 'Terms',
   '/amdai-bench': 'amdai-bench',
   '/maintain': 'Weekday scrape',
@@ -1089,6 +1090,14 @@ setMeta(
   'Honest AMDai contact routes: contribute a sourced recipe, ROCm problems, and the forum. No invented inbox.',
 );
 setDate('/contact', '2026-10-13');
+setMeta(
+  '/sponsor',
+  'Sponsor AMDai',
+  'Sponsorship slots for AMD/Radeon-relevant vendors: homepage banner, featured GPU and backend listings, newsletter mention. Labeled Sponsored. Contact for rates.',
+);
+setDate('/sponsor', '2026-10-16');
+setDate('/llms.txt', '2026-10-16');
+setDate('/llms-full.txt', '2026-10-16');
 setMeta(
   '/terms',
   'Terms of use',

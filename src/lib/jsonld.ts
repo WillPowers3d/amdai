@@ -119,6 +119,45 @@ export function organizationJsonLd(): JsonLd {
   };
 }
 
+export function webPageJsonLd(input: {
+  name: string;
+  description: string;
+  url: string;
+  published?: string;
+  modified?: string;
+}): JsonLd {
+  const node: JsonLd = {
+    '@type': 'WebPage',
+    name: input.name,
+    description: input.description,
+    url: input.url,
+    isPartOf: { '@id': `${SITE_ORIGIN}/#website` },
+    publisher: { '@id': `${SITE_ORIGIN}/#organization` },
+  };
+  if (input.published) node.datePublished = input.published;
+  if (input.modified) node.dateModified = input.modified;
+  return node;
+}
+
+/** Fail closed if any node is a schema.org Person. */
+export function personJsonLdHits(value: unknown): string[] {
+  const hits: string[] = [];
+  const walk = (node: unknown) => {
+    if (!node || typeof node !== 'object') return;
+    if (Array.isArray(node)) {
+      for (const item of node) walk(item);
+      return;
+    }
+    const rec = node as Record<string, unknown>;
+    const raw = rec['@type'];
+    const types = Array.isArray(raw) ? raw.map(String) : raw ? [String(raw)] : [];
+    if (types.includes('Person')) hits.push('Person');
+    for (const child of Object.values(rec)) walk(child);
+  };
+  walk(value);
+  return hits;
+}
+
 export function aboutPageJsonLd(input: {
   name: string;
   description: string;
@@ -1065,6 +1104,7 @@ export function pageJsonLd(input: {
     path === '/methodology' ||
     path === '/terms' ||
     path === '/contact' ||
+    path === '/sponsor' ||
     path === '/amdai-bench';
   if (article && dates) {
     nodes.push(
@@ -1074,6 +1114,22 @@ export function pageJsonLd(input: {
         url,
         published: dates.published,
         modified: dates.modified,
+      }),
+    );
+  }
+
+  const specific = nodes.some((node) => {
+    const type = String(node['@type'] ?? '');
+    return type !== 'WebSite' && type !== 'Organization' && type !== 'BreadcrumbList';
+  });
+  if (!specific) {
+    nodes.push(
+      webPageJsonLd({
+        name: input.title.replace(/ · AMDai$/, ''),
+        description: input.description,
+        url,
+        published: dates?.published,
+        modified: dates?.modified,
       }),
     );
   }

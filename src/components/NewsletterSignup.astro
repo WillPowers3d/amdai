@@ -20,6 +20,9 @@ const formId = `nl-${variant}`;
   </h2>
   <p class:list={['mt-2 text-sm leading-relaxed text-muted', compact && 'text-xs']}>
     Email only — no account. Double opt-in. {NEWSLETTER_CADENCE}
+    Issues may include one labeled Sponsored mention.
+    Slots and rates:
+    <a class="underline decoration-accent/40" href="/sponsor">Sponsor</a>.
   </p>
   <form class="nl-form mt-4 space-y-3" data-nl-form data-nl-variant={variant} novalidate>
     <label class="hp" aria-hidden="true">Company site<input type="text" name="website" tabindex="-1" autocomplete="off" /></label>

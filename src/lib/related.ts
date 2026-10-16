@@ -748,6 +748,7 @@ function topicLinks(path: string): RelatedLink[] {
     path === '/about' ||
     path === '/methodology' ||
     path === '/contact' ||
+    path === '/sponsor' ||
     path === '/terms' ||
     path === '/amdai-bench' ||
     path === '/privacy' ||
@@ -759,6 +760,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/about', label: 'About' },
       { href: '/methodology', label: 'How we test' },
       { href: '/contact', label: 'Contact' },
+      { href: '/sponsor', label: 'Sponsor' },
       { href: '/terms', label: 'Terms' },
       { href: '/amdai-bench', label: 'amdai-bench' },
     ];

@@ -97,6 +97,18 @@ export const FAQ_ENTRIES: FaqItem[] = [
     ],
   },
   {
+    id: 'sponsor-slots',
+    group: 'about',
+    question: 'Can vendors sponsor AMDai?',
+    answer:
+      'Yes. AMDai sells labeled Sponsored slots for AMD and Radeon-relevant vendors: a homepage banner, featured listings on the GPU directory and inference-engines hub, and a newsletter mention. Rates are not listed — contact for rates. A booking does not change measured recommendations.',
+    links: [
+      { href: '/sponsor', label: 'Sponsor' },
+      { href: '/disclosure', label: 'Affiliate disclosure' },
+      { href: '/contact', label: 'Contact' },
+    ],
+  },
+  {
     id: 'lab-notes-rss',
     group: 'about',
     question: 'How do I follow Lab Notes without an account?',
@@ -1134,6 +1146,7 @@ export const REQUIRED_FAQ_HREFS = [
   '/methodology',
   '/contact',
   '/disclosure',
+  '/sponsor',
   '/rss.xml',
   '/budget',
   '/multi-gpu',
@@ -1259,6 +1272,7 @@ export function assertFaqValid(items: FaqItem[] = FAQ_ENTRIES): string[] {
     'what-is-amdai',
     'measured-vs-estimate',
     'affiliate-links',
+    'sponsor-slots',
     'lab-notes-rss',
     'open-in-stack-lab',
     'llamacpp-vs-strata',

@@ -10,6 +10,7 @@ import {
   collectJsonLdKeys,
   FORBIDDEN_JSONLD_KEYS,
   forbiddenJsonLdHits,
+  personJsonLdHits,
 } from './jsonld';
 import {
   DESC_MAX,
@@ -174,6 +175,10 @@ export function requiredFieldsFor(type: string, node: Record<string, unknown>): 
       need('name');
       need('url');
       break;
+    case 'WebPage':
+      need('name');
+      need('url');
+      break;
     case 'BreadcrumbList':
       if (!Array.isArray(node.itemListElement) || node.itemListElement.length < 2) {
         missing.push('itemListElement');
@@ -307,6 +312,9 @@ export function checkSeoPage(page: SeoPage, root: string): SeoIssue[] {
   for (const doc of parsed.ok) {
     for (const key of forbiddenJsonLdHits(doc)) {
       issues.push({ kind: 'jsonld', path: page.path, message: `forbidden JSON-LD field ${key}` });
+    }
+    for (const hit of personJsonLdHits(doc)) {
+      issues.push({ kind: 'jsonld', path: page.path, message: `forbidden JSON-LD type ${hit}` });
     }
     for (const node of graphNodes([doc])) {
       for (const type of typesOf(node).filter((t) => t !== 'ListItem' && t !== 'Question' && t !== 'Answer' && t !== 'HowToStep' && t !== 'DefinedTerm' && t !== 'SearchAction' && t !== 'EntryPoint' && t !== 'Person')) {

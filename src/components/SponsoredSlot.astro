@@ -1,0 +1,56 @@
+---
+import {
+  SPONSOR_LABEL,
+  SPONSOR_PATH,
+  SPONSOR_RATES,
+  bookingFor,
+  sponsorSlot,
+  type SponsorSlotId,
+} from '../lib/sponsor';
+
+interface Props {
+  slot: SponsorSlotId;
+  variant?: 'banner' | 'featured';
+}
+
+const { slot: slotId, variant = 'featured' } = Astro.props;
+const slot = sponsorSlot(slotId);
+const booking = bookingFor(slotId);
+const banner = variant === 'banner';
+---
+
+<aside
+  class:list={[
+    'rounded-2xl border border-line p-5',
+    banner ? 'bg-raised/70' : 'bg-raised/50',
+  ]}
+  aria-label={SPONSOR_LABEL}
+  data-sponsor-slot={slot.id}
+>
+  <p class="kicker">{SPONSOR_LABEL}</p>
+  {
+    booking ? (
+      <>
+        <p class="mt-2 font-medium text-ink">{booking.name}</p>
+        <p class="mt-2 text-sm leading-relaxed text-muted">{booking.line}</p>
+        <p class="mt-3">
+          <a class="btn-secondary" href={booking.href} rel="sponsored nofollow noopener">
+            {booking.name}
+          </a>
+        </p>
+      </>
+    ) : (
+      <>
+        <p class="mt-2 font-medium text-ink">{slot.name} — available</p>
+        <p class="mt-2 text-sm leading-relaxed text-muted">
+          {slot.summary} AMD and Radeon-relevant vendors: {SPONSOR_RATES}.
+        </p>
+        <p class="mt-3">
+          <a class="btn-secondary" href={SPONSOR_PATH}>
+            Sponsor this slot
+          </a>
+        </p>
+      </>
+    )
+  }
+</aside>

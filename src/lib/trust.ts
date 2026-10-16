@@ -20,6 +20,7 @@ export const TRUST_FOOTER_LINKS: TrustLink[] = [
   { href: '/about', label: 'About' },
   { href: '/methodology', label: 'Methodology' },
   { href: '/contact', label: 'Contact' },
+  { href: '/sponsor', label: 'Sponsor' },
   { href: '/terms', label: 'Terms' },
   { href: '/privacy', label: 'Privacy' },
   { href: '/disclosure', label: 'Disclosure' },

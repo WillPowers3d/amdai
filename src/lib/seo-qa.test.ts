@@ -20,8 +20,8 @@ import {
   isSitemapExcluded,
   shouldNoindex,
 } from './seo';
-import { breadcrumbJsonLd, forbiddenJsonLdHits, organizationJsonLd, pageJsonLd, websiteJsonLd } from './jsonld';
-import { BRAND } from './site';
+import { breadcrumbJsonLd, forbiddenJsonLdHits, organizationJsonLd, pageJsonLd, personJsonLdHits, websiteJsonLd } from './jsonld';
+import { BRAND, site } from './site';
 
 describe('SEO helpers', () => {
   it('marks account, search, and login noindex and out of the sitemap', () => {
@@ -75,6 +75,8 @@ describe('SEO helpers', () => {
 
   it('rejects price and rating keys in JSON-LD', () => {
     assert.deepEqual(forbiddenJsonLdHits(websiteJsonLd()), []);
+    assert.deepEqual(personJsonLdHits(organizationJsonLd()), []);
+    assert.deepEqual(personJsonLdHits(pageJsonLd({ pathname: '/', title: 'AMDai', description: site.description })), []);
     assert.equal(organizationJsonLd().name, BRAND);
     assert.deepEqual(forbiddenJsonLdHits({ aggregateRating: { ratingValue: 5 }, offers: { price: 1 } }), [
       'aggregateRating',

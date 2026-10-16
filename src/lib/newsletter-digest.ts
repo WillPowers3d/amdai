@@ -4,6 +4,7 @@
  */
 
 import { NEWSLETTER_CADENCE, NEWSLETTER_NAME, NEWSLETTER_SEND_FLAG, type NewsletterTopicId } from './newsletter';
+import { digestSponsoredMention } from './sponsor';
 
 /** Same line as the site footer / disclosure page. Do not invent a different disclosure. */
 export const DIGEST_AFFILIATE_LINE = 'As an Amazon Associate I earn from qualifying purchases.';
@@ -107,6 +108,12 @@ export function buildDigest(input: {
     lines.push(disclosure);
     lines.push('');
   }
+  const sponsored = digestSponsoredMention();
+  if (sponsored) {
+    lines.push(`${sponsored.label}: ${sponsored.text}`);
+    lines.push(sponsored.href);
+    lines.push('');
+  }
   lines.push('No tracking pixel. One-click unsubscribe does not need an account.');
   if (input.unsubUrl) lines.push(`Unsubscribe: ${input.unsubUrl}`);
   const text = `${lines.join('\n').trim()}\n`;
@@ -134,6 +141,9 @@ export function buildDigest(input: {
     `<p>${escapeHtml(NEWSLETTER_CADENCE)}</p>`,
     sections || '<p>Nothing cited changed in this window. No invented tok/s.</p>',
     disclosure ? `<p>${escapeHtml(disclosure)}</p>` : '',
+    sponsored
+      ? `<p><strong>${escapeHtml(sponsored.label)}:</strong> ${escapeHtml(sponsored.text)} <a href="${escapeHtml(sponsored.href)}">${escapeHtml(sponsored.href)}</a></p>`
+      : '',
     '<p>No tracking pixel. One-click unsubscribe does not need an account.</p>',
     input.unsubUrl ? `<p><a href="${escapeHtml(input.unsubUrl)}">Unsubscribe</a></p>` : '',
     '</body></html>',

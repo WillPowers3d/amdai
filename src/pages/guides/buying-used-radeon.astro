@@ -4,6 +4,7 @@ import AffiliateDisclosure from '../../components/AffiliateDisclosure.astro';
 import BuyButtons from '../../components/BuyButtons.astro';
 import Callout from '../../components/Callout.astro';
 import HowWeTest from '../../components/HowWeTest.astro';
+import NewsletterSignup from '../../components/NewsletterSignup.astro';
 import NextSteps from '../../components/NextSteps.astro';
 import SystemRamNeed from '../../components/SystemRamNeed.astro';
 import { RAM_FULL_LABEL, RAM_MIN_LABEL } from '../../lib/ram-surfaces';
@@ -301,6 +302,9 @@ const classes = buyingUsedVramClasses();
 
     <div class="mt-8">
       <HowWeTest />
+    </div>
+    <div class="mt-10">
+      <NewsletterSignup variant="article" />
     </div>
     <NextSteps path="/guides/buying-used-radeon" />
   </main>

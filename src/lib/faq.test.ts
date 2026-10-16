@@ -27,6 +27,7 @@ describe('FAQ source', () => {
     assert.ok(FAQ_ENTRIES.some((item) => item.id === 'open-in-stack-lab'));
     assert.ok(FAQ_ENTRIES.some((item) => item.id === 'radeon-vs-nvidia'));
     assert.ok(FAQ_ENTRIES.some((item) => item.id === 'affiliate-links'));
+    assert.ok(FAQ_ENTRIES.some((item) => item.id === 'sponsor-slots'));
     const questions = FAQ_ENTRIES.map((item) => item.question);
     assert.equal(new Set(questions).size, questions.length);
     const blob = FAQ_ENTRIES.map((item) => `${item.question} ${item.answer}`).join('\n');

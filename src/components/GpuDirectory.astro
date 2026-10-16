@@ -5,11 +5,15 @@ import { gpuCardId } from '../lib/gpu-pages';
 import { recipesForCard } from '../lib/recipes';
 import { gpuDirectoryHref, isConsumerRecipeGpu } from '../lib/consumer-gpu';
 import { isWorkstationRecipeGpu } from '../lib/workstation-gpu';
+import SponsoredSlot from './SponsoredSlot.astro';
 
 const families = [...new Set(gpuDirectory.cards.map((card) => card.family))];
 ---
 
 <div class="not-prose my-8">
+  <div class="mb-8">
+    <SponsoredSlot slot="gpus-featured" variant="featured" />
+  </div>
   <p class="text-sm text-muted">
     Snapshot {gpuDirectory.as_of}. Support follows AMD’s
     <a class="text-accent-ink underline decoration-accent/40 underline-offset-2" href={gpuDirectory.matrix}>ROCm 10.1.0 matrix</a>

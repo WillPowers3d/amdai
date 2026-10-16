@@ -442,6 +442,7 @@ export const REQUIRED_FOOTER_HREFS = [
   '/about',
   '/methodology',
   '/contact',
+  '/sponsor',
   '/terms',
   '/privacy',
   '/disclosure',

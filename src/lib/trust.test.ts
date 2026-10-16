@@ -53,6 +53,7 @@ describe('trust / E-E-A-T pack', () => {
     }
     assert.ok(contactRoutes().some((row) => row.href === '/forum'));
     assert.ok(REQUIRED_FOOTER_HREFS.includes('/rss.xml'));
+    assert.ok(REQUIRED_FOOTER_HREFS.includes('/sponsor'));
   });
 
   it('is in nav and sitemap with AboutPage JSON-LD and no prices', () => {

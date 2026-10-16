@@ -45,7 +45,7 @@ describe('sitemap from built pages', () => {
     assert.ok(!paths.includes('/search'));
     assert.equal(isSitemapExcluded('/troubleshoot'), false);
     assert.equal(isSitemapExcluded('/setup/windows'), false);
-    assert.deepEqual(EXTRA_SITEMAP_PATHS, ['/rss.xml']);
+    assert.deepEqual(EXTRA_SITEMAP_PATHS, ['/rss.xml', '/llms.txt', '/llms-full.txt']);
 
     const xml = readFileSync(join(root, 'sitemap-0.xml'), 'utf8');
     const locs = extractSitemapLocs(xml);
