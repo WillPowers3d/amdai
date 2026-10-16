@@ -6,6 +6,12 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import {
+  deriveRunsOn,
+  emptyRunsOn,
+  normalizeRunsOn,
+  type RunOnHit,
+} from './new-model-engines';
 
 export const NEW_MODELS_PATH = '/new-models';
 export const NEW_MODELS_JSON = '/data/new-models.json';
@@ -17,9 +23,9 @@ export const NEW_MODELS_TITLE = 'New open-weight models';
 export const NEW_MODELS_H1 = 'New open-weight models';
 export const NEW_MODELS_KICKER = 'Daily Hub scan · 90-day window';
 export const NEW_MODELS_DESCRIPTION =
-  'Daily table of new open-weight text and vision models from the Hugging Face Hub. Known labs plus trending. GGUF Q3–Q8. Q4_K_M fit is a labeled estimate.';
+  'Daily Hub table of new open-weight text and vision models. GGUF Q3–Q8. Runs-on from cited engine lists. Q4_K_M fit is a labeled estimate.';
 export const NEW_MODELS_MEASUREMENT =
-  'Hugging Face Hub public /api/models listings plus model-card safetensors and config metadata. GGUF filenames from unsloth, bartowski, lmstudio-community, and ggml-org. Not llama-bench.';
+  'Hugging Face Hub public /api/models listings plus model-card safetensors and config metadata. GGUF filenames from unsloth, bartowski, lmstudio-community, and ggml-org. Runs-on from llama.cpp convert_hf_to_gguf architecture names or a listed GGUF pack, the vLLM supported-architectures registry, Ollama library slugs, Strata Qwen 3.8 Flash notes on /backends, and SGLang architecture names when listed. LM Studio and Lemonade follow GGUF evidence as llama.cpp wrappers. MLX is excluded. Not llama-bench.';
 
 export const Q4_K_M_BPW = 4.85;
 export const FIT_OVERHEAD_GIB = 1.5;
@@ -62,6 +68,7 @@ export type NewModelRow = {
   q4_k_m_kind: 'listed' | 'estimate' | 'unknown';
   fit: Record<FitKey, FitVerdict>;
   size_band: SizeBand;
+  runs_on: RunOnHit[];
 };
 
 export type NewModelsDay = {
@@ -184,7 +191,18 @@ export function loadNewModelsFile(cwd = process.cwd()): NewModelsFile {
     if (!existsSync(file)) continue;
     try {
       const parsed = JSON.parse(readFileSync(file, 'utf8')) as NewModelsFile;
-      if (parsed?.schema === NEW_MODELS_SCHEMA && Array.isArray(parsed.days)) return parsed;
+      if (parsed?.schema === NEW_MODELS_SCHEMA && Array.isArray(parsed.days)) {
+        return {
+          ...parsed,
+          days: parsed.days.map((day) => ({
+            ...day,
+            models: day.models.map((row) => ({
+              ...row,
+              runs_on: normalizeRunsOn(row.runs_on ?? deriveRunsOn(row)),
+            })),
+          })),
+        };
+      }
     } catch {
       /* ignore */
     }
@@ -220,12 +238,14 @@ export function newModelsFeedItems(file: NewModelsFile, origin = 'https://amdai.
       const active = row.active_params_b != null && row.active_params_b !== row.params_b ? ` (${row.active_params_b}B active)` : '';
       const gguf = row.gguf.length ? `GGUF: ${[...new Set(row.gguf.flatMap((pack) => pack.quants))].join(', ')}.` : 'No public GGUF pack listed yet.';
       const q4 = row.q4_k_m_gib != null ? `Q4_K_M ${row.q4_k_m_kind} ${row.q4_k_m_gib} GiB.` : 'Q4_K_M size unknown.';
+      const engines = (row.runs_on ?? []).filter((hit) => hit.status === 'yes').map((hit) => hit.id);
+      const runs = engines.length ? `Runs on: ${engines.join(', ')}.` : 'Runs on: unknown.';
       return {
         title: `${row.name} · ${row.maker}`,
         href: `${base}${NEW_MODELS_PATH}#${rowAnchor(row.id)}`,
         guid: row.id,
         date: row.released,
-        description: `${row.released}. ${params}${active}. ${row.architecture ?? 'architecture not listed'}. ${q4} ${gguf} Fit estimates: 16 ${row.fit['16']}, 24 ${row.fit['24']}, 32 ${row.fit['32']}, 2×32 ${row.fit['2x32']}.`,
+        description: `${row.released}. ${params}${active}. ${row.architecture ?? 'architecture not listed'}. ${q4} ${gguf} ${runs} Fit estimates: 16 ${row.fit['16']}, 24 ${row.fit['24']}, 32 ${row.fit['32']}, 2×32 ${row.fit['2x32']}.`,
       };
     });
 }
@@ -287,7 +307,16 @@ export function assertNewModelsValid(file: NewModelsFile = loadNewModelsFile()):
         }
       }
       if (row.q4_k_m_kind === 'estimate' && row.q4_k_m_gib == null) errors.push(`${row.id} estimate without size`);
+      const runs = normalizeRunsOn(row.runs_on);
+      if (runs.length !== 7) errors.push(`${row.id} runs_on length`);
+      if (runs.some((hit) => hit.id === ('mlx' as typeof hit.id))) errors.push(`${row.id} mlx`);
+      if (runs.some((hit) => hit.status !== 'yes' && hit.status !== 'unknown')) {
+        errors.push(`${row.id} runs_on status`);
+      }
     }
   }
   return [...new Set(errors)];
 }
+
+export { deriveRunsOn, emptyRunsOn, normalizeRunsOn };
+export type { RunOnHit };

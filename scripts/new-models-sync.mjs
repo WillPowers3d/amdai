@@ -17,6 +17,7 @@ import { fileURLToPath } from 'node:url';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const DEFAULT_OUT = join(ROOT, 'public/data/new-models.json');
+const CATALOG_OUT = join(ROOT, 'src/data/engine-arch.json');
 const HF = 'https://huggingface.co';
 const API = `${HF}/api/models`;
 const SCHEMA = 'amdai-new-models/1';
@@ -24,6 +25,12 @@ const WINDOW_DAYS = 90;
 const Q4_BPW = 4.85;
 const OVERHEAD_GIB = 1.5;
 const UA = 'AMDai-new-models/1 (+https://amdai.net/new-models)';
+const LLAMA_CONVERT = 'https://raw.githubusercontent.com/ggml-org/llama.cpp/master/conversion/__init__.py';
+const VLLM_REGISTRY =
+  'https://raw.githubusercontent.com/vllm-project/vllm/master/vllm/model_executor/models/registry.py';
+const OLLAMA_LIBRARY = 'https://ollama.com/library';
+const SGLANG_MODELS = 'https://api.github.com/repos/sgl-project/sglang/contents/python/sglang/srt/models';
+const STRATA_FLASH = /qwen3\.8[-_ ]?flash/i;
 const PIPELINES = new Set(['text-generation', 'image-text-to-text']);
 const PACKAGERS = ['unsloth', 'bartowski', 'lmstudio-community', 'ggml-org'];
 const BANNED_NAME = /Qwen2\.5|Qwen3-8B/i;
@@ -124,6 +131,222 @@ function cutoffDay(now = new Date()) {
 function authorOf(row) {
   if (row?.author) return String(row.author);
   return String(row?.id || '').split('/')[0] || '';
+}
+
+async function textGet(url, attempt = 0) {
+  const res = await fetch(url, {
+    headers: { Accept: 'text/plain, application/json, text/html;q=0.9', 'User-Agent': UA },
+  });
+  if (res.status === 429 && attempt < 5) {
+    const wait = Number(res.headers.get('retry-after') || 0) * 1000 || 1500 * (attempt + 1);
+    await sleep(wait);
+    return textGet(url, attempt + 1);
+  }
+  if (res.status === 404) return null;
+  if (!res.ok) throw new Error(`${res.status} ${url}`);
+  return res.text();
+}
+
+function parseArchKeys(text) {
+  const keys = new Set();
+  if (!text) return keys;
+  for (const match of text.matchAll(/"([A-Za-z][A-Za-z0-9_\.]*)"/g)) {
+    const key = match[1];
+    if (
+      /(?:ForCausalLM|ForConditionalGeneration|LMHeadModel|ForMaskedLM|ForSequenceClassification|ForTokenClassification|ForRewardModel|ForProcessRewardModel)$/.test(
+        key,
+      ) ||
+      /^(?:GritLM|Cheers|ColQwen3|ColQwen3_5|HF_ColBERT|Terratorch|CLIPModel|SiglipModel|GteModel|GteNewModel|PrithviGeoSpatialMAE|NeoBERT|RND1)$/.test(
+        key,
+      )
+    ) {
+      keys.add(key);
+    }
+  }
+  return keys;
+}
+
+function parseOllamaSlugs(html) {
+  const slugs = new Set();
+  if (!html) return slugs;
+  for (const match of html.matchAll(/href="\/library\/([a-z0-9][a-z0-9._-]*)"/gi)) {
+    slugs.add(match[1].toLowerCase());
+  }
+  for (const match of html.matchAll(/^\s*-\s+([a-z0-9][a-z0-9._-]*)\s*$/gim)) {
+    slugs.add(match[1].toLowerCase());
+  }
+  slugs.delete('library');
+  return slugs;
+}
+
+const SIZE_TOKEN = /^(?:\d+(?:\.\d+)?B|A\d)/i;
+const STOP_TOKEN = /^(instruct|chat|it|base|next|flash|thinking|coder|vl|vision|moe)$/i;
+
+function ollamaFamilyCandidates(id, name) {
+  const base = (name || String(id).split('/').pop() || id).trim();
+  if (!base) return [];
+  const tokens = base.split(/[-_]/).filter(Boolean);
+  if (!tokens.length) return [];
+  const kept = [];
+  for (const tok of tokens) {
+    if (SIZE_TOKEN.test(tok) || STOP_TOKEN.test(tok)) break;
+    kept.push(tok);
+  }
+  if (!kept.length) kept.push(tokens[0]);
+  const compact = kept.join('').toLowerCase();
+  const dashed = kept.join('-').toLowerCase();
+  const first = tokens[0].toLowerCase();
+  return [...new Set([dashed, compact, first].filter(Boolean))];
+}
+
+function ollamaFamilySlug(id, name) {
+  return ollamaFamilyCandidates(id, name)[0] || null;
+}
+
+function archInList(architecture, list) {
+  const arch = String(architecture || '').trim();
+  if (!arch || !list?.size) return false;
+  if (list.has(arch)) return true;
+  const lower = arch.toLowerCase();
+  for (const item of list) {
+    if (item.toLowerCase() === lower) return true;
+  }
+  return false;
+}
+
+function deriveRunsOn(row, catalogs) {
+  const arch = row.architecture;
+  const hasGguf = Array.isArray(row.gguf) && row.gguf.length > 0;
+  const llamaArch = archInList(arch, catalogs.llamacpp);
+  const vllmArch = archInList(arch, catalogs.vllm);
+  const sglangArch = archInList(arch, catalogs.sglang);
+  const ollamaSlug = ollamaFamilyCandidates(row.id, row.name).find((slug) => catalogs.ollama.has(slug));
+  const ollamaYes = Boolean(ollamaSlug);
+  const strata = STRATA_FLASH.test(`${row.id} ${row.name}`);
+  const hit = (id, yes, evidence) => ({
+    id,
+    status: yes ? 'yes' : 'unknown',
+    evidence: yes ? evidence : '',
+  });
+  return [
+    hit('llamacpp', hasGguf || llamaArch, hasGguf ? 'gguf' : llamaArch ? 'llamacpp-arch' : ''),
+    hit('strata', strata, strata ? 'backends-strata' : ''),
+    hit('vllm', vllmArch, vllmArch ? 'vllm-arch' : ''),
+    hit('ollama', ollamaYes, ollamaYes ? 'ollama-library' : ''),
+    hit('lmstudio', hasGguf, hasGguf ? 'gguf' : ''),
+    hit('lemonade', hasGguf, hasGguf ? 'gguf' : ''),
+    hit('sglang', sglangArch, sglangArch ? 'sglang-arch' : ''),
+  ];
+}
+
+function readCatalogSnapshot() {
+  if (!existsSync(CATALOG_OUT)) {
+    return { as_of: '', llamacpp: new Set(), vllm: new Set(), ollama: new Set(), sglang: new Set() };
+  }
+  try {
+    const parsed = JSON.parse(readFileSync(CATALOG_OUT, 'utf8'));
+    return {
+      as_of: parsed.as_of || '',
+      llamacpp: new Set(parsed.llamacpp || []),
+      vllm: new Set(parsed.vllm || []),
+      ollama: new Set(parsed.ollama || []),
+      sglang: new Set(parsed.sglang || []),
+    };
+  } catch {
+    return { as_of: '', llamacpp: new Set(), vllm: new Set(), ollama: new Set(), sglang: new Set() };
+  }
+}
+
+async function fetchSglangArches() {
+  const arches = new Set();
+  let listing;
+  try {
+    listing = await hfGet(SGLANG_MODELS);
+  } catch {
+    return arches;
+  }
+  if (!Array.isArray(listing)) return arches;
+  const files = listing.filter(
+    (row) =>
+      row?.type === 'file' &&
+      typeof row.name === 'string' &&
+      row.name.endsWith('.py') &&
+      !['__init__.py', 'registry.py', 'utils.py'].includes(row.name) &&
+      typeof row.download_url === 'string',
+  );
+  for (const file of files) {
+    await sleep(40);
+    try {
+      const text = await textGet(file.download_url);
+      if (!text) continue;
+      for (const match of text.matchAll(/class\s+([A-Za-z][A-Za-z0-9_]*(?:ForCausalLM|ForConditionalGeneration|LMHeadModel))/g)) {
+        arches.add(match[1]);
+      }
+      for (const match of text.matchAll(/EntryClass\s*=\s*([^\n]+)/g)) {
+        for (const name of match[1].matchAll(/[A-Za-z][A-Za-z0-9_]+/g)) {
+          if (/(?:ForCausalLM|ForConditionalGeneration|LMHeadModel)$/.test(name[0])) arches.add(name[0]);
+        }
+      }
+    } catch {
+      /* keep going */
+    }
+  }
+  return arches;
+}
+
+async function loadEngineCatalogs() {
+  const snapshot = readCatalogSnapshot();
+  const catalogs = {
+    as_of: new Date().toISOString(),
+    llamacpp: new Set(snapshot.llamacpp),
+    vllm: new Set(snapshot.vllm),
+    ollama: new Set(snapshot.ollama),
+    sglang: new Set(snapshot.sglang),
+  };
+  try {
+    const llama = parseArchKeys(await textGet(LLAMA_CONVERT));
+    if (llama.size) catalogs.llamacpp = llama;
+  } catch (err) {
+    console.warn(`llama.cpp arch list: ${err instanceof Error ? err.message : err}`);
+  }
+  try {
+    const vllm = parseArchKeys(await textGet(VLLM_REGISTRY));
+    if (vllm.size) catalogs.vllm = vllm;
+  } catch (err) {
+    console.warn(`vLLM arch list: ${err instanceof Error ? err.message : err}`);
+  }
+  try {
+    const ollama = parseOllamaSlugs(await textGet(OLLAMA_LIBRARY));
+    if (ollama.size) catalogs.ollama = ollama;
+  } catch (err) {
+    console.warn(`Ollama library: ${err instanceof Error ? err.message : err}`);
+  }
+  try {
+    const sglang = await fetchSglangArches();
+    if (sglang.size) catalogs.sglang = sglang;
+  } catch (err) {
+    console.warn(`SGLang arch list: ${err instanceof Error ? err.message : err}`);
+  }
+  const file = {
+    as_of: catalogs.as_of,
+    sources: {
+      llamacpp: LLAMA_CONVERT,
+      vllm: VLLM_REGISTRY,
+      ollama: OLLAMA_LIBRARY,
+      sglang: SGLANG_MODELS,
+      strata: 'https://amdai.net/backends/strata',
+    },
+    llamacpp: [...catalogs.llamacpp].sort(),
+    vllm: [...catalogs.vllm].sort(),
+    ollama: [...catalogs.ollama].sort(),
+    sglang: [...catalogs.sglang].sort(),
+  };
+  mkdirSync(dirname(CATALOG_OUT), { recursive: true });
+  writeFileSync(CATALOG_OUT, `${JSON.stringify(file, null, 2)}\n`);
+  console.log(
+    `engine catalogs · llama.cpp ${file.llamacpp.length} · vLLM ${file.vllm.length} · Ollama ${file.ollama.length} · SGLang ${file.sglang.length}`,
+  );
+  return catalogs;
 }
 
 async function hfGet(url, attempt = 0) {
@@ -459,6 +682,7 @@ async function enrich(listing, trendingIds) {
       '2x32': fitVerdict(q4, 64),
     },
     size_band: sizeBand(paramsB),
+    runs_on: [],
   };
 }
 
@@ -500,31 +724,40 @@ async function main() {
   const existingPath = resolve(process.env.NEW_MODELS_EXISTING || out);
   const existing = readExisting(existingPath);
   const byId = new Map(flatten(existing).map((row) => [row.id, row]));
-
-  const { listings, trendingIds } = await collectListings();
-  const candidates = [...listings.values()]
-    .filter((row) => keepListing(row, trendingIds))
-    .sort((a, b) => {
-      const knownDelta = Number(knownOrg(authorOf(b))) - Number(knownOrg(authorOf(a)));
-      if (knownDelta) return knownDelta;
-      return String(b.createdAt || '').localeCompare(String(a.createdAt || ''));
-    });
-
+  const catalogs = await loadEngineCatalogs();
   const cap = Number(process.env.NEW_MODELS_MAX || 80);
-  const picked = candidates.slice(0, Number.isFinite(cap) && cap > 0 ? cap : 80);
+  const skipHub = Number.isFinite(cap) && cap === 0;
+
   let fetched = 0;
-  for (const listing of picked) {
-    await sleep(90);
-    try {
-      const row = await enrich(listing, trendingIds);
-      if (row) {
-        byId.set(row.id, row);
-        fetched += 1;
-        console.log(`kept ${row.id}`);
+  let candidates = [];
+  if (!skipHub) {
+    const { listings, trendingIds } = await collectListings();
+    candidates = [...listings.values()]
+      .filter((row) => keepListing(row, trendingIds))
+      .sort((a, b) => {
+        const knownDelta = Number(knownOrg(authorOf(b))) - Number(knownOrg(authorOf(a)));
+        if (knownDelta) return knownDelta;
+        return String(b.createdAt || '').localeCompare(String(a.createdAt || ''));
+      });
+
+    const picked = candidates.slice(0, Number.isFinite(cap) && cap > 0 ? cap : 80);
+    for (const listing of picked) {
+      await sleep(90);
+      try {
+        const row = await enrich(listing, trendingIds);
+        if (row) {
+          byId.set(row.id, row);
+          fetched += 1;
+          console.log(`kept ${row.id}`);
+        }
+      } catch (err) {
+        console.warn(`skip ${listing.id}: ${err instanceof Error ? err.message : err}`);
       }
-    } catch (err) {
-      console.warn(`skip ${listing.id}: ${err instanceof Error ? err.message : err}`);
     }
+  }
+
+  for (const [id, row] of byId) {
+    byId.set(id, { ...row, runs_on: deriveRunsOn(row, catalogs) });
   }
 
   const file = {

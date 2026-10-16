@@ -15,6 +15,7 @@ import {
   makersOf,
   rowAnchor,
 } from '../lib/new-models';
+import { RUN_ENGINES, engineLabel, engineNote, yesEngineIds } from '../lib/new-model-engines';
 
 const file = loadNewModelsFile();
 const makers = makersOf(file);
@@ -42,6 +43,11 @@ function paramsLabel(row: (typeof file.days)[number]['models'][number]): string 
       downloads stays off. GGUF packs are searched on unsloth, bartowski,
       lmstudio-community, and ggml-org. Q3–Q8 only — Q1/Q2 stay off.
       Fit is a labeled Q4_K_M estimate, not a measured card.
+      Runs on is evidence-only: llama.cpp convert arch or a listed GGUF pack,
+      vLLM’s supported-architectures list, Ollama library slugs, Strata’s
+      Qwen 3.8 Flash notes on /backends, and SGLang architecture names when
+      listed. LM Studio and Lemonade follow GGUF as llama.cpp wrappers.
+      Empty stays unknown. MLX is off — not a Radeon path.
     </p>
     <p class="mt-3 text-sm text-muted">
       <span id="nm-asof">{count} models · as of {asOf || 'this build'}.</span>
@@ -72,7 +78,7 @@ function paramsLabel(row: (typeof file.days)[number]['models'][number]): string 
           <p class="kicker">Releases</p>
           <h2 id="table-heading" class="mt-2 font-serif text-3xl">Filter the days</h2>
           <p class="mt-2 max-w-2xl text-sm text-muted">
-            Maker, size band, GGUF, and a Radeon VRAM class. Click a column to sort inside
+            Maker, size band, GGUF, engine, and a Radeon VRAM class. Click a column to sort inside
             each day. Without JavaScript the full fallback table stays visible.
           </p>
         </div>
@@ -104,6 +110,17 @@ function paramsLabel(row: (typeof file.days)[number]['models'][number]): string 
             <button type="button" class="chip is-on" data-filter="gguf" data-value="" aria-pressed="true">Any</button>
             <button type="button" class="chip" data-filter="gguf" data-value="yes" aria-pressed="false">Has GGUF</button>
             <button type="button" class="chip" data-filter="gguf" data-value="no" aria-pressed="false">No GGUF yet</button>
+          </div>
+        </div>
+        <div>
+          <p class="font-mono text-[0.68rem] uppercase tracking-[0.12em] text-faint">Runs on</p>
+          <div class="mt-2 flex flex-wrap gap-2" role="group" aria-label="Runs on engine">
+            <button type="button" class="chip is-on" data-filter="engine" data-value="" aria-pressed="true">Any</button>
+            {RUN_ENGINES.map((engine) => (
+              <button type="button" class="chip" data-filter="engine" data-value={engine.id} aria-pressed="false">
+                {engine.label}
+              </button>
+            ))}
           </div>
         </div>
         <div>
@@ -140,6 +157,7 @@ function paramsLabel(row: (typeof file.days)[number]['models'][number]): string 
                       <th scope="col"><button type="button" class="nm-sort" data-sort="maker">Maker</button></th>
                       <th scope="col"><button type="button" class="nm-sort" data-sort="params">Params</button></th>
                       <th scope="col"><button type="button" class="nm-sort" data-sort="arch">Arch</button></th>
+                      <th scope="col"><button type="button" class="nm-sort" data-sort="runs">Runs on</button></th>
                       <th scope="col"><button type="button" class="nm-sort" data-sort="ctx">Ctx</button></th>
                       <th scope="col"><button type="button" class="nm-sort" data-sort="license">License</button></th>
                       <th scope="col">GGUF</th>
@@ -158,6 +176,7 @@ function paramsLabel(row: (typeof file.days)[number]['models'][number]): string 
                         data-maker={row.maker}
                         data-band={row.size_band}
                         data-gguf={row.gguf.length ? 'yes' : 'no'}
+                        data-engines={yesEngineIds(row.runs_on).join(' ')}
                         data-fit-16={row.fit['16']}
                         data-fit-24={row.fit['24']}
                         data-fit-32={row.fit['32']}
@@ -176,6 +195,24 @@ function paramsLabel(row: (typeof file.days)[number]['models'][number]): string 
                         <td>{row.maker}</td>
                         <td>{paramsLabel(row)}</td>
                         <td class="text-sm">{row.architecture ?? 'not listed'}</td>
+                        <td class="text-sm">
+                          {yesEngineIds(row.runs_on).length === 0 ? (
+                            'unknown'
+                          ) : (
+                            <ul class="space-y-1">
+                              {row.runs_on
+                                .filter((hit) => hit.status === 'yes')
+                                .map((hit) => (
+                                  <li>
+                                    <a class="nm-engine underline decoration-accent/40" href={RUN_ENGINES.find((e) => e.id === hit.id)?.href ?? '/backends'}>
+                                      <span>{engineLabel(hit.id)}</span>
+                                      <span class="text-xs text-faint">{engineNote(hit.id)}</span>
+                                    </a>
+                                  </li>
+                                ))}
+                            </ul>
+                          )}
+                        </td>
                         <td>{row.context != null ? row.context.toLocaleString('en-US') : 'not listed'}</td>
                         <td class="text-sm">{row.license ?? 'not listed'}</td>
                         <td class="text-sm">
@@ -235,10 +272,21 @@ function paramsLabel(row: (typeof file.days)[number]['models'][number]): string 
     q4_k_m_kind: string;
     fit: Record<string, Fit>;
     size_band: string;
+    runs_on?: Array<{ id: string; status: string; evidence?: string }>;
   };
   type FileShape = { schema?: string; as_of?: string; days: Array<{ date: string; models: Row[] }> };
 
-  const filters = { maker: '', band: '', gguf: '', gpu: '' };
+  const engineMeta: Record<string, { label: string; note: string; href: string }> = {
+    llamacpp: { label: 'llama.cpp', note: 'Vulkan / ROCm', href: '/backends/llamacpp' },
+    strata: { label: 'Strata', note: 'ROCm (HIP)', href: '/backends/strata' },
+    vllm: { label: 'vLLM', note: 'ROCm', href: '/backends/vllm' },
+    ollama: { label: 'Ollama', note: 'ROCm', href: '/backends/ollama' },
+    lmstudio: { label: 'LM Studio', note: 'Vulkan / ROCm', href: '/backends/lmstudio' },
+    lemonade: { label: 'Lemonade', note: 'Vulkan / ROCm', href: '/backends/lemonade' },
+    sglang: { label: 'SGLang', note: 'ROCm', href: '/backends/sglang' },
+  };
+
+  const filters = { maker: '', band: '', gguf: '', gpu: '', engine: '' };
   let sortKey = 'name';
   let sortDir = 1;
   let file: FileShape = { days: [] };
@@ -275,6 +323,23 @@ function paramsLabel(row: (typeof file.days)[number]['models'][number]): string 
     return `${row.params_b}B${active}`;
   }
 
+  function yesEngines(row: Row): string[] {
+    return (row.runs_on || []).filter((hit) => hit.status === 'yes' && hit.id !== 'mlx').map((hit) => hit.id);
+  }
+
+  function runsOnHtml(row: Row): string {
+    const yes = yesEngines(row);
+    if (!yes.length) return 'unknown';
+    const items = yes
+      .map((id) => {
+        const meta = engineMeta[id] || { label: id, note: '', href: '/backends' };
+        const note = meta.note ? `<span class="text-xs text-faint">${escapeHtml(meta.note)}</span>` : '';
+        return `<li><a class="nm-engine underline decoration-accent/40" href="${escapeHtml(meta.href)}"><span>${escapeHtml(meta.label)}</span>${note}</a></li>`;
+      })
+      .join('');
+    return `<ul class="space-y-1">${items}</ul>`;
+  }
+
   function ggufHtml(row: Row): string {
     if (!row.gguf.length) return 'none listed';
     const items = row.gguf
@@ -296,6 +361,7 @@ function paramsLabel(row: (typeof file.days)[number]['models'][number]): string 
         : key === 'q4' ? a.q4_k_m_gib ?? -1
         : key === 'maker' ? a.maker
         : key === 'arch' ? a.architecture ?? ''
+        : key === 'runs' ? yesEngines(a).join(' ')
         : key === 'license' ? a.license ?? ''
         : a.name;
       const bv =
@@ -304,6 +370,7 @@ function paramsLabel(row: (typeof file.days)[number]['models'][number]): string 
         : key === 'q4' ? b.q4_k_m_gib ?? -1
         : key === 'maker' ? b.maker
         : key === 'arch' ? b.architecture ?? ''
+        : key === 'runs' ? yesEngines(b).join(' ')
         : key === 'license' ? b.license ?? ''
         : b.name;
       if (typeof av === 'number' && typeof bv === 'number') return (av - bv) * dir;
@@ -314,10 +381,12 @@ function paramsLabel(row: (typeof file.days)[number]['models'][number]): string 
   function rowVisible(row: Row): boolean {
     const gguf = row.gguf.length ? 'yes' : 'no';
     const fit = filters.gpu ? row.fit[filters.gpu] : '';
+    const engines = yesEngines(row);
     return (
       (!filters.maker || row.maker === filters.maker) &&
       (!filters.band || row.size_band === filters.band) &&
       (!filters.gguf || gguf === filters.gguf) &&
+      (!filters.engine || engines.includes(filters.engine)) &&
       (!filters.gpu || fit === 'fits' || fit === 'tight')
     );
   }
@@ -349,11 +418,13 @@ function paramsLabel(row: (typeof file.days)[number]['models'][number]): string 
         const body = rows
           .map((row) => {
             const gguf = row.gguf.length ? 'yes' : 'no';
-            return `<tr id="${escapeHtml(rowAnchor(row.id))}" data-id="${escapeHtml(row.id)}" data-maker="${escapeHtml(row.maker)}" data-band="${escapeHtml(row.size_band)}" data-gguf="${gguf}" data-fit-16="${row.fit['16']}" data-fit-24="${row.fit['24']}" data-fit-32="${row.fit['32']}" data-fit-2x32="${row.fit['2x32']}">
+            const engines = yesEngines(row).join(' ');
+            return `<tr id="${escapeHtml(rowAnchor(row.id))}" data-id="${escapeHtml(row.id)}" data-maker="${escapeHtml(row.maker)}" data-band="${escapeHtml(row.size_band)}" data-gguf="${gguf}" data-engines="${escapeHtml(engines)}" data-fit-16="${row.fit['16']}" data-fit-24="${row.fit['24']}" data-fit-32="${row.fit['32']}" data-fit-2x32="${row.fit['2x32']}">
               <th scope="row"><a class="underline decoration-accent/40" href="${escapeHtml(row.href)}" rel="noopener">${escapeHtml(row.name)}</a><p class="mt-1 text-xs text-faint">${escapeHtml((row.modalities || []).join(' · '))}</p></th>
               <td>${escapeHtml(row.maker)}</td>
               <td>${escapeHtml(paramsLabel(row))}</td>
               <td class="text-sm">${escapeHtml(row.architecture ?? 'not listed')}</td>
+              <td class="text-sm">${runsOnHtml(row)}</td>
               <td>${row.context != null ? escapeHtml(row.context.toLocaleString('en-US')) : 'not listed'}</td>
               <td class="text-sm">${escapeHtml(row.license ?? 'not listed')}</td>
               <td class="text-sm">${ggufHtml(row)}</td>
@@ -375,6 +446,7 @@ function paramsLabel(row: (typeof file.days)[number]['models'][number]): string 
                 <th scope="col"><button type="button" class="nm-sort" data-sort="maker">Maker</button></th>
                 <th scope="col"><button type="button" class="nm-sort" data-sort="params">Params</button></th>
                 <th scope="col"><button type="button" class="nm-sort" data-sort="arch">Arch</button></th>
+                <th scope="col"><button type="button" class="nm-sort" data-sort="runs">Runs on</button></th>
                 <th scope="col"><button type="button" class="nm-sort" data-sort="ctx">Ctx</button></th>
                 <th scope="col"><button type="button" class="nm-sort" data-sort="license">License</button></th>
                 <th scope="col">GGUF</th>
@@ -429,6 +501,7 @@ function paramsLabel(row: (typeof file.days)[number]['models'][number]): string 
       filters.band = '';
       filters.gguf = '';
       filters.gpu = '';
+      filters.engine = '';
       document.querySelectorAll<HTMLButtonElement>('[data-filter]').forEach((btn) => {
         const on = (btn.dataset.value ?? '') === '';
         btn.classList.toggle('is-on', on);
@@ -489,5 +562,13 @@ function paramsLabel(row: (typeof file.days)[number]['models'][number]): string 
   .nm-sort:hover,
   .nm-sort:focus-visible {
     color: var(--ink);
+  }
+  :global(.nm-engine) {
+    display: flex;
+    min-height: 2.75rem;
+    min-width: 2.75rem;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0.2rem 0.15rem;
   }
 </style>

@@ -672,6 +672,8 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
   ],
   '/new-models': [
     { href: '/models', label: 'House models' },
+    { href: '/backends', label: 'Backends' },
+    { href: '/backends/llamacpp', label: 'llama.cpp' },
     { href: '/calculator', label: 'Calculator' },
     { href: '/quants', label: 'Quants' },
     { href: '/can-run', label: 'Can my Radeon run it?' },

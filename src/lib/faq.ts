@@ -817,10 +817,11 @@ export const FAQ_ENTRIES: FaqItem[] = [
     group: 'models-quants',
     question: 'Where do I see new open-weight model releases?',
     answer:
-      'The /new-models table is a daily Hugging Face Hub scan of text-generation and image-text-to-text rows from known labs plus trending. It lists params, architecture, context, license, GGUF Q3–Q8 packs, and a labeled Q4_K_M fit estimate for 16/24/32/2×32 GB. Not llama-bench. Q1/Q2 stay off.',
+      'The /new-models table is a daily Hugging Face Hub scan of text-generation and image-text-to-text rows from known labs plus trending. It lists params, architecture, context, license, GGUF Q3–Q8 packs, a Runs on column from cited engine lists (llama.cpp convert arch or GGUF, vLLM supported-architectures, Ollama library, Strata Flash notes on /backends; LM Studio and Lemonade follow GGUF; SGLang only when its architecture is listed; unknown if we lack evidence; MLX stays off), and a labeled Q4_K_M fit estimate for 16/24/32/2×32 GB. Not llama-bench. Q1/Q2 stay off.',
     links: [
       { href: '/new-models', label: 'New models' },
       { href: '/models', label: 'House models' },
+      { href: '/backends', label: 'Backends' },
       { href: '/calculator', label: 'Calculator' },
       { href: '/quants', label: 'Quants' },
       { href: '/can-run', label: 'Can my Radeon run it?' },

@@ -179,6 +179,9 @@ function topicLinks(path: string): RelatedLink[] {
   if (path === '/new-models') {
     return [
       { href: '/models', label: 'House models' },
+      { href: '/backends', label: 'Backends' },
+      { href: '/backends/llamacpp', label: 'llama.cpp' },
+      { href: '/backends/strata', label: 'Strata' },
       { href: '/calculator', label: 'Calculator' },
       { href: '/quants', label: 'Quants' },
       { href: '/can-run', label: 'Can my Radeon run it?' },

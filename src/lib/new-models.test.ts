@@ -23,11 +23,13 @@ import {
   NEW_MODELS_WINDOW_DAYS,
   allowedQuants,
   assertNewModelsValid,
+  deriveRunsOn,
   estimateQ4KMGIB,
   fitForQ4,
   fitVerdict,
   loadNewModelsFile,
   newModelsFeedItems,
+  normalizeRunsOn,
   quantBand,
   renderNewModelsRss,
   rowAnchor,
@@ -36,6 +38,12 @@ import {
   type NewModelRow,
   type NewModelsFile,
 } from './new-models';
+import {
+  RUN_ENGINE_IDS,
+  loadEngineCatalogs,
+  ollamaFamilySlug,
+  strataFlashHit,
+} from './new-model-engines';
 
 const here = dirname(fileURLToPath(import.meta.url));
 
@@ -70,6 +78,12 @@ function sampleRow(over: Partial<NewModelRow> = {}): NewModelRow {
     q4_k_m_kind: 'estimate',
     fit: fitForQ4(13.5),
     size_band: '20-40B',
+    runs_on: deriveRunsOn({
+      id: 'LiquidAI/LFM2.5-24B-A2B',
+      name: 'LFM2.5-24B-A2B',
+      architecture: 'Lfm2MoeForCausalLM',
+      gguf: [{}],
+    }),
     ...over,
   };
 }
@@ -88,6 +102,10 @@ describe('new open-weight models table', () => {
     assert.ok(NEW_MODELS_DESCRIPTION.length <= 160);
     assert.match(NEW_MODELS_MEASUREMENT, /Hugging Face Hub/);
     assert.match(NEW_MODELS_MEASUREMENT, /Not llama-bench/);
+    assert.match(NEW_MODELS_MEASUREMENT, /vLLM/);
+    assert.match(NEW_MODELS_MEASUREMENT, /Ollama/);
+    assert.match(NEW_MODELS_MEASUREMENT, /MLX is excluded/);
+    assert.doesNotMatch(NEW_MODELS_DESCRIPTION, /MLX/);
     assert.deepEqual([...ALLOWED_QUANT_BANDS], ['Q8', 'Q6', 'Q5', 'Q4', 'Q3']);
     assert.deepEqual([...GGUF_PACKAGERS], ['unsloth', 'bartowski', 'lmstudio-community', 'ggml-org']);
     assert.deepEqual(FIT_VRAM, { '16': 16, '24': 24, '32': 32, '2x32': 64 });
@@ -122,6 +140,11 @@ describe('new open-weight models table', () => {
           assert.ok(GGUF_PACKAGERS.includes(pack.org as (typeof GGUF_PACKAGERS)[number]));
           assert.ok(pack.quants.every((q) => quantBand(q)));
         }
+        const runs = normalizeRunsOn(row.runs_on);
+        assert.equal(runs.length, RUN_ENGINE_IDS.length);
+        assert.deepEqual(runs.map((hit) => hit.id), [...RUN_ENGINE_IDS]);
+        assert.ok(runs.every((hit) => hit.status === 'yes' || hit.status === 'unknown'));
+        assert.ok(!runs.some((hit) => String(hit.id) === 'mlx'));
       }
     }
   });
@@ -151,6 +174,10 @@ describe('new open-weight models table', () => {
     assert.match(page, /NEW_MODELS_H1/);
     assert.match(page, /nm-filters/);
     assert.match(page, /fits my GPU/i);
+    assert.match(page, /Runs on/);
+    assert.match(page, /data-filter="engine"/);
+    assert.match(page, /llama\.cpp/);
+    assert.match(page, /MLX is off/);
     assert.match(page, /NEW_MODELS_JSON/);
     assert.match(page, /NEW_MODELS_FEED/);
     assert.match(page, /NextSteps/);
@@ -182,5 +209,69 @@ describe('new open-weight models table', () => {
     assert.ok(dataset.temporalCoverage);
     assert.match(String(dataset.measurementTechnique), /Hugging Face Hub/);
     assert.match(String(dataset.measurementTechnique), /Not llama-bench/);
+  });
+
+  it('derives Runs on from evidence and leaves the rest unknown', () => {
+    const catalogs = {
+      as_of: '2026-10-16T00:00:00.000Z',
+      llamacpp: ['Qwen3ForCausalLM', 'Lfm2MoeForCausalLM'],
+      vllm: ['Qwen3ForCausalLM', 'LlamaForCausalLM'],
+      ollama: ['qwen3', 'llama3.1', 'lfm2.5'],
+      sglang: ['Qwen3ForCausalLM'],
+    };
+    const ggufYes = deriveRunsOn(
+      { id: 'Qwen/Qwen3-32B', name: 'Qwen3-32B', architecture: 'Qwen3ForCausalLM', gguf: [{}] },
+      catalogs,
+    );
+    assert.equal(ggufYes.find((hit) => hit.id === 'llamacpp')?.status, 'yes');
+    assert.equal(ggufYes.find((hit) => hit.id === 'llamacpp')?.evidence, 'gguf');
+    assert.equal(ggufYes.find((hit) => hit.id === 'lmstudio')?.status, 'yes');
+    assert.equal(ggufYes.find((hit) => hit.id === 'lemonade')?.status, 'yes');
+    assert.equal(ggufYes.find((hit) => hit.id === 'vllm')?.status, 'yes');
+    assert.equal(ggufYes.find((hit) => hit.id === 'vllm')?.evidence, 'vllm-arch');
+    assert.equal(ggufYes.find((hit) => hit.id === 'ollama')?.status, 'yes');
+    assert.equal(ggufYes.find((hit) => hit.id === 'sglang')?.status, 'yes');
+    assert.equal(ggufYes.find((hit) => hit.id === 'strata')?.status, 'unknown');
+    assert.ok(!ggufYes.some((hit) => String(hit.id) === 'mlx'));
+
+    const archOnly = deriveRunsOn(
+      { id: 'Qwen/Qwen3-14B', name: 'Qwen3-14B', architecture: 'Qwen3ForCausalLM', gguf: [] },
+      catalogs,
+    );
+    assert.equal(archOnly.find((hit) => hit.id === 'llamacpp')?.evidence, 'llamacpp-arch');
+    assert.equal(archOnly.find((hit) => hit.id === 'lmstudio')?.status, 'unknown');
+    assert.equal(archOnly.find((hit) => hit.id === 'lemonade')?.status, 'unknown');
+
+    const novel = deriveRunsOn(
+      { id: 'example/NeverHeard-9B', name: 'NeverHeard-9B', architecture: 'NeverHeardForCausalLM', gguf: [] },
+      catalogs,
+    );
+    assert.ok(novel.every((hit) => hit.status === 'unknown'));
+
+    const flash = deriveRunsOn(
+      { id: 'Qwen/Qwen3.8-Flash-Next', name: 'Qwen3.8-Flash-Next', architecture: 'NeverHeardForCausalLM', gguf: [] },
+      catalogs,
+    );
+    assert.equal(flash.find((hit) => hit.id === 'strata')?.status, 'yes');
+    assert.equal(flash.find((hit) => hit.id === 'strata')?.evidence, 'backends-strata');
+    assert.equal(strataFlashHit('Qwen/Qwen3-32B', 'Qwen3-32B'), false);
+    assert.equal(ollamaFamilySlug('Qwen/Qwen3-32B', 'Qwen3-32B'), 'qwen3');
+    assert.equal(ollamaFamilySlug('Qwen/Qwen3.6-35B-A3B', 'Qwen3.6-35B-A3B'), 'qwen3.6');
+    assert.equal(ollamaFamilySlug('meta-llama/Llama-3.1-8B-Instruct', 'Llama-3.1-8B-Instruct'), 'llama-3.1');
+    const missOllama = deriveRunsOn(
+      { id: 'Qwen/Qwen3.6-35B-A3B', name: 'Qwen3.6-35B-A3B', architecture: null, gguf: [] },
+      catalogs,
+    );
+    assert.equal(missOllama.find((hit) => hit.id === 'ollama')?.status, 'unknown');
+
+    const live = loadEngineCatalogs();
+    assert.ok(live.llamacpp.includes('Qwen3ForCausalLM') || live.llamacpp.length === 0);
+    assert.ok(!live.ollama.includes('mlx'));
+    const xml = renderNewModelsRss({
+      ...EMPTY_NEW_MODELS,
+      days: [{ date: '2026-10-12', models: [sampleRow()] }],
+    });
+    assert.match(xml, /Runs on:/);
+    assert.doesNotMatch(xml, /\bmlx\b/i);
   });
 });
