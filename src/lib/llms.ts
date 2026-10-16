@@ -12,6 +12,11 @@ export type LlmsLink = { href: string; title: string; summary: string };
 const SHORT: LlmsLink[] = [
   { href: '/', title: site.name, summary: site.description },
   {
+    href: '/new-models',
+    title: 'New models',
+    summary: 'Daily Hugging Face Hub table of new open-weight text and vision releases. GGUF Q3–Q8. Q4_K_M fit is a labeled estimate.',
+  },
+  {
     href: '/start',
     title: 'Getting started',
     summary: 'Check a rig or budget, first-run Ubuntu setup, then a measured 35B recipe.',
@@ -69,6 +74,7 @@ const FULL_EXTRA: LlmsLink[] = [
   { href: '/compare/gpus', title: 'Compare GPUs', summary: 'Pick two Radeon sheets. Fit estimates. No invented prices.' },
   { href: '/compare/radeon-vs-nvidia', title: 'Radeon vs NVIDIA', summary: 'Cited specs. Measured R9700 35B. No invented tok/s.' },
   { href: '/models', title: 'Models', summary: 'House Qwen plus cited open-weight pages. Q3 is a labeled estimate.' },
+  { href: '/new-models', title: 'New models', summary: 'Daily Hugging Face Hub table of new open-weight releases. GGUF Q3–Q8. Fit is a labeled estimate.' },
   { href: '/quants', title: 'Quants Q3–Q8', summary: 'Why Q1/Q2 stay off this notebook. Unsloth UD is the house default.' },
   { href: '/stack-lab', title: 'Stack Lab', summary: 'Ubuntu 24.04+ companion. Packages not published yet.' },
   { href: '/guides/buying-used-radeon', title: 'Buying a used Radeon', summary: 'Cited shopper checklist. No invented street prices.' },

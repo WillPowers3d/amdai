@@ -813,6 +813,20 @@ export const FAQ_ENTRIES: FaqItem[] = [
     ],
   },
   {
+    id: 'new-models',
+    group: 'models-quants',
+    question: 'Where do I see new open-weight model releases?',
+    answer:
+      'The /new-models table is a daily Hugging Face Hub scan of text-generation and image-text-to-text rows from known labs plus trending. It lists params, architecture, context, license, GGUF Q3–Q8 packs, and a labeled Q4_K_M fit estimate for 16/24/32/2×32 GB. Not llama-bench. Q1/Q2 stay off.',
+    links: [
+      { href: '/new-models', label: 'New models' },
+      { href: '/models', label: 'House models' },
+      { href: '/calculator', label: 'Calculator' },
+      { href: '/quants', label: 'Quants' },
+      { href: '/can-run', label: 'Can my Radeon run it?' },
+    ],
+  },
+  {
     id: 'quantize-gguf',
     group: 'models-quants',
     question: 'How do I make my own GGUF quant for a Radeon GPU?',
@@ -1171,6 +1185,7 @@ export const REQUIRED_FAQ_HREFS = [
   '/thinking',
   '/sampling',
   '/chat-templates',
+  '/new-models',
   '/concurrency-ab',
   '/flash-attention',
   '/prefill',

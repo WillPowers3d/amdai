@@ -74,6 +74,7 @@ export const NAV_SURFACED = [
   '/budget',
   '/newsletter',
   '/models',
+  '/new-models',
   '/troubleshoot',
 ] as const;
 
@@ -666,7 +667,17 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
     { href: '/sampling', label: 'Sampling' },
     { href: '/compare/models', label: 'Compare models' },
     { href: '/calculator', label: 'Calculator' },
+    { href: '/new-models', label: 'New models' },
     { href: '/contribute', label: 'Contribute' },
+  ],
+  '/new-models': [
+    { href: '/models', label: 'House models' },
+    { href: '/calculator', label: 'Calculator' },
+    { href: '/quants', label: 'Quants' },
+    { href: '/can-run', label: 'Can my Radeon run it?' },
+    { href: '/compare/models', label: 'Compare models' },
+    { href: '/guides/quantize-gguf', label: 'Make GGUF quants' },
+    { href: '/methodology', label: 'How we test' },
   ],
   '/models/qwen36': [
     { href: '/recipes/qwen36-35b.llamacpp-vulkan.262k', label: 'Daily-driver recipe' },

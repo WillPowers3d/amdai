@@ -1,0 +1,3255 @@
+{
+  "schema": "amdai-new-models/1",
+  "as_of": "2026-10-16T20:10:58.854Z",
+  "source": "https://huggingface.co/api/models",
+  "window_days": 90,
+  "days": [
+    {
+      "date": "2026-10-15",
+      "models": [
+        {
+          "id": "tencent/Hy-Memory-30B-A3B",
+          "name": "Hy-Memory-30B-A3B",
+          "href": "https://huggingface.co/tencent/Hy-Memory-30B-A3B",
+          "maker": "tencent",
+          "released": "2026-10-15",
+          "updated": "2026-10-16",
+          "params_b": 30.06,
+          "active_params_b": 3,
+          "architecture": "HYV3ForCausalLM",
+          "context": 262144,
+          "license": "apache-2.0",
+          "modalities": [
+            "text"
+          ],
+          "pipeline": "text-generation",
+          "downloads": 0,
+          "likes": 112,
+          "trending": true,
+          "known_org": true,
+          "gguf": [],
+          "q4_k_m_gib": 17,
+          "q4_k_m_kind": "estimate",
+          "fit": {
+            "16": "no",
+            "24": "fits",
+            "32": "fits",
+            "2x32": "fits"
+          },
+          "size_band": "20-40B"
+        }
+      ]
+    },
+    {
+      "date": "2026-10-14",
+      "models": [
+        {
+          "id": "black-forest-labs/flux-3-image-klein-pup",
+          "name": "flux-3-image-klein-pup",
+          "href": "https://huggingface.co/black-forest-labs/flux-3-image-klein-pup",
+          "maker": "black-forest-labs",
+          "released": "2026-10-14",
+          "updated": "2026-10-15",
+          "params_b": 9.41,
+          "active_params_b": 9.41,
+          "architecture": "Qwen3_5ForConditionalGeneration",
+          "context": null,
+          "license": "apache-2.0",
+          "modalities": [
+            "text",
+            "image"
+          ],
+          "pipeline": "image-text-to-text",
+          "downloads": 426,
+          "likes": 41,
+          "trending": true,
+          "known_org": true,
+          "gguf": [],
+          "q4_k_m_gib": 5.3,
+          "q4_k_m_kind": "estimate",
+          "fit": {
+            "16": "fits",
+            "24": "fits",
+            "32": "fits",
+            "2x32": "fits"
+          },
+          "size_band": "8-20B"
+        },
+        {
+          "id": "ibm-granite/granite-switch-4.1-30b",
+          "name": "granite-switch-4.1-30b",
+          "href": "https://huggingface.co/ibm-granite/granite-switch-4.1-30b",
+          "maker": "ibm-granite",
+          "released": "2026-10-14",
+          "updated": "2026-10-15",
+          "params_b": 29.99,
+          "active_params_b": 29.99,
+          "architecture": "GraniteSwitchForCausalLM",
+          "context": 131072,
+          "license": "apache-2.0",
+          "modalities": [
+            "text"
+          ],
+          "pipeline": "text-generation",
+          "downloads": 178,
+          "likes": 15,
+          "trending": false,
+          "known_org": true,
+          "gguf": [],
+          "q4_k_m_gib": 16.9,
+          "q4_k_m_kind": "estimate",
+          "fit": {
+            "16": "no",
+            "24": "fits",
+            "32": "fits",
+            "2x32": "fits"
+          },
+          "size_band": "20-40B"
+        },
+        {
+          "id": "ibm-granite/granite-switch-4.1-8b",
+          "name": "granite-switch-4.1-8b",
+          "href": "https://huggingface.co/ibm-granite/granite-switch-4.1-8b",
+          "maker": "ibm-granite",
+          "released": "2026-10-14",
+          "updated": "2026-10-15",
+          "params_b": 8.78,
+          "active_params_b": 8.78,
+          "architecture": "GraniteSwitchForCausalLM",
+          "context": 131072,
+          "license": "apache-2.0",
+          "modalities": [
+            "text"
+          ],
+          "pipeline": "text-generation",
+          "downloads": 278,
+          "likes": 17,
+          "trending": false,
+          "known_org": true,
+          "gguf": [],
+          "q4_k_m_gib": 5,
+          "q4_k_m_kind": "estimate",
+          "fit": {
+            "16": "fits",
+            "24": "fits",
+            "32": "fits",
+            "2x32": "fits"
+          },
+          "size_band": "8-20B"
+        },
+        {
+          "id": "microsoft/UserRepGen-4B",
+          "name": "UserRepGen-4B",
+          "href": "https://huggingface.co/microsoft/UserRepGen-4B",
+          "maker": "microsoft",
+          "released": "2026-10-14",
+          "updated": "2026-10-14",
+          "params_b": 4.54,
+          "active_params_b": 4.54,
+          "architecture": "Qwen3_5ForConditionalGeneration",
+          "context": null,
+          "license": "mit",
+          "modalities": [
+            "text",
+            "image"
+          ],
+          "pipeline": "text-generation",
+          "downloads": 589,
+          "likes": 7,
+          "trending": false,
+          "known_org": true,
+          "gguf": [
+            {
+              "org": "bartowski",
+              "repo": "bartowski/UserRepGen-4B-GGUF",
+              "href": "https://huggingface.co/bartowski/UserRepGen-4B-GGUF",
+              "quants": [
+                "IQ3_M",
+                "IQ3_XS",
+                "IQ3_XXS",
+                "Q3_K_L",
+                "Q3_K_M",
+                "Q3_K_S",
+                "Q4_K_M",
+                "Q4_K_S",
+                "Q5_K_M",
+                "Q5_K_S",
+                "Q6_K",
+                "Q8_0"
+              ]
+            }
+          ],
+          "q4_k_m_gib": 2.6,
+          "q4_k_m_kind": "estimate",
+          "fit": {
+            "16": "fits",
+            "24": "fits",
+            "32": "fits",
+            "2x32": "fits"
+          },
+          "size_band": "<8B"
+        }
+      ]
+    },
+    {
+      "date": "2026-10-13",
+      "models": [
+        {
+          "id": "inclusionAI/Ling-3.1-flash",
+          "name": "Ling-3.1-flash",
+          "href": "https://huggingface.co/inclusionAI/Ling-3.1-flash",
+          "maker": "inclusionAI",
+          "released": "2026-10-13",
+          "updated": "2026-10-15",
+          "params_b": 572.12,
+          "active_params_b": 8.94,
+          "architecture": "BailingMoeV3ForCausalLM",
+          "context": 262144,
+          "license": "mit",
+          "modalities": [
+            "text"
+          ],
+          "pipeline": "text-generation",
+          "downloads": 1276,
+          "likes": 111,
+          "trending": true,
+          "known_org": true,
+          "gguf": [
+            {
+              "org": "bartowski",
+              "repo": "bartowski/Ling-3.1-flash-GGUF",
+              "href": "https://huggingface.co/bartowski/Ling-3.1-flash-GGUF",
+              "quants": [
+                "IQ3_M",
+                "IQ3_XS",
+                "IQ3_XXS",
+                "Q3_K_L",
+                "Q3_K_M",
+                "Q3_K_S",
+                "Q4_K_M",
+                "Q4_K_S",
+                "Q5_K_M",
+                "Q5_K_S",
+                "Q6_K",
+                "Q8_0"
+              ]
+            }
+          ],
+          "q4_k_m_gib": 323,
+          "q4_k_m_kind": "estimate",
+          "fit": {
+            "16": "no",
+            "24": "no",
+            "32": "no",
+            "2x32": "no"
+          },
+          "size_band": "80B+"
+        }
+      ]
+    },
+    {
+      "date": "2026-10-12",
+      "models": [
+        {
+          "id": "LiquidAI/LFM2.5-24B-A2B",
+          "name": "LFM2.5-24B-A2B",
+          "href": "https://huggingface.co/LiquidAI/LFM2.5-24B-A2B",
+          "maker": "LiquidAI",
+          "released": "2026-10-12",
+          "updated": "2026-10-13",
+          "params_b": 23.97,
+          "active_params_b": 2,
+          "architecture": "Lfm2MoeForCausalLM",
+          "context": 131072,
+          "license": "other",
+          "modalities": [
+            "text"
+          ],
+          "pipeline": "text-generation",
+          "downloads": 9356,
+          "likes": 424,
+          "trending": true,
+          "known_org": true,
+          "gguf": [
+            {
+              "org": "unsloth",
+              "repo": "unsloth/LFM2.5-24B-A2B-GGUF",
+              "href": "https://huggingface.co/unsloth/LFM2.5-24B-A2B-GGUF",
+              "quants": [
+                "Q8_0",
+                "UD-IQ3_XXS",
+                "UD-Q3_K_XL",
+                "UD-Q4_K_XL",
+                "UD-Q5_K_XL",
+                "UD-Q6_K_XL"
+              ]
+            },
+            {
+              "org": "bartowski",
+              "repo": "bartowski/LiquidAI_LFM2.5-24B-A2B-GGUF",
+              "href": "https://huggingface.co/bartowski/LiquidAI_LFM2.5-24B-A2B-GGUF",
+              "quants": [
+                "IQ3_M",
+                "IQ3_XS",
+                "IQ3_XXS",
+                "Q3_K_L",
+                "Q3_K_M",
+                "Q3_K_S",
+                "Q4_K_M",
+                "Q4_K_S",
+                "Q5_K_M",
+                "Q5_K_S",
+                "Q6_K",
+                "Q8_0"
+              ]
+            }
+          ],
+          "q4_k_m_gib": 13.5,
+          "q4_k_m_kind": "estimate",
+          "fit": {
+            "16": "tight",
+            "24": "fits",
+            "32": "fits",
+            "2x32": "fits"
+          },
+          "size_band": "20-40B"
+        }
+      ]
+    },
+    {
+      "date": "2026-10-09",
+      "models": [
+        {
+          "id": "togethercomputer/HybridAgent-14B-Agentic",
+          "name": "HybridAgent-14B-Agentic",
+          "href": "https://huggingface.co/togethercomputer/HybridAgent-14B-Agentic",
+          "maker": "togethercomputer",
+          "released": "2026-10-09",
+          "updated": "2026-10-14",
+          "params_b": 14.77,
+          "active_params_b": 14.77,
+          "architecture": "Qwen3ForCausalLM",
+          "context": 32768,
+          "license": "mit",
+          "modalities": [
+            "text"
+          ],
+          "pipeline": "text-generation",
+          "downloads": 904,
+          "likes": 4,
+          "trending": false,
+          "known_org": true,
+          "gguf": [],
+          "q4_k_m_gib": 8.3,
+          "q4_k_m_kind": "estimate",
+          "fit": {
+            "16": "fits",
+            "24": "fits",
+            "32": "fits",
+            "2x32": "fits"
+          },
+          "size_band": "8-20B"
+        },
+        {
+          "id": "togethercomputer/HybridAgent-8B-Agentic",
+          "name": "HybridAgent-8B-Agentic",
+          "href": "https://huggingface.co/togethercomputer/HybridAgent-8B-Agentic",
+          "maker": "togethercomputer",
+          "released": "2026-10-09",
+          "updated": "2026-10-14",
+          "params_b": 8.19,
+          "active_params_b": 8.19,
+          "architecture": "Qwen3ForCausalLM",
+          "context": 32768,
+          "license": "mit",
+          "modalities": [
+            "text"
+          ],
+          "pipeline": "text-generation",
+          "downloads": 895,
+          "likes": 1,
+          "trending": false,
+          "known_org": true,
+          "gguf": [],
+          "q4_k_m_gib": 4.6,
+          "q4_k_m_kind": "estimate",
+          "fit": {
+            "16": "fits",
+            "24": "fits",
+            "32": "fits",
+            "2x32": "fits"
+          },
+          "size_band": "8-20B"
+        },
+        {
+          "id": "LiquidAI/LFM2.5-24B-A2B-Base",
+          "name": "LFM2.5-24B-A2B-Base",
+          "href": "https://huggingface.co/LiquidAI/LFM2.5-24B-A2B-Base",
+          "maker": "LiquidAI",
+          "released": "2026-10-09",
+          "updated": "2026-10-13",
+          "params_b": 23.97,
+          "active_params_b": 2,
+          "architecture": "Lfm2MoeForCausalLM",
+          "context": 131072,
+          "license": "other",
+          "modalities": [
+            "text"
+          ],
+          "pipeline": "text-generation",
+          "downloads": 362,
+          "likes": 35,
+          "trending": true,
+          "known_org": true,
+          "gguf": [],
+          "q4_k_m_gib": 13.5,
+          "q4_k_m_kind": "estimate",
+          "fit": {
+            "16": "tight",
+            "24": "fits",
+            "32": "fits",
+            "2x32": "fits"
+          },
+          "size_band": "20-40B"
+        },
+        {
+          "id": "tencent/Youtu-Parsing-Omni",
+          "name": "Youtu-Parsing-Omni",
+          "href": "https://huggingface.co/tencent/Youtu-Parsing-Omni",
+          "maker": "tencent",
+          "released": "2026-10-09",
+          "updated": "2026-10-10",
+          "params_b": 5.33,
+          "active_params_b": 5.33,
+          "architecture": "YoutuVITAForCausalLM",
+          "context": 1048576,
+          "license": "other",
+          "modalities": [
+            "text",
+            "image",
+            "audio",
+            "video"
+          ],
+          "pipeline": "image-text-to-text",
+          "downloads": 1552,
+          "likes": 104,
+          "trending": true,
+          "known_org": true,
+          "gguf": [],
+          "q4_k_m_gib": 3,
+          "q4_k_m_kind": "estimate",
+          "fit": {
+            "16": "fits",
+            "24": "fits",
+            "32": "fits",
+            "2x32": "fits"
+          },
+          "size_band": "<8B"
+        }
+      ]
+    },
+    {
+      "date": "2026-10-07",
+      "models": [
+        {
+          "id": "reflection/Beam-1.0-501B-A23B",
+          "name": "Beam-1.0-501B-A23B",
+          "href": "https://huggingface.co/reflection/Beam-1.0-501B-A23B",
+          "maker": "reflection",
+          "released": "2026-10-07",
+          "updated": "2026-10-16",
+          "params_b": 501.27,
+          "active_params_b": 23,
+          "architecture": "BeamForCausalLM",
+          "context": 1048576,
+          "license": "apache-2.0",
+          "modalities": [
+            "text"
+          ],
+          "pipeline": "text-generation",
+          "downloads": 440,
+          "likes": 90,
+          "trending": true,
+          "known_org": true,
+          "gguf": [
+            {
+              "org": "unsloth",
+              "repo": "unsloth/Beam-1.0-501B-A23B-GGUF",
+              "href": "https://huggingface.co/unsloth/Beam-1.0-501B-A23B-GGUF",
+              "quants": [
+                "Q8_0",
+                "UD-IQ3_XXS",
+                "UD-Q3_K_XL",
+                "UD-Q4_K_XL",
+                "UD-Q5_K_XL",
+                "UD-Q6_K_XL"
+              ]
+            }
+          ],
+          "q4_k_m_gib": 283,
+          "q4_k_m_kind": "estimate",
+          "fit": {
+            "16": "no",
+            "24": "no",
+            "32": "no",
+            "2x32": "no"
+          },
+          "size_band": "80B+"
+        },
+        {
+          "id": "openbmb/MiniCPM-V-4.7-35B-A3B",
+          "name": "MiniCPM-V-4.7-35B-A3B",
+          "href": "https://huggingface.co/openbmb/MiniCPM-V-4.7-35B-A3B",
+          "maker": "openbmb",
+          "released": "2026-10-07",
+          "updated": "2026-10-15",
+          "params_b": 35.21,
+          "active_params_b": 3,
+          "architecture": "MiniCPMV4_7ForConditionalGeneration",
+          "context": null,
+          "license": "apache-2.0",
+          "modalities": [
+            "text",
+            "image"
+          ],
+          "pipeline": "image-text-to-text",
+          "downloads": 17553,
+          "likes": 841,
+          "trending": true,
+          "known_org": true,
+          "gguf": [],
+          "q4_k_m_gib": 19.9,
+          "q4_k_m_kind": "estimate",
+          "fit": {
+            "16": "no",
+            "24": "fits",
+            "32": "fits",
+            "2x32": "fits"
+          },
+          "size_band": "20-40B"
+        }
+      ]
+    },
+    {
+      "date": "2026-10-06",
+      "models": [
+        {
+          "id": "openbmb/MiniCPM-V-4.7-1B",
+          "name": "MiniCPM-V-4.7-1B",
+          "href": "https://huggingface.co/openbmb/MiniCPM-V-4.7-1B",
+          "maker": "openbmb",
+          "released": "2026-10-06",
+          "updated": "2026-10-15",
+          "params_b": 1.55,
+          "active_params_b": 1.55,
+          "architecture": "MiniCPMV4_7ForConditionalGeneration",
+          "context": null,
+          "license": "apache-2.0",
+          "modalities": [
+            "text",
+            "image"
+          ],
+          "pipeline": "image-text-to-text",
+          "downloads": 8822,
+          "likes": 369,
+          "trending": true,
+          "known_org": true,
+          "gguf": [],
+          "q4_k_m_gib": 0.9,
+          "q4_k_m_kind": "estimate",
+          "fit": {
+            "16": "fits",
+            "24": "fits",
+            "32": "fits",
+            "2x32": "fits"
+          },
+          "size_band": "<8B"
+        }
+      ]
+    },
+    {
+      "date": "2026-10-05",
+      "models": [
+        {
+          "id": "LiquidAI/d1-3B",
+          "name": "d1-3B",
+          "href": "https://huggingface.co/LiquidAI/d1-3B",
+          "maker": "LiquidAI",
+          "released": "2026-10-05",
+          "updated": "2026-10-07",
+          "params_b": 3.12,
+          "active_params_b": 3.12,
+          "architecture": "Lfm2VlForConditionalGeneration",
+          "context": null,
+          "license": "other",
+          "modalities": [
+            "text",
+            "image"
+          ],
+          "pipeline": "image-text-to-text",
+          "downloads": 17820,
+          "likes": 433,
+          "trending": true,
+          "known_org": true,
+          "gguf": [],
+          "q4_k_m_gib": 1.8,
+          "q4_k_m_kind": "estimate",
+          "fit": {
+            "16": "fits",
+            "24": "fits",
+            "32": "fits",
+            "2x32": "fits"
+          },
+          "size_band": "<8B"
+        },
+        {
+          "id": "LiquidAI/d1-omni-600M",
+          "name": "d1-omni-600M",
+          "href": "https://huggingface.co/LiquidAI/d1-omni-600M",
+          "maker": "LiquidAI",
+          "released": "2026-10-05",
+          "updated": "2026-10-07",
+          "params_b": 0.59,
+          "active_params_b": 0.59,
+          "architecture": "D1OmniModel",
+          "context": 16384,
+          "license": "other",
+          "modalities": [
+            "text",
+            "image",
+            "audio"
+          ],
+          "pipeline": "image-text-to-text",
+          "downloads": 13400,
+          "likes": 132,
+          "trending": true,
+          "known_org": true,
+          "gguf": [],
+          "q4_k_m_gib": 0.3,
+          "q4_k_m_kind": "estimate",
+          "fit": {
+            "16": "fits",
+            "24": "fits",
+            "32": "fits",
+            "2x32": "fits"
+          },
+          "size_band": "<8B"
+        }
+      ]
+    },
+    {
+      "date": "2026-10-02",
+      "models": [
+        {
+          "id": "amazon/ALoDLM-1.7B",
+          "name": "ALoDLM-1.7B",
+          "href": "https://huggingface.co/amazon/ALoDLM-1.7B",
+          "maker": "amazon",
+          "released": "2026-10-02",
+          "updated": "2026-10-02",
+          "params_b": 2.03,
+          "active_params_b": 2.03,
+          "architecture": "Qwen3ForCausalLM",
+          "context": 40960,
+          "license": "cc-by-nc-4.0",
+          "modalities": [
+            "text"
+          ],
+          "pipeline": "text-generation",
+          "downloads": 293,
+          "likes": 10,
+          "trending": false,
+          "known_org": true,
+          "gguf": [],
+          "q4_k_m_gib": 1.1,
+          "q4_k_m_kind": "estimate",
+          "fit": {
+            "16": "fits",
+            "24": "fits",
+            "32": "fits",
+            "2x32": "fits"
+          },
+          "size_band": "<8B"
+        },
+        {
+          "id": "amazon/ALoDLM-8B",
+          "name": "ALoDLM-8B",
+          "href": "https://huggingface.co/amazon/ALoDLM-8B",
+          "maker": "amazon",
+          "released": "2026-10-02",
+          "updated": "2026-10-07",
+          "params_b": 8.19,
+          "active_params_b": 8.19,
+          "architecture": "Qwen3ForCausalLM",
+          "context": 40960,
+          "license": "cc-by-nc-4.0",
+          "modalities": [
+            "text"
+          ],
+          "pipeline": "text-generation",
+          "downloads": 1193,
+          "likes": 54,
+          "trending": true,
+          "known_org": true,
+          "gguf": [],
+          "q4_k_m_gib": 4.6,
+          "q4_k_m_kind": "estimate",
+          "fit": {
+            "16": "fits",
+            "24": "fits",
+            "32": "fits",
+            "2x32": "fits"
+          },
+          "size_band": "8-20B"
+        },
+        {
+          "id": "Aleph-Alpha/Kolibri-1",
+          "name": "Kolibri-1",
+          "href": "https://huggingface.co/Aleph-Alpha/Kolibri-1",
+          "maker": "Aleph-Alpha",
+          "released": "2026-10-02",
+          "updated": "2026-10-16",
+          "params_b": 78.1,
+          "active_params_b": 1.22,
+          "architecture": "Kolibri1ForCausalLM",
+          "context": 262144,
+          "license": "apache-2.0",
+          "modalities": [
+            "text"
+          ],
+          "pipeline": "text-generation",
+          "downloads": 17864,
+          "likes": 944,
+          "trending": true,
+          "known_org": true,
+          "gguf": [],
+          "q4_k_m_gib": 44.1,
+          "q4_k_m_kind": "estimate",
+          "fit": {
+            "16": "no",
+            "24": "no",
+            "32": "no",
+            "2x32": "fits"
+          },
+          "size_band": "40-80B"
+        }
+      ]
+    },
+    {
+      "date": "2026-09-29",
+      "models": [
+        {
+          "id": "internlm/AdvancedMathBench-AutoVerifier",
+          "name": "AdvancedMathBench-AutoVerifier",
+          "href": "https://huggingface.co/internlm/AdvancedMathBench-AutoVerifier",
+          "maker": "internlm",
+          "released": "2026-09-29",
+          "updated": "2026-09-29",
+          "params_b": 35.96,
+          "active_params_b": 35.96,
+          "architecture": "Qwen3_5MoeForConditionalGeneration",
+          "context": null,
+          "license": null,
+          "modalities": [
+            "text",
+            "image"
+          ],
+          "pipeline": "image-text-to-text",
+          "downloads": 186,
+          "likes": 1,
+          "trending": false,
+          "known_org": true,
+          "gguf": [],
+          "q4_k_m_gib": 20.3,
+          "q4_k_m_kind": "estimate",
+          "fit": {
+            "16": "no",
+            "24": "fits",
+            "32": "fits",
+            "2x32": "fits"
+          },
+          "size_band": "20-40B"
+        },
+        {
+          "id": "microsoft/AesCode-32B",
+          "name": "AesCode-32B",
+          "href": "https://huggingface.co/microsoft/AesCode-32B",
+          "maker": "microsoft",
+          "released": "2026-09-29",
+          "updated": "2026-10-14",
+          "params_b": 33.36,
+          "active_params_b": 33.36,
+          "architecture": "Qwen3VLForConditionalGeneration",
+          "context": null,
+          "license": "apache-2.0",
+          "modalities": [
+            "text",
+            "image"
+          ],
+          "pipeline": "image-text-to-text",
+          "downloads": 611,
+          "likes": 52,
+          "trending": true,
+          "known_org": true,
+          "gguf": [
+            {
+              "org": "bartowski",
+              "repo": "bartowski/AesCode-32B-GGUF",
+              "href": "https://huggingface.co/bartowski/AesCode-32B-GGUF",
+              "quants": [
+                "IQ3_M",
+                "IQ3_XS",
+                "IQ3_XXS",
+                "Q3_K_L",
+                "Q3_K_M",
+                "Q3_K_S",
+                "Q4_K_M",
+                "Q4_K_S",
+                "Q5_K_M",
+                "Q5_K_S",
+                "Q6_K",
+                "Q8_0"
+              ]
+            }
+          ],
+          "q4_k_m_gib": 18.8,
+          "q4_k_m_kind": "estimate",
+          "fit": {
+            "16": "no",
+            "24": "fits",
+            "32": "fits",
+            "2x32": "fits"
+          },
+          "size_band": "20-40B"
+        },
+        {
+          "id": "microsoft/AesCode-8B",
+          "name": "AesCode-8B",
+          "href": "https://huggingface.co/microsoft/AesCode-8B",
+          "maker": "microsoft",
+          "released": "2026-09-29",
+          "updated": "2026-10-14",
+          "params_b": 8.77,
+          "active_params_b": 8.77,
+          "architecture": "Qwen3VLForConditionalGeneration",
+          "context": null,
+          "license": "apache-2.0",
+          "modalities": [
+            "text",
+            "image"
+          ],
+          "pipeline": "image-text-to-text",
+          "downloads": 587,
+          "likes": 65,
+          "trending": true,
+          "known_org": true,
+          "gguf": [
+            {
+              "org": "bartowski",
+              "repo": "bartowski/AesCode-8B-GGUF",
+              "href": "https://huggingface.co/bartowski/AesCode-8B-GGUF",
+              "quants": [
+                "IQ3_M",
+                "IQ3_XS",
+                "IQ3_XXS",
+                "Q3_K_L",
+                "Q3_K_M",
+                "Q3_K_S",
+                "Q4_K_M",
+                "Q4_K_S",
+                "Q5_K_M",
+                "Q5_K_S",
+                "Q6_K",
+                "Q8_0"
+              ]
+            }
+          ],
+          "q4_k_m_gib": 5,
+          "q4_k_m_kind": "estimate",
+          "fit": {
+            "16": "fits",
+            "24": "fits",
+            "32": "fits",
+            "2x32": "fits"
+          },
+          "size_band": "8-20B"
+        },
+        {
+          "id": "BAAI/AREX-2",
+          "name": "AREX-2",
+          "href": "https://huggingface.co/BAAI/AREX-2",
+          "maker": "BAAI",
+          "released": "2026-09-29",
+          "updated": "2026-10-01",
+          "params_b": 27.36,
+          "active_params_b": 27.36,
+          "architecture": "Qwen3_5ForConditionalGeneration",
+          "context": null,
+          "license": "apache-2.0",
+          "modalities": [
+            "text",
+            "image"
+          ],
+          "pipeline": "image-text-to-text",
+          "downloads": 1923,
+          "likes": 119,
+          "trending": false,
+          "known_org": true,
+          "gguf": [
+            {
+              "org": "bartowski",
+              "repo": "bartowski/BAAI_AREX-2-GGUF",
+              "href": "https://huggingface.co/bartowski/BAAI_AREX-2-GGUF",
+              "quants": [
+                "IQ3_M",
+                "IQ3_XS",
+                "IQ3_XXS",
+                "Q3_K_L",
+                "Q3_K_M",
+                "Q3_K_S",
+                "Q4_K_M",
+                "Q4_K_S",
+                "Q5_K_M",
+                "Q5_K_S",
+                "Q6_K",
+                "Q8_0"
+              ]
+            }
+          ],
+          "q4_k_m_gib": 15.4,
+          "q4_k_m_kind": "estimate",
+          "fit": {
+            "16": "no",
+            "24": "fits",
+            "32": "fits",
+            "2x32": "fits"
+          },
+          "size_band": "20-40B"
+        }
+      ]
+    },
+    {
+      "date": "2026-09-26",
+      "models": [
+        {
+          "id": "internlm/Intern-Decision-0.8B",
+          "name": "Intern-Decision-0.8B",
+          "href": "https://huggingface.co/internlm/Intern-Decision-0.8B",
+          "maker": "internlm",
+          "released": "2026-09-26",
+          "updated": "2026-09-26",
+          "params_b": 0.85,
+          "active_params_b": 0.85,
+          "architecture": "Qwen3_5ForConditionalGeneration",
+          "context": null,
+          "license": "apache-2.0",
+          "modalities": [
+            "text",
+            "image"
+          ],
+          "pipeline": "image-text-to-text",
+          "downloads": 2701,
+          "likes": 35,
+          "trending": false,
+          "known_org": true,
+          "gguf": [],
+          "q4_k_m_gib": 0.5,
+          "q4_k_m_kind": "estimate",
+          "fit": {
+            "16": "fits",
+            "24": "fits",
+            "32": "fits",
+            "2x32": "fits"
+          },
+          "size_band": "<8B"
+        },
+        {
+          "id": "internlm/Intern-Decision-2B",
+          "name": "Intern-Decision-2B",
+          "href": "https://huggingface.co/internlm/Intern-Decision-2B",
+          "maker": "internlm",
+          "released": "2026-09-26",
+          "updated": "2026-09-26",
+          "params_b": 2.21,
+          "active_params_b": 2.21,
+          "architecture": "Qwen3_5ForConditionalGeneration",
+          "context": null,
+          "license": "apache-2.0",
+          "modalities": [
+            "text",
+            "image"
+          ],
+          "pipeline": "image-text-to-text",
+          "downloads": 2039,
+          "likes": 17,
+          "trending": false,
+          "known_org": true,
+          "gguf": [],
+          "q4_k_m_gib": 1.2,
+          "q4_k_m_kind": "estimate",
+          "fit": {
+            "16": "fits",
+            "24": "fits",
+            "32": "fits",
+            "2x32": "fits"
+          },
+          "size_band": "<8B"
+        },
+        {
+          "id": "internlm/Intern-Decision-4B",
+          "name": "Intern-Decision-4B",
+          "href": "https://huggingface.co/internlm/Intern-Decision-4B",
+          "maker": "internlm",
+          "released": "2026-09-26",
+          "updated": "2026-10-16",
+          "params_b": 4.54,
+          "active_params_b": 4.54,
+          "architecture": "Qwen3_5ForConditionalGeneration",
+          "context": null,
+          "license": "apache-2.0",
+          "modalities": [
+            "text",
+            "image"
+          ],
+          "pipeline": "image-text-to-text",
+          "downloads": 4045,
+          "likes": 87,
+          "trending": false,
+          "known_org": true,
+          "gguf": [],
+          "q4_k_m_gib": 2.6,
+          "q4_k_m_kind": "estimate",
+          "fit": {
+            "16": "fits",
+            "24": "fits",
+            "32": "fits",
+            "2x32": "fits"
+          },
+          "size_band": "<8B"
+        }
+      ]
+    },
+    {
+      "date": "2026-09-25",
+      "models": [
+        {
+          "id": "togethercomputer/Tev1-0.8B-experimental",
+          "name": "Tev1-0.8B-experimental",
+          "href": "https://huggingface.co/togethercomputer/Tev1-0.8B-experimental",
+          "maker": "togethercomputer",
+          "released": "2026-09-25",
+          "updated": "2026-09-25",
+          "params_b": 0.87,
+          "active_params_b": 0.87,
+          "architecture": "Qwen3_5ForConditionalGeneration",
+          "context": null,
+          "license": null,
+          "modalities": [
+            "text",
+            "image"
+          ],
+          "pipeline": "text-generation",
+          "downloads": 2506,
+          "likes": 20,
+          "trending": false,
+          "known_org": true,
+          "gguf": [],
+          "q4_k_m_gib": 0.5,
+          "q4_k_m_kind": "estimate",
+          "fit": {
+            "16": "fits",
+            "24": "fits",
+            "32": "fits",
+            "2x32": "fits"
+          },
+          "size_band": "<8B"
+        }
+      ]
+    },
+    {
+      "date": "2026-09-23",
+      "models": [
+        {
+          "id": "togethercomputer/Tev1-4B-experimental",
+          "name": "Tev1-4B-experimental",
+          "href": "https://huggingface.co/togethercomputer/Tev1-4B-experimental",
+          "maker": "togethercomputer",
+          "released": "2026-09-23",
+          "updated": "2026-09-23",
+          "params_b": 4.66,
+          "active_params_b": 4.66,
+          "architecture": "Qwen3_5ForConditionalGeneration",
+          "context": null,
+          "license": null,
+          "modalities": [
+            "text",
+            "image"
+          ],
+          "pipeline": "text-generation",
+          "downloads": 4989,
+          "likes": 36,
+          "trending": false,
+          "known_org": true,
+          "gguf": [
+            {
+              "org": "bartowski",
+              "repo": "bartowski/togethercomputer_Tev1-4B-experimental-GGUF",
+              "href": "https://huggingface.co/bartowski/togethercomputer_Tev1-4B-experimental-GGUF",
+              "quants": [
+                "IQ3_M",
+                "IQ3_XS",
+                "IQ3_XXS",
+                "Q3_K_L",
+                "Q3_K_M",
+                "Q3_K_S",
+                "Q4_K_M",
+                "Q4_K_S",
+                "Q5_K_M",
+                "Q5_K_S",
+                "Q6_K",
+                "Q8_0"
+              ]
+            }
+          ],
+          "q4_k_m_gib": 2.6,
+          "q4_k_m_kind": "estimate",
+          "fit": {
+            "16": "fits",
+            "24": "fits",
+            "32": "fits",
+            "2x32": "fits"
+          },
+          "size_band": "<8B"
+        }
+      ]
+    },
+    {
+      "date": "2026-09-21",
+      "models": [
+        {
+          "id": "apple/LensVLM-9B",
+          "name": "LensVLM-9B",
+          "href": "https://huggingface.co/apple/LensVLM-9B",
+          "maker": "apple",
+          "released": "2026-09-21",
+          "updated": "2026-09-22",
+          "params_b": 9.41,
+          "active_params_b": 9.41,
+          "architecture": "Qwen3_5ForConditionalGeneration",
+          "context": null,
+          "license": "apple-amlr",
+          "modalities": [
+            "text",
+            "image"
+          ],
+          "pipeline": "image-text-to-text",
+          "downloads": 2745,
+          "likes": 293,
+          "trending": false,
+          "known_org": true,
+          "gguf": [
+            {
+              "org": "bartowski",
+              "repo": "bartowski/LensVLM-9B-GGUF",
+              "href": "https://huggingface.co/bartowski/LensVLM-9B-GGUF",
+              "quants": [
+                "IQ3_M",
+                "IQ3_XS",
+                "IQ3_XXS",
+                "Q3_K_L",
+                "Q3_K_M",
+                "Q3_K_S",
+                "Q4_K_M",
+                "Q4_K_S",
+                "Q5_K_M",
+                "Q5_K_S",
+                "Q6_K",
+                "Q8_0"
+              ]
+            }
+          ],
+          "q4_k_m_gib": 5.3,
+          "q4_k_m_kind": "estimate",
+          "fit": {
+            "16": "fits",
+            "24": "fits",
+            "32": "fits",
+            "2x32": "fits"
+          },
+          "size_band": "8-20B"
+        },
+        {
+          "id": "XiaomiMiMo/MiMo-V2.6-Distill-Qwen-9B",
+          "name": "MiMo-V2.6-Distill-Qwen-9B",
+          "href": "https://huggingface.co/XiaomiMiMo/MiMo-V2.6-Distill-Qwen-9B",
+          "maker": "XiaomiMiMo",
+          "released": "2026-09-21",
+          "updated": "2026-09-22",
+          "params_b": 9.41,
+          "active_params_b": 9.41,
+          "architecture": "Qwen3_5ForConditionalGeneration",
+          "context": null,
+          "license": "mit",
+          "modalities": [
+            "text",
+            "image"
+          ],
+          "pipeline": "image-text-to-text",
+          "downloads": 26119,
+          "likes": 656,
+          "trending": false,
+          "known_org": true,
+          "gguf": [
+            {
+              "org": "bartowski",
+              "repo": "bartowski/MiMo-V2.6-Distill-Qwen-9B-GGUF",
+              "href": "https://huggingface.co/bartowski/MiMo-V2.6-Distill-Qwen-9B-GGUF",
+              "quants": [
+                "IQ3_M",
+                "IQ3_XS",
+                "IQ3_XXS",
+                "Q3_K_L",
+                "Q3_K_M",
+                "Q3_K_S",
+                "Q4_K_M",
+                "Q4_K_S",
+                "Q5_K_M",
+                "Q5_K_S",
+                "Q6_K",
+                "Q8_0"
+              ]
+            },
+            {
+              "org": "ggml-org",
+              "repo": "ggml-org/MiMo-V2.6-Distill-Qwen-9B-GGUF",
+              "href": "https://huggingface.co/ggml-org/MiMo-V2.6-Distill-Qwen-9B-GGUF",
+              "quants": [
+                "Q8_0"
+              ]
+            }
+          ],
+          "q4_k_m_gib": 5.3,
+          "q4_k_m_kind": "estimate",
+          "fit": {
+            "16": "fits",
+            "24": "fits",
+            "32": "fits",
+            "2x32": "fits"
+          },
+          "size_band": "8-20B"
+        },
+        {
+          "id": "XiaomiMiMo/MiMo-V2.6-Flash-RL",
+          "name": "MiMo-V2.6-Flash-RL",
+          "href": "https://huggingface.co/XiaomiMiMo/MiMo-V2.6-Flash-RL",
+          "maker": "XiaomiMiMo",
+          "released": "2026-09-21",
+          "updated": "2026-10-09",
+          "params_b": 310.76,
+          "active_params_b": 9.71,
+          "architecture": "MiMoV2ForCausalLM",
+          "context": 1048576,
+          "license": "mit",
+          "modalities": [
+            "text",
+            "audio"
+          ],
+          "pipeline": "text-generation",
+          "downloads": 92057,
+          "likes": 562,
+          "trending": false,
+          "known_org": true,
+          "gguf": [
+            {
+              "org": "ggml-org",
+              "repo": "ggml-org/MiMo-V2.6-Flash-RL-GGUF",
+              "href": "https://huggingface.co/ggml-org/MiMo-V2.6-Flash-RL-GGUF",
+              "quants": [
+                "Q8_0"
+              ]
+            }
+          ],
+          "q4_k_m_gib": 175.5,
+          "q4_k_m_kind": "estimate",
+          "fit": {
+            "16": "no",
+            "24": "no",
+            "32": "no",
+            "2x32": "no"
+          },
+          "size_band": "80B+"
+        },
+        {
+          "id": "XiaomiMiMo/MiMo-V2.6-Pro-RL",
+          "name": "MiMo-V2.6-Pro-RL",
+          "href": "https://huggingface.co/XiaomiMiMo/MiMo-V2.6-Pro-RL",
+          "maker": "XiaomiMiMo",
+          "released": "2026-09-21",
+          "updated": "2026-10-09",
+          "params_b": 1024.22,
+          "active_params_b": 21.34,
+          "architecture": "MiMoV2ForCausalLM",
+          "context": 1048576,
+          "license": "mit",
+          "modalities": [
+            "text",
+            "audio"
+          ],
+          "pipeline": "text-generation",
+          "downloads": 100156,
+          "likes": 737,
+          "trending": true,
+          "known_org": true,
+          "gguf": [
+            {
+              "org": "ggml-org",
+              "repo": "ggml-org/MiMo-V2.6-Pro-RL-GGUF",
+              "href": "https://huggingface.co/ggml-org/MiMo-V2.6-Pro-RL-GGUF",
+              "quants": [
+                "Q8_0"
+              ]
+            }
+          ],
+          "q4_k_m_gib": 578.3,
+          "q4_k_m_kind": "estimate",
+          "fit": {
+            "16": "no",
+            "24": "no",
+            "32": "no",
+            "2x32": "no"
+          },
+          "size_band": "80B+"
+        }
+      ]
+    },
+    {
+      "date": "2026-09-20",
+      "models": [
+        {
+          "id": "JetBrains/Mellum2.1-12B-A2.5B-Thinking",
+          "name": "Mellum2.1-12B-A2.5B-Thinking",
+          "href": "https://huggingface.co/JetBrains/Mellum2.1-12B-A2.5B-Thinking",
+          "maker": "JetBrains",
+          "released": "2026-09-20",
+          "updated": "2026-10-07",
+          "params_b": 12.15,
+          "active_params_b": 2.5,
+          "architecture": "MellumForCausalLM",
+          "context": 131072,
+          "license": "apache-2.0",
+          "modalities": [
+            "text"
+          ],
+          "pipeline": "text-generation",
+          "downloads": 2939,
+          "likes": 158,
+          "trending": true,
+          "known_org": true,
+          "gguf": [
+            {
+              "org": "bartowski",
+              "repo": "bartowski/Mellum2.1-12B-A2.5B-Thinking-GGUF",
+              "href": "https://huggingface.co/bartowski/Mellum2.1-12B-A2.5B-Thinking-GGUF",
+              "quants": [
+                "IQ3_M",
+                "IQ3_XS",
+                "IQ3_XXS",
+                "Q3_K_L",
+                "Q3_K_M",
+                "Q3_K_S",
+                "Q4_K_M",
+                "Q4_K_S",
+                "Q5_K_M",
+                "Q5_K_S",
+                "Q6_K",
+                "Q8_0"
+              ]
+            }
+          ],
+          "q4_k_m_gib": 6.9,
+          "q4_k_m_kind": "estimate",
+          "fit": {
+            "16": "fits",
+            "24": "fits",
+            "32": "fits",
+            "2x32": "fits"
+          },
+          "size_band": "8-20B"
+        }
+      ]
+    },
+    {
+      "date": "2026-09-16",
+      "models": [
+        {
+          "id": "EleutherAI/olmo3-7b-sdf-sft-clean150",
+          "name": "olmo3-7b-sdf-sft-clean150",
+          "href": "https://huggingface.co/EleutherAI/olmo3-7b-sdf-sft-clean150",
+          "maker": "EleutherAI",
+          "released": "2026-09-16",
+          "updated": "2026-09-16",
+          "params_b": 7.3,
+          "active_params_b": 7.3,
+          "architecture": "Olmo3ForCausalLM",
+          "context": 65536,
+          "license": "apache-2.0",
+          "modalities": [
+            "text"
+          ],
+          "pipeline": "text-generation",
+          "downloads": 195,
+          "likes": 0,
+          "trending": false,
+          "known_org": true,
+          "gguf": [],
+          "q4_k_m_gib": 4.1,
+          "q4_k_m_kind": "estimate",
+          "fit": {
+            "16": "fits",
+            "24": "fits",
+            "32": "fits",
+            "2x32": "fits"
+          },
+          "size_band": "<8B"
+        },
+        {
+          "id": "EleutherAI/olmo3-7b-sdf-sft-scrub-b1reset150",
+          "name": "olmo3-7b-sdf-sft-scrub-b1reset150",
+          "href": "https://huggingface.co/EleutherAI/olmo3-7b-sdf-sft-scrub-b1reset150",
+          "maker": "EleutherAI",
+          "released": "2026-09-16",
+          "updated": "2026-09-16",
+          "params_b": 7.3,
+          "active_params_b": 7.3,
+          "architecture": "Olmo3ForCausalLM",
+          "context": 65536,
+          "license": "apache-2.0",
+          "modalities": [
+            "text"
+          ],
+          "pipeline": "text-generation",
+          "downloads": 171,
+          "likes": 0,
+          "trending": false,
+          "known_org": true,
+          "gguf": [],
+          "q4_k_m_gib": 4.1,
+          "q4_k_m_kind": "estimate",
+          "fit": {
+            "16": "fits",
+            "24": "fits",
+            "32": "fits",
+            "2x32": "fits"
+          },
+          "size_band": "<8B"
+        }
+      ]
+    },
+    {
+      "date": "2026-09-15",
+      "models": [
+        {
+          "id": "JetBrains/Qwen3.8-3.6-27B-blend",
+          "name": "Qwen3.8-3.6-27B-blend",
+          "href": "https://huggingface.co/JetBrains/Qwen3.8-3.6-27B-blend",
+          "maker": "JetBrains",
+          "released": "2026-09-15",
+          "updated": "2026-09-21",
+          "params_b": 27.78,
+          "active_params_b": 27.78,
+          "architecture": "Qwen3_5ForConditionalGeneration",
+          "context": null,
+          "license": "apache-2.0",
+          "modalities": [
+            "text",
+            "image"
+          ],
+          "pipeline": "image-text-to-text",
+          "downloads": 1281,
+          "likes": 35,
+          "trending": false,
+          "known_org": true,
+          "gguf": [
+            {
+              "org": "bartowski",
+              "repo": "bartowski/JetBrains-Qwen3.8-3.6-27B-blend-GGUF",
+              "href": "https://huggingface.co/bartowski/JetBrains-Qwen3.8-3.6-27B-blend-GGUF",
+              "quants": [
+                "IQ3_M",
+                "IQ3_XS",
+                "IQ3_XXS",
+                "Q3_K_L",
+                "Q3_K_M",
+                "Q3_K_S",
+                "Q4_K_M",
+                "Q4_K_S",
+                "Q5_K_M",
+                "Q5_K_S",
+                "Q6_K",
+                "Q8_0"
+              ]
+            }
+          ],
+          "q4_k_m_gib": 15.7,
+          "q4_k_m_kind": "estimate",
+          "fit": {
+            "16": "no",
+            "24": "fits",
+            "32": "fits",
+            "2x32": "fits"
+          },
+          "size_band": "20-40B"
+        }
+      ]
+    },
+    {
+      "date": "2026-09-13",
+      "models": [
+        {
+          "id": "internlm/Intern-S2-397B",
+          "name": "Intern-S2-397B",
+          "href": "https://huggingface.co/internlm/Intern-S2-397B",
+          "maker": "internlm",
+          "released": "2026-09-13",
+          "updated": "2026-09-24",
+          "params_b": 403.42,
+          "active_params_b": 403.42,
+          "architecture": "Qwen3_5MoeForConditionalGeneration",
+          "context": null,
+          "license": "apache-2.0",
+          "modalities": [
+            "text",
+            "image"
+          ],
+          "pipeline": "image-text-to-text",
+          "downloads": 1136,
+          "likes": 48,
+          "trending": false,
+          "known_org": true,
+          "gguf": [
+            {
+              "org": "bartowski",
+              "repo": "bartowski/Intern-S2-397B-GGUF",
+              "href": "https://huggingface.co/bartowski/Intern-S2-397B-GGUF",
+              "quants": [
+                "IQ3_M",
+                "IQ3_XS",
+                "IQ3_XXS",
+                "Q3_K_L",
+                "Q3_K_M",
+                "Q3_K_S",
+                "Q4_K_M",
+                "Q4_K_S",
+                "Q5_K_M",
+                "Q5_K_S",
+                "Q6_K",
+                "Q8_0"
+              ]
+            }
+          ],
+          "q4_k_m_gib": 227.8,
+          "q4_k_m_kind": "estimate",
+          "fit": {
+            "16": "no",
+            "24": "no",
+            "32": "no",
+            "2x32": "no"
+          },
+          "size_band": "80B+"
+        }
+      ]
+    },
+    {
+      "date": "2026-09-10",
+      "models": [
+        {
+          "id": "allenai/AstaBrief_8B_SFT",
+          "name": "AstaBrief_8B_SFT",
+          "href": "https://huggingface.co/allenai/AstaBrief_8B_SFT",
+          "maker": "allenai",
+          "released": "2026-09-10",
+          "updated": "2026-10-02",
+          "params_b": 8,
+          "active_params_b": 8,
+          "architecture": "Qwen3ForCausalLM",
+          "context": 40960,
+          "license": "apache-2.0",
+          "modalities": [
+            "text"
+          ],
+          "pipeline": "text-generation",
+          "downloads": 1302,
+          "likes": 2,
+          "trending": false,
+          "known_org": true,
+          "gguf": [],
+          "q4_k_m_gib": 4.5,
+          "q4_k_m_kind": "estimate",
+          "fit": {
+            "16": "fits",
+            "24": "fits",
+            "32": "fits",
+            "2x32": "fits"
+          },
+          "size_band": "8-20B"
+        },
+        {
+          "id": "deepseek-ai/DeepSeek-V4.1-Flash",
+          "name": "DeepSeek-V4.1-Flash",
+          "href": "https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash",
+          "maker": "deepseek-ai",
+          "released": "2026-09-10",
+          "updated": "2026-10-16",
+          "params_b": 763.21,
+          "active_params_b": 763.21,
+          "architecture": "DeepseekV41ForCausalLM",
+          "context": null,
+          "license": "mit",
+          "modalities": [
+            "text",
+            "image"
+          ],
+          "pipeline": "image-text-to-text",
+          "downloads": 1276459,
+          "likes": 4564,
+          "trending": true,
+          "known_org": true,
+          "gguf": [],
+          "q4_k_m_gib": 430.9,
+          "q4_k_m_kind": "estimate",
+          "fit": {
+            "16": "no",
+            "24": "no",
+            "32": "no",
+            "2x32": "no"
+          },
+          "size_band": "80B+"
+        }
+      ]
+    },
+    {
+      "date": "2026-09-08",
+      "models": [
+        {
+          "id": "CohereLabs/tiny-aya-base-32K",
+          "name": "tiny-aya-base-32K",
+          "href": "https://huggingface.co/CohereLabs/tiny-aya-base-32K",
+          "maker": "CohereLabs",
+          "released": "2026-09-08",
+          "updated": "2026-09-30",
+          "params_b": 3.35,
+          "active_params_b": 3.35,
+          "architecture": "Cohere2ForCausalLM",
+          "context": null,
+          "license": "cc-by-nc-4.0",
+          "modalities": [
+            "text"
+          ],
+          "pipeline": "text-generation",
+          "downloads": 17,
+          "likes": 4,
+          "trending": false,
+          "known_org": true,
+          "gguf": [],
+          "q4_k_m_gib": 1.9,
+          "q4_k_m_kind": "estimate",
+          "fit": {
+            "16": "fits",
+            "24": "fits",
+            "32": "fits",
+            "2x32": "fits"
+          },
+          "size_band": "<8B"
+        }
+      ]
+    },
+    {
+      "date": "2026-09-06",
+      "models": [
+        {
+          "id": "openbmb/MiniCPM5-2B",
+          "name": "MiniCPM5-2B",
+          "href": "https://huggingface.co/openbmb/MiniCPM5-2B",
+          "maker": "openbmb",
+          "released": "2026-09-06",
+          "updated": "2026-09-29",
+          "params_b": 2.52,
+          "active_params_b": 2.52,
+          "architecture": "LlamaForCausalLM",
+          "context": 131072,
+          "license": "apache-2.0",
+          "modalities": [
+            "text"
+          ],
+          "pipeline": "text-generation",
+          "downloads": 1282153,
+          "likes": 1780,
+          "trending": true,
+          "known_org": true,
+          "gguf": [
+            {
+              "org": "bartowski",
+              "repo": "bartowski/MiniCPM5-2B-GGUF",
+              "href": "https://huggingface.co/bartowski/MiniCPM5-2B-GGUF",
+              "quants": [
+                "IQ3_M",
+                "IQ3_XS",
+                "IQ3_XXS",
+                "Q3_K_L",
+                "Q3_K_M",
+                "Q3_K_S",
+                "Q4_K_M",
+                "Q4_K_S",
+                "Q5_K_M",
+                "Q5_K_S",
+                "Q6_K",
+                "Q8_0"
+              ]
+            }
+          ],
+          "q4_k_m_gib": 1.4,
+          "q4_k_m_kind": "estimate",
+          "fit": {
+            "16": "fits",
+            "24": "fits",
+            "32": "fits",
+            "2x32": "fits"
+          },
+          "size_band": "<8B"
+        }
+      ]
+    },
+    {
+      "date": "2026-09-03",
+      "models": [
+        {
+          "id": "BAAI/Recon2Reason-Reasoning-4B",
+          "name": "Recon2Reason-Reasoning-4B",
+          "href": "https://huggingface.co/BAAI/Recon2Reason-Reasoning-4B",
+          "maker": "BAAI",
+          "released": "2026-09-03",
+          "updated": "2026-09-03",
+          "params_b": 4.44,
+          "active_params_b": 4.44,
+          "architecture": "Qwen3VLForConditionalGeneration",
+          "context": null,
+          "license": "apache-2.0",
+          "modalities": [
+            "text",
+            "image"
+          ],
+          "pipeline": "image-text-to-text",
+          "downloads": 162,
+          "likes": 0,
+          "trending": false,
+          "known_org": true,
+          "gguf": [],
+          "q4_k_m_gib": 2.5,
+          "q4_k_m_kind": "estimate",
+          "fit": {
+            "16": "fits",
+            "24": "fits",
+            "32": "fits",
+            "2x32": "fits"
+          },
+          "size_band": "<8B"
+        }
+      ]
+    },
+    {
+      "date": "2026-09-02",
+      "models": [
+        {
+          "id": "CohereLabs/tiny-aya-en-thinker",
+          "name": "tiny-aya-en-thinker",
+          "href": "https://huggingface.co/CohereLabs/tiny-aya-en-thinker",
+          "maker": "CohereLabs",
+          "released": "2026-09-02",
+          "updated": "2026-09-25",
+          "params_b": 3.35,
+          "active_params_b": 3.35,
+          "architecture": "Cohere2ForCausalLM",
+          "context": null,
+          "license": "cc-by-nc-4.0",
+          "modalities": [
+            "text"
+          ],
+          "pipeline": "text-generation",
+          "downloads": 29,
+          "likes": 12,
+          "trending": false,
+          "known_org": true,
+          "gguf": [],
+          "q4_k_m_gib": 1.9,
+          "q4_k_m_kind": "estimate",
+          "fit": {
+            "16": "fits",
+            "24": "fits",
+            "32": "fits",
+            "2x32": "fits"
+          },
+          "size_band": "<8B"
+        },
+        {
+          "id": "CohereLabs/tiny-aya-l2-thinker",
+          "name": "tiny-aya-l2-thinker",
+          "href": "https://huggingface.co/CohereLabs/tiny-aya-l2-thinker",
+          "maker": "CohereLabs",
+          "released": "2026-09-02",
+          "updated": "2026-09-25",
+          "params_b": 3.35,
+          "active_params_b": 3.35,
+          "architecture": "Cohere2ForCausalLM",
+          "context": null,
+          "license": "cc-by-nc-4.0",
+          "modalities": [
+            "text"
+          ],
+          "pipeline": "text-generation",
+          "downloads": 821,
+          "likes": 15,
+          "trending": false,
+          "known_org": true,
+          "gguf": [],
+          "q4_k_m_gib": 1.9,
+          "q4_k_m_kind": "estimate",
+          "fit": {
+            "16": "fits",
+            "24": "fits",
+            "32": "fits",
+            "2x32": "fits"
+          },
+          "size_band": "<8B"
+        }
+      ]
+    },
+    {
+      "date": "2026-08-31",
+      "models": [
+        {
+          "id": "deepseek-ai/DeepSeek-V4-Flash-Vision-Exp",
+          "name": "DeepSeek-V4-Flash-Vision-Exp",
+          "href": "https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash-Vision-Exp",
+          "maker": "deepseek-ai",
+          "released": "2026-08-31",
+          "updated": "2026-09-01",
+          "params_b": 304.65,
+          "active_params_b": 7.14,
+          "architecture": "DeepseekV4ForCausalLM",
+          "context": 1048576,
+          "license": "mit",
+          "modalities": [
+            "text",
+            "image"
+          ],
+          "pipeline": "image-text-to-text",
+          "downloads": 480973,
+          "likes": 953,
+          "trending": false,
+          "known_org": true,
+          "gguf": [
+            {
+              "org": "unsloth",
+              "repo": "unsloth/DeepSeek-V4-Flash-Vision-Exp-GGUF",
+              "href": "https://huggingface.co/unsloth/DeepSeek-V4-Flash-Vision-Exp-GGUF",
+              "quants": [
+                "UD-IQ3_S",
+                "UD-IQ3_XXS",
+                "UD-Q3_K_XL",
+                "UD-Q4_K_XL"
+              ]
+            },
+            {
+              "org": "ggml-org",
+              "repo": "ggml-org/DeepSeek-V4-Flash-Vision-Exp-GGUF",
+              "href": "https://huggingface.co/ggml-org/DeepSeek-V4-Flash-Vision-Exp-GGUF",
+              "quants": [
+                "Q8_0"
+              ]
+            }
+          ],
+          "q4_k_m_gib": 172,
+          "q4_k_m_kind": "estimate",
+          "fit": {
+            "16": "no",
+            "24": "no",
+            "32": "no",
+            "2x32": "no"
+          },
+          "size_band": "80B+"
+        }
+      ]
+    },
+    {
+      "date": "2026-08-27",
+      "models": [
+        {
+          "id": "tencent/ContextPilot-14B",
+          "name": "ContextPilot-14B",
+          "href": "https://huggingface.co/tencent/ContextPilot-14B",
+          "maker": "tencent",
+          "released": "2026-08-27",
+          "updated": "2026-08-31",
+          "params_b": 14.77,
+          "active_params_b": 14.77,
+          "architecture": "Qwen3ForCausalLM",
+          "context": 40960,
+          "license": "other",
+          "modalities": [
+            "text"
+          ],
+          "pipeline": "text-generation",
+          "downloads": 824,
+          "likes": 23,
+          "trending": false,
+          "known_org": true,
+          "gguf": [
+            {
+              "org": "bartowski",
+              "repo": "bartowski/tencent_ContextPilot-14B-GGUF",
+              "href": "https://huggingface.co/bartowski/tencent_ContextPilot-14B-GGUF",
+              "quants": [
+                "IQ3_M",
+                "IQ3_XS",
+                "IQ3_XXS",
+                "Q3_K_L",
+                "Q3_K_M",
+                "Q3_K_S",
+                "Q3_K_XL",
+                "Q4_K_M",
+                "Q4_K_S",
+                "Q5_K_M",
+                "Q5_K_S",
+                "Q6_K",
+                "Q8_0"
+              ]
+            }
+          ],
+          "q4_k_m_gib": 8.3,
+          "q4_k_m_kind": "estimate",
+          "fit": {
+            "16": "fits",
+            "24": "fits",
+            "32": "fits",
+            "2x32": "fits"
+          },
+          "size_band": "8-20B"
+        },
+        {
+          "id": "tencent/ContextPilot-8B",
+          "name": "ContextPilot-8B",
+          "href": "https://huggingface.co/tencent/ContextPilot-8B",
+          "maker": "tencent",
+          "released": "2026-08-27",
+          "updated": "2026-08-31",
+          "params_b": 8.19,
+          "active_params_b": 8.19,
+          "architecture": "Qwen3ForCausalLM",
+          "context": 40960,
+          "license": "other",
+          "modalities": [
+            "text"
+          ],
+          "pipeline": "text-generation",
+          "downloads": 733,
+          "likes": 11,
+          "trending": false,
+          "known_org": true,
+          "gguf": [],
+          "q4_k_m_gib": 4.6,
+          "q4_k_m_kind": "estimate",
+          "fit": {
+            "16": "fits",
+            "24": "fits",
+            "32": "fits",
+            "2x32": "fits"
+          },
+          "size_band": "8-20B"
+        },
+        {
+          "id": "tencent/ContextPilot-E4B",
+          "name": "ContextPilot-E4B",
+          "href": "https://huggingface.co/tencent/ContextPilot-E4B",
+          "maker": "tencent",
+          "released": "2026-08-27",
+          "updated": "2026-08-31",
+          "params_b": 7.94,
+          "active_params_b": 7.94,
+          "architecture": "Gemma4ForConditionalGeneration",
+          "context": null,
+          "license": "other",
+          "modalities": [
+            "text",
+            "image"
+          ],
+          "pipeline": "text-generation",
+          "downloads": 804,
+          "likes": 9,
+          "trending": false,
+          "known_org": true,
+          "gguf": [],
+          "q4_k_m_gib": 4.5,
+          "q4_k_m_kind": "estimate",
+          "fit": {
+            "16": "fits",
+            "24": "fits",
+            "32": "fits",
+            "2x32": "fits"
+          },
+          "size_band": "<8B"
+        },
+        {
+          "id": "tencent/Hy4-preview",
+          "name": "Hy4-preview",
+          "href": "https://huggingface.co/tencent/Hy4-preview",
+          "maker": "tencent",
+          "released": "2026-08-27",
+          "updated": "2026-08-28",
+          "params_b": 779.96,
+          "active_params_b": 24.37,
+          "architecture": "HYV4ForCausalLM",
+          "context": 1048576,
+          "license": "apache-2.0",
+          "modalities": [
+            "text"
+          ],
+          "pipeline": "text-generation",
+          "downloads": 22997,
+          "likes": 508,
+          "trending": false,
+          "known_org": true,
+          "gguf": [],
+          "q4_k_m_gib": 440.4,
+          "q4_k_m_kind": "estimate",
+          "fit": {
+            "16": "no",
+            "24": "no",
+            "32": "no",
+            "2x32": "no"
+          },
+          "size_band": "80B+"
+        },
+        {
+          "id": "Qwen/Qwen-Drive-1.0-4B",
+          "name": "Qwen-Drive-1.0-4B",
+          "href": "https://huggingface.co/Qwen/Qwen-Drive-1.0-4B",
+          "maker": "Qwen",
+          "released": "2026-08-27",
+          "updated": "2026-09-02",
+          "params_b": 4.54,
+          "active_params_b": 4.54,
+          "architecture": "QwenDriveForPlanning",
+          "context": null,
+          "license": "apache-2.0",
+          "modalities": [
+            "text",
+            "image"
+          ],
+          "pipeline": "image-text-to-text",
+          "downloads": 5028,
+          "likes": 250,
+          "trending": false,
+          "known_org": true,
+          "gguf": [],
+          "q4_k_m_gib": 2.6,
+          "q4_k_m_kind": "estimate",
+          "fit": {
+            "16": "fits",
+            "24": "fits",
+            "32": "fits",
+            "2x32": "fits"
+          },
+          "size_band": "<8B"
+        }
+      ]
+    },
+    {
+      "date": "2026-08-26",
+      "models": [
+        {
+          "id": "allenai/Bolmo-1B-Stage1",
+          "name": "Bolmo-1B-Stage1",
+          "href": "https://huggingface.co/allenai/Bolmo-1B-Stage1",
+          "maker": "allenai",
+          "released": "2026-08-26",
+          "updated": "2026-08-28",
+          "params_b": 1.47,
+          "active_params_b": 1.47,
+          "architecture": "BolmoForCausalLM",
+          "context": 4096,
+          "license": "apache-2.0",
+          "modalities": [
+            "text"
+          ],
+          "pipeline": "text-generation",
+          "downloads": 712,
+          "likes": 0,
+          "trending": false,
+          "known_org": true,
+          "gguf": [],
+          "q4_k_m_gib": 0.8,
+          "q4_k_m_kind": "estimate",
+          "fit": {
+            "16": "fits",
+            "24": "fits",
+            "32": "fits",
+            "2x32": "fits"
+          },
+          "size_band": "<8B"
+        },
+        {
+          "id": "allenai/Bolmo-7B-Stage1",
+          "name": "Bolmo-7B-Stage1",
+          "href": "https://huggingface.co/allenai/Bolmo-7B-Stage1",
+          "maker": "allenai",
+          "released": "2026-08-26",
+          "updated": "2026-08-28",
+          "params_b": 7.63,
+          "active_params_b": 7.63,
+          "architecture": "BolmoForCausalLM",
+          "context": 65536,
+          "license": "apache-2.0",
+          "modalities": [
+            "text"
+          ],
+          "pipeline": "text-generation",
+          "downloads": 159,
+          "likes": 1,
+          "trending": false,
+          "known_org": true,
+          "gguf": [],
+          "q4_k_m_gib": 4.3,
+          "q4_k_m_kind": "estimate",
+          "fit": {
+            "16": "fits",
+            "24": "fits",
+            "32": "fits",
+            "2x32": "fits"
+          },
+          "size_band": "<8B"
+        },
+        {
+          "id": "allenai/Bwen-8B",
+          "name": "Bwen-8B",
+          "href": "https://huggingface.co/allenai/Bwen-8B",
+          "maker": "allenai",
+          "released": "2026-08-26",
+          "updated": "2026-08-28",
+          "params_b": 8.31,
+          "active_params_b": 8.31,
+          "architecture": "BolmoForCausalLM",
+          "context": 32768,
+          "license": "apache-2.0",
+          "modalities": [
+            "text"
+          ],
+          "pipeline": "text-generation",
+          "downloads": 286,
+          "likes": 2,
+          "trending": false,
+          "known_org": true,
+          "gguf": [],
+          "q4_k_m_gib": 4.7,
+          "q4_k_m_kind": "estimate",
+          "fit": {
+            "16": "fits",
+            "24": "fits",
+            "32": "fits",
+            "2x32": "fits"
+          },
+          "size_band": "8-20B"
+        },
+        {
+          "id": "allenai/Bwen-8B-Stage1",
+          "name": "Bwen-8B-Stage1",
+          "href": "https://huggingface.co/allenai/Bwen-8B-Stage1",
+          "maker": "allenai",
+          "released": "2026-08-26",
+          "updated": "2026-08-28",
+          "params_b": 8.31,
+          "active_params_b": 8.31,
+          "architecture": "BolmoForCausalLM",
+          "context": 32768,
+          "license": "apache-2.0",
+          "modalities": [
+            "text"
+          ],
+          "pipeline": "text-generation",
+          "downloads": 162,
+          "likes": 2,
+          "trending": false,
+          "known_org": true,
+          "gguf": [],
+          "q4_k_m_gib": 4.7,
+          "q4_k_m_kind": "estimate",
+          "fit": {
+            "16": "fits",
+            "24": "fits",
+            "32": "fits",
+            "2x32": "fits"
+          },
+          "size_band": "8-20B"
+        },
+        {
+          "id": "allenai/Llama-3-Blama-8B",
+          "name": "Llama-3-Blama-8B",
+          "href": "https://huggingface.co/allenai/Llama-3-Blama-8B",
+          "maker": "allenai",
+          "released": "2026-08-26",
+          "updated": "2026-08-28",
+          "params_b": 8.25,
+          "active_params_b": 8.25,
+          "architecture": "BolmoForCausalLM",
+          "context": 8192,
+          "license": "llama3",
+          "modalities": [
+            "text"
+          ],
+          "pipeline": "text-generation",
+          "downloads": 162,
+          "likes": 1,
+          "trending": false,
+          "known_org": true,
+          "gguf": [],
+          "q4_k_m_gib": 4.7,
+          "q4_k_m_kind": "estimate",
+          "fit": {
+            "16": "fits",
+            "24": "fits",
+            "32": "fits",
+            "2x32": "fits"
+          },
+          "size_band": "8-20B"
+        },
+        {
+          "id": "allenai/Llama-3-Blama-8B-Stage1",
+          "name": "Llama-3-Blama-8B-Stage1",
+          "href": "https://huggingface.co/allenai/Llama-3-Blama-8B-Stage1",
+          "maker": "allenai",
+          "released": "2026-08-26",
+          "updated": "2026-08-28",
+          "params_b": 8.25,
+          "active_params_b": 8.25,
+          "architecture": "BolmoForCausalLM",
+          "context": 8192,
+          "license": "llama3",
+          "modalities": [
+            "text"
+          ],
+          "pipeline": "text-generation",
+          "downloads": 125,
+          "likes": 0,
+          "trending": false,
+          "known_org": true,
+          "gguf": [],
+          "q4_k_m_gib": 4.7,
+          "q4_k_m_kind": "estimate",
+          "fit": {
+            "16": "fits",
+            "24": "fits",
+            "32": "fits",
+            "2x32": "fits"
+          },
+          "size_band": "8-20B"
+        }
+      ]
+    },
+    {
+      "date": "2026-08-25",
+      "models": [
+        {
+          "id": "zai-org/GLM-5.3",
+          "name": "GLM-5.3",
+          "href": "https://huggingface.co/zai-org/GLM-5.3",
+          "maker": "zai-org",
+          "released": "2026-08-25",
+          "updated": "2026-10-14",
+          "params_b": 753.33,
+          "active_params_b": 23.54,
+          "architecture": "GlmMoeDsaForCausalLM",
+          "context": 1048576,
+          "license": "other",
+          "modalities": [
+            "text"
+          ],
+          "pipeline": "text-generation",
+          "downloads": 1833879,
+          "likes": 2239,
+          "trending": true,
+          "known_org": true,
+          "gguf": [
+            {
+              "org": "unsloth",
+              "repo": "unsloth/GLM-5.3-Flash-GGUF",
+              "href": "https://huggingface.co/unsloth/GLM-5.3-Flash-GGUF",
+              "quants": [
+                "Q8_0",
+                "UD-IQ3_XXS",
+                "UD-Q3_K_XL",
+                "UD-Q4_K_XL",
+                "UD-Q5_K_XL",
+                "UD-Q6_K_XL"
+              ]
+            },
+            {
+              "org": "unsloth",
+              "repo": "unsloth/GLM-5.3-GGUF",
+              "href": "https://huggingface.co/unsloth/GLM-5.3-GGUF",
+              "quants": [
+                "Q8_0",
+                "UD-IQ3_XXS",
+                "UD-Q3_K_XL",
+                "UD-Q4_K_XL",
+                "UD-Q5_K_XL",
+                "UD-Q6_K_XL"
+              ]
+            }
+          ],
+          "q4_k_m_gib": 425.3,
+          "q4_k_m_kind": "estimate",
+          "fit": {
+            "16": "no",
+            "24": "no",
+            "32": "no",
+            "2x32": "no"
+          },
+          "size_band": "80B+"
+        },
+        {
+          "id": "zai-org/GLM-5.3-Flash",
+          "name": "GLM-5.3-Flash",
+          "href": "https://huggingface.co/zai-org/GLM-5.3-Flash",
+          "maker": "zai-org",
+          "released": "2026-08-25",
+          "updated": "2026-10-15",
+          "params_b": 321.32,
+          "active_params_b": 321.32,
+          "architecture": "Glm5NextForConditionalGeneration",
+          "context": null,
+          "license": "mit",
+          "modalities": [
+            "text",
+            "image"
+          ],
+          "pipeline": "image-text-to-text",
+          "downloads": 6527460,
+          "likes": 2868,
+          "trending": true,
+          "known_org": true,
+          "gguf": [
+            {
+              "org": "unsloth",
+              "repo": "unsloth/GLM-5.3-Flash-GGUF",
+              "href": "https://huggingface.co/unsloth/GLM-5.3-Flash-GGUF",
+              "quants": [
+                "Q8_0",
+                "UD-IQ3_XXS",
+                "UD-Q3_K_XL",
+                "UD-Q4_K_XL",
+                "UD-Q5_K_XL",
+                "UD-Q6_K_XL"
+              ]
+            },
+            {
+              "org": "bartowski",
+              "repo": "bartowski/GLM-5.3-Flash-BF16-GGUF",
+              "href": "https://huggingface.co/bartowski/GLM-5.3-Flash-BF16-GGUF",
+              "quants": [
+                "IQ3_M",
+                "IQ3_XS",
+                "IQ3_XXS",
+                "Q3_K_L",
+                "Q3_K_M",
+                "Q3_K_S",
+                "Q4_K_M",
+                "Q4_K_S",
+                "Q5_K_M",
+                "Q5_K_S",
+                "Q6_K",
+                "Q8_0"
+              ]
+            }
+          ],
+          "q4_k_m_gib": 181.4,
+          "q4_k_m_kind": "estimate",
+          "fit": {
+            "16": "no",
+            "24": "no",
+            "32": "no",
+            "2x32": "no"
+          },
+          "size_band": "80B+"
+        }
+      ]
+    },
+    {
+      "date": "2026-08-24",
+      "models": [
+        {
+          "id": "Qwen/Qwen3.8-Flash-Next",
+          "name": "Qwen3.8-Flash-Next",
+          "href": "https://huggingface.co/Qwen/Qwen3.8-Flash-Next",
+          "maker": "Qwen",
+          "released": "2026-08-24",
+          "updated": "2026-08-27",
+          "params_b": 180,
+          "active_params_b": 180,
+          "architecture": "Qwen4ExpForConditionalGeneration",
+          "context": null,
+          "license": "other",
+          "modalities": [
+            "text",
+            "image"
+          ],
+          "pipeline": "image-text-to-text",
+          "downloads": 2379596,
+          "likes": 6280,
+          "trending": true,
+          "known_org": true,
+          "gguf": [
+            {
+              "org": "unsloth",
+              "repo": "unsloth/Qwen3.8-Flash-Next-GGUF",
+              "href": "https://huggingface.co/unsloth/Qwen3.8-Flash-Next-GGUF",
+              "quants": [
+                "Q4_K_M",
+                "Q8_0",
+                "UD-IQ3_XXS",
+                "UD-Q3_K_XL",
+                "UD-Q4_K_XL",
+                "UD-Q5_K_XL",
+                "UD-Q6_K_XL"
+              ]
+            }
+          ],
+          "q4_k_m_gib": 101.6,
+          "q4_k_m_kind": "estimate",
+          "fit": {
+            "16": "no",
+            "24": "no",
+            "32": "no",
+            "2x32": "no"
+          },
+          "size_band": "80B+"
+        }
+      ]
+    },
+    {
+      "date": "2026-08-21",
+      "models": [
+        {
+          "id": "EleutherAI/gpt2-custom",
+          "name": "gpt2-custom",
+          "href": "https://huggingface.co/EleutherAI/gpt2-custom",
+          "maker": "EleutherAI",
+          "released": "2026-08-21",
+          "updated": "2026-08-21",
+          "params_b": 0.12,
+          "active_params_b": 0.12,
+          "architecture": "GPT2CustomLMHeadModel",
+          "context": 1024,
+          "license": null,
+          "modalities": [
+            "text"
+          ],
+          "pipeline": "text-generation",
+          "downloads": 123,
+          "likes": 0,
+          "trending": false,
+          "known_org": true,
+          "gguf": [],
+          "q4_k_m_gib": 0.1,
+          "q4_k_m_kind": "estimate",
+          "fit": {
+            "16": "fits",
+            "24": "fits",
+            "32": "fits",
+            "2x32": "fits"
+          },
+          "size_band": "<8B"
+        }
+      ]
+    },
+    {
+      "date": "2026-08-13",
+      "models": [
+        {
+          "id": "deepseek-ai/DeepSeek-V4-Pro-0813",
+          "name": "DeepSeek-V4-Pro-0813",
+          "href": "https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro-0813",
+          "maker": "deepseek-ai",
+          "released": "2026-08-13",
+          "updated": "2026-08-13",
+          "params_b": 1650.5,
+          "active_params_b": 25.79,
+          "architecture": "DeepseekV4ForCausalLM",
+          "context": 1048576,
+          "license": "mit",
+          "modalities": [
+            "text"
+          ],
+          "pipeline": "text-generation",
+          "downloads": 157814,
+          "likes": 897,
+          "trending": false,
+          "known_org": true,
+          "gguf": [
+            {
+              "org": "unsloth",
+              "repo": "unsloth/DeepSeek-V4-Pro-0813-GGUF",
+              "href": "https://huggingface.co/unsloth/DeepSeek-V4-Pro-0813-GGUF",
+              "quants": [
+                "UD-Q4_K_XL"
+              ]
+            }
+          ],
+          "q4_k_m_gib": 931.9,
+          "q4_k_m_kind": "estimate",
+          "fit": {
+            "16": "no",
+            "24": "no",
+            "32": "no",
+            "2x32": "no"
+          },
+          "size_band": "80B+"
+        }
+      ]
+    },
+    {
+      "date": "2026-08-10",
+      "models": [
+        {
+          "id": "CohereLabs/North-Micro-Vision-Instruct",
+          "name": "North-Micro-Vision-Instruct",
+          "href": "https://huggingface.co/CohereLabs/North-Micro-Vision-Instruct",
+          "maker": "CohereLabs",
+          "released": "2026-08-10",
+          "updated": "2026-09-30",
+          "params_b": 2.48,
+          "active_params_b": 2.48,
+          "architecture": "CohereCompassForConditionalGeneration",
+          "context": null,
+          "license": "apache-2.0",
+          "modalities": [
+            "text",
+            "image"
+          ],
+          "pipeline": "image-text-to-text",
+          "downloads": 66624,
+          "likes": 154,
+          "trending": false,
+          "known_org": true,
+          "gguf": [],
+          "q4_k_m_gib": 1.4,
+          "q4_k_m_kind": "estimate",
+          "fit": {
+            "16": "fits",
+            "24": "fits",
+            "32": "fits",
+            "2x32": "fits"
+          },
+          "size_band": "<8B"
+        }
+      ]
+    },
+    {
+      "date": "2026-08-08",
+      "models": [
+        {
+          "id": "Qwen/Qwen3.8-2.4T-A95B",
+          "name": "Qwen3.8-2.4T-A95B",
+          "href": "https://huggingface.co/Qwen/Qwen3.8-2.4T-A95B",
+          "maker": "Qwen",
+          "released": "2026-08-08",
+          "updated": "2026-08-12",
+          "params_b": 2446.18,
+          "active_params_b": 47.78,
+          "architecture": "Qwen3_5MoeForCausalLM",
+          "context": 262144,
+          "license": "other",
+          "modalities": [
+            "text"
+          ],
+          "pipeline": "text-generation",
+          "downloads": 31991,
+          "likes": 1315,
+          "trending": false,
+          "known_org": true,
+          "gguf": [
+            {
+              "org": "unsloth",
+              "repo": "unsloth/Qwen3.8-2.4T-A95B-GGUF",
+              "href": "https://huggingface.co/unsloth/Qwen3.8-2.4T-A95B-GGUF",
+              "quants": [
+                "Q8_0",
+                "UD-IQ3_XXS"
+              ]
+            }
+          ],
+          "q4_k_m_gib": 1381.1,
+          "q4_k_m_kind": "estimate",
+          "fit": {
+            "16": "no",
+            "24": "no",
+            "32": "no",
+            "2x32": "no"
+          },
+          "size_band": "80B+"
+        }
+      ]
+    },
+    {
+      "date": "2026-08-06",
+      "models": [
+        {
+          "id": "skt/A.X-K2-EAGLE3",
+          "name": "A.X-K2-EAGLE3",
+          "href": "https://huggingface.co/skt/A.X-K2-EAGLE3",
+          "maker": "skt",
+          "released": "2026-08-06",
+          "updated": "2026-08-07",
+          "params_b": 3.02,
+          "active_params_b": 3.02,
+          "architecture": "Eagle3DeepseekV2ForCausalLM",
+          "context": 262144,
+          "license": "apache-2.0",
+          "modalities": [
+            "text"
+          ],
+          "pipeline": "text-generation",
+          "downloads": 9276,
+          "likes": 8,
+          "trending": false,
+          "known_org": true,
+          "gguf": [],
+          "q4_k_m_gib": 1.7,
+          "q4_k_m_kind": "estimate",
+          "fit": {
+            "16": "fits",
+            "24": "fits",
+            "32": "fits",
+            "2x32": "fits"
+          },
+          "size_band": "<8B"
+        }
+      ]
+    },
+    {
+      "date": "2026-08-05",
+      "models": [
+        {
+          "id": "Qwen/Qwen3.8-27B",
+          "name": "Qwen3.8-27B",
+          "href": "https://huggingface.co/Qwen/Qwen3.8-27B",
+          "maker": "Qwen",
+          "released": "2026-08-05",
+          "updated": "2026-08-14",
+          "params_b": 27.78,
+          "active_params_b": 27.78,
+          "architecture": "Qwen3_5ForConditionalGeneration",
+          "context": null,
+          "license": "apache-2.0",
+          "modalities": [
+            "text",
+            "image"
+          ],
+          "pipeline": "image-text-to-text",
+          "downloads": 7516626,
+          "likes": 17844,
+          "trending": true,
+          "known_org": true,
+          "gguf": [
+            {
+              "org": "unsloth",
+              "repo": "unsloth/Qwen3.8-27B-GGUF",
+              "href": "https://huggingface.co/unsloth/Qwen3.8-27B-GGUF",
+              "quants": [
+                "Q8_0",
+                "UD-IQ3_S",
+                "UD-IQ3_XXS",
+                "UD-Q3_K_XL",
+                "UD-Q4_K_M",
+                "UD-Q4_K_S",
+                "UD-Q4_K_XL",
+                "UD-Q5_K_M",
+                "UD-Q5_K_S",
+                "UD-Q5_K_XL",
+                "UD-Q6_K",
+                "UD-Q6_K_XL"
+              ]
+            },
+            {
+              "org": "lmstudio-community",
+              "repo": "lmstudio-community/Qwen3.8-27B-GGUF",
+              "href": "https://huggingface.co/lmstudio-community/Qwen3.8-27B-GGUF",
+              "quants": [
+                "Q4_K_M",
+                "Q6_K",
+                "Q8_0"
+              ]
+            }
+          ],
+          "q4_k_m_gib": 15.7,
+          "q4_k_m_kind": "estimate",
+          "fit": {
+            "16": "no",
+            "24": "fits",
+            "32": "fits",
+            "2x32": "fits"
+          },
+          "size_band": "20-40B"
+        }
+      ]
+    },
+    {
+      "date": "2026-07-31",
+      "models": [
+        {
+          "id": "deepseek-ai/DeepSeek-V4-Flash-0731",
+          "name": "DeepSeek-V4-Flash-0731",
+          "href": "https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash-0731",
+          "maker": "deepseek-ai",
+          "released": "2026-07-31",
+          "updated": "2026-08-01",
+          "params_b": 304.18,
+          "active_params_b": 7.13,
+          "architecture": "DeepseekV4ForCausalLM",
+          "context": 1048576,
+          "license": "mit",
+          "modalities": [
+            "text"
+          ],
+          "pipeline": "text-generation",
+          "downloads": 4391387,
+          "likes": 4086,
+          "trending": false,
+          "known_org": true,
+          "gguf": [
+            {
+              "org": "unsloth",
+              "repo": "unsloth/DeepSeek-V4-Flash-0731-GGUF",
+              "href": "https://huggingface.co/unsloth/DeepSeek-V4-Flash-0731-GGUF",
+              "quants": [
+                "UD-IQ3_S",
+                "UD-IQ3_XXS",
+                "UD-Q3_K_M",
+                "UD-Q3_K_XL",
+                "UD-Q4_K_XL",
+                "Q8_0"
+              ]
+            }
+          ],
+          "q4_k_m_gib": 171.7,
+          "q4_k_m_kind": "estimate",
+          "fit": {
+            "16": "no",
+            "24": "no",
+            "32": "no",
+            "2x32": "no"
+          },
+          "size_band": "80B+"
+        },
+        {
+          "id": "meituan-longcat/LongCat-Flash-Lite-Sparse",
+          "name": "LongCat-Flash-Lite-Sparse",
+          "href": "https://huggingface.co/meituan-longcat/LongCat-Flash-Lite-Sparse",
+          "maker": "meituan-longcat",
+          "released": "2026-07-31",
+          "updated": "2026-08-04",
+          "params_b": 69.13,
+          "active_params_b": 3.24,
+          "architecture": "LongcatCausalLM",
+          "context": 983040,
+          "license": "mit",
+          "modalities": [
+            "text"
+          ],
+          "pipeline": "text-generation",
+          "downloads": 982,
+          "likes": 90,
+          "trending": false,
+          "known_org": true,
+          "gguf": [],
+          "q4_k_m_gib": 39,
+          "q4_k_m_kind": "estimate",
+          "fit": {
+            "16": "no",
+            "24": "no",
+            "32": "no",
+            "2x32": "fits"
+          },
+          "size_band": "40-80B"
+        }
+      ]
+    },
+    {
+      "date": "2026-07-29",
+      "models": [
+        {
+          "id": "internlm/Intern-S2-Mobius",
+          "name": "Intern-S2-Mobius",
+          "href": "https://huggingface.co/internlm/Intern-S2-Mobius",
+          "maker": "internlm",
+          "released": "2026-07-29",
+          "updated": "2026-08-14",
+          "params_b": 35.96,
+          "active_params_b": 35.96,
+          "architecture": "InternS2MobiusForConditionalGeneration",
+          "context": null,
+          "license": "apache-2.0",
+          "modalities": [
+            "text",
+            "image"
+          ],
+          "pipeline": "image-text-to-text",
+          "downloads": 1209,
+          "likes": 65,
+          "trending": false,
+          "known_org": true,
+          "gguf": [],
+          "q4_k_m_gib": 20.3,
+          "q4_k_m_kind": "estimate",
+          "fit": {
+            "16": "no",
+            "24": "fits",
+            "32": "fits",
+            "2x32": "fits"
+          },
+          "size_band": "20-40B"
+        },
+        {
+          "id": "LGAI-EXAONE/K-EXAONE-2.0-750B-A37B",
+          "name": "K-EXAONE-2.0-750B-A37B",
+          "href": "https://huggingface.co/LGAI-EXAONE/K-EXAONE-2.0-750B-A37B",
+          "maker": "LGAI-EXAONE",
+          "released": "2026-07-29",
+          "updated": "2026-08-07",
+          "params_b": 749.36,
+          "active_params_b": 37,
+          "architecture": "ExaoneMoeForCausalLM",
+          "context": 262144,
+          "license": "apache-2.0",
+          "modalities": [
+            "text"
+          ],
+          "pipeline": "text-generation",
+          "downloads": 3385,
+          "likes": 157,
+          "trending": false,
+          "known_org": true,
+          "gguf": [],
+          "q4_k_m_gib": 423.1,
+          "q4_k_m_kind": "estimate",
+          "fit": {
+            "16": "no",
+            "24": "no",
+            "32": "no",
+            "2x32": "no"
+          },
+          "size_band": "80B+"
+        }
+      ]
+    },
+    {
+      "date": "2026-07-28",
+      "models": [
+        {
+          "id": "skt/A.X-K2",
+          "name": "A.X-K2",
+          "href": "https://huggingface.co/skt/A.X-K2",
+          "maker": "skt",
+          "released": "2026-07-28",
+          "updated": "2026-09-01",
+          "params_b": 691.69,
+          "active_params_b": 21.62,
+          "architecture": "AXK2ForCausalLM",
+          "context": 262144,
+          "license": "apache-2.0",
+          "modalities": [
+            "text"
+          ],
+          "pipeline": "text-generation",
+          "downloads": 20386,
+          "likes": 106,
+          "trending": false,
+          "known_org": true,
+          "gguf": [],
+          "q4_k_m_gib": 390.5,
+          "q4_k_m_kind": "estimate",
+          "fit": {
+            "16": "no",
+            "24": "no",
+            "32": "no",
+            "2x32": "no"
+          },
+          "size_band": "80B+"
+        },
+        {
+          "id": "LiquidAI/LFM2.5-2.6B",
+          "name": "LFM2.5-2.6B",
+          "href": "https://huggingface.co/LiquidAI/LFM2.5-2.6B",
+          "maker": "LiquidAI",
+          "released": "2026-07-28",
+          "updated": "2026-08-24",
+          "params_b": 2.7,
+          "active_params_b": 2.7,
+          "architecture": "Lfm2ForCausalLM",
+          "context": 131072,
+          "license": "other",
+          "modalities": [
+            "text"
+          ],
+          "pipeline": "text-generation",
+          "downloads": 115088,
+          "likes": 839,
+          "trending": true,
+          "known_org": true,
+          "gguf": [
+            {
+              "org": "bartowski",
+              "repo": "bartowski/LiquidAI_LFM2.5-2.6B-GGUF",
+              "href": "https://huggingface.co/bartowski/LiquidAI_LFM2.5-2.6B-GGUF",
+              "quants": [
+                "IQ3_M",
+                "IQ3_XS",
+                "IQ3_XXS",
+                "Q3_K_L",
+                "Q3_K_M",
+                "Q3_K_S",
+                "Q3_K_XL",
+                "Q4_K_M",
+                "Q4_K_S",
+                "Q5_K_M",
+                "Q5_K_S",
+                "Q6_K",
+                "Q8_0"
+              ]
+            }
+          ],
+          "q4_k_m_gib": 1.5,
+          "q4_k_m_kind": "estimate",
+          "fit": {
+            "16": "fits",
+            "24": "fits",
+            "32": "fits",
+            "2x32": "fits"
+          },
+          "size_band": "<8B"
+        }
+      ]
+    },
+    {
+      "date": "2026-07-25",
+      "models": [
+        {
+          "id": "microsoft/Mage-VL",
+          "name": "Mage-VL",
+          "href": "https://huggingface.co/microsoft/Mage-VL",
+          "maker": "microsoft",
+          "released": "2026-07-25",
+          "updated": "2026-08-10",
+          "params_b": 4.74,
+          "active_params_b": 4.74,
+          "architecture": "MageVLForConditionalGeneration",
+          "context": null,
+          "license": "apache-2.0",
+          "modalities": [
+            "text",
+            "image"
+          ],
+          "pipeline": "image-text-to-text",
+          "downloads": 9358,
+          "likes": 430,
+          "trending": false,
+          "known_org": true,
+          "gguf": [],
+          "q4_k_m_gib": 2.7,
+          "q4_k_m_kind": "estimate",
+          "fit": {
+            "16": "fits",
+            "24": "fits",
+            "32": "fits",
+            "2x32": "fits"
+          },
+          "size_band": "<8B"
+        }
+      ]
+    },
+    {
+      "date": "2026-07-24",
+      "models": [
+        {
+          "id": "kakaocorp/kanana-2-1.3b-base",
+          "name": "kanana-2-1.3b-base",
+          "href": "https://huggingface.co/kakaocorp/kanana-2-1.3b-base",
+          "maker": "kakaocorp",
+          "released": "2026-07-24",
+          "updated": "2026-07-29",
+          "params_b": 1.29,
+          "active_params_b": 1.29,
+          "architecture": "Kanana2TinyForCausalLM",
+          "context": 32768,
+          "license": "other",
+          "modalities": [
+            "text"
+          ],
+          "pipeline": "text-generation",
+          "downloads": 552,
+          "likes": 6,
+          "trending": false,
+          "known_org": true,
+          "gguf": [],
+          "q4_k_m_gib": 0.7,
+          "q4_k_m_kind": "estimate",
+          "fit": {
+            "16": "fits",
+            "24": "fits",
+            "32": "fits",
+            "2x32": "fits"
+          },
+          "size_band": "<8B"
+        },
+        {
+          "id": "kakaocorp/kanana-2-1.3b-instruct",
+          "name": "kanana-2-1.3b-instruct",
+          "href": "https://huggingface.co/kakaocorp/kanana-2-1.3b-instruct",
+          "maker": "kakaocorp",
+          "released": "2026-07-24",
+          "updated": "2026-08-01",
+          "params_b": 1.29,
+          "active_params_b": 1.29,
+          "architecture": "Kanana2TinyForCausalLM",
+          "context": 32768,
+          "license": "other",
+          "modalities": [
+            "text"
+          ],
+          "pipeline": "text-generation",
+          "downloads": 3803,
+          "likes": 13,
+          "trending": false,
+          "known_org": true,
+          "gguf": [],
+          "q4_k_m_gib": 0.7,
+          "q4_k_m_kind": "estimate",
+          "fit": {
+            "16": "fits",
+            "24": "fits",
+            "32": "fits",
+            "2x32": "fits"
+          },
+          "size_band": "<8B"
+        },
+        {
+          "id": "kakaocorp/kanana-2-3b-base",
+          "name": "kanana-2-3b-base",
+          "href": "https://huggingface.co/kakaocorp/kanana-2-3b-base",
+          "maker": "kakaocorp",
+          "released": "2026-07-24",
+          "updated": "2026-07-29",
+          "params_b": 3.18,
+          "active_params_b": 3.18,
+          "architecture": "Qwen3ForCausalLM",
+          "context": 32768,
+          "license": "other",
+          "modalities": [
+            "text"
+          ],
+          "pipeline": "text-generation",
+          "downloads": 918,
+          "likes": 5,
+          "trending": false,
+          "known_org": true,
+          "gguf": [],
+          "q4_k_m_gib": 1.8,
+          "q4_k_m_kind": "estimate",
+          "fit": {
+            "16": "fits",
+            "24": "fits",
+            "32": "fits",
+            "2x32": "fits"
+          },
+          "size_band": "<8B"
+        },
+        {
+          "id": "kakaocorp/kanana-2-3b-instruct",
+          "name": "kanana-2-3b-instruct",
+          "href": "https://huggingface.co/kakaocorp/kanana-2-3b-instruct",
+          "maker": "kakaocorp",
+          "released": "2026-07-24",
+          "updated": "2026-07-29",
+          "params_b": 3.51,
+          "active_params_b": 3.51,
+          "architecture": "Qwen3ForCausalLM",
+          "context": 32768,
+          "license": "other",
+          "modalities": [
+            "text"
+          ],
+          "pipeline": "text-generation",
+          "downloads": 4482,
+          "likes": 13,
+          "trending": false,
+          "known_org": true,
+          "gguf": [],
+          "q4_k_m_gib": 2,
+          "q4_k_m_kind": "estimate",
+          "fit": {
+            "16": "fits",
+            "24": "fits",
+            "32": "fits",
+            "2x32": "fits"
+          },
+          "size_band": "<8B"
+        }
+      ]
+    },
+    {
+      "date": "2026-07-23",
+      "models": [
+        {
+          "id": "BAAI/AREX-Base",
+          "name": "AREX-Base",
+          "href": "https://huggingface.co/BAAI/AREX-Base",
+          "maker": "BAAI",
+          "released": "2026-07-23",
+          "updated": "2026-08-11",
+          "params_b": 122.56,
+          "active_params_b": 122.56,
+          "architecture": "Qwen3_5MoeForConditionalGeneration",
+          "context": null,
+          "license": "apache-2.0",
+          "modalities": [
+            "text",
+            "image"
+          ],
+          "pipeline": "text-generation",
+          "downloads": 361,
+          "likes": 22,
+          "trending": false,
+          "known_org": true,
+          "gguf": [
+            {
+              "org": "bartowski",
+              "repo": "bartowski/BAAI_AREX-Base-GGUF",
+              "href": "https://huggingface.co/bartowski/BAAI_AREX-Base-GGUF",
+              "quants": [
+                "IQ3_M",
+                "IQ3_XS",
+                "IQ3_XXS",
+                "Q3_K_L",
+                "Q3_K_M",
+                "Q3_K_S",
+                "Q3_K_XL",
+                "Q4_K_M",
+                "Q4_K_S",
+                "Q5_K_M",
+                "Q5_K_S",
+                "Q6_K",
+                "Q8_0"
+              ]
+            }
+          ],
+          "q4_k_m_gib": 69.2,
+          "q4_k_m_kind": "estimate",
+          "fit": {
+            "16": "no",
+            "24": "no",
+            "32": "no",
+            "2x32": "no"
+          },
+          "size_band": "80B+"
+        },
+        {
+          "id": "BAAI/AREX-Turbo",
+          "name": "AREX-Turbo",
+          "href": "https://huggingface.co/BAAI/AREX-Turbo",
+          "maker": "BAAI",
+          "released": "2026-07-23",
+          "updated": "2026-08-11",
+          "params_b": 4.54,
+          "active_params_b": 4.54,
+          "architecture": "Qwen3_5ForConditionalGeneration",
+          "context": null,
+          "license": "apache-2.0",
+          "modalities": [
+            "text",
+            "image"
+          ],
+          "pipeline": "text-generation",
+          "downloads": 374,
+          "likes": 50,
+          "trending": false,
+          "known_org": true,
+          "gguf": [
+            {
+              "org": "bartowski",
+              "repo": "bartowski/BAAI_AREX-Turbo-GGUF",
+              "href": "https://huggingface.co/bartowski/BAAI_AREX-Turbo-GGUF",
+              "quants": [
+                "IQ3_M",
+                "IQ3_XS",
+                "IQ3_XXS",
+                "Q3_K_L",
+                "Q3_K_M",
+                "Q3_K_S",
+                "Q3_K_XL",
+                "Q4_K_M",
+                "Q4_K_S",
+                "Q5_K_M",
+                "Q5_K_S",
+                "Q6_K",
+                "Q8_0"
+              ]
+            }
+          ],
+          "q4_k_m_gib": 2.6,
+          "q4_k_m_kind": "estimate",
+          "fit": {
+            "16": "fits",
+            "24": "fits",
+            "32": "fits",
+            "2x32": "fits"
+          },
+          "size_band": "<8B"
+        }
+      ]
+    },
+    {
+      "date": "2026-07-22",
+      "models": [
+        {
+          "id": "upstage/Solar-Open2-250B",
+          "name": "Solar-Open2-250B",
+          "href": "https://huggingface.co/upstage/Solar-Open2-250B",
+          "maker": "upstage",
+          "released": "2026-07-22",
+          "updated": "2026-07-31",
+          "params_b": 250.29,
+          "active_params_b": 6.26,
+          "architecture": "SolarOpen2ForCausalLM",
+          "context": 1048576,
+          "license": "other",
+          "modalities": [
+            "text"
+          ],
+          "pipeline": "text-generation",
+          "downloads": 6990,
+          "likes": 756,
+          "trending": false,
+          "known_org": true,
+          "gguf": [],
+          "q4_k_m_gib": 141.3,
+          "q4_k_m_kind": "estimate",
+          "fit": {
+            "16": "no",
+            "24": "no",
+            "32": "no",
+            "2x32": "no"
+          },
+          "size_band": "80B+"
+        }
+      ]
+    }
+  ]
+}

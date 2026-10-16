@@ -15,6 +15,7 @@ import { forumCategories } from './forum-categories';
 import { canRunSeoRows } from './can-run';
 import { gpuCompareSeoRows } from './gpu-compare';
 import { modelCompareSeoRows } from './model-compare';
+import { NEW_MODELS_DESCRIPTION, NEW_MODELS_TITLE } from './new-models';
 
 export const SITE_ORIGIN = 'https://amdai.net';
 export const TITLE_SUFFIX = ` · ${BRAND}`;
@@ -189,6 +190,7 @@ export const CRUMB_LABELS: Record<string, string> = {
   '/gpus/w7700': 'PRO W7700',
   '/gpus/w6800': 'PRO W6800',
   '/models': 'Models',
+  '/new-models': 'New models',
   '/models/qwen36': 'Qwen3.6-35B-A3B',
   '/models/flash': 'Qwen 3.8 Flash',
   '/models/gpt-oss-20b': 'gpt-oss 20B',
@@ -831,6 +833,13 @@ setMeta(
   'PRO W6800 recipe sheet — 32 GB, gfx1030, cited ROCm matrix row. Q6/Q5/Q4 plus labeled UD-Q3_K_XL; 1 and 2 GPU estimates. Not measured on the local desktop.',
 );
 setDate('/gpus/w6800', '2026-10-14');
+setMeta(
+  '/new-models',
+  NEW_MODELS_TITLE,
+  NEW_MODELS_DESCRIPTION,
+);
+setDate('/new-models', '2026-10-16');
+setDate('/new-models/rss.xml', '2026-10-16');
 setMeta(
   '/models',
   'Models',

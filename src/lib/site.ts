@@ -138,6 +138,7 @@ export const primaryNav: NavItem[] = [
   { href: '/results', label: 'Results', description: 'Official amdai-bench/run@1 cards — the house verified local desktop tests, exact launch command', group: 'tools' },
   { href: '/gpus', label: 'GPU directory', description: 'Radeon cards, gfx IDs, VRAM, official ROCm rows, tested recipes', group: 'tools' },
   { href: '/models', label: 'Models', description: 'House Qwen plus cited open-weight pages — official cards, Q6/Q5/Q4, labeled Q3', group: 'tools' },
+  { href: '/new-models', label: 'New models', description: 'Daily Hugging Face Hub table of new open-weight text and vision releases. GGUF Q3–Q8. Q4_K_M fit is a labeled estimate', group: 'tools' },
   { href: '/quants', label: 'Quants', description: 'Q3–Q8, UD dynamic, KV types, why Q1/Q2 stay off', group: 'tools' },
   { href: '/backends', label: 'Backends', description: 'Inference engines compared — llama.cpp first', group: 'tools' },
   { href: '/about', label: 'About', description: 'Who runs AMDai, the local desktop rig, and editorial independence', group: 'learn' },

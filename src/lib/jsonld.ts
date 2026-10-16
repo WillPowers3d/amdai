@@ -70,6 +70,12 @@ import { BRAND } from './site';
 import { RUN_SCHEMA } from './run-card';
 import { TRUST_PUBLISHED } from './trust';
 import { runs } from './run-card-data';
+import {
+  NEW_MODELS_MEASUREMENT,
+  NEW_MODELS_TITLE,
+  loadNewModelsFile,
+  temporalCoverage,
+} from './new-models';
 import { parseBios, type BiosFile } from './bios';
 import { parse } from 'yaml';
 import { existsSync, readFileSync } from 'node:fs';
@@ -426,6 +432,26 @@ export function pageJsonLd(input: {
         input.description,
       ),
     );
+    return nodes;
+  }
+  if (path === '/new-models') {
+    const file = loadNewModelsFile();
+    nodes.push({
+      '@type': 'Dataset',
+      name: `${BRAND} ${NEW_MODELS_TITLE}`,
+      description: input.description,
+      url,
+      creator: {
+        '@type': 'Organization',
+        name: DATASET_CREATOR.name,
+        '@id': `${SITE_ORIGIN}/#organization`,
+      },
+      license: DATASET_LICENSE,
+      measurementTechnique: NEW_MODELS_MEASUREMENT,
+      temporalCoverage: temporalCoverage(file),
+      variableMeasured: ['parameter count', 'context length', 'Q4_K_M GiB estimate', 'GGUF quant availability'],
+      isAccessibleForFree: true,
+    });
     return nodes;
   }
 

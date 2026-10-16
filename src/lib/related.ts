@@ -176,6 +176,18 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/chat-templates', label: 'Chat templates' },
     ];
   }
+  if (path === '/new-models') {
+    return [
+      { href: '/models', label: 'House models' },
+      { href: '/calculator', label: 'Calculator' },
+      { href: '/quants', label: 'Quants' },
+      { href: '/can-run', label: 'Can my Radeon run it?' },
+      { href: '/compare/models', label: 'Compare models' },
+      { href: '/guides/quantize-gguf', label: 'Make GGUF quants' },
+      { href: '/methodology', label: 'How we test' },
+      { href: '/qwen', label: 'Qwen compare' },
+    ];
+  }
   if (path === '/can-run' || path.startsWith('/can-run/')) {
     return [
       { href: '/calculator', label: 'Calculator' },
@@ -892,6 +904,7 @@ export function relatedFor(pathname: string): RelatedLink[] {
       void model;
     } else {
       for (const model of MODEL_PAGES) add(out, seen, `/models/${model.id}`, model.name);
+      add(out, seen, '/new-models', 'New models');
       add(out, seen, '/qwen', 'Qwen compare');
       add(out, seen, '/moe', 'MoE on Radeon');
       add(out, seen, '/contribute', 'Contribute');
@@ -1021,6 +1034,7 @@ export function assertRelatedValid(
     '/guides/quantize-gguf',
     '/faq',
     '/qwen',
+    '/new-models',
     '/models/qwen36',
     '/models/flash',
     '/models/gpt-oss-20b',
