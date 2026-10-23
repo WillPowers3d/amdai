@@ -144,6 +144,7 @@ describe('primary path and nav IA', () => {
       '/amdai-bench': '../pages/amdai-bench/index.astro',
       '/models': '../pages/models/index.astro',
       '/new-models': '../pages/new-models.astro',
+      '/lab-log': '../pages/lab-log.astro',
       '/models/qwen36': '../pages/models/[id].astro',
       '/models/flash': '../pages/models/[id].astro',
       '/models/gpt-oss-20b': '../pages/models/[id].astro',

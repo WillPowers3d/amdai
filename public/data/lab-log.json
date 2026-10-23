@@ -1,0 +1,19 @@
+{
+  "as_of": "2026-10-23T18:00:00.000Z",
+  "entries": [
+    {
+      "id": "lab-log-open",
+      "date": "2026-10-23T18:00:00.000Z",
+      "project": "idea-lab",
+      "kind": "progress",
+      "title": "The lab log is open",
+      "summary": "Public record of results, progress, and failures from Dual R9700 speed and the hourly Idea lab. Empty cells stay empty. No invented tok/s.",
+      "details": "This page is the living log for AMDai projects on the local desktop.\n\n**Dual R9700 speed** is first: get Q4, Q5, and Q6 Flash-class models running as fast as possible on two R9700 cards. llama.cpp first. Q3 stays a labeled estimate. Q1/Q2 stay off.\n\n**Idea lab** is the hourly notes stream — small experiments, dead ends, and next steps.\n\nThe table reads /data/lab-log.json in the browser so a server cron can refresh it without a rebuild.",
+      "next": "First Dual R9700 speed notes land when a measured card exists. Until then this log stays a progress note.",
+      "sources": [
+        "https://amdai.net/methodology",
+        "https://amdai.net/multi-gpu"
+      ]
+    }
+  ]
+}

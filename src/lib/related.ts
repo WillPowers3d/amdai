@@ -189,6 +189,20 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/guides/quantize-gguf', label: 'Make GGUF quants' },
       { href: '/methodology', label: 'How we test' },
       { href: '/qwen', label: 'Qwen compare' },
+      { href: '/lab-log', label: 'Lab log' },
+    ];
+  }
+  if (path === '/lab-log') {
+    return [
+      { href: '/results', label: 'Run cards' },
+      { href: '/benchmarks', label: 'Benchmarks' },
+      { href: '/methodology', label: 'How we test' },
+      { href: '/multi-gpu', label: 'Dual / multi-GPU' },
+      { href: '/flash-daily', label: 'Flash daily' },
+      { href: '/new-models', label: 'New models' },
+      { href: '/backends/llamacpp', label: 'llama.cpp' },
+      { href: '/gpus/r9700', label: 'R9700 measured page' },
+      { href: '/amdai-bench', label: 'amdai-bench' },
     ];
   }
   if (path === '/can-run' || path.startsWith('/can-run/')) {
@@ -908,6 +922,7 @@ export function relatedFor(pathname: string): RelatedLink[] {
     } else {
       for (const model of MODEL_PAGES) add(out, seen, `/models/${model.id}`, model.name);
       add(out, seen, '/new-models', 'New models');
+      add(out, seen, '/lab-log', 'Lab log');
       add(out, seen, '/qwen', 'Qwen compare');
       add(out, seen, '/moe', 'MoE on Radeon');
       add(out, seen, '/contribute', 'Contribute');
@@ -1038,6 +1053,7 @@ export function assertRelatedValid(
     '/faq',
     '/qwen',
     '/new-models',
+    '/lab-log',
     '/models/qwen36',
     '/models/flash',
     '/models/gpt-oss-20b',

@@ -828,6 +828,20 @@ export const FAQ_ENTRIES: FaqItem[] = [
     ],
   },
   {
+    id: 'lab-log',
+    group: 'models-quants',
+    question: 'Where do I read AMDai lab results and failures?',
+    answer:
+      'The /lab-log page is the public lab log. It records results, progress, and failures from Dual R9700 speed — Q4/Q5/Q6 Flash-class models on two R9700s — and the hourly Idea lab. Failures stay labeled. Empty cells stay empty. No invented tok/s. The page reads /data/lab-log.json in the browser so a server can refresh it without a rebuild.',
+    links: [
+      { href: '/lab-log', label: 'Lab log' },
+      { href: '/results', label: 'Run cards' },
+      { href: '/methodology', label: 'How we test' },
+      { href: '/multi-gpu', label: 'Dual / multi-GPU' },
+      { href: '/new-models', label: 'New models' },
+    ],
+  },
+  {
     id: 'quantize-gguf',
     group: 'models-quants',
     question: 'How do I make my own GGUF quant for a Radeon GPU?',
@@ -1187,6 +1201,7 @@ export const REQUIRED_FAQ_HREFS = [
   '/sampling',
   '/chat-templates',
   '/new-models',
+  '/lab-log',
   '/concurrency-ab',
   '/flash-attention',
   '/prefill',

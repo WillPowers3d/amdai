@@ -16,6 +16,7 @@ import { canRunSeoRows } from './can-run';
 import { gpuCompareSeoRows } from './gpu-compare';
 import { modelCompareSeoRows } from './model-compare';
 import { NEW_MODELS_DESCRIPTION, NEW_MODELS_TITLE } from './new-models';
+import { LAB_LOG_DESCRIPTION, LAB_LOG_TITLE } from './lab-log';
 
 export const SITE_ORIGIN = 'https://amdai.net';
 export const TITLE_SUFFIX = ` · ${BRAND}`;
@@ -191,6 +192,7 @@ export const CRUMB_LABELS: Record<string, string> = {
   '/gpus/w6800': 'PRO W6800',
   '/models': 'Models',
   '/new-models': 'New models',
+  '/lab-log': 'Lab log',
   '/models/qwen36': 'Qwen3.6-35B-A3B',
   '/models/flash': 'Qwen 3.8 Flash',
   '/models/gpt-oss-20b': 'gpt-oss 20B',
@@ -840,6 +842,12 @@ setMeta(
 );
 setDate('/new-models', '2026-10-16');
 setDate('/new-models/rss.xml', '2026-10-16');
+setMeta(
+  '/lab-log',
+  LAB_LOG_TITLE,
+  LAB_LOG_DESCRIPTION,
+);
+setDate('/lab-log', '2026-10-23');
 setMeta(
   '/models',
   'Models',

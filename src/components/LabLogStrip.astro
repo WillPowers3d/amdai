@@ -1,0 +1,125 @@
+---
+import {
+  LAB_LOG_PATH,
+  latestLabLogEntries,
+  loadLabLogFile,
+  kindLabel,
+  projectLabel,
+  entryAnchor,
+} from '../lib/lab-log';
+
+const file = loadLabLogFile();
+const latest = latestLabLogEntries(file, 3);
+const fallback = JSON.stringify({ as_of: file.as_of, entries: latest }).replaceAll('<', '\\u003c');
+const hidden = latest.length === 0;
+---
+
+<section
+  id="ll-strip"
+  class="border-b border-line"
+  aria-labelledby="ll-strip-heading"
+  hidden={hidden}
+>
+  <div class="mx-auto max-w-7xl px-4 py-10 sm:px-6">
+    <div class="flex flex-wrap items-end justify-between gap-3">
+      <div>
+        <p class="kicker">Latest from the lab</p>
+        <h2 id="ll-strip-heading" class="display mt-2 text-3xl sm:text-4xl">Newest notes</h2>
+      </div>
+      <a class="btn-ghost" href={LAB_LOG_PATH}>Lab log</a>
+    </div>
+    <div id="ll-strip-list" class="mt-6 grid gap-3 md:grid-cols-3">
+      {latest.map((entry) => (
+        <a class="card p-5" href={`${LAB_LOG_PATH}#${entryAnchor(entry.id)}`}>
+          <p class="kicker">{kindLabel(entry.kind)} · {projectLabel(entry.project)}</p>
+          <h3 class="mt-2 text-xl tracking-tight">{entry.title}</h3>
+          <p class="mt-2 text-sm text-muted">{entry.summary}</p>
+        </a>
+      ))}
+    </div>
+  </div>
+  <script type="application/json" id="ll-strip-fallback" set:html={fallback}></script>
+</section>
+
+<script>
+  type Entry = {
+    id: string;
+    date: string;
+    project: string;
+    kind: string;
+    title: string;
+    summary: string;
+  };
+  type FileShape = { as_of?: string; entries?: Entry[] };
+
+  const PROJECT_LABELS: Record<string, string> = {
+    'dual-r9700': 'Dual R9700 speed',
+    'idea-lab': 'Idea lab',
+  };
+  const KIND_LABELS: Record<string, string> = {
+    result: 'Result',
+    progress: 'Progress',
+    failure: 'Failed',
+  };
+
+  function escapeHtml(value: string): string {
+    return value
+      .replaceAll('&', '&amp;')
+      .replaceAll('<', '&lt;')
+      .replaceAll('>', '&gt;')
+      .replaceAll('"', '&quot;');
+  }
+
+  function anchor(id: string): string {
+    return id.replaceAll('/', '--');
+  }
+
+  function paint(entries: Entry[]) {
+    const strip = document.getElementById('ll-strip');
+    const list = document.getElementById('ll-strip-list');
+    if (!strip || !list) return;
+    const latest = entries
+      .slice()
+      .sort((a, b) => b.date.localeCompare(a.date) || a.id.localeCompare(b.id))
+      .slice(0, 3);
+    if (!latest.length) {
+      strip.hidden = true;
+      list.innerHTML = '';
+      return;
+    }
+    strip.hidden = false;
+    list.innerHTML = latest
+      .map((entry) => {
+        const kind = KIND_LABELS[entry.kind] || entry.kind;
+        const project = PROJECT_LABELS[entry.project] || entry.project;
+        return `<a class="card p-5" href="/lab-log#${escapeHtml(anchor(entry.id))}"><p class="kicker">${escapeHtml(kind)} · ${escapeHtml(project)}</p><h3 class="mt-2 text-xl tracking-tight">${escapeHtml(entry.title)}</h3><p class="mt-2 text-sm text-muted">${escapeHtml(entry.summary)}</p></a>`;
+      })
+      .join('');
+  }
+
+  async function hydrate() {
+    try {
+      const res = await fetch('/data/lab-log.json', { cache: 'no-store' });
+      if (!res.ok) {
+        if (!document.getElementById('ll-strip-list')?.children.length) {
+          const strip = document.getElementById('ll-strip');
+          if (strip) strip.hidden = true;
+        }
+        return;
+      }
+      const live = (await res.json()) as FileShape;
+      paint(Array.isArray(live?.entries) ? live.entries : []);
+    } catch {
+      const node = document.getElementById('ll-strip-fallback');
+      try {
+        const parsed = node?.textContent ? (JSON.parse(node.textContent) as FileShape) : { entries: [] };
+        paint(Array.isArray(parsed.entries) ? parsed.entries : []);
+      } catch {
+        const strip = document.getElementById('ll-strip');
+        if (strip && !document.getElementById('ll-strip-list')?.children.length) strip.hidden = true;
+      }
+    }
+  }
+
+  hydrate();
+</script>

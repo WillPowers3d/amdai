@@ -1,0 +1,572 @@
+---
+import Base from '../layouts/Base.astro';
+import NextSteps from '../components/NextSteps.astro';
+import {
+  LAB_LOG_DESCRIPTION,
+  LAB_LOG_H1,
+  LAB_LOG_JSON,
+  LAB_LOG_KICKER,
+  LAB_LOG_KINDS,
+  LAB_LOG_PATH,
+  LAB_LOG_TITLE,
+  dayKey,
+  entryAnchor,
+  groupLabLogByDay,
+  kindLabel,
+  loadLabLogFile,
+  projectLabel,
+  projectsOf,
+} from '../lib/lab-log';
+
+const file = loadLabLogFile();
+const fallback = JSON.stringify(file).replaceAll('<', '\\u003c');
+const days = groupLabLogByDay(file.entries);
+const projects = projectsOf(file);
+const asOf = file.as_of ? file.as_of.slice(0, 10) : '';
+const empty = file.entries.length === 0;
+
+function setupRows(setup: NonNullable<(typeof file.entries)[number]['setup']>) {
+  return (
+    [
+      ['Model', setup.model],
+      ['Quant', setup.quant],
+      ['Engine', setup.engine],
+      ['Engine version', setup.engine_version],
+      ['GPUs', setup.gpus],
+      ['Context', setup.context],
+      ['Flags', setup.flags],
+    ] as const
+  ).filter((row) => row[1]);
+}
+---
+
+<Base title={LAB_LOG_TITLE} description={LAB_LOG_DESCRIPTION}>
+  <main id="main" class="ll-page mx-auto max-w-[52rem] px-4 py-10 sm:px-6">
+    <p class="kicker">{LAB_LOG_KICKER}</p>
+    <h1 class="display mt-3 text-4xl sm:text-5xl">{LAB_LOG_H1}</h1>
+    <p class="mt-4 max-w-3xl text-lg leading-relaxed text-muted">
+      Results, progress, and failures from ongoing AMDai projects on the local desktop.
+      First project: Dual R9700 speed — Q4, Q5, and Q6 Flash-class models as fast as
+      possible on two R9700s. llama.cpp first. The hourly Idea lab is the second stream.
+      Empty cells stay empty. No invented tok/s. Q1/Q2 stay off.
+    </p>
+    <p class="mt-3 text-sm text-muted">
+      <span id="ll-asof">
+        {empty ? 'The log is starting.' : `${file.entries.length} notes · as of ${asOf || 'this build'}.`}
+      </span>
+      The page reads
+      <a class="underline decoration-accent/40" href={LAB_LOG_JSON}>{LAB_LOG_JSON}</a>
+      in the browser so a server cron can refresh it without a rebuild.
+      This page ships a static fallback from the last seed.
+    </p>
+    <p class="mt-5 flex flex-wrap gap-3">
+      <a class="btn-secondary" href="/results">Run cards</a>
+      <a class="btn-secondary" href="/benchmarks">Benchmarks</a>
+      <a class="btn-ghost" href="/methodology">How we test</a>
+      <a class="btn-ghost" href="/multi-gpu">Dual / multi-GPU</a>
+    </p>
+
+    <section class="ll-card mt-10" aria-labelledby="ll-filter-heading">
+      <div class="flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <p class="kicker">Filter</p>
+          <h2 id="ll-filter-heading" class="ll-card-title">Newest first</h2>
+        </div>
+        <p id="ll-count" class="text-sm text-muted" aria-live="polite">
+          {empty ? '0 notes' : `${file.entries.length} notes`}
+        </p>
+      </div>
+      <form id="ll-filters" class="ll-filters" aria-controls="ll-log">
+        <div>
+          <label class="ll-label" for="ll-search">Search</label>
+          <input id="ll-search" class="field mt-2" type="search" name="q" placeholder="Title, setup, note" autocomplete="off" />
+        </div>
+        <div>
+          <p class="ll-label" id="ll-project-label">Project</p>
+          <div class="mt-2 flex flex-wrap gap-2" role="group" aria-labelledby="ll-project-label">
+            <button type="button" class="chip is-on" data-filter="project" data-value="" aria-pressed="true">Any</button>
+            {projects.map((id) => (
+              <button type="button" class="chip" data-filter="project" data-value={id} aria-pressed="false">
+                {projectLabel(id)}
+              </button>
+            ))}
+          </div>
+        </div>
+        <div>
+          <p class="ll-label" id="ll-kind-label">Kind</p>
+          <div class="mt-2 flex flex-wrap gap-2" role="group" aria-labelledby="ll-kind-label">
+            <button type="button" class="chip is-on" data-filter="kind" data-value="" aria-pressed="true">Any</button>
+            {Object.entries(LAB_LOG_KINDS).map(([id, label]) => (
+              <button type="button" class="chip" data-filter="kind" data-value={id} aria-pressed="false">
+                {label}
+              </button>
+            ))}
+          </div>
+        </div>
+        <button type="reset" class="btn-ghost">Clear</button>
+      </form>
+    </section>
+
+    <div id="ll-log" class="ll-stack mt-6">
+      {empty ? (
+        <p class="ll-empty">The log is starting. Dual R9700 speed and Idea lab notes will land here.</p>
+      ) : (
+        days.map((day) => (
+          <section class="ll-day" data-day={day.date} aria-labelledby={`ll-day-${day.date}`}>
+            <h2 id={`ll-day-${day.date}`} class="ll-day-title">{day.date}</h2>
+            {day.entries.map((entry) => (
+              <article
+                id={entryAnchor(entry.id)}
+                class:list={['ll-entry', entry.kind === 'failure' && 'is-fail']}
+                data-id={entry.id}
+                data-project={entry.project}
+                data-kind={entry.kind}
+                data-day={dayKey(entry.date)}
+              >
+                <div class="ll-entry-head">
+                  <p class="ll-meta">
+                    <span class:list={['ll-kind', `is-${entry.kind}`]}>{kindLabel(entry.kind)}</span>
+                    <span class="ll-project">{projectLabel(entry.project)}</span>
+                  </p>
+                  <h3 class="ll-entry-title">{entry.title}</h3>
+                  <p class="ll-summary">{entry.summary}</p>
+                </div>
+                <details class="ll-more">
+                  <summary>Setup, metrics, sources</summary>
+                  {entry.details ? <p class="ll-details">{entry.details}</p> : null}
+                  {entry.setup && setupRows(entry.setup).length ? (
+                    <dl class="ll-kv">
+                      {setupRows(entry.setup).map(([label, value]) => (
+                        <div>
+                          <dt>{label}</dt>
+                          <dd>{value}</dd>
+                        </div>
+                      ))}
+                    </dl>
+                  ) : null}
+                  {entry.metrics?.length ? (
+                    <div class="ll-table-wrap">
+                      <table class="table-lab ll-metrics">
+                        <caption class="sr-only">Metrics for {entry.title}</caption>
+                        <thead>
+                          <tr>
+                            <th scope="col">Metric</th>
+                            <th scope="col">Value</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {entry.metrics.map((row) => (
+                            <tr>
+                              <th scope="row">{row.label}</th>
+                              <td>{row.value}{row.unit ? ` ${row.unit}` : ''}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  ) : null}
+                  {entry.sources?.length ? (
+                    <ul class="ll-sources">
+                      {entry.sources.map((href) => (
+                        <li>
+                          <a class="underline decoration-accent/40" href={href} rel="noopener">{href}</a>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : null}
+                  {entry.next ? <p class="ll-next"><span class="ll-label">Next</span> {entry.next}</p> : null}
+                </details>
+              </article>
+            ))}
+          </section>
+        ))
+      )}
+    </div>
+    <NextSteps path={LAB_LOG_PATH} />
+  </main>
+  <script type="application/json" id="ll-fallback" set:html={fallback}></script>
+</Base>
+
+<script>
+  type Entry = {
+    id: string;
+    date: string;
+    project: string;
+    kind: string;
+    title: string;
+    summary: string;
+    details?: string;
+    setup?: Record<string, string | undefined>;
+    metrics?: Array<{ label: string; value: number | string; unit?: string }>;
+    sources?: string[];
+    next?: string;
+  };
+  type FileShape = { as_of?: string; entries: Entry[] };
+
+  const PROJECT_LABELS: Record<string, string> = {
+    'dual-r9700': 'Dual R9700 speed',
+    'idea-lab': 'Idea lab',
+  };
+  const KIND_LABELS: Record<string, string> = {
+    result: 'Result',
+    progress: 'Progress',
+    failure: 'Failed',
+  };
+
+  const filters = { project: '', kind: '', q: '' };
+  let file: FileShape = { entries: [] };
+
+  function escapeHtml(value: string): string {
+    return value
+      .replaceAll('&', '&amp;')
+      .replaceAll('<', '&lt;')
+      .replaceAll('>', '&gt;')
+      .replaceAll('"', '&quot;');
+  }
+
+  function projectLabel(id: string): string {
+    return PROJECT_LABELS[id] || id;
+  }
+
+  function kindLabel(kind: string): string {
+    return KIND_LABELS[kind] || kind;
+  }
+
+  function dayKey(iso: string): string {
+    return iso.slice(0, 10);
+  }
+
+  function entryAnchor(id: string): string {
+    return id.replaceAll('/', '--');
+  }
+
+  function parseFallback(): FileShape {
+    const node = document.getElementById('ll-fallback');
+    if (!node?.textContent) return { entries: [] };
+    try {
+      const parsed = JSON.parse(node.textContent) as FileShape;
+      return Array.isArray(parsed?.entries) ? parsed : { entries: [] };
+    } catch {
+      return { entries: [] };
+    }
+  }
+
+  function setupRows(setup?: Record<string, string | undefined>) {
+    if (!setup) return [];
+    return (
+      [
+        ['Model', setup.model],
+        ['Quant', setup.quant],
+        ['Engine', setup.engine],
+        ['Engine version', setup.engine_version],
+        ['GPUs', setup.gpus],
+        ['Context', setup.context],
+        ['Flags', setup.flags],
+      ] as Array<[string, string | undefined]>
+    ).filter((row): row is [string, string] => Boolean(row[1]));
+  }
+
+  function visible(entry: Entry): boolean {
+    const q = filters.q.trim().toLowerCase();
+    const hay = [
+      entry.title,
+      entry.summary,
+      entry.details || '',
+      entry.project,
+      projectLabel(entry.project),
+      entry.next || '',
+      JSON.stringify(entry.setup || {}),
+      JSON.stringify(entry.metrics || []),
+    ]
+      .join(' ')
+      .toLowerCase();
+    return (
+      (!filters.project || entry.project === filters.project) &&
+      (!filters.kind || entry.kind === filters.kind) &&
+      (!q || hay.includes(q))
+    );
+  }
+
+  function entryHtml(entry: Entry): string {
+    const setup = setupRows(entry.setup);
+    const setupHtml = setup.length
+      ? `<dl class="ll-kv">${setup
+          .map(([label, value]) => `<div><dt>${escapeHtml(label)}</dt><dd>${escapeHtml(value)}</dd></div>`)
+          .join('')}</dl>`
+      : '';
+    const metrics = entry.metrics?.length
+      ? `<div class="ll-table-wrap"><table class="table-lab ll-metrics"><caption class="sr-only">Metrics for ${escapeHtml(entry.title)}</caption><thead><tr><th scope="col">Metric</th><th scope="col">Value</th></tr></thead><tbody>${entry.metrics
+          .map(
+            (row) =>
+              `<tr><th scope="row">${escapeHtml(row.label)}</th><td>${escapeHtml(String(row.value))}${row.unit ? ` ${escapeHtml(row.unit)}` : ''}</td></tr>`,
+          )
+          .join('')}</tbody></table></div>`
+      : '';
+    const sources = entry.sources?.length
+      ? `<ul class="ll-sources">${entry.sources
+          .map((href) => `<li><a class="underline decoration-accent/40" href="${escapeHtml(href)}" rel="noopener">${escapeHtml(href)}</a></li>`)
+          .join('')}</ul>`
+      : '';
+    const details = entry.details ? `<p class="ll-details">${escapeHtml(entry.details)}</p>` : '';
+    const next = entry.next
+      ? `<p class="ll-next"><span class="ll-label">Next</span> ${escapeHtml(entry.next)}</p>`
+      : '';
+    const fail = entry.kind === 'failure' ? ' is-fail' : '';
+    return `<article id="${escapeHtml(entryAnchor(entry.id))}" class="ll-entry${fail}" data-id="${escapeHtml(entry.id)}" data-project="${escapeHtml(entry.project)}" data-kind="${escapeHtml(entry.kind)}" data-day="${escapeHtml(dayKey(entry.date))}">
+      <div class="ll-entry-head">
+        <p class="ll-meta"><span class="ll-kind is-${escapeHtml(entry.kind)}">${escapeHtml(kindLabel(entry.kind))}</span><span class="ll-project">${escapeHtml(projectLabel(entry.project))}</span></p>
+        <h3 class="ll-entry-title">${escapeHtml(entry.title)}</h3>
+        <p class="ll-summary">${escapeHtml(entry.summary)}</p>
+      </div>
+      <details class="ll-more">
+        <summary>Setup, metrics, sources</summary>
+        ${details}${setupHtml}${metrics}${sources}${next}
+      </details>
+    </article>`;
+  }
+
+  function render(next: FileShape) {
+    file = next;
+    const root = document.getElementById('ll-log');
+    if (!root) return;
+    const rows = (next.entries || []).filter(visible).sort((a, b) => b.date.localeCompare(a.date) || a.id.localeCompare(b.id));
+    const count = document.getElementById('ll-count');
+    if (count) count.textContent = `${rows.length} notes`;
+    const asof = document.getElementById('ll-asof');
+    if (asof) {
+      asof.textContent = next.entries?.length
+        ? `${next.entries.length} notes · as of ${(next.as_of || '').slice(0, 10) || 'this build'}.`
+        : 'The log is starting.';
+    }
+    if (!rows.length) {
+      root.innerHTML = next.entries?.length
+        ? '<p class="ll-empty">No notes match these filters.</p>'
+        : '<p class="ll-empty">The log is starting. Dual R9700 speed and Idea lab notes will land here.</p>';
+      return;
+    }
+    const days = new Map<string, Entry[]>();
+    for (const entry of rows) {
+      const day = dayKey(entry.date);
+      const list = days.get(day) ?? [];
+      list.push(entry);
+      days.set(day, list);
+    }
+    root.innerHTML = [...days.entries()]
+      .sort((a, b) => b[0].localeCompare(a[0]))
+      .map(
+        ([date, list]) =>
+          `<section class="ll-day" data-day="${escapeHtml(date)}" aria-labelledby="ll-day-${escapeHtml(date)}"><h2 id="ll-day-${escapeHtml(date)}" class="ll-day-title">${escapeHtml(date)}</h2>${list.map(entryHtml).join('')}</section>`,
+      )
+      .join('');
+  }
+
+  function apply() {
+    render(file);
+  }
+
+  function bind() {
+    document.querySelectorAll<HTMLButtonElement>('[data-filter]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const key = btn.dataset.filter as 'project' | 'kind';
+        filters[key] = btn.dataset.value ?? '';
+        btn.closest('[role="group"]')?.querySelectorAll<HTMLButtonElement>('[data-filter]').forEach((other) => {
+          const on = other === btn;
+          other.classList.toggle('is-on', on);
+          other.setAttribute('aria-pressed', on ? 'true' : 'false');
+        });
+        apply();
+      });
+    });
+    const search = document.getElementById('ll-search') as HTMLInputElement | null;
+    search?.addEventListener('input', () => {
+      filters.q = search.value;
+      apply();
+    });
+    document.getElementById('ll-filters')?.addEventListener('reset', () => {
+      filters.project = '';
+      filters.kind = '';
+      filters.q = '';
+      document.querySelectorAll<HTMLButtonElement>('[data-filter]').forEach((btn) => {
+        const on = (btn.dataset.value ?? '') === '';
+        btn.classList.toggle('is-on', on);
+        btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+      });
+      queueMicrotask(apply);
+    });
+  }
+
+  async function hydrate() {
+    file = parseFallback();
+    bind();
+    try {
+      const res = await fetch('/data/lab-log.json', { cache: 'no-store' });
+      if (!res.ok) return;
+      const live = (await res.json()) as FileShape;
+      if (!Array.isArray(live?.entries)) return;
+      if (live.as_of && live.as_of === file.as_of) return;
+      render(live);
+    } catch {
+      /* keep static fallback */
+    }
+  }
+
+  hydrate();
+</script>
+
+<style is:global>
+  .ll-card {
+    border: 1px solid var(--line);
+    background: var(--raised);
+    border-radius: 1rem;
+    padding: 1.15rem 1.2rem 1.25rem;
+  }
+  .ll-card-title,
+  .ll-day-title {
+    margin-top: 0.35rem;
+    font-size: 1.35rem;
+    font-weight: 560;
+    letter-spacing: -0.03em;
+    line-height: 1.15;
+  }
+  .ll-filters {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+  .ll-label {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--faint);
+  }
+  .ll-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+  .ll-day {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  .ll-entry {
+    border: 1px solid var(--line);
+    background: var(--raised);
+    border-radius: 1rem;
+    padding: 1rem 1.15rem 1.1rem;
+  }
+  .ll-entry.is-fail {
+    border-color: color-mix(in srgb, var(--warn) 45%, var(--line));
+    background: color-mix(in srgb, var(--warn) 7%, var(--raised));
+  }
+  .ll-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem 0.7rem;
+    margin: 0;
+    align-items: center;
+  }
+  .ll-kind {
+    display: inline-flex;
+    min-height: 1.75rem;
+    align-items: center;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    padding: 0.15rem 0.65rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--muted);
+  }
+  .ll-kind.is-result {
+    border-color: color-mix(in srgb, var(--ok) 45%, var(--line));
+    color: var(--ok);
+  }
+  .ll-kind.is-progress {
+    border-color: color-mix(in srgb, var(--ember) 40%, var(--line));
+    color: var(--ember);
+  }
+  .ll-kind.is-failure {
+    border-color: color-mix(in srgb, var(--warn) 50%, var(--line));
+    color: var(--warn);
+  }
+  .ll-project {
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+  .ll-entry-title {
+    margin-top: 0.55rem;
+    font-size: 1.2rem;
+    font-weight: 560;
+    letter-spacing: -0.02em;
+  }
+  .ll-summary,
+  .ll-details,
+  .ll-next {
+    margin-top: 0.45rem;
+    color: var(--muted);
+    line-height: 1.5;
+    white-space: pre-wrap;
+  }
+  .ll-more {
+    margin-top: 0.65rem;
+  }
+  .ll-more summary {
+    display: flex;
+    min-height: 2.75rem;
+    align-items: center;
+    cursor: pointer;
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--faint);
+  }
+  .ll-kv {
+    display: grid;
+    gap: 0.45rem;
+    margin: 0.75rem 0 0;
+  }
+  .ll-kv > div {
+    display: grid;
+    grid-template-columns: 8.5rem 1fr;
+    gap: 0.75rem;
+  }
+  .ll-kv dt {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--faint);
+    padding-top: 0.15rem;
+  }
+  .ll-kv dd {
+    margin: 0;
+    color: var(--ink);
+  }
+  .ll-table-wrap {
+    margin-top: 0.85rem;
+    overflow-x: auto;
+  }
+  .ll-metrics {
+    font-variant-numeric: tabular-nums;
+  }
+  .ll-sources {
+    margin: 0.75rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .ll-sources li {
+    min-height: 2.75rem;
+    display: flex;
+    align-items: center;
+  }
+  .ll-empty {
+    margin: 0;
+    padding: 1.2rem;
+    border: 1px dashed var(--line);
+    border-radius: 1rem;
+    color: var(--muted);
+  }
+</style>

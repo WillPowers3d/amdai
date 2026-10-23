@@ -7,6 +7,7 @@ import SiliconGrid from '../components/SiliconGrid.astro';
 import RigWizard from '../components/RigWizard.astro';
 import NextSteps from '../components/NextSteps.astro';
 import PrimaryPath from '../components/PrimaryPath.astro';
+import LabLogStrip from '../components/LabLogStrip.astro';
 import OpenInStackLab from '../components/OpenInStackLab.astro';
 import NewsletterSignup from '../components/NewsletterSignup.astro';
 import SponsoredSlot from '../components/SponsoredSlot.astro';
@@ -71,6 +72,8 @@ const updates = (await getCollection('updates')).sort((a, b) => b.data.date.valu
     </section>
 
     <PrimaryPath />
+
+    <LabLogStrip />
 
     <section class="mx-auto max-w-7xl px-4 py-14 sm:px-6">
       <p class="kicker">From the rig</p>

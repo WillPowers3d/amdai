@@ -139,6 +139,7 @@ export const primaryNav: NavItem[] = [
   { href: '/gpus', label: 'GPU directory', description: 'Radeon cards, gfx IDs, VRAM, official ROCm rows, tested recipes', group: 'tools' },
   { href: '/models', label: 'Models', description: 'House Qwen plus cited open-weight pages — official cards, Q6/Q5/Q4, labeled Q3', group: 'tools' },
   { href: '/new-models', label: 'New models', description: 'Daily Hub table of new open-weight text and vision releases. GGUF Q3–Q8. Runs-on from cited engine lists. Q4_K_M fit is a labeled estimate', group: 'tools' },
+  { href: '/lab-log', label: 'Lab log', description: 'Public results, progress, and failures from Dual R9700 speed and the hourly Idea lab. No invented tok/s', group: 'tools' },
   { href: '/quants', label: 'Quants', description: 'Q3–Q8, UD dynamic, KV types, why Q1/Q2 stay off', group: 'tools' },
   { href: '/backends', label: 'Backends', description: 'Inference engines compared — llama.cpp first', group: 'tools' },
   { href: '/about', label: 'About', description: 'Who runs AMDai, the local desktop rig, and editorial independence', group: 'learn' },

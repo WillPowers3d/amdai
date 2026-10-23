@@ -76,6 +76,7 @@ import {
   loadNewModelsFile,
   temporalCoverage,
 } from './new-models';
+import { LAB_LOG_PUBLISHED, LAB_LOG_TITLE } from './lab-log';
 import { parseBios, type BiosFile } from './bios';
 import { parse } from 'yaml';
 import { existsSync, readFileSync } from 'node:fs';
@@ -450,6 +451,21 @@ export function pageJsonLd(input: {
       measurementTechnique: NEW_MODELS_MEASUREMENT,
       temporalCoverage: temporalCoverage(file),
       variableMeasured: ['parameter count', 'context length', 'Q4_K_M GiB estimate', 'GGUF quant availability'],
+      isAccessibleForFree: true,
+    });
+    return nodes;
+  }
+  if (path === '/lab-log') {
+    const dates = articleDates(path);
+    nodes.push({
+      ...webPageJsonLd({
+        name: `${BRAND} ${LAB_LOG_TITLE}`,
+        description: input.description,
+        url,
+        published: dates?.published ?? LAB_LOG_PUBLISHED,
+        modified: dates?.modified ?? LAB_LOG_PUBLISHED,
+      }),
+      '@type': 'CollectionPage',
       isAccessibleForFree: true,
     });
     return nodes;
