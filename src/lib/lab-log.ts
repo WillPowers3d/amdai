@@ -1,7 +1,8 @@
 /**
- * Public lab log. Entries come from public/data/lab-log.json so a VPS
+ * Public results log. Entries come from public/data/lab-log.json so a VPS
  * cron can refresh /data/lab-log.json without a rebuild.
- * No invented tok/s. Failures stay labeled, not alarming.
+ * Measured and cited findings plus informative failures. No invented tok/s.
+ * The shipped seed is empty so a live server file can replace it.
  */
 
 import { existsSync, readFileSync } from 'node:fs';
@@ -13,9 +14,9 @@ export const LAB_LOG_JSON = '/data/lab-log.json';
 export const LAB_LOG_PUBLISHED = '2026-10-23';
 export const LAB_LOG_TITLE = 'Lab log';
 export const LAB_LOG_H1 = 'Lab log';
-export const LAB_LOG_KICKER = 'Local desktop · living notes';
+export const LAB_LOG_KICKER = 'Local desktop · measured findings';
 export const LAB_LOG_DESCRIPTION =
-  'Public AMDai lab log of results, progress, and failures. Dual R9700 speed and the hourly Idea lab. No invented tok/s.';
+  'Public AMDai results log of measured and cited findings, plus informative failures. Dual R9700 speed and the hourly Idea lab. No invented tok/s.';
 
 export const LAB_LOG_PROJECTS = {
   'dual-r9700': 'Dual R9700 speed',

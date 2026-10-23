@@ -19,7 +19,7 @@ const SHORT: LlmsLink[] = [
   {
     href: '/lab-log',
     title: 'Lab log',
-    summary: 'Public results, progress, and failures from Dual R9700 speed and the hourly Idea lab. No invented tok/s.',
+    summary: 'Results log of measured and cited findings, plus informative failures. Dual R9700 speed and the hourly Idea lab. No invented tok/s.',
   },
   {
     href: '/start',
@@ -80,7 +80,7 @@ const FULL_EXTRA: LlmsLink[] = [
   { href: '/compare/radeon-vs-nvidia', title: 'Radeon vs NVIDIA', summary: 'Cited specs. Measured R9700 35B. No invented tok/s.' },
   { href: '/models', title: 'Models', summary: 'House Qwen plus cited open-weight pages. Q3 is a labeled estimate.' },
   { href: '/new-models', title: 'New models', summary: 'Daily Hugging Face Hub table of new open-weight releases. GGUF Q3–Q8. Runs-on from cited engine lists. Fit is a labeled estimate.' },
-  { href: '/lab-log', title: 'Lab log', summary: 'Public lab log. Dual R9700 speed and the hourly Idea lab. Failures stay labeled. No invented tok/s.' },
+  { href: '/lab-log', title: 'Lab log', summary: 'Results log of measured and cited findings plus informative failures. Dual R9700 speed and the hourly Idea lab. No invented tok/s.' },
   { href: '/quants', title: 'Quants Q3–Q8', summary: 'Why Q1/Q2 stay off this notebook. Unsloth UD is the house default.' },
   { href: '/stack-lab', title: 'Stack Lab', summary: 'Ubuntu 24.04+ companion. Packages not published yet.' },
   { href: '/guides/buying-used-radeon', title: 'Buying a used Radeon', summary: 'Cited shopper checklist. No invented street prices.' },

@@ -28,12 +28,12 @@ const here = dirname(fileURLToPath(import.meta.url));
 
 function sample(over: Partial<LabLogEntry> = {}): LabLogEntry {
   return {
-    id: 'lab-log-open',
+    id: 'sample-result',
     date: '2026-10-23T18:00:00.000Z',
-    project: 'idea-lab',
-    kind: 'progress',
-    title: 'The lab log is open',
-    summary: 'Public record of results, progress, and failures.',
+    project: 'dual-r9700',
+    kind: 'result',
+    title: 'Sample finding',
+    summary: 'Measured and cited finding. No invented tok/s.',
     ...over,
   };
 }
@@ -46,6 +46,9 @@ describe('lab log', () => {
     assert.equal(LAB_LOG_H1, 'Lab log');
     assert.ok(LAB_LOG_DESCRIPTION.length >= 70);
     assert.ok(LAB_LOG_DESCRIPTION.length <= 160);
+    assert.match(LAB_LOG_DESCRIPTION, /measured and cited findings/i);
+    assert.match(LAB_LOG_DESCRIPTION, /informative failures/i);
+    assert.doesNotMatch(LAB_LOG_DESCRIPTION, /status/i);
     assert.equal(projectLabel('dual-r9700'), 'Dual R9700 speed');
     assert.equal(projectLabel('idea-lab'), 'Idea lab');
     assert.equal(kindLabel('failure'), 'Failed');
@@ -53,12 +56,10 @@ describe('lab log', () => {
     assert.equal(latestLabLogEntries(EMPTY_LAB_LOG).length, 0);
   });
 
-  it('loads the seed, newest first, and never invents a banned row', () => {
+  it('loads an empty seed, newest first, and never invents a banned row', () => {
     const file = loadLabLogFile();
     assert.deepEqual(assertLabLogValid(file), []);
-    assert.ok(file.entries.length >= 1);
-    assert.equal(file.entries[0]?.id, 'lab-log-open');
-    assert.match(file.entries[0]!.summary, /No invented tok\/s/);
+    assert.equal(file.entries.length, 0);
     const blob = JSON.stringify(file);
     assert.doesNotMatch(blob, /Qwen2\.5|Qwen3-8B/);
     assert.doesNotMatch(blob, /local-desktop|amdai|amdai/i);
@@ -91,11 +92,15 @@ describe('lab log', () => {
     assert.match(page, /hydrate/);
     assert.match(page, /\/data\/lab-log\.json/);
     assert.match(page, /The log is starting/);
+    assert.match(page, /measured and cited findings/i);
+    assert.match(page, /informative failures/i);
+    assert.match(page, /not a status board/);
     assert.match(page, /Failed/);
     assert.match(page, /Dual R9700 speed/);
     assert.match(page, /Idea lab/);
     assert.match(page, /NextSteps/);
     assert.match(strip, /Latest from the lab/);
+    assert.match(strip, /Newest findings/);
     assert.match(strip, /\/data\/lab-log\.json/);
     assert.match(home, /LabLogStrip/);
     assert.equal(shouldNoindex(LAB_LOG_PATH), false);
