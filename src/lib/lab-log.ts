@@ -8,6 +8,7 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { PII_TEXT } from './pii-denylist';
 
 export const LAB_LOG_PATH = '/lab-log';
 export const LAB_LOG_JSON = '/data/lab-log.json';
@@ -77,7 +78,7 @@ export const EMPTY_LAB_LOG: LabLogFile = {
   entries: [],
 };
 
-const BANNED = /Qwen2\.5|Qwen3-8B|local-desktop|amdai|amdai/i;
+const BANNED = new RegExp(`Qwen2\\.5|Qwen3-8B|${PII_TEXT.source}`, 'i');
 const HOME_PATH = /\/home\/|\/Users\/|C:\\Users\\/i;
 const Q1Q2 = /\b(?:IQ[12][_-]|Q[12][_-])/i;
 const KINDS = new Set<string>(Object.keys(LAB_LOG_KINDS));

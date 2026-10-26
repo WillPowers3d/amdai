@@ -3,6 +3,7 @@
  * llmstxt.org layout. No Person data, prices, or invented tok/s.
  */
 
+import { PII_TEXT } from './pii-denylist';
 import { SITE_ORIGIN } from './seo';
 import { BRAND, site } from './site';
 import { SPONSOR_DESCRIPTION, SPONSOR_PATH } from './sponsor';
@@ -138,7 +139,7 @@ export function renderLlmsFullTxt(): string {
   return [...preamble(), renderSection('Docs', llmsFullLinks()), ''].join('\n').trim() + '\n';
 }
 
-const BANNED = /Qwen2\.5|Qwen3-8B|local-desktop|amdai|amdai/i;
+const BANNED = new RegExp(`Qwen2\\.5|Qwen3-8B|${PII_TEXT.source}`, 'i');
 
 export function assertLlmsValid(): string[] {
   const errors: string[] = [];

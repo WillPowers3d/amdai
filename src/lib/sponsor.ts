@@ -3,6 +3,7 @@
  * No invented prices, vendors, or bookings. Empty payment URL hides the CTA.
  */
 
+import { PII_TEXT } from './pii-denylist';
 import { contactEmail } from './trust';
 
 export const SPONSOR_PUBLISHED = '2026-10-16';
@@ -151,6 +152,6 @@ export function assertSponsorValid(): string[] {
   if (Q1Q2.test(blob)) errors.push('Q1/Q2 listed');
   if (/\$\d|\bMSRP\b/i.test(blob)) errors.push('invented price');
   if (/TODO|TBD|FIXME|lorem ipsum|coming soon/i.test(blob)) errors.push('leftover copy');
-  if (/@amdai\.|local-desktop|amdai|amdai/i.test(blob)) errors.push('invented inbox or scrubbed PII');
+  if (/@amdai\./i.test(blob) || PII_TEXT.test(blob)) errors.push('invented inbox or scrubbed PII');
   return [...new Set(errors)];
 }

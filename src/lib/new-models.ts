@@ -12,6 +12,7 @@ import {
   normalizeRunsOn,
   type RunOnHit,
 } from './new-model-engines';
+import { PII_TEXT } from './pii-denylist';
 
 export const NEW_MODELS_PATH = '/new-models';
 export const NEW_MODELS_JSON = '/data/new-models.json';
@@ -94,7 +95,7 @@ export const EMPTY_NEW_MODELS: NewModelsFile = {
 
 const BANNED_NAME = /Qwen2\.5|Qwen3-8B/i;
 const Q1Q2 = /\b(?:IQ[12][_-]|Q[12][_-])/i;
-const FORBIDDEN_PII = /local-desktop|amdai|amdai/i;
+const FORBIDDEN_PII = PII_TEXT;
 
 export function sizeBand(paramsB: number | null): SizeBand {
   if (paramsB == null || !Number.isFinite(paramsB) || paramsB <= 0) return 'unknown';

@@ -1,15 +1,16 @@
 #!/usr/bin/env tsx
 /**
- * Fail the build if dist still contains scrubbed PII
- * (local-desktop, amdai, amdai — case-insensitive), including file/dir names
- * that contain local-desktop. Run after astro build + pagefind.
+ * Fail the build if dist still contains scrubbed PII tokens
+ * (assembled denylist, case-insensitive), including file/dir names
+ * that match the scrubbed host token. Run after astro build + pagefind.
  */
 
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { extname, join, relative } from 'node:path';
+import { PII_HOST, PII_TEXT } from '../lib/pii-denylist';
 
-const FORBIDDEN = /local-desktop|amdai|amdai/i;
-const FORBIDDEN_NAME = /local-desktop/i;
+const FORBIDDEN = PII_TEXT;
+const FORBIDDEN_NAME = PII_HOST;
 const BINARY_EXT = new Set([
   '.png',
   '.jpg',
@@ -65,7 +66,7 @@ function walk(dir: string): void {
 walk(root);
 
 if (hits.length) {
-  console.error(`pii QA: ${hits.length} hit(s) for local-desktop / amdai / amdai:`);
+  console.error(`pii QA: ${hits.length} hit(s) for scrubbed PII tokens:`);
   for (const hit of hits.slice(0, 80)) console.error(`  ${hit}`);
   if (hits.length > 80) console.error(`  … ${hits.length - 80} more`);
   process.exitCode = 1;

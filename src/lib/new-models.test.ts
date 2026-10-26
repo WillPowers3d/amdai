@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { PII_TEXT } from './pii-denylist';
 import { primaryNav } from './site';
 import { documentTitle, isSitemapExcluded, pageDescription, shouldNoindex } from './seo';
 import { pageJsonLd, personJsonLdHits } from './jsonld';
@@ -140,7 +141,7 @@ describe('new open-weight models table', () => {
     assert.match(file.source, /huggingface\.co\/api\/models/);
     const blob = JSON.stringify(file);
     assert.doesNotMatch(blob, /Qwen2\.5|Qwen3-8B/);
-    assert.doesNotMatch(blob, /local-desktop|amdai|amdai/i);
+    assert.doesNotMatch(blob, PII_TEXT);
     assert.doesNotMatch(blob, /\b(?:IQ[12][_-]|Q[12][_-])/i);
     assert.doesNotMatch(blob, /\$\d|\bMSRP\b/);
     for (const day of file.days) {
