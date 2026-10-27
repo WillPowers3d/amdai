@@ -89,6 +89,13 @@ describe('lab log', () => {
     const baked = staticLabLogEntries(file);
     assert.ok(baked.length >= 10);
     assert.ok(baked.length <= file.entries.length);
+    assert.equal(
+      staticLabLogEntries({
+        as_of: '2026-10-27T00:00:00.000Z',
+        entries: [sample({ summary: 'Q4 and up only on this card.' })],
+      }).length,
+      0,
+    );
     const md = renderLabLogMarkdown(file);
     assert.match(md, /^# AMDai lab log/m);
     assert.match(md, /https:\/\/amdai\.net\/lab-log\/#/);

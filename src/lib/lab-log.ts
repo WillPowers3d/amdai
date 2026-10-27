@@ -88,6 +88,7 @@ const BANNED_MODEL = /Qwen2\.5|Qwen3-8B/i;
 const HOME_PATH = /\/home\/|\/Users\/|C:\\Users\\/i;
 const Q1Q2_QUANT = /\b(?:IQ[12]_[A-Z0-9]+|Q[12]_[A-Z0-9]+)\b/;
 const GLUE_PERIOD = /([a-z]|\])\.[A-Z]/;
+const Q4_FLOOR = /floor is q4|q4 floor|q4 and up only|never (?:go |drop )?below q4|do not drop below q4|why not below q4/i;
 const KINDS = new Set<string>(Object.keys(LAB_LOG_KINDS));
 const SETUP_ORDER = ['model', 'quant', 'engine', 'engine_version', 'gpus', 'context', 'flags'] as const;
 
@@ -260,6 +261,7 @@ export function isLabLogHtmlSafe(entry: LabLogEntry): boolean {
   if (PII_TEXT.test(blob)) return false;
   if (Q1Q2_QUANT.test(blob)) return false;
   if (GLUE_PERIOD.test(blob)) return false;
+  if (Q4_FLOOR.test(blob)) return false;
   return true;
 }
 
