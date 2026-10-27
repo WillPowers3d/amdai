@@ -1,17 +1,16 @@
 /**
  * Cited KV-cache shopper guide for Radeon.
- * Reuses calculator formulaKvGiB / KV_TYPES and official 35B f16 VRAM cards.
+ * Reuses calculator kvCacheGiB / KV_TYPES and official 35B f16 VRAM cards.
  * Do not invent tok/s, quality scores, or a Stack Lab KV A/B deep link.
  */
 
 import {
   DEFAULT_INPUT,
-  KV_TYPES,
   applyGpuPreset,
   applyModelPreset,
   compute,
   formatGiB,
-  formulaKvGiB,
+  kvCacheGiB,
   systemRamNeed,
   type GpuId,
   type KvId,
@@ -61,12 +60,14 @@ export const KV_CACHE_WHAT = `
   whole prompt. More tokens → a bigger store. Official Qwen3.6-35B-A3B
   card: 40 layers, 10 full-attention (GQA 2×256). Only those 10 layers grow
   a token-length cache — that count is the public model card, not a tape
-  measure. The calculator formula is 2 × kv_layers × kv_heads × head_dim ×
-  context × bytes. House numbers: 2 × ${KV_CACHE_KV_LAYERS} × ${KV_CACHE_KV_HEADS}
-  × ${KV_CACHE_HEAD_DIM} × context × bytes. Bytes come from KV_TYPES on the
-  calculator (f16 = 2, q8_0 = 1.0625, q4_0 = 0.5625). Those KV-only figures
-  are estimates. Peak VRAM on the table is the whole load (weights + KV +
-  overhead) and is measured only for f16 on the overnight UD-Q5 cards.
+  measure. The calculator growing-KV formula is 2 × kv_layers × kv_heads ×
+  head_dim × context × bytes. House numbers: 2 × ${KV_CACHE_KV_LAYERS} ×
+  ${KV_CACHE_KV_HEADS} × ${KV_CACHE_HEAD_DIM} × context × bytes, plus the
+  fixed linear-attention state llama.cpp keeps for the other 30 layers.
+  Bytes come from KV_TYPES on the calculator (f16 = 2, q8_0 = 1.0625,
+  q4_0 = 0.5625). Those KV-only figures are estimates. Peak VRAM on the
+  table is the whole load (weights + KV + overhead) and is measured only
+  for f16 on the overnight UD-Q5 cards.
 `.replace(/\s+/g, ' ').trim();
 
 export const KV_CACHE_FLAGS = `
@@ -150,7 +151,7 @@ export const KV_CACHE_FAQ = [
     id: 'what-is-kv',
     question: 'What is the KV cache on llama.cpp?',
     answer:
-      'Key/value attention memory that grows with the token window. Separate from the GGUF. House default is f16. The calculator estimates 2 × 10 full-attention layers × 2 heads × 256 dim × context × bytes for Qwen3.6-35B-A3B.',
+      'Key/value attention memory that grows with the token window. Separate from the GGUF. House default is f16. The calculator estimates 2 × 10 full-attention layers × 2 heads × 256 dim × context × bytes plus a fixed linear-attention state for Qwen3.6-35B-A3B.',
     links: [
       { href: '/glossary#kv-cache', label: 'KV cache' },
       { href: '/calculator', label: 'Calculator' },
@@ -250,10 +251,6 @@ export const REQUIRED_KV_CACHE_HREFS = [
 
 const HOUSE_KV_IDS = ['f16', 'q8_0', 'q4_0'] as const;
 
-function kvBytes(id: (typeof HOUSE_KV_IDS)[number]): number {
-  return KV_TYPES.find((row) => row.id === id)?.bytes ?? 0;
-}
-
 function measuredUdq5Vram(context: number): string | null {
   const row = qwen36TableFromRuns(runs).compare.find(
     (item) => item.quant === 'UD-Q5_K_XL' && item.context === context,
@@ -274,7 +271,13 @@ export type KvContextRow = {
 };
 
 function kvOnlyGiB(context: number, id: (typeof HOUSE_KV_IDS)[number]): number {
-  return formulaKvGiB(KV_CACHE_KV_LAYERS, KV_CACHE_KV_HEADS, KV_CACHE_HEAD_DIM, context, kvBytes(id));
+  return kvCacheGiB({
+    ...applyModelPreset('qwen36', DEFAULT_INPUT),
+    context,
+    kvId: id,
+    backendId: 'llamacpp',
+    batch: 1,
+  }).gib;
 }
 
 export function kvContextRows(): KvContextRow[] {
