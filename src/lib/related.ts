@@ -855,6 +855,12 @@ export function relatedFor(pathname: string): RelatedLink[] {
     }
   }
 
+  if (path === '/recipes' || path.startsWith('/recipes/')) {
+    add(out, seen, '/recipes', 'All recipes');
+    add(out, seen, '/models', 'House models');
+    add(out, seen, '/gpus', 'GPU directory');
+  }
+
   if (path.startsWith('/recipes/')) {
     const recipe = liveRecipes(recipes).find((row) => `/recipes/${row.id}` === path);
     if (recipe) {
@@ -1054,6 +1060,7 @@ export function assertRelatedValid(
     '/qwen',
     '/new-models',
     '/lab-log',
+    '/recipes',
     '/models/qwen36',
     '/models/flash',
     '/models/gpt-oss-20b',

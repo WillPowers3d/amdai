@@ -15,6 +15,7 @@ import {
 import {
   DESC_MAX,
   DESC_MIN,
+  canonicalUrl,
   isSitemapExcluded,
   SITE_ORIGIN,
   TITLE_MAX,
@@ -266,17 +267,16 @@ export function checkSeoPage(page: SeoPage, root: string): SeoIssue[] {
     if (!page.canonical) {
       issues.push({ kind: 'canonical', path: page.path, message: 'missing canonical' });
     } else {
-      const expected = page.path === '/' ? `${SITE_ORIGIN}/` : `${SITE_ORIGIN}${page.path}`;
-      const got = page.canonical.replace(/\/$/, '') === `${SITE_ORIGIN}` ? `${SITE_ORIGIN}/` : page.canonical.replace(/\/+$/, '');
-      const want = expected.replace(/\/+$/, '') || SITE_ORIGIN;
+      const expected = canonicalUrl(page.path);
       if (urlPath(new URL(page.canonical, SITE_ORIGIN).pathname) !== page.path) {
         issues.push({ kind: 'canonical', path: page.path, message: `canonical ${page.canonical} is not self-referencing` });
       }
       if (!page.canonical.startsWith(SITE_ORIGIN)) {
         issues.push({ kind: 'canonical', path: page.path, message: `canonical must start with ${SITE_ORIGIN}` });
       }
-      void got;
-      void want;
+      if (page.canonical !== expected) {
+        issues.push({ kind: 'canonical', path: page.path, message: `canonical ${page.canonical} must be ${expected}` });
+      }
     }
     if (!page.ogImage) {
       issues.push({ kind: 'og', path: page.path, message: 'missing og:image' });
@@ -405,6 +405,14 @@ export function checkSeoIndex(index: DistIndex): SeoIssue[] {
     const text = readFileSync(robots, 'utf8');
     if (!/sitemap:\s*https:\/\/amdai\.net\/sitemap/i.test(text)) {
       issues.push({ kind: 'robots', path: '/robots.txt', message: 'robots.txt must point at the amdai.net sitemap' });
+    }
+    if (!/https:\/\/amdai\.net\/llms\.txt/i.test(text)) {
+      issues.push({ kind: 'robots', path: '/robots.txt', message: 'robots.txt must point at llms.txt' });
+    }
+    for (const bot of ['GPTBot', 'OAI-SearchBot', 'ChatGPT-User', 'ClaudeBot', 'PerplexityBot']) {
+      if (!text.includes(bot)) {
+        issues.push({ kind: 'robots', path: '/robots.txt', message: `robots.txt must allow ${bot}` });
+      }
     }
   }
 

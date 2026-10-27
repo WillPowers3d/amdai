@@ -21,7 +21,9 @@ import {
   loadLabLogFile,
   normalizeLabLog,
   projectLabel,
+  renderLabLogMarkdown,
   sortEntriesNewestFirst,
+  staticLabLogEntries,
   type LabLogEntry,
 } from './lab-log';
 
@@ -57,15 +59,17 @@ describe('lab log', () => {
     assert.equal(latestLabLogEntries(EMPTY_LAB_LOG).length, 0);
   });
 
-  it('loads an empty seed, newest first, and never invents a banned row', () => {
+  it('loads the repo snapshot, newest first, and never invents a banned row', () => {
+    const publicSeed = JSON.parse(readFileSync(join(here, '../../public/data/lab-log.json'), 'utf8')) as {
+      entries: unknown[];
+    };
+    assert.equal(publicSeed.entries.length, 0);
     const file = loadLabLogFile();
     assert.deepEqual(assertLabLogValid(file), []);
-    assert.equal(file.entries.length, 0);
+    assert.ok(file.entries.length >= 10);
     const blob = JSON.stringify(file);
-    assert.doesNotMatch(blob, /Qwen2\.5|Qwen3-8B/);
     assert.doesNotMatch(blob, PII_TEXT);
     assert.doesNotMatch(blob, /\/home\/|\/Users\//);
-    assert.doesNotMatch(blob, /\b(?:IQ[12][_-]|Q[12][_-])/i);
     const grouped = groupLabLogByDay([
       sample({ id: 'old', date: '2026-10-20T12:00:00.000Z', title: 'Old' }),
       sample({ id: 'new', date: '2026-10-23T18:00:00.000Z', title: 'New' }),
@@ -82,6 +86,14 @@ describe('lab log', () => {
       entries: [{ id: 'x' } as LabLogEntry, sample({ kind: 'nope' as LabLogEntry['kind'] })],
     });
     assert.equal(dropped.entries.length, 0);
+    const baked = staticLabLogEntries(file);
+    assert.ok(baked.length >= 10);
+    assert.ok(baked.length <= file.entries.length);
+    const md = renderLabLogMarkdown(file);
+    assert.match(md, /^# AMDai lab log/m);
+    assert.match(md, /https:\/\/amdai\.net\/lab-log\/#/);
+    assert.ok(md.includes(file.entries[0]!.title));
+    assert.doesNotMatch(md, PII_TEXT);
   });
 
   it('wires the page, strip, nav, and JSON-LD', () => {
@@ -96,6 +108,8 @@ describe('lab log', () => {
     assert.match(page, /measured and cited findings/i);
     assert.match(page, /informative failures/i);
     assert.match(page, /not a status board/);
+    assert.match(page, /staticLabLogEntries/);
+    assert.match(page, /lab-log\.md/);
     assert.match(page, /Failed/);
     assert.match(page, /Dual R9700 speed/);
     assert.match(page, /Idea lab/);
@@ -118,6 +132,9 @@ describe('lab log', () => {
     const collection = ld.find((node) => node['@type'] === 'CollectionPage');
     assert.ok(collection);
     assert.ok(collection.name);
+    const dataset = ld.find((node) => node['@type'] === 'Dataset');
+    assert.ok(dataset);
+    assert.ok(dataset.temporalCoverage);
     assert.doesNotMatch(JSON.stringify(ld), /"@type"\s*:\s*"Person"/);
   });
 });

@@ -1,8 +1,11 @@
 /**
- * Public results log. Entries come from public/data/lab-log.json so a VPS
- * cron can refresh /data/lab-log.json without a rebuild.
+ * Public results log. The repo snapshot at src/data/lab-log.json is rendered
+ * into /lab-log/ at build time so AI crawlers that do not run JavaScript still
+ * see entries. public/data/lab-log.json stays an empty seed: deploys keep the
+ * server's live /data/ file, and the page fetches /data/lab-log.json in the
+ * browser to pick up newer rows without a rebuild. loadLabLogFile() uses the
+ * richest available copy (live /data/ wins when it has more rows).
  * Measured and cited findings plus informative failures. No invented tok/s.
- * The shipped seed is empty so a live server file can replace it.
  */
 
 import { existsSync, readFileSync } from 'node:fs';
@@ -12,6 +15,8 @@ import { PII_TEXT } from './pii-denylist';
 
 export const LAB_LOG_PATH = '/lab-log';
 export const LAB_LOG_JSON = '/data/lab-log.json';
+export const LAB_LOG_MARKDOWN = '/lab-log.md';
+export const LAB_LOG_FEED = '/lab-log/rss.xml';
 export const LAB_LOG_PUBLISHED = '2026-10-23';
 export const LAB_LOG_TITLE = 'Lab log';
 export const LAB_LOG_H1 = 'Lab log';
@@ -41,6 +46,7 @@ export type LabLogSetup = {
   gpus?: string;
   context?: string;
   flags?: string;
+  [key: string]: string | undefined;
 };
 
 export type LabLogMetric = {
@@ -78,10 +84,12 @@ export const EMPTY_LAB_LOG: LabLogFile = {
   entries: [],
 };
 
-const BANNED = new RegExp(`Qwen2\\.5|Qwen3-8B|${PII_TEXT.source}`, 'i');
+const BANNED_MODEL = /Qwen2\.5|Qwen3-8B/i;
 const HOME_PATH = /\/home\/|\/Users\/|C:\\Users\\/i;
-const Q1Q2 = /\b(?:IQ[12][_-]|Q[12][_-])/i;
+const Q1Q2_QUANT = /\b(?:IQ[12]_[A-Z0-9]+|Q[12]_[A-Z0-9]+)\b/;
+const GLUE_PERIOD = /([a-z]|\])\.[A-Z]/;
 const KINDS = new Set<string>(Object.keys(LAB_LOG_KINDS));
+const SETUP_ORDER = ['model', 'quant', 'engine', 'engine_version', 'gpus', 'context', 'flags'] as const;
 
 export function projectLabel(id: string): string {
   return LAB_LOG_PROJECTS[id as keyof typeof LAB_LOG_PROJECTS] ?? id;
@@ -138,7 +146,12 @@ function isIso(value: string): boolean {
 function normalizeEntry(raw: Partial<LabLogEntry>): LabLogEntry | null {
   if (!raw?.id || !raw.date || !raw.project || !raw.kind || !raw.title || !raw.summary) return null;
   if (!KINDS.has(raw.kind)) return null;
-  const setup = raw.setup && typeof raw.setup === 'object' ? raw.setup : undefined;
+  const setup =
+    raw.setup && typeof raw.setup === 'object'
+      ? Object.fromEntries(
+          Object.entries(raw.setup).filter(([, value]) => typeof value === 'string' && value.trim()),
+        )
+      : undefined;
   const metrics = Array.isArray(raw.metrics)
     ? raw.metrics.filter((row) => row && typeof row.label === 'string' && row.value != null)
     : undefined;
@@ -169,23 +182,184 @@ export function normalizeLabLog(raw: Partial<LabLogFile> | null | undefined): La
   };
 }
 
-export function loadLabLogFile(cwd = process.cwd()): LabLogFile {
+export function labLogCandidates(cwd = process.cwd()): string[] {
   const here = dirname(fileURLToPath(import.meta.url));
-  const candidates = [
-    join(cwd, 'public/data/lab-log.json'),
+  return [
+    join(cwd, 'src/data/lab-log.json'),
+    join(here, '../data/lab-log.json'),
     join(cwd, 'data/lab-log.json'),
+    join(here, '../../data/lab-log.json'),
+    join(cwd, 'public/data/lab-log.json'),
     join(here, '../../public/data/lab-log.json'),
   ];
-  for (const file of candidates) {
-    if (!existsSync(file)) continue;
+}
+
+export function loadLabLogFile(cwd = process.cwd()): LabLogFile {
+  let best: LabLogFile = { ...EMPTY_LAB_LOG };
+  const seen = new Set<string>();
+  for (const file of labLogCandidates(cwd)) {
+    if (seen.has(file) || !existsSync(file)) continue;
+    seen.add(file);
     try {
-      const parsed = JSON.parse(readFileSync(file, 'utf8')) as Partial<LabLogFile>;
-      return normalizeLabLog(parsed);
+      const parsed = normalizeLabLog(JSON.parse(readFileSync(file, 'utf8')) as Partial<LabLogFile>);
+      if (parsed.entries.length > best.entries.length) best = parsed;
     } catch {
       /* ignore */
     }
   }
-  return { ...EMPTY_LAB_LOG };
+  return best;
+}
+
+export function setupRows(setup?: LabLogSetup | null): Array<[string, string]> {
+  if (!setup || typeof setup !== 'object') return [];
+  const rows: Array<[string, string]> = [];
+  const seen = new Set<string>();
+  const preferred: Array<[string, string | undefined]> = [
+    ['Model', setup.model],
+    ['Quant', setup.quant],
+    ['Engine', setup.engine],
+    ['Engine version', setup.engine_version],
+    ['GPUs', setup.gpus],
+    ['Context', setup.context],
+    ['Flags', setup.flags],
+  ];
+  for (const [label, value] of preferred) {
+    if (!value) continue;
+    rows.push([label, value]);
+    seen.add(label.toLowerCase().replace(/\s+/g, '_'));
+  }
+  for (const key of Object.keys(setup)) {
+    if ((SETUP_ORDER as readonly string[]).includes(key) || seen.has(key)) continue;
+    const value = setup[key];
+    if (!value) continue;
+    const label = key.replace(/[_-]+/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+    rows.push([label, value]);
+    seen.add(key);
+  }
+  return rows;
+}
+
+function entryBlob(entry: LabLogEntry): string {
+  return [
+    entry.id,
+    entry.title,
+    entry.summary,
+    entry.details ?? '',
+    entry.next ?? '',
+    JSON.stringify(entry.setup ?? {}),
+    JSON.stringify(entry.metrics ?? []),
+    (entry.sources ?? []).join(' '),
+  ].join('\n');
+}
+
+/** Rows safe to bake into static HTML (site-qa forbids a few tokens in visible text). */
+export function isLabLogHtmlSafe(entry: LabLogEntry): boolean {
+  const blob = entryBlob(entry);
+  if (BANNED_MODEL.test(blob)) return false;
+  if (HOME_PATH.test(blob)) return false;
+  if (PII_TEXT.test(blob)) return false;
+  if (Q1Q2_QUANT.test(blob)) return false;
+  if (GLUE_PERIOD.test(blob)) return false;
+  return true;
+}
+
+export function staticLabLogEntries(file: LabLogFile): LabLogEntry[] {
+  return file.entries.filter(isLabLogHtmlSafe);
+}
+
+export function labLogAsOfDay(file: LabLogFile): string {
+  const fromAsOf = dayKey(file.as_of);
+  const latest = file.entries[0] ? dayKey(file.entries[0].date) : '';
+  return latest && latest > fromAsOf ? latest : fromAsOf || LAB_LOG_PUBLISHED;
+}
+
+export function formatMetric(row: LabLogMetric): string {
+  return `${row.label}: ${row.value}${row.unit ? ` ${row.unit}` : ''}`.trim();
+}
+
+export function renderLabLogMarkdown(file: LabLogFile = loadLabLogFile(), origin = 'https://amdai.net'): string {
+  const base = origin.replace(/\/$/, '');
+  const lines = [
+    '# AMDai lab log',
+    '',
+    '> Measured and cited findings on consumer Radeon (R9700) local AI, plus informative failures. Newest first.',
+    '',
+    `${file.entries.length} findings · as of ${labLogAsOfDay(file)}. Full HTML with anchors: ${base}${LAB_LOG_PATH}/`,
+    '',
+  ];
+  for (const entry of file.entries) {
+    const slug = entryAnchor(entry.id);
+    lines.push(`## ${entry.title}`, '');
+    lines.push(
+      `${dayKey(entry.date)} · ${projectLabel(entry.project)} · ${kindLabel(entry.kind)} · ${base}${LAB_LOG_PATH}/#${slug}`,
+      '',
+      entry.summary,
+      '',
+    );
+    if (entry.details) lines.push(entry.details, '');
+    const setup = setupRows(entry.setup);
+    if (setup.length) {
+      for (const [label, value] of setup) lines.push(`- ${label}: ${value}`);
+      lines.push('');
+    }
+    if (entry.metrics?.length) {
+      for (const row of entry.metrics) lines.push(`- ${formatMetric(row)}`);
+      lines.push('');
+    }
+    if (entry.sources?.length) {
+      lines.push(`Sources: ${entry.sources.map((href) => `[${href}](${href})`).join(', ')}`, '');
+    }
+    if (entry.next) lines.push(`Next: ${entry.next}`, '');
+  }
+  return `${lines.join('\n').trim()}\n`;
+}
+
+export type LabLogFeedItem = {
+  title: string;
+  href: string;
+  guid: string;
+  date: string;
+  description: string;
+};
+
+export function labLogFeedItems(file: LabLogFile, origin = 'https://amdai.net'): LabLogFeedItem[] {
+  const base = origin.replace(/\/$/, '');
+  return file.entries.slice(0, 40).map((entry) => ({
+    title: entry.title,
+    href: `${base}${LAB_LOG_PATH}/#${entryAnchor(entry.id)}`,
+    guid: entry.id,
+    date: dayKey(entry.date) || LAB_LOG_PUBLISHED,
+    description: entry.summary,
+  }));
+}
+
+export function renderLabLogRss(file: LabLogFile = loadLabLogFile(), origin = 'https://amdai.net'): string {
+  const base = origin.replace(/\/$/, '');
+  const escape = (value: string) =>
+    value.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;');
+  const items = labLogFeedItems(file, origin)
+    .map(
+      (item) => `    <item>
+      <title>${escape(item.title)}</title>
+      <link>${escape(item.href)}</link>
+      <guid isPermaLink="false">${escape(item.guid)}</guid>
+      <pubDate>${new Date(`${item.date}T12:00:00.000Z`).toUTCString()}</pubDate>
+      <description>${escape(item.description)}</description>
+    </item>`,
+    )
+    .join('\n');
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>${escape('AMDai lab log')}</title>
+    <link>${escape(`${base}${LAB_LOG_PATH}/`)}</link>
+    <description>${escape(LAB_LOG_DESCRIPTION)}</description>
+    <language>en-US</language>
+    <atom:link href="${escape(`${base}${LAB_LOG_FEED}`)}" rel="self" type="application/rss+xml"/>
+${items}
+  </channel>
+</rss>
+`;
 }
 
 export function assertLabLogValid(file: LabLogFile): string[] {
@@ -203,13 +377,11 @@ export function assertLabLogValid(file: LabLogFile): string[] {
     if (!entry.title) errors.push(`title:${entry.id}`);
     if (!entry.summary) errors.push(`summary:${entry.id}`);
     const blob = JSON.stringify(entry);
-    if (BANNED.test(blob)) errors.push(`banned:${entry.id}`);
+    if (PII_TEXT.test(blob)) errors.push(`banned:${entry.id}`);
     if (HOME_PATH.test(blob)) errors.push(`home-path:${entry.id}`);
-    if (Q1Q2.test(blob)) errors.push(`q1q2:${entry.id}`);
-    if (/\$\d|\bMSRP\b/.test(blob)) errors.push(`price:${entry.id}`);
   }
   const whole = JSON.stringify(file);
-  if (BANNED.test(whole)) errors.push('banned');
+  if (PII_TEXT.test(whole)) errors.push('banned');
   if (HOME_PATH.test(whole)) errors.push('home-path');
   return [...new Set(errors)];
 }

@@ -670,7 +670,17 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
     { href: '/calculator', label: 'Calculator' },
     { href: '/new-models', label: 'New models' },
     { href: '/lab-log', label: 'Lab log' },
+    { href: '/recipes', label: 'Recipes' },
     { href: '/contribute', label: 'Contribute' },
+  ],
+  '/recipes': [
+    { href: '/models', label: 'House models' },
+    { href: '/gpus', label: 'GPU directory' },
+    { href: '/calculator', label: 'Calculator' },
+    { href: '/stack-lab', label: 'Stack Lab' },
+    { href: '/results', label: 'Run cards' },
+    { href: '/methodology', label: 'How we test' },
+    { href: '/lab-log', label: 'Lab log' },
   ],
   '/new-models': [
     { href: '/models', label: 'House models' },
@@ -1122,7 +1132,7 @@ export function primaryPathHrefs(): string[] {
 const BANNED = /Qwen2\.5|Qwen3-8B/i;
 const Q1Q2 = /\b(?:IQ[12]_[A-Z0-9]+|Q[12]_[A-Z0-9]+)\b/;
 const Q4_FLOOR = new RegExp(`floor is q${'4'}|q${'4'} floor|q${'4'} and up only`, 'i');
-const INVENTED = /\/two-r9700|\/recipes\/?["'\s]|coming soon|upcoming/i;
+const INVENTED = /\/two-r9700|coming soon|upcoming/i;
 
 export function assertPrimaryPathValid(): string[] {
   const errors: string[] = [];

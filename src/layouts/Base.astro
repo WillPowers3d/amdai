@@ -10,6 +10,7 @@ import Related from '../components/Related.astro';
 import { jsonLdScript, pageJsonLd } from '../lib/jsonld';
 import { relatedFor } from '../lib/related';
 import {
+  articleDates,
   breadcrumbsFor,
   canonicalUrl,
   documentTitle,
@@ -34,6 +35,7 @@ const ogAlt = ogImageAlt(path);
 const noindex = shouldNoindex(path);
 const crumbs = path === '/' ? [] : breadcrumbsFor(path);
 const related = relatedFor(path);
+const dates = articleDates(path);
 const jsonld = jsonLdScript(pageJsonLd({ pathname: path, title, description }));
 ---
 
@@ -48,6 +50,9 @@ const jsonld = jsonLdScript(pageJsonLd({ pathname: path, title, description }));
     <meta name="theme-color" content="#08080b" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="canonical" href={canonical} />
+    {dates && <meta property="article:published_time" content={dates.published} />}
+    {dates && <meta property="article:modified_time" content={dates.modified} />}
+    {dates && <meta name="last-modified" content={dates.modified} />}
     <link rel="sitemap" href="/sitemap-index.xml" />
     <link rel="alternate" type="application/rss+xml" title={`${site.wordmark} Lab Notes`} href="/rss.xml" />
     <link rel="alternate" type="application/rss+xml" title={`${site.wordmark} · ${site.name} updates`} href="/updates/rss.xml" />
@@ -79,20 +84,9 @@ const jsonld = jsonLdScript(pageJsonLd({ pathname: path, title, description }));
       })();
     </script>
   </head>
-  <body class="min-h-screen antialiased">
+  <body class="page-body min-h-screen antialiased">
     <a class="skip-link" href="#main">Skip to content</a>
-    <ReadingProgress />
-    <div data-pagefind-ignore>
-      <Header />
-      {crumbs.length > 1 && (
-        <div class="border-b border-line">
-          <div class="mx-auto max-w-6xl px-4 sm:px-6">
-            <Breadcrumbs items={crumbs} />
-          </div>
-        </div>
-      )}
-    </div>
-    <div data-pagefind-body>
+    <div class="page-main" data-pagefind-body>
       <slot />
       {related.length > 0 && (
         <div class="mx-auto max-w-6xl px-4 sm:px-6">
@@ -100,7 +94,23 @@ const jsonld = jsonLdScript(pageJsonLd({ pathname: path, title, description }));
         </div>
       )}
     </div>
-    <div data-pagefind-ignore>
+    <div class="page-chrome" data-pagefind-ignore>
+      <ReadingProgress />
+      <Header />
+      {crumbs.length > 1 && (
+        <div class="border-b border-line">
+          <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-2 px-4 sm:px-6">
+            <Breadcrumbs items={crumbs} />
+            {dates && (
+              <p class="page-updated">
+                Last updated <time datetime={dates.modified}>{dates.modified}</time>
+              </p>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+    <div class="page-foot" data-pagefind-ignore>
       <Footer />
       <CommandPalette />
     </div>

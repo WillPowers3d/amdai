@@ -16,7 +16,7 @@ import { canRunSeoRows } from './can-run';
 import { gpuCompareSeoRows } from './gpu-compare';
 import { modelCompareSeoRows } from './model-compare';
 import { NEW_MODELS_DESCRIPTION, NEW_MODELS_TITLE } from './new-models';
-import { LAB_LOG_DESCRIPTION, LAB_LOG_TITLE } from './lab-log';
+import { LAB_LOG_DESCRIPTION, LAB_LOG_PUBLISHED, LAB_LOG_TITLE, labLogAsOfDay, loadLabLogFile } from './lab-log';
 
 export const SITE_ORIGIN = 'https://amdai.net';
 export const TITLE_SUFFIX = ` · ${BRAND}`;
@@ -57,9 +57,21 @@ export function isSitemapExcluded(pathname: string): boolean {
   return shouldNoindex(pathname);
 }
 
+const FILE_URL_EXT =
+  /\.(xml|txt|json|md|xsl|svg|png|jpe?g|webp|avif|gif|ico|woff2?|ttf|css|js|mjs|html|webmanifest)$/i;
+
+/** True for downloadable files that must not grow a trailing slash. */
+export function isFileUrlPath(pathname: string): boolean {
+  const last = urlPath(pathname).split('/').filter(Boolean).at(-1) ?? '';
+  return FILE_URL_EXT.test(last);
+}
+
+/** Canonical public URL. Directory pages end with / so crawlers skip a 308 hop. */
 export function canonicalUrl(pathname: string, origin = SITE_ORIGIN): string {
   const path = urlPath(pathname);
-  return path === '/' ? `${origin}/` : `${origin}${path}`;
+  if (path === '/') return `${origin}/`;
+  if (isFileUrlPath(path)) return `${origin}${path}`;
+  return `${origin}${path}/`;
 }
 
 export function isNestedPath(pathname: string): boolean {
@@ -294,12 +306,11 @@ export const CRUMB_LABELS: Record<string, string> = {
 export type Crumb = { name: string; href: string };
 
 /** Intermediate segments that are not real pages. */
-const SKIP_CRUMB = new Set(['/forum/c', '/forum/t', '/recipes', '/go', '/guides']);
+const SKIP_CRUMB = new Set(['/forum/c', '/forum/t', '/go', '/guides']);
 
 const CRUMB_HREF: Record<string, string> = {
   '/forum/c': '/forum',
   '/forum/t': '/forum',
-  '/recipes': '/models',
 };
 
 export function breadcrumbsFor(pathname: string): Crumb[] {
@@ -848,6 +859,14 @@ setMeta(
   LAB_LOG_DESCRIPTION,
 );
 setDate('/lab-log', '2026-10-23');
+setDate('/lab-log.md', '2026-10-23');
+setDate('/lab-log/rss.xml', '2026-10-23');
+setMeta(
+  '/recipes',
+  'Recipes',
+  'First-party Radeon launch recipes: one model on one card with ROCm metadata, a sourced proof, and the exact launch command. llama.cpp first. No invented tok/s.',
+);
+setDate('/recipes', '2026-10-13');
 setMeta(
   '/models',
   'Models',
@@ -1399,6 +1418,9 @@ function gitDay(rel: string): string | null {
 
 export function lastmodFor(pathname: string): string | undefined {
   const path = urlPath(pathname);
+  if (path === '/lab-log' || path === '/lab-log.md' || path === '/lab-log/rss.xml') {
+    return labLogAsOfDay(loadLabLogFile());
+  }
   const hit = PAGE_DATES.get(path);
   if (hit) return hit.modified;
   if (path.startsWith('/rocm')) return isoDay(GUIDE_UPDATED) ?? undefined;
@@ -1415,6 +1437,10 @@ export function lastmodFor(pathname: string): string | undefined {
 
 export function articleDates(pathname: string): { published: string; modified: string } | null {
   const path = urlPath(pathname);
+  if (path === '/lab-log' || path === '/lab-log.md' || path === '/lab-log/rss.xml') {
+    const published = PAGE_DATES.get('/lab-log')?.published ?? LAB_LOG_PUBLISHED;
+    return { published, modified: labLogAsOfDay(loadLabLogFile()) };
+  }
   return PAGE_DATES.get(path) ?? (path.startsWith('/rocm') ? {
     published: GUIDE_UPDATED.toISOString().slice(0, 10),
     modified: GUIDE_UPDATED.toISOString().slice(0, 10),
