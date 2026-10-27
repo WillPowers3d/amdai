@@ -14,9 +14,10 @@ yarn-error.log*
 pnpm-debug.log*
 
 
-# environment variables
+# environment variables — keep .env.example tracked
 .env
-.env.production
+.env.*
+!.env.example
 
 # local SQLite (accounts). Never commit. Root-only so src/data/ YAML stays tracked.
 # Official run cards live in data/runs/*.jsonl and must be committed.

@@ -1,216 +1,185 @@
-# AMDai · R9700 Lab Notes
+# AMDai
 
-A static documentation site for **local AI on consumer AMD Radeon** — grounded in a real test rig with two **AMD Radeon AI PRO R9700** cards (32 GB, `gfx1201`) and 256 GB DDR5.
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Node.js](https://img.shields.io/badge/node-%3E%3D22.12-339933?logo=nodedotjs&logoColor=white)](package.json)
 
-Independent living notes. **Not affiliated with AMD.** The wordmark is `AMDai` with a chip we drew; we do not use AMD’s logo as a lockup.
+Independent lab notes for **local AI on consumer AMD Radeon and ROCm**.
 
-Visual system: [docs/design.md](docs/design.md). Dark-first ember-on-obsidian theme, Geist + Geist Mono (self-hosted in `public/fonts/`), mega-menu, ⌘K search, and per-page OG images ([docs/og-images.md](docs/og-images.md) — `npm run og` rebuilds the 1200×630 catalog).
+**Live site:** [amdai.net](https://amdai.net)
 
-It is a **living tracker**, not a frozen manual. Version pins are dated snapshots. The home page “what works this week” card is the current recommendation.
+[![AMDai homepage](https://amdai.net/og/home.png)](https://amdai.net)
 
-Audience: home-lab and enthusiast users. Not enterprise Instinct marketing.
+AMDai is a documentation site — not a store, not a leaderboard scrape, and not an AMD publication. It helps someone size a Radeon box, pick a GGUF and an engine, and follow a first-run path that is either **measured** on a published test rig or clearly labeled **cited** / **estimate**.
 
-## What we run
+The wordmark is `AMDai` with a chip motif drawn for this project. **Not affiliated with AMD.** Product names are used nominatively.
 
-| Role | Model | Quant | Engine | Notes |
-| --- | --- | --- | --- | --- |
-| Daily driver | Qwen3.6-35B-A3B | Unsloth UD-Q5_K_XL | llama.cpp Vulkan | One R9700, 262K, f16 KV, 0% RAM offload. Measured on our rig, 2026-10: 102.39 tok/s short / 90.52 at 32K / 66.43 at 128K / 44.4 at 256K |
-| Fast agent | Qwen 3.8 Flash | Unsloth UD-Q6_K_XL | Strata v0.1.42 | Two-card 262K: 32.8 tok/s at 8K/32K, 31.8 at 100K. Prior first-party ~32.6 vs llama.cpp ~16 — Measured on our rig, 2026-10 |
+## What the site does
 
-Official llama-bench cards (c060ca974 Vulkan, f16 KV, overnight sweep 2026-10-12) live in `data/runs/`. Credited to AMDai / local desktop. UD-Q5_K_XL peak VRAM is 25.97 GB at 4K / 29.34 GB at 256K. Sibling 35B points: Q5_K_M 109.73 tok/s (24.68 GB VRAM); Q4_K_M 117.69 tok/s decode, 1902.1 tok/s prefill at 32K. Q6_K 1-GPU 4K table cell is 103.23 tok/s (23:55; the earlier 82.62 card stays on /results). The whole sweep is measured, pending re-verify after the DDR5-5200 RAM fix. Flash / Strata / Q3 are pending a DDR5 rerun.
+The homepage is a living “what works this week” card, driven by dated YAML — not a frozen manual. Version pins are snapshots. Empty cells stay empty.
 
-House rules: prefer llama.cpp over vLLM; prefer Q5 over Q4; Q3 is listed as estimate/community unless measured; Q1/Q2 stay off; fast NVMe only; one LLM per GPU unless you deliberately combine.
+Around that card the repo ships:
 
-## Stack
+| Area | What you get |
+| --- | --- |
+| **Path** | First-run setup (Ubuntu is the measured path; Windows, Fedora, Arch, WSL2, Docker, and app-specific guides are cited), recommended stacks, and per-GPU / per-model recipe sheets |
+| **Tools** | Client-side quant + hardware calculator, GPU directory, model compare tables, budget tiers without invented prices, “can this Radeon run it?” fit pages |
+| **Evidence** | Official `amdai-bench/run@1` cards under [`data/runs/`](data/runs/), a `/results` browser, and a `/benchmarks` hub that only prints measured or labeled cells |
+| **Learn** | ROCm explainer, consumer ROCm problem tracker, symptom-first troubleshooter (including paste-a-log), harness catalog, shopper guides (KV cache, long context, MoE, image gen, speech, RAG, …) |
 
-- [Astro](https://astro.build) 7 (static / SSG)
-- MDX content collections
-- TypeScript
-- Tailwind CSS 4
-- YAML data files for weekly status
+Default production is **static HTML**. Optional accounts, saved rigs, a forum, and an email digest exist in this repo but stay **off** unless feature flags are set.
+
+## Key features
+
+- **Evidence labels.** A number is a validating run card, a cited public doc with a URL and as-of date, or a labeled estimate. The build fails leftover `TODO` / `TBD` copy and invented Q1/Q2 quants.
+- **House daily-driver path.** llama.cpp first (Vulkan on the published R9700 cards). Q5 preferred when the file fits. Q3 stays a labeled estimate unless measured. One LLM per GPU unless a page is explicitly about combining cards.
+- **Test rig, published as-is.** Official cards credit a local desktop with two AMD Radeon AI PRO R9700 (32 GB, `gfx1201`), 256 GB DDR5, Ubuntu 24.04+. The motherboard model is not published. See [`/about`](https://amdai.net/about) and [`/methodology`](https://amdai.net/methodology).
+- **Radeon Stack Lab companion.** Pages and `amdai-stack-lab:` deep links for an Ubuntu 24.04+ helper that records run cards. Packages are **not published yet** — this repo does not invent a download URL.
+- **Static JSON.** `/api/v1/catalog.json`, per-GPU JSON, and a pick table are generated at build time. Query strings on those files are not evaluated.
+- **Search and share cards.** Pagefind indexes `dist/` during `npm run build`. Per-page 1200×630 OG images live under `public/og/` (`npm run og` rebuilds the catalog).
+- **QA as a build gate.** After compile: internal links + orphans, SEO/JSON-LD, axe-core in dark and light, a mobile Core Web Vitals / byte budget, and a PII denylist over `dist/`.
+
+## Tech stack
+
+| Layer | Choice |
+| --- | --- |
+| Site | [Astro](https://astro.build) 7, TypeScript, MDX content collections |
+| Style | Tailwind CSS 4, self-hosted Geist / Geist Mono, dark-first theme ([`docs/design.md`](docs/design.md)) |
+| Data | YAML catalogs in `src/data/`, JSONL run cards in `data/runs/`, Zod-checked collections |
+| Search | [Pagefind](https://pagefind.app/) over the built site |
+| Optional runtime | `@astrojs/node` standalone adapter, SQLite (Drizzle), magic-link / GitHub auth, SMTP |
+| Quality | Node test runner (`tsx --test`), Playwright e2e, axe-core, custom SEO / perf / PII scripts |
+
+Node **22.12+** (see `.nvmrc` and `package.json#engines`).
+
+## Architecture
+
+Content and catalogs compile to static pages. Feature flags can attach a small Node process for accounts, the digest, and the forum. Nothing in the default build needs a database.
+
+```mermaid
+flowchart TB
+  subgraph sources [Sources of truth]
+    MDX["MDX collections<br/>guides · tutorials · blog · updates"]
+    YAML["YAML catalogs<br/>src/data/*.yaml"]
+    RUNS["Run cards<br/>data/runs/*.jsonl"]
+  end
+
+  subgraph astro [Astro 7]
+    PAGES["src/pages · src/lib"]
+    SSG["Static HTML + JSON"]
+    PF["Pagefind index"]
+    QA["Build gates<br/>links · SEO · a11y · perf · PII"]
+  end
+
+  subgraph flags [Optional — flags off by default]
+    NODE["Node standalone adapter"]
+    DB[("SQLite")]
+    APIS["Auth · saved rigs · forum · digest"]
+  end
+
+  MDX --> PAGES
+  YAML --> PAGES
+  RUNS --> PAGES
+  PAGES --> SSG
+  SSG --> PF
+  SSG --> QA
+  PF --> DIST["dist/"]
+  QA --> DIST
+  DIST --> PROXY["Reverse proxy + file server"]
+
+  PAGES -.->|ACCOUNTS_ENABLED or NEWSLETTER_ENABLED| NODE
+  NODE --> APIS
+  APIS --> DB
+  NODE --> PROXY
+```
+
+**Forum** (`FORUM_ENABLED`) requires accounts and shares the same SQLite session. **Digest mailing** stays off unless `NEWSLETTER_SEND` is on *and* the digest command is passed `--send`. The default `npm run digest` only writes drafts under `artifacts/newsletter/`.
+
+## Project structure
+
+```text
+.
+├── data/runs/              Official amdai-bench/run@1 JSONL (committed)
+├── docs/                   Design, OG, deploy cache notes, weekday scrape, schemas
+├── e2e/                    Playwright
+├── public/                 Fonts, favicons, OG PNGs, static JSON seeds
+├── scripts/                Hub sync, screenshot helpers
+├── src/
+│   ├── components/         Astro UI (calculator, GPU sheets, nav, run cards)
+│   ├── content/            MDX collections
+│   ├── data/               Living YAML — edit these, not the layouts
+│   ├── layouts/            Base, Doc, RocmGuide
+│   ├── lib/                Domain logic + unit tests
+│   ├── pages/              File-based routes (including optional /api)
+│   ├── scripts/            QA gates, OG renderer, digest, notify
+│   ├── server/             Accounts, forum, mail, CSRF — used when flags are on
+│   └── styles/             Global Tailwind theme
+├── astro.config.mjs        Site URL, redirects, Node adapter when flagged
+└── .env.example            Documented flags and optional secrets (no real values)
+```
+
+Nav and IA live in [`src/lib/site.ts`](src/lib/site.ts). Calculator math is [`src/lib/calculator.ts`](src/lib/calculator.ts). Affiliate wrappers are [`src/lib/affiliates.ts`](src/lib/affiliates.ts) — buttons say “Check price”; the site does not print live or stale street prices.
+
+### Living data files
+
+| File | Feeds |
+| --- | --- |
+| `src/data/what-works.yaml` | Home status card |
+| `src/data/stacks.yaml` | `/stacks` |
+| `src/data/gpus.yaml` | GPU directory |
+| `src/data/backends.yaml` | Engine comparison |
+| `src/data/harnesses.yaml` | Frontends / agents |
+| `src/data/version-matrix.yaml` | ROCm × engine × card (or “no data”) |
+| `data/runs/*.jsonl` | Official run cards — schema in `docs/amdai-bench-run.schema.json` |
+
+Add a dated note under `src/content/updates/` when a **line** changes (new Core SDK, new vLLM extras). Weekday procedure: [`docs/weekday-scrape.md`](docs/weekday-scrape.md).
 
 ## Run locally
-
-Requires **Node.js 22.12+**.
 
 ```bash
 npm install
 npm run dev
 ```
 
-Dev server: [http://127.0.0.1:43147](http://127.0.0.1:43147)
+The `dev` script binds to loopback on the port in `package.json` (43147). Copy [`.env.example`](.env.example) to `.env` only if you need optional flags or affiliate IDs. Leave flags at `0` for a pure static session.
 
 ```bash
-npm run build
-npm run preview
+npm test              # unit tests (tsx --test)
+npm run build         # compile, Pagefind, then QA gates
+npm run preview       # serve dist/ on the same loopback port
 ```
 
-`npm run build` runs Pagefind over `dist/`, then the site QA gate (`npm run qa:links` / `tsx src/scripts/check-site.ts`), the SEO gate (`npm run qa:seo` / `tsx src/scripts/check-seo.ts`), the accessibility gate (`npm run qa:a11y` / `tsx src/scripts/check-a11y.ts`), then the performance gate (`npm run qa:perf` / `tsx src/scripts/check-perf.ts`). The link gate checks every internal link, `#` anchor, image, OG image, and asset in the built HTML, sitemap and redirect targets included, plus an orphan and link-depth check: every sitemap page must be linked from another page and reachable within three clicks of the homepage. Content lint fails the build on sentence glue, leftover TODO/TBD/FIXME/changeme/lorem, broken tokens, empty table cells, banned model names, Q4-floor phrases, Q1/Q2 quants, RAM-offload pages missing “Minimum system RAM needed” or “RAM needed at full context”, and `og:site_name` that is not exactly `AMDai`. The SEO gate fails on missing or duplicate titles and descriptions, missing canonicals, missing OG images or `og:image:alt`, relative or 404 `og:image` / `twitter:image` URLs, a `twitter:card` other than `summary_large_image`, invalid JSON-LD (including price/rating fields), or a noindex URL in `sitemap.xml`. The a11y gate runs axe-core on every built page in dark and light themes and fails on serious or critical issues. The perf gate fails the build when a page exceeds the mobile CWV budget (content performance ≥ 90, LCP ≤ 2.5 s, CLS ≤ 0.1; calculator / Qwen table / search have a documented tool floor) or the per-page JS/CSS/image/font-preload byte budget. All four gates write dated reports under `artifacts/link-reports/`, `reports/`, and `/opt/cursor/artifacts/link-reports/`. Mobile screenshot helpers: `npm run qa:a11y:shots -- before` or `after`. For `npm run dev` after a build, `npm run index` copies the index to `public/pagefind`. Chromium is required for `qa:a11y` and `qa:perf` (`npx playwright install chromium`). Caddy cache headers for hashed `/_astro/` assets: [docs/deploy.md](docs/deploy.md). Baseline: [docs/perf-baseline.md](docs/perf-baseline.md).
+`npm run build` runs, in order: Astro → Pagefind → link/orphan QA → SEO QA → axe-core (dark + light) → mobile perf budget → PII denylist. Chromium is required for the a11y and perf gates (`npx playwright install chromium`).
 
-Outbound citations are a separate, network-using pass: `npm run check:links:external` (alias `npm run qa:links:external`). It is not part of the default build. It writes a dated report next to the internal one and does not remove citations. Flaky externals do not fail `npm run build`.
+Useful extras (not part of the default build):
 
-Public site URL is `https://amdai.net` (`site` in `astro.config.mjs`; override with `SITE_URL`). Default build is `ACCOUNTS_ENABLED=0` `FORUM_ENABLED=0` `NEWSLETTER_ENABLED=0` (static SSG, no database). Set `ACCOUNTS_ENABLED=1` for optional login, saved rigs, and `npm run notify`. Set `NEWSLETTER_ENABLED=1` (or accounts) for the email-only Lab Notes digest APIs. `NEWSLETTER_SEND` stays off; `npm run digest` drafts HTML + text under `artifacts/newsletter/` and only mails with `NEWSLETTER_SEND=1` plus `--send`. `FORUM_ENABLED=1` also requires accounts (same SQLite) and turns on `/forum`. Admins are the comma-separated list in `ADMIN_EMAILS`. Optional `MOD_EMAILS` promotes moderators. Optional `CONTACT_EMAIL` prints a mailto on `/contact`; unset or invalid renders no inbox.
-
-## Information architecture
-
-| URL | Section |
+| Command | Purpose |
 | --- | --- |
-| `/` | Home + living status card |
-| `/start` | Short hub — Ubuntu setup, measured recipe, benchmarks, optional Stack Lab |
-| `/setup` | First-run setup — Ubuntu 24.04+ measured path; Windows card links to `/setup/windows`; Ubuntu-based note for Mint / Pop!_OS / Kubuntu |
-| `/setup/windows` | Cited Windows ROCm + llama.cpp Vulkan first-run — not measured on the local desktop |
-| `/setup/fedora` | Cited Fedora distro ROCm + llama.cpp Vulkan — not verified on our rig |
-| `/setup/arch` | Cited Arch Wiki RADV + llama.cpp Vulkan — not verified on our rig |
-| `/gpus/strix-halo` | Cited Ryzen AI Max+ 395 / Strix Halo APU guide — shared memory, not measured on the local desktop |
-| `/stacks` | Recommended stack cards from the test rig |
-| `/qwen` | Master 3.6 / 3.8 comparison table — one row per model × quant, measured tok/s from run cards |
-| `/compare` | Cited 35B decisions from local desktop cards — one vs split, Q6 / Q5 / Q4 plus a Q3 estimate, Radeon vs NVIDIA |
-| `/compare/one-vs-two-gpu` | One R9700 vs split: decode, prefill, VRAM, system RAM |
-| `/compare/q4-q5-q6` | Same 35B quants side by side; Q3 column labeled estimate |
-| `/compare/radeon-vs-nvidia` | Cited Radeon vs NVIDIA for local-LLM shoppers — vendor specs, measured R9700, empty RTX speed until cited |
-| `/qwen36-dual` | 35B on two R9700s — split vs two copies, measured soak |
-| `/multi-gpu` | Dual / multi-GPU — when a second R9700 helps, llama.cpp flags, cited PCIe and PSU |
-| `/flash-daily` | Flash daily driver — Q3–Q6 VRAM + DDR5 offload at 262K |
-| `/flash-ram-offload` | Flash on DDR5 — system RAM at 262K, 128/192/256 kits, measured DIMM speed, expert-offload launch |
-| `/backends/strata` | Strata deep dive — expert cache, prefill limits, MTP is Q2 |
-| `/budget` | Setup by budget — size/speed, local/hybrid, standard/abliterated |
-| `/calculator` | Quant + Hardware Calculator — size a model, ask what a Radeon can run, or read a speed floor (Q3 through BF16, client-side) |
-| `/quants` | Q3–Q8, UD dynamic, KV types, why Q1/Q2 stay off |
-| `/gpus` | GPU directory — gfx IDs, VRAM, official ROCm rows, links to `/gpus/<id>` |
-| `/gpus/r9700` | Radeon AI PRO R9700 measured hero — 32 GB, 35B llama.cpp tables, Start → setup → recipe → Stack Lab |
-| `/gpus/rx-7900-xtx` | RX 7900 XTX consumer recipe sheet — 24 GB, gfx1100, calculator fit estimates; not measured on the local desktop |
-| `/gpus/rx-7900-xt` | RX 7900 XT consumer recipe sheet — 20 GB, gfx1100, calculator fit estimates; not measured on the local desktop |
-| `/gpus/rx-7800-xt` | RX 7800 XT consumer recipe sheet — 16 GB, gfx1101, calculator fit estimates; not measured on the local desktop |
-| `/gpus/<id>` | One card: recipe table, launch command, estimate sheet when listed, or “no tested recipe yet” |
-| `/models` | House Qwen models — daily drivers first; names without a cited row stay contribute |
-| `/models/qwen36` | Qwen3.6-35B-A3B recipe page — measured config table, RAM lines, llama.cpp launch, Stack Lab |
-| `/models/flash` | Qwen 3.8 Flash recipe page — cited Strata vs llama.cpp pair, two-card Q6, RAM lines |
-| `/recipes/<id>` | One launch: gates, command, RAM, withdrawal |
-| `/contribute` | Download recipe JSON (log required) |
-| `/wanted` | Card × model gaps — no bounty amounts |
-| `/credits` | Sybil / 0xSero MIT notice, local desktop first-party set, and Shannon’s cited lab write-up |
-| `/labs` | Community labs index — cited write-ups, not measured on the local desktop |
-| `/labs/shannon` | Shannon (@iamMrDuncan) How I run my Lab — cited, not measured by AMDai |
-| `/secure-lab` | Cited secure-lab layout — isolated enclave, Proxmox split, guardrails, separate NVMe, offsite backup |
-| `/autoresearch` | Cited amdai-bench idea — container per GPU, Prometheus/Grafana, bot steering; Thermite has no public repo here |
-| `/about` | Who runs AMDai, the published local desktop kit, editorial independence, affiliate links |
-| `/methodology` | How we test — amdai-bench/run@1 cards, labeled estimates, citations, corrections |
-| `/contact` | Honest routes — contribute, ROCm problems; email only if `CONTACT_EMAIL` is set |
-| `/terms` | Short terms of use — informational, no warranty, hardware/BIOS at your risk |
-| `/amdai-bench` | Schema hub — run@1 JSON, runs dump, links to results and methodology |
-| `/rss.xml` | Lab Notes RSS — blog posts, dated updates, and official run cards |
-| `/benchmarks/methodology` | Our pass/fail suite in our words |
-| `/recipes.json` | Stack Lab catalog — Q4+ recipes, llama.cpp first, no prices |
-| `/api/v1/catalog.json` | Static recipe catalog |
-| `/api/v1/gpus/<id>.json` | Per-card JSON |
-| `/api/v1/pick.json` | Static pick table (query strings are not evaluated here) |
-| `/stack-lab` | Radeon Stack Lab — Ubuntu 24.04+ companion (packages not published yet). Install, then Open in Stack Lab (`amdai-stack-lab:`) from Lab Notes |
-| `/rocm` | What is ROCm — multi-page consumer deep dive |
-| `/rocm/stack` | Layer-by-layer stack + mermaid diagram |
-| `/rocm/gfx` | GPU architectures, gfx IDs, HSA_OVERRIDE |
-| `/rocm/vulkan-hip` | ROCm vs Vulkan vs HIP for local LLMs |
-| `/rocm/versions` | Cadence, official vs works, 10.1, ROCm CLI |
-| `/rocm/history` | Cited timeline |
-| `/rocm/glossary` | Terms |
-| `/rocm/faq` | Misconceptions + FAQ |
-| `/rocm-problems` | Cited consumer ROCm problems + how you can help |
-| `/rocm-problems/{id}` | One problem, workaround, upstream, Discuss in forum |
-| `/rocm-problems/help` | Bug reports, nightlies, benches, AMD / GitHub |
-| `/rocm-problems/report` | Report template + collect-rocm-report.sh |
-| `/rocm-problems/works` | Works on my rig (saved-rig form) |
-| `/rocm-problems/contribute` | Contributor guidelines for this site |
-| `/backends` | Inference engines compared — table + flowchart, llama.cpp default |
-| `/benchmarks` | First-party tok/s from the R9700 rig — methodology + local desktop table |
-| `/results` | Official `amdai-bench/run@1` cards — credited to the submitter, page per run |
-| `/results/<id>` | One test-run card, including the exact launch command |
-| `/bios` | Motherboard BIOS for local AI on Radeon — cited chipset notes, empty board table |
-| `/backends/{id}` | Deep dive: architecture, ROCm, quants, install, sources |
-| `/software` | llama.cpp first; vLLM / Strata as tries |
-| `/abliterated` | Abliterated hub — vet files, catalog table, method/variant cards, llama.cpp notes |
-| `/forum` | Community forum (off unless `FORUM_ENABLED=1` with accounts) |
-| `/forum/rules` | Code of conduct (always static) |
-| `/forum/c/{slug}` | Category listing |
-| `/forum/t/{slug}` | Thread (SSR when the forum is on; no JS to read) |
-| `/forum/new` | New thread, optional saved-rig badge |
-| `/forum/search` | Title/body search |
-| `/forum/mod` | Reports + audit log (mods/admins) |
-| `/newsletter` | Email-only Lab Notes digest (double opt-in; no account) |
-| `/account` | Optional saved rigs (off unless `ACCOUNTS_ENABLED=1`) |
-| `/privacy` | What optional accounts and the digest store |
-| `/harnesses` | Harnesses & frontends — what to plug your local model into |
-| `/harnesses/agents` | Agent harnesses (Hermes used on our rig, OpenHands, Aider, …) |
-| `/harnesses/chat` | Chat UIs (Open WebUI, LM Studio, llama.cpp web UI, …) |
-| `/harnesses/image` | ComfyUI on ROCm |
-| `/harnesses/compare` | Comparison table |
-| `/harnesses/quiz` | Pick a harness (GET, no JS required) |
-| `/harnesses/connect` | Copy-paste :8080 / :8083 snippets |
-| `/harnesses/{id}` | One harness: endpoint, tools, ROCm notes, hybrid |
-| `/harnesses/herdr` | Herdr — lab-wide agent/machine access, cited from Shannon, not a /v1 client |
-| `/harnesses/coolify` | Coolify — self-hosted artifacts/dashboards, cited from Shannon, not a /v1 client |
-| `/hardware` | PSU, cooling, VRAM, and old/cheap AMD cards (Radeon VII not measured) |
-| `/tutorials` | How-tos |
-| `/troubleshoot` | Symptom-first consumer hub — grouped guided flows, `?q=` filter |
-| `/troubleshooting` | Common failures |
-| `/troubleshoot/errors` | Paste-a-log matcher, cited patterns |
-| `/updates` | Dated notes + RSS + version matrix |
-| `/search` | Pagefind (index built by `npm run build`) |
-| `/faq` | Consumer FAQ — About AMDai, GPU, quants, RAM, Open in Stack Lab, affiliates; sticky nav, `?q=` filter |
-| `/glossary` | Consumer jargon — A–Z, search, deep links; ROCm citations stay on `/rocm/glossary` |
-| `/accessibility` | What we test for keyboard, screen readers, and phones — report via /contact, /forum, or /contribute |
-| `/blog` | Longer posts + version-note index |
-| `/maintain` | Weekday scrape checklist |
-| `/disclosure` | Amazon Associates, Rakuten, B&H |
-| `/go/{retailer}/{product}` | Affiliate / storefront redirect |
+| `npm run check` | `astro check` |
+| `npm run test:e2e` | Playwright (expects a built `dist/`) |
+| `npm run qa:links:external` | Outbound citation check — network, non-blocking for `build` |
+| `npm run og` | Rebuild the OG PNG catalog |
+| `npm run index` | Copy a Pagefind index into `public/pagefind` for `npm run dev` after a build |
 
-`/local-ai` redirects to `/software`.
+Reports from the gates write under `artifacts/` and `reports/` (gitignored).
 
-## Living updates (edit these, not the layouts)
+## Deployment
 
-| File | Feeds |
-| --- | --- |
-| `src/data/what-works.yaml` | Home status card |
-| `src/data/qwen-recommendations.yaml` | Getting started / software / serve-Qwen |
-| `src/data/stacks.yaml` | `/stacks` cards |
-| `src/data/gpus.yaml` | GPU directory |
-| `src/data/abliterated.yaml` | Abliterated table + method/variant cards |
-| `src/data/stack-updates.yaml` | Cited stack updates matched to saved rigs |
-| `src/data/retailers.yaml` | Storefronts + Amazon tag `amdainet-20` + Rakuten site `amdainet` / SID `4763021` |
-| `src/data/products.yaml` | Check-price search URLs (no prices) |
-| `src/data/budget-tiers.yaml` | `/budget` tiers; USD bands stay TODO until cited |
-| `src/data/errors.yaml` | Cited troubleshooter patterns |
-| `src/data/troubleshoot.yaml` | Symptom-first `/troubleshoot` hub (needs_source rows excluded) |
-| `src/data/shannon-lab.yaml` | Shannon community-lab write-up — cited, not measured by AMDai |
-| `src/data/rocm-problems.yaml` | Cited `/rocm-problems` tracker (TODO if unverified) |
-| `src/data/harnesses.yaml` | Cited `/harnesses` catalog (no invented features) |
-| `src/data/backends.yaml` | `/backends` comparison + per-engine deep dives |
-| `src/data/local-desktop-dual.yaml` | `/qwen36-dual` two-card 35B soak |
-| `src/data/flash-daily.yaml` | `/flash-daily` Q3–Q6 RAM + measured Q6 |
-| `src/data/strata-deep.yaml` | `/backends/strata` deep dive + dated community cites |
-| `src/data/benchmarks.yaml` | `/benchmarks` first-party tok/s |
-| `data/runs/*.jsonl` | Official `amdai-bench/run@1` cards (overnight local desktop drops). Schema: `docs/amdai-bench-run.schema.json` |
-| `src/data/amdai-bench.v1.json` | Derived 35B-only compatibility snapshot — live `/amdai-bench.v1.json` comes from the run cards |
-| `src/data/bios.yaml` | `/bios` chipset notes + community board table |
-| `src/data/version-matrix.yaml` | ROCm × engine × card (or “no data”) |
+High level only — no hostnames, addresses, or secrets.
 
-Add a short dated note under `src/content/updates/` when a **line** changes (new Core SDK, new vLLM extras). Those render on `/rocm/versions` and the blog index.
+1. **Default path is static.** `ACCOUNTS_ENABLED=0`, `FORUM_ENABLED=0`, `NEWSLETTER_ENABLED=0` (the repo default) produces `dist/` with no database.
+2. **`npm run build` is the release artifact.** HTML, hashed `/_astro/` assets, self-hosted fonts, Pagefind, sitemap, and static `/api/v1/` JSON all land in `dist/`.
+3. **Serve `dist/` behind a reverse proxy** as a file root. Content-addressed `/_astro/` files and `/fonts/` can be cached as immutable. HTML, sitemaps, and the search index should revalidate so a new build is visible the same day.
+4. **Canonical URLs** use `SITE_URL` when set; otherwise the `site` value in `astro.config.mjs` (`https://amdai.net`).
+5. **Optional Node mode.** Turning on accounts or the newsletter switches Astro to the Node standalone adapter. That process needs a local env file (never committed), an `AUTH_SECRET` of at least 16 characters, and — if you want mail — SMTP settings from `.env.example`. Forum mode also requires accounts.
 
-Weekday procedure: [docs/weekday-scrape.md](docs/weekday-scrape.md) and `/maintain`.
-
-**Radeon Stack Lab** is a separate Ubuntu companion (Origin repo / local app — no public domain documented here). Profiles: `qwen-reliable` (daily driver), `qwen-fast-agent` (Flash). Keep its living catalog aligned with the YAML. Its **amdai-bench** emitter must write `amdai-bench/run@1` (see `npx tsx src/scripts/amdai-bench.ts`).
-
-## Authoring MDX
-
-| Folder | Routes |
-| --- | --- |
-| `src/content/guides/` | `/{id}` (`rocm.mdx`, `abliterated.mdx`, and `harnesses.mdx` are excluded) |
-| `src/content/tutorials/` | `/tutorials/{id}` |
-| `src/content/blog/` | `/blog/{id}` |
-| `src/content/updates/` | Cards on `/rocm/versions` and `/blog` |
-
-MDX can use `<Callout>`, `<QwenPicks />`, `<HouseRules />`, `<GpuDirectory />`, `<BuyButtons />`, and `<AbliteratedTable />` without imports.
-
-Nav lives in `src/lib/site.ts`. Calculator math lives in `src/lib/calculator.ts`. Affiliate wrappers live in `src/lib/affiliates.ts`. Setup: [docs/affiliates.md](docs/affiliates.md).
+Do not commit `.env`, SQLite files, or real affiliate / auth tokens. `.env.example` is the documented shape.
 
 ## Accuracy
 
-Product figures from AMD’s public pages are labeled. Publisher GGUF sizes are Hugging Face listings, not measured VRAM. ROCm 10.0 / 10.1 / vLLM pins are **dated snapshots**. Always re-check the live [ROCm matrix](https://rocm.docs.amd.com/projects/install-on-linux/en/latest/reference/system-requirements.html) and [vLLM GPU install](https://docs.vllm.ai/en/stable/getting_started/installation/gpu/index.html).
+Product figures from AMD’s public pages are labeled. Publisher GGUF sizes are Hugging Face listings, not measured VRAM. ROCm and vLLM pins are **dated snapshots**. Re-check the live [ROCm matrix](https://rocm.docs.amd.com/projects/install-on-linux/en/latest/reference/system-requirements.html) and [vLLM GPU install](https://docs.vllm.ai/en/stable/getting_started/installation/gpu/index.html) before you treat a pin as current.
+
+This repository does not invent tok/s, street prices, user counts, or a Stack Lab download URL.
+
+## License
+
+[MIT](LICENSE).
