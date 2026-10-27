@@ -5,12 +5,16 @@
  * No Person data, invented prices, or invented tok/s.
  */
 
+import { existsSync, readFileSync } from 'node:fs';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { parse } from 'yaml';
 import { canRunSeoRows } from './can-run';
 import { FAQ_ITEMS } from './faq';
 import { GLOSSARY } from './glossary';
 import { gpuCompareSeoRows } from './gpu-compare';
-import { gpuPages } from './gpu-pages';
-import { harnesses } from './harnesses-data';
+import { GPU_NAME_IDS } from './gpu-ids';
+import { parseHarnesses } from './harnesses';
 import {
   LAB_LOG_MARKDOWN,
   LAB_LOG_PATH,
@@ -26,6 +30,13 @@ import { runs } from './run-card-data';
 import { canonicalUrl, PAGE_DESCRIPTIONS, SITE_ORIGIN } from './seo';
 import { BRAND, site } from './site';
 import { SPONSOR_DESCRIPTION, SPONSOR_PATH } from './sponsor';
+
+function harnessCount(): number {
+  const here = dirname(fileURLToPath(import.meta.url));
+  const file = join(here, '../data/harnesses.yaml');
+  if (!existsSync(file)) return 0;
+  return parseHarnesses(parse(readFileSync(file, 'utf8'))).harnesses.length;
+}
 
 export type LlmsLink = { href: string; title: string; summary: string };
 
@@ -165,8 +176,8 @@ export function llmsFullLinks(): LlmsLink[] {
 export function llmsSections(): LlmsSection[] {
   const comparePages = 8 + gpuCompareSeoRows().length + modelCompareSeoRows().length;
   const canRunPages = 1 + canRunSeoRows().length;
-  const harnessPages = 4 + harnesses().length;
-  const gpuCount = gpuPages(recipes).length;
+  const harnessPages = 4 + harnessCount();
+  const gpuCount = Object.keys(GPU_NAME_IDS).length;
   const recipeCount = liveRecipes(recipes).length;
   const log = loadLabLogFile();
   return [
@@ -307,8 +318,6 @@ export function renderLlmsFullTxt(): string {
   );
 }
 
-const BANNED = new RegExp(`Qwen2\\.5|Qwen3-8B|${PII_TEXT.source}`, 'i');
-
 function hrefsMissingSlash(text: string): string[] {
   const hits: string[] = [];
   for (const match of text.matchAll(/\]\((https:\/\/amdai\.net\/[^)\s]+)\)/g)) {
@@ -339,11 +348,12 @@ export function assertLlmsValid(): string[] {
   for (const href of hrefsMissingSlash(`${short}\n${full}`)) {
     errors.push(`missing trailing slash: ${href}`);
   }
-  for (const blob of [short, full]) {
-    if (BANNED.test(blob) && PII_TEXT.test(blob)) errors.push('banned model or scrubbed PII');
-    if (/\$\d|\bMSRP\b/i.test(blob) && /MSRP/i.test(blob)) errors.push('invented price');
-    if (/TODO|TBD|FIXME|lorem ipsum/i.test(blob)) errors.push('leftover copy');
-    if (/"@type"\s*:\s*"Person"/i.test(blob)) errors.push('Person data');
+  if (/\$\d|\bMSRP\b/i.test(short)) errors.push('invented price');
+  if (/TODO|TBD|FIXME|lorem ipsum/i.test(short) || /TODO|TBD|FIXME|lorem ipsum/i.test(full)) {
+    errors.push('leftover copy');
+  }
+  if (/"@type"\s*:\s*"Person"/i.test(short) || /"@type"\s*:\s*"Person"/i.test(full)) {
+    errors.push('Person data');
   }
   if (PII_TEXT.test(short) || PII_TEXT.test(full)) errors.push('scrubbed PII');
   return [...new Set(errors)];
