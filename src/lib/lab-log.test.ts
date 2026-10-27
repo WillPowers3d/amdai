@@ -109,7 +109,7 @@ describe('lab log', () => {
     assert.match(page, /informative failures/i);
     assert.match(page, /not a status board/);
     assert.match(page, /staticLabLogEntries/);
-    assert.match(page, /lab-log\.md/);
+    assert.match(page, /LAB_LOG_MARKDOWN/);
     assert.match(page, /Failed/);
     assert.match(page, /Dual R9700 speed/);
     assert.match(page, /Idea lab/);
