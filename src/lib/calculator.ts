@@ -1168,6 +1168,124 @@ export const MODEL_PRESETS: ModelPreset[] = [
   },
 ];
 
+/**
+ * Visible picker order: Qwen 3.6 / 3.8 first, then models we actively run.
+ * Every MODEL_PRESETS id must appear here or in OLDER_MODEL_IDS.
+ */
+export const CURRENT_MODEL_PICKER_IDS = [
+  'qwen36',
+  'flash',
+  'qwen38-27b',
+  'qwen36-27b',
+  'glm-53-flash',
+  'gpt-oss-20b',
+  'gpt-oss-120b',
+  'custom',
+] as const satisfies readonly ModelId[];
+
+/**
+ * Catalog rows kept behind the Older models disclosure.
+ * Gemma (all sizes), Llama 3.x, and earlier Qwen 3 / 3.5 lines superseded by 3.6 / 3.8.
+ */
+export const OLDER_MODEL_IDS = [
+  'qwen35-27b',
+  'qwen35-9b',
+  'qwen3-32b',
+  'qwen3-14b',
+  'qwen3-30b-a3b',
+  'qwen3-235b-a22b',
+  'llama33-70b',
+  'llama31-70b',
+  'llama31-8b',
+  'gemma3-27b',
+  'gemma4-31b',
+  'gemma4-12b',
+] as const satisfies readonly ModelId[];
+
+const CURRENT_PICKER_RANK = new Map<string, number>(CURRENT_MODEL_PICKER_IDS.map((id, index) => [id, index]));
+
+export function isOlderModel(id: string | null | undefined): boolean {
+  return !!id && (OLDER_MODEL_IDS as readonly string[]).includes(id);
+}
+
+export function olderModelsOpenFor(id: string | null | undefined): boolean {
+  return isOlderModel(id);
+}
+
+/** Share-link helper: collapsed unless a listed query key names an older catalog row. */
+export function olderModelsOpenFromSearch(search: string, keys: readonly string[] = ['model']): boolean {
+  const raw = search.includes('?') ? search.slice(search.indexOf('?') + 1) : search;
+  const q = new URLSearchParams(raw);
+  return keys.some((key) => isOlderModel(q.get(key)));
+}
+
+export function sortCurrentPickerModels<T extends { id: string }>(models: T[]): T[] {
+  return [...models].sort((a, b) => {
+    const ia = CURRENT_PICKER_RANK.get(a.id) ?? Number.MAX_SAFE_INTEGER;
+    const ib = CURRENT_PICKER_RANK.get(b.id) ?? Number.MAX_SAFE_INTEGER;
+    return ia - ib;
+  });
+}
+
+export function partitionPickerIds<T extends string>(ids: readonly T[]): { current: T[]; older: T[] } {
+  return {
+    current: sortCurrentPickerModels(ids.filter((id) => !isOlderModel(id)).map((id) => ({ id }))).map((row) => row.id as T),
+    older: ids.filter((id) => isOlderModel(id)),
+  };
+}
+
+export function currentPickerPresets(): ModelPreset[] {
+  return sortCurrentPickerModels(MODEL_PRESETS.filter((model) => !isOlderModel(model.id)));
+}
+
+export function olderPickerPresets(): ModelPreset[] {
+  return MODEL_PRESETS.filter((model) => isOlderModel(model.id));
+}
+
+export function pickerPresetGroups(models: ModelPreset[]): Array<{ group: string; models: ModelPreset[] }> {
+  const groups: Array<{ group: string; models: ModelPreset[] }> = [];
+  for (const model of models) {
+    const last = groups[groups.length - 1];
+    if (last && last.group === model.group) last.models.push(model);
+    else groups.push({ group: model.group, models: [model] });
+  }
+  return groups;
+}
+
+/** Hide older <option>s until the disclosure is open. Selected older values stay set. */
+export function syncOlderModelOptions(select: HTMLSelectElement, open: boolean): void {
+  select.querySelectorAll<HTMLOptionElement>('[data-older-option]').forEach((option) => {
+    option.hidden = !open;
+  });
+  const group = select.querySelector<HTMLOptGroupElement>('[data-older-optgroup]');
+  if (group) group.hidden = !open;
+}
+
+export function bindOlderModelPickers(root: ParentNode = document): void {
+  root.querySelectorAll<HTMLElement>('[data-model-picker]').forEach((picker) => {
+    if (picker.dataset.olderBound === '1') return;
+    picker.dataset.olderBound = '1';
+    const details = picker.querySelector<HTMLDetailsElement>('[data-older-models]');
+    const selects = [...picker.querySelectorAll<HTMLSelectElement>('select')];
+    const sync = () => {
+      const open = Boolean(details?.open);
+      for (const select of selects) syncOlderModelOptions(select, open);
+    };
+    const openIfOlderSelected = () => {
+      if (details && selects.some((select) => isOlderModel(select.value))) details.open = true;
+    };
+    details?.addEventListener('toggle', sync);
+    selects.forEach((select) => {
+      select.addEventListener('change', () => {
+        openIfOlderSelected();
+        sync();
+      });
+    });
+    openIfOlderSelected();
+    sync();
+  });
+}
+
 export const CONTEXT_PRESETS = [2048, 4096, 8192, 16384, 32768, 65536, 131072, 262144, 524288] as const;
 
 export const DEFAULT_INPUT: CalcInput = {
@@ -2071,6 +2189,18 @@ export function catalogGuardErrors(): string[] {
   }
   const modelIds = new Set(MODEL_PRESETS.map((m) => m.id));
   if (modelIds.size !== MODEL_PRESETS.length) errors.push('duplicate model id');
+  const classified = new Set<string>([...CURRENT_MODEL_PICKER_IDS, ...OLDER_MODEL_IDS]);
+  if (classified.size !== CURRENT_MODEL_PICKER_IDS.length + OLDER_MODEL_IDS.length) {
+    errors.push('duplicate picker class id');
+  }
+  for (const model of MODEL_PRESETS) {
+    if (!classified.has(model.id)) errors.push(`model ${model.id} missing picker class`);
+  }
+  for (const id of classified) {
+    if (!modelIds.has(id)) errors.push(`picker class unknown model ${id}`);
+  }
+  if (DEFAULT_INPUT.modelId !== 'qwen36') errors.push('default model must stay qwen36');
+  if (isOlderModel(DEFAULT_INPUT.modelId)) errors.push('default model must not be older');
   return errors;
 }
 
