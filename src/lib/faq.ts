@@ -832,7 +832,7 @@ export const FAQ_ENTRIES: FaqItem[] = [
     group: 'models-quants',
     question: 'Where do I read AMDai lab results and failures?',
     answer:
-      'The /lab-log page is a public results log of measured and cited findings, plus informative failures, from Dual R9700 speed — Q4/Q5/Q6 Flash-class models on two R9700s — and the hourly Idea lab. It is not a status board. Empty cells stay empty. No invented tok/s. The page reads /data/lab-log.json in the browser so a server can refresh it without a rebuild.',
+      'The /lab-log page is a public results log of measured and cited findings, plus informative failures, from Dual R9700 speed — Q4/Q5/Q6 Flash-class models on two R9700s — and the hourly Idea lab. It is not a status board. Empty cells stay empty. No invented tok/s. Entries are rendered into the HTML at build time from the repo snapshot. The page also reads /data/lab-log.json in the browser so a server can refresh newer live rows without a rebuild.',
     links: [
       { href: '/lab-log', label: 'Lab log' },
       { href: '/results', label: 'Run cards' },

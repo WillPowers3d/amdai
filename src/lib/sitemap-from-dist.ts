@@ -17,7 +17,7 @@ import {
   type DistIndex,
 } from './site-qa';
 
-export const EXTRA_SITEMAP_PATHS = ['/rss.xml', '/new-models/rss.xml'] as const;
+export const EXTRA_SITEMAP_PATHS = ['/rss.xml', '/new-models/rss.xml', '/lab-log.md', '/lab-log/rss.xml', '/llms.txt', '/llms-full.txt'] as const;
 
 export type SitemapEntry = {
   path: string;

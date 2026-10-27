@@ -45,12 +45,19 @@ describe('sitemap from built pages', () => {
     assert.ok(!paths.includes('/search'));
     assert.equal(isSitemapExcluded('/troubleshoot'), false);
     assert.equal(isSitemapExcluded('/setup/windows'), false);
-    assert.deepEqual(EXTRA_SITEMAP_PATHS, ['/rss.xml', '/new-models/rss.xml']);
+    assert.deepEqual(EXTRA_SITEMAP_PATHS, [
+      '/rss.xml',
+      '/new-models/rss.xml',
+      '/lab-log.md',
+      '/lab-log/rss.xml',
+      '/llms.txt',
+      '/llms-full.txt',
+    ]);
 
     const xml = readFileSync(join(root, 'sitemap-0.xml'), 'utf8');
     const locs = extractSitemapLocs(xml);
-    assert.ok(locs.includes('https://amdai.net/troubleshoot'));
-    assert.ok(locs.includes('https://amdai.net/setup/windows'));
+    assert.ok(locs.includes('https://amdai.net/troubleshoot/'));
+    assert.ok(locs.includes('https://amdai.net/setup/windows/'));
     assert.ok(locs.includes('https://amdai.net/rss.xml'));
     assert.ok(!locs.includes('https://amdai.net/search'));
     assert.match(xml, /<lastmod>/);

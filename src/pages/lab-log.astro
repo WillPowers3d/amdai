@@ -7,37 +7,28 @@ import {
   LAB_LOG_JSON,
   LAB_LOG_KICKER,
   LAB_LOG_KINDS,
+  LAB_LOG_MARKDOWN,
   LAB_LOG_PATH,
   LAB_LOG_TITLE,
   dayKey,
   entryAnchor,
   groupLabLogByDay,
   kindLabel,
+  labLogAsOfDay,
   loadLabLogFile,
   projectLabel,
   projectsOf,
+  setupRows,
+  staticLabLogEntries,
 } from '../lib/lab-log';
 
 const file = loadLabLogFile();
 const fallback = JSON.stringify(file).replaceAll('<', '\\u003c');
-const days = groupLabLogByDay(file.entries);
+const staticEntries = staticLabLogEntries(file);
+const days = groupLabLogByDay(staticEntries);
 const projects = projectsOf(file);
-const asOf = file.as_of ? file.as_of.slice(0, 10) : '';
-const empty = file.entries.length === 0;
-
-function setupRows(setup: NonNullable<(typeof file.entries)[number]['setup']>) {
-  return (
-    [
-      ['Model', setup.model],
-      ['Quant', setup.quant],
-      ['Engine', setup.engine],
-      ['Engine version', setup.engine_version],
-      ['GPUs', setup.gpus],
-      ['Context', setup.context],
-      ['Flags', setup.flags],
-    ] as const
-  ).filter((row) => row[1]);
-}
+const asOf = labLogAsOfDay(file);
+const empty = staticEntries.length === 0;
 ---
 
 <Base title={LAB_LOG_TITLE} description={LAB_LOG_DESCRIPTION}>
@@ -53,12 +44,16 @@ function setupRows(setup: NonNullable<(typeof file.entries)[number]['setup']>) {
     </p>
     <p class="mt-3 text-sm text-muted">
       <span id="ll-asof">
-        {empty ? 'The log is starting.' : `${file.entries.length} findings · as of ${asOf || 'this build'}.`}
+        {empty ? 'The log is starting.' : `${staticEntries.length} findings · as of ${asOf || 'this build'}.`}
       </span>
-      The page reads
+      Entries below are rendered at build time from the repo snapshot so crawlers that do not run JavaScript can read them.
+      The page also reads
       <a class="underline decoration-accent/40" href={LAB_LOG_JSON}>{LAB_LOG_JSON}</a>
-      in the browser so a server cron can refresh it without a rebuild.
-      This build ships an empty seed; live entries come from that JSON.
+      in the browser to pick up newer live rows without a rebuild. Deploys keep the server's live /data/ file.
+      Full text:
+      <a class="underline decoration-accent/40" href={LAB_LOG_MARKDOWN}>{LAB_LOG_MARKDOWN}</a>
+      ·
+      <a class="underline decoration-accent/40" href="/lab-log/rss.xml">RSS</a>.
     </p>
     <p class="mt-5 flex flex-wrap gap-3">
       <a class="btn-secondary" href="/results">Run cards</a>
@@ -254,17 +249,30 @@ function setupRows(setup: NonNullable<(typeof file.entries)[number]['setup']>) {
 
   function setupRows(setup?: Record<string, string | undefined>) {
     if (!setup) return [];
-    return (
-      [
-        ['Model', setup.model],
-        ['Quant', setup.quant],
-        ['Engine', setup.engine],
-        ['Engine version', setup.engine_version],
-        ['GPUs', setup.gpus],
-        ['Context', setup.context],
-        ['Flags', setup.flags],
-      ] as Array<[string, string | undefined]>
-    ).filter((row): row is [string, string] => Boolean(row[1]));
+    const order = ['model', 'quant', 'engine', 'engine_version', 'gpus', 'context', 'flags'];
+    const labels: Record<string, string> = {
+      model: 'Model',
+      quant: 'Quant',
+      engine: 'Engine',
+      engine_version: 'Engine version',
+      gpus: 'GPUs',
+      context: 'Context',
+      flags: 'Flags',
+    };
+    const rows: Array<[string, string]> = [];
+    const seen = new Set<string>();
+    for (const key of order) {
+      const value = setup[key];
+      if (!value) continue;
+      rows.push([labels[key] || key, value]);
+      seen.add(key);
+    }
+    for (const [key, value] of Object.entries(setup)) {
+      if (seen.has(key) || !value) continue;
+      const label = key.replace(/[_-]+/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+      rows.push([label, value]);
+    }
+    return rows;
   }
 
   function visible(entry: Entry): boolean {

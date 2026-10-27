@@ -143,6 +143,41 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+/* Source order is skip-link, main, chrome, footer so crawlers hit content first.
+   Flex order keeps the visual header at the top. */
+.page-body {
+  display: flex;
+  flex-direction: column;
+}
+
+.page-body > .skip-link {
+  order: 0;
+}
+
+.page-chrome {
+  order: 1;
+}
+
+.page-main {
+  order: 2;
+  min-width: 0;
+}
+
+.page-foot {
+  order: 3;
+}
+
+.page-updated {
+  margin: 0;
+  padding: 0.7rem 0;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--faint);
+  white-space: nowrap;
+}
+
 ::selection {
   background: color-mix(in srgb, var(--accent) 35%, transparent);
   color: var(--ink);

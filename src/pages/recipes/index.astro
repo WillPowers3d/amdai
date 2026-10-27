@@ -1,0 +1,58 @@
+---
+import Base from '../../layouts/Base.astro';
+import HowWeTest from '../../components/HowWeTest.astro';
+import NextSteps from '../../components/NextSteps.astro';
+import RecipeTable from '../../components/RecipeTable.astro';
+import { liveRecipes, recipesForCard } from '../../lib/recipes';
+import { recipes } from '../../lib/recipes-data';
+import { gpuPages } from '../../lib/gpu-pages';
+
+const live = liveRecipes(recipes);
+const cards = gpuPages(recipes).filter((card) => recipesForCard(recipes, card.id).length);
+---
+
+<Base
+  title="Recipes"
+  description="First-party Radeon launch recipes: one model on one card with ROCm metadata, a sourced proof, and the exact launch command. llama.cpp first. No invented tok/s."
+>
+  <main id="main" class="mx-auto max-w-6xl px-4 py-10 sm:px-6">
+    <p class="kicker">First-party launch recipes</p>
+    <h1 class="display mt-3 text-4xl sm:text-5xl">Recipes</h1>
+    <p class="mt-4 max-w-3xl text-lg leading-relaxed text-muted">
+      One model on one card, with ROCm metadata and a sourced proof. llama.cpp is the consumer default.
+      Decode cells stay empty until a sourced run exists. Q3 is labeled estimate or community unless we measured it.
+      Q1/Q2 stay off.
+    </p>
+    <p class="mt-3 text-sm text-muted">
+      {live.length} live recipes · catalog also at
+      <a class="underline decoration-accent/40" href="/recipes.json">/recipes.json</a>.
+    </p>
+    <div class="mt-4">
+      <HowWeTest />
+    </div>
+    <p class="mt-6 flex flex-wrap gap-3">
+      <a class="btn-secondary" href="/models">Models</a>
+      <a class="btn-secondary" href="/gpus">GPU directory</a>
+      <a class="btn-ghost" href="/calculator">Calculator</a>
+      <a class="btn-ghost" href="/stack-lab">Stack Lab</a>
+    </p>
+
+    <div class="mt-10 grid gap-8">
+      {cards.map((card) => {
+        const rows = recipesForCard(recipes, card.id);
+        return (
+          <section class="card p-5 sm:p-6" aria-labelledby={`recipe-card-${card.id}`}>
+            <p class="kicker">{card.id} · {card.gfx}</p>
+            <h2 id={`recipe-card-${card.id}`} class="mt-1 text-2xl tracking-tight">
+              <a class="underline decoration-accent/40" href={`/gpus/${card.id}`}>{card.name}</a>
+            </h2>
+            <div class="mt-5">
+              <RecipeTable recipes={rows} empty="No tested recipe yet — contribute." />
+            </div>
+          </section>
+        );
+      })}
+    </div>
+    <NextSteps path="/recipes" />
+  </main>
+</Base>

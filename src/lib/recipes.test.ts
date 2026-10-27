@@ -170,3 +170,15 @@ describe('wanted board and nav', () => {
     }
   });
 });
+
+describe('recipes index', () => {
+  it('ships a /recipes hub that lists live recipes', () => {
+    const page = readFileSync(new URL('../pages/recipes/index.astro', import.meta.url), 'utf8');
+    assert.match(page, /<h1/);
+    assert.match(page, /Recipes/);
+    assert.match(page, /RecipeTable/);
+    assert.match(page, /liveRecipes/);
+    assert.match(page, /NextSteps/);
+    assert.ok(recipes.length >= 1);
+  });
+});

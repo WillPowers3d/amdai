@@ -36,8 +36,10 @@ describe('SEO helpers', () => {
     assert.equal(isSitemapExcluded('/results'), false);
     assert.equal(isSitemapExcluded('/newsletter'), false);
     assert.equal(isSitemapExcluded('/newsletter/confirm'), true);
-    assert.equal(canonicalUrl('/faq'), `${SITE_ORIGIN}/faq`);
+    assert.equal(canonicalUrl('/faq'), `${SITE_ORIGIN}/faq/`);
     assert.equal(canonicalUrl('/'), `${SITE_ORIGIN}/`);
+    assert.equal(canonicalUrl('/llms.txt'), `${SITE_ORIGIN}/llms.txt`);
+    assert.equal(canonicalUrl('/lab-log.md'), `${SITE_ORIGIN}/lab-log.md`);
     assert.match(SEARCH_ACTION_TEMPLATE, /\/search\?q=\{search_term_string\}/);
   });
 
