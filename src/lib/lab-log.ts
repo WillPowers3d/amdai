@@ -272,6 +272,12 @@ export function staticLabLogEntries(file: LabLogFile): LabLogEntry[] {
   return file.entries.filter(isLabLogHtmlSafe);
 }
 
+/** Prefer the copy with more rows (live /data/ over an empty deploy seed). */
+export function richerLabLog(a: LabLogFile, b: LabLogFile): LabLogFile {
+  if (b.entries.length !== a.entries.length) return b.entries.length > a.entries.length ? b : a;
+  return (b.as_of || '') > (a.as_of || '') ? b : a;
+}
+
 export function labLogAsOfDay(file: LabLogFile): string {
   const fromAsOf = dayKey(file.as_of);
   const latest = file.entries[0] ? dayKey(file.entries[0].date) : '';

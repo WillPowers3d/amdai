@@ -412,6 +412,10 @@ const empty = staticEntries.length === 0;
       if (!res.ok) return;
       const live = (await res.json()) as FileShape;
       if (!Array.isArray(live?.entries)) return;
+      const current = file.entries?.length ?? 0;
+      const incoming = live.entries.length;
+      if (incoming < current) return;
+      if (incoming === current && (live.as_of || '') <= (file.as_of || '')) return;
       render(live);
     } catch {
       /* keep static fallback */
