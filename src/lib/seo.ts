@@ -714,7 +714,7 @@ setMeta(
   'Radeon AI PRO R9700',
   'Measured 35B llama.cpp on the Radeon AI PRO R9700 — 32 GB VRAM, one GPU vs two, cited decode and prefill from local desktop run cards.',
 );
-setDate('/gpus/r9700', '2026-10-13');
+setDate('/gpus/r9700', '2026-10-13', '2026-10-27');
 setMeta(
   '/gpus/strix-halo',
   'Ryzen AI Max / Strix Halo',
@@ -937,7 +937,7 @@ setMeta(
   'Hardware and power',
   'PSU, cooling, noise, and VRAM versus model size for a home Radeon AI box. Cited or not recorded.',
 );
-setDate('/hardware', '2026-10-13');
+setDate('/hardware', '2026-10-13', '2026-10-27');
 setMeta(
   '/labs',
   'Community labs',
