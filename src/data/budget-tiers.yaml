@@ -1,7 +1,8 @@
-# Setup-by-budget tiers. Price bands stay not recorded until a cited street-price
-# source exists. Never invent USD. Buttons say “Check price.”
-as_of: 2026-10-12
-price_label: approximate, check current price — not a live or stale quote
+# Setup-by-budget tiers. R9700 GPU bands are filled at load from
+# src/data/r9700-street-price.yaml. Starter / Mid stay not recorded until cited.
+# Never invent USD. Buttons say “Check price.”
+as_of: 2026-10-27
+price_label: approximate GPU-only US street, before tax — dated snapshot, not a live quote
 
 tiers:
   - id: starter
@@ -12,7 +13,7 @@ tiers:
     vram_note: "~16 GB (RX 9070 XT or RX 7800 XT)"
     usd_band:
       status: todo
-      label: "not recorded: no cited street-price source as of 2026-10-12"
+      label: "not recorded: no cited street-price source as of 2026-10-27"
       usd_low: null
       usd_high: null
     gpus:
@@ -67,7 +68,7 @@ tiers:
     vram_note: "~20–24 GB (RX 7900 XT or RX 7900 XTX)"
     usd_band:
       status: todo
-      label: "not recorded: no cited street-price source as of 2026-10-12"
+      label: "not recorded: no cited street-price source as of 2026-10-27"
       usd_low: null
       usd_high: null
     gpus:
@@ -115,10 +116,10 @@ tiers:
     tagline: One 32 GB R9700
     vram_note: 32 GB (one Radeon AI PRO R9700)
     usd_band:
-      status: todo
-      label: "not recorded: no cited street-price source as of 2026-10-12"
-      usd_low: null
-      usd_high: null
+      status: cited
+      label: "One R9700 ≈ $1,950–$2,000 (GPU only, US street, new, before tax, checked 2026-10-27; AMD MSRP $1,299)"
+      usd_low: 1950
+      usd_high: 2000
     gpus:
       - r9700
     parts:
@@ -163,10 +164,10 @@ tiers:
     tagline: Two R9700 + 128–256 GB DDR5
     vram_note: 2 × 32 GB (our test rig). Daily driver still uses one card.
     usd_band:
-      status: todo
-      label: "not recorded: no cited street-price source as of 2026-10-12"
-      usd_low: null
-      usd_high: null
+      status: cited
+      label: "Two R9700s ≈ $3,900–$4,000 (GPU only, US street, new, before tax, checked 2026-10-27; AMD MSRP $1,299 each)"
+      usd_low: 3900
+      usd_high: 4000
     gpus:
       - r9700
     parts:

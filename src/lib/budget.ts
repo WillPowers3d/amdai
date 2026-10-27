@@ -1,5 +1,10 @@
 import { parse } from 'yaml';
 import budgetRaw from '../data/budget-tiers.yaml?raw';
+import {
+  R9700_STREET_CHECKED,
+  R9700_STREET_PRICE_LABEL,
+  streetBandForTier,
+} from './r9700-street-price';
 
 export type UsdBand = {
   status: 'todo' | 'cited';
@@ -66,7 +71,19 @@ export type BudgetFile = {
   upgrade: UpgradePath;
 };
 
-export const budgetFile = parse(budgetRaw) as BudgetFile;
+function withStreetBands(file: BudgetFile): BudgetFile {
+  return {
+    ...file,
+    as_of: R9700_STREET_CHECKED,
+    price_label: R9700_STREET_PRICE_LABEL,
+    tiers: file.tiers.map((tier) => {
+      const band = streetBandForTier(tier.id);
+      return band ? { ...tier, usd_band: band } : tier;
+    }),
+  };
+}
+
+export const budgetFile = withStreetBands(parse(budgetRaw) as BudgetFile);
 export const budgetTiers = [...budgetFile.tiers].sort((a, b) => a.order - b.order);
 
 export function tierBySlider(value: number): BudgetTier {
@@ -87,6 +104,14 @@ export function tierForUsd(usd: number): BudgetTier | undefined {
   });
 }
 
+export function bandIsCited(band: UsdBand): boolean {
+  return band.status === 'cited' && band.usd_low != null && band.usd_high != null;
+}
+
 export function bandsReady(): boolean {
-  return budgetTiers.every((tier) => tier.usd_band.status === 'cited' && tier.usd_band.usd_low != null && tier.usd_band.usd_high != null);
+  return budgetTiers.every((tier) => bandIsCited(tier.usd_band));
+}
+
+export function hasCitedBands(): boolean {
+  return budgetTiers.some((tier) => bandIsCited(tier.usd_band));
 }

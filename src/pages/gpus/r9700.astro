@@ -39,6 +39,11 @@ import {
   r9700OneVsTwo,
   r9700RamKitRows,
 } from '../../lib/r9700';
+import {
+  R9700_STREET_LOG_HREF,
+  R9700_STREET_POLICY,
+  R9700_STREET_SNAPSHOT,
+} from '../../lib/r9700-street-price';
 
 const page = gpuPageById(recipes, 'r9700');
 if (!page) throw new Error('missing r9700 GPU page');
@@ -480,11 +485,16 @@ const dailyRam = dailyRecipe ? recipeSystemRam(dailyRecipe, measuredRamHits) : n
           </li>
         ))}
       </ul>
-      <div class="mt-10">
+      <p class="mt-10 max-w-3xl text-sm leading-relaxed text-muted">
+        {R9700_STREET_SNAPSHOT} Prices move daily — see the
+        <a class="underline decoration-accent/40" href={R9700_STREET_LOG_HREF}>price log</a>
+        for the full table.
+      </p>
+      <div class="mt-6">
         <BuyButtons products={['r9700']} heading={R9700_NAME} />
       </div>
       <p class="mt-4 text-sm text-faint">
-        No live or invented prices. Retailer hops use the existing
+        {R9700_STREET_POLICY} Retailer hops use the existing
         <a class="underline decoration-accent/40" href="/disclosure">disclosure</a> path.
       </p>
     </section>
