@@ -5,6 +5,8 @@ import HowWeTest from '../../components/HowWeTest.astro';
 import NewsletterSignup from '../../components/NewsletterSignup.astro';
 import NextSteps from '../../components/NextSteps.astro';
 import OpenInStackLab from '../../components/OpenInStackLab.astro';
+import OlderModelsToggle from '../../components/OlderModelsToggle.astro';
+import { olderModelsOpenFromSearch, partitionPickerIds } from '../../lib/calculator';
 import {
   MODEL_COMPARE_ENGINE,
   MODEL_COMPARE_HUB_LEAD,
@@ -20,6 +22,8 @@ import { HOUSE_STACK_LAB } from '../../lib/stack-lab-open';
 const cards = modelCompareHubCards();
 const sides = MODEL_COMPARE_IDS.map((id) => modelCompareSide(id));
 const picked = parseModelComparePicker(Astro.url.search);
+const pickerModels = partitionPickerIds(MODEL_COMPARE_IDS);
+const olderOpen = olderModelsOpenFromSearch(Astro.url.search, ['a', 'b']);
 const pickedHref = picked.href;
 const pickedLabel =
   picked.a && picked.b
@@ -56,25 +60,42 @@ const pickedLabel =
           The form works without JavaScript: submit to land on this page with a link to the pair.
           With JS, the same controls open the shareable pair URL directly.
         </p>
-        <div class="mt-5 grid gap-4 sm:grid-cols-2">
-          <label class="block text-sm">
-            <span class="text-faint">Model A</span>
-            <select name="a" class="field mt-1">
-              {sides.map((side) => (
-                <option value={side.id} selected={picked.a === side.id}>{side.shortName}</option>
-              ))}
-            </select>
-          </label>
-          <label class="block text-sm">
-            <span class="text-faint">Model B</span>
-            <select name="b" class="field mt-1">
-              {sides.map((side) => (
-                <option value={side.id} selected={picked.b === side.id || (!picked.b && side.id === 'glm-53-flash')}>
-                  {side.shortName}
-                </option>
-              ))}
-            </select>
-          </label>
+        <div class="mt-5" data-model-picker>
+          <div class="grid gap-4 sm:grid-cols-2">
+            <label class="block text-sm">
+              <span class="text-faint">Model A</span>
+              <select name="a" class="field mt-1">
+                {pickerModels.current.map((id) => (
+                  <option value={id} selected={picked.a === id}>{MODEL_COMPARE_SHORT[id]}</option>
+                ))}
+                <optgroup label="Older models" data-older-optgroup>
+                  {pickerModels.older.map((id) => (
+                    <option value={id} data-older-option selected={picked.a === id}>
+                      {MODEL_COMPARE_SHORT[id]}
+                    </option>
+                  ))}
+                </optgroup>
+              </select>
+            </label>
+            <label class="block text-sm">
+              <span class="text-faint">Model B</span>
+              <select name="b" class="field mt-1">
+                {pickerModels.current.map((id) => (
+                  <option value={id} selected={picked.b === id || (!picked.b && id === 'glm-53-flash')}>
+                    {MODEL_COMPARE_SHORT[id]}
+                  </option>
+                ))}
+                <optgroup label="Older models" data-older-optgroup>
+                  {pickerModels.older.map((id) => (
+                    <option value={id} data-older-option selected={picked.b === id}>
+                      {MODEL_COMPARE_SHORT[id]}
+                    </option>
+                  ))}
+                </optgroup>
+              </select>
+            </label>
+          </div>
+          <OlderModelsToggle open={olderOpen} />
         </div>
         <button class="btn-primary mt-5" type="submit">Compare</button>
       </fieldset>
@@ -167,6 +188,8 @@ const pickedLabel =
 </Base>
 
 <script>
+  import { bindOlderModelPickers } from '../../lib/calculator';
+  bindOlderModelPickers();
   const form = document.getElementById('model-compare-picker');
   if (form instanceof HTMLFormElement) {
     const slugs: Record<string, string> = {

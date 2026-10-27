@@ -1,6 +1,8 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { parse } from 'yaml';
 import {
   BACKENDS,
@@ -10,7 +12,13 @@ import {
   DIMM_KIT_GB,
   MEASURED_ON_OUR_RIG,
   MODEL_PRESETS,
+  OLDER_MODEL_IDS,
   QUANTS,
+  currentPickerPresets,
+  isOlderModel,
+  olderModelsOpenFromSearch,
+  olderPickerPresets,
+  partitionPickerIds,
   LOCAL_DESKTOP_DDR5_GB,
   LOCAL_DESKTOP_USABLE_RAM_GB,
   roundUpToDimmKitGb,
@@ -151,6 +159,62 @@ describe('calculator catalog guards', () => {
     assert.ok(ids.includes('qwen36-27b'));
     assert.ok(ids.includes('glm-53-flash'));
     assert.ok(ids.includes('llama33-70b'));
+  });
+
+  it('puts Qwen 3.6 / 3.8 and live house models first, and hides older families by default', () => {
+    const current = currentPickerPresets().map((model) => model.id);
+    const older = olderPickerPresets().map((model) => model.id);
+    assert.deepEqual(current.slice(0, 5), ['qwen36', 'flash', 'qwen38-27b', 'qwen36-27b', 'glm-53-flash']);
+    assert.ok(current.includes('gpt-oss-20b'));
+    assert.ok(current.includes('custom'));
+    assert.equal(DEFAULT_INPUT.modelId, 'qwen36');
+    assert.equal(isOlderModel(DEFAULT_INPUT.modelId), false);
+    assert.equal(olderModelsOpenFromSearch(''), false);
+    assert.equal(olderModelsOpenFromSearch('?gpu=r9700&model=qwen36&quant=q5_k_m'), false);
+    assert.equal(olderModelsOpenFromSearch(inputToQuery(DEFAULT_INPUT)), false);
+    const catalogIds = MODEL_PRESETS.map((model) => model.id);
+    for (const id of ['gemma3-27b', 'gemma4-31b', 'gemma4-12b', 'llama33-70b', 'llama31-8b', 'qwen35-27b', 'qwen3-32b'] as const) {
+      assert.ok(older.includes(id), id);
+      assert.ok(catalogIds.includes(id), id);
+    }
+    assert.equal(current.length + older.length, MODEL_PRESETS.length);
+    assert.equal(older.length, OLDER_MODEL_IDS.length);
+    const canRun = partitionPickerIds([
+      'qwen36',
+      'flash',
+      'gpt-oss-20b',
+      'gemma3-27b',
+      'llama33-70b',
+      'glm-53-flash',
+      'qwen36-27b',
+      'qwen38-27b',
+    ]);
+    assert.deepEqual(canRun.current, ['qwen36', 'flash', 'qwen38-27b', 'qwen36-27b', 'glm-53-flash', 'gpt-oss-20b']);
+    assert.deepEqual(canRun.older, ['gemma3-27b', 'llama33-70b']);
+  });
+
+  it('opens the Older models disclosure when a share link names a hidden row', () => {
+    const shared = queryToInput('?model=gemma3-27b&quant=q4_k_m&ctx=8192');
+    assert.equal(shared.modelId, 'gemma3-27b');
+    assert.equal(isOlderModel(shared.modelId), true);
+    assert.equal(olderModelsOpenFromSearch('?model=gemma3-27b&quant=q4_k_m&ctx=8192'), true);
+    assert.equal(olderModelsOpenFromSearch(inputToQuery(shared)), true);
+    assert.equal(olderModelsOpenFromSearch('/calculator?model=llama33-70b'), true);
+    assert.equal(olderModelsOpenFromSearch('?a=qwen36&b=gemma3-27b', ['a', 'b']), true);
+    assert.equal(olderModelsOpenFromSearch('?a=qwen36&b=glm-53-flash', ['a', 'b']), false);
+    assert.equal(olderModelsOpenFromSearch('?model=qwen35-9b'), true);
+    assert.equal(queryToInput('?model=llama31-8b').modelId, 'llama31-8b');
+    const here = dirname(fileURLToPath(import.meta.url));
+    const calcPage = readFileSync(join(here, '../pages/calculator.astro'), 'utf8');
+    const canRunPage = readFileSync(join(here, '../pages/can-run/index.astro'), 'utf8');
+    const comparePage = readFileSync(join(here, '../pages/compare/models.astro'), 'utf8');
+    for (const page of [calcPage, canRunPage, comparePage]) {
+      assert.match(page, /OlderModelsToggle/);
+      assert.match(page, /olderModelsOpenFromSearch/);
+      assert.match(page, /data-older-optgroup/);
+      assert.match(page, /data-older-option/);
+      assert.match(page, /bindOlderModelPickers/);
+    }
   });
 });
 

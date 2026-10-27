@@ -5,6 +5,7 @@ import HowWeTest from '../../components/HowWeTest.astro';
 import NewsletterSignup from '../../components/NewsletterSignup.astro';
 import NextSteps from '../../components/NextSteps.astro';
 import OpenInStackLab from '../../components/OpenInStackLab.astro';
+import OlderModelsToggle from '../../components/OlderModelsToggle.astro';
 import {
   CAN_RUN_ENGINE,
   CAN_RUN_GPU_IDS,
@@ -19,6 +20,7 @@ import {
   canRunHubRows,
   parseCanRunPicker,
 } from '../../lib/can-run';
+import { olderModelsOpenFromSearch, partitionPickerIds } from '../../lib/calculator';
 import { RAM_FULL_LABEL, RAM_MIN_LABEL } from '../../lib/ram-surfaces';
 import { HOUSE_STACK_LAB } from '../../lib/stack-lab-open';
 
@@ -26,6 +28,8 @@ const rows = canRunHubRows();
 const gpus = canRunGpuColumns();
 const faq = canRunHubFaq();
 const picked = parseCanRunPicker(Astro.url.search);
+const pickerModels = partitionPickerIds(CAN_RUN_MODEL_IDS);
+const olderOpen = olderModelsOpenFromSearch(Astro.url.search);
 const pickedHref = picked.href;
 const pickedLabel =
   picked.model && picked.gpu
@@ -74,16 +78,30 @@ const pickedLabel =
               ))}
             </select>
           </label>
-          <label class="block text-sm">
-            <span class="text-faint">Model</span>
-            <select name="model" class="field mt-1">
-              {CAN_RUN_MODEL_IDS.map((id) => (
-                <option value={id} selected={picked.model === id || (!picked.model && id === 'qwen36')}>
-                  {CAN_RUN_MODEL_SHORT[id]}
-                </option>
-              ))}
-            </select>
-          </label>
+          <div class="block text-sm" data-model-picker>
+            <label class="block">
+              <span class="text-faint">Model</span>
+              <select name="model" class="field mt-1">
+                {pickerModels.current.map((id) => (
+                  <option value={id} selected={picked.model === id || (!picked.model && id === 'qwen36')}>
+                    {CAN_RUN_MODEL_SHORT[id]}
+                  </option>
+                ))}
+                <optgroup label="Older models" data-older-optgroup>
+                  {pickerModels.older.map((id) => (
+                    <option
+                      value={id}
+                      data-older-option
+                      selected={picked.model === id}
+                    >
+                      {CAN_RUN_MODEL_SHORT[id]}
+                    </option>
+                  ))}
+                </optgroup>
+              </select>
+            </label>
+            <OlderModelsToggle open={olderOpen} />
+          </div>
         </div>
         <button class="btn-primary mt-5" type="submit">Open pair</button>
       </fieldset>
@@ -184,6 +202,8 @@ const pickedLabel =
 </Base>
 
 <script>
+  import { bindOlderModelPickers } from '../../lib/calculator';
+  bindOlderModelPickers();
   const form = document.getElementById('can-run-picker');
   if (form instanceof HTMLFormElement) {
     const modelSlugs: Record<string, string> = {

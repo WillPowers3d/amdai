@@ -1,0 +1,19 @@
+---
+interface Props {
+  open?: boolean;
+}
+
+const { open = false } = Astro.props;
+---
+
+<details
+  class="mt-3 rounded-xl border border-line bg-canvas/50 px-3 py-2"
+  data-older-models
+  open={open || undefined}
+>
+  <summary class="cursor-pointer text-sm font-medium">Older models</summary>
+  <p class="mt-2 text-xs leading-relaxed text-faint">
+    Gemma, Llama 3, earlier Qwen 3 / 3.5, and other catalog rows. Still selectable. A share link that
+    names one opens this list.
+  </p>
+</details>
