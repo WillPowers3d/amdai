@@ -95,7 +95,6 @@ describe('R9700 cited street snapshot', () => {
     const hardware = read('../content/guides/hardware.mdx');
     assert.match(r9700, /R9700_STREET_SNAPSHOT/);
     assert.match(r9700, /R9700_STREET_POLICY/);
-    assert.match(r9700, /R9700_STREET_LOG_HREF/);
     assert.match(r9700, /\/lab-log/);
     assert.doesNotMatch(r9700, /No live or invented prices\./);
     assert.match(budget, /hasCitedBands/);

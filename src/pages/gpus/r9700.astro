@@ -39,11 +39,7 @@ import {
   r9700OneVsTwo,
   r9700RamKitRows,
 } from '../../lib/r9700';
-import {
-  R9700_STREET_LOG_HREF,
-  R9700_STREET_POLICY,
-  R9700_STREET_SNAPSHOT,
-} from '../../lib/r9700-street-price';
+import { R9700_STREET_POLICY, R9700_STREET_SNAPSHOT } from '../../lib/r9700-street-price';
 
 const page = gpuPageById(recipes, 'r9700');
 if (!page) throw new Error('missing r9700 GPU page');
@@ -487,7 +483,7 @@ const dailyRam = dailyRecipe ? recipeSystemRam(dailyRecipe, measuredRamHits) : n
       </ul>
       <p class="mt-10 max-w-3xl text-sm leading-relaxed text-muted">
         {R9700_STREET_SNAPSHOT} Prices move daily — see the
-        <a class="underline decoration-accent/40" href={R9700_STREET_LOG_HREF}>price log</a>
+        <a class="underline decoration-accent/40" href="/lab-log">price log</a>
         for the full table.
       </p>
       <div class="mt-6">
