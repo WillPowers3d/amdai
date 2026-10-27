@@ -156,6 +156,10 @@ body {
 
 .page-chrome {
   order: 1;
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: var(--canvas);
 }
 
 .page-main {

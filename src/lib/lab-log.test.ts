@@ -22,6 +22,7 @@ import {
   normalizeLabLog,
   projectLabel,
   renderLabLogMarkdown,
+  richerLabLog,
   sortEntriesNewestFirst,
   staticLabLogEntries,
   type LabLogEntry,
@@ -96,6 +97,10 @@ describe('lab log', () => {
       }).length,
       0,
     );
+    const empty = { as_of: '2026-10-28T00:00:00.000Z', entries: [] as LabLogEntry[] };
+    const older = { as_of: '2026-10-26T00:00:00.000Z', entries: [sample()] };
+    assert.equal(richerLabLog(older, empty), older);
+    assert.equal(richerLabLog(empty, older), older);
     const md = renderLabLogMarkdown(file);
     assert.match(md, /^# AMDai lab log/m);
     assert.match(md, /https:\/\/amdai\.net\/lab-log\/#/);
@@ -116,6 +121,7 @@ describe('lab log', () => {
     assert.match(page, /informative failures/i);
     assert.match(page, /not a status board/);
     assert.match(page, /staticLabLogEntries/);
+    assert.match(page, /incoming < current/);
     assert.match(page, /LAB_LOG_MARKDOWN/);
     assert.match(page, /Failed/);
     assert.match(page, /Dual R9700 speed/);
