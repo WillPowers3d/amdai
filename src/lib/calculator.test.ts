@@ -213,7 +213,7 @@ describe('calculator catalog guards', () => {
       assert.match(page, /olderModelsOpenFromSearch/);
       assert.match(page, /data-older-optgroup/);
       assert.match(page, /data-older-option/);
-      assert.match(page, /bindOlderModelPickers/);
+      assert.match(page, /bindOlderModelPickers|initOlderModelPickers/);
     }
   });
 });

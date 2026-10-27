@@ -202,8 +202,8 @@ const pickedLabel =
 </Base>
 
 <script>
-  import { bindOlderModelPickers } from '../../lib/calculator';
-  bindOlderModelPickers();
+  import { initOlderModelPickers } from '../../lib/calculator';
+  initOlderModelPickers();
   const form = document.getElementById('can-run-picker');
   if (form instanceof HTMLFormElement) {
     const modelSlugs: Record<string, string> = {

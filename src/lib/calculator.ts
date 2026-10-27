@@ -1261,6 +1261,18 @@ export function syncOlderModelOptions(select: HTMLSelectElement, open: boolean):
   if (group) group.hidden = !open;
 }
 
+export function applyPickerSearch(root: ParentNode = document, search = typeof window === 'undefined' ? '' : window.location.search): void {
+  const q = new URLSearchParams(search.startsWith('?') ? search.slice(1) : search);
+  root.querySelectorAll<HTMLElement>('[data-model-picker]').forEach((picker) => {
+    picker.querySelectorAll<HTMLSelectElement>('select[name]').forEach((select) => {
+      const value = q.get(select.name);
+      if (value && [...select.options].some((option) => option.value === value)) {
+        select.value = value;
+      }
+    });
+  });
+}
+
 export function bindOlderModelPickers(root: ParentNode = document): void {
   root.querySelectorAll<HTMLElement>('[data-model-picker]').forEach((picker) => {
     if (picker.dataset.olderBound === '1') return;
@@ -1284,6 +1296,11 @@ export function bindOlderModelPickers(root: ParentNode = document): void {
     openIfOlderSelected();
     sync();
   });
+}
+
+export function initOlderModelPickers(root: ParentNode = document, search = typeof window === 'undefined' ? '' : window.location.search): void {
+  applyPickerSearch(root, search);
+  bindOlderModelPickers(root);
 }
 
 export const CONTEXT_PRESETS = [2048, 4096, 8192, 16384, 32768, 65536, 131072, 262144, 524288] as const;
