@@ -2,7 +2,9 @@
  * Quant + Hardware Calculator — estimates unless a first-party badge applies.
  *
  * Weights: publisher file listing when we have one, else params × bits-per-weight / 8.
- * KV: architecture-aware (full-attention layers, optional sliding window, optional MLA).
+ * KV: architecture-aware (full-attention layers, optional sliding window, optional MLA,
+ * optional DSA/QSA indexer cache, and a fixed recurrent state for linear-attention layers).
+ * Sliding-window cells follow llama.cpp ISWA: pad256(min(ctx, window × n_seq_max + ubatch)).
  * Overhead: backend floor + percent, labeled estimate (ROCm / Vulkan path). Not a bench.
  *
  * GiB uses 1024³. Publisher Hugging Face “GB” listings are decimal (10⁹) and
@@ -11,6 +13,10 @@
 
 export const GIB = 1024 ** 3;
 export const DECIMAL_GB = 1e9;
+/** llama.cpp pads SWA / n_kv to this many cells (llama-kv-cache-iswa.cpp). */
+export const LLAMA_KV_PAD = 256;
+/** llama.cpp default --ubatch-size. SWA cache is window + this, then padded. */
+export const LLAMA_DEFAULT_UBATCH = 512;
 
 export type QuantId = 'q3_k_s' | 'q3_k_m' | 'q3_k_xl' | 'iq3' | 'q4_k_m' | 'q5_k_m' | 'q6_k' | 'q8_0' | 'bf16';
 export type KvId = 'f16' | 'q8_0' | 'q5_1' | 'q4_0';
@@ -109,6 +115,16 @@ export type ModelPreset = {
   mlaTensors: number;
   windowLayers: number | null;
   windowTokens: number | null;
+  /** Sliding-window KV heads. Null = same as kvHeads (Gemma 4 uses a wider window shape). */
+  windowKvHeads?: number | null;
+  /** Sliding-window head dim. Null = same as headDim. */
+  windowHeadDim?: number | null;
+  /** DSA/QSA indexer layers that grow a token-length key cache (K type). */
+  indexerLayers?: number | null;
+  /** Elements per token per indexer layer (head_size × kpool_row). */
+  indexerDim?: number | null;
+  /** Recurrent / conv state, MiB, f32, one sequence. Does not grow with context. */
+  fixedStateMiB?: number | null;
   embedVocab: number | null;
   embedHidden: number | null;
   embedTied: boolean;
@@ -172,6 +188,12 @@ export type CalcInput = {
   mlaTensors: number;
   windowLayers: number;
   windowTokens: number;
+  windowKvHeads: number;
+  windowHeadDim: number;
+  indexerLayers: number;
+  indexerDim: number;
+  fixedStateMiB: number;
+  ubatch: number;
   embedVocab: number;
   embedHidden: number;
   embedTied: boolean;
@@ -397,6 +419,57 @@ export const GPU_PRESETS: GpuPreset[] = [
   { id: 'custom', name: 'Custom GPU', vramGb: 24, gfx: '', kind: 'discrete', bandwidthGBs: 0, bandwidthNote: 'Enter VRAM and optional bandwidth from the product page.' },
 ];
 
+/** llama.cpp pads SWA / n_kv up to a multiple of 256. */
+export function padKvCells(n: number): number {
+  if (!(n > 0)) return 0;
+  return Math.ceil(n / LLAMA_KV_PAD) * LLAMA_KV_PAD;
+}
+
+/**
+ * llama.cpp ISWA cell count: GGML_PAD(min(kv_size, n_swa * n_seq_max + n_ubatch), 256)
+ * when the cache is unified (default).
+ */
+export function swaCellCount(
+  context: number,
+  windowTokens: number,
+  sequences = 1,
+  ubatch = LLAMA_DEFAULT_UBATCH,
+): number {
+  if (!(context > 0) || !(windowTokens > 0)) return 0;
+  const seq = Math.max(1, sequences);
+  return padKvCells(Math.min(context, windowTokens * seq + Math.max(0, ubatch)));
+}
+
+/**
+ * Qwen gated-delta linear-attention state (f32).
+ * llama.cpp n_embd_s = ssm_d_state * ssm_d_inner; n_embd_r = (d_conv-1)*(d_inner + 2*n_group*d_state).
+ */
+export function qwenLinearStateMiB(
+  linearLayers: number,
+  kHeads: number,
+  vHeads: number,
+  headDim: number,
+  dConv: number,
+): number {
+  if (!(linearLayers > 0) || !(kHeads > 0) || !(vHeads > 0) || !(headDim > 0)) return 0;
+  const dInner = headDim * vHeads;
+  const nEmbdS = headDim * dInner;
+  const nEmbdR = (dConv > 0 ? dConv - 1 : 0) * (dInner + 2 * kHeads * headDim);
+  return (linearLayers * (nEmbdS + nEmbdR) * 4) / (1024 * 1024);
+}
+
+/**
+ * KDA (Kimi / GLM-5.3-Flash) linear-attention state (f32).
+ * llama.cpp n_embd_s = head_dim² * n_head; n_embd_r = 3 * (d_conv-1) * n_head * head_dim.
+ */
+export function kdaLinearStateMiB(linearLayers: number, heads: number, headDim: number, dConv: number): number {
+  if (!(linearLayers > 0) || !(heads > 0) || !(headDim > 0)) return 0;
+  const dInner = heads * headDim;
+  const nEmbdS = headDim * headDim * heads;
+  const nEmbdR = 3 * (dConv > 0 ? dConv - 1 : 3) * dInner;
+  return (linearLayers * (nEmbdS + nEmbdR) * 4) / (1024 * 1024);
+}
+
 export const MODEL_PRESETS: ModelPreset[] = [
   {
     id: 'qwen36',
@@ -422,8 +495,9 @@ export const MODEL_PRESETS: ModelPreset[] = [
     defaultQuant: 'q5_k_m',
     defaultCtx: 262144,
     defaultKv: 'f16',
+    fixedStateMiB: qwenLinearStateMiB(30, 16, 32, 128, 4),
     archNote:
-      'Official card: 35B total / 3B active, 40 layers, 10 full-attention (GQA 2×256). Only those 10 layers grow a token-length KV cache.',
+      'Official card: 35B total / 3B active, 40 layers, 10 full-attention (GQA 2×256). Only those 10 layers grow a token-length KV cache. The other 30 hold a fixed linear-attention state.',
     publisherFiles: {
       q3_k_s: { decimalGb: 15.4, label: 'Hugging Face listing for Qwen3.6-35B-A3B-UD-Q3_K_S.gguf (15.4 GB)' },
       q3_k_m: { decimalGb: 16.6, label: 'Hugging Face listing for Qwen3.6-35B-A3B-UD-Q3_K_M.gguf (16.6 GB)' },
@@ -456,8 +530,11 @@ export const MODEL_PRESETS: ModelPreset[] = [
     defaultQuant: 'q6_k',
     defaultCtx: 262144,
     defaultKv: 'f16',
+    indexerLayers: 12,
+    indexerDim: 256,
+    fixedStateMiB: qwenLinearStateMiB(36, 16, 48, 128, 4),
     archNote:
-      'Official card (Qwen3.8-Flash-Next): 125B total / 6B active, plus a 51B n-gram embedding llama.cpp can keep in system RAM. 48 layers, 12 sparse-attention layers (GQA 2×256). Publisher UD-Q6_K_XL folder lists ~169 GB.',
+      'Official card (Qwen3.8-Flash-Next): 125B total / 6B active, plus a 51B n-gram embedding llama.cpp can keep in system RAM. 48 layers, 12 sparse-attention layers (GQA 2×256) plus a 12×256 indexer cache (raw + pooled key). 36 linear layers hold a fixed state. Publisher UD-Q6_K_XL folder lists ~169 GB.',
     publisherFiles: {
       q3_k_xl: {
         decimalGb: 90,
@@ -502,6 +579,7 @@ export const MODEL_PRESETS: ModelPreset[] = [
     defaultQuant: 'q4_k_m',
     defaultCtx: 8192,
     defaultKv: 'f16',
+    fixedStateMiB: qwenLinearStateMiB(48, 16, 48, 128, 4),
     archNote: 'Official card: 16 of 64 layers are full attention (GQA 4×256). The rest hold a fixed recurrent state, so KV grows on those 16 layers. 262K native.',
     publisherFiles: {
       q6_k: {
@@ -550,6 +628,7 @@ export const MODEL_PRESETS: ModelPreset[] = [
     defaultQuant: 'q4_k_m',
     defaultCtx: 8192,
     defaultKv: 'f16',
+    fixedStateMiB: qwenLinearStateMiB(48, 16, 48, 128, 4),
     archNote: 'Official card: 16 of 64 layers full attention. Same hybrid KV idea as Qwen3.8 27B.',
     publisherFiles: {
       q6_k: {
@@ -598,6 +677,7 @@ export const MODEL_PRESETS: ModelPreset[] = [
     defaultQuant: 'q4_k_m',
     defaultCtx: 8192,
     defaultKv: 'f16',
+    fixedStateMiB: qwenLinearStateMiB(48, 16, 48, 128, 4),
     archNote: 'Official card: 16 of 64 layers full attention (GQA 4×256).',
     publisherFiles: {},
   },
@@ -625,6 +705,7 @@ export const MODEL_PRESETS: ModelPreset[] = [
     defaultQuant: 'q5_k_m',
     defaultCtx: 8192,
     defaultKv: 'f16',
+    fixedStateMiB: qwenLinearStateMiB(24, 16, 32, 128, 4),
     archNote: 'Official card: 8 of 32 layers full attention. Not an 8B Qwen 3.x dense — that older name is not on this site.',
     publisherFiles: {},
   },
@@ -902,7 +983,10 @@ export const MODEL_PRESETS: ModelPreset[] = [
     defaultQuant: 'q4_k_m',
     defaultCtx: 8192,
     defaultKv: 'f16',
-    archNote: 'Official GGUF metadata: 10 global layers (4 KV heads × 512), 50 sliding-window layers at 1024 tokens.',
+    windowKvHeads: 16,
+    windowHeadDim: 256,
+    archNote:
+      'Official config: 10 global layers (4 KV heads × 512), 50 sliding-window layers at 16×256 and 1024 tokens. llama.cpp pads the window cache to 256 cells using window + ubatch (1536 at the default -ub 512).',
     publisherFiles: {},
   },
   {
@@ -929,7 +1013,10 @@ export const MODEL_PRESETS: ModelPreset[] = [
     defaultQuant: 'q5_k_m',
     defaultCtx: 8192,
     defaultKv: 'f16',
-    archNote: 'Official GGUF metadata: 8 global layers (one 512-dim KV head), 40 layers cache a 1024-token window.',
+    windowKvHeads: 8,
+    windowHeadDim: 256,
+    archNote:
+      'Official config: 8 global layers (one 512-dim KV head), 40 sliding-window layers at 8×256 and 1024 tokens. llama.cpp pads the window cache to 256 cells using window + ubatch (1536 at the default -ub 512).',
     publisherFiles: {},
   },
   {
@@ -986,7 +1073,7 @@ export const MODEL_PRESETS: ModelPreset[] = [
     totalParamsB: 320,
     activeParamsB: 18,
     layers: 45,
-    kvLayers: 45,
+    kvLayers: 11,
     kvHeads: 64,
     headDim: 256,
     kvKind: 'mla',
@@ -994,6 +1081,9 @@ export const MODEL_PRESETS: ModelPreset[] = [
     mlaTensors: 1,
     windowLayers: null,
     windowTokens: null,
+    indexerLayers: 11,
+    indexerDim: 384,
+    fixedStateMiB: kdaLinearStateMiB(34, 64, 128, 4),
     embedVocab: 154880,
     embedHidden: 4096,
     embedTied: false,
@@ -1002,7 +1092,7 @@ export const MODEL_PRESETS: ModelPreset[] = [
     defaultCtx: 8192,
     defaultKv: 'f16',
     archNote:
-      'Official card: 320B total / 18B active. config.json text_config lists 45 layers, MLA kv_lora_rank 512, and max_position_embeddings 1,048,576. 288 routed experts + 1 shared, 8 per token. Consumer cards offload; both RAM lines are estimates until measured.',
+      'Official card: 320B total / 18B active. 11 of 45 layers are sparse attention (MLA, kv_lora_rank 512, K-only cache) and grow the context store plus an 11×384 indexer (raw + 2 pooled rows). 34 linear (KDA) layers hold a fixed state. max_position_embeddings 1,048,576. 288 routed experts + 1 shared, 8 per token. Consumer cards offload; both RAM lines are estimates until measured.',
     publisherFiles: {
       q6_k: {
         decimalGb: 291.83,
@@ -1104,6 +1194,12 @@ export const DEFAULT_INPUT: CalcInput = {
   mlaTensors: 1,
   windowLayers: 0,
   windowTokens: 0,
+  windowKvHeads: 2,
+  windowHeadDim: 256,
+  indexerLayers: 0,
+  indexerDim: 0,
+  fixedStateMiB: qwenLinearStateMiB(30, 16, 32, 128, 4),
+  ubatch: LLAMA_DEFAULT_UBATCH,
   embedVocab: 248320,
   embedHidden: 2048,
   embedTied: false,
@@ -1163,6 +1259,16 @@ export function formulaKvGiB(kvLayers: number, kvHeads: number, headDim: number,
 export function formulaMlaGiB(layers: number, dim: number, tensors: number, context: number, bytes: number): number {
   if (!(layers > 0) || !(dim > 0) || !(tensors > 0) || !(context > 0) || !(bytes > 0)) return 0;
   return (layers * dim * tensors * context * bytes) / GIB;
+}
+
+export function formulaIndexerGiB(layers: number, dim: number, context: number, bytes: number): number {
+  if (!(layers > 0) || !(dim > 0) || !(context > 0) || !(bytes > 0)) return 0;
+  return (layers * dim * context * bytes) / GIB;
+}
+
+export function formulaFixedStateGiB(fixedStateMiB: number, sequences = 1): number {
+  if (!(fixedStateMiB > 0)) return 0;
+  return (fixedStateMiB / 1024) * Math.max(1, sequences);
 }
 
 function pathAddGiB(pathId: PathId): number {
@@ -1245,6 +1351,12 @@ export function applyModelPreset(id: ModelId, current: CalcInput): CalcInput {
     mlaTensors: model.mlaTensors,
     windowLayers: model.windowLayers ?? 0,
     windowTokens: model.windowTokens ?? 0,
+    windowKvHeads: model.windowKvHeads ?? model.kvHeads ?? 0,
+    windowHeadDim: model.windowHeadDim ?? model.headDim ?? 0,
+    indexerLayers: model.indexerLayers ?? 0,
+    indexerDim: model.indexerDim ?? 0,
+    fixedStateMiB: model.fixedStateMiB ?? 0,
+    ubatch: current.ubatch > 0 ? current.ubatch : LLAMA_DEFAULT_UBATCH,
     embedVocab: model.embedVocab ?? 0,
     embedHidden: model.embedHidden ?? 0,
     embedTied: model.embedTied,
@@ -1278,6 +1390,7 @@ export function kvCacheGiB(input: CalcInput): { gib: number; note: string } {
   const kv = kvById(input.kvId);
   const backend = backendById(input.backendId);
   const sequences = backend.kvPerSequence ? Math.max(1, Math.round(input.batch)) : 1;
+  const ubatch = input.ubatch > 0 ? input.ubatch : LLAMA_DEFAULT_UBATCH;
   let gib = 0;
   const parts: string[] = [];
 
@@ -1290,16 +1403,26 @@ export function kvCacheGiB(input: CalcInput): { gib: number; note: string } {
     gib += full * sequences;
     parts.push(`2 × ${input.kvLayers} full layers × ${input.kvHeads} × ${input.headDim} × ${input.context} × ${kv.bytes} B`);
     if (input.windowLayers > 0 && input.windowTokens > 0) {
-      const win = formulaKvGiB(
-        input.windowLayers,
-        input.kvHeads,
-        input.headDim,
-        Math.min(input.context, input.windowTokens),
-        kv.bytes,
+      const wHeads = input.windowKvHeads > 0 ? input.windowKvHeads : input.kvHeads;
+      const wDim = input.windowHeadDim > 0 ? input.windowHeadDim : input.headDim;
+      const cells = swaCellCount(input.context, input.windowTokens, sequences, ubatch);
+      const win = formulaKvGiB(input.windowLayers, wHeads, wDim, cells, kv.bytes);
+      gib += win;
+      parts.push(
+        `2 × ${input.windowLayers} window layers × ${wHeads} × ${wDim} × ${cells} (pad256(min(ctx, window×${sequences} + ${ubatch})))`,
       );
-      gib += win * sequences;
-      parts.push(`2 × ${input.windowLayers} window layers × min(${input.context}, ${input.windowTokens})`);
     }
+  }
+
+  if (input.indexerLayers > 0 && input.indexerDim > 0) {
+    const idx = formulaIndexerGiB(input.indexerLayers, input.indexerDim, input.context, kv.bytes);
+    gib += idx * sequences;
+    parts.push(`indexer ${input.indexerLayers} × ${input.indexerDim} × ${input.context} × ${kv.bytes} B`);
+  }
+
+  if (input.fixedStateMiB > 0) {
+    gib += formulaFixedStateGiB(input.fixedStateMiB, sequences);
+    parts.push(`fixed linear-attention state ${input.fixedStateMiB.toFixed(1)} MiB × ${sequences}`);
   }
 
   if (backend.quantCacheWork && input.kvId !== 'f16' && input.kvLayers > 0) {
@@ -1790,6 +1913,12 @@ const QUERY_KEYS = [
   'mlad',
   'win',
   'wint',
+  'wkh',
+  'whd',
+  'idxl',
+  'idxd',
+  'fsm',
+  'ub',
   'ohm',
 ] as const;
 
@@ -1847,6 +1976,12 @@ export function inputToQuery(input: CalcInput, extras?: { priority?: string; usa
     mlad: String(input.mlaDim),
     win: String(input.windowLayers),
     wint: String(input.windowTokens),
+    wkh: String(input.windowKvHeads),
+    whd: String(input.windowHeadDim),
+    idxl: String(input.indexerLayers),
+    idxd: String(input.indexerDim),
+    fsm: String(input.fixedStateMiB),
+    ub: String(input.ubatch),
     ohm: input.overheadManual ? '1' : '0',
   });
   if (extras?.priority) params.set('priority', extras.priority);
@@ -1896,6 +2031,12 @@ export function queryToInput(search: string): CalcInput {
     mlaTensors: 1,
     windowLayers: Math.max(0, Math.round(num(q.get('win'), model.windowLayers ?? 0))),
     windowTokens: Math.max(0, Math.round(num(q.get('wint'), model.windowTokens ?? 0))),
+    windowKvHeads: Math.max(0, Math.round(num(q.get('wkh'), model.windowKvHeads ?? model.kvHeads ?? 0))),
+    windowHeadDim: Math.max(0, Math.round(num(q.get('whd'), model.windowHeadDim ?? model.headDim ?? 0))),
+    indexerLayers: Math.max(0, Math.round(num(q.get('idxl'), model.indexerLayers ?? 0))),
+    indexerDim: Math.max(0, Math.round(num(q.get('idxd'), model.indexerDim ?? 0))),
+    fixedStateMiB: Math.max(0, num(q.get('fsm'), model.fixedStateMiB ?? 0)),
+    ubatch: Math.max(0, Math.round(num(q.get('ub'), LLAMA_DEFAULT_UBATCH))),
     embedVocab: model.embedVocab ?? 0,
     embedHidden: model.embedHidden ?? 0,
     embedTied: model.embedTied,

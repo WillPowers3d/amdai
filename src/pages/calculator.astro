@@ -215,6 +215,26 @@ const groups = [...new Set(MODEL_PRESETS.map((m) => m.group))];
               <span class="text-faint">Window tokens</span>
               <input class="field mt-1" type="number" name="windowTokens" min="0" step="1" inputmode="numeric" />
             </label>
+            <label class="block text-sm">
+              <span class="text-faint">Window KV heads</span>
+              <input class="field mt-1" type="number" name="windowKvHeads" min="0" step="1" inputmode="numeric" />
+            </label>
+            <label class="block text-sm">
+              <span class="text-faint">Window head dim</span>
+              <input class="field mt-1" type="number" name="windowHeadDim" min="0" step="1" inputmode="numeric" />
+            </label>
+            <label class="block text-sm">
+              <span class="text-faint">Indexer layers</span>
+              <input class="field mt-1" type="number" name="indexerLayers" min="0" step="1" inputmode="numeric" />
+            </label>
+            <label class="block text-sm">
+              <span class="text-faint">Indexer dim</span>
+              <input class="field mt-1" type="number" name="indexerDim" min="0" step="1" inputmode="numeric" />
+            </label>
+            <label class="block text-sm">
+              <span class="text-faint">Fixed state (MiB)</span>
+              <input class="field mt-1" type="number" name="fixedStateMiB" min="0" step="0.1" inputmode="decimal" />
+            </label>
           </div>
         </fieldset>
 
@@ -531,6 +551,11 @@ const groups = [...new Set(MODEL_PRESETS.map((m) => m.group))];
     field<HTMLInputElement>('mlaDim').value = String(input.mlaDim);
     field<HTMLInputElement>('windowLayers').value = String(input.windowLayers);
     field<HTMLInputElement>('windowTokens').value = String(input.windowTokens);
+    field<HTMLInputElement>('windowKvHeads').value = String(input.windowKvHeads);
+    field<HTMLInputElement>('windowHeadDim').value = String(input.windowHeadDim);
+    field<HTMLInputElement>('indexerLayers').value = String(input.indexerLayers);
+    field<HTMLInputElement>('indexerDim').value = String(input.indexerDim);
+    field<HTMLInputElement>('fixedStateMiB').value = String(input.fixedStateMiB);
     field<HTMLSelectElement>('quantId').value = input.quantId;
     field<HTMLInputElement>('context').value = String(Math.min(524288, input.context));
     field<HTMLInputElement>('contextNum').value = String(input.context);
@@ -583,6 +608,11 @@ const groups = [...new Set(MODEL_PRESETS.map((m) => m.group))];
       mlaDim: Number(field<HTMLInputElement>('mlaDim').value),
       windowLayers: Number(field<HTMLInputElement>('windowLayers').value),
       windowTokens: Number(field<HTMLInputElement>('windowTokens').value),
+      windowKvHeads: Number(field<HTMLInputElement>('windowKvHeads').value),
+      windowHeadDim: Number(field<HTMLInputElement>('windowHeadDim').value),
+      indexerLayers: Number(field<HTMLInputElement>('indexerLayers').value),
+      indexerDim: Number(field<HTMLInputElement>('indexerDim').value),
+      fixedStateMiB: Number(field<HTMLInputElement>('fixedStateMiB').value),
       quantId: field<HTMLSelectElement>('quantId').value as QuantId,
       context: Number(field<HTMLInputElement>('contextNum').value || field<HTMLInputElement>('context').value),
       kvId: field<HTMLSelectElement>('kvId').value as KvId,

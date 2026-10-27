@@ -16,6 +16,7 @@ import {
   roundUpToDimmKitGb,
   systemRamNeed,
   applyModelPreset,
+  modelById,
   catalogGuardErrors,
   compute,
   contextSweep,
@@ -24,7 +25,11 @@ import {
   gpuCatalog,
   inputToQuery,
   kvCacheGiB,
+  kdaLinearStateMiB,
+  padKvCells,
   queryToInput,
+  qwenLinearStateMiB,
+  swaCellCount,
   testedBadge,
 } from './calculator';
 import { buildTestGguf, parseGgufHeader } from './gguf-header';
@@ -311,6 +316,123 @@ describe('calculator math and modes', () => {
     const missed = systemRamNeed({ ...DEFAULT_INPUT, context: 8192 }, hits);
     assert.equal(missed.atSelected.label, 'estimate');
     assert.equal(missed.atSelected.peakGbs, undefined);
+  });
+});
+
+describe('llama.cpp KV allocation', () => {
+  const CTX = 262144;
+  const F16 = 2;
+
+  function f16Kv(id: Parameters<typeof applyModelPreset>[0], context = CTX) {
+    return kvCacheGiB({
+      ...applyModelPreset(id, DEFAULT_INPUT),
+      context,
+      kvId: 'f16',
+      backendId: 'llamacpp',
+      batch: 1,
+    }).gib;
+  }
+
+  it('pads SWA cells the way llama.cpp ISWA does', () => {
+    assert.equal(padKvCells(0), 0);
+    assert.equal(padKvCells(1024), 1024);
+    assert.equal(padKvCells(640), 768);
+    assert.equal(swaCellCount(262144, 1024, 1, 512), 1536);
+    assert.equal(swaCellCount(262144, 128, 1, 512), 768);
+    assert.equal(swaCellCount(1024, 1024, 1, 512), 1024);
+  });
+
+  it('matches llama.cpp for GLM 5.3 Flash (11 MLA layers + indexer + KDA state)', () => {
+    const glm = applyModelPreset('glm-53-flash', DEFAULT_INPUT);
+    assert.equal(glm.kvLayers, 11);
+    assert.equal(glm.mlaDim, 512);
+    assert.equal(glm.indexerLayers, 11);
+    assert.equal(glm.indexerDim, 384);
+    const mla = (11 * 512 * 1 * CTX * F16) / (1024 ** 3);
+    const indexer = (11 * 384 * CTX * F16) / (1024 ** 3);
+    const fixed = kdaLinearStateMiB(34, 64, 128, 4) / 1024;
+    const expected = mla + indexer + fixed;
+    assert.ok(Math.abs(f16Kv('glm-53-flash') - expected) < 1e-9);
+    assert.ok(Math.abs(f16Kv('glm-53-flash') - 4.95) < 0.02);
+    assert.match(modelById('glm-53-flash').archNote, /11 of 45/);
+    assert.match(modelById('glm-53-flash').archNote, /34 linear/);
+  });
+
+  it('matches llama.cpp for Qwen 3.8 Flash (GQA + 12×256 indexer + linear state)', () => {
+    const flash = applyModelPreset('flash', DEFAULT_INPUT);
+    assert.equal(flash.kvLayers, 12);
+    assert.equal(flash.indexerLayers, 12);
+    assert.equal(flash.indexerDim, 256);
+    const gqa = (2 * 12 * 2 * 256 * CTX * F16) / (1024 ** 3);
+    const indexer = (12 * 256 * CTX * F16) / (1024 ** 3);
+    const fixed = qwenLinearStateMiB(36, 16, 48, 128, 4) / 1024;
+    const expected = gqa + indexer + fixed;
+    assert.ok(Math.abs(f16Kv('flash') - expected) < 1e-9);
+    assert.ok(Math.abs(f16Kv('flash') - 7.61) < 0.02);
+    assert.match(modelById('flash').archNote, /12×256 indexer/);
+  });
+
+  it('matches llama.cpp for Gemma 4 window heads and pad256(window+ubatch)', () => {
+    const g31 = applyModelPreset('gemma4-31b', DEFAULT_INPUT);
+    const g12 = applyModelPreset('gemma4-12b', DEFAULT_INPUT);
+    assert.equal(g31.windowKvHeads, 16);
+    assert.equal(g31.windowHeadDim, 256);
+    assert.equal(g12.windowKvHeads, 8);
+    assert.equal(g12.windowHeadDim, 256);
+    const cells = swaCellCount(CTX, 1024, 1, 512);
+    const g31Expected =
+      (2 * 10 * 4 * 512 * CTX * F16) / (1024 ** 3) + (2 * 50 * 16 * 256 * cells * F16) / (1024 ** 3);
+    const g12Expected =
+      (2 * 8 * 1 * 512 * CTX * F16) / (1024 ** 3) + (2 * 40 * 8 * 256 * cells * F16) / (1024 ** 3);
+    assert.ok(Math.abs(f16Kv('gemma4-31b') - g31Expected) < 1e-9);
+    assert.ok(Math.abs(f16Kv('gemma4-12b') - g12Expected) < 1e-9);
+    assert.ok(Math.abs(f16Kv('gemma4-31b') - 21.17) < 0.02);
+    assert.ok(Math.abs(f16Kv('gemma4-12b') - 4.47) < 0.02);
+    assert.match(modelById('gemma4-31b').archNote, /16×256/);
+    assert.match(modelById('gemma4-12b').archNote, /8×256/);
+  });
+
+  it('keeps dense and hybrid presets within 2% of llama.cpp f16 at 256K', () => {
+    const expected: Record<string, number> = {
+      qwen36: 5.06,
+      flash: 7.61,
+      'qwen38-27b': 16.15,
+      'qwen36-27b': 16.15,
+      'qwen35-27b': 16.15,
+      'qwen35-9b': 8.05,
+      'qwen3-32b': 64,
+      'qwen3-14b': 40,
+      'qwen3-30b-a3b': 24,
+      'qwen3-235b-a22b': 47,
+      'llama33-70b': 80,
+      'llama31-70b': 80,
+      'llama31-8b': 32,
+      'gemma3-27b': 20.61,
+      'gemma4-31b': 21.17,
+      'gemma4-12b': 4.47,
+      'gpt-oss-20b': 6.02,
+      'glm-53-flash': 4.95,
+      'gpt-oss-120b': 9.03,
+    };
+    for (const [id, llama] of Object.entries(expected)) {
+      const got = f16Kv(id as Parameters<typeof applyModelPreset>[0]);
+      const ratio = got / llama;
+      assert.ok(Math.abs(ratio - 1) < 0.02, `${id}: ${got.toFixed(3)} vs ${llama}`);
+    }
+  });
+
+  it('round-trips indexer, window-head, and fixed-state query keys', () => {
+    const input = applyModelPreset('gemma4-31b', applyModelPreset('flash', DEFAULT_INPUT));
+    const back = queryToInput(inputToQuery(input));
+    assert.equal(back.windowKvHeads, 16);
+    assert.equal(back.windowHeadDim, 256);
+    const flash = queryToInput(inputToQuery(applyModelPreset('flash', DEFAULT_INPUT)));
+    assert.equal(flash.indexerLayers, 12);
+    assert.equal(flash.indexerDim, 256);
+    assert.ok(flash.fixedStateMiB > 100);
+    const glm = queryToInput(inputToQuery(applyModelPreset('glm-53-flash', DEFAULT_INPUT)));
+    assert.equal(glm.kvLayers, 11);
+    assert.equal(glm.indexerDim, 384);
   });
 });
 
