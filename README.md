@@ -1,5 +1,6 @@
 # AMDai
 
+[![CI](https://github.com/WillPowers3d/amdai/actions/workflows/ci.yml/badge.svg)](https://github.com/WillPowers3d/amdai/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Node.js](https://img.shields.io/badge/node-%3E%3D22.12-339933?logo=nodedotjs&logoColor=white)](package.json)
 
