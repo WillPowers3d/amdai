@@ -10,6 +10,7 @@ import {
   DUAL_BADGE,
   EXPAND_GPU_COPY,
   MIN_BUDGET_COPY,
+  STRIX_CAUTION,
   MOTHERBOARDS_PATH,
   WHY_DUAL_X8X8,
   assertMotherboardsValid,
@@ -57,6 +58,14 @@ describe('vetted dual x8/x8 motherboards', () => {
     assert.equal(local[0]?.id, 'asrock-x870-taichi-creator');
     assert.equal(local[0]?.dual_ready, true);
     assert.match(local[0]?.citation.section ?? '', /x8\/x8/);
+    for (const id of ['asrock-x870e-taichi', 'gigabyte-b850-ai-top', 'asus-proart-b850-creator-wifi-neo']) {
+      const extra = file.boards.find((board) => board.id === id);
+      assert.ok(extra?.dual_ready, id);
+      assert.match(`${extra?.split} ${extra?.citation.section}`, /x8\/x8|x8, x8/, id);
+    }
+    assert.ok(file.boards.some((board) => board.id === 'asrock-b650m-pro-rs' && !board.dual_ready));
+    assert.ok(file.boards.some((board) => board.id === 'msi-b650-gaming-plus-wifi' && !board.dual_ready));
+    assert.ok(!file.boards.some((board) => /strix|x870e-e/i.test(`${board.id} ${board.name}`)));
   });
 
   it('never shows a non-x8/x8 board for a dual-GPU build', () => {
@@ -164,6 +173,10 @@ describe('vetted dual x8/x8 motherboards', () => {
     assert.equal(DUAL_BADGE, 'Dual x8/x8 ✓');
     assert.match(page, /AffiliateDisclosure/);
     assert.match(page, /local desktop board/);
+    assert.match(page, /STRIX_CAUTION/);
+    assert.match(STRIX_CAUTION.body, /not a dual x8\/x8 board/i);
+    assert.match(STRIX_CAUTION.body, /ROG Strix X870E-E/);
+    assert.doesNotMatch(STRIX_CAUTION.body, /\$\d|\bMSRP\b/);
     assert.doesNotMatch(page, /\$\d|\bMSRP\b/);
 
     const inbound = [

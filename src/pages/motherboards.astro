@@ -8,6 +8,7 @@ import {
   ANY_BOARD_NOTE,
   CHEAP_BOARD_NOTE,
   DUAL_BADGE,
+  STRIX_CAUTION,
   MOTHERBOARDS_DIGEST,
   MOTHERBOARDS_NAME,
   MOTHERBOARDS_PUBLISHED,
@@ -59,6 +60,17 @@ const links = [
         Every row here quotes the maker spec or manual, with the page or section and an as-of date.
         We do not invent a street price. Buttons say Check price.
         Published {MOTHERBOARDS_PUBLISHED}.
+      </p>
+    </Callout>
+
+    <Callout type="warn" title={STRIX_CAUTION.title}>
+      <p>
+        {STRIX_CAUTION.body}
+        Cite:
+        <a class="underline decoration-accent/40 underline-offset-2" href={STRIX_CAUTION.url} rel="noopener" target="_blank">
+          ROG Strix X870E-E spec
+        </a>
+        — {STRIX_CAUTION.section}. As of {STRIX_CAUTION.as_of}.
       </p>
     </Callout>
 

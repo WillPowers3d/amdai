@@ -123,6 +123,15 @@ export const CHEAP_BOARD_NOTE =
 export const ANY_BOARD_NOTE =
   'One GPU will run on a CPU x16 slot. The vetted dual x8/x8 list is still the default unless you explicitly pick Minimum budget.';
 
+export const STRIX_CAUTION = {
+  title: 'ROG Strix X870E-E is not dual x8/x8',
+  body:
+    'ASUS ROG Strix X870E-E Gaming WiFi7 NEO is a flagship X870E board, but it is not a dual x8/x8 board. The maker spec lists one CPU PCIe 5.0 x16 slot in x16 mode, plus a chipset PCIe 4.0 x16 slot at x4. That leftover x4 is not a matching CPU-lane second GPU.',
+  url: 'https://rog.asus.com/us/motherboards/rog-strix/rog-strix-x870e-e-gaming-wifi7-neo/spec/',
+  section: 'Expansion Slots — AMD Ryzen 9000 & 7000: 1 x PCIe 5.0 x16 slot (supports x16 mode). AMD X870E Chipset: 1 x PCIe 4.0 x16 slot (supports x4 mode)',
+  as_of: '2026-10-28',
+};
+
 export function parseMotherboards(raw: unknown): MotherboardsFile {
   const file = raw as MotherboardsFile;
   if (!file || typeof file.as_of !== 'string' || !Array.isArray(file.boards)) {
@@ -282,6 +291,7 @@ export function motherboardsBlob(file: MotherboardsFile): string {
     MULTI_GPU_HARDWARE.pcie,
     CHEAP_BOARD_NOTE,
     ANY_BOARD_NOTE,
+    STRIX_CAUTION.body,
     MIN_BUDGET_COPY.minimum.lede,
     EXPAND_GPU_COPY.push,
     ...file.boards.map((board) => `${board.name} ${board.citation.url} ${board.citation.section}`),
