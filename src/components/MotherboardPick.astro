@@ -11,6 +11,7 @@ import {
   type Motherboard,
   type MotherboardAsk,
 } from '../lib/motherboards';
+import { ramCapFlag } from '../lib/ram-kit';
 
 interface Props {
   boards: Motherboard[];
@@ -73,9 +74,14 @@ const payload = JSON.stringify({
             )}
           </div>
           <p class="mt-2 text-sm text-muted">
-            {board.chipset} · PCIe {board.pcie_gen} · {board.split} · {board.form_factor} · {board.socket}
+            {board.chipset} · PCIe {board.pcie_gen} · {board.split} · {board.form_factor} · {board.socket} · {board.max_ram_gb} GB max · {board.dimms} DIMMs
           </p>
           {board.slot_note && <p class="mt-2 text-sm leading-relaxed text-muted">{board.slot_note}</p>}
+          {ramCapFlag(board.max_ram_gb) && (
+            <p class="mt-2 text-sm leading-relaxed text-muted" data-ram-cap hidden>
+              {ramCapFlag(board.max_ram_gb)}
+            </p>
+          )}
           {!board.dual_ready && (
             <p class="mt-2 text-sm leading-relaxed text-muted">{CHEAP_BOARD_NOTE}</p>
           )}

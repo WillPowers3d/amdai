@@ -16,6 +16,7 @@ import {
   dualReadyBoards,
   singleCapableBoards,
 } from '../lib/motherboards';
+import { DIMM_SPEED_NOTE, ramCapFlag } from '../lib/ram-kit';
 import { MULTI_GPU_HARDWARE } from '../lib/multi-gpu';
 import { motherboards, motherboardsFile } from '../lib/motherboards-data';
 
@@ -79,6 +80,7 @@ const links = [
       <p class="mt-3 max-w-3xl text-muted">
         Two full-length slots that the maker documents as a CPU-lane x16 or x8/x8 split.
         This is the default list for two-GPU builds and for one-GPU builds that are not on Minimum budget.
+        Maker spec max RAM is cited on each row. {DIMM_SPEED_NOTE}
       </p>
       <ol class="mt-8 space-y-4">
         {duals.map((board) => (
@@ -93,8 +95,11 @@ const links = [
               )}
             </div>
             <p class="mt-2 text-sm text-muted">
-              {board.chipset} · PCIe {board.pcie_gen} · {board.split} · {board.form_factor} · {board.socket}
+              {board.chipset} · PCIe {board.pcie_gen} · {board.split} · {board.form_factor} · {board.socket} · {board.max_ram_gb} GB max · {board.dimms} DIMMs
             </p>
+            {ramCapFlag(board.max_ram_gb) && (
+              <p class="mt-2 text-sm leading-relaxed text-muted">{ramCapFlag(board.max_ram_gb)} {DIMM_SPEED_NOTE}</p>
+            )}
             {board.local_desktop && (
               <p class="mt-2 text-sm leading-relaxed text-muted">
                 The local desktop seats two R9700s at PCIe 5.0 x8/x8 on CPU lanes on this board.
@@ -137,8 +142,11 @@ const links = [
               </span>
             </div>
             <p class="mt-2 text-sm text-muted">
-              {board.chipset} · PCIe {board.pcie_gen} · {board.split} · {board.form_factor} · {board.socket}
+              {board.chipset} · PCIe {board.pcie_gen} · {board.split} · {board.form_factor} · {board.socket} · {board.max_ram_gb} GB max · {board.dimms} DIMMs
             </p>
+            {ramCapFlag(board.max_ram_gb) && (
+              <p class="mt-2 text-sm leading-relaxed text-muted">{ramCapFlag(board.max_ram_gb)}</p>
+            )}
             {board.slot_note && <p class="mt-2 text-sm leading-relaxed text-muted">{board.slot_note}</p>}
             <p class="mt-2 text-sm leading-relaxed text-muted">{CHEAP_BOARD_NOTE}</p>
             <p class="mt-3 text-sm leading-relaxed text-muted">

@@ -350,6 +350,26 @@ products:
       bhphoto: https://www.bhphotovideo.com/c/search?Ntt=DDR5+64GB
       microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=DDR5+64GB
 
+  - id: ddr5-32
+    name: 32 GB DDR5 kit (2x16)
+    kind: part
+    note: Search only — 2x16 GB DDR5. No live or invented price. The GPU does the work on this path.
+    urls:
+      amazon: https://www.amazon.com/s?k=DDR5+32GB+2x16+desktop+kit
+      newegg: https://www.newegg.com/p/pl?d=DDR5+32GB+2x16+desktop+kit
+      bhphoto: https://www.bhphotovideo.com/c/search?Ntt=DDR5+32GB+2x16
+      microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=DDR5+32GB+2x16
+
+  - id: ddr5-256
+    name: 192 GB or 256 GB DDR5 kit (4x48 or 4x64)
+    kind: part
+    note: Search only — 4x48 GB (192 GB) or 4x64 GB (256 GB) DDR5. No live or invented price. Confirm the board max on the maker spec.
+    urls:
+      amazon: https://www.amazon.com/s?k=DDR5+256GB+4x64+desktop+kit
+      newegg: https://www.newegg.com/p/pl?d=DDR5+256GB+4x64+desktop+kit
+      bhphoto: https://www.bhphotovideo.com/c/search?Ntt=DDR5+256GB+4x64
+      microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=DDR5+256GB+4x64
+
   - id: nvme
     name: Fast NVMe SSD
     kind: part

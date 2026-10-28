@@ -66,6 +66,8 @@ describe('vetted dual x8/x8 motherboards', () => {
     assert.ok(file.boards.some((board) => board.id === 'asrock-b650m-pro-rs' && !board.dual_ready));
     assert.ok(file.boards.some((board) => board.id === 'msi-b650-gaming-plus-wifi' && !board.dual_ready));
     assert.ok(!file.boards.some((board) => /strix|x870e-e/i.test(`${board.id} ${board.name}`)));
+    assert.ok(file.boards.every((board) => board.max_ram_gb >= 32 && board.dimms >= 2));
+    assert.ok(file.boards.some((board) => board.id === 'asus-proart-x670e-creator' && board.max_ram_gb === 192));
   });
 
   it('never shows a non-x8/x8 board for a dual-GPU build', () => {
@@ -188,9 +190,10 @@ describe('vetted dual x8/x8 motherboards', () => {
       '../components/AskToggles.astro',
       '../components/RigWizard.astro',
       '../components/MotherboardPick.astro',
+      '../components/RamPick.astro',
     ];
     for (const rel of inbound) {
-      assert.match(read(rel), /\/motherboards|MotherboardPick|minbudget/, rel);
+      assert.match(read(rel), /\/motherboards|MotherboardPick|RamPick|minbudget|bigmodels/, rel);
     }
     const askToggles = read('../components/AskToggles.astro');
     assert.match(askToggles, /MIN_BUDGET_COPY/);

@@ -33,6 +33,8 @@ export type Motherboard = {
   slot_note: string;
   local_desktop: boolean;
   product_id: string;
+  max_ram_gb: number;
+  dimms: number;
   citation: BoardCitation;
   manual: BoardCitation;
 };
@@ -143,6 +145,8 @@ export function parseMotherboards(raw: unknown): MotherboardsFile {
       ...row,
       dual_ready: Boolean(row.dual_ready),
       local_desktop: Boolean(row.local_desktop),
+      max_ram_gb: Number(row.max_ram_gb),
+      dimms: Number(row.dimms),
     })),
   };
 }
@@ -204,6 +208,9 @@ export function motherboardPayload(file: MotherboardsFile) {
       slot_note: board.slot_note || null,
       local_desktop: board.local_desktop,
       product_id: board.product_id,
+      max_ram_gb: board.max_ram_gb,
+      dimms: board.dimms,
+      can_take_256: board.max_ram_gb >= 256,
       citation: board.citation,
       manual: board.manual,
     })),
@@ -248,6 +255,15 @@ export function assertMotherboardsValid(file: MotherboardsFile): string[] {
     if (!board.pcie_gen?.trim()) errors.push(`${board.id} missing PCIe gen`);
     if (!board.split?.trim()) errors.push(`${board.id} missing split`);
     if (!board.product_id?.trim()) errors.push(`${board.id} missing product_id`);
+    if (!Number.isFinite(board.max_ram_gb) || board.max_ram_gb < 32) {
+      errors.push(`${board.id} missing cited max_ram_gb`);
+    }
+    if (!Number.isFinite(board.dimms) || board.dimms < 2) {
+      errors.push(`${board.id} missing dimms`);
+    }
+    if (board.max_ram_gb < 256 && !new RegExp(String(board.max_ram_gb)).test(board.citation.section)) {
+      errors.push(`${board.id} citation must quote the maker max RAM`);
+    }
     if (board.socket !== 'AM5' && board.socket !== 'sTR5' && board.socket !== 'sWRX9') {
       errors.push(`${board.id} unexpected socket ${board.socket}`);
     }

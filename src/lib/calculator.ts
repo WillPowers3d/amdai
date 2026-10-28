@@ -2081,7 +2081,7 @@ function isBackendId(value: string | null): value is BackendId {
 
 export function inputToQuery(
   input: CalcInput,
-  extras?: { priority?: string; usage?: string; style?: string; minbudget?: string; expandgpu?: string },
+  extras?: { priority?: string; usage?: string; style?: string; minbudget?: string; expandgpu?: string; bigmodels?: string },
 ): string {
   const params = new URLSearchParams({
     gpu: input.gpuId,
@@ -2127,6 +2127,7 @@ export function inputToQuery(
   if (extras?.style) params.set('style', extras.style);
   if (extras?.minbudget != null && extras.minbudget !== '') params.set('minbudget', extras.minbudget);
   if (extras?.expandgpu != null && extras.expandgpu !== '') params.set('expandgpu', extras.expandgpu);
+  if (extras?.bigmodels != null && extras.bigmodels !== '') params.set('bigmodels', extras.bigmodels);
   return params.toString();
 }
 
