@@ -1,0 +1,397 @@
+{
+  "schema_version": "1.0",
+  "as_of": "2026-10-12",
+  "href": "https://amdai.net/rocm-problems",
+  "issues": [
+    {
+      "id": "ollama-r9700-windows",
+      "title": "Ollama ROCm fails to init on R9700 Windows",
+      "summary": "Ollama on Windows 11 with an Radeon AI PRO R9700 (gfx1201) detects the card, then logs that the device did not fully initialize and falls back to CPU. The bundled ROCm libraries (amdhip64_6.dll / 6.x tensiles) do not include gfx1201 kernels. HSA_OVERRIDE_GFX_VERSION does not add the missing kernels. Vulkan on the same box works.",
+      "impact": "Windows users who install Ollama expecting ROCm get CPU tokens. This is not a reason to abandon the card — it is a reason not to treat official Ollama ROCm as the gfx1201 daily driver.",
+      "status": "workaround",
+      "fixed_in": null,
+      "workaround": "Use llama.cpp Vulkan (this site’s consumer default) or Ollama’s Vulkan path (`OLLAMA_VULKAN=1`). Do not expect a full ROCm userspace from the Windows Ollama installer. Linux + a gfx1201-aware build is the HIP path we document.",
+      "affected_gpus": [
+        "R9700"
+      ],
+      "affected_gfx": [
+        "gfx1201"
+      ],
+      "affected_os": [
+        "Windows"
+      ],
+      "affected_backends": [
+        "ollama"
+      ],
+      "affected_versions": [],
+      "last_checked": "2026-10-12",
+      "href": "https://amdai.net/rocm-problems/ollama-r9700-windows",
+      "upstream": [
+        {
+          "title": "Ollama",
+          "href": "https://github.com/ollama/ollama/issues/14686",
+          "repo": "ollama/ollama"
+        },
+        {
+          "title": "Ollama",
+          "href": "https://github.com/ollama/ollama/issues/14423",
+          "repo": "ollama/ollama"
+        },
+        {
+          "title": "Ollama",
+          "href": "https://github.com/ollama/ollama/issues/13236",
+          "repo": "ollama/ollama"
+        }
+      ]
+    },
+    {
+      "id": "ollama-gfx1201-tensile",
+      "title": "Ollama gfx1201 looks for hipBLASLt tensiles in the wrong folder",
+      "summary": "Official `ollama:rocm` images (reported on RX 9070 XT and related gfx1201 cards) ask hipBLASLt for `hipblaslt/library/TensileLibrary_lazy_gfx1201.dat` while the file is shipped under `rocblas/library/`. hipBLASLt then fails heuristic fetch. A packaging PR to install the hipblaslt directory has been discussed; do not assume your image has it until you list the files.",
+      "impact": "Docker/Linux Ollama ROCm looks “installed” and still cannot run gfx1201 models. People then sprinkle HSA_OVERRIDE and make it worse.",
+      "status": "workaround",
+      "fixed_in": null,
+      "workaround": "Do not treat official Ollama ROCm as the daily driver on gfx1201. Use llama.cpp you compiled (Vulkan or HIP with `AMDGPU_TARGETS=gfx1201`). If you stay on Ollama, confirm `TensileLibrary_lazy_gfx1201.dat` exists under `hipblaslt/library/` before you file a +1.",
+      "affected_gpus": [
+        "RX 9070 XT",
+        "R9700"
+      ],
+      "affected_gfx": [
+        "gfx1201"
+      ],
+      "affected_os": [
+        "Linux"
+      ],
+      "affected_backends": [
+        "ollama"
+      ],
+      "affected_versions": [],
+      "last_checked": "2026-10-12",
+      "href": "https://amdai.net/rocm-problems/ollama-gfx1201-tensile",
+      "upstream": [
+        {
+          "title": "Ollama",
+          "href": "https://github.com/ollama/ollama/issues/12908",
+          "repo": "ollama/ollama"
+        },
+        {
+          "title": "Ollama PR",
+          "href": "https://github.com/ollama/ollama/pull/14979",
+          "repo": "ollama/ollama"
+        }
+      ]
+    },
+    {
+      "id": "hsa-override-unofficial",
+      "title": "HSA_OVERRIDE_GFX_VERSION is unofficial — and the wrong gfx1201 fix",
+      "summary": "`HSA_OVERRIDE_GFX_VERSION` is a community environment variable that pretends the GPU is a different LLVM target so an older code object will load. A comment on ROCm #2353 documents `10.3.0` so gfx1031 can run gfx1030 objects. It is not an AMD recommendation, and it is not on the official ROCR environment-variable page we could find. On Windows Ollama + R9700, 12.0.1 / 12.0.0 / 11.0.0 still failed to initialize ROCm.",
+      "impact": "Home users copy a number from a Discord thread, load the wrong kernels, and then blame RDNA 4. On a card current ROCm already lists (gfx1201 on 10.1.0), you should not need an override.",
+      "status": "workaround",
+      "fixed_in": null,
+      "workaround": "On official gfx1201 + ROCm 10.0/10.1, unset it. Install a userspace that actually lists your gfx ID, or run llama.cpp Vulkan. If you keep an override on an unofficial ISA (see gfx1031), treat it as unofficial and expect wrong kernels. After an upgrade, unset it — /rocm/upgrade.",
+      "affected_gpus": [],
+      "affected_gfx": [
+        "gfx1201",
+        "gfx1031"
+      ],
+      "affected_os": [
+        "Linux",
+        "Windows"
+      ],
+      "affected_backends": [],
+      "affected_versions": [],
+      "last_checked": "2026-10-12",
+      "href": "https://amdai.net/rocm-problems/hsa-override-unofficial",
+      "upstream": [
+        {
+          "title": "ROCm",
+          "href": "https://github.com/ROCm/ROCm/issues/2353",
+          "repo": "ROCm/ROCm"
+        },
+        {
+          "title": "Ollama",
+          "href": "https://github.com/ollama/ollama/issues/14686",
+          "repo": "ollama/ollama"
+        },
+        {
+          "title": "ROCm 10.1.0 hardware table (gfx1201 is listed — no override)",
+          "href": "https://rocm.docs.amd.com/en/docs-10.1.0/about/release-notes.html",
+          "repo": "AMD docs"
+        }
+      ]
+    },
+    {
+      "id": "mode1-reset-gfx12",
+      "title": "amdgpu MODE1 reset / MES hang on gfx12",
+      "summary": "The amdgpu driver declares the GPU hung and issues a MODE1 (SMU) reset. VRAM is lost across the reset. Cited reports: an amd-gfx thread (July 2026) on gfx12 HSA selftests after MES failed to suspend compute gangs; ROCm #6127 on an R9700 where `gst-plugin-scan` / VA-API probing ended in MODE1; and a gfx1201 llama.cpp HIP hang (legacy-rocm-build #6630) where Vulkan on the same card passed. #6127 was later closed for inactivity, not marked fixed.",
+      "impact": "A hang can take the desktop with it. Reinstalling userspace will not help if the kernel/MES path is wedged. Fine-tune GPU-resets are a different class — do not apply training workarounds to inference blindly.",
+      "status": "open",
+      "fixed_in": null,
+      "workaround": "Capture `dmesg | grep -iE 'amdgpu|MODE1|MES'` before you reboot if you can. If the hang started after a kernel upgrade, bisect kernel vs ROCm userspace. For #6127-style login resets, try disabling `libgstvaapi.so`. For inference, switch to llama.cpp Vulkan and see if the hang follows HIP. AMD asked one reporter for nightlies after later gfx1201 page-fault fixes — that is a test request, not a measured fix on our rig.",
+      "affected_gpus": [
+        "R9700"
+      ],
+      "affected_gfx": [
+        "gfx1201",
+        "gfx1200"
+      ],
+      "affected_os": [
+        "Linux"
+      ],
+      "affected_backends": [],
+      "affected_versions": [],
+      "last_checked": "2026-10-12",
+      "href": "https://amdai.net/rocm-problems/mode1-reset-gfx12",
+      "upstream": [
+        {
+          "title": "amd-gfx — GPU reset / MODE1 on gfx12 HSA tests (July 2026)",
+          "href": "https://lists.freedesktop.org/archives/amd-gfx/2026-July/148055.html",
+          "repo": "amd-gfx"
+        },
+        {
+          "title": "ROCm",
+          "href": "https://github.com/ROCm/ROCm/issues/6127",
+          "repo": "ROCm/ROCm"
+        },
+        {
+          "title": "legacy-rocm-build",
+          "href": "https://github.com/ROCm/legacy-rocm-build/issues/6630",
+          "repo": "ROCm/legacy-rocm-build"
+        }
+      ]
+    },
+    {
+      "id": "ubuntu-rocm-package-shadow",
+      "title": "Distro HIP/HSA packages shadow AMD’s ROCm install",
+      "summary": "Mixing Ubuntu archive `rocm` / `libamdhip64-dev` / `libhsa-runtime*` with AMD’s repo install loads the wrong runtime. ROCm #6110 on gfx1201 looked like “has 2 ISAs but can only support a single ISA” until the reporter removed Ubuntu-packaged HIP/HSA 5.7.1 libraries that shadowed ROCm 7.2.1. The HIP sources for that log line are old (6.x-era). The issue is closed as a packaging conflict, not a gfx1201 ISA bug.",
+      "impact": "A clean-looking `/opt/rocm` install still fails HIP init. People then file gfx1201 bugs against the wrong library.",
+      "status": "workaround",
+      "fixed_in": null,
+      "workaround": "Pick one source. Purge archive `rocm`, `libamdhip64-dev`, and `libhsa-runtime*` before adding AMD’s 10.x repo. Check `ldd $(which rocminfo)` / `ldconfig` so `/opt/rocm` wins. See the install tutorial, then /rocm/upgrade if the mix is leftover from a half-finished version move.",
+      "affected_gpus": [],
+      "affected_gfx": [
+        "gfx1201"
+      ],
+      "affected_os": [
+        "Linux"
+      ],
+      "affected_backends": [],
+      "affected_versions": [],
+      "last_checked": "2026-10-12",
+      "href": "https://amdai.net/rocm-problems/ubuntu-rocm-package-shadow",
+      "upstream": [
+        {
+          "title": "ROCm",
+          "href": "https://github.com/ROCm/ROCm/issues/6110",
+          "repo": "ROCm/ROCm"
+        },
+        {
+          "title": "Install ROCm 10.1.0",
+          "href": "https://rocm.docs.amd.com/en/docs-10.1.0/install/rocm.html",
+          "repo": "AMD docs"
+        }
+      ]
+    },
+    {
+      "id": "windows-wsl-preview",
+      "title": "Windows and WSL2 ROCm are a technical preview, not the home-lab path",
+      "summary": "ROCm 10.1.0 release notes add WSL2 support in TheRock artifacts as a technical preview (Ubuntu `.deb` and Python wheels; not RPM). Profiling, debugging, and KFD-dependent tools are out of scope at launch. AMD SMI on WSL2 is discovery/monitoring only. Radeon-Ryzen Windows notes have said only PyTorch is available on Windows — the rest of the stack is Linux. Native Linux is still the path this site writes install steps for.",
+      "impact": "A Windows or WSL box can look “ROCm installed” and still miss KFD tools, `amd-smi` management, and Linux-only engines. Performance vs native Linux is documented as lower in older Radeon-Ryzen WSL notes.",
+      "status": "workaround",
+      "fixed_in": null,
+      "workaround": "For HIP + PyTorch + `amd-smi` as AMD documents them, use a listed Ubuntu. For tokens tonight on Windows, use llama.cpp Vulkan (/setup/windows). The cited WSL2 walk is /setup/wsl. Treat WSL2 ROCm as preview: expect known issues, and do not file “ROCm is broken on Radeon” when the missing piece is KFD in WSL.",
+      "affected_gpus": [],
+      "affected_gfx": [],
+      "affected_os": [
+        "Windows",
+        "WSL"
+      ],
+      "affected_backends": [],
+      "affected_versions": [
+        "10.1",
+        "10.1.0"
+      ],
+      "last_checked": "2026-10-12",
+      "href": "https://amdai.net/rocm-problems/windows-wsl-preview",
+      "upstream": [
+        {
+          "title": "ROCm 10.1.0 release notes — WSL2 technical preview",
+          "href": "https://rocm.docs.amd.com/en/docs-10.1.0/about/release-notes.html",
+          "repo": "AMD docs"
+        },
+        {
+          "title": "Install ROCm 10.1.0 — WSL2 Ubuntu preview notes",
+          "href": "https://rocm.docs.amd.com/en/docs-10.1.0/install/rocm.html",
+          "repo": "AMD docs"
+        },
+        {
+          "title": "Radeon limitations (7.2 docs) — Windows PyTorch-only; WSL caveats",
+          "href": "https://rocm.docs.amd.com/projects/radeon-ryzen/en/docs-7.2/docs/limitations/limitationsrad.html",
+          "repo": "AMD docs"
+        }
+      ]
+    },
+    {
+      "id": "consumer-gpu-not-on-matrix",
+      "title": "Official ROCm is a table — your card may not be on it",
+      "summary": "“Official” on this site means the SKU or OS appears on AMD’s current compatibility matrix or the matching release notes. ROCm 10.1.0 lists specific RDNA 4 / RDNA 3 / RDNA 2 rows (including R9700 and RX 9070 XT as gfx1201). A card that is not on that table is unofficial here, even if a wheel loads. Instinct and Radeon are different product lines with different validation.",
+      "impact": "Buyers assume “Radeon + ROCm docs” means every RX SKU is first-class. Missing kernel images, missing MIOpen kdb files, and “works on my cousin’s 7900” reports follow. We keep official vs works in different columns.",
+      "status": "open",
+      "fixed_in": null,
+      "workaround": "Check the GPU directory and the 10.1.0 matrix before you buy for HIP. If the card is listed, install that userspace. If it is not, use llama.cpp Vulkan and say “works,” not “official.” Do not invent a support claim from a marketing name.",
+      "affected_gpus": [],
+      "affected_gfx": [],
+      "affected_os": [],
+      "affected_backends": [],
+      "affected_versions": [],
+      "last_checked": "2026-10-12",
+      "href": "https://amdai.net/rocm-problems/consumer-gpu-not-on-matrix",
+      "upstream": [
+        {
+          "title": "ROCm 10.1.0 compatibility matrix",
+          "href": "https://rocm.docs.amd.com/en/docs-10.1.0/compatibility/compatibility-matrix.html",
+          "repo": "AMD docs"
+        },
+        {
+          "title": "ROCm 10.1.0 release notes (hardware table)",
+          "href": "https://rocm.docs.amd.com/en/docs-10.1.0/about/release-notes.html",
+          "repo": "AMD docs"
+        },
+        {
+          "title": "ROCm Linux system requirements",
+          "href": "https://rocm.docs.amd.com/projects/install-on-linux/en/latest/reference/system-requirements.html",
+          "repo": "AMD docs"
+        }
+      ]
+    },
+    {
+      "id": "gfx1031-hsa-override",
+      "title": "gfx1031 (RX 67xx class) is not the gfx1030 official row",
+      "summary": "Navi 22 / RX 67xx cards are gfx1031. A community comment on ROCm #2353 says you can export `HSA_OVERRIDE_GFX_VERSION=10.3.0` on Linux to load gfx1030 code objects. That is unofficial. gfx1030 (for example some PRO W6800 / V620 rows) is what official tables list for RDNA 2 in current 10.1 notes — do not collapse 1031 into 1030 in the directory.",
+      "impact": "6700-class buyers follow R9700 or 7900 instructions, hit missing binaries, and then run an override that can load the wrong kernels.",
+      "status": "workaround",
+      "fixed_in": null,
+      "workaround": "Prefer a userspace that actually builds gfx1031 (some distro packages do). If you override to 10.3.0, label it unofficial. llama.cpp Vulkan does not need the HIP target list.",
+      "affected_gpus": [
+        "RX 6750 XT",
+        "RX 6700 XT"
+      ],
+      "affected_gfx": [
+        "gfx1031"
+      ],
+      "affected_os": [
+        "Linux"
+      ],
+      "affected_backends": [],
+      "affected_versions": [],
+      "last_checked": "2026-10-12",
+      "href": "https://amdai.net/rocm-problems/gfx1031-hsa-override",
+      "upstream": [
+        {
+          "title": "ROCm",
+          "href": "https://github.com/ROCm/ROCm/issues/2353",
+          "repo": "ROCm/ROCm"
+        },
+        {
+          "title": "ROCm 10.1.0 compatibility matrix (gfx1030 row, not gfx1031)",
+          "href": "https://rocm.docs.amd.com/en/docs-10.1.0/compatibility/compatibility-matrix.html",
+          "repo": "AMD docs"
+        }
+      ]
+    },
+    {
+      "id": "strix-halo-mes-remove-queue",
+      "title": "MES REMOVE_QUEUE hang on Strix Halo (gfx1151)",
+      "summary": "Cited HIP / ROCm reports on Ryzen AI Max / Strix Halo (gfx1151) hang the GPU. dmesg prints `MES failed to respond to msg=REMOVE_QUEUE` (ROCm #5590). A related firmware row (ROCm #5724) describes MES 0x83 hangs and memory-access faults on the same gfx. This is not a local desktop measurement.",
+      "impact": "A HIP first-run on a mini-PC can look installed and still lock the desktop. People then blame the APU. Vulkan llama.cpp is the consumer first token on this site.",
+      "status": "open",
+      "fixed_in": null,
+      "workaround": "Use llama.cpp Vulkan for a first token. Read the two upstream issues before you copy a kernel flag from a comment. We have not reproduced this hang on the local desktop and we do not invent a firmware pin.",
+      "affected_gpus": [
+        "Strix Halo",
+        "Ryzen AI Max+ 395"
+      ],
+      "affected_gfx": [
+        "gfx1151"
+      ],
+      "affected_os": [
+        "Linux"
+      ],
+      "affected_backends": [
+        "llama.cpp"
+      ],
+      "affected_versions": [],
+      "last_checked": "2026-10-13",
+      "href": "https://amdai.net/rocm-problems/strix-halo-mes-remove-queue",
+      "upstream": [
+        {
+          "title": "ROCm",
+          "href": "https://github.com/ROCm/ROCm/issues/5590",
+          "repo": "ROCm/ROCm"
+        },
+        {
+          "title": "ROCm",
+          "href": "https://github.com/ROCm/ROCm/issues/5724",
+          "repo": "ROCm/ROCm"
+        }
+      ]
+    },
+    {
+      "id": "hip-no-binary-for-gpu",
+      "title": "hipErrorNoBinaryForGpu — the wheel was not built for your ISA",
+      "summary": "HIP has a GPU but no compiled kernel image for that ISA. Official HIP wording: “No kernel image is available for execution on the device.” On gfx1201 this usually means the wheel, container, or llama.cpp HIP build was compiled for a different `AMDGPU_TARGETS` list — not that the card is dead.",
+      "impact": "First-run HIP/vLLM/PyTorch on a new Radeon fails in a way that looks like a driver bug. Random HSA_OVERRIDE values do not compile a missing gfx1201 image.",
+      "status": "workaround",
+      "fixed_in": null,
+      "workaround": "Rebuild or reinstall with an explicit gfx1201 target (`-DAMDGPU_TARGETS=gfx1201` / `-DGGML_HIP=ON`, or the gfx1201 ROCm family package). If HIP still has no binary, use llama.cpp Vulkan tonight. After a ROCm version move, rebuild HIP — see /rocm/upgrade.",
+      "affected_gpus": [],
+      "affected_gfx": [
+        "gfx1201"
+      ],
+      "affected_os": [],
+      "affected_backends": [
+        "llama.cpp",
+        "vllm"
+      ],
+      "affected_versions": [],
+      "last_checked": "2026-10-12",
+      "href": "https://amdai.net/rocm-problems/hip-no-binary-for-gpu",
+      "upstream": [
+        {
+          "title": "HIP error codes — hipErrorNoBinaryForGpu (209)",
+          "href": "https://github.com/ROCm/HIP/blob/develop/docs/reference/error_codes.rst",
+          "repo": "ROCm/HIP"
+        }
+      ]
+    },
+    {
+      "id": "rocm-10-0-finetune-reset",
+      "title": "ROCm 10.0 fine-tune GPU-reset on R9700 (URL still not recorded)",
+      "summary": "Living notes mention a ROCm 10.0 fine-tune / training GPU-reset class on the R9700 and a first mitigation of `TORCH_BLAS_PREFER_HIPBLASLT=0`. We do not yet have a first-party AMD known-issue URL copied here. Do not treat this as a measured inference fix.",
+      "impact": "Training jobs die with a GPU reset. Inference daily-driver on this site is llama.cpp Vulkan and is a different stack.",
+      "status": "open",
+      "fixed_in": null,
+      "workaround": "not recorded: confirm the KI URL on the ROCm 10.0.0 notes page, then retry the training step with `TORCH_BLAS_PREFER_HIPBLASLT=0`. Do not apply this to inference because a blog said so.",
+      "affected_gpus": [
+        "R9700"
+      ],
+      "affected_gfx": [
+        "gfx1201"
+      ],
+      "affected_os": [],
+      "affected_backends": [],
+      "affected_versions": [
+        "10.0"
+      ],
+      "last_checked": "2026-10-12",
+      "href": "https://amdai.net/rocm-problems/rocm-10-0-finetune-reset",
+      "upstream": [
+        {
+          "title": "ROCm 10.0.0 release notes (KI URL still not recorded)",
+          "href": "https://rocm.docs.amd.com/en/docs-10.0.0/about/release-notes.html",
+          "repo": "AMD docs"
+        }
+      ]
+    }
+  ]
+}

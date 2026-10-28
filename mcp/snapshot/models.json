@@ -1,0 +1,1162 @@
+{
+  "schema_version": "1.0",
+  "as_of": "2026-10-27",
+  "href": "https://amdai.net/models",
+  "default_family": "Qwen",
+  "note": "Qwen first. Older families set older: true. Quants below Q4 are omitted.",
+  "quants": [
+    {
+      "id": "q4_k_m",
+      "label": "Q4_K_M",
+      "short": "Q4",
+      "bpw": 4.85
+    },
+    {
+      "id": "q5_k_m",
+      "label": "Q5_K_M / UD-Q5_K_XL",
+      "short": "Q5",
+      "bpw": 5.69
+    },
+    {
+      "id": "q6_k",
+      "label": "Q6_K / UD-Q6_K_XL",
+      "short": "Q6",
+      "bpw": 6.56
+    },
+    {
+      "id": "q8_0",
+      "label": "Q8_0",
+      "short": "Q8",
+      "bpw": 8.5
+    },
+    {
+      "id": "bf16",
+      "label": "BF16",
+      "short": "BF16",
+      "bpw": 16
+    }
+  ],
+  "models": [
+    {
+      "id": "qwen36",
+      "name": "Qwen3.6-35B-A3B",
+      "group": "Qwen (house)",
+      "official": "Qwen/Qwen3.6-35B-A3B",
+      "gguf": "unsloth/Qwen3.6-35B-A3B-GGUF",
+      "older": false,
+      "href": "https://amdai.net/models/qwen36",
+      "total_params_b": 35,
+      "active_params_b": 3,
+      "layers": 40,
+      "kv_layers": 10,
+      "kv_heads": 2,
+      "head_dim": 256,
+      "default_quant": "q5_k_m",
+      "default_ctx": 262144,
+      "quants": [
+        {
+          "id": "q4_k_m",
+          "label": "Q4_K_M",
+          "short": "Q4",
+          "bpw": 4.85,
+          "publisher_decimal_gb": null,
+          "publisher_label": null
+        },
+        {
+          "id": "q5_k_m",
+          "label": "Q5_K_M / UD-Q5_K_XL",
+          "short": "Q5",
+          "bpw": 5.69,
+          "publisher_decimal_gb": 26.6,
+          "publisher_label": "Hugging Face listing for Qwen3.6-35B-A3B-UD-Q5_K_XL.gguf (26.6 GB)"
+        },
+        {
+          "id": "q6_k",
+          "label": "Q6_K / UD-Q6_K_XL",
+          "short": "Q6",
+          "bpw": 6.56,
+          "publisher_decimal_gb": null,
+          "publisher_label": null
+        },
+        {
+          "id": "q8_0",
+          "label": "Q8_0",
+          "short": "Q8",
+          "bpw": 8.5,
+          "publisher_decimal_gb": null,
+          "publisher_label": null
+        },
+        {
+          "id": "bf16",
+          "label": "BF16",
+          "short": "BF16",
+          "bpw": 16,
+          "publisher_decimal_gb": null,
+          "publisher_label": null
+        }
+      ]
+    },
+    {
+      "id": "flash",
+      "name": "Qwen 3.8 Flash",
+      "group": "Qwen (house)",
+      "official": "Qwen/Qwen3.8-Flash-Next",
+      "gguf": "unsloth/Qwen3.8-Flash-Next-GGUF",
+      "older": false,
+      "href": "https://amdai.net/models/flash",
+      "total_params_b": 125,
+      "active_params_b": 6,
+      "layers": 48,
+      "kv_layers": 12,
+      "kv_heads": 2,
+      "head_dim": 256,
+      "default_quant": "q6_k",
+      "default_ctx": 262144,
+      "quants": [
+        {
+          "id": "q4_k_m",
+          "label": "Q4_K_M",
+          "short": "Q4",
+          "bpw": 4.85,
+          "publisher_decimal_gb": 111,
+          "publisher_label": "Hugging Face folder listing for UD-Q4_K_XL (~111 GB across 4 shards). Unsloth docs list 111.3 GB (retrieved 2026-10-13)"
+        },
+        {
+          "id": "q5_k_m",
+          "label": "Q5_K_M / UD-Q5_K_XL",
+          "short": "Q5",
+          "bpw": 5.69,
+          "publisher_decimal_gb": 158.3,
+          "publisher_label": "Unsloth docs listing for UD-Q5_K_XL (158.3 GB). Hugging Face folder lists 158 GB across 6 shards (retrieved 2026-10-13)"
+        },
+        {
+          "id": "q6_k",
+          "label": "Q6_K / UD-Q6_K_XL",
+          "short": "Q6",
+          "bpw": 6.56,
+          "publisher_decimal_gb": 169,
+          "publisher_label": "Hugging Face folder listing for UD-Q6_K_XL (~169 GB across 6 shards)"
+        },
+        {
+          "id": "q8_0",
+          "label": "Q8_0",
+          "short": "Q8",
+          "bpw": 8.5,
+          "publisher_decimal_gb": null,
+          "publisher_label": null
+        },
+        {
+          "id": "bf16",
+          "label": "BF16",
+          "short": "BF16",
+          "bpw": 16,
+          "publisher_decimal_gb": null,
+          "publisher_label": null
+        }
+      ]
+    },
+    {
+      "id": "qwen38-27b",
+      "name": "Qwen3.8 27B",
+      "group": "Qwen",
+      "official": "Qwen/Qwen3.8-27B",
+      "gguf": "unsloth/Qwen3.8-27B-GGUF",
+      "older": false,
+      "href": "https://amdai.net/models/qwen38-27b",
+      "total_params_b": 27.8,
+      "active_params_b": 27.8,
+      "layers": 64,
+      "kv_layers": 16,
+      "kv_heads": 4,
+      "head_dim": 256,
+      "default_quant": "q4_k_m",
+      "default_ctx": 8192,
+      "quants": [
+        {
+          "id": "q4_k_m",
+          "label": "Q4_K_M",
+          "short": "Q4",
+          "bpw": 4.85,
+          "publisher_decimal_gb": 16.46,
+          "publisher_label": "Hugging Face LFS size for unsloth/Qwen3.8-27B-GGUF Qwen3.8-27B-UD-Q4_K_M.gguf (16.46 GB)"
+        },
+        {
+          "id": "q5_k_m",
+          "label": "Q5_K_M / UD-Q5_K_XL",
+          "short": "Q5",
+          "bpw": 5.69,
+          "publisher_decimal_gb": 19.77,
+          "publisher_label": "Hugging Face LFS size for unsloth/Qwen3.8-27B-GGUF Qwen3.8-27B-UD-Q5_K_M.gguf (19.77 GB)"
+        },
+        {
+          "id": "q6_k",
+          "label": "Q6_K / UD-Q6_K_XL",
+          "short": "Q6",
+          "bpw": 6.56,
+          "publisher_decimal_gb": 21.98,
+          "publisher_label": "Hugging Face LFS size for unsloth/Qwen3.8-27B-GGUF Qwen3.8-27B-UD-Q6_K.gguf (21.98 GB)"
+        },
+        {
+          "id": "q8_0",
+          "label": "Q8_0",
+          "short": "Q8",
+          "bpw": 8.5,
+          "publisher_decimal_gb": null,
+          "publisher_label": null
+        },
+        {
+          "id": "bf16",
+          "label": "BF16",
+          "short": "BF16",
+          "bpw": 16,
+          "publisher_decimal_gb": null,
+          "publisher_label": null
+        }
+      ]
+    },
+    {
+      "id": "qwen36-27b",
+      "name": "Qwen3.6 27B",
+      "group": "Qwen",
+      "official": "Qwen/Qwen3.6-27B",
+      "gguf": "unsloth/Qwen3.6-27B-GGUF",
+      "older": false,
+      "href": "https://amdai.net/models/qwen36-27b",
+      "total_params_b": 27.78,
+      "active_params_b": 27.78,
+      "layers": 64,
+      "kv_layers": 16,
+      "kv_heads": 4,
+      "head_dim": 256,
+      "default_quant": "q4_k_m",
+      "default_ctx": 8192,
+      "quants": [
+        {
+          "id": "q4_k_m",
+          "label": "Q4_K_M",
+          "short": "Q4",
+          "bpw": 4.85,
+          "publisher_decimal_gb": 16.82,
+          "publisher_label": "Hugging Face LFS size for unsloth/Qwen3.6-27B-GGUF Qwen3.6-27B-Q4_K_M.gguf (16.82 GB)"
+        },
+        {
+          "id": "q5_k_m",
+          "label": "Q5_K_M / UD-Q5_K_XL",
+          "short": "Q5",
+          "bpw": 5.69,
+          "publisher_decimal_gb": 19.51,
+          "publisher_label": "Hugging Face LFS size for unsloth/Qwen3.6-27B-GGUF Qwen3.6-27B-Q5_K_M.gguf (19.51 GB)"
+        },
+        {
+          "id": "q6_k",
+          "label": "Q6_K / UD-Q6_K_XL",
+          "short": "Q6",
+          "bpw": 6.56,
+          "publisher_decimal_gb": 22.52,
+          "publisher_label": "Hugging Face LFS size for unsloth/Qwen3.6-27B-GGUF Qwen3.6-27B-Q6_K.gguf (22.52 GB)"
+        },
+        {
+          "id": "q8_0",
+          "label": "Q8_0",
+          "short": "Q8",
+          "bpw": 8.5,
+          "publisher_decimal_gb": null,
+          "publisher_label": null
+        },
+        {
+          "id": "bf16",
+          "label": "BF16",
+          "short": "BF16",
+          "bpw": 16,
+          "publisher_decimal_gb": null,
+          "publisher_label": null
+        }
+      ]
+    },
+    {
+      "id": "glm-53-flash",
+      "name": "GLM 5.3 Flash",
+      "group": "GLM",
+      "official": "zai-org/GLM-5.3-Flash",
+      "gguf": "unsloth/GLM-5.3-Flash-GGUF",
+      "older": false,
+      "href": "https://amdai.net/models/glm-53-flash",
+      "total_params_b": 320,
+      "active_params_b": 18,
+      "layers": 45,
+      "kv_layers": 11,
+      "kv_heads": 64,
+      "head_dim": 256,
+      "default_quant": "q4_k_m",
+      "default_ctx": 8192,
+      "quants": [
+        {
+          "id": "q4_k_m",
+          "label": "Q4_K_M",
+          "short": "Q4",
+          "bpw": 4.85,
+          "publisher_decimal_gb": 199.71,
+          "publisher_label": "Hugging Face LFS shard sum for unsloth/GLM-5.3-Flash-GGUF UD-Q4_K_XL (199.71 GB across 6 shards)"
+        },
+        {
+          "id": "q5_k_m",
+          "label": "Q5_K_M / UD-Q5_K_XL",
+          "short": "Q5",
+          "bpw": 5.69,
+          "publisher_decimal_gb": 240.31,
+          "publisher_label": "Hugging Face LFS shard sum for unsloth/GLM-5.3-Flash-GGUF UD-Q5_K_XL (240.31 GB across 6 shards)"
+        },
+        {
+          "id": "q6_k",
+          "label": "Q6_K / UD-Q6_K_XL",
+          "short": "Q6",
+          "bpw": 6.56,
+          "publisher_decimal_gb": 291.83,
+          "publisher_label": "Hugging Face LFS shard sum for unsloth/GLM-5.3-Flash-GGUF UD-Q6_K_XL (291.83 GB across 7 shards)"
+        },
+        {
+          "id": "q8_0",
+          "label": "Q8_0",
+          "short": "Q8",
+          "bpw": 8.5,
+          "publisher_decimal_gb": null,
+          "publisher_label": null
+        },
+        {
+          "id": "bf16",
+          "label": "BF16",
+          "short": "BF16",
+          "bpw": 16,
+          "publisher_decimal_gb": null,
+          "publisher_label": null
+        }
+      ]
+    },
+    {
+      "id": "gpt-oss-20b",
+      "name": "gpt-oss 20B",
+      "group": "gpt-oss",
+      "official": "openai/gpt-oss-20b",
+      "gguf": "unsloth/gpt-oss-20b-GGUF",
+      "older": false,
+      "href": "https://amdai.net/models/gpt-oss-20b",
+      "total_params_b": 21.5,
+      "active_params_b": 3.6,
+      "layers": 24,
+      "kv_layers": 12,
+      "kv_heads": 8,
+      "head_dim": 64,
+      "default_quant": "q4_k_m",
+      "default_ctx": 8192,
+      "quants": [
+        {
+          "id": "q4_k_m",
+          "label": "Q4_K_M",
+          "short": "Q4",
+          "bpw": 4.85,
+          "publisher_decimal_gb": 11.62,
+          "publisher_label": "Hugging Face LFS size for unsloth/gpt-oss-20b-GGUF gpt-oss-20b-Q4_K_M.gguf (11.62 GB)"
+        },
+        {
+          "id": "q5_k_m",
+          "label": "Q5_K_M / UD-Q5_K_XL",
+          "short": "Q5",
+          "bpw": 5.69,
+          "publisher_decimal_gb": 11.72,
+          "publisher_label": "Hugging Face LFS size for unsloth/gpt-oss-20b-GGUF gpt-oss-20b-Q5_K_M.gguf (11.72 GB)"
+        },
+        {
+          "id": "q6_k",
+          "label": "Q6_K / UD-Q6_K_XL",
+          "short": "Q6",
+          "bpw": 6.56,
+          "publisher_decimal_gb": 12.04,
+          "publisher_label": "Hugging Face LFS size for unsloth/gpt-oss-20b-GGUF gpt-oss-20b-Q6_K.gguf (12.04 GB)"
+        },
+        {
+          "id": "q8_0",
+          "label": "Q8_0",
+          "short": "Q8",
+          "bpw": 8.5,
+          "publisher_decimal_gb": null,
+          "publisher_label": null
+        },
+        {
+          "id": "bf16",
+          "label": "BF16",
+          "short": "BF16",
+          "bpw": 16,
+          "publisher_decimal_gb": null,
+          "publisher_label": null
+        }
+      ]
+    },
+    {
+      "id": "gpt-oss-120b",
+      "name": "gpt-oss 120B",
+      "group": "gpt-oss",
+      "official": "openai/gpt-oss-120b",
+      "gguf": "",
+      "older": false,
+      "href": "https://amdai.net/calculator?model=gpt-oss-120b",
+      "total_params_b": 120.4,
+      "active_params_b": 5.1,
+      "layers": 36,
+      "kv_layers": 18,
+      "kv_heads": 8,
+      "head_dim": 64,
+      "default_quant": "q4_k_m",
+      "default_ctx": 8192,
+      "quants": [
+        {
+          "id": "q4_k_m",
+          "label": "Q4_K_M",
+          "short": "Q4",
+          "bpw": 4.85,
+          "publisher_decimal_gb": null,
+          "publisher_label": null
+        },
+        {
+          "id": "q5_k_m",
+          "label": "Q5_K_M / UD-Q5_K_XL",
+          "short": "Q5",
+          "bpw": 5.69,
+          "publisher_decimal_gb": null,
+          "publisher_label": null
+        },
+        {
+          "id": "q6_k",
+          "label": "Q6_K / UD-Q6_K_XL",
+          "short": "Q6",
+          "bpw": 6.56,
+          "publisher_decimal_gb": null,
+          "publisher_label": null
+        },
+        {
+          "id": "q8_0",
+          "label": "Q8_0",
+          "short": "Q8",
+          "bpw": 8.5,
+          "publisher_decimal_gb": null,
+          "publisher_label": null
+        },
+        {
+          "id": "bf16",
+          "label": "BF16",
+          "short": "BF16",
+          "bpw": 16,
+          "publisher_decimal_gb": null,
+          "publisher_label": null
+        }
+      ]
+    },
+    {
+      "id": "qwen35-27b",
+      "name": "Qwen3.5 27B",
+      "group": "Qwen",
+      "official": "Qwen/Qwen3.5-27B",
+      "gguf": "",
+      "older": true,
+      "href": "https://amdai.net/calculator?model=qwen35-27b",
+      "total_params_b": 27.78,
+      "active_params_b": 27.78,
+      "layers": 64,
+      "kv_layers": 16,
+      "kv_heads": 4,
+      "head_dim": 256,
+      "default_quant": "q4_k_m",
+      "default_ctx": 8192,
+      "quants": [
+        {
+          "id": "q4_k_m",
+          "label": "Q4_K_M",
+          "short": "Q4",
+          "bpw": 4.85,
+          "publisher_decimal_gb": null,
+          "publisher_label": null
+        },
+        {
+          "id": "q5_k_m",
+          "label": "Q5_K_M / UD-Q5_K_XL",
+          "short": "Q5",
+          "bpw": 5.69,
+          "publisher_decimal_gb": null,
+          "publisher_label": null
+        },
+        {
+          "id": "q6_k",
+          "label": "Q6_K / UD-Q6_K_XL",
+          "short": "Q6",
+          "bpw": 6.56,
+          "publisher_decimal_gb": null,
+          "publisher_label": null
+        },
+        {
+          "id": "q8_0",
+          "label": "Q8_0",
+          "short": "Q8",
+          "bpw": 8.5,
+          "publisher_decimal_gb": null,
+          "publisher_label": null
+        },
+        {
+          "id": "bf16",
+          "label": "BF16",
+          "short": "BF16",
+          "bpw": 16,
+          "publisher_decimal_gb": null,
+          "publisher_label": null
+        }
+      ]
+    },
+    {
+      "id": "qwen35-9b",
+      "name": "Qwen3.5 9B",
+      "group": "Qwen",
+      "official": "Qwen/Qwen3.5-9B",
+      "gguf": "",
+      "older": true,
+      "href": "https://amdai.net/calculator?model=qwen35-9b",
+      "total_params_b": 9.65,
+      "active_params_b": 9.65,
+      "layers": 32,
+      "kv_layers": 8,
+      "kv_heads": 4,
+      "head_dim": 256,
+      "default_quant": "q5_k_m",
+      "default_ctx": 8192,
+      "quants": [
+        {
+          "id": "q4_k_m",
+          "label": "Q4_K_M",
+          "short": "Q4",
+          "bpw": 4.85,
+          "publisher_decimal_gb": null,
+          "publisher_label": null
+        },
+        {
+          "id": "q5_k_m",
+          "label": "Q5_K_M / UD-Q5_K_XL",
+          "short": "Q5",
+          "bpw": 5.69,
+          "publisher_decimal_gb": null,
+          "publisher_label": null
+        },
+        {
+          "id": "q6_k",
+          "label": "Q6_K / UD-Q6_K_XL",
+          "short": "Q6",
+          "bpw": 6.56,
+          "publisher_decimal_gb": null,
+          "publisher_label": null
+        },
+        {
+          "id": "q8_0",
+          "label": "Q8_0",
+          "short": "Q8",
+          "bpw": 8.5,
+          "publisher_decimal_gb": null,
+          "publisher_label": null
+        },
+        {
+          "id": "bf16",
+          "label": "BF16",
+          "short": "BF16",
+          "bpw": 16,
+          "publisher_decimal_gb": null,
+          "publisher_label": null
+        }
+      ]
+    },
+    {
+      "id": "qwen3-32b",
+      "name": "Qwen3 32B",
+      "group": "Qwen",
+      "official": "Qwen/Qwen3-32B",
+      "gguf": "",
+      "older": true,
+      "href": "https://amdai.net/calculator?model=qwen3-32b",
+      "total_params_b": 32.5,
+      "active_params_b": 32.5,
+      "layers": 64,
+      "kv_layers": 64,
+      "kv_heads": 8,
+      "head_dim": 128,
+      "default_quant": "q4_k_m",
+      "default_ctx": 8192,
+      "quants": [
+        {
+          "id": "q4_k_m",
+          "label": "Q4_K_M",
+          "short": "Q4",
+          "bpw": 4.85,
+          "publisher_decimal_gb": null,
+          "publisher_label": null
+        },
+        {
+          "id": "q5_k_m",
+          "label": "Q5_K_M / UD-Q5_K_XL",
+          "short": "Q5",
+          "bpw": 5.69,
+          "publisher_decimal_gb": null,
+          "publisher_label": null
+        },
+        {
+          "id": "q6_k",
+          "label": "Q6_K / UD-Q6_K_XL",
+          "short": "Q6",
+          "bpw": 6.56,
+          "publisher_decimal_gb": null,
+          "publisher_label": null
+        },
+        {
+          "id": "q8_0",
+          "label": "Q8_0",
+          "short": "Q8",
+          "bpw": 8.5,
+          "publisher_decimal_gb": null,
+          "publisher_label": null
+        },
+        {
+          "id": "bf16",
+          "label": "BF16",
+          "short": "BF16",
+          "bpw": 16,
+          "publisher_decimal_gb": null,
+          "publisher_label": null
+        }
+      ]
+    },
+    {
+      "id": "qwen3-14b",
+      "name": "Qwen3 14B",
+      "group": "Qwen",
+      "official": "Qwen/Qwen3-14B",
+      "gguf": "",
+      "older": true,
+      "href": "https://amdai.net/calculator?model=qwen3-14b",
+      "total_params_b": 14.77,
+      "active_params_b": 14.77,
+      "layers": 40,
+      "kv_layers": 40,
+      "kv_heads": 8,
+      "head_dim": 128,
+      "default_quant": "q5_k_m",
+      "default_ctx": 8192,
+      "quants": [
+        {
+          "id": "q4_k_m",
+          "label": "Q4_K_M",
+          "short": "Q4",
+          "bpw": 4.85,
+          "publisher_decimal_gb": null,
+          "publisher_label": null
+        },
+        {
+          "id": "q5_k_m",
+          "label": "Q5_K_M / UD-Q5_K_XL",
+          "short": "Q5",
+          "bpw": 5.69,
+          "publisher_decimal_gb": null,
+          "publisher_label": null
+        },
+        {
+          "id": "q6_k",
+          "label": "Q6_K / UD-Q6_K_XL",
+          "short": "Q6",
+          "bpw": 6.56,
+          "publisher_decimal_gb": null,
+          "publisher_label": null
+        },
+        {
+          "id": "q8_0",
+          "label": "Q8_0",
+          "short": "Q8",
+          "bpw": 8.5,
+          "publisher_decimal_gb": null,
+          "publisher_label": null
+        },
+        {
+          "id": "bf16",
+          "label": "BF16",
+          "short": "BF16",
+          "bpw": 16,
+          "publisher_decimal_gb": null,
+          "publisher_label": null
+        }
+      ]
+    },
+    {
+      "id": "qwen3-30b-a3b",
+      "name": "Qwen3 30B-A3B",
+      "group": "Qwen",
+      "official": "Qwen/Qwen3-30B-A3B",
+      "gguf": "",
+      "older": true,
+      "href": "https://amdai.net/calculator?model=qwen3-30b-a3b",
+      "total_params_b": 30,
+      "active_params_b": 3,
+      "layers": 48,
+      "kv_layers": 48,
+      "kv_heads": 4,
+      "head_dim": 128,
+      "default_quant": "q4_k_m",
+      "default_ctx": 8192,
+      "quants": [
+        {
+          "id": "q4_k_m",
+          "label": "Q4_K_M",
+          "short": "Q4",
+          "bpw": 4.85,
+          "publisher_decimal_gb": null,
+          "publisher_label": null
+        },
+        {
+          "id": "q5_k_m",
+          "label": "Q5_K_M / UD-Q5_K_XL",
+          "short": "Q5",
+          "bpw": 5.69,
+          "publisher_decimal_gb": null,
+          "publisher_label": null
+        },
+        {
+          "id": "q6_k",
+          "label": "Q6_K / UD-Q6_K_XL",
+          "short": "Q6",
+          "bpw": 6.56,
+          "publisher_decimal_gb": null,
+          "publisher_label": null
+        },
+        {
+          "id": "q8_0",
+          "label": "Q8_0",
+          "short": "Q8",
+          "bpw": 8.5,
+          "publisher_decimal_gb": null,
+          "publisher_label": null
+        },
+        {
+          "id": "bf16",
+          "label": "BF16",
+          "short": "BF16",
+          "bpw": 16,
+          "publisher_decimal_gb": null,
+          "publisher_label": null
+        }
+      ]
+    },
+    {
+      "id": "qwen3-235b-a22b",
+      "name": "Qwen3 235B-A22B",
+      "group": "Qwen",
+      "official": "Qwen/Qwen3-235B-A22B",
+      "gguf": "",
+      "older": true,
+      "href": "https://amdai.net/calculator?model=qwen3-235b-a22b",
+      "total_params_b": 235,
+      "active_params_b": 22,
+      "layers": 94,
+      "kv_layers": 94,
+      "kv_heads": 4,
+      "head_dim": 128,
+      "default_quant": "q4_k_m",
+      "default_ctx": 8192,
+      "quants": [
+        {
+          "id": "q4_k_m",
+          "label": "Q4_K_M",
+          "short": "Q4",
+          "bpw": 4.85,
+          "publisher_decimal_gb": null,
+          "publisher_label": null
+        },
+        {
+          "id": "q5_k_m",
+          "label": "Q5_K_M / UD-Q5_K_XL",
+          "short": "Q5",
+          "bpw": 5.69,
+          "publisher_decimal_gb": null,
+          "publisher_label": null
+        },
+        {
+          "id": "q6_k",
+          "label": "Q6_K / UD-Q6_K_XL",
+          "short": "Q6",
+          "bpw": 6.56,
+          "publisher_decimal_gb": null,
+          "publisher_label": null
+        },
+        {
+          "id": "q8_0",
+          "label": "Q8_0",
+          "short": "Q8",
+          "bpw": 8.5,
+          "publisher_decimal_gb": null,
+          "publisher_label": null
+        },
+        {
+          "id": "bf16",
+          "label": "BF16",
+          "short": "BF16",
+          "bpw": 16,
+          "publisher_decimal_gb": null,
+          "publisher_label": null
+        }
+      ]
+    },
+    {
+      "id": "llama33-70b",
+      "name": "Llama 3.3 70B",
+      "group": "Llama",
+      "official": "meta-llama/Llama-3.3-70B-Instruct",
+      "gguf": "bartowski/Llama-3.3-70B-Instruct-GGUF",
+      "older": true,
+      "href": "https://amdai.net/models/llama33-70b",
+      "total_params_b": 70.6,
+      "active_params_b": 70.6,
+      "layers": 80,
+      "kv_layers": 80,
+      "kv_heads": 8,
+      "head_dim": 128,
+      "default_quant": "q4_k_m",
+      "default_ctx": 8192,
+      "quants": [
+        {
+          "id": "q4_k_m",
+          "label": "Q4_K_M",
+          "short": "Q4",
+          "bpw": 4.85,
+          "publisher_decimal_gb": 42.52,
+          "publisher_label": "bartowski/Llama-3.3-70B-Instruct-GGUF README table Q4_K_M 42.52 GB (LFS 42.52 GB)"
+        },
+        {
+          "id": "q5_k_m",
+          "label": "Q5_K_M / UD-Q5_K_XL",
+          "short": "Q5",
+          "bpw": 5.69,
+          "publisher_decimal_gb": 49.95,
+          "publisher_label": "bartowski/Llama-3.3-70B-Instruct-GGUF README table Q5_K_M 49.95 GB (LFS shards 39.99 + 9.96 GB)"
+        },
+        {
+          "id": "q6_k",
+          "label": "Q6_K / UD-Q6_K_XL",
+          "short": "Q6",
+          "bpw": 6.56,
+          "publisher_decimal_gb": 57.89,
+          "publisher_label": "bartowski/Llama-3.3-70B-Instruct-GGUF README table Q6_K 57.89 GB (LFS shards 39.95 + 17.93 GB)"
+        },
+        {
+          "id": "q8_0",
+          "label": "Q8_0",
+          "short": "Q8",
+          "bpw": 8.5,
+          "publisher_decimal_gb": null,
+          "publisher_label": null
+        },
+        {
+          "id": "bf16",
+          "label": "BF16",
+          "short": "BF16",
+          "bpw": 16,
+          "publisher_decimal_gb": null,
+          "publisher_label": null
+        }
+      ]
+    },
+    {
+      "id": "llama31-70b",
+      "name": "Llama 3.1 70B",
+      "group": "Llama",
+      "official": "meta-llama/Llama-3.1-70B-Instruct",
+      "gguf": "",
+      "older": true,
+      "href": "https://amdai.net/calculator?model=llama31-70b",
+      "total_params_b": 70.6,
+      "active_params_b": 70.6,
+      "layers": 80,
+      "kv_layers": 80,
+      "kv_heads": 8,
+      "head_dim": 128,
+      "default_quant": "q4_k_m",
+      "default_ctx": 8192,
+      "quants": [
+        {
+          "id": "q4_k_m",
+          "label": "Q4_K_M",
+          "short": "Q4",
+          "bpw": 4.85,
+          "publisher_decimal_gb": null,
+          "publisher_label": null
+        },
+        {
+          "id": "q5_k_m",
+          "label": "Q5_K_M / UD-Q5_K_XL",
+          "short": "Q5",
+          "bpw": 5.69,
+          "publisher_decimal_gb": null,
+          "publisher_label": null
+        },
+        {
+          "id": "q6_k",
+          "label": "Q6_K / UD-Q6_K_XL",
+          "short": "Q6",
+          "bpw": 6.56,
+          "publisher_decimal_gb": null,
+          "publisher_label": null
+        },
+        {
+          "id": "q8_0",
+          "label": "Q8_0",
+          "short": "Q8",
+          "bpw": 8.5,
+          "publisher_decimal_gb": null,
+          "publisher_label": null
+        },
+        {
+          "id": "bf16",
+          "label": "BF16",
+          "short": "BF16",
+          "bpw": 16,
+          "publisher_decimal_gb": null,
+          "publisher_label": null
+        }
+      ]
+    },
+    {
+      "id": "llama31-8b",
+      "name": "Llama 3.1 8B",
+      "group": "Llama",
+      "official": "meta-llama/Llama-3.1-8B-Instruct",
+      "gguf": "",
+      "older": true,
+      "href": "https://amdai.net/calculator?model=llama31-8b",
+      "total_params_b": 8.03,
+      "active_params_b": 8.03,
+      "layers": 32,
+      "kv_layers": 32,
+      "kv_heads": 8,
+      "head_dim": 128,
+      "default_quant": "q5_k_m",
+      "default_ctx": 8192,
+      "quants": [
+        {
+          "id": "q4_k_m",
+          "label": "Q4_K_M",
+          "short": "Q4",
+          "bpw": 4.85,
+          "publisher_decimal_gb": null,
+          "publisher_label": null
+        },
+        {
+          "id": "q5_k_m",
+          "label": "Q5_K_M / UD-Q5_K_XL",
+          "short": "Q5",
+          "bpw": 5.69,
+          "publisher_decimal_gb": null,
+          "publisher_label": null
+        },
+        {
+          "id": "q6_k",
+          "label": "Q6_K / UD-Q6_K_XL",
+          "short": "Q6",
+          "bpw": 6.56,
+          "publisher_decimal_gb": null,
+          "publisher_label": null
+        },
+        {
+          "id": "q8_0",
+          "label": "Q8_0",
+          "short": "Q8",
+          "bpw": 8.5,
+          "publisher_decimal_gb": null,
+          "publisher_label": null
+        },
+        {
+          "id": "bf16",
+          "label": "BF16",
+          "short": "BF16",
+          "bpw": 16,
+          "publisher_decimal_gb": null,
+          "publisher_label": null
+        }
+      ]
+    },
+    {
+      "id": "gemma3-27b",
+      "name": "Gemma 3 27B",
+      "group": "Gemma",
+      "official": "google/gemma-3-27b-it",
+      "gguf": "unsloth/gemma-3-27b-it-GGUF",
+      "older": true,
+      "href": "https://amdai.net/models/gemma3-27b",
+      "total_params_b": 27.4,
+      "active_params_b": 27.4,
+      "layers": 62,
+      "kv_layers": 10,
+      "kv_heads": 16,
+      "head_dim": 128,
+      "default_quant": "q4_k_m",
+      "default_ctx": 8192,
+      "quants": [
+        {
+          "id": "q4_k_m",
+          "label": "Q4_K_M",
+          "short": "Q4",
+          "bpw": 4.85,
+          "publisher_decimal_gb": 16.55,
+          "publisher_label": "Hugging Face LFS size for unsloth/gemma-3-27b-it-GGUF gemma-3-27b-it-Q4_K_M.gguf (16.55 GB)"
+        },
+        {
+          "id": "q5_k_m",
+          "label": "Q5_K_M / UD-Q5_K_XL",
+          "short": "Q5",
+          "bpw": 5.69,
+          "publisher_decimal_gb": 19.27,
+          "publisher_label": "Hugging Face LFS size for unsloth/gemma-3-27b-it-GGUF gemma-3-27b-it-Q5_K_M.gguf (19.27 GB)"
+        },
+        {
+          "id": "q6_k",
+          "label": "Q6_K / UD-Q6_K_XL",
+          "short": "Q6",
+          "bpw": 6.56,
+          "publisher_decimal_gb": 22.17,
+          "publisher_label": "Hugging Face LFS size for unsloth/gemma-3-27b-it-GGUF gemma-3-27b-it-Q6_K.gguf (22.17 GB)"
+        },
+        {
+          "id": "q8_0",
+          "label": "Q8_0",
+          "short": "Q8",
+          "bpw": 8.5,
+          "publisher_decimal_gb": null,
+          "publisher_label": null
+        },
+        {
+          "id": "bf16",
+          "label": "BF16",
+          "short": "BF16",
+          "bpw": 16,
+          "publisher_decimal_gb": null,
+          "publisher_label": null
+        }
+      ]
+    },
+    {
+      "id": "gemma4-31b",
+      "name": "Gemma 4 31B",
+      "group": "Gemma",
+      "official": "google/gemma-4-31b",
+      "gguf": "",
+      "older": true,
+      "href": "https://amdai.net/calculator?model=gemma4-31b",
+      "total_params_b": 31,
+      "active_params_b": 31,
+      "layers": 60,
+      "kv_layers": 10,
+      "kv_heads": 4,
+      "head_dim": 512,
+      "default_quant": "q4_k_m",
+      "default_ctx": 8192,
+      "quants": [
+        {
+          "id": "q4_k_m",
+          "label": "Q4_K_M",
+          "short": "Q4",
+          "bpw": 4.85,
+          "publisher_decimal_gb": null,
+          "publisher_label": null
+        },
+        {
+          "id": "q5_k_m",
+          "label": "Q5_K_M / UD-Q5_K_XL",
+          "short": "Q5",
+          "bpw": 5.69,
+          "publisher_decimal_gb": null,
+          "publisher_label": null
+        },
+        {
+          "id": "q6_k",
+          "label": "Q6_K / UD-Q6_K_XL",
+          "short": "Q6",
+          "bpw": 6.56,
+          "publisher_decimal_gb": null,
+          "publisher_label": null
+        },
+        {
+          "id": "q8_0",
+          "label": "Q8_0",
+          "short": "Q8",
+          "bpw": 8.5,
+          "publisher_decimal_gb": null,
+          "publisher_label": null
+        },
+        {
+          "id": "bf16",
+          "label": "BF16",
+          "short": "BF16",
+          "bpw": 16,
+          "publisher_decimal_gb": null,
+          "publisher_label": null
+        }
+      ]
+    },
+    {
+      "id": "gemma4-12b",
+      "name": "Gemma 4 12B",
+      "group": "Gemma",
+      "official": "google/gemma-4-12b",
+      "gguf": "",
+      "older": true,
+      "href": "https://amdai.net/calculator?model=gemma4-12b",
+      "total_params_b": 12.1,
+      "active_params_b": 12.1,
+      "layers": 48,
+      "kv_layers": 8,
+      "kv_heads": 1,
+      "head_dim": 512,
+      "default_quant": "q5_k_m",
+      "default_ctx": 8192,
+      "quants": [
+        {
+          "id": "q4_k_m",
+          "label": "Q4_K_M",
+          "short": "Q4",
+          "bpw": 4.85,
+          "publisher_decimal_gb": null,
+          "publisher_label": null
+        },
+        {
+          "id": "q5_k_m",
+          "label": "Q5_K_M / UD-Q5_K_XL",
+          "short": "Q5",
+          "bpw": 5.69,
+          "publisher_decimal_gb": null,
+          "publisher_label": null
+        },
+        {
+          "id": "q6_k",
+          "label": "Q6_K / UD-Q6_K_XL",
+          "short": "Q6",
+          "bpw": 6.56,
+          "publisher_decimal_gb": null,
+          "publisher_label": null
+        },
+        {
+          "id": "q8_0",
+          "label": "Q8_0",
+          "short": "Q8",
+          "bpw": 8.5,
+          "publisher_decimal_gb": null,
+          "publisher_label": null
+        },
+        {
+          "id": "bf16",
+          "label": "BF16",
+          "short": "BF16",
+          "bpw": 16,
+          "publisher_decimal_gb": null,
+          "publisher_label": null
+        }
+      ]
+    }
+  ]
+}

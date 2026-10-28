@@ -20,6 +20,8 @@ describe('llms.txt', () => {
     assert.match(short, new RegExp(`${SITE_ORIGIN}/gpus/`));
     assert.match(short, new RegExp(`${SITE_ORIGIN}/sponsor/`));
     assert.match(short, new RegExp(`${SITE_ORIGIN}/compare/`));
+    assert.match(short, new RegExp(`${SITE_ORIGIN}/api/`));
+    assert.match(short, /api\/v1\/index\.json/);
     assert.match(full, new RegExp(`${SITE_ORIGIN}/llms\\.txt`));
     assert.match(full, new RegExp(`${SITE_ORIGIN}/can-run/`));
     assert.match(full, new RegExp(`${SITE_ORIGIN}/harnesses/`));

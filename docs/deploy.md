@@ -21,6 +21,11 @@ amdai.net {
 
 	@html path *.html /
 	header @html Cache-Control "public, max-age=0, must-revalidate"
+
+	@api path /api/v1/*.json
+	header @api Access-Control-Allow-Origin "*"
+	header @api Access-Control-Allow-Methods "GET, HEAD, OPTIONS"
+	header @api Cache-Control "public, max-age=300"
 }
 ```
 

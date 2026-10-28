@@ -91,6 +91,16 @@ const SHORT: LlmsLink[] = [
     summary: 'Size a GGUF against Radeon VRAM. Estimates stay labeled. No prices.',
   },
   {
+    href: '/api',
+    title: 'Public API',
+    summary: 'Static JSON at /api/v1/. GPU, model, stack, measured, and ROCm catalogs for assistants. MCP server in this repo.',
+  },
+  {
+    href: '/api/v1/index.json',
+    title: 'API index.json',
+    summary: 'Endpoint list, schema version, and as_of for the public static API.',
+  },
+  {
     href: '/benchmarks',
     title: 'Benchmarks',
     summary: 'Cited 35B llama.cpp matrix from local desktop amdai-bench/run@1 cards.',
@@ -339,6 +349,7 @@ export function assertLlmsValid(): string[] {
   if (!short.includes(SPONSOR_PATH)) errors.push('llms.txt missing /sponsor');
   if (!full.includes('/llms.txt')) errors.push('llms-full should point at llms.txt');
   if (!short.includes('/compare')) errors.push('llms.txt missing /compare');
+  if (!short.includes('/api')) errors.push('llms.txt missing /api');
   if (!short.includes('/can-run') && !full.includes('/can-run')) errors.push('llms files missing /can-run');
   if (!full.includes('/harnesses')) errors.push('llms-full missing /harnesses');
   if (!full.includes('/recipes')) errors.push('llms-full missing /recipes');

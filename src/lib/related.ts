@@ -679,8 +679,21 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/out-of-vram', label: 'Out of VRAM' },
     ];
   }
+  if (path === '/api') {
+    return [
+      { href: '/calculator', label: 'Calculator' },
+      { href: '/gpus', label: 'GPU directory' },
+      { href: '/models', label: 'Models' },
+      { href: '/stacks', label: 'Stacks' },
+      { href: '/lab-log', label: 'Lab log' },
+      { href: '/rocm-problems', label: 'ROCm problems' },
+      { href: '/backends', label: 'Backends' },
+      { href: '/llms.txt', label: 'llms.txt' },
+    ];
+  }
   if (path === '/calculator' || path === '/quants') {
     return [
+      { href: '/api', label: 'Public API' },
       { href: '/kv-cache', label: 'KV cache' },
       { href: '/calculator', label: 'Calculator' },
       { href: '/quants', label: 'Quants' },
@@ -1094,6 +1107,7 @@ export function assertRelatedValid(
     '/moe',
     '/can-run',
     '/hardware',
+    '/api',
   ],
 ): string[] {
   const errors: string[] = [];

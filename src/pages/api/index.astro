@@ -1,0 +1,94 @@
+---
+import Base from '../../layouts/Base.astro';
+import { API_SCHEMA_VERSION, apiAsOf, apiEndpoints, DEFAULT_BACKEND_NAME } from '../../lib/public-api';
+
+const endpoints = apiEndpoints();
+const asOf = apiAsOf();
+---
+
+<Base
+  title="Public API"
+  description="Static JSON API for AMDai GPU, model, stack, measured, and ROCm catalogs. curl examples, CORS note, MIT licence, and the MCP server."
+>
+  <main id="main" class="mx-auto max-w-3xl px-4 py-10 sm:px-6">
+    <p class="kicker">Machine-readable · static JSON</p>
+    <h1 class="display mt-3 text-4xl sm:text-5xl">Public API</h1>
+    <p class="mt-4 text-lg leading-relaxed text-muted">
+      Build-time JSON at <code class="text-ink">/api/v1/</code>. The files are ordinary static assets — Caddy
+      serves them as files. Schema <code class="text-ink">{API_SCHEMA_VERSION}</code>, as of
+      <code class="text-ink">{asOf}</code>. Default backend is {DEFAULT_BACKEND_NAME}. Quants below Q4 are omitted.
+    </p>
+
+    <section class="mt-12">
+      <h2 class="font-serif text-3xl" id="endpoints">Endpoints</h2>
+      <ul class="mt-4 space-y-3 text-muted">
+        {endpoints.map((row) => (
+          <li>
+            <a class="font-mono text-ink underline decoration-accent/40" href={row.path}>{row.path}</a>
+            <span class="block text-sm">{row.description}</span>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section class="mt-12">
+      <h2 class="font-serif text-3xl" id="curl">curl</h2>
+      <p class="mt-3 leading-relaxed text-muted">
+        Query strings are not evaluated. Fetch a file, then filter locally.
+      </p>
+      <pre class="mt-4 overflow-x-auto rounded-2xl border border-line bg-raised p-4 text-xs leading-relaxed"><code>{`curl -s https://amdai.net/api/v1/index.json
+curl -s https://amdai.net/api/v1/gpus.json
+curl -s https://amdai.net/api/v1/models.json
+curl -s https://amdai.net/api/v1/stacks.json
+curl -s https://amdai.net/api/v1/measured.json
+curl -s https://amdai.net/api/v1/rocm-issues.json
+curl -s https://amdai.net/api/v1/backends.json`}</code></pre>
+    </section>
+
+    <section class="mt-12">
+      <h2 class="font-serif text-3xl" id="cors">CORS</h2>
+      <p class="mt-3 leading-relaxed text-muted">
+        These files are meant to be fetched from a browser or an assistant.
+        The production Caddy file sends <code class="text-ink">Access-Control-Allow-Origin: *</code> on
+        <code class="text-ink">/api/v1/*.json</code>. GET and HEAD only. No cookies. No server code.
+      </p>
+    </section>
+
+    <section class="mt-12">
+      <h2 class="font-serif text-3xl" id="attribution">Attribution and licence</h2>
+      <p class="mt-3 leading-relaxed text-muted">
+        Cite <a class="underline decoration-accent/40" href="https://amdai.net">https://amdai.net</a>.
+        Numbers are measured on a local desktop, cited from a public doc with a date, or labeled estimates.
+        Dated GPU street snapshots are not live quotes. Buy links that say “Check price” may be affiliate links.
+        AMDai is not affiliated with AMD. The site and this API are
+        <a class="underline decoration-accent/40" href="https://opensource.org/licenses/MIT">MIT</a>.
+      </p>
+    </section>
+
+    <section class="mt-12">
+      <h2 class="font-serif text-3xl" id="mcp">MCP server</h2>
+      <p class="mt-3 leading-relaxed text-muted">
+        <code class="text-ink">amdai-fit-mcp</code> v0.2 lives in this repository under
+        <code class="text-ink">mcp/</code>. It fetches the live
+        <code class="text-ink">https://amdai.net/api/v1/*.json</code> files, falls back to a bundled snapshot,
+        and exposes fit, stack, price, and ROCm-issue tools. Point an assistant at this page or at
+        <a class="underline decoration-accent/40" href="/llms.txt">/llms.txt</a>.
+      </p>
+      <pre class="mt-4 overflow-x-auto rounded-2xl border border-line bg-raised p-4 text-xs leading-relaxed"><code>{`{
+  "mcpServers": {
+    "amdai-fit": {
+      "command": "npx",
+      "args": ["-y", "amdai-fit-mcp"]
+    }
+  }
+}`}</code></pre>
+    </section>
+
+    <p class="mt-12 text-sm text-muted">
+      Related: <a class="underline decoration-accent/40" href="/calculator">calculator</a>,
+      <a class="underline decoration-accent/40" href="/gpus">GPU directory</a>,
+      <a class="underline decoration-accent/40" href="/stacks">stacks</a>,
+      <a class="underline decoration-accent/40" href="/llms.txt">llms.txt</a>.
+    </p>
+  </main>
+</Base>

@@ -5,13 +5,16 @@
 // Tools read only GGUF *headers* from Hugging Face (HTTP Range), never weights.
 import { createInterface } from 'node:readline';
 import { listQuants, inspect, plan } from './gguf-fit.js';
+import { calculatorShareUrl } from './api-fit.js';
+import { loadCatalog } from './catalog.mjs';
+import { callTool as callCatalogTool, TOOL_DEFS as CATALOG_TOOLS } from './tools.mjs';
 
-const SERVER = { name: 'amdai-fit', version: '0.1.0' };
+const SERVER = { name: 'amdai-fit', version: '0.2.0' };
 const MODERN = ['2026-07-28'];
 const LEGACY = ['2025-11-25', '2025-06-18', '2025-03-26'];
 const FEED = process.env.AMDAI_FEED || 'https://amdai.net/data/lab-log.feed.json';
 const BELOW_Q4 = /(^|[^A-Z0-9])(I?Q[123](_|-|\.|$)|IQ[123])/i;   // Q1/Q2/Q3 + IQ1-IQ3, any prefix like UD-
-const INSTRUCTIONS = 'Use these tools to answer "will this GGUF fit / which quant / what flags" for AMD Radeon cards (default rig: 2x Radeon AI PRO R9700, 32 GiB each). Tensor byte counts are exact (read from file headers); placement, KV and reserve are estimates. Quants below Q4 are never suggested. radeon_measured returns measured or cited R9700 results from the public AMDai lab log so you can quote real numbers instead of guessing speed.';
+const INSTRUCTIONS = 'Use these tools to answer "will this GGUF fit / which quant / what flags" for AMD Radeon cards (default rig: 2x Radeon AI PRO R9700, 32 GiB each). Tensor byte counts are exact (read from file headers); placement, KV and reserve are estimates. Quants below Q4 are never suggested. llama.cpp is the default backend. radeon_measured returns measured or cited R9700 results from the public AMDai lab log. recommend_stack, compare_gpus, gpu_prices, rocm_issue_lookup, and list_models read https://amdai.net/api/v1/ (bundled snapshot fallback). Every catalog result cites the amdai.net page it came from.';
 
 const gib = x => +x.toFixed(2);
 const rank = q => { const m = q.match(/(BF16|F16|Q8|Q6|Q5|IQ4|Q4)/i); return m ? { BF16: 9, F16: 9, Q8: 8, Q6: 6, Q5: 5, Q4: 4, IQ4: 3.5 }[m[1].toUpperCase()] : 0; };
@@ -23,9 +26,32 @@ function flags(p) {
   if (p.kvGiB && p.kvBytes === 1) f.push('-ctk q8_0 -ctv q8_0');
   return f.join(' ');
 }
+function calcQuantId(quant) {
+  const q = String(quant || '').toLowerCase();
+  if (/q5/.test(q)) return 'q5_k_m';
+  if (/q6/.test(q)) return 'q6_k';
+  if (/q8/.test(q)) return 'q8_0';
+  if (/bf16|f16/.test(q)) return 'bf16';
+  return 'q4_k_m';
+}
+
+function shareForPlan(p, quant) {
+  return calculatorShareUrl({
+    gpu: 'r9700',
+    vram: p.vramGiB ?? 32,
+    ram: p.ramGiB ?? 128,
+    model: 'qwen36',
+    quant: calcQuantId(quant),
+    ctx: p.ctx ?? 32768,
+    n: p.gpus ?? 1,
+  });
+}
+
 function summarize(p, repo, quant) {
   const out = Object.fromEntries(Object.entries(p).map(([k, v]) => [k, typeof v === 'number' && !Number.isInteger(v) ? gib(v) : v]));
   out.repo = repo; out.quant = quant; out.llamaCppFlags = flags(p);
+  out.calculator = shareForPlan(p, quant);
+  out.source_url = out.calculator;
   out.note = 'Tensor sizes exact from GGUF headers; placement/KV/reserve are estimates. Verify with llama-server --fit or a real load.';
   return out;
 }
@@ -58,7 +84,24 @@ const TOOLS = [
     annotations: { readOnlyHint: true, openWorldHint: true } },
 ];
 
+const CATALOG_ONLY = new Set(['recommend_stack', 'compare_gpus', 'gpu_prices', 'rocm_issue_lookup', 'list_models']);
+for (const def of CATALOG_TOOLS) {
+  if (CATALOG_ONLY.has(def.name)) {
+    TOOLS.push({
+      name: def.name,
+      title: def.name,
+      description: def.description,
+      inputSchema: def.inputSchema,
+      annotations: { readOnlyHint: true, openWorldHint: true },
+    });
+  }
+}
+
 async function callTool(name, a = {}) {
+  if (CATALOG_ONLY.has(name)) {
+    const catalog = await loadCatalog();
+    return callCatalogTool(name, a, catalog).structuredContent;
+  }
   if (name === 'list_quants') {
     const all = await listQuants(a.repo);
     const quants = all.filter(q => !BELOW_Q4.test(q.split('/').pop() || q));
@@ -78,10 +121,13 @@ async function callTool(name, a = {}) {
       catch (e) { plans.push({ quant: q, error: String(e.message || e) }); }
     }
     const ok = plans.filter(p => !p.error);
+    const best = ok.find(p => p.verdict === 'fits-in-vram') ?? ok.find(p => p.verdict === 'fits-with-ddr5-offload') ?? ok[0];
     return { repo: a.repo, rig: rigArgs(a),
       bestFullyInVRAM: ok.find(p => p.verdict === 'fits-in-vram')?.quant ?? null,
       bestWithDDR5Offload: ok.find(p => p.verdict === 'fits-with-ddr5-offload' || p.verdict === 'fits-in-vram')?.quant ?? null,
-      plans: plans.map(p => p.error ? p : ({ quant: p.quant, totalGiB: p.totalGiB, kvGiB: p.kvGiB, verdict: p.verdict, ncmoe: p.ncmoe, ramNeededGiB: p.ramNeededGiB, llamaCppFlags: p.llamaCppFlags })) };
+      calculator: best?.calculator ?? shareForPlan(rigArgs(a), best?.quant),
+      source_url: best?.calculator ?? 'https://amdai.net/calculator',
+      plans: plans.map(p => p.error ? p : ({ quant: p.quant, totalGiB: p.totalGiB, kvGiB: p.kvGiB, verdict: p.verdict, ncmoe: p.ncmoe, ramNeededGiB: p.ramNeededGiB, llamaCppFlags: p.llamaCppFlags, calculator: p.calculator })) };
   }
   if (name === 'radeon_measured') {
     const r = await fetch(FEED); if (!r.ok) throw new Error(`lab log ${r.status}`);
@@ -89,7 +135,7 @@ async function callTool(name, a = {}) {
     const words = String(a.query).toLowerCase().split(/\s+/).filter(Boolean);
     const scored = items.map(it => { const t = JSON.stringify(it).toLowerCase(); return [words.filter(w => t.includes(w)).length, it]; })
       .filter(([s]) => s > 0).sort((x, y) => y[0] - x[0] || String(y[1].date_published || y[1].date).localeCompare(String(x[1].date_published || x[1].date)));
-    return { source: FEED, matches: scored.slice(0, a.limit || 5).map(([, it]) => it) };
+    return { source: FEED, source_url: 'https://amdai.net/lab-log/', matches: scored.slice(0, a.limit || 5).map(([, it]) => it) };
   }
   throw Object.assign(new Error(`Unknown tool ${name}`), { code: -32602 });
 }
