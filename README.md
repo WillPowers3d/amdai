@@ -33,7 +33,7 @@ Default production is **static HTML**. Optional accounts, saved rigs, a forum, a
 
 - **Evidence labels.** A number is a validating run card, a cited public doc with a URL and as-of date, or a labeled estimate. The build fails leftover `TODO` / `TBD` copy and invented Q1/Q2 quants.
 - **House daily-driver path.** llama.cpp first (Vulkan on the published R9700 cards). Q5 preferred when the file fits. Q3 stays a labeled estimate unless measured. One LLM per GPU unless a page is explicitly about combining cards.
-- **Test rig, published as-is.** Official cards credit a local desktop with two AMD Radeon AI PRO R9700 (32 GB, `gfx1201`), 256 GB DDR5, Ubuntu 24.04+. The motherboard model is not published. See [`/about`](https://amdai.net/about) and [`/methodology`](https://amdai.net/methodology).
+- **Test rig, published as-is.** Official cards credit a local desktop with two AMD Radeon AI PRO R9700 (32 GB, `gfx1201`), 256 GB DDR5, Ubuntu 24.04+. Each run card also lists the full rig spec, including the motherboard model, BIOS version and DRAM voltages. See [`/about`](https://amdai.net/about) and [`/methodology`](https://amdai.net/methodology).
 - **Radeon Stack Lab companion.** Pages and `amdai-stack-lab:` deep links for an Ubuntu 24.04+ helper that records run cards. Packages are **not published yet** — this repo does not invent a download URL.
 - **Static JSON.** `/api/v1/catalog.json`, per-GPU JSON, and a pick table are generated at build time. Query strings on those files are not evaluated.
 - **Search and share cards.** Pagefind indexes `dist/` during `npm run build`. Per-page 1200×630 OG images live under `public/og/` (`npm run og` rebuilds the catalog).
