@@ -12,7 +12,17 @@ const here = dirname(fileURLToPath(import.meta.url));
 const SERVER = join(here, 'server.mjs');
 const skipNetwork = process.env.AMDAI_SKIP_NETWORK === '1' || process.env.SKIP_NETWORK === '1';
 const MODERN_META = { 'io.modelcontextprotocol/protocolVersion': '2026-07-28' };
-const EXPECTED_TOOLS = ['list_quants', 'plan_fit', 'best_quant', 'radeon_measured'];
+const EXPECTED_TOOLS = [
+  'list_quants',
+  'plan_fit',
+  'best_quant',
+  'radeon_measured',
+  'recommend_stack',
+  'compare_gpus',
+  'gpu_prices',
+  'rocm_issue_lookup',
+  'list_models',
+];
 
 function startServer() {
   const child = spawn(process.execPath, [SERVER], {
@@ -72,7 +82,7 @@ describe('package metadata', () => {
 });
 
 describe('MCP protocol', () => {
-  it('tools/list returns list_quants, plan_fit, best_quant, radeon_measured', async () => {
+  it('tools/list returns fit tools plus 0.2 catalog tools', async () => {
     const s = startServer();
     try {
       const res = await s.rpc(1, 'tools/list', { _meta: MODERN_META });
@@ -94,6 +104,24 @@ describe('MCP protocol', () => {
       });
       assert.equal(res.result?.isError, true);
       assert.match(res.result.content[0].text, /Quants below Q4 are not planned by this server/);
+    } finally {
+      await s.stop();
+    }
+  });
+
+  it('recommend_stack returns llama.cpp and a Q4+ catalog pick offline', async () => {
+    const s = startServer();
+    try {
+      const res = await s.rpc(5, 'tools/call', {
+        name: 'recommend_stack',
+        arguments: { gpus: ['r9700'], vram_gb: 32, ram_gb: 256, goal: 'daily' },
+        _meta: MODERN_META,
+      });
+      assert.equal(res.result?.isError, undefined, JSON.stringify(res));
+      const out = res.result.structuredContent;
+      assert.equal(out.backend, 'llama.cpp');
+      assert.match(out.source_url, /\/stacks/);
+      assert.match(out.calculator, /\/calculator\?/);
     } finally {
       await s.stop();
     }

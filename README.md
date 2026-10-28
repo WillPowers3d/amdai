@@ -35,7 +35,7 @@ Default production is **static HTML**. Optional accounts, saved rigs, a forum, a
 - **House daily-driver path.** llama.cpp first (Vulkan on the published R9700 cards). Q5 preferred when the file fits. Q3 stays a labeled estimate unless measured. One LLM per GPU unless a page is explicitly about combining cards.
 - **Test rig, published as-is.** Official cards credit a local desktop with two AMD Radeon AI PRO R9700 (32 GB, `gfx1201`), 256 GB DDR5, Ubuntu 24.04+. Each run card also lists the full rig spec, including the motherboard model, BIOS version and DRAM voltages. See [`/about`](https://amdai.net/about) and [`/methodology`](https://amdai.net/methodology).
 - **Radeon Stack Lab companion.** Pages and `amdai-stack-lab:` deep links for an Ubuntu 24.04+ helper that records run cards. Packages are **not published yet** — this repo does not invent a download URL.
-- **Static JSON.** `/api/v1/catalog.json`, per-GPU JSON, and a pick table are generated at build time. Query strings on those files are not evaluated.
+- **Static JSON.** `/api/v1/` is generated at build time (`index.json`, `gpus.json`, `models.json`, `stacks.json`, `measured.json`, `rocm-issues.json`, `backends.json`, plus the older catalog/pick files). Query strings on those files are not evaluated. Human docs live at [`/api/`](https://amdai.net/api/). The zero-dependency MCP server is [`mcp/`](mcp/) (`amdai-fit-mcp` v0.2).
 - **Search and share cards.** Pagefind indexes `dist/` during `npm run build`. Per-page 1200×630 OG images live under `public/og/` (`npm run og` rebuilds the catalog).
 - **QA as a build gate.** After compile: internal links + orphans, SEO/JSON-LD, axe-core in dark and light, a mobile Core Web Vitals / byte budget, and a PII denylist over `dist/`.
 
@@ -100,7 +100,7 @@ flowchart TB
 ```text
 .
 ├── data/runs/              Official amdai-bench/run@1 JSONL (committed)
-├── mcp/                    Publishable AMDai fit MCP server (npm: amdai-fit-mcp)
+├── mcp/                    Publishable AMDai fit MCP server (npm: amdai-fit-mcp v0.2)
 ├── docs/                   Design, OG, deploy cache notes, weekday scrape, schemas
 ├── e2e/                    Playwright
 ├── public/                 Fonts, favicons, OG PNGs, static JSON seeds

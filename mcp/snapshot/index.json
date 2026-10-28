@@ -1,0 +1,59 @@
+{
+  "schema_version": "1.0",
+  "as_of": "2026-10-27",
+  "name": "AMDai public API",
+  "docs": "https://amdai.net/api/",
+  "mcp": "https://amdai.net/api/#mcp",
+  "license": "MIT",
+  "attribution": "Cite https://amdai.net. Numbers are measured on a local desktop, cited from a public doc, or labeled estimates. Not affiliated with AMD.",
+  "cors": "GET /api/v1/*.json is static. Caddy sends Access-Control-Allow-Origin: * so browser fetch works.",
+  "default_backend": "llama.cpp",
+  "quant_floor": "Q4",
+  "endpoints": [
+    {
+      "path": "/api/v1/index.json",
+      "description": "Endpoint list, schema version, and as_of",
+      "href": "https://amdai.net/api/v1/index.json"
+    },
+    {
+      "path": "/api/v1/gpus.json",
+      "description": "Radeon GPU directory, VRAM, bandwidth, dated prices, buy links",
+      "href": "https://amdai.net/api/v1/gpus.json"
+    },
+    {
+      "path": "/api/v1/models.json",
+      "description": "Models and Q4+ quants. Qwen first; older families flagged",
+      "href": "https://amdai.net/api/v1/models.json"
+    },
+    {
+      "path": "/api/v1/stacks.json",
+      "description": "Recommended stack picks and launch configs",
+      "href": "https://amdai.net/api/v1/stacks.json"
+    },
+    {
+      "path": "/api/v1/measured.json",
+      "description": "Measured runs from the lab log",
+      "href": "https://amdai.net/api/v1/measured.json"
+    },
+    {
+      "path": "/api/v1/rocm-issues.json",
+      "description": "Consumer ROCm problem tracker",
+      "href": "https://amdai.net/api/v1/rocm-issues.json"
+    },
+    {
+      "path": "/api/v1/backends.json",
+      "description": "Inference engines. llama.cpp is the default",
+      "href": "https://amdai.net/api/v1/backends.json"
+    },
+    {
+      "path": "/api/v1/catalog.json",
+      "description": "First-party launch recipes",
+      "href": "https://amdai.net/api/v1/catalog.json"
+    },
+    {
+      "path": "/api/v1/pick.json",
+      "description": "Static per-GPU recipe pick table",
+      "href": "https://amdai.net/api/v1/pick.json"
+    }
+  ]
+}

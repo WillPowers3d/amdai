@@ -1135,6 +1135,12 @@ setDate('/sponsor', '2026-10-16');
 setDate('/llms.txt', '2026-10-16');
 setDate('/llms-full.txt', '2026-10-16');
 setMeta(
+  '/api',
+  'Public API',
+  'Static JSON API for AMDai GPU, model, stack, measured, and ROCm catalogs. curl examples, CORS, MIT licence, MCP server.',
+);
+setDate('/api', '2026-10-28');
+setMeta(
   '/terms',
   'Terms of use',
   'Short AMDai terms: informational content, not legal advice, no warranty, hardware/BIOS at your risk, affiliate and privacy links.',

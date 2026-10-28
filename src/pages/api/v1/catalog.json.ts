@@ -1,9 +1,12 @@
+import { isPublicQuant, jsonResponse } from '../../../lib/public-api';
 import { catalogPayload } from '../../../lib/recipes';
 import { recipes } from '../../../lib/recipes-data';
 import { runs } from '../../../lib/run-card-data';
 
 export async function GET() {
-  return new Response(JSON.stringify(catalogPayload(recipes, runs), null, 2), {
-    headers: { 'Content-Type': 'application/json; charset=utf-8' },
+  const payload = catalogPayload(recipes, runs);
+  return jsonResponse({
+    ...payload,
+    recipes: payload.recipes.filter((row) => isPublicQuant(String(row.quant ?? ''))),
   });
 }

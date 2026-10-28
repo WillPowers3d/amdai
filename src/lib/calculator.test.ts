@@ -215,6 +215,8 @@ describe('calculator catalog guards', () => {
       assert.match(page, /data-older-option/);
       assert.match(page, /bindOlderModelPickers|initOlderModelPickers/);
     }
+    assert.match(calcPage, /Use with your AI assistant/);
+    assert.match(calcPage, /href="\/api\/"/);
   });
 });
 

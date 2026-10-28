@@ -1,13 +1,13 @@
 {
   "name": "amdai-fit-mcp",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "type": "module",
-  "description": "MCP server that estimates whether a Hugging Face GGUF fits AMD Radeon cards (Q4+ only).",
+  "description": "MCP server that estimates whether a Hugging Face GGUF fits AMD Radeon cards (Q4+ only), plus live amdai.net /api/v1/ stack, price, and ROCm tools.",
   "bin": {
     "amdai-fit-mcp": "server.mjs"
   },
   "scripts": {
-    "test": "node --test test.mjs",
+    "test": "node --test test.mjs tests/*.test.mjs",
     "start": "node server.mjs"
   },
   "engines": {
@@ -36,6 +36,10 @@
     "LICENSE",
     "README.md",
     "gguf-fit.js",
+    "api-fit.js",
+    "catalog.mjs",
+    "tools.mjs",
+    "snapshot",
     "server.json",
     "server.mjs"
   ],

@@ -74,6 +74,11 @@ const olderOpen = olderModelsOpenFromSearch(Astro.url.search);
     <div class="mt-4">
       <OpenInStackLab {...HOUSE_STACK_LAB.planner} compact />
     </div>
+    <p class="mt-4 max-w-2xl text-sm text-muted" data-assistant-note>
+      Use with your AI assistant:
+      <a class="underline decoration-accent/40" href="/api/">the public JSON API</a>
+      and the <code class="text-ink">amdai-fit-mcp</code> server documented there.
+    </p>
 
     <div id="ask-row" class="mt-8">
       <AskToggles defaultPriority={DEFAULT_PRIORITY} defaultUsage={DEFAULT_USAGE} defaultStyle={DEFAULT_STYLE} />
