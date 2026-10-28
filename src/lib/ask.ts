@@ -1,6 +1,6 @@
 /**
  * Upfront questions shared by /budget and /calculator.
- * URL params: priority, usage, style, minbudget, expandgpu.
+ * URL params: priority, usage, style, minbudget, expandgpu, bigmodels.
  */
 import type { Priority } from './priority';
 import { DEFAULT_PRIORITY, isPriority, parsePriority, PRIORITY_COPY } from './priority';
@@ -11,6 +11,7 @@ import {
   parseMinBudget,
   writeMotherboardAskParams,
 } from './motherboards';
+import { DEFAULT_BIG_MODELS, parseBigModels, writeRamAskParams } from './ram-kit';
 import { abliteratedGuide, type AbliteratedRow } from './status';
 
 export type Usage = 'local' | 'hybrid';
@@ -18,7 +19,7 @@ export type Style = 'standard' | 'abliterated';
 
 export const DEFAULT_USAGE: Usage = 'local';
 export const DEFAULT_STYLE: Style = 'standard';
-export { DEFAULT_MIN_BUDGET, defaultExpandGpu };
+export { DEFAULT_MIN_BUDGET, defaultExpandGpu, DEFAULT_BIG_MODELS };
 
 export const USAGE_COPY: Record<Usage, { label: string; short: string; lede: string; verdict: string }> = {
   local: {
@@ -59,6 +60,7 @@ export type AskState = {
   style: Style;
   minBudget: boolean;
   expandGpu: boolean;
+  bigModels: boolean;
 };
 
 export function isUsage(value: string | null | undefined): value is Usage {
@@ -81,7 +83,7 @@ export function parseStyle(search: string): Style {
   return isStyle(raw) ? raw : DEFAULT_STYLE;
 }
 
-export { parseMinBudget, parseExpandGpu };
+export { parseMinBudget, parseExpandGpu, parseBigModels };
 
 export function parseAsk(search: string): AskState {
   const minBudget = parseMinBudget(search);
@@ -91,6 +93,7 @@ export function parseAsk(search: string): AskState {
     style: parseStyle(search),
     minBudget,
     expandGpu: parseExpandGpu(search, minBudget),
+    bigModels: parseBigModels(search),
   };
 }
 
@@ -101,6 +104,7 @@ export function askQuery(ask: AskState): Record<string, string> {
     style: ask.style,
     minbudget: ask.minBudget ? '1' : '0',
     expandgpu: ask.expandGpu ? '1' : '0',
+    bigmodels: ask.bigModels ? '1' : '0',
   };
 }
 
@@ -109,6 +113,7 @@ export function writeAskParams(url: URL, ask: AskState): void {
   url.searchParams.set('usage', ask.usage);
   url.searchParams.set('style', ask.style);
   writeMotherboardAskParams(url, ask);
+  writeRamAskParams(url, ask);
 }
 
 /** Hybrid can take a cheaper tier. Fully local keeps the size/speed ladder. */

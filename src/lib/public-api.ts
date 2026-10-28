@@ -34,6 +34,7 @@ import { entryAnchor, LAB_LOG_PATH, loadLabLogFile } from './lab-log';
 import { PII_TEXT } from './pii-denylist';
 import { isQ3Quant, isQ4PlusQuant } from './quant-guard';
 import { liveRecipes, pickRecipes, type Recipe } from './recipes';
+import { ramRecommendation, setupNeedsRamOffload, type RamRecommendation } from './ram-kit';
 import { recipes } from './recipes-data';
 import { r9700StreetPrice, R9700_STREET_LOG_HREF, R9700_STREET_POLICY } from './r9700-street-price';
 import { parseRocmProblems, problemPath, type RocmProblemsFile } from './rocm-problems';
@@ -344,7 +345,9 @@ export function modelPageHref(id: string): string {
 }
 
 export function calculatorShareUrl(input: CalcInput): string {
-  return abs(`/calculator?${inputToQuery({ ...input, backendId: 'llamacpp' })}`);
+  const fitted = { ...input, backendId: 'llamacpp' as const };
+  const offload = setupNeedsRamOffload(fitted);
+  return abs(`/calculator?${inputToQuery(fitted, { bigmodels: offload ? '1' : '0' })}`);
 }
 
 function goPath(retailerId: string, productId: string): string {
@@ -759,6 +762,7 @@ export type StackRecommend = {
   href: string;
   note: string;
   verdict: string;
+  ram: RamRecommendation;
 };
 
 function normalizeGpuToken(value: string): string {
@@ -851,6 +855,10 @@ export function recommendStack(opts: StackRecommendInput): StackRecommend {
     href: abs('/stacks'),
     note,
     verdict: fittedResult.verdict,
+    ram: ramRecommendation({
+      bigModels: false,
+      needsOffload: setupNeedsRamOffload(fitted),
+    }),
   };
 }
 

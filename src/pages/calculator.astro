@@ -25,6 +25,7 @@ import { DEFAULT_STYLE, DEFAULT_USAGE } from '../lib/ask';
 import { defaultExpandGpu } from '../lib/motherboards';
 import { motherboards } from '../lib/motherboards-data';
 import MotherboardPick from '../components/MotherboardPick.astro';
+import RamPick from '../components/RamPick.astro';
 import { gpuProducts } from '../lib/affiliates';
 import { recipes } from '../lib/recipes-data';
 import OpenInStackLab from '../components/OpenInStackLab.astro';
@@ -90,6 +91,7 @@ const olderOpen = olderModelsOpenFromSearch(Astro.url.search);
         boards={motherboards}
         ask={{ gpuCount: 1, minBudget: false, expandGpu: defaultExpandGpu(false) }}
       />
+      <RamPick boards={motherboards} />
     </div>
 
     <div id="tested-badge" hidden class="mt-6 inline-flex max-w-3xl items-start gap-2 rounded-2xl border border-ok/40 bg-ok/10 px-4 py-2 text-sm text-ok">
@@ -626,6 +628,9 @@ const olderOpen = olderModelsOpenFromSearch(Astro.url.search);
     document.querySelectorAll<HTMLInputElement>('input[name="expandgpu"]').forEach((el) => {
       el.checked = (el.value === '1') === ask.expandGpu;
     });
+    document.querySelectorAll<HTMLInputElement>('input[name="bigmodels"]').forEach((el) => {
+      el.checked = (el.value === '1') === ask.bigModels;
+    });
   }
 
   function readForm(): CalcInput {
@@ -683,6 +688,7 @@ const olderOpen = olderModelsOpenFromSearch(Astro.url.search);
       style: ask.style,
       minbudget: ask.minBudget ? '1' : '0',
       expandgpu: ask.expandGpu ? '1' : '0',
+      bigmodels: ask.bigModels ? '1' : '0',
     });
   }
 
@@ -698,6 +704,9 @@ const olderOpen = olderModelsOpenFromSearch(Astro.url.search);
     setText('[data-expandgpu-lede]', ask.expandGpu
       ? 'A dual x8/x8 board now puts both cards on CPU lanes at the same width.'
       : 'One card will run on a single x16 slot. Combined with Minimum budget, a cheaper single-x16 board is listed.');
+    setText('[data-bigmodels-lede]', ask.bigModels
+      ? 'Recommend 192 GB or 256 GB now (4x48 or 4x64 DDR5). That lets big MoE models keep experts in RAM. Adding a matched kit later is harder and usually costs more.'
+      : 'Recommend 32 GB (2x16 DDR5). The GPU does the work on the in-VRAM path, so save the money on system RAM.');
     setText('[data-priority-headline]', advice.headline);
     setText('[data-priority-body]', advice.body);
     setText('[data-usage-verdict]', USAGE_COPY[ask.usage].verdict);
@@ -885,6 +894,9 @@ const olderOpen = olderModelsOpenFromSearch(Astro.url.search);
         recipeLine.textContent = line.text;
       }
     }
+
+    const offloadNeeded = result.overflowGiB > 1 || result.systemRam.atSelected.breakdown.offloadedWeightsGiB > 1;
+    window.dispatchEvent(new CustomEvent('amdai-ram-offload', { detail: { needed: offloadNeeded } }));
 
     const qs = shareQuery();
     const url = `${window.location.pathname}?${qs}`;
@@ -1087,10 +1099,11 @@ const olderOpen = olderModelsOpenFromSearch(Astro.url.search);
       style: s === 'abliterated' ? 'abliterated' : 'standard',
       minBudget: min,
       expandGpu: expandRaw == null ? !min : expandRaw === '1',
+      bigModels: document.querySelector<HTMLInputElement>('input[name="bigmodels"]:checked')?.value === '1',
     };
   }
 
-  document.querySelectorAll<HTMLInputElement>('input[name="priority"], input[name="usage"], input[name="style"], input[name="minbudget"], input[name="expandgpu"]').forEach((el) => {
+  document.querySelectorAll<HTMLInputElement>('input[name="priority"], input[name="usage"], input[name="style"], input[name="minbudget"], input[name="expandgpu"], input[name="bigmodels"]').forEach((el) => {
     el.addEventListener('change', (event) => {
       const target = event.target as HTMLInputElement;
       if (target.name === 'minbudget') {
@@ -1113,7 +1126,7 @@ const olderOpen = olderModelsOpenFromSearch(Astro.url.search);
 
   if (!window.location.search) {
     input = { ...DEFAULT_INPUT };
-    ask = { priority: 'speed', usage: 'local', style: 'standard', minBudget: false, expandGpu: true };
+    ask = { priority: 'speed', usage: 'local', style: 'standard', minBudget: false, expandGpu: true, bigModels: false };
   }
   writeForm();
   bindOlderModelPickers();

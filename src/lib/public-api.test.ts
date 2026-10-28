@@ -123,6 +123,9 @@ describe('public static API generator', () => {
     assert.ok(isPublicQuant(daily.quant));
     assert.match(daily.calculator, /^https:\/\/amdai\.net\/calculator\?/);
     assert.match(daily.calculator, /model=qwen36/);
+    assert.ok(daily.ram);
+    assert.match(String(daily.ram.kit_gb), /32|192|256/);
+    assert.doesNotMatch(daily.ram.why, /\$\d|\bMSRP\b/);
     assert.match(daily.href, /\/stacks/);
     const input = planFitInput({ gpu: 'r9700', model: 'qwen36', quant: 'q5_k_m' });
     const share = calculatorShareUrl(input);

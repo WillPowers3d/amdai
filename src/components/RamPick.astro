@@ -1,0 +1,126 @@
+---
+import BuyButtons from './BuyButtons.astro';
+import AffiliateDisclosure from './AffiliateDisclosure.astro';
+import {
+  DIMM_SPEED_NOTE,
+  RAM_32_PRODUCT,
+  RAM_32_SRC,
+  RAM_256_PRODUCT,
+  RAM_256_SRC,
+  RAM_ASK_COPY,
+  ramCapFlag,
+  ramRecommendation,
+} from '../lib/ram-kit';
+import type { Motherboard } from '../lib/motherboards';
+
+interface Props {
+  boards: Motherboard[];
+  bigModels?: boolean;
+  needsOffload?: boolean;
+  id?: string;
+}
+
+const { boards, bigModels = false, needsOffload = false, id = 'ram-pick' } = Astro.props;
+const initial = ramRecommendation({ bigModels, needsOffload });
+const capped = boards.filter((board) => board.max_ram_gb < 256);
+---
+
+<section id={id} class="space-y-4" data-ram-pick data-ram-offload={needsOffload ? '1' : '0'}>
+  <div>
+    <p class="kicker">System RAM</p>
+    <h2 class="mt-2 text-2xl tracking-tight sm:text-3xl">Which DDR5 kit matches this build?</h2>
+    <p class="mt-2 text-sm leading-relaxed text-muted">{RAM_ASK_COPY.expensive}</p>
+    <p class="mt-2 text-sm leading-relaxed text-muted" data-ram-note>{initial.why}</p>
+    <p class="mt-2 text-sm leading-relaxed text-muted">{DIMM_SPEED_NOTE}</p>
+    <p class="mt-2 text-sm text-muted">Buttons say Check price. We never invent a RAM price.</p>
+  </div>
+
+  <div class="card p-5 sm:p-6" data-ram-card="32" hidden={initial.kit !== '32'}>
+    <p class="kicker">Default kit</p>
+    <h3 class="mt-1 text-2xl tracking-tight">32 GB (2x16 DDR5)</h3>
+    <p class="mt-2 text-sm leading-relaxed text-muted">{RAM_ASK_COPY.no.lede}</p>
+    <BuyButtons product={RAM_32_PRODUCT} src={RAM_32_SRC} disclose={false} />
+  </div>
+
+  <div class="card p-5 sm:p-6" data-ram-card="256" hidden={initial.kit !== '256'}>
+    <p class="kicker">Large kit</p>
+    <h3 class="mt-1 text-2xl tracking-tight">192 GB or 256 GB (4x48 or 4x64 DDR5)</h3>
+    <p class="mt-2 text-sm leading-relaxed text-muted">{RAM_ASK_COPY.yes.lede}</p>
+    <p class="mt-2 text-sm leading-relaxed text-muted" data-ram-offload-note hidden={!initial.offload}>
+      {RAM_ASK_COPY.offload}
+    </p>
+    <BuyButtons product={RAM_256_PRODUCT} src={RAM_256_SRC} disclose={false} />
+  </div>
+
+  {capped.length > 0 && (
+    <div data-ram-caps hidden={initial.kit !== '256'}>
+      <p class="text-sm font-medium">Boards that cannot take 256 GB</p>
+      <ul class="mt-2 space-y-2 text-sm leading-relaxed text-muted">
+        {capped.map((board) => (
+          <li>
+            <a class="text-accent-ink underline decoration-accent/40 underline-offset-2" href={`/motherboards#${board.id}`}>
+              {board.name}
+            </a>
+            — {ramCapFlag(board.max_ram_gb)}
+            Cite:
+            <a class="underline decoration-accent/40 underline-offset-2" href={board.citation.url} rel="noopener" target="_blank">
+              {board.citation.title}
+            </a>
+            — {board.citation.section}. As of {board.citation.as_of}.
+          </li>
+        ))}
+      </ul>
+    </div>
+  )}
+
+  <AffiliateDisclosure compact />
+</section>
+
+<script>
+  function bigModels(): boolean {
+    const checked = document.querySelector<HTMLInputElement>('input[name="bigmodels"]:checked');
+    if (checked) return checked.value === '1' || checked.value === 'yes';
+    return false;
+  }
+
+  function needsOffload(): boolean {
+    const root = document.querySelector<HTMLElement>('[data-ram-pick]');
+    return root?.getAttribute('data-ram-offload') === '1';
+  }
+
+  function syncRam() {
+    const root = document.querySelector<HTMLElement>('[data-ram-pick]');
+    if (!root) return;
+    const large = bigModels() || needsOffload();
+    const note = root.querySelector('[data-ram-note]');
+    if (note) {
+      note.textContent = large
+        ? needsOffload() && !bigModels()
+          ? 'This model and setup already need RAM offload, so the large kit is the recommendation even if you answered No. Experts and leftover weights land in system RAM, not in VRAM.'
+          : 'Recommend 192 GB or 256 GB now (4x48 or 4x64 DDR5). That lets big MoE models keep experts in RAM. Adding a matched kit later is harder and usually costs more.'
+        : 'Recommend 32 GB (2x16 DDR5). The GPU does the work on the in-VRAM path, so save the money on system RAM.';
+    }
+    root.querySelectorAll<HTMLElement>('[data-ram-card]').forEach((card) => {
+      card.hidden = large ? card.getAttribute('data-ram-card') !== '256' : card.getAttribute('data-ram-card') !== '32';
+    });
+    const offloadNote = root.querySelector<HTMLElement>('[data-ram-offload-note]');
+    if (offloadNote) offloadNote.hidden = !(large && needsOffload());
+    const caps = root.querySelector<HTMLElement>('[data-ram-caps]');
+    if (caps) caps.hidden = !large;
+    document.querySelectorAll<HTMLElement>('[data-ram-cap]').forEach((el) => {
+      el.hidden = !large;
+    });
+  }
+
+  document.addEventListener('change', (event) => {
+    const target = event.target as HTMLElement | null;
+    if (target?.matches('[name="bigmodels"]')) syncRam();
+  });
+  window.addEventListener('amdai-ask-change', syncRam);
+  window.addEventListener('amdai-ram-offload', ((event: CustomEvent<{ needed?: boolean }>) => {
+    const root = document.querySelector<HTMLElement>('[data-ram-pick]');
+    if (root) root.setAttribute('data-ram-offload', event.detail?.needed ? '1' : '0');
+    syncRam();
+  }) as EventListener);
+  syncRam();
+</script>

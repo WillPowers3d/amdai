@@ -17,10 +17,12 @@ boards:
     slot_note: Maker spec page — widened spacing easily fits two 4-slot GPUs.
     local_desktop: true
     product_id: asrock-x870-taichi-creator
+    max_ram_gb: 256
+    dimms: 4
     citation:
       title: ASRock X870 Taichi Creator specifications
       url: https://www.asrock.com/MB/AMD/X870%20Taichi%20Creator/
-      section: "Specifications → Slots: CPU 2 x PCIe 5.0 x16 Slots (PCIE1 and PCIE2), support x16 or x8/x8 modes; Features — PCIe 5.0 x8/x8 Slots & Wide Spacing"
+      section: "Specifications → Slots: CPU 2 x PCIe 5.0 x16 Slots (PCIE1 and PCIE2), support x16 or x8/x8 modes; Memory: 4 x DDR5 DIMM Slots, Max. capacity of system memory: 256GB; Features — PCIe 5.0 x8/x8 Slots & Wide Spacing"
       as_of: 2026-10-28
     manual:
       title: ASRock X870 Taichi Creator user manual
@@ -40,10 +42,12 @@ boards:
     slot_note: Spec page — when both PCIEX16(G5)_1 and PCIEX16(G5)_2 are used they run at x8 each. PCIEX16(G5)_2 shares bandwidth with M.2_2 (x8/x4 if that M.2 is enabled).
     local_desktop: false
     product_id: asus-proart-x870e-creator
+    max_ram_gb: 256
+    dimms: 4
     citation:
       title: ASUS ProArt X870E-CREATOR WIFI tech spec
       url: https://www.asus.com/uk/motherboards-components/motherboards/proart/proart-x870e-creator-wifi/techspec/
-      section: "Expansion Slots — AMD Ryzen 9000 & 7000: 2 x PCIe 5.0 x16 slots (supports x16 or x8/x8). Note: when you use both PCIEX16(G5)_1 and PCIEX16(G5)_2, they will run at x8 each. Form Factor: ATX 12 x 9.6 in"
+      section: "Memory: 4 x DIMM slots, max. 256GB, DDR5. Expansion Slots — AMD Ryzen 9000 & 7000: 2 x PCIe 5.0 x16 slots (supports x16 or x8/x8). Note: when you use both PCIEX16(G5)_1 and PCIEX16(G5)_2, they will run at x8 each. Form Factor: ATX 12 x 9.6 in"
       as_of: 2026-10-28
     manual:
       title: ASUS ProArt X870E-CREATOR WIFI user manual (E28680 V2)
@@ -63,10 +67,12 @@ boards:
     slot_note: Spec page — two CPU PCIe 5.0 x16 slots support x16 or x8/x8. A third full-length slot is chipset x2, not a second CPU GPU slot.
     local_desktop: false
     product_id: asus-proart-x670e-creator
+    max_ram_gb: 192
+    dimms: 4
     citation:
       title: ASUS ProArt X670E-CREATOR WIFI tech spec
       url: https://www.asus.com/us/motherboards-components/motherboards/proart/proart-x670e-creator-wifi/techspec/
-      section: "Expansion Slots — AMD Ryzen 9000 & 8000 & 7000: 2 x PCIe 5.0 x16 slots (support x16 or x8/x8 modes). AMD X670 Chipset: 1 x PCIe 4.0 x16 slot (supports x2 mode)"
+      section: "Memory: 4 x DIMM, Max. 192GB, DDR5. Expansion Slots — AMD Ryzen 9000 & 8000 & 7000: 2 x PCIe 5.0 x16 slots (support x16 or x8/x8 modes). AMD X670 Chipset: 1 x PCIe 4.0 x16 slot (supports x2 mode)"
       as_of: 2026-10-28
     manual:
       title: ASUS ProArt X670E-CREATOR WIFI user manual (E21293 V2)
@@ -86,10 +92,12 @@ boards:
     slot_note: Spec page — PCI_E1 and PCI_E2 are from the CPU and support PCIe 5.0 x16/x0 or x8/x8 on Ryzen 9000/7000. PCI_E3 is a CPU x4 leftover that shares bandwidth with M.2_1 — not the second GPU slot.
     local_desktop: false
     product_id: msi-meg-x870e-ace-max
+    max_ram_gb: 256
+    dimms: 4
     citation:
       title: MSI MEG X870E ACE MAX specification
       url: https://www.msi.com/Motherboard/MEG-X870E-ACE-MAX/Specification
-      section: "Slot — PCI_E1 & PCI_E2 slots support up to PCIe 5.0 x16/x0 or x8/x8 (Ryzen 9000/7000). PCI_E1 Gen PCIe 5.0 up to x16 (From CPU); PCI_E2 Gen PCIe 5.0 up to x8 (From CPU)"
+      section: "Memory — 4x DDR5 UDIMM, Maximum Memory Capacity 256GB. Slot — PCI_E1 & PCI_E2 slots support up to PCIe 5.0 x16/x0 or x8/x8 (Ryzen 9000/7000). PCI_E1 Gen PCIe 5.0 up to x16 (From CPU); PCI_E2 Gen PCIe 5.0 up to x8 (From CPU)"
       as_of: 2026-10-28
     manual:
       title: MSI MEG X870E ACE MAX English manual
@@ -109,10 +117,12 @@ boards:
     slot_note: Maker spec — PCIE1 and PCIE2 are CPU PCIe 5.0 x16 slots, x16 or x8/x8. Manual two-card CrossFire table is Gen5x8 + Gen5x8. E-ATX 12.0 in × 10.5 in — the case must take E-ATX.
     local_desktop: false
     product_id: asrock-x870e-taichi
+    max_ram_gb: 256
+    dimms: 4
     citation:
       title: ASRock X870E Taichi specifications
       url: https://www.asrock.com/MB/AMD/X870E%20Taichi/
-      section: "Slots → CPU: 2 x PCIe 5.0 x16 Slots (PCIE1 and PCIE2), support x16 or x8/x8 modes. Form Factor: EATX 12.0-in x 10.5-in"
+      section: "Memory: Max. capacity of system memory: 256GB. Slots → CPU: 2 x PCIe 5.0 x16 Slots (PCIE1 and PCIE2), support x16 or x8/x8 modes. Form Factor: EATX 12.0-in x 10.5-in"
       as_of: 2026-10-28
     manual:
       title: ASRock X870E Taichi user manual
@@ -132,10 +142,12 @@ boards:
     slot_note: Spec page — two PCIe 5.0 x16 slots run x16 or x8, x8. Manual — PCIEX16 and PCIEX8 are CPU slots; when PCIEX8 is populated, PCIEX16 drops to x8. PCIEX2 is chipset x2 and shares with M2C_SB, not a second GPU slot. Ryzen 8000 APUs make PCIEX8 unavailable.
     local_desktop: false
     product_id: gigabyte-b850-ai-top
+    max_ram_gb: 256
+    dimms: 4
     citation:
       title: Gigabyte B850 AI TOP specifications
       url: https://www.gigabyte.com/Motherboard/B850-AI-TOP/sp
-      section: "Full-length PCIe slots — 2 x PCIe 5.0 x16 (run x16 or x8, x8) with PCIe UD Slot X; 1 x PCIe 4.0 x2 Slot"
+      section: "Memory — 4 x DDR5 DIMM sockets supporting up to 256 GB (64 GB single DIMM capacity). Full-length PCIe slots — 2 x PCIe 5.0 x16 (run x16 or x8, x8) with PCIe UD Slot X; 1 x PCIe 4.0 x2 Slot"
       as_of: 2026-10-28
     manual:
       title: Gigabyte B850 AI TOP user manual (Rev. 1004)
@@ -155,10 +167,12 @@ boards:
     slot_note: "Spec page — two PCIe 5.0 x16 slots support x16 or x8/x8; when both PCIEX16(G5)_1 and PCIE16(G5)_2 are used they run at x8 each. The chipset PCIEX16(G4) is x4 and shares with M.2_3 — not a second CPU GPU slot. Ryzen 8000 APUs: one x16 slot at x8/x4."
     local_desktop: false
     product_id: asus-proart-b850-creator-wifi-neo
+    max_ram_gb: 256
+    dimms: 4
     citation:
       title: ASUS ProArt B850-CREATOR WIFI NEO tech spec
       url: https://www.asus.com/us/motherboards-components/motherboards/proart/proart-b850-creator-wifi-neo/techspec/
-      section: "Expansion Slots — AMD Ryzen 9000 & 7000: 2 x PCIe 5.0 x16 slots (supports x16 or x8/x8 modes). Note: when you use both PCIEX16(G5)_1 and PCIE16(G5)_2, they will run at x8 each. Form Factor: ATX 12 x 9.6 in"
+      section: "Memory: 4 x DIMM slots, max. 256GB, DDR5. Expansion Slots — AMD Ryzen 9000 & 7000: 2 x PCIe 5.0 x16 slots (supports x16 or x8/x8 modes). Note: when you use both PCIEX16(G5)_1 and PCIE16(G5)_2, they will run at x8 each. Form Factor: ATX 12 x 9.6 in"
       as_of: 2026-10-28
     manual:
       title: ASUS ProArt B850-CREATOR WIFI NEO user manual (E27577)
@@ -178,10 +192,12 @@ boards:
     slot_note: Manual — PCIE1 is PCIe 4.0 x16; PCIE2 is PCIe 3.0 x16 electrical x4. Two-card CrossFire layout is Gen4x16 + Gen3x4, not CPU-lane x8/x8.
     local_desktop: false
     product_id: asrock-b650m-pro-rs
+    max_ram_gb: 256
+    dimms: 4
     citation:
       title: ASRock B650M Pro RS specifications
       url: https://www.asrock.com/mb/AMD/B650M%20Pro%20RS/
-      section: "Slots — CPU: 1 x PCIe 4.0 x16 Slot (PCIE1), supports x16 mode; 1 x PCIe 3.0 x16 Slot (PCIE2), supports x4 mode"
+      section: "Memory: 4 x DDR5 DIMM Slots, Max. capacity of system memory: 256GB. Slots — CPU: 1 x PCIe 4.0 x16 Slot (PCIE1), supports x16 mode; 1 x PCIe 3.0 x16 Slot (PCIE2), supports x4 mode"
       as_of: 2026-10-28
     manual:
       title: ASRock B650M Pro RS user manual
@@ -201,10 +217,12 @@ boards:
     slot_note: Spec page — PCI_E1 is PCIe 4.0 x16 from the CPU; PCI_E3 is PCIe 4.0 x4 from the B650 chipset. Two x16-shaped slots run x16/x4, not CPU-lane x8/x8.
     local_desktop: false
     product_id: msi-b650-gaming-plus-wifi
+    max_ram_gb: 256
+    dimms: 4
     citation:
       title: MSI B650 GAMING PLUS WIFI specification
       url: https://www.msi.com/Motherboard/B650-GAMING-PLUS-WIFI/Specification
-      section: "Slot — 2x PCI-E x16 slot supports x16/x4 (Ryzen 9000/7000). PCI_E1 Gen PCIe 4.0 up to x16 (From CPU); PCI_E3 Gen PCIe 4.0 up to x4 (From Chipset). PCB Info: ATX"
+      section: "Memory — 4x DDR5, Maximum Memory Capacity 256GB. Slot — 2x PCI-E x16 slot supports x16/x4 (Ryzen 9000/7000). PCI_E1 Gen PCIe 4.0 up to x16 (From CPU); PCI_E3 Gen PCIe 4.0 up to x4 (From Chipset). PCB Info: ATX"
       as_of: 2026-10-28
     manual:
       title: MSI B650 GAMING PLUS WIFI datasheet
