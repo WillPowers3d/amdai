@@ -1,5 +1,8 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { runs } from './run-card-data';
 import { allNav, primaryNav } from './site';
 import {
@@ -76,5 +79,15 @@ describe('local desktop compare tables', () => {
     assert.doesNotMatch(blob, /floor is q4|q4 floor|q4 and up only/i);
     assert.doesNotMatch(blob, /\b(?:IQ[12]_[A-Z0-9]+|Q[12]_[A-Z0-9]+)\b/);
     assert.match(blob, /Q3/);
+  });
+
+  it('puts a next-step buy box on the one-vs-two-GPU page', () => {
+    const page = readFileSync(
+      join(dirname(fileURLToPath(import.meta.url)), '../pages/compare/one-vs-two-gpu.astro'),
+      'utf8',
+    );
+    assert.match(page, /NextStepBuyBox/);
+    assert.match(page, /ONE_VS_TWO_PICKS/);
+    assert.match(page, /ONE_VS_TWO_SRC/);
   });
 });

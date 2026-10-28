@@ -4,6 +4,7 @@ import BuyButtons from '../../components/BuyButtons.astro';
 import Callout from '../../components/Callout.astro';
 import HowWeTest from '../../components/HowWeTest.astro';
 import NewsletterSignup from '../../components/NewsletterSignup.astro';
+import NextStepBuyBox from '../../components/NextStepBuyBox.astro';
 import NextSteps from '../../components/NextSteps.astro';
 import OpenInStackLab from '../../components/OpenInStackLab.astro';
 import SystemRamNeed from '../../components/SystemRamNeed.astro';
@@ -17,6 +18,7 @@ import {
   parseCanRunSlug,
 } from '../../lib/can-run';
 import { RAM_FULL_LABEL, RAM_MIN_LABEL } from '../../lib/ram-surfaces';
+import { CAN_RUN_FOOTER_SRC, CAN_RUN_NEXT_STEP_SRC, nextStepPicks } from '../../lib/upgrade-pick';
 
 export function getStaticPaths() {
   return canRunPairPages().map((page) => ({ params: { slug: page.slug } }));
@@ -26,6 +28,7 @@ const slug = Astro.params.slug ?? '';
 const parsed = parseCanRunSlug(slug);
 if (!parsed) throw new Error(`unknown can-run slug ${slug}`);
 const page = canRunPairPage(parsed.modelId, parsed.gpuId, runs);
+const nextStep = nextStepPicks(page.modelId, page.gpuId);
 ---
 
 <Base title={page.title} description={page.description}>
@@ -41,6 +44,7 @@ const page = canRunPairPage(parsed.modelId, parsed.gpuId, runs);
     <h1 class="display mt-3 text-4xl sm:text-5xl">{page.heading}</h1>
     <p class="mt-3 font-serif text-2xl tracking-tight text-accent-ink">{page.headlineLabel}</p>
     <p class="mt-4 max-w-3xl text-lg leading-relaxed text-muted">{page.lead}</p>
+    <NextStepBuyBox picks={nextStep} src={CAN_RUN_NEXT_STEP_SRC} />
     <div class="mt-4">
       <HowWeTest />
     </div>
@@ -180,7 +184,7 @@ const page = canRunPairPage(parsed.modelId, parsed.gpuId, runs);
         Existing <a class="underline decoration-accent/40" href="/disclosure">/go/</a> routes for this GPU sheet.
         Buttons say Check price — we do not print a figure.
       </p>
-      <BuyButtons product={page.productId} heading={page.gpuName} />
+      <BuyButtons product={page.productId} heading={page.gpuName} src={CAN_RUN_FOOTER_SRC} />
     </section>
 
     <section id="faq" class="mt-12" aria-labelledby="faq-heading">

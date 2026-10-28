@@ -1,0 +1,161 @@
+url	verdict	current_buy	primary_pick	newegg_route
+/can-run/flash-on-r9700/	fits with ram offload	r9700	More DDR5 for the offloaded experts	/go/newegg/ddr5-kit
+/can-run/flash-on-rx-6700-xt/	fits with ram offload	rx6700xt	More DDR5 for the offloaded experts	/go/newegg/ddr5-kit
+/can-run/flash-on-rx-6800-xt/	fits with ram offload	rx6800xt	More DDR5 for the offloaded experts	/go/newegg/ddr5-kit
+/can-run/flash-on-rx-6950-xt/	fits with ram offload	rx6950xt	More DDR5 for the offloaded experts	/go/newegg/ddr5-kit
+/can-run/flash-on-rx-7600-xt/	fits with ram offload	rx7600xt	More DDR5 for the offloaded experts	/go/newegg/ddr5-kit
+/can-run/flash-on-rx-7600/	fits with ram offload	rx7600	More DDR5 for the offloaded experts	/go/newegg/ddr5-kit
+/can-run/flash-on-rx-7700-xt/	fits with ram offload	rx7700xt	More DDR5 for the offloaded experts	/go/newegg/ddr5-kit
+/can-run/flash-on-rx-7800-xt/	fits with ram offload	rx7800xt	More DDR5 for the offloaded experts	/go/newegg/ddr5-kit
+/can-run/flash-on-rx-7900-gre/	fits with ram offload	rx7900gre	More DDR5 for the offloaded experts	/go/newegg/ddr5-kit
+/can-run/flash-on-rx-7900-xt/	fits with ram offload	rx7900xt	More DDR5 for the offloaded experts	/go/newegg/ddr5-kit
+/can-run/flash-on-rx-7900-xtx/	fits with ram offload	rx7900xtx	More DDR5 for the offloaded experts	/go/newegg/ddr5-kit
+/can-run/flash-on-rx-9060-xt/	fits with ram offload	rx9060xt	More DDR5 for the offloaded experts	/go/newegg/ddr5-kit
+/can-run/flash-on-rx-9070-gre/	fits with ram offload	rx9070gre	More DDR5 for the offloaded experts	/go/newegg/ddr5-kit
+/can-run/flash-on-rx-9070-xt/	fits with ram offload	rx9070xt	More DDR5 for the offloaded experts	/go/newegg/ddr5-kit
+/can-run/flash-on-rx-9070/	fits with ram offload	rx9070	More DDR5 for the offloaded experts	/go/newegg/ddr5-kit
+/can-run/flash-on-strix-halo/	fits with ram offload	strix-halo	More DDR5 for the offloaded experts	/go/newegg/ddr5-kit
+/can-run/flash-on-w6800/	fits with ram offload	w6800	More DDR5 for the offloaded experts	/go/newegg/ddr5-kit
+/can-run/flash-on-w7700/	fits with ram offload	w7700	More DDR5 for the offloaded experts	/go/newegg/ddr5-kit
+/can-run/flash-on-w7800/	fits with ram offload	w7800	More DDR5 for the offloaded experts	/go/newegg/ddr5-kit
+/can-run/flash-on-w7900/	fits with ram offload	w7900	More DDR5 for the offloaded experts	/go/newegg/ddr5-kit
+/can-run/gemma3-27b-on-r9700/	fits fully on gpu	r9700	current card box unchanged	
+/can-run/gemma3-27b-on-rx-6700-xt/	needs 2 gpus	rx6700xt	One Radeon AI PRO R9700 (32 GB) fits this model fully on one card	/go/newegg/r9700
+/can-run/gemma3-27b-on-rx-6800-xt/	needs 2 gpus	rx6800xt	One Radeon AI PRO R9700 (32 GB) fits this model fully on one card	/go/newegg/r9700
+/can-run/gemma3-27b-on-rx-6950-xt/	needs 2 gpus	rx6950xt	One Radeon AI PRO R9700 (32 GB) fits this model fully on one card	/go/newegg/r9700
+/can-run/gemma3-27b-on-rx-7600-xt/	needs 2 gpus	rx7600xt	One Radeon AI PRO R9700 (32 GB) fits this model fully on one card	/go/newegg/r9700
+/can-run/gemma3-27b-on-rx-7600/	fits with ram offload	rx7600	More DDR5 for the offloaded experts	/go/newegg/ddr5-kit
+/can-run/gemma3-27b-on-rx-7700-xt/	needs 2 gpus	rx7700xt	One Radeon AI PRO R9700 (32 GB) fits this model fully on one card	/go/newegg/r9700
+/can-run/gemma3-27b-on-rx-7800-xt/	needs 2 gpus	rx7800xt	One Radeon AI PRO R9700 (32 GB) fits this model fully on one card	/go/newegg/r9700
+/can-run/gemma3-27b-on-rx-7900-gre/	needs 2 gpus	rx7900gre	One Radeon AI PRO R9700 (32 GB) fits this model fully on one card	/go/newegg/r9700
+/can-run/gemma3-27b-on-rx-7900-xt/	fits fully on gpu	rx7900xt	current card box unchanged	
+/can-run/gemma3-27b-on-rx-7900-xtx/	fits fully on gpu	rx7900xtx	current card box unchanged	
+/can-run/gemma3-27b-on-rx-9060-xt/	needs 2 gpus	rx9060xt	One Radeon AI PRO R9700 (32 GB) fits this model fully on one card	/go/newegg/r9700
+/can-run/gemma3-27b-on-rx-9070-gre/	needs 2 gpus	rx9070gre	One Radeon AI PRO R9700 (32 GB) fits this model fully on one card	/go/newegg/r9700
+/can-run/gemma3-27b-on-rx-9070-xt/	needs 2 gpus	rx9070xt	One Radeon AI PRO R9700 (32 GB) fits this model fully on one card	/go/newegg/r9700
+/can-run/gemma3-27b-on-rx-9070/	needs 2 gpus	rx9070	One Radeon AI PRO R9700 (32 GB) fits this model fully on one card	/go/newegg/r9700
+/can-run/gemma3-27b-on-strix-halo/	fits fully on gpu	strix-halo	current card box unchanged	
+/can-run/gemma3-27b-on-w6800/	fits fully on gpu	w6800	current card box unchanged	
+/can-run/gemma3-27b-on-w7700/	needs 2 gpus	w7700	One Radeon AI PRO R9700 (32 GB) fits this model fully on one card	/go/newegg/r9700
+/can-run/gemma3-27b-on-w7800/	fits fully on gpu	w7800	current card box unchanged	
+/can-run/gemma3-27b-on-w7900/	fits fully on gpu	w7900	current card box unchanged	
+/can-run/glm-53-flash-on-r9700/	fits with ram offload	r9700	More DDR5 for the offloaded experts	/go/newegg/ddr5-kit
+/can-run/glm-53-flash-on-rx-6700-xt/	fits with ram offload	rx6700xt	More DDR5 for the offloaded experts	/go/newegg/ddr5-kit
+/can-run/glm-53-flash-on-rx-6800-xt/	fits with ram offload	rx6800xt	More DDR5 for the offloaded experts	/go/newegg/ddr5-kit
+/can-run/glm-53-flash-on-rx-6950-xt/	fits with ram offload	rx6950xt	More DDR5 for the offloaded experts	/go/newegg/ddr5-kit
+/can-run/glm-53-flash-on-rx-7600-xt/	fits with ram offload	rx7600xt	More DDR5 for the offloaded experts	/go/newegg/ddr5-kit
+/can-run/glm-53-flash-on-rx-7600/	fits with ram offload	rx7600	More DDR5 for the offloaded experts	/go/newegg/ddr5-kit
+/can-run/glm-53-flash-on-rx-7700-xt/	fits with ram offload	rx7700xt	More DDR5 for the offloaded experts	/go/newegg/ddr5-kit
+/can-run/glm-53-flash-on-rx-7800-xt/	fits with ram offload	rx7800xt	More DDR5 for the offloaded experts	/go/newegg/ddr5-kit
+/can-run/glm-53-flash-on-rx-7900-gre/	fits with ram offload	rx7900gre	More DDR5 for the offloaded experts	/go/newegg/ddr5-kit
+/can-run/glm-53-flash-on-rx-7900-xt/	fits with ram offload	rx7900xt	More DDR5 for the offloaded experts	/go/newegg/ddr5-kit
+/can-run/glm-53-flash-on-rx-7900-xtx/	fits with ram offload	rx7900xtx	More DDR5 for the offloaded experts	/go/newegg/ddr5-kit
+/can-run/glm-53-flash-on-rx-9060-xt/	fits with ram offload	rx9060xt	More DDR5 for the offloaded experts	/go/newegg/ddr5-kit
+/can-run/glm-53-flash-on-rx-9070-gre/	fits with ram offload	rx9070gre	More DDR5 for the offloaded experts	/go/newegg/ddr5-kit
+/can-run/glm-53-flash-on-rx-9070-xt/	fits with ram offload	rx9070xt	More DDR5 for the offloaded experts	/go/newegg/ddr5-kit
+/can-run/glm-53-flash-on-rx-9070/	fits with ram offload	rx9070	More DDR5 for the offloaded experts	/go/newegg/ddr5-kit
+/can-run/glm-53-flash-on-strix-halo/	fits with ram offload	strix-halo	More DDR5 for the offloaded experts	/go/newegg/ddr5-kit
+/can-run/glm-53-flash-on-w6800/	fits with ram offload	w6800	More DDR5 for the offloaded experts	/go/newegg/ddr5-kit
+/can-run/glm-53-flash-on-w7700/	fits with ram offload	w7700	More DDR5 for the offloaded experts	/go/newegg/ddr5-kit
+/can-run/glm-53-flash-on-w7800/	fits with ram offload	w7800	More DDR5 for the offloaded experts	/go/newegg/ddr5-kit
+/can-run/glm-53-flash-on-w7900/	fits with ram offload	w7900	More DDR5 for the offloaded experts	/go/newegg/ddr5-kit
+/can-run/gpt-oss-20b-on-r9700/	fits fully on gpu	r9700	current card box unchanged	
+/can-run/gpt-oss-20b-on-rx-6700-xt/	needs 2 gpus	rx6700xt	One Radeon AI PRO R9700 (32 GB) fits this model fully on one card	/go/newegg/r9700
+/can-run/gpt-oss-20b-on-rx-6800-xt/	fits fully on gpu	rx6800xt	current card box unchanged	
+/can-run/gpt-oss-20b-on-rx-6950-xt/	fits fully on gpu	rx6950xt	current card box unchanged	
+/can-run/gpt-oss-20b-on-rx-7600-xt/	fits fully on gpu	rx7600xt	current card box unchanged	
+/can-run/gpt-oss-20b-on-rx-7600/	needs 2 gpus	rx7600	One Radeon AI PRO R9700 (32 GB) fits this model fully on one card	/go/newegg/r9700
+/can-run/gpt-oss-20b-on-rx-7700-xt/	needs 2 gpus	rx7700xt	One Radeon AI PRO R9700 (32 GB) fits this model fully on one card	/go/newegg/r9700
+/can-run/gpt-oss-20b-on-rx-7800-xt/	fits fully on gpu	rx7800xt	current card box unchanged	
+/can-run/gpt-oss-20b-on-rx-7900-gre/	fits fully on gpu	rx7900gre	current card box unchanged	
+/can-run/gpt-oss-20b-on-rx-7900-xt/	fits fully on gpu	rx7900xt	current card box unchanged	
+/can-run/gpt-oss-20b-on-rx-7900-xtx/	fits fully on gpu	rx7900xtx	current card box unchanged	
+/can-run/gpt-oss-20b-on-rx-9060-xt/	fits fully on gpu	rx9060xt	current card box unchanged	
+/can-run/gpt-oss-20b-on-rx-9070-gre/	needs 2 gpus	rx9070gre	One Radeon AI PRO R9700 (32 GB) fits this model fully on one card	/go/newegg/r9700
+/can-run/gpt-oss-20b-on-rx-9070-xt/	fits fully on gpu	rx9070xt	current card box unchanged	
+/can-run/gpt-oss-20b-on-rx-9070/	fits fully on gpu	rx9070	current card box unchanged	
+/can-run/gpt-oss-20b-on-strix-halo/	fits fully on gpu	strix-halo	current card box unchanged	
+/can-run/gpt-oss-20b-on-w6800/	fits fully on gpu	w6800	current card box unchanged	
+/can-run/gpt-oss-20b-on-w7700/	fits fully on gpu	w7700	current card box unchanged	
+/can-run/gpt-oss-20b-on-w7800/	fits fully on gpu	w7800	current card box unchanged	
+/can-run/gpt-oss-20b-on-w7900/	fits fully on gpu	w7900	current card box unchanged	
+/can-run/llama33-70b-on-r9700/	needs 2 gpus	r9700	A second R9700 (2x 32 GB)	/go/newegg/r9700
+/can-run/llama33-70b-on-rx-6700-xt/	fits with ram offload	rx6700xt	More DDR5 for the offloaded experts	/go/newegg/ddr5-kit
+/can-run/llama33-70b-on-rx-6800-xt/	fits with ram offload	rx6800xt	More DDR5 for the offloaded experts	/go/newegg/ddr5-kit
+/can-run/llama33-70b-on-rx-6950-xt/	fits with ram offload	rx6950xt	More DDR5 for the offloaded experts	/go/newegg/ddr5-kit
+/can-run/llama33-70b-on-rx-7600-xt/	fits with ram offload	rx7600xt	More DDR5 for the offloaded experts	/go/newegg/ddr5-kit
+/can-run/llama33-70b-on-rx-7600/	fits with ram offload	rx7600	More DDR5 for the offloaded experts	/go/newegg/ddr5-kit
+/can-run/llama33-70b-on-rx-7700-xt/	fits with ram offload	rx7700xt	More DDR5 for the offloaded experts	/go/newegg/ddr5-kit
+/can-run/llama33-70b-on-rx-7800-xt/	fits with ram offload	rx7800xt	More DDR5 for the offloaded experts	/go/newegg/ddr5-kit
+/can-run/llama33-70b-on-rx-7900-gre/	fits with ram offload	rx7900gre	More DDR5 for the offloaded experts	/go/newegg/ddr5-kit
+/can-run/llama33-70b-on-rx-7900-xt/	fits with ram offload	rx7900xt	More DDR5 for the offloaded experts	/go/newegg/ddr5-kit
+/can-run/llama33-70b-on-rx-7900-xtx/	needs 2 gpus	rx7900xtx	A second rx-7900-xtx for the 2x columns	/go/newegg/rx7900xtx
+/can-run/llama33-70b-on-rx-9060-xt/	fits with ram offload	rx9060xt	More DDR5 for the offloaded experts	/go/newegg/ddr5-kit
+/can-run/llama33-70b-on-rx-9070-gre/	fits with ram offload	rx9070gre	More DDR5 for the offloaded experts	/go/newegg/ddr5-kit
+/can-run/llama33-70b-on-rx-9070-xt/	fits with ram offload	rx9070xt	More DDR5 for the offloaded experts	/go/newegg/ddr5-kit
+/can-run/llama33-70b-on-rx-9070/	fits with ram offload	rx9070	More DDR5 for the offloaded experts	/go/newegg/ddr5-kit
+/can-run/llama33-70b-on-strix-halo/	fits fully on gpu	strix-halo	current card box unchanged	
+/can-run/llama33-70b-on-w6800/	needs 2 gpus	w6800	A second w6800 for the 2x columns	/go/newegg/w6800
+/can-run/llama33-70b-on-w7700/	fits with ram offload	w7700	More DDR5 for the offloaded experts	/go/newegg/ddr5-kit
+/can-run/llama33-70b-on-w7800/	needs 2 gpus	w7800	A second w7800 for the 2x columns	/go/newegg/w7800
+/can-run/llama33-70b-on-w7900/	fits fully on gpu	w7900	current card box unchanged	
+/can-run/qwen36-27b-on-r9700/	fits fully on gpu	r9700	current card box unchanged	
+/can-run/qwen36-27b-on-rx-6700-xt/	needs 2 gpus	rx6700xt	One Radeon AI PRO R9700 (32 GB) fits this model fully on one card	/go/newegg/r9700
+/can-run/qwen36-27b-on-rx-6800-xt/	needs 2 gpus	rx6800xt	One Radeon AI PRO R9700 (32 GB) fits this model fully on one card	/go/newegg/r9700
+/can-run/qwen36-27b-on-rx-6950-xt/	needs 2 gpus	rx6950xt	One Radeon AI PRO R9700 (32 GB) fits this model fully on one card	/go/newegg/r9700
+/can-run/qwen36-27b-on-rx-7600-xt/	needs 2 gpus	rx7600xt	One Radeon AI PRO R9700 (32 GB) fits this model fully on one card	/go/newegg/r9700
+/can-run/qwen36-27b-on-rx-7600/	fits with ram offload	rx7600	More DDR5 for the offloaded experts	/go/newegg/ddr5-kit
+/can-run/qwen36-27b-on-rx-7700-xt/	needs 2 gpus	rx7700xt	One Radeon AI PRO R9700 (32 GB) fits this model fully on one card	/go/newegg/r9700
+/can-run/qwen36-27b-on-rx-7800-xt/	needs 2 gpus	rx7800xt	One Radeon AI PRO R9700 (32 GB) fits this model fully on one card	/go/newegg/r9700
+/can-run/qwen36-27b-on-rx-7900-gre/	needs 2 gpus	rx7900gre	One Radeon AI PRO R9700 (32 GB) fits this model fully on one card	/go/newegg/r9700
+/can-run/qwen36-27b-on-rx-7900-xt/	fits fully on gpu	rx7900xt	current card box unchanged	
+/can-run/qwen36-27b-on-rx-7900-xtx/	fits fully on gpu	rx7900xtx	current card box unchanged	
+/can-run/qwen36-27b-on-rx-9060-xt/	needs 2 gpus	rx9060xt	One Radeon AI PRO R9700 (32 GB) fits this model fully on one card	/go/newegg/r9700
+/can-run/qwen36-27b-on-rx-9070-gre/	needs 2 gpus	rx9070gre	One Radeon AI PRO R9700 (32 GB) fits this model fully on one card	/go/newegg/r9700
+/can-run/qwen36-27b-on-rx-9070-xt/	needs 2 gpus	rx9070xt	One Radeon AI PRO R9700 (32 GB) fits this model fully on one card	/go/newegg/r9700
+/can-run/qwen36-27b-on-rx-9070/	needs 2 gpus	rx9070	One Radeon AI PRO R9700 (32 GB) fits this model fully on one card	/go/newegg/r9700
+/can-run/qwen36-27b-on-strix-halo/	fits fully on gpu	strix-halo	current card box unchanged	
+/can-run/qwen36-27b-on-w6800/	fits fully on gpu	w6800	current card box unchanged	
+/can-run/qwen36-27b-on-w7700/	needs 2 gpus	w7700	One Radeon AI PRO R9700 (32 GB) fits this model fully on one card	/go/newegg/r9700
+/can-run/qwen36-27b-on-w7800/	fits fully on gpu	w7800	current card box unchanged	
+/can-run/qwen36-27b-on-w7900/	fits fully on gpu	w7900	current card box unchanged	
+/can-run/qwen36-35b-on-r9700/	fits fully on gpu	r9700	current card box unchanged	
+/can-run/qwen36-35b-on-rx-6700-xt/	fits with ram offload	rx6700xt	More DDR5 for the offloaded experts	/go/newegg/ddr5-kit
+/can-run/qwen36-35b-on-rx-6800-xt/	needs 2 gpus	rx6800xt	One Radeon AI PRO R9700 (32 GB) fits this model fully on one card	/go/newegg/r9700
+/can-run/qwen36-35b-on-rx-6950-xt/	needs 2 gpus	rx6950xt	One Radeon AI PRO R9700 (32 GB) fits this model fully on one card	/go/newegg/r9700
+/can-run/qwen36-35b-on-rx-7600-xt/	needs 2 gpus	rx7600xt	One Radeon AI PRO R9700 (32 GB) fits this model fully on one card	/go/newegg/r9700
+/can-run/qwen36-35b-on-rx-7600/	fits with ram offload	rx7600	More DDR5 for the offloaded experts	/go/newegg/ddr5-kit
+/can-run/qwen36-35b-on-rx-7700-xt/	fits with ram offload	rx7700xt	More DDR5 for the offloaded experts	/go/newegg/ddr5-kit
+/can-run/qwen36-35b-on-rx-7800-xt/	needs 2 gpus	rx7800xt	One Radeon AI PRO R9700 (32 GB) fits this model fully on one card	/go/newegg/r9700
+/can-run/qwen36-35b-on-rx-7900-gre/	needs 2 gpus	rx7900gre	One Radeon AI PRO R9700 (32 GB) fits this model fully on one card	/go/newegg/r9700
+/can-run/qwen36-35b-on-rx-7900-xt/	needs 2 gpus	rx7900xt	One Radeon AI PRO R9700 (32 GB) fits this model fully on one card	/go/newegg/r9700
+/can-run/qwen36-35b-on-rx-7900-xtx/	needs 2 gpus	rx7900xtx	One Radeon AI PRO R9700 (32 GB) fits this model fully on one card	/go/newegg/r9700
+/can-run/qwen36-35b-on-rx-9060-xt/	needs 2 gpus	rx9060xt	One Radeon AI PRO R9700 (32 GB) fits this model fully on one card	/go/newegg/r9700
+/can-run/qwen36-35b-on-rx-9070-gre/	fits with ram offload	rx9070gre	More DDR5 for the offloaded experts	/go/newegg/ddr5-kit
+/can-run/qwen36-35b-on-rx-9070-xt/	needs 2 gpus	rx9070xt	One Radeon AI PRO R9700 (32 GB) fits this model fully on one card	/go/newegg/r9700
+/can-run/qwen36-35b-on-rx-9070/	needs 2 gpus	rx9070	One Radeon AI PRO R9700 (32 GB) fits this model fully on one card	/go/newegg/r9700
+/can-run/qwen36-35b-on-strix-halo/	fits fully on gpu	strix-halo	current card box unchanged	
+/can-run/qwen36-35b-on-w6800/	fits fully on gpu	w6800	current card box unchanged	
+/can-run/qwen36-35b-on-w7700/	needs 2 gpus	w7700	One Radeon AI PRO R9700 (32 GB) fits this model fully on one card	/go/newegg/r9700
+/can-run/qwen36-35b-on-w7800/	fits fully on gpu	w7800	current card box unchanged	
+/can-run/qwen36-35b-on-w7900/	fits fully on gpu	w7900	current card box unchanged	
+/can-run/qwen38-27b-on-r9700/	fits fully on gpu	r9700	current card box unchanged	
+/can-run/qwen38-27b-on-rx-6700-xt/	needs 2 gpus	rx6700xt	One Radeon AI PRO R9700 (32 GB) fits this model fully on one card	/go/newegg/r9700
+/can-run/qwen38-27b-on-rx-6800-xt/	needs 2 gpus	rx6800xt	One Radeon AI PRO R9700 (32 GB) fits this model fully on one card	/go/newegg/r9700
+/can-run/qwen38-27b-on-rx-6950-xt/	needs 2 gpus	rx6950xt	One Radeon AI PRO R9700 (32 GB) fits this model fully on one card	/go/newegg/r9700
+/can-run/qwen38-27b-on-rx-7600-xt/	needs 2 gpus	rx7600xt	One Radeon AI PRO R9700 (32 GB) fits this model fully on one card	/go/newegg/r9700
+/can-run/qwen38-27b-on-rx-7600/	fits with ram offload	rx7600	More DDR5 for the offloaded experts	/go/newegg/ddr5-kit
+/can-run/qwen38-27b-on-rx-7700-xt/	needs 2 gpus	rx7700xt	One Radeon AI PRO R9700 (32 GB) fits this model fully on one card	/go/newegg/r9700
+/can-run/qwen38-27b-on-rx-7800-xt/	needs 2 gpus	rx7800xt	One Radeon AI PRO R9700 (32 GB) fits this model fully on one card	/go/newegg/r9700
+/can-run/qwen38-27b-on-rx-7900-gre/	needs 2 gpus	rx7900gre	One Radeon AI PRO R9700 (32 GB) fits this model fully on one card	/go/newegg/r9700
+/can-run/qwen38-27b-on-rx-7900-xt/	fits fully on gpu	rx7900xt	current card box unchanged	
+/can-run/qwen38-27b-on-rx-7900-xtx/	fits fully on gpu	rx7900xtx	current card box unchanged	
+/can-run/qwen38-27b-on-rx-9060-xt/	needs 2 gpus	rx9060xt	One Radeon AI PRO R9700 (32 GB) fits this model fully on one card	/go/newegg/r9700
+/can-run/qwen38-27b-on-rx-9070-gre/	needs 2 gpus	rx9070gre	One Radeon AI PRO R9700 (32 GB) fits this model fully on one card	/go/newegg/r9700
+/can-run/qwen38-27b-on-rx-9070-xt/	needs 2 gpus	rx9070xt	One Radeon AI PRO R9700 (32 GB) fits this model fully on one card	/go/newegg/r9700
+/can-run/qwen38-27b-on-rx-9070/	needs 2 gpus	rx9070	One Radeon AI PRO R9700 (32 GB) fits this model fully on one card	/go/newegg/r9700
+/can-run/qwen38-27b-on-strix-halo/	fits fully on gpu	strix-halo	current card box unchanged	
+/can-run/qwen38-27b-on-w6800/	fits fully on gpu	w6800	current card box unchanged	
+/can-run/qwen38-27b-on-w7700/	needs 2 gpus	w7700	One Radeon AI PRO R9700 (32 GB) fits this model fully on one card	/go/newegg/r9700
+/can-run/qwen38-27b-on-w7800/	fits fully on gpu	w7800	current card box unchanged	
+/can-run/qwen38-27b-on-w7900/	fits fully on gpu	w7900	current card box unchanged	

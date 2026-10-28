@@ -1,6 +1,9 @@
 import { parse } from 'yaml';
 import retailersRaw from '../data/retailers.yaml?raw';
 import productsRaw from '../data/products.yaml?raw';
+import { neweggFirstFromValue, orderRetailers } from './go-src';
+
+export { GO_SRC_PARAM, goPath, orderRetailers, sanitizeGoSrc } from './go-src';
 
 export type RetailerProgram = 'amazon_associates' | 'rakuten' | 'bhphoto' | 'none';
 
@@ -195,8 +198,26 @@ export function resolveGo(retailerId: string, productId: string): { href: string
   return { ...wrapped, retailer, product };
 }
 
-export function goPath(retailerId: string, productId: string): string {
-  return `/go/${retailerId}/${productId}`;
+/**
+ * Put Newegg first on Check-price buttons. Defaults off — Newegg stubs
+ * are not Rakuten deep links yet, so Amazon stays first until that is wired.
+ */
+export function neweggFirstEnabled(): boolean {
+  return neweggFirstFromValue(readEnv('NEWEGG_FIRST'));
+}
+
+export function buyRetailers(): Retailer[] {
+  return orderRetailers(retailers, neweggFirstEnabled());
+}
+
+export const NEXT_STEP_RETAILER_IDS = ['amazon', 'newegg'] as const;
+
+export function nextStepRetailers(): Retailer[] {
+  const wanted = new Set<string>(NEXT_STEP_RETAILER_IDS);
+  return orderRetailers(
+    retailers.filter((row) => wanted.has(row.id)),
+    neweggFirstEnabled(),
+  );
 }
 
 export function productHasRetailer(product: Product, retailerId: string): boolean {
