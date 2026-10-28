@@ -1,0 +1,156 @@
+---
+import Base from '../layouts/Base.astro';
+import BuyButtons from '../components/BuyButtons.astro';
+import AffiliateDisclosure from '../components/AffiliateDisclosure.astro';
+import Callout from '../components/Callout.astro';
+import NextSteps from '../components/NextSteps.astro';
+import {
+  ANY_BOARD_NOTE,
+  CHEAP_BOARD_NOTE,
+  DUAL_BADGE,
+  MOTHERBOARDS_DIGEST,
+  MOTHERBOARDS_NAME,
+  MOTHERBOARDS_PUBLISHED,
+  WHY_DUAL_X8X8,
+  dualReadyBoards,
+  singleCapableBoards,
+} from '../lib/motherboards';
+import { MULTI_GPU_HARDWARE } from '../lib/multi-gpu';
+import { motherboards, motherboardsFile } from '../lib/motherboards-data';
+
+const duals = dualReadyBoards(motherboards);
+const cheap = singleCapableBoards(motherboards);
+const links = [
+  { href: '/multi-gpu', label: 'Dual / multi-GPU' },
+  { href: '/bios', label: 'BIOS' },
+  { href: '/budget', label: 'Budget' },
+  { href: '/hardware', label: 'Hardware' },
+  { href: '/calculator', label: 'Calculator' },
+  { href: '/setup/multi-gpu', label: 'Multi-GPU how-to' },
+];
+---
+
+<Base
+  title={MOTHERBOARDS_NAME}
+  description="Cited AM5 boards that split CPU PCIe x16 into x8/x8 for two full-length GPUs. Maker manuals only. No invented prices."
+>
+  <main id="main" class="mx-auto max-w-4xl px-4 py-10 sm:px-6">
+    <p class="kicker">Cited · as of {motherboardsFile.as_of}</p>
+    <h1 class="display mt-3 text-4xl sm:text-5xl">{MOTHERBOARDS_NAME}</h1>
+    <p class="mt-4 max-w-3xl text-lg leading-relaxed text-muted">{MOTHERBOARDS_DIGEST}</p>
+    <p class="mt-3 max-w-3xl leading-relaxed text-muted">{WHY_DUAL_X8X8}</p>
+    <p class="mt-3 max-w-3xl text-sm leading-relaxed text-muted">{MULTI_GPU_HARDWARE.pcie}</p>
+    <ul class="mt-4 flex flex-wrap gap-2">
+      {links.map((link) => (
+        <li>
+          <a
+            class="inline-flex min-h-11 items-center rounded-full border border-line bg-canvas px-3 text-sm text-ink hover:border-accent/50 hover:text-accent-ink"
+            href={link.href}
+          >
+            {link.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+
+    <Callout type="note" title="Cited manuals only">
+      <p>
+        A chipset that <em>can</em> do 2×8 does not mean every board wired two full-length CPU slots.
+        Every row here quotes the maker spec or manual, with the page or section and an as-of date.
+        We do not invent a street price. Buttons say Check price.
+        Published {MOTHERBOARDS_PUBLISHED}.
+      </p>
+    </Callout>
+
+    <section id="dual" class="mt-12 scroll-mt-28" aria-labelledby="dual-heading">
+      <h2 id="dual-heading" class="font-serif text-3xl tracking-tight">Dual x8/x8 (CPU lanes)</h2>
+      <p class="mt-3 max-w-3xl text-muted">
+        Two full-length slots that the maker documents as a CPU-lane x16 or x8/x8 split.
+        This is the default list for two-GPU builds and for one-GPU builds that are not on Minimum budget.
+      </p>
+      <ol class="mt-8 space-y-4">
+        {duals.map((board) => (
+          <li id={board.id} class="card scroll-mt-28 p-5 sm:p-6">
+            <div class="flex flex-wrap items-center gap-2">
+              <h3 class="text-2xl tracking-tight">{board.name}</h3>
+              <span class="rounded-full bg-ok/15 px-2.5 py-0.5 text-xs text-ok">{DUAL_BADGE}</span>
+              {board.local_desktop && (
+                <span class="rounded-full border border-line bg-canvas px-2.5 py-0.5 text-xs text-muted">
+                  Our local desktop board
+                </span>
+              )}
+            </div>
+            <p class="mt-2 text-sm text-muted">
+              {board.chipset} · PCIe {board.pcie_gen} · {board.split} · {board.form_factor} · {board.socket}
+            </p>
+            {board.local_desktop && (
+              <p class="mt-2 text-sm leading-relaxed text-muted">
+                The local desktop seats two R9700s at PCIe 5.0 x8/x8 on CPU lanes on this board.
+              </p>
+            )}
+            {board.slot_note && <p class="mt-2 text-sm leading-relaxed text-muted">{board.slot_note}</p>}
+            <p class="mt-3 text-sm leading-relaxed text-muted">
+              Cite:
+              <a class="underline decoration-accent/40 underline-offset-2" href={board.citation.url} rel="noopener" target="_blank">
+                {board.citation.title}
+              </a>
+              — {board.citation.section}. As of {board.citation.as_of}.
+            </p>
+            <p class="mt-2 text-sm leading-relaxed text-muted">
+              Manual:
+              <a class="underline decoration-accent/40 underline-offset-2" href={board.manual.url} rel="noopener" target="_blank">
+                {board.manual.title}
+              </a>
+              — {board.manual.section}. As of {board.manual.as_of}.
+            </p>
+            <BuyButtons product={board.product_id} disclose />
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <section id="minimum" class="mt-14 scroll-mt-28" aria-labelledby="minimum-heading">
+      <h2 id="minimum-heading" class="font-serif text-3xl tracking-tight">Minimum budget · single-x16</h2>
+      <p class="mt-3 max-w-3xl text-muted">
+        {ANY_BOARD_NOTE} These cheaper boards are listed only when the builder’s Minimum budget
+        option is on and a second GPU is not planned.
+      </p>
+      <ol class="mt-8 space-y-4">
+        {cheap.map((board) => (
+          <li id={board.id} class="card scroll-mt-28 p-5 sm:p-6">
+            <div class="flex flex-wrap items-center gap-2">
+              <h3 class="text-2xl tracking-tight">{board.name}</h3>
+              <span class="rounded-full border border-line bg-canvas px-2.5 py-0.5 text-xs text-muted">
+                Single-GPU capable · not dual x8/x8
+              </span>
+            </div>
+            <p class="mt-2 text-sm text-muted">
+              {board.chipset} · PCIe {board.pcie_gen} · {board.split} · {board.form_factor} · {board.socket}
+            </p>
+            {board.slot_note && <p class="mt-2 text-sm leading-relaxed text-muted">{board.slot_note}</p>}
+            <p class="mt-2 text-sm leading-relaxed text-muted">{CHEAP_BOARD_NOTE}</p>
+            <p class="mt-3 text-sm leading-relaxed text-muted">
+              Cite:
+              <a class="underline decoration-accent/40 underline-offset-2" href={board.citation.url} rel="noopener" target="_blank">
+                {board.citation.title}
+              </a>
+              — {board.citation.section}. As of {board.citation.as_of}.
+            </p>
+            <p class="mt-2 text-sm leading-relaxed text-muted">
+              Manual:
+              <a class="underline decoration-accent/40 underline-offset-2" href={board.manual.url} rel="noopener" target="_blank">
+                {board.manual.title}
+              </a>
+              — {board.manual.section}. As of {board.manual.as_of}.
+            </p>
+            <BuyButtons product={board.product_id} disclose />
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <AffiliateDisclosure />
+
+    <NextSteps path="/motherboards" />
+  </main>
+</Base>

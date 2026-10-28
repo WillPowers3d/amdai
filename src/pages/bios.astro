@@ -44,6 +44,7 @@ const emptyBoards = file.boards.length === 0;
       <a class="btn-primary" href="#settings">Settings</a>
       <a class="btn-secondary" href="#chipsets">Chipsets</a>
       <a class="btn-ghost" href="#boards">Board notes</a>
+      <a class="btn-ghost" href="/motherboards">Dual x8/x8 boards</a>
       <a class="btn-ghost" href="/hardware">Hardware</a>
     </div>
 
@@ -156,8 +157,9 @@ const emptyBoards = file.boards.length === 0;
     <section id="boards" class="mt-14 scroll-mt-28" aria-labelledby="boards-heading">
       <h2 id="boards-heading" class="font-serif text-3xl">Per-board notes</h2>
       <p class="mt-3 max-w-2xl text-muted">
-        Community submissions only. The test-rig motherboard is not published, so this table
-        starts empty on purpose.
+        Community BIOS walkthroughs only — this table stays empty until someone files a cited
+        firmware walk. Boards whose maker manuals document a CPU-lane x8/x8 split live on
+        <a class="underline decoration-accent/40 underline-offset-2" href="/motherboards">dual x8/x8 motherboards</a>.
       </p>
 
       {emptyBoards ? (

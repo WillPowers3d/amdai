@@ -521,10 +521,18 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
   '/multi-gpu': [
     { href: '/gpus/r9700', label: 'R9700 measured page' },
     { href: '/setup/multi-gpu', label: 'Multi-GPU llama.cpp how-to' },
+    { href: '/motherboards', label: 'Dual x8/x8 motherboards' },
     { href: '/qwen36-dual', label: '35B on two cards' },
     { href: '/flash-daily', label: 'Flash daily' },
     { href: '/compare/one-vs-two-gpu', label: 'One vs split' },
     { href: '/setup', label: 'First-run setup' },
+  ],
+  '/motherboards': [
+    { href: '/budget', label: 'Setup by budget' },
+    { href: '/calculator', label: 'Calculator' },
+    { href: '/multi-gpu', label: 'Dual / multi-GPU' },
+    { href: '/bios', label: 'BIOS' },
+    { href: '/hardware', label: 'Hardware' },
   ],
   '/benchmarks': [
     { href: '/results', label: 'Run cards' },

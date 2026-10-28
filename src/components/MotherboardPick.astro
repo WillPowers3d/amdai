@@ -1,0 +1,202 @@
+---
+import BuyButtons from './BuyButtons.astro';
+import AffiliateDisclosure from './AffiliateDisclosure.astro';
+import {
+  ANY_BOARD_NOTE,
+  CHEAP_BOARD_NOTE,
+  DUAL_BADGE,
+  WHY_DUAL_X8X8,
+  boardsForAsk,
+  recommendationNote,
+  type Motherboard,
+  type MotherboardAsk,
+} from '../lib/motherboards';
+
+interface Props {
+  boards: Motherboard[];
+  ask: MotherboardAsk;
+  id?: string;
+}
+
+const { boards, ask, id = 'motherboard-pick' } = Astro.props;
+const initial = boardsForAsk(boards, ask);
+const initialNote = recommendationNote(ask);
+const payload = JSON.stringify({
+  why: WHY_DUAL_X8X8,
+  cheap: CHEAP_BOARD_NOTE,
+  any: ANY_BOARD_NOTE,
+  boards: boards.map((board) => ({
+    id: board.id,
+    dual_ready: board.dual_ready,
+  })),
+});
+---
+
+<section id={id} class="space-y-4" data-mb-pick data-mb-payload={payload}>
+  <div>
+    <p class="kicker">Motherboard</p>
+    <h2 class="mt-2 text-2xl tracking-tight sm:text-3xl">Which board matches this build?</h2>
+    <p class="mt-2 text-sm leading-relaxed text-muted" data-mb-note>{initialNote}</p>
+    <p class="mt-2 text-sm leading-relaxed text-muted">{WHY_DUAL_X8X8}</p>
+    <p class="mt-2 text-sm">
+      <a class="text-accent-ink underline decoration-accent/40 underline-offset-2" href="/motherboards">
+        Vetted dual x8/x8 list
+      </a>
+      — maker manuals only. No invented prices.
+    </p>
+  </div>
+
+  <ol class="grid gap-4" data-mb-list>
+    {boards.map((board) => {
+      const shown = initial.some((row) => row.id === board.id);
+      return (
+        <li
+          class="card p-5 sm:p-6"
+          data-mb-board={board.id}
+          data-dual-ready={board.dual_ready ? '1' : '0'}
+          hidden={!shown}
+        >
+          <div class="flex flex-wrap items-center gap-2">
+            <h3 class="text-2xl tracking-tight">{board.name}</h3>
+            {board.dual_ready && (
+              <span class="rounded-full bg-ok/15 px-2.5 py-0.5 text-xs text-ok">{DUAL_BADGE}</span>
+            )}
+            {board.local_desktop && (
+              <span class="rounded-full border border-line bg-canvas px-2.5 py-0.5 text-xs text-muted">
+                Our local desktop board
+              </span>
+            )}
+            {!board.dual_ready && (
+              <span class="rounded-full border border-line bg-canvas px-2.5 py-0.5 text-xs text-muted">
+                Single-GPU capable · not dual x8/x8
+              </span>
+            )}
+          </div>
+          <p class="mt-2 text-sm text-muted">
+            {board.chipset} · PCIe {board.pcie_gen} · {board.split} · {board.form_factor} · {board.socket}
+          </p>
+          {board.slot_note && <p class="mt-2 text-sm leading-relaxed text-muted">{board.slot_note}</p>}
+          {!board.dual_ready && (
+            <p class="mt-2 text-sm leading-relaxed text-muted">{CHEAP_BOARD_NOTE}</p>
+          )}
+          <p class="mt-3 text-sm leading-relaxed text-muted">
+            Cite:
+            <a
+              class="underline decoration-accent/40 underline-offset-2"
+              href={board.citation.url}
+              rel="noopener"
+              target="_blank"
+            >
+              {board.citation.title}
+            </a>
+            — {board.citation.section}. As of {board.citation.as_of}.
+            Manual:
+            <a
+              class="underline decoration-accent/40 underline-offset-2"
+              href={board.manual.url}
+              rel="noopener"
+              target="_blank"
+            >
+              {board.manual.title}
+            </a>
+            — {board.manual.section}.
+          </p>
+          <BuyButtons product={board.product_id} disclose={false} />
+        </li>
+      );
+    })}
+  </ol>
+  <AffiliateDisclosure compact />
+</section>
+
+<script>
+  function gpuCount(): number {
+    const field = document.querySelector<HTMLInputElement>('[name="gpuCount"]');
+    if (field && field.value) {
+      const n = Number(field.value);
+      if (Number.isFinite(n) && n >= 1) return Math.min(4, Math.round(n));
+    }
+    const radio = document.querySelector<HTMLInputElement>('input[name="n"]:checked');
+    if (radio) {
+      const n = Number(radio.value);
+      if (Number.isFinite(n) && n >= 1) return Math.min(4, Math.round(n));
+    }
+    const highlighted = document.querySelector<HTMLElement>('[data-tier].ring-accent, [data-tier].ring-2');
+    if (highlighted?.getAttribute('data-tier') === 'pro') return 2;
+    const q = new URLSearchParams(window.location.search);
+    if (q.get('tier') === 'pro' || q.get('n') === '2') return 2;
+    return 1;
+  }
+
+  function minBudget(): boolean {
+    const checked = document.querySelector<HTMLInputElement>('input[name="minbudget"]:checked');
+    if (checked) return checked.value === '1' || checked.value === 'minimum';
+    return false;
+  }
+
+  function expandGpu(min: boolean): boolean {
+    const checked = document.querySelector<HTMLInputElement>('input[name="expandgpu"]:checked');
+    if (checked) return checked.value === '1' || checked.value === 'yes';
+    return !min;
+  }
+
+  function recommendDual(n: number, min: boolean, expand: boolean): boolean {
+    if (n >= 2) return true;
+    if (!min) return true;
+    return expand;
+  }
+
+  function syncPick() {
+    const root = document.querySelector<HTMLElement>('[data-mb-pick]');
+    if (!root) return;
+    const n = gpuCount();
+    const min = minBudget();
+    const expand = expandGpu(min);
+    const dual = recommendDual(n, min, expand);
+    const note = root.querySelector('[data-mb-note]');
+    if (note) {
+      if (n >= 2) {
+        note.textContent =
+          'Two GPUs: only boards whose maker docs show a CPU-lane x8/x8 split. Chipset x4 leftovers stay off this list.';
+      } else if (dual) {
+        note.textContent = min
+          ? 'Minimum budget, but you said a second GPU might come later — keep the dual x8/x8 board.'
+          : 'Default is a dual x8/x8 board, including for one GPU, so a later card can sit on matching CPU lanes.';
+      } else {
+        note.textContent =
+          'This board will run one GPU. The second full-length slot is not a CPU-lane x8. Adding a later card here usually lands on a leftover x4 — we do not recommend that for a second Radeon.';
+      }
+    }
+    root.querySelectorAll<HTMLElement>('[data-mb-board]').forEach((card) => {
+      const ready = card.getAttribute('data-dual-ready') === '1';
+      card.hidden = dual ? !ready : ready;
+    });
+    const expandRow = document.querySelector<HTMLElement>('[data-expand-gpu]');
+    if (expandRow) expandRow.hidden = n >= 2;
+  }
+
+  document.addEventListener('change', (event) => {
+    const target = event.target as HTMLElement | null;
+    if (!target) return;
+    if (target.matches('[name="minbudget"]')) {
+      const min = minBudget();
+      const want = min ? '0' : '1';
+      document.querySelectorAll<HTMLInputElement>('input[name="expandgpu"]').forEach((el) => {
+        el.checked = el.value === want;
+      });
+    }
+    if (
+      target.matches(
+        '[name="minbudget"], [name="expandgpu"], [name="gpuCount"], [name="n"], [name="priority"], [name="usage"], [name="style"]',
+      )
+    ) {
+      syncPick();
+    }
+  });
+  document.addEventListener('input', (event) => {
+    const target = event.target as HTMLElement | null;
+    if (target?.matches('[name="gpuCount"]')) syncPick();
+  });
+  window.addEventListener('amdai-ask-change', syncPick);
+  syncPick();
+</script>

@@ -55,6 +55,7 @@ export const MULTI_GPU_INTRO_LINKS: MultiGpuLink[] = [
   { href: '/flash-daily', label: 'Flash daily' },
   { href: '/setup', label: 'First-run setup' },
   { href: '/setup/multi-gpu', label: 'Multi-GPU how-to' },
+  { href: '/motherboards', label: 'Dual x8/x8 boards' },
 ];
 
 export const MULTI_GPU_WHEN = {
@@ -180,6 +181,11 @@ export const MULTI_GPU_MORE: { href: string; label: string; body: string }[] = [
     body: 'Starter through two-R9700 builds. No invented prices.',
   },
   {
+    href: '/motherboards',
+    label: 'Dual x8/x8 motherboards',
+    body: 'Cited AM5 boards that actually split CPU lanes x8/x8. Maker manuals only.',
+  },
+  {
     href: '/bios',
     label: 'BIOS',
     body: 'Above 4G, ReBAR/SAM, CSM, x8/x8 vs x16/x4 — cited chipset notes.',
@@ -223,6 +229,7 @@ export const REQUIRED_MULTI_GPU_HREFS = [
   '/setup/multi-gpu',
   '/calculator',
   '/budget',
+  '/motherboards',
   '/glossary',
   '/bios',
   '/hardware',

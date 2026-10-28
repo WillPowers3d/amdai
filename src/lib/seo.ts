@@ -277,6 +277,7 @@ export const CRUMB_LABELS: Record<string, string> = {
   '/stacks': 'Stacks',
   '/calculator': 'Calculator',
   '/budget': 'Budget',
+  '/motherboards': 'Motherboards',
   '/quants': 'Quants',
   '/software': 'AI software',
   '/hardware': 'Hardware',
@@ -705,6 +706,12 @@ setMeta(
   'Setup by budget',
   'Starter through two-R9700 Pro builds for local Qwen. Size and speed, never a live or invented price.',
 );
+setMeta(
+  '/motherboards',
+  'Dual x8/x8 motherboards',
+  'Cited AM5 boards that split CPU PCIe x16 into x8/x8 for two full-length GPUs. Maker manuals only. No invented prices.',
+);
+setDate('/motherboards', '2026-10-28');
 setMeta(
   '/calculator',
   'Quant + hardware calc',

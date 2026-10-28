@@ -165,6 +165,7 @@ export const FAQ_ENTRIES: FaqItem[] = [
       'Setup by budget is four tiers from a ~16 GB card to the two-R9700 Pro rig. Size vs speed changes the pick. Buttons say Check price — we do not invent a street price. Consumer 7900 / 7800 sheets are estimates; the R9700 page is the measured north star.',
     links: [
       { href: '/budget', label: 'Setup by budget' },
+      { href: '/motherboards', label: 'Dual x8/x8 motherboards' },
       { href: '/calculator', label: 'Calculator' },
       { href: '/gpus/r9700', label: 'R9700 measured page' },
       { href: '/disclosure', label: 'Affiliate disclosure' },
@@ -1110,6 +1111,7 @@ export const FAQ_ENTRIES: FaqItem[] = [
       'Cited chipset notes: Above 4G, ReBAR/SAM, CSM off, and matching GPU lane widths (x8/x8 or x16/x16 — not a leftover x4). The per-board table is empty until submissions. We do not invent a motherboard for local desktop. Read /bios before you file “ROCm is broken” on a firmware miss.',
     links: [
       { href: '/bios', label: 'BIOS' },
+      { href: '/motherboards', label: 'Dual x8/x8 motherboards' },
       { href: '/hardware', label: 'Hardware' },
       { href: '/rocm-problems', label: 'ROCm problems' },
     ],
@@ -1178,6 +1180,7 @@ export const REQUIRED_FAQ_HREFS = [
   '/sponsor',
   '/rss.xml',
   '/budget',
+  '/motherboards',
   '/multi-gpu',
   '/amdai-bench',
   '/amdai-bench/lab-notes-report@1.schema.json',

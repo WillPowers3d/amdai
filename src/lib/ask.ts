@@ -1,9 +1,16 @@
 /**
  * Upfront questions shared by /budget and /calculator.
- * URL params: priority, usage, style.
+ * URL params: priority, usage, style, minbudget, expandgpu.
  */
 import type { Priority } from './priority';
 import { DEFAULT_PRIORITY, isPriority, parsePriority, PRIORITY_COPY } from './priority';
+import {
+  DEFAULT_MIN_BUDGET,
+  defaultExpandGpu,
+  parseExpandGpu,
+  parseMinBudget,
+  writeMotherboardAskParams,
+} from './motherboards';
 import { abliteratedGuide, type AbliteratedRow } from './status';
 
 export type Usage = 'local' | 'hybrid';
@@ -11,6 +18,7 @@ export type Style = 'standard' | 'abliterated';
 
 export const DEFAULT_USAGE: Usage = 'local';
 export const DEFAULT_STYLE: Style = 'standard';
+export { DEFAULT_MIN_BUDGET, defaultExpandGpu };
 
 export const USAGE_COPY: Record<Usage, { label: string; short: string; lede: string; verdict: string }> = {
   local: {
@@ -49,6 +57,8 @@ export type AskState = {
   priority: Priority;
   usage: Usage;
   style: Style;
+  minBudget: boolean;
+  expandGpu: boolean;
 };
 
 export function isUsage(value: string | null | undefined): value is Usage {
@@ -71,22 +81,34 @@ export function parseStyle(search: string): Style {
   return isStyle(raw) ? raw : DEFAULT_STYLE;
 }
 
+export { parseMinBudget, parseExpandGpu };
+
 export function parseAsk(search: string): AskState {
+  const minBudget = parseMinBudget(search);
   return {
     priority: parsePriority(search),
     usage: parseUsage(search),
     style: parseStyle(search),
+    minBudget,
+    expandGpu: parseExpandGpu(search, minBudget),
   };
 }
 
 export function askQuery(ask: AskState): Record<string, string> {
-  return { priority: ask.priority, usage: ask.usage, style: ask.style };
+  return {
+    priority: ask.priority,
+    usage: ask.usage,
+    style: ask.style,
+    minbudget: ask.minBudget ? '1' : '0',
+    expandgpu: ask.expandGpu ? '1' : '0',
+  };
 }
 
 export function writeAskParams(url: URL, ask: AskState): void {
   url.searchParams.set('priority', ask.priority);
   url.searchParams.set('usage', ask.usage);
   url.searchParams.set('style', ask.style);
+  writeMotherboardAskParams(url, ask);
 }
 
 /** Hybrid can take a cheaper tier. Fully local keeps the size/speed ladder. */

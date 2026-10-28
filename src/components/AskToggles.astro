@@ -2,18 +2,23 @@
 import type { Priority } from '../lib/priority';
 import type { Style, Usage } from '../lib/ask';
 import { DEFAULT_PRIORITY } from '../lib/priority';
-import { DEFAULT_STYLE, DEFAULT_USAGE } from '../lib/ask';
+import { DEFAULT_MIN_BUDGET, DEFAULT_STYLE, DEFAULT_USAGE, defaultExpandGpu } from '../lib/ask';
+import { EXPAND_GPU_COPY, MIN_BUDGET_COPY } from '../lib/motherboards';
 
 interface Props {
   defaultPriority?: Priority;
   defaultUsage?: Usage;
   defaultStyle?: Style;
+  defaultMinBudget?: boolean;
+  defaultExpandGpu?: boolean;
 }
 
 const {
   defaultPriority = DEFAULT_PRIORITY,
   defaultUsage = DEFAULT_USAGE,
   defaultStyle = DEFAULT_STYLE,
+  defaultMinBudget = DEFAULT_MIN_BUDGET,
+  defaultExpandGpu: expandDefault = defaultExpandGpu(defaultMinBudget),
 } = Astro.props;
 ---
 
@@ -22,8 +27,9 @@ const {
     <p class="kicker">Ask first</p>
     <h2 class="mt-2 text-2xl tracking-tight sm:text-3xl">What do you want first?</h2>
     <p class="mt-2 text-sm text-muted">
-      Three questions before the recommendation. They change the pick, not the VRAM math. Tokens per
+      Setup questions before the recommendation. They change the pick, not the VRAM math. Tokens per
       second are estimates unless a “Tested on our rig” number is showing. No cloud prices.
+      Dual x8/x8 boards stay the default unless you explicitly pick Minimum budget.
     </p>
   </div>
 
@@ -80,5 +86,40 @@ const {
       <a class="text-accent-ink underline decoration-accent/40 underline-offset-2" href="/abliterated">Abliterated hub</a>
       — what it is, how to vet files, the catalog. Educational only. Tested pick: being reworked.
     </p>
+  </fieldset>
+
+  <fieldset class="rounded-2xl border border-line bg-raised/40 p-5">
+    <legend class="px-1 font-medium">Board budget</legend>
+    <div class="mt-3 grid gap-2 sm:grid-cols-2" role="radiogroup" aria-label="Board budget">
+      <label class="cursor-pointer rounded-2xl border border-line bg-canvas/70 p-4 has-[:checked]:border-accent has-[:checked]:ring-2 has-[:checked]:ring-accent">
+        <input class="sr-only" type="radio" name="minbudget" value="0" checked={!defaultMinBudget} />
+        <span class="block font-medium">{MIN_BUDGET_COPY.recommended.label}</span>
+        <span class="mt-1 block text-sm text-muted">{MIN_BUDGET_COPY.recommended.lede}</span>
+      </label>
+      <label class="cursor-pointer rounded-2xl border border-line bg-canvas/70 p-4 has-[:checked]:border-accent has-[:checked]:ring-2 has-[:checked]:ring-accent">
+        <input class="sr-only" type="radio" name="minbudget" value="1" checked={defaultMinBudget} />
+        <span class="block font-medium">{MIN_BUDGET_COPY.minimum.label}</span>
+        <span class="mt-1 block text-sm text-muted">{MIN_BUDGET_COPY.minimum.lede}</span>
+      </label>
+    </div>
+    <p class="mt-4 text-sm leading-relaxed text-muted" data-minbudget-lede></p>
+  </fieldset>
+
+  <fieldset class="rounded-2xl border border-line bg-raised/40 p-5" data-expand-gpu>
+    <legend class="px-1 font-medium">{EXPAND_GPU_COPY.question}</legend>
+    <p class="mt-2 text-sm leading-relaxed text-muted">{EXPAND_GPU_COPY.push}</p>
+    <div class="mt-3 grid gap-2 sm:grid-cols-2" role="radiogroup" aria-label="Second GPU later">
+      <label class="cursor-pointer rounded-2xl border border-line bg-canvas/70 p-4 has-[:checked]:border-accent has-[:checked]:ring-2 has-[:checked]:ring-accent">
+        <input class="sr-only" type="radio" name="expandgpu" value="1" checked={expandDefault} />
+        <span class="block font-medium">{EXPAND_GPU_COPY.yes.label}</span>
+        <span class="mt-1 block text-sm text-muted">{EXPAND_GPU_COPY.yes.lede}</span>
+      </label>
+      <label class="cursor-pointer rounded-2xl border border-line bg-canvas/70 p-4 has-[:checked]:border-accent has-[:checked]:ring-2 has-[:checked]:ring-accent">
+        <input class="sr-only" type="radio" name="expandgpu" value="0" checked={!expandDefault} />
+        <span class="block font-medium">{EXPAND_GPU_COPY.no.label}</span>
+        <span class="mt-1 block text-sm text-muted">{EXPAND_GPU_COPY.no.lede}</span>
+      </label>
+    </div>
+    <p class="mt-4 text-sm leading-relaxed text-muted" data-expandgpu-lede></p>
   </fieldset>
 </section>

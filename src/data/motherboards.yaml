@@ -1,0 +1,144 @@
+# Vetted AM5 boards for local-AI GPU layouts.
+# Dual-ready rows cite a maker manual or spec page that documents a CPU-lane
+# x8/x8 split across two full-length slots. Cheap single-x16 rows are for
+# Minimum budget only. Do not invent prices. Do not add a board you cannot cite.
+as_of: 2026-10-28
+
+boards:
+  - id: asrock-x870-taichi-creator
+    name: ASRock X870 Taichi Creator
+    maker: ASRock
+    socket: AM5
+    chipset: X870
+    form_factor: ATX
+    dual_ready: true
+    split: x8/x8
+    pcie_gen: "5.0"
+    slot_note: Maker spec page — widened spacing easily fits two 4-slot GPUs.
+    local_desktop: true
+    product_id: asrock-x870-taichi-creator
+    citation:
+      title: ASRock X870 Taichi Creator specifications
+      url: https://www.asrock.com/MB/AMD/X870%20Taichi%20Creator/
+      section: "Specifications → Slots: CPU 2 x PCIe 5.0 x16 Slots (PCIE1 and PCIE2), support x16 or x8/x8 modes; Features — PCIe 5.0 x8/x8 Slots & Wide Spacing"
+      as_of: 2026-10-28
+    manual:
+      title: ASRock X870 Taichi Creator user manual
+      url: https://download.asrock.com/Manual/X870%20Taichi%20Creator.pdf
+      section: "Chapter 1.2 Specifications → Expansion Slot: CPU 2 x PCIe 5.0 x16 Slots (PCIE1 and PCIE2), support x16 or x8/x8 modes"
+      as_of: 2026-10-28
+
+  - id: asus-proart-x870e-creator
+    name: ASUS ProArt X870E-CREATOR WIFI
+    maker: ASUS
+    socket: AM5
+    chipset: X870E
+    form_factor: ATX
+    dual_ready: true
+    split: x8/x8
+    pcie_gen: "5.0"
+    slot_note: Spec page — when both PCIEX16(G5)_1 and PCIEX16(G5)_2 are used they run at x8 each. PCIEX16(G5)_2 shares bandwidth with M.2_2 (x8/x4 if that M.2 is enabled).
+    local_desktop: false
+    product_id: asus-proart-x870e-creator
+    citation:
+      title: ASUS ProArt X870E-CREATOR WIFI tech spec
+      url: https://www.asus.com/uk/motherboards-components/motherboards/proart/proart-x870e-creator-wifi/techspec/
+      section: "Expansion Slots — AMD Ryzen 9000 & 7000: 2 x PCIe 5.0 x16 slots (supports x16 or x8/x8). Note: when you use both PCIEX16(G5)_1 and PCIEX16(G5)_2, they will run at x8 each. Form Factor: ATX 12 x 9.6 in"
+      as_of: 2026-10-28
+    manual:
+      title: ASUS ProArt X870E-CREATOR WIFI user manual (E28680 V2)
+      url: https://dlcdnets.asus.com/pub/ASUS/mb/SocketAM5/ProArt_X870E-CREATOR_WIFI/E28680_ProArt_X870E-CREATOR_WIFI_EM_V2_WEB.pdf
+      section: "Specifications → Expansion Slots: 2 x PCIe 5.0 x16 slots with Q-Release Slim (supports x16 or x8/x8). When you use both PCIEX16(G5)_1 and PCIEX16(G5)_2, they will run at x8 each"
+      as_of: 2026-10-28
+
+  - id: asus-proart-x670e-creator
+    name: ASUS ProArt X670E-CREATOR WIFI
+    maker: ASUS
+    socket: AM5
+    chipset: X670E
+    form_factor: ATX
+    dual_ready: true
+    split: x8/x8
+    pcie_gen: "5.0"
+    slot_note: Spec page — two CPU PCIe 5.0 x16 slots support x16 or x8/x8. A third full-length slot is chipset x2, not a second CPU GPU slot.
+    local_desktop: false
+    product_id: asus-proart-x670e-creator
+    citation:
+      title: ASUS ProArt X670E-CREATOR WIFI tech spec
+      url: https://www.asus.com/us/motherboards-components/motherboards/proart/proart-x670e-creator-wifi/techspec/
+      section: "Expansion Slots — AMD Ryzen 9000 & 8000 & 7000: 2 x PCIe 5.0 x16 slots (support x16 or x8/x8 modes). AMD X670 Chipset: 1 x PCIe 4.0 x16 slot (supports x2 mode)"
+      as_of: 2026-10-28
+    manual:
+      title: ASUS ProArt X670E-CREATOR WIFI user manual (E21293 V2)
+      url: https://dlcdnets.asus.com/pub/ASUS/mb/Socket%20AM5/ProArt%20X670E-CREATOR%20WIFI/E21293_ProArt_X670E-CREATOR_WIFI_UM_V2_WEB.pdf
+      section: "Specifications → Expansion Slots: 2 x PCIe 5.0 x16 slots (support x16 or x8/x8 modes). Recommended VGA configuration Dual VGA: PCIEX16_1 x8 + PCIEX16_2 x8"
+      as_of: 2026-10-28
+
+  - id: msi-meg-x870e-ace-max
+    name: MSI MEG X870E ACE MAX
+    maker: MSI
+    socket: AM5
+    chipset: X870E
+    form_factor: ATX
+    dual_ready: true
+    split: x8/x8
+    pcie_gen: "5.0"
+    slot_note: Spec page — PCI_E1 and PCI_E2 are from the CPU and support PCIe 5.0 x16/x0 or x8/x8 on Ryzen 9000/7000. PCI_E3 is a CPU x4 leftover that shares bandwidth with M.2_1 — not the second GPU slot.
+    local_desktop: false
+    product_id: msi-meg-x870e-ace-max
+    citation:
+      title: MSI MEG X870E ACE MAX specification
+      url: https://www.msi.com/Motherboard/MEG-X870E-ACE-MAX/Specification
+      section: "Slot — PCI_E1 & PCI_E2 slots support up to PCIe 5.0 x16/x0 or x8/x8 (Ryzen 9000/7000). PCI_E1 Gen PCIe 5.0 up to x16 (From CPU); PCI_E2 Gen PCIe 5.0 up to x8 (From CPU)"
+      as_of: 2026-10-28
+    manual:
+      title: MSI MEG X870E ACE MAX English manual
+      url: https://download-2.msi.com/archive/mnu_exe/mb/MEGX870EACEMAX_English.pdf
+      section: "Specifications → Expansion Slots: PCI_E1 & PCI_E2 (From CPU) support up to PCIe 5.0 x16/x0, x8/x8 (Ryzen 9000/7000). Form Factor: ATX 9.6 in x 12 in"
+      as_of: 2026-10-28
+
+  - id: asrock-b650m-pro-rs
+    name: ASRock B650M Pro RS
+    maker: ASRock
+    socket: AM5
+    chipset: B650
+    form_factor: Micro-ATX
+    dual_ready: false
+    split: x16/x4
+    pcie_gen: "4.0"
+    slot_note: Manual — PCIE1 is PCIe 4.0 x16; PCIE2 is PCIe 3.0 x16 electrical x4. Two-card CrossFire layout is Gen4x16 + Gen3x4, not CPU-lane x8/x8.
+    local_desktop: false
+    product_id: asrock-b650m-pro-rs
+    citation:
+      title: ASRock B650M Pro RS specifications
+      url: https://www.asrock.com/mb/AMD/B650M%20Pro%20RS/
+      section: "Slots — CPU: 1 x PCIe 4.0 x16 Slot (PCIE1), supports x16 mode; 1 x PCIe 3.0 x16 Slot (PCIE2), supports x4 mode"
+      as_of: 2026-10-28
+    manual:
+      title: ASRock B650M Pro RS user manual
+      url: https://download.asrock.com/Manual/B650M%20Pro%20RS.pdf
+      section: "Chapter 1.2 Specifications → Expansion Slot, and Expansion Slots (PCIe Slots): two-card CrossFire mode is Gen4x16 + Gen3x4. Platform: Micro ATX Form Factor"
+      as_of: 2026-10-28
+
+  - id: msi-b650-gaming-plus-wifi
+    name: MSI B650 GAMING PLUS WIFI
+    maker: MSI
+    socket: AM5
+    chipset: B650
+    form_factor: ATX
+    dual_ready: false
+    split: x16/x4
+    pcie_gen: "4.0"
+    slot_note: Spec page — PCI_E1 is PCIe 4.0 x16 from the CPU; PCI_E3 is PCIe 4.0 x4 from the B650 chipset. Two x16-shaped slots run x16/x4, not CPU-lane x8/x8.
+    local_desktop: false
+    product_id: msi-b650-gaming-plus-wifi
+    citation:
+      title: MSI B650 GAMING PLUS WIFI specification
+      url: https://www.msi.com/Motherboard/B650-GAMING-PLUS-WIFI/Specification
+      section: "Slot — 2x PCI-E x16 slot supports x16/x4 (Ryzen 9000/7000). PCI_E1 Gen PCIe 4.0 up to x16 (From CPU); PCI_E3 Gen PCIe 4.0 up to x4 (From Chipset). PCB Info: ATX"
+      as_of: 2026-10-28
+    manual:
+      title: MSI B650 GAMING PLUS WIFI datasheet
+      url: https://storage-asset.msi.com/datasheet/mb/global/B650-GAMING-PLUS-WIFI.pdf
+      section: "Specifications — Expansion Slots: 2x PCIe 4.0 x16 slots, 1x PCIe 3.0 x1 slot. Lane split (x16/x4 vs chipset x4) is on the product specification page"
+      as_of: 2026-10-28

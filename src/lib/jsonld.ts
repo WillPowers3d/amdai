@@ -1177,6 +1177,7 @@ export function pageJsonLd(input: {
     path === '/compare/radeon-vs-nvidia' ||
     path === '/compare/radeon-vs-mac' ||
     path === '/multi-gpu' ||
+    path === '/motherboards' ||
     path === '/methodology' ||
     path === '/terms' ||
     path === '/contact' ||

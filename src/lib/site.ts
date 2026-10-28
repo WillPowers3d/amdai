@@ -126,6 +126,7 @@ export const primaryNav: NavItem[] = [
   { href: '/calculator', label: 'Calculator', description: 'Size a model, ask what a Radeon can run, or read a speed floor — Q3 through BF16', group: 'tools' },
   { href: '/api', label: 'Public API', description: 'Static JSON at /api/v1/ plus the amdai-fit MCP server for assistants', group: 'tools' },
   { href: '/budget', label: 'Budget', description: 'Starter → Pro Radeon builds, no invented prices', group: 'tools' },
+  { href: '/motherboards', label: 'Motherboards', description: 'Cited AM5 boards with a CPU-lane x8/x8 split for two GPUs. No invented prices', group: 'tools' },
   { href: '/guides/buying-used-radeon', label: 'Buying used Radeon', description: 'Cited used-Radeon shopper guide — VRAM picker, gfx / ROCm notes, Linux vetting. No invented prices', group: 'tools' },
   { href: '/guides/quantize-gguf', label: 'Make GGUF quants', description: 'Cited llama.cpp convert + imatrix + Q6/Q5/Q4 how-to. Unsloth UD is the house default. Q3 is a labeled estimate', group: 'tools' },
   { href: '/compare', label: 'Compare 35B', description: 'One GPU vs split, and Q6 / Q5 / Q4 plus a labeled Q3 estimate — from local desktop run cards', group: 'tools' },

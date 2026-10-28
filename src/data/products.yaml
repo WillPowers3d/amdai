@@ -369,3 +369,63 @@ products:
       newegg: https://www.newegg.com/p/pl?d=1000W+ATX+power+supply+12V-2x6
       bhphoto: https://www.bhphotovideo.com/c/search?Ntt=1000W+power+supply
       microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=1000W+power+supply
+
+  - id: asrock-x870-taichi-creator
+    name: ASRock X870 Taichi Creator
+    kind: part
+    note: Local desktop board. Maker spec — two PCIe 5.0 x16 slots, x16 or x8/x8. Search only, not a SKU or a price.
+    urls:
+      newegg: https://www.newegg.com/p/pl?d=ASRock+X870+Taichi+Creator
+      amazon: https://www.amazon.com/s?k=ASRock+X870+Taichi+Creator
+      bhphoto: https://www.bhphotovideo.com/c/search?Ntt=ASRock+X870+Taichi+Creator
+      microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=ASRock+X870+Taichi+Creator
+
+  - id: asus-proart-x870e-creator
+    name: ASUS ProArt X870E-CREATOR WIFI
+    kind: part
+    note: Maker spec — two PCIe 5.0 x16 slots, x16 or x8/x8. Search only, not a SKU or a price.
+    urls:
+      newegg: https://www.newegg.com/p/pl?d=ASUS+ProArt+X870E-CREATOR+WIFI
+      amazon: https://www.amazon.com/s?k=ASUS+ProArt+X870E-CREATOR+WIFI
+      bhphoto: https://www.bhphotovideo.com/c/search?Ntt=ASUS+ProArt+X870E-CREATOR+WIFI
+      microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=ASUS+ProArt+X870E-CREATOR+WIFI
+
+  - id: asus-proart-x670e-creator
+    name: ASUS ProArt X670E-CREATOR WIFI
+    kind: part
+    note: Maker spec — two PCIe 5.0 x16 slots, x16 or x8/x8. Search only, not a SKU or a price.
+    urls:
+      newegg: https://www.newegg.com/p/pl?d=ASUS+ProArt+X670E-CREATOR+WIFI
+      amazon: https://www.amazon.com/s?k=ASUS+ProArt+X670E-CREATOR+WIFI
+      bhphoto: https://www.bhphotovideo.com/c/search?Ntt=ASUS+ProArt+X670E-CREATOR+WIFI
+      microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=ASUS+ProArt+X670E-CREATOR+WIFI
+
+  - id: msi-meg-x870e-ace-max
+    name: MSI MEG X870E ACE MAX
+    kind: part
+    note: Maker spec — PCI_E1/PCI_E2 from the CPU, PCIe 5.0 x16/x0 or x8/x8. Search only, not a SKU or a price.
+    urls:
+      newegg: https://www.newegg.com/p/pl?d=MSI+MEG+X870E+ACE+MAX
+      amazon: https://www.amazon.com/s?k=MSI+MEG+X870E+ACE+MAX
+      bhphoto: https://www.bhphotovideo.com/c/search?Ntt=MSI+MEG+X870E+ACE+MAX
+      microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=MSI+MEG+X870E+ACE+MAX
+
+  - id: asrock-b650m-pro-rs
+    name: ASRock B650M Pro RS
+    kind: part
+    note: Minimum-budget single-x16 board. Maker spec — PCIE1 x16 plus PCIE2 x4, not CPU-lane x8/x8. Search only, not a SKU or a price.
+    urls:
+      newegg: https://www.newegg.com/p/pl?d=ASRock+B650M+Pro+RS
+      amazon: https://www.amazon.com/s?k=ASRock+B650M+Pro+RS
+      bhphoto: https://www.bhphotovideo.com/c/search?Ntt=ASRock+B650M+Pro+RS
+      microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=ASRock+B650M+Pro+RS
+
+  - id: msi-b650-gaming-plus-wifi
+    name: MSI B650 GAMING PLUS WIFI
+    kind: part
+    note: Minimum-budget single-x16 board. Maker spec — CPU x16 plus chipset x4, not CPU-lane x8/x8. Search only, not a SKU or a price.
+    urls:
+      newegg: https://www.newegg.com/p/pl?d=MSI+B650+GAMING+PLUS+WIFI
+      amazon: https://www.amazon.com/s?k=MSI+B650+GAMING+PLUS+WIFI
+      bhphoto: https://www.bhphotovideo.com/c/search?Ntt=MSI+B650+GAMING+PLUS+WIFI
+      microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=MSI+B650+GAMING+PLUS+WIFI

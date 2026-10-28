@@ -140,6 +140,7 @@ const FULL_EXTRA: LlmsLink[] = [
   { href: '/rocm', title: 'What is ROCm', summary: 'Stack, gfx IDs, Vulkan vs HIP, versions.' },
   { href: '/rocm-problems', title: 'ROCm problems', summary: 'Cited consumer ROCm issues and workarounds.' },
   { href: '/multi-gpu', title: 'Dual / multi-GPU', summary: 'Two R9700s: one model split, or two copies. Measured cards only.' },
+  { href: '/motherboards', title: 'Dual x8/x8 motherboards', summary: 'Cited AM5 boards that split CPU PCIe into x8/x8. No invented prices.' },
   { href: LAB_LOG_MARKDOWN, title: 'Lab log as Markdown', summary: 'Every lab-log entry with metrics and sources, no JavaScript.' },
   { href: '/contact', title: 'Contact', summary: 'Honest routes. No invented inbox.' },
   { href: '/disclosure', title: 'Affiliate disclosure', summary: 'Amazon Associates and other programs when IDs are set.' },
