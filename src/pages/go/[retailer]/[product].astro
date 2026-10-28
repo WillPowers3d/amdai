@@ -36,10 +36,11 @@ const rel = resolved.affiliate ? 'sponsored nofollow noopener' : 'noopener';
     </p>
     <script is:inline define:vars={{ dest, beacon, retailer, product }}>
       try {
+        const src = new URLSearchParams(location.search).get('src') || '';
         if (beacon) {
           navigator.sendBeacon?.(
             beacon,
-            new Blob([JSON.stringify({ retailer, product, t: Date.now() })], { type: 'application/json' }),
+            new Blob([JSON.stringify({ retailer, product, src, t: Date.now() })], { type: 'application/json' }),
           );
         }
       } catch {

@@ -4,7 +4,9 @@ import Callout from '../../components/Callout.astro';
 import HowWeTest from '../../components/HowWeTest.astro';
 import HouseRam from '../../components/HouseRam.astro';
 import NewsletterSignup from '../../components/NewsletterSignup.astro';
+import NextStepBuyBox from '../../components/NextStepBuyBox.astro';
 import SystemRamNeed from '../../components/SystemRamNeed.astro';
+import { ONE_VS_TWO_PICKS, ONE_VS_TWO_SRC } from '../../lib/upgrade-pick';
 import { FLASH_RERUN_NOTE } from '../../lib/run-card';
 import { runs } from '../../lib/run-card-data';
 import {
@@ -62,6 +64,11 @@ const payload = rows.map((row) => ({
     <div class="mt-6">
       <HouseRam which="daily" compact />
     </div>
+    <NextStepBuyBox
+      picks={ONE_VS_TWO_PICKS}
+      src={ONE_VS_TWO_SRC}
+      lead="Your next step for the split column"
+    />
     <p class="mt-3 text-sm text-faint">
       Winner counts on this sweep: one GPU {summary.one} · split {summary.two} · tie {summary.tie} · incomplete {summary.incomplete}.
       Q6_K 1-GPU 4K uses the 23:55 card (103.23 tok/s). The earlier 82.62 card stays on /results.

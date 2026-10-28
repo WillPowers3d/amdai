@@ -1,15 +1,16 @@
 ---
 import AffiliateDisclosure from './AffiliateDisclosure.astro';
-import { destinationUrl, goPath, productById, productHasRetailer, retailers, wrapRetailer } from '../lib/affiliates';
+import { buyRetailers, destinationUrl, goPath, productById, productHasRetailer, wrapRetailer } from '../lib/affiliates';
 
 interface Props {
   product?: string;
   products?: string[];
   heading?: string;
   disclose?: boolean;
+  src?: string;
 }
 
-const { product: productId, products: productIds, heading, disclose = true } = Astro.props;
+const { product: productId, products: productIds, heading, disclose = true, src } = Astro.props;
 const ids = productIds ?? (productId ? [productId] : []);
 const items = ids.map((id) => productById(id)).filter((item): item is NonNullable<typeof item> => Boolean(item));
 ---
@@ -17,12 +18,12 @@ const items = ids.map((id) => productById(id)).filter((item): item is NonNullabl
 {items.length > 0 && (
   <section class="not-prose my-6 space-y-5">
     {items.map((item) => {
-      const links = retailers.filter((retailer) => productHasRetailer(item, retailer.id)).map((retailer) => {
+      const links = buyRetailers().filter((retailer) => productHasRetailer(item, retailer.id)).map((retailer) => {
         const dest = destinationUrl(item.id, retailer.id);
         const wrapped = dest ? wrapRetailer(dest, retailer) : { href: '', affiliate: false };
         return {
           retailer,
-          href: goPath(retailer.id, item.id),
+          href: goPath(retailer.id, item.id, src),
           affiliate: wrapped.affiliate,
         };
       });

@@ -90,6 +90,9 @@ describe('can-run GPU × model fit', () => {
     assert.match(pair, /RAM_MIN_LABEL/);
     assert.match(hub, /RAM_MIN_LABEL/);
     assert.match(pair, /BuyButtons/);
+    assert.match(pair, /NextStepBuyBox/);
+    assert.match(pair, /CAN_RUN_NEXT_STEP_SRC/);
+    assert.match(pair, /CAN_RUN_FOOTER_SRC/);
     assert.match(pair, /OpenInStackLab/);
     assert.doesNotMatch(hub, /Qwen2\.5|Qwen3-8B/);
     assert.doesNotMatch(pair, /Qwen2\.5|Qwen3-8B/);
