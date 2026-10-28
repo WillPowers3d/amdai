@@ -1,0 +1,43 @@
+{
+  "name": "amdai-fit-mcp",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "MCP server that estimates whether a Hugging Face GGUF fits AMD Radeon cards (Q4+ only).",
+  "bin": {
+    "amdai-fit-mcp": "server.mjs"
+  },
+  "scripts": {
+    "test": "node --test test.mjs",
+    "start": "node server.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/WillPowers3d/amdai",
+    "directory": "mcp"
+  },
+  "homepage": "https://amdai.net",
+  "bugs": {
+    "url": "https://github.com/WillPowers3d/amdai/issues"
+  },
+  "keywords": [
+    "mcp",
+    "amd",
+    "radeon",
+    "rocm",
+    "gguf",
+    "llama.cpp",
+    "r9700"
+  ],
+  "files": [
+    "LICENSE",
+    "README.md",
+    "gguf-fit.js",
+    "server.json",
+    "server.mjs"
+  ],
+  "mcpName": "io.github.WillPowers3d/amdai-fit"
+}
