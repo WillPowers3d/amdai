@@ -410,6 +410,36 @@ products:
       bhphoto: https://www.bhphotovideo.com/c/search?Ntt=MSI+MEG+X870E+ACE+MAX
       microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=MSI+MEG+X870E+ACE+MAX
 
+  - id: asrock-x870e-taichi
+    name: ASRock X870E Taichi
+    kind: part
+    note: Maker spec — two PCIe 5.0 x16 slots, x16 or x8/x8. E-ATX. Search only, not a SKU or a price.
+    urls:
+      newegg: https://www.newegg.com/p/pl?d=ASRock+X870E+Taichi
+      amazon: https://www.amazon.com/s?k=ASRock+X870E+Taichi
+      bhphoto: https://www.bhphotovideo.com/c/search?Ntt=ASRock+X870E+Taichi
+      microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=ASRock+X870E+Taichi
+
+  - id: gigabyte-b850-ai-top
+    name: Gigabyte B850 AI TOP
+    kind: part
+    note: Maker spec — two PCIe 5.0 x16 slots, x16 or x8/x8. Search only, not a SKU or a price.
+    urls:
+      newegg: https://www.newegg.com/p/pl?d=Gigabyte+B850+AI+TOP
+      amazon: https://www.amazon.com/s?k=Gigabyte+B850+AI+TOP
+      bhphoto: https://www.bhphotovideo.com/c/search?Ntt=Gigabyte+B850+AI+TOP
+      microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=Gigabyte+B850+AI+TOP
+
+  - id: asus-proart-b850-creator-wifi-neo
+    name: ASUS ProArt B850-CREATOR WIFI NEO
+    kind: part
+    note: Maker spec — two PCIe 5.0 x16 slots, x16 or x8/x8. Search only, not a SKU or a price.
+    urls:
+      newegg: https://www.newegg.com/p/pl?d=ASUS+ProArt+B850-CREATOR+WIFI+NEO
+      amazon: https://www.amazon.com/s?k=ASUS+ProArt+B850-CREATOR+WIFI+NEO
+      bhphoto: https://www.bhphotovideo.com/c/search?Ntt=ASUS+ProArt+B850-CREATOR+WIFI+NEO
+      microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=ASUS+ProArt+B850-CREATOR+WIFI+NEO
+
   - id: asrock-b650m-pro-rs
     name: ASRock B650M Pro RS
     kind: part
