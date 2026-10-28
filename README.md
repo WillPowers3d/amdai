@@ -100,6 +100,7 @@ flowchart TB
 ```text
 .
 ├── data/runs/              Official amdai-bench/run@1 JSONL (committed)
+├── mcp/                    Publishable AMDai fit MCP server (npm: amdai-fit-mcp)
 ├── docs/                   Design, OG, deploy cache notes, weekday scrape, schemas
 ├── e2e/                    Playwright
 ├── public/                 Fonts, favicons, OG PNGs, static JSON seeds

@@ -1,0 +1,23 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.WillPowers3d/amdai-fit",
+  "title": "AMDai fit",
+  "description": "Estimate whether a Hugging Face GGUF fits AMD Radeon cards (Q4+ only).",
+  "websiteUrl": "https://amdai.net",
+  "repository": {
+    "url": "https://github.com/WillPowers3d/amdai",
+    "source": "github",
+    "subfolder": "mcp"
+  },
+  "version": "0.1.0",
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "amdai-fit-mcp",
+      "version": "0.1.0",
+      "transport": {
+        "type": "stdio"
+      }
+    }
+  ]
+}
