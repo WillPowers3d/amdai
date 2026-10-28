@@ -129,6 +129,7 @@ describe('primary path and nav IA', () => {
       '/gpus/w7700': '../pages/gpus/w7700.astro',
       '/gpus/w6800': '../pages/gpus/w6800.astro',
       '/multi-gpu': '../pages/multi-gpu.astro',
+      '/motherboards': '../pages/motherboards.astro',
       '/benchmarks': '../pages/benchmarks.astro',
       '/compare': '../pages/compare/index.astro',
       '/compare/gpus': '../pages/compare/gpus.astro',

@@ -80,6 +80,7 @@ function topicLinks(path: string): RelatedLink[] {
     return [
       { href: '/guides/buying-used-radeon', label: 'Buying a used Radeon' },
       { href: '/budget', label: 'Budget' },
+      { href: '/motherboards', label: 'Dual x8/x8 motherboards' },
       { href: '/compare/gpus', label: 'Compare GPUs' },
       { href: '/gpus', label: 'GPU directory' },
       { href: '/gpus/r9700', label: 'R9700 measured page' },
@@ -521,6 +522,7 @@ function topicLinks(path: string): RelatedLink[] {
     return [
       { href: '/gpus/r9700', label: 'R9700 measured page' },
       { href: '/setup/multi-gpu', label: 'Multi-GPU llama.cpp how-to' },
+      { href: '/motherboards', label: 'Dual x8/x8 motherboards' },
       { href: '/power', label: 'Power and PSU' },
       { href: '/compare/one-vs-two-gpu', label: 'One vs split' },
       { href: '/flash-daily', label: 'Flash daily' },
@@ -599,10 +601,21 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/credits', label: 'Credits' },
     ];
   }
+  if (path === '/motherboards') {
+    return [
+      { href: '/multi-gpu', label: 'Dual / multi-GPU' },
+      { href: '/bios', label: 'BIOS' },
+      { href: '/budget', label: 'Budget' },
+      { href: '/hardware', label: 'Hardware' },
+      { href: '/calculator', label: 'Calculator' },
+      { href: '/setup/multi-gpu', label: 'Multi-GPU how-to' },
+    ];
+  }
   if (path === '/hardware') {
     return [
       { href: '/power', label: 'Power and PSU' },
       { href: '/bios', label: 'BIOS' },
+      { href: '/motherboards', label: 'Dual x8/x8 motherboards' },
       { href: '/gpus/r9700', label: 'R9700 measured page' },
       { href: '/multi-gpu', label: 'Dual / multi-GPU' },
       { href: '/labs/shannon', label: 'Shannon’s lab' },
@@ -1108,6 +1121,7 @@ export function assertRelatedValid(
     '/can-run',
     '/hardware',
     '/api',
+    '/motherboards',
   ],
 ): string[] {
   const errors: string[] = [];

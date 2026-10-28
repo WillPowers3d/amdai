@@ -56,6 +56,7 @@ const ALLOWED_HREFS = new Set([
   '/models/qwen36-27b',
   '/models/qwen38-27b',
   '/multi-gpu',
+  '/motherboards',
   '/quants',
   '/qwen',
   '/qwen36-dual',

@@ -22,6 +22,9 @@ import {
 import { measuredRamHits } from '../lib/measured-ram-data';
 import { DEFAULT_PRIORITY } from '../lib/priority';
 import { DEFAULT_STYLE, DEFAULT_USAGE } from '../lib/ask';
+import { defaultExpandGpu } from '../lib/motherboards';
+import { motherboards } from '../lib/motherboards-data';
+import MotherboardPick from '../components/MotherboardPick.astro';
 import { gpuProducts } from '../lib/affiliates';
 import { recipes } from '../lib/recipes-data';
 import OpenInStackLab from '../components/OpenInStackLab.astro';
@@ -60,6 +63,7 @@ const olderOpen = olderModelsOpenFromSearch(Astro.url.search);
         <a class="btn-secondary" href="/out-of-vram">Out of VRAM</a>
         <a class="btn-secondary" href="/gpus/r9700">R9700 measured page</a>
         <a class="btn-secondary" href="/multi-gpu">Dual / multi-GPU</a>
+        <a class="btn-secondary" href="/motherboards">Dual x8/x8 boards</a>
         <a class="btn-secondary" href="/gpus">GPU directory</a>
         <a class="btn-secondary" href="/models/qwen36">35B model page</a>
         <a class="btn-secondary" href="/models/flash">Flash model page</a>
@@ -80,8 +84,12 @@ const olderOpen = olderModelsOpenFromSearch(Astro.url.search);
       and the <code class="text-ink">amdai-fit-mcp</code> server documented there.
     </p>
 
-    <div id="ask-row" class="mt-8">
+    <div id="ask-row" class="mt-8 space-y-6">
       <AskToggles defaultPriority={DEFAULT_PRIORITY} defaultUsage={DEFAULT_USAGE} defaultStyle={DEFAULT_STYLE} />
+      <MotherboardPick
+        boards={motherboards}
+        ask={{ gpuCount: 1, minBudget: false, expandGpu: defaultExpandGpu(false) }}
+      />
     </div>
 
     <div id="tested-badge" hidden class="mt-6 inline-flex max-w-3xl items-start gap-2 rounded-2xl border border-ok/40 bg-ok/10 px-4 py-2 text-sm text-ok">
@@ -612,6 +620,12 @@ const olderOpen = olderModelsOpenFromSearch(Astro.url.search);
     document.querySelectorAll<HTMLInputElement>('input[name="style"]').forEach((el) => {
       el.checked = el.value === ask.style;
     });
+    document.querySelectorAll<HTMLInputElement>('input[name="minbudget"]').forEach((el) => {
+      el.checked = (el.value === '1') === ask.minBudget;
+    });
+    document.querySelectorAll<HTMLInputElement>('input[name="expandgpu"]').forEach((el) => {
+      el.checked = (el.value === '1') === ask.expandGpu;
+    });
   }
 
   function readForm(): CalcInput {
@@ -663,7 +677,13 @@ const olderOpen = olderModelsOpenFromSearch(Astro.url.search);
   }
 
   function shareQuery() {
-    return inputToQuery(input, { priority: ask.priority, usage: ask.usage, style: ask.style });
+    return inputToQuery(input, {
+      priority: ask.priority,
+      usage: ask.usage,
+      style: ask.style,
+      minbudget: ask.minBudget ? '1' : '0',
+      expandgpu: ask.expandGpu ? '1' : '0',
+    });
   }
 
   function renderAdvice(advice: PriorityAdvice) {
@@ -672,6 +692,12 @@ const olderOpen = olderModelsOpenFromSearch(Astro.url.search);
     setText('[data-style-lede]', ask.style === 'abliterated'
       ? 'Abliteration edits refusals in the weights. It can hurt quality. Verify the uploader and the file. You are responsible for what you run. Q1/Q2 stay off; Q3 is estimate/community unless measured. Tested pick: being reworked.'
       : 'Official instruct weights. This is the default and the reliability baseline. Prove Qwen3.6-35B-A3B before you swap.');
+    setText('[data-minbudget-lede]', ask.minBudget
+      ? 'Only this choice may drop the dual x8/x8 requirement. A cheaper single-x16 board limits a later second GPU.'
+      : 'Default. Buy a board whose maker manual documents a CPU-lane x8/x8 split, even for one GPU.');
+    setText('[data-expandgpu-lede]', ask.expandGpu
+      ? 'A dual x8/x8 board now puts both cards on CPU lanes at the same width.'
+      : 'One card will run on a single x16 slot. Combined with Minimum budget, a cheaper single-x16 board is listed.');
     setText('[data-priority-headline]', advice.headline);
     setText('[data-priority-body]', advice.body);
     setText('[data-usage-verdict]', USAGE_COPY[ask.usage].verdict);
@@ -1053,18 +1079,30 @@ const olderOpen = olderModelsOpenFromSearch(Astro.url.search);
     const p = document.querySelector<HTMLInputElement>('input[name="priority"]:checked')?.value;
     const u = document.querySelector<HTMLInputElement>('input[name="usage"]:checked')?.value;
     const s = document.querySelector<HTMLInputElement>('input[name="style"]:checked')?.value;
+    const min = document.querySelector<HTMLInputElement>('input[name="minbudget"]:checked')?.value === '1';
+    const expandRaw = document.querySelector<HTMLInputElement>('input[name="expandgpu"]:checked')?.value;
     return {
       priority: p === 'size' ? 'size' : 'speed',
       usage: u === 'hybrid' ? 'hybrid' : 'local',
       style: s === 'abliterated' ? 'abliterated' : 'standard',
+      minBudget: min,
+      expandGpu: expandRaw == null ? !min : expandRaw === '1',
     };
   }
 
-  document.querySelectorAll<HTMLInputElement>('input[name="priority"], input[name="usage"], input[name="style"]').forEach((el) => {
-    el.addEventListener('change', () => {
+  document.querySelectorAll<HTMLInputElement>('input[name="priority"], input[name="usage"], input[name="style"], input[name="minbudget"], input[name="expandgpu"]').forEach((el) => {
+    el.addEventListener('change', (event) => {
+      const target = event.target as HTMLInputElement;
+      if (target.name === 'minbudget') {
+        const want = target.value === '1' ? '0' : '1';
+        document.querySelectorAll<HTMLInputElement>('input[name="expandgpu"]').forEach((radio) => {
+          radio.checked = radio.value === want;
+        });
+      }
       ask = readAsk();
       writeForm();
       render();
+      window.dispatchEvent(new Event('amdai-ask-change'));
     });
   });
 
@@ -1075,11 +1113,12 @@ const olderOpen = olderModelsOpenFromSearch(Astro.url.search);
 
   if (!window.location.search) {
     input = { ...DEFAULT_INPUT };
-    ask = { priority: 'speed', usage: 'local', style: 'standard' };
+    ask = { priority: 'speed', usage: 'local', style: 'standard', minBudget: false, expandGpu: true };
   }
   writeForm();
   bindOlderModelPickers();
   render();
+  window.dispatchEvent(new Event('amdai-ask-change'));
 </script>
 
 <style>

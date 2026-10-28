@@ -348,6 +348,7 @@ export const GLOSSARY: GlossaryEntry[] = [
       'Layouts on amdai-bench cards: single, split, dual-instance. Two copies: about 100 tok/s per request, 172 at two concurrent, 177 at 4–8, 423 soak requests, 0 errors. Split 4K max total 82.78 versus 102.39 on one card. Consumer why: /multi-gpu. Hands-on llama.cpp flags: /setup/multi-gpu.',
     links: [
       { href: '/multi-gpu', label: 'Dual / multi-GPU' },
+      { href: '/motherboards', label: 'Dual x8/x8 motherboards' },
       { href: '/setup/multi-gpu', label: 'Multi-GPU llama.cpp how-to' },
       { href: '/qwen36-dual', label: '35B on two cards' },
       { href: '/compare/one-vs-two-gpu', label: 'One vs split' },

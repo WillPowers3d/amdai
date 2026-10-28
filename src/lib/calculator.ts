@@ -2079,7 +2079,10 @@ function isBackendId(value: string | null): value is BackendId {
   return !!value && (BACKEND_IDS as string[]).includes(value);
 }
 
-export function inputToQuery(input: CalcInput, extras?: { priority?: string; usage?: string; style?: string }): string {
+export function inputToQuery(
+  input: CalcInput,
+  extras?: { priority?: string; usage?: string; style?: string; minbudget?: string; expandgpu?: string },
+): string {
   const params = new URLSearchParams({
     gpu: input.gpuId,
     vram: String(input.vramGb),
@@ -2122,6 +2125,8 @@ export function inputToQuery(input: CalcInput, extras?: { priority?: string; usa
   if (extras?.priority) params.set('priority', extras.priority);
   if (extras?.usage) params.set('usage', extras.usage);
   if (extras?.style) params.set('style', extras.style);
+  if (extras?.minbudget != null && extras.minbudget !== '') params.set('minbudget', extras.minbudget);
+  if (extras?.expandgpu != null && extras.expandgpu !== '') params.set('expandgpu', extras.expandgpu);
   return params.toString();
 }
 
