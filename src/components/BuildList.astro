@@ -52,30 +52,37 @@ const payload = JSON.stringify({ key: buildListKey(ask), builds: maps });
 </section>
 
 <script>
-  function radioValue(name, fallback) {
-    const checked = document.querySelector(`input[name="${name}"]:checked`);
+  type BuildPart = { role: string; part: string; why: string; spec: string | null; go: string };
+  type BuildRow = {
+    answers: { gpus: number; later_big: boolean; min_budget: boolean; cold_load: boolean };
+    parts: BuildPart[];
+    warnings: string[];
+  };
+
+  function radioValue(name: string, fallback: string): string {
+    const checked = document.querySelector<HTMLInputElement>(`input[name="${name}"]:checked`);
     return checked ? checked.value : fallback;
   }
 
-  function gpuCount() {
-    const field = document.querySelector('[name="gpuCount"]');
-    if (field && field.value) {
+  function gpuCount(): number {
+    const field = document.querySelector<HTMLInputElement>('[name="gpuCount"]');
+    if (field?.value) {
       const n = Number(field.value);
       if (Number.isFinite(n) && n >= 1) return Math.min(4, Math.round(n));
     }
-    const radio = document.querySelector('input[name="n"]:checked');
+    const radio = document.querySelector<HTMLInputElement>('input[name="n"]:checked');
     if (radio) {
       const n = Number(radio.value);
       if (Number.isFinite(n) && n >= 1) return Math.min(4, Math.round(n));
     }
-    const highlighted = document.querySelector('[data-tier].ring-accent, [data-tier].ring-2');
+    const highlighted = document.querySelector<HTMLElement>('[data-tier].ring-accent, [data-tier].ring-2');
     if (highlighted?.getAttribute('data-tier') === 'pro') return 2;
     const q = new URLSearchParams(window.location.search);
     if (q.get('tier') === 'pro' || q.get('n') === '2') return 2;
     return 1;
   }
 
-  function askKey() {
+  function askKey(): string {
     const min = radioValue('minbudget', '0') === '1';
     const expandRaw = radioValue('expandgpu', min ? '0' : '1');
     const g = gpuCount() >= 2 ? '2' : '1';
@@ -86,20 +93,20 @@ const payload = JSON.stringify({ key: buildListKey(ask), builds: maps });
     return `${g}${min ? '1' : '0'}${expand}${big}${cpu}${cold}`;
   }
 
-  function answerLine(build) {
+  function answerLine(build: BuildRow): string {
     return `Based on: ${build.answers.gpus} GPU(s), ${build.answers.later_big ? 'larger models later' : 'stay at this size'}${build.answers.min_budget ? ', minimum budget' : ''}${build.answers.cold_load ? ', fastest cold loads' : ''}.`;
   }
 
   function syncBuild() {
-    const root = document.querySelector('[data-build-list]');
+    const root = document.querySelector<HTMLElement>('[data-build-list]');
     if (!root) return;
-    let data;
+    let data: { key?: string; builds?: Record<string, BuildRow> };
     try {
       data = JSON.parse(root.getAttribute('data-build-payload') || '{}');
     } catch {
       return;
     }
-    const build = data.builds?.[askKey()] || data.builds?.[data.key];
+    const build = data.builds?.[askKey()] || (data.key ? data.builds?.[data.key] : undefined);
     if (!build) return;
     const answers = root.querySelector('[data-build-answers]');
     if (answers) answers.textContent = answerLine(build);
@@ -119,7 +126,7 @@ const payload = JSON.stringify({ key: buildListKey(ask), builds: maps });
       const part = item.querySelector('[data-build-part]');
       const why = item.querySelector('[data-build-why]');
       const go = item.querySelector('[data-build-go]');
-      const spec = item.querySelector('[data-build-spec]');
+      const spec = item.querySelector<HTMLElement>('[data-build-spec]');
       if (part) part.textContent = row.part;
       if (why) why.textContent = row.why;
       if (go) go.setAttribute('href', row.go);
@@ -135,9 +142,9 @@ const payload = JSON.stringify({ key: buildListKey(ask), builds: maps });
   }
 
   document.addEventListener('change', (event) => {
-    const target = event.target;
+    const target = event.target as HTMLElement | null;
     if (
-      target?.matches?.(
+      target?.matches(
         '[name="minbudget"], [name="expandgpu"], [name="bigmodels"], [name="cpuwork"], [name="coldload"], [name="n"], [name="gpuCount"], [name="priority"], [name="usage"], [name="style"]',
       )
     ) {

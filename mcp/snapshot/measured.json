@@ -1,9 +1,52 @@
 {
   "schema_version": "1.0",
-  "as_of": "2026-10-27T15:11:43-05:00",
+  "as_of": "2026-10-28T20:10:00-05:00",
   "href": "https://amdai.net/lab-log",
   "note": "Measured and cited lab-log rows. Numbers keep their original dates. Quants below Q4 are omitted.",
   "runs": [
+    {
+      "id": "2026-10-28-nvme-for-local-models",
+      "date": "2026-10-28T20:10:00-05:00",
+      "project": "idea-lab",
+      "kind": "result",
+      "title": "How much NVMe a Radeon local-AI box needs: 2 TB holds every Q4-Q6 quant of three model families, and Gen5 barely speeds up loading",
+      "summary": "Every Q4 to Q6 quant of Qwen3.6-35B-A3B (20.6 to 29.7 GiB), Qwen3.8-Flash-Next (103.7 to 157.6 GiB) and GLM-5.3-Flash (186.0 to 271.8 GiB) adds up to about 1,587 GiB once you keep one extra file of room for the next download and 150 GiB for the OS. That fits a 2 TB drive (1,863 GiB) with 10% left free; a fourth Flash-class family such as MiniMax-M3.1-Flash (UD-Q4 232 GiB) needs 4 TB. On llama.cpp's default memory-mapped loader, loading is usually limited by page faults and one CPU core rather than the drive, so a Gen5 SSD helps less than its doubled rating suggests.",
+      "setup": {
+        "stack": "Spec and file-size review: Samsung 990 PRO 2/4 TB, WD_BLACK SN850X 4/8 TB, Samsung 9100 PRO 4/8 TB; unsloth GGUF repos"
+      },
+      "metrics": [
+        {
+          "label": "All Q4-Q6 quants of 3 families + headroom",
+          "value": "1587",
+          "unit": "GiB"
+        },
+        {
+          "label": "Usable space on a 2 TB drive",
+          "value": "1863",
+          "unit": "GiB"
+        },
+        {
+          "label": "Gen4 vs Gen5 cold load, 40.5 GB Q4_K_M (third-party)",
+          "value": "15.2 vs 13.8",
+          "unit": "s"
+        },
+        {
+          "label": "GPT-OSS-120B load, mmap vs direct I/O (llama.cpp PR)",
+          "value": "110 vs 10.5",
+          "unit": "s"
+        }
+      ],
+      "sources": [
+        "https://huggingface.co/unsloth/Qwen3.6-35B-A3B-GGUF",
+        "https://github.com/ggml-org/llama.cpp/pull/18012",
+        "https://github.com/ggml-org/llama.cpp/discussions/12223",
+        "https://craftrigs.com/guides/nvme-speed-llm-load-times-benchmarks/",
+        "https://download.semiconductor.samsung.com/resources/data-sheet/samsung_nvme_ssd_990_pro_datasheet_rev.2.0.pdf",
+        "https://download.semiconductor.samsung.com/resources/data-sheet/Samsung_NVMe_SSD_9100_PRO_Datasheet_Rev.2.0.pdf",
+        "https://documents.sandisk.com/content/dam/asset-library/en_us/assets/public/sandisk/product/internal-drives/wd-black-ssd/data-sheet-wd-black-sn850x-nvme-ssd.pdf"
+      ],
+      "href": "https://amdai.net/lab-log#2026-10-28-nvme-for-local-models"
+    },
     {
       "id": "2026-10-27-sglang-tp2-vs-llamacpp-r9700",
       "date": "2026-10-27T15:20:00-05:00",
