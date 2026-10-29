@@ -229,3 +229,41 @@ export function buildListPayload(ask: BuildAsk = { gpuCount: 1, minBudget: false
     slugs: { draft: DRAFT_GO_SLUGS, reused: REUSED_GO_SLUG },
   };
 }
+
+/** Interned client map so /budget and /calculator do not embed 64 full copies. */
+export type CompactBuildMaps = {
+  strings: string[];
+  key: string;
+  builds: Record<string, { a: [number, number, number, number]; w: number[]; p: number[][] }>;
+};
+
+export function compactBuildMaps(key: string, maps: Record<string, BuildList>): CompactBuildMaps {
+  const strings: string[] = [];
+  const intern = (value: string | null): number => {
+    if (value == null) return -1;
+    const found = strings.indexOf(value);
+    if (found >= 0) return found;
+    strings.push(value);
+    return strings.length - 1;
+  };
+  const builds: CompactBuildMaps['builds'] = {};
+  for (const [mapKey, list] of Object.entries(maps)) {
+    builds[mapKey] = {
+      a: [
+        list.answers.gpus,
+        list.answers.later_big ? 1 : 0,
+        list.answers.min_budget ? 1 : 0,
+        list.answers.cold_load ? 1 : 0,
+      ],
+      w: list.warnings.map(intern),
+      p: list.parts.map((row) => [
+        intern(row.role),
+        intern(row.part),
+        intern(row.why),
+        intern(row.spec),
+        intern(row.go),
+      ]),
+    };
+  }
+  return { strings, key, builds };
+}

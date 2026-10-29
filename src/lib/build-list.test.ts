@@ -12,6 +12,7 @@ import {
   buildList,
   buildListKey,
   buildListPayload,
+  compactBuildMaps,
   goSlugForProduct,
   partGo,
 } from './build-list';
@@ -72,8 +73,16 @@ describe('one-answer parts list', () => {
     assert.equal(goSlugForProduct('ddr5-32'), 'f5-6000j3038f16gx2-fx5');
     assert.match(partGo('r9700'), /^\/go\/newegg\/r9700/);
     const maps = allBuildLists();
-    assert.ok(maps[buildListKey({ gpuCount: 1, minBudget: false, expandGpu: true, bigModels: false })]);
+    const key = buildListKey({ gpuCount: 1, minBudget: false, expandGpu: true, bigModels: false });
+    assert.ok(maps[key]);
     assert.equal(Object.keys(maps).length, 64);
+    const compact = compactBuildMaps(key, maps);
+    assert.ok(compact.strings.length < 80);
+    assert.ok(JSON.stringify(compact).length < 20_000);
+    assert.ok(JSON.stringify(maps).length > 50_000);
+    const defaultRow = compact.builds[key]!;
+    assert.equal(compact.strings[defaultRow.p[0]![0]!], 'GPU');
+    assert.match(compact.strings[defaultRow.p[0]![1]!] ?? '', /R9700/);
   });
 
   it('wires the box on /budget and into pick + recommend_stack', () => {
@@ -81,6 +90,7 @@ describe('one-answer parts list', () => {
     assert.equal(payload.default.parts.length, 6);
     assert.match(read('../pages/budget.astro'), /BuildList/);
     assert.match(read('../components/BuildList.astro'), /AffiliateDisclosure/);
+    assert.match(read('../components/BuildList.astro'), /compactBuildMaps/);
     assert.match(read('../pages/api/v1/pick.json.ts'), /buildListPayload/);
     assert.match(read('../pages/api/v1/pick/[gpu].json.ts'), /buildList/);
     assert.match(read('../lib/public-api.ts'), /parts:/);
