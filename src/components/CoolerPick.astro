@@ -1,0 +1,142 @@
+---
+import BuyButtons from './BuyButtons.astro';
+import AffiliateDisclosure from './AffiliateDisclosure.astro';
+import {
+  AMD_NO_BOX_COOLER,
+  COOLERS,
+  INTAKE_AIO_WARNING,
+  M2_CLASH_WARNING,
+  MOE_OFFLOAD_NOTE,
+  RAM_HEIGHT_WARNING,
+  coolerRecommendation,
+  type CoolerAsk,
+} from '../lib/cooler-pick';
+
+interface Props {
+  ask?: CoolerAsk;
+  id?: string;
+}
+
+const {
+  ask = { cpuId: '9600x', caseId: 'fractal-torrent', gpuCount: 1 },
+  id = 'cooler-pick',
+} = Astro.props;
+const initial = coolerRecommendation(ask);
+const payload = JSON.stringify({
+  noBox: AMD_NO_BOX_COOLER,
+  moe: MOE_OFFLOAD_NOTE,
+  ram: RAM_HEIGHT_WARNING,
+  m2: M2_CLASH_WARNING,
+  intake: INTAKE_AIO_WARNING,
+});
+---
+
+<section id={id} class="space-y-4" data-cooler-pick data-cooler-payload={payload}>
+  <div>
+    <p class="kicker">CPU cooler</p>
+    <h2 class="mt-2 text-2xl tracking-tight sm:text-3xl">Which cooler, since Ryzen 9000X ships none?</h2>
+    <p class="mt-2 text-sm leading-relaxed text-muted" data-cooler-note>{initial.why}</p>
+    <p class="mt-2 text-sm leading-relaxed text-muted">{AMD_NO_BOX_COOLER} {MOE_OFFLOAD_NOTE}</p>
+    <p class="mt-2 text-sm text-muted">Buttons say Check price. We never invent a cooler price.</p>
+  </div>
+
+  <div class="space-y-3" data-cooler-warnings>
+    {initial.warnings.map((warning) => (
+      <p class="rounded-xl border border-warn/40 bg-warn/10 p-3 text-sm leading-relaxed text-ink">{warning}</p>
+    ))}
+  </div>
+
+  {COOLERS.map((row) => {
+    const isPrimary = row.id === initial.id;
+    const isAlt = row.id === initial.alt?.id;
+    const shown = isPrimary || isAlt;
+    return (
+      <div class="card p-5 sm:p-6" data-cooler-card={row.id} hidden={!shown}>
+        <p class="kicker">{isAlt ? (row.type === 'aio' ? '360 liquid if the case has a top mount' : 'Air if you skip liquid') : 'Pick'}</p>
+        <h3 class="mt-1 text-2xl tracking-tight">{row.name}</h3>
+        <p class="mt-2 text-sm text-muted">
+          {row.type === 'aio'
+            ? `360 mm radiator · ${row.radiator?.thick_mm} mm thick · ${row.radiator?.needs_clearance_mm} mm clearance`
+            : `${row.height_mm} mm dual-tower air`}
+        </p>
+        <p class="mt-2 text-sm leading-relaxed text-muted" data-cooler-card-why={row.id}>
+          {isPrimary ? initial.why : initial.alt?.why ?? row.note}
+        </p>
+        <p class="mt-3 text-sm leading-relaxed text-muted">
+          Cite:
+          <a class="underline decoration-accent/40 underline-offset-2" href={row.citation.url} rel="noopener" target="_blank">
+            {row.citation.title}
+          </a>
+          — {row.citation.section}. As of {row.citation.as_of}.
+        </p>
+        <BuyButtons product={row.product_id} src={row.src} disclose={false} />
+      </div>
+    );
+  })}
+
+  <AffiliateDisclosure compact />
+</section>
+
+<script>
+  function radioValue(name: string, fallback: string): string {
+    const checked = document.querySelector<HTMLInputElement>(`input[name="${name}"]:checked`);
+    return checked ? checked.value : fallback;
+  }
+
+  function cpuId(): '9600x' | '9900x' | '9950x' {
+    const big = radioValue('bigmodels', '0') === '1';
+    const jobs = radioValue('cpuwork', '0') === '1';
+    if (!big) return '9600x';
+    return jobs ? '9950x' : '9900x';
+  }
+
+  function syncCooler() {
+    const root = document.querySelector<HTMLElement>('[data-cooler-pick]');
+    if (!root) return;
+    let data: { noBox?: string; moe?: string; ram?: string; m2?: string; intake?: string } = {};
+    try {
+      data = JSON.parse(root.getAttribute('data-cooler-payload') || '{}');
+    } catch {
+      data = {};
+    }
+    const cpu = cpuId();
+    const air65 = cpu === '9600x';
+    const primary = air65 ? 'pa120se' : 'nhd15g2';
+    const note = root.querySelector('[data-cooler-note]');
+    if (note) {
+      const chip = cpu.toUpperCase();
+      note.textContent = air65
+        ? `The ${chip} ships with no cooler (${data.noBox ?? ''}) At 65 W a dual-tower air cooler is plenty; AMD recommends a premium air cooler.`
+        : `The ${chip} ships with no cooler (${data.noBox ?? ''}) AMD recommends liquid for best boost, but ${data.moe ?? ''} A big dual-tower air cooler is the simpler 24/7 choice (no pump). Suggest a 360 AIO only when the case has a top radiator mount (Meshify 2 or Enthoo).`;
+    }
+    const warnBox = root.querySelector('[data-cooler-warnings]');
+    if (warnBox) {
+      warnBox.replaceChildren();
+      for (const warning of [data.ram, air65 ? null : data.intake]) {
+        if (!warning) continue;
+        const p = document.createElement('p');
+        p.className = 'rounded-xl border border-warn/40 bg-warn/10 p-3 text-sm leading-relaxed text-ink';
+        p.textContent = warning;
+        warnBox.append(p);
+      }
+    }
+    root.querySelectorAll<HTMLElement>('[data-cooler-card]').forEach((card) => {
+      const id = card.getAttribute('data-cooler-card');
+      const isAio = id === 'lf3pro360';
+      card.hidden = isAio ? air65 : id !== primary;
+      const kicker = card.querySelector('.kicker');
+      if (kicker) {
+        kicker.textContent = isAio ? '360 liquid only if the case has a top mount' : 'Pick';
+      }
+    });
+  }
+
+  document.addEventListener('change', (event) => {
+    const target = event.target as HTMLElement | null;
+    if (target?.matches('[name="bigmodels"], [name="cpuwork"], [name="minbudget"], [name="n"], [name="gpuCount"]')) {
+      syncCooler();
+    }
+  });
+  window.addEventListener('amdai-ask-change', syncCooler);
+  syncCooler();
+</script>

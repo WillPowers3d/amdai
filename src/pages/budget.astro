@@ -20,6 +20,8 @@ import RamPick from '../components/RamPick.astro';
 import CpuPick from '../components/CpuPick.astro';
 import PsuPick from '../components/PsuPick.astro';
 import StoragePick from '../components/StoragePick.astro';
+import CasePick from '../components/CasePick.astro';
+import CoolerPick from '../components/CoolerPick.astro';
 import BuildList from '../components/BuildList.astro';
 
 const hasBands = bandsReady();
@@ -94,6 +96,8 @@ const payload = JSON.stringify({
       <CpuPick />
       <PsuPick ask={{ gpuCount: 1, expandGpu: defaultExpandGpu(false) }} />
       <StoragePick />
+      <CasePick />
+      <CoolerPick />
     </div>
 
     <section class="mt-10 rounded-2xl border border-line bg-raised/40 p-5">

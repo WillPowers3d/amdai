@@ -327,6 +327,19 @@ function recommendStackTool(args, catalog) {
           ? '4 TB when larger models later or a fourth Flash-class family is in the plan. Gen4 TLC with DRAM. Datasheet 7,450 MB/s, 2,400 TBW.'
           : '2 TB holds every Q4–Q6 of Qwen3.6-35B, Qwen3.8-Flash-Next and GLM-5.3-Flash with headroom. Gen4 TLC with DRAM. Datasheet 7,450 MB/s, 1,200 TBW.',
     },
+    case: {
+      title: 'Fractal Design Torrent',
+      slots: 7,
+      go: '/go/newegg/fractal-design-torrent',
+      why: '7-slot ATX is enough for two 2-slot R9700s on a sourced 4-slot-spacing board. Point case fans at the GPUs (published 67 C vs 57 C).',
+    },
+    cooler: {
+      title: offload ? 'Noctua NH-D15 G2' : 'Thermalright Peerless Assassin 120 SE',
+      go: offload ? '/go/newegg/noctua-nh-d15-g2' : '/go/newegg/thermalright-peerless-assassin-120-se',
+      why: offload
+        ? '9900X and 9950X: dual-tower air (NH-D15 G2, 168 mm). Suggest a 360 AIO only when the case has a top radiator mount.'
+        : '65 W 9600X: Peerless Assassin 120 SE (155 mm). AMD ships no cooler.',
+    },
     parts: {
       answers: {
         gpus: gpuCount,
@@ -359,6 +372,16 @@ function recommendStackTool(args, catalog) {
           role: 'Storage',
           part: offload || ram >= 192 ? 'Samsung 990 PRO 4TB (MZ-V9P4T0BW)' : 'Samsung 990 PRO 2TB (MZ-V9P2T0BW)',
           go: offload || ram >= 192 ? '/go/newegg/mz-v9p4t0bw' : '/go/newegg/mz-v9p2t0bw',
+        },
+        {
+          role: 'Case',
+          part: 'Fractal Design Torrent',
+          go: '/go/newegg/fractal-design-torrent',
+        },
+        {
+          role: 'Cooler',
+          part: offload ? 'Noctua NH-D15 G2' : 'Thermalright Peerless Assassin 120 SE',
+          go: offload ? '/go/newegg/noctua-nh-d15-g2' : '/go/newegg/thermalright-peerless-assassin-120-se',
         },
       ],
     },

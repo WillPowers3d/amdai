@@ -38,6 +38,8 @@ import { ramRecommendation, setupNeedsRamOffload, type RamRecommendation } from 
 import { cpuRecommendation, type CpuRecommendation } from './cpu-pick';
 import { psuRecommendation, type PsuRecommendation } from './psu-pick';
 import { storageRecommendation, type StorageRecommendation } from './storage-pick';
+import { caseRecommendation, type CaseRecommendation } from './case-pick';
+import { coolerRecommendation, type CoolerRecommendation } from './cooler-pick';
 import { buildList, type BuildList } from './build-list';
 import { recipes } from './recipes-data';
 import { r9700StreetPrice, R9700_STREET_LOG_HREF, R9700_STREET_POLICY } from './r9700-street-price';
@@ -770,6 +772,8 @@ export type StackRecommend = {
   cpu: CpuRecommendation;
   psu: PsuRecommendation;
   storage: StorageRecommendation;
+  case: CaseRecommendation;
+  cooler: CoolerRecommendation;
   parts: BuildList;
 };
 
@@ -880,6 +884,20 @@ export function recommendStack(opts: StackRecommendInput): StackRecommend {
     storage: storageRecommendation({
       bigModels: goal === 'agent' || ram >= 192,
       coldLoad: false,
+    }),
+    case: caseRecommendation({
+      boardId: 'asrock-x870-taichi-creator',
+      formFactor: 'ATX',
+      gpuCount: Array.isArray(opts.gpus) ? Math.max(1, opts.gpus.length) : 1,
+      psuName:
+        Array.isArray(opts.gpus) && opts.gpus.length >= 2
+          ? 'Thermaltake Toughpower GT 1200W'
+          : 'Corsair RM850x (2024, ATX 3.1)',
+    }),
+    cooler: coolerRecommendation({
+      cpuId: goal === 'agent' || setupNeedsRamOffload(fitted) ? '9900x' : '9600x',
+      caseId: 'fractal-torrent',
+      gpuCount: Array.isArray(opts.gpus) ? Math.max(1, opts.gpus.length) : 1,
     }),
     parts: buildList({
       gpuCount: Array.isArray(opts.gpus) ? Math.max(1, opts.gpus.length) : 1,

@@ -1,8 +1,8 @@
 /**
- * One-answer parts list: GPU, board, CPU, RAM, PSU, storage.
+ * One-answer parts list: GPU, board, CPU, RAM, PSU, storage, case, cooler.
  * Every Newegg href is an internal /go/newegg/<slug> stub so clicks count
  * and the Rakuten deep-link generator can wrap the destination later.
- * No prices. Composer of the existing step pickers plus storage-pick.
+ * No prices. Composer of the existing step pickers plus storage / case / cooler.
  */
 
 import { existsSync, readFileSync } from 'node:fs';
@@ -21,10 +21,12 @@ import {
 import { psuRecommendation } from './psu-pick';
 import { ramRecommendation } from './ram-kit';
 import { storageRecommendation } from './storage-pick';
+import { CASE_GO_SLUGS, UNVERIFIED_SLOT_WARNING, caseRecommendation } from './case-pick';
+import { COOLER_GO_SLUGS, INTAKE_AIO_WARNING, coolerRecommendation } from './cooler-pick';
 
 export const BUILD_LIST_SRC = 'builder-list';
 
-/** Nine Newegg stubs from the storage/build-list drafts. r9700 is reused. */
+/** Draft Newegg stubs: storage/build-list plus case and cooler. r9700 is reused. */
 export const DRAFT_GO_SLUGS = [
   'amd-ryzen-5-9600x',
   'amd-ryzen-7-9700x',
@@ -35,6 +37,8 @@ export const DRAFT_GO_SLUGS = [
   'f5-6000j3644d64gx4-tz5nr',
   'mz-v9p2t0bw',
   'ps-tpt-1200fnfagu-3',
+  ...CASE_GO_SLUGS,
+  ...COOLER_GO_SLUGS,
 ] as const;
 
 export const REUSED_GO_SLUG = 'r9700';
@@ -67,7 +71,7 @@ export type BuildAsk = {
   needsOffload?: boolean;
 };
 
-export type BuildPartRole = 'GPU' | 'Motherboard' | 'CPU' | 'RAM' | 'PSU' | 'Storage';
+export type BuildPartRole = 'GPU' | 'Motherboard' | 'CPU' | 'RAM' | 'PSU' | 'Storage' | 'Case' | 'Cooler';
 
 export type BuildPart = {
   role: BuildPartRole;
@@ -149,6 +153,17 @@ export function buildList(ask: BuildAsk, boards = loadBoards()): BuildList {
   const psu1 = psu.picks[0]!;
   const sto = storageRecommendation({ bigModels: ask.bigModels, coldLoad: ask.coldLoad });
   const boardAsk = { gpuCount, minBudget: ask.minBudget, expandGpu: ask.expandGpu };
+  const cs = caseRecommendation({
+    boardId: board.id,
+    formFactor: board.form_factor,
+    gpuCount,
+    psuName: psu1.name,
+  });
+  const cooler = coolerRecommendation({
+    cpuId: cpu.id,
+    caseId: cs.primary.id,
+    gpuCount,
+  });
 
   const parts: BuildPart[] = [
     part(
@@ -171,11 +186,21 @@ export function buildList(ask: BuildAsk, boards = loadBoards()): BuildList {
       sto.primary.citation.url,
       sto.src,
     ),
+    part('Case', cs.primary.name, cs.primary.product_id, cs.why, cs.primary.spec, cs.primary.src),
+    part('Cooler', cooler.name, cooler.product_id, cooler.why, cooler.spec, cooler.src),
   ];
 
   const warnings: string[] = [];
   if (ask.minBudget && !recommendDualX8X8(boardAsk)) warnings.push(MIN_BUDGET_WARNING);
   if (gpuCount >= 2 && !board.dual_ready) warnings.push(UNVERIFIED_SPLIT_WARNING);
+  for (const warning of cs.warnings) {
+    if (warning === UNVERIFIED_SLOT_WARNING && !warnings.includes(warning)) warnings.push(warning);
+  }
+  for (const warning of cooler.warnings) {
+    if ((warning === INTAKE_AIO_WARNING || /taller than this case/.test(warning)) && !warnings.includes(warning)) {
+      warnings.push(warning);
+    }
+  }
 
   return {
     answers: {

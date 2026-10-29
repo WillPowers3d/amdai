@@ -29,6 +29,8 @@ import RamPick from '../components/RamPick.astro';
 import CpuPick from '../components/CpuPick.astro';
 import PsuPick from '../components/PsuPick.astro';
 import StoragePick from '../components/StoragePick.astro';
+import CasePick from '../components/CasePick.astro';
+import CoolerPick from '../components/CoolerPick.astro';
 import BuildList from '../components/BuildList.astro';
 import { gpuProducts } from '../lib/affiliates';
 import { recipes } from '../lib/recipes-data';
@@ -99,6 +101,8 @@ const olderOpen = olderModelsOpenFromSearch(Astro.url.search);
       <CpuPick />
       <PsuPick ask={{ gpuCount: 1, expandGpu: defaultExpandGpu(false) }} />
       <StoragePick />
+      <CasePick />
+      <CoolerPick />
     </div>
 
     <div id="tested-badge" hidden class="mt-6 inline-flex max-w-3xl items-start gap-2 rounded-2xl border border-ok/40 bg-ok/10 px-4 py-2 text-sm text-ok">
