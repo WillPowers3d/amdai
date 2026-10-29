@@ -337,8 +337,7 @@ export function storageRecommendation(ask: StorageAsk): StorageRecommendation {
   let tb = sizeTb(need);
   if (ask.bigModels || ask.fourthFamily) tb = tb < 4 ? 4 : tb;
   const gen: 4 | 5 = ask.coldLoad ? 5 : 4;
-  const cands = DRIVES.filter((drive) => drive.tb >= tb && drive.gen === gen).slice();
-  cands.sort((a, b) => a.tb - b.tb || a.seq_read_mbs - b.seq_read_mbs);
+  const cands = DRIVES.filter((drive) => drive.tb >= tb && drive.gen === gen);
   const primaryRow = cands[0] ?? byId(gen === 5 ? '9100pro-4tb' : tb >= 4 ? '990pro-4tb' : '990pro-2tb');
   tb = primaryRow.tb;
   const alts = DRIVES.filter((drive) => drive.id !== primaryRow.id && drive.tb === tb && drive.gen === gen).map(toItem);

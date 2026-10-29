@@ -99,7 +99,6 @@ const olderOpen = olderModelsOpenFromSearch(Astro.url.search);
       <CpuPick />
       <PsuPick ask={{ gpuCount: 1, expandGpu: defaultExpandGpu(false) }} />
       <StoragePick />
-      <BuildList />
     </div>
 
     <div id="tested-badge" hidden class="mt-6 inline-flex max-w-3xl items-start gap-2 rounded-2xl border border-ok/40 bg-ok/10 px-4 py-2 text-sm text-ok">
@@ -525,6 +524,9 @@ const olderOpen = olderModelsOpenFromSearch(Astro.url.search);
           <BuyButtons product={item.id} disclose={false} />
         </div>
       ))}
+      <div class="mt-10">
+        <BuildList />
+      </div>
       <AffiliateDisclosure compact />
     </section>
   </main>

@@ -94,7 +94,6 @@ const payload = JSON.stringify({
       <CpuPick />
       <PsuPick ask={{ gpuCount: 1, expandGpu: defaultExpandGpu(false) }} />
       <StoragePick />
-      <BuildList />
     </div>
 
     <section class="mt-10 rounded-2xl border border-line bg-raised/40 p-5">
@@ -235,6 +234,9 @@ const payload = JSON.stringify({
         </li>
       ))}
     </ol>
+    <div class="mt-12">
+      <BuildList />
+    </div>
     <AffiliateDisclosure compact />
 
     <section id="upgrade" class="mt-16 rounded-2xl border border-line bg-raised/40 p-5 sm:p-6">
