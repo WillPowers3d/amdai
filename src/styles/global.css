@@ -161,6 +161,10 @@ body {
   pointer-events: none;
 }
 
+.page-chrome-reserve.has-crumbs {
+  height: 8.25rem;
+}
+
 .page-chrome {
   order: 1;
   margin-top: -4rem;
@@ -168,6 +172,14 @@ body {
   top: 0;
   z-index: 40;
   background: var(--canvas);
+}
+
+.page-body:has(.page-chrome-reserve.has-crumbs) .page-chrome {
+  margin-top: -8.25rem;
+}
+
+.crumb-bar {
+  height: 4.25rem;
 }
 
 .page-main {
