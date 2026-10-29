@@ -98,5 +98,6 @@ describe('API preview helpers', () => {
     assert.match(page, /data-api-raw/);
     assert.match(page, /data-api-close/);
     assert.doesNotMatch(page, /href={`#\$\{/);
+    assert.doesNotMatch(page, /\.api-preview-pre\s*\{[^}]*height:\s*100%/);
   });
 });
