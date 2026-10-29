@@ -597,6 +597,7 @@ export const GLOSSARY: GlossaryEntry[] = [
       'llama.cpp server README: -np / --parallel N, --kv-unified-per-slot N, GET /health total_slots. Pack concurrency-ab/1 is amdai-bench ab-concurrency. That pack is not an allowlisted Open-in-Stack-Lab deep link. Do not copy a one-client 35B tok/s as an -np 4 figure.',
     links: [
       { href: '/concurrency-ab', label: 'Parallel slots' },
+      { href: '/serving', label: 'Serving many users' },
       { href: '/setup/server', label: 'Always-on server' },
       { href: '/kv-cache', label: 'KV cache' },
       { href: '/stack-lab', label: 'Stack Lab' },

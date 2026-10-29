@@ -119,6 +119,7 @@ const ALLOWED_HREFS = new Set([
   '/thinking',
   '/sampling',
   '/chat-templates',
+  '/serving',
   '/concurrency-ab',
   '/flash-attention',
   '/prefill',

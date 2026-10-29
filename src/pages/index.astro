@@ -168,6 +168,11 @@ const updates = (await getCollection('updates')).sort((a, b) => b.data.date.valu
             <h3 class="mt-2 text-2xl tracking-tight">Speech on Radeon</h3>
             <p class="mt-3 text-sm text-muted">Cited whisper.cpp Vulkan STT plus Piper TTS. Linux first. Speeds not yet measured by AMDai.</p>
           </a>
+          <a class="card p-6" href="/serving">
+            <p class="kicker">Many users</p>
+            <h3 class="mt-2 text-2xl tracking-tight">Serving on 1–2 cards</h3>
+            <p class="mt-3 text-sm text-muted">llama.cpp -np and --split-mode first. Third-party vLLM and Radiance figures labeled. Our lab 35B and Flash.</p>
+          </a>
           <a class="card p-6" href="/long-context">
             <p class="kicker">Context</p>
             <h3 class="mt-2 text-2xl tracking-tight">Long context on Radeon</h3>

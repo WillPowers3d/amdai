@@ -576,6 +576,12 @@ export const OG_CARDS: OgCard[] = [
     alt: 'AMDai chat templates and --jinja on a Radeon GPU with llama.cpp — cited GGUF tokenizer.chat_template',
   },
   {
+    slug: 'serving',
+    title: 'Serve many users on Radeon',
+    lede: 'llama.cpp -np and --split-mode first. Third-party figures labeled',
+    alt: 'AMDai serving many users on one or two Radeon cards with llama.cpp — cited -np and --split-mode, third-party figures labeled',
+  },
+  {
     slug: 'concurrency-ab',
     title: 'Parallel slots on Radeon',
     lede: 'Cited -np / --parallel. Measure Stack Lab concurrency-ab/1',

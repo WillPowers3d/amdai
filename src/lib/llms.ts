@@ -86,6 +86,11 @@ const SHORT: LlmsLink[] = [
     summary: 'llama.cpp first. Vulkan daily driver. Cited engines, no invented benches.',
   },
   {
+    href: '/serving',
+    title: 'Serve many users on two Radeon cards',
+    summary: 'Several users on 1–2 Radeon cards. llama.cpp -np and --split-mode first. Third-party figures labeled. Our lab 35B and Flash.',
+  },
+  {
     href: '/calculator',
     title: 'Quant + hardware calc',
     summary: 'Size a GGUF against Radeon VRAM. Estimates stay labeled. No prices.',
@@ -309,6 +314,7 @@ export function renderLlmsFullTxt(): string {
       pageText('/gpus', 'GPU directory'),
       pageText('/results', 'Official run cards'),
       pageText('/compare', 'Compare'),
+      pageText('/serving', 'Serve many users on two Radeon cards'),
       pageText('/can-run', 'Can my Radeon run it?'),
       pageText('/harnesses', 'Harnesses'),
       pageText('/recipes', 'Recipes'),

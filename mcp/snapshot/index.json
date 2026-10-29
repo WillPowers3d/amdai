@@ -46,6 +46,11 @@
       "href": "https://amdai.net/api/v1/backends.json"
     },
     {
+      "path": "/api/v1/serving.json",
+      "description": "Multi-user serving on 1–2 Radeon cards. llama.cpp first",
+      "href": "https://amdai.net/api/v1/serving.json"
+    },
+    {
       "path": "/api/v1/catalog.json",
       "description": "First-party launch recipes",
       "href": "https://amdai.net/api/v1/catalog.json"

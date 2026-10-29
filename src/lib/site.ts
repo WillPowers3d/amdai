@@ -172,6 +172,7 @@ export const primaryNav: NavItem[] = [
   { href: '/thinking', label: 'Thinking mode', description: 'Cited llama.cpp --reasoning on Radeon. Official Qwen3.6 thinks by default. Tokens not measured on the local desktop', group: 'learn' },
   { href: '/sampling', label: 'Sampling', description: 'Cited llama.cpp --temp, --top-p, --min-p on Radeon. House recipes do not pin samplers. Sampler speed not measured. Q3 is a labeled estimate', group: 'learn' },
   { href: '/chat-templates', label: 'Chat templates', description: 'Cited llama.cpp --jinja and GGUF tokenizer.chat_template on Radeon. House recipes pass --jinja. Q3 is a labeled estimate', group: 'learn' },
+  { href: '/serving', label: 'Serving many users', description: 'Several users on 1–2 Radeon cards. llama.cpp -np and --split-mode first. Third-party figures labeled', group: 'learn' },
   { href: '/concurrency-ab', label: 'Parallel slots', description: 'Cited llama.cpp -np / --parallel on Radeon. Measure Stack Lab concurrency-ab/1. Slots not measured on the local desktop', group: 'learn' },
   { href: '/flash-attention', label: 'Flash Attention', description: 'Cited llama.cpp -fa / --flash-attn on Radeon. Overnight -fa 1. llama-server FA deltas not measured. Q3 is a labeled estimate', group: 'learn' },
   { href: '/prefill', label: 'Prefill', description: 'Cited llama.cpp -b / -ub on Radeon. Measure Stack Lab prefill-ab/1. llama-server batch not measured. Q3 is a labeled estimate', group: 'learn' },
