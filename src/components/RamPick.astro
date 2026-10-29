@@ -3,11 +3,9 @@ import BuyButtons from './BuyButtons.astro';
 import AffiliateDisclosure from './AffiliateDisclosure.astro';
 import {
   DIMM_SPEED_NOTE,
-  RAM_32_PRODUCT,
-  RAM_32_SRC,
-  RAM_256_PRODUCT,
-  RAM_256_SRC,
+  NAMED_RAM_KITS,
   RAM_ASK_COPY,
+  REPLACE_KIT_NOTE,
   ramCapFlag,
   ramRecommendation,
 } from '../lib/ram-kit';
@@ -17,12 +15,14 @@ interface Props {
   boards: Motherboard[];
   bigModels?: boolean;
   needsOffload?: boolean;
+  gpuCount?: number;
   id?: string;
 }
 
-const { boards, bigModels = false, needsOffload = false, id = 'ram-pick' } = Astro.props;
-const initial = ramRecommendation({ bigModels, needsOffload });
+const { boards, bigModels = false, needsOffload = false, gpuCount = 1, id = 'ram-pick' } = Astro.props;
+const initial = ramRecommendation({ bigModels, needsOffload, gpuCount });
 const capped = boards.filter((board) => board.max_ram_gb < 256);
+const visibleIds = new Set([initial.primary.id, ...initial.alternatives.map((row) => row.id)]);
 ---
 
 <section id={id} class="space-y-4" data-ram-pick data-ram-offload={needsOffload ? '1' : '0'}>
@@ -32,25 +32,34 @@ const capped = boards.filter((board) => board.max_ram_gb < 256);
     <p class="mt-2 text-sm leading-relaxed text-muted">{RAM_ASK_COPY.expensive}</p>
     <p class="mt-2 text-sm leading-relaxed text-muted" data-ram-note>{initial.why}</p>
     <p class="mt-2 text-sm leading-relaxed text-muted">{DIMM_SPEED_NOTE}</p>
+    <p class="mt-2 text-sm leading-relaxed text-muted">{REPLACE_KIT_NOTE}</p>
     <p class="mt-2 text-sm text-muted">Buttons say Check price. We never invent a RAM price.</p>
   </div>
 
-  <div class="card p-5 sm:p-6" data-ram-card="32" hidden={initial.kit !== '32'}>
-    <p class="kicker">Default kit</p>
-    <h3 class="mt-1 text-2xl tracking-tight">32 GB (2x16 DDR5)</h3>
-    <p class="mt-2 text-sm leading-relaxed text-muted">{RAM_ASK_COPY.no.lede}</p>
-    <BuyButtons product={RAM_32_PRODUCT} src={RAM_32_SRC} disclose={false} />
-  </div>
-
-  <div class="card p-5 sm:p-6" data-ram-card="256" hidden={initial.kit !== '256'}>
-    <p class="kicker">Large kit</p>
-    <h3 class="mt-1 text-2xl tracking-tight">192 GB or 256 GB (4x48 or 4x64 DDR5)</h3>
-    <p class="mt-2 text-sm leading-relaxed text-muted">{RAM_ASK_COPY.yes.lede}</p>
-    <p class="mt-2 text-sm leading-relaxed text-muted" data-ram-offload-note hidden={!initial.offload}>
-      {RAM_ASK_COPY.offload}
-    </p>
-    <BuyButtons product={RAM_256_PRODUCT} src={RAM_256_SRC} disclose={false} />
-  </div>
+  {NAMED_RAM_KITS.map((kit) => {
+    const isPrimary = kit.id === initial.primary.id;
+    return (
+      <div class="card p-5 sm:p-6" data-ram-card={kit.id} hidden={!visibleIds.has(kit.id)}>
+        <p class="kicker">{kit.optional ? 'Optional middle' : isPrimary ? 'Named kit' : 'Alternate size'}</p>
+        <h3 class="mt-1 text-2xl tracking-tight">{kit.name}</h3>
+        <p class="mt-2 text-sm text-muted">{kit.kit_gb} GB · {kit.dimms} · {kit.part}</p>
+        <p class="mt-2 text-sm leading-relaxed text-muted">{kit.note}</p>
+        {kit.id === '256' && (
+          <p class="mt-2 text-sm leading-relaxed text-muted" data-ram-offload-note hidden={!initial.offload}>
+            {RAM_ASK_COPY.offload}
+          </p>
+        )}
+        <p class="mt-3 text-sm leading-relaxed text-muted">
+          Cite:
+          <a class="underline decoration-accent/40 underline-offset-2" href={kit.citation.url} rel="noopener" target="_blank">
+            {kit.citation.title}
+          </a>
+          — {kit.citation.section}. As of {kit.citation.as_of}.
+        </p>
+        <BuyButtons product={kit.product_id} src={kit.src} disclose={false} />
+      </div>
+    );
+  })}
 
   {capped.length > 0 && (
     <div data-ram-caps hidden={initial.kit !== '256'}>
@@ -88,20 +97,51 @@ const capped = boards.filter((board) => board.max_ram_gb < 256);
     return root?.getAttribute('data-ram-offload') === '1';
   }
 
+  function gpuCount(): number {
+    const field = document.querySelector<HTMLInputElement>('[name="gpuCount"]');
+    if (field && field.value) {
+      const n = Number(field.value);
+      if (Number.isFinite(n) && n >= 1) return Math.min(4, Math.round(n));
+    }
+    const radio = document.querySelector<HTMLInputElement>('input[name="n"]:checked');
+    if (radio) {
+      const n = Number(radio.value);
+      if (Number.isFinite(n) && n >= 1) return Math.min(4, Math.round(n));
+    }
+    const highlighted = document.querySelector<HTMLElement>('[data-tier].ring-accent, [data-tier].ring-2');
+    if (highlighted?.getAttribute('data-tier') === 'pro') return 2;
+    const q = new URLSearchParams(window.location.search);
+    if (q.get('tier') === 'pro' || q.get('n') === '2') return 2;
+    return 1;
+  }
+
   function syncRam() {
     const root = document.querySelector<HTMLElement>('[data-ram-pick]');
     if (!root) return;
     const large = bigModels() || needsOffload();
+    const n = gpuCount();
+    const primary = !large ? '32' : n >= 2 ? '256' : '192';
     const note = root.querySelector('[data-ram-note]');
     if (note) {
       note.textContent = large
         ? needsOffload() && !bigModels()
           ? 'This model and setup already need RAM offload, so the large kit is the recommendation even if you answered No. Experts and leftover weights land in system RAM, not in VRAM.'
-          : 'Recommend 192 GB or 256 GB now (4x48 or 4x64 DDR5). That lets big MoE models keep experts in RAM. Adding a matched kit later is harder and usually costs more.'
-        : 'Recommend 32 GB (2x16 DDR5). The GPU does the work on the in-VRAM path, so save the money on system RAM.';
+          : n >= 2
+            ? 'Two cards plus 256 GB is the layout our measured Flash Q6 runs use. 192 GB is the alternate 4-DIMM size.'
+            : 'Recommend 192 GB or 256 GB now (G.SKILL Flare X5 4x48 DDR5-6000 CL28, or Trident Z5 Neo 4x64 DDR5-6000). That lets big MoE models keep experts in RAM.'
+        : 'Recommend the G.SKILL Flare X5 2x16 DDR5-6000 CL30 (32 GB). The GPU does the work on the in-VRAM path, so save the money on system RAM.';
     }
     root.querySelectorAll<HTMLElement>('[data-ram-card]').forEach((card) => {
-      card.hidden = large ? card.getAttribute('data-ram-card') !== '256' : card.getAttribute('data-ram-card') !== '32';
+      const id = card.getAttribute('data-ram-card');
+      if (!large) {
+        card.hidden = id !== '32' && id !== '128';
+      } else {
+        card.hidden = id === '32';
+      }
+      const kicker = card.querySelector('.kicker');
+      if (kicker && id) {
+        kicker.textContent = id === '128' ? 'Optional middle' : id === primary ? 'Named kit' : 'Alternate size';
+      }
     });
     const offloadNote = root.querySelector<HTMLElement>('[data-ram-offload-note]');
     if (offloadNote) offloadNote.hidden = !(large && needsOffload());
@@ -114,7 +154,11 @@ const capped = boards.filter((board) => board.max_ram_gb < 256);
 
   document.addEventListener('change', (event) => {
     const target = event.target as HTMLElement | null;
-    if (target?.matches('[name="bigmodels"]')) syncRam();
+    if (target?.matches('[name="bigmodels"], [name="n"], [name="gpuCount"]')) syncRam();
+  });
+  document.addEventListener('input', (event) => {
+    const target = event.target as HTMLElement | null;
+    if (target?.matches('[name="gpuCount"]')) syncRam();
   });
   window.addEventListener('amdai-ask-change', syncRam);
   window.addEventListener('amdai-ram-offload', ((event: CustomEvent<{ needed?: boolean }>) => {

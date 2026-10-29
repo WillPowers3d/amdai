@@ -1,11 +1,14 @@
 ---
 import { DEFAULT_PRIORITY } from '../lib/priority';
-import { DEFAULT_BIG_MODELS, DEFAULT_MIN_BUDGET, DEFAULT_STYLE, DEFAULT_USAGE, defaultExpandGpu } from '../lib/ask';
+import { DEFAULT_BIG_MODELS, DEFAULT_CPU_WORK, DEFAULT_MIN_BUDGET, DEFAULT_STYLE, DEFAULT_USAGE, defaultExpandGpu } from '../lib/ask';
 import { EXPAND_GPU_COPY, MIN_BUDGET_COPY } from '../lib/motherboards';
 import { RAM_ASK_COPY } from '../lib/ram-kit';
+import { CPU_WORK_COPY } from '../lib/cpu-pick';
 import { motherboards } from '../lib/motherboards-data';
 import MotherboardPick from './MotherboardPick.astro';
 import RamPick from './RamPick.astro';
+import CpuPick from './CpuPick.astro';
+import PsuPick from './PsuPick.astro';
 
 interface Props {
   id?: string;
@@ -164,6 +167,26 @@ const expandDefault = defaultExpandGpu(DEFAULT_MIN_BUDGET);
     </div>
   </fieldset>
 
+  <fieldset class="mt-5" data-cpu-work hidden={!DEFAULT_BIG_MODELS}>
+    <legend class="text-sm font-medium">{CPU_WORK_COPY.question}</legend>
+    <div class="mt-2 grid gap-2 sm:grid-cols-2">
+      <label class="choice">
+        <input type="radio" name="cpuwork" value="0" checked={!DEFAULT_CPU_WORK} />
+        <span>
+          <span class="block font-medium">{CPU_WORK_COPY.no.label}</span>
+          <span class="mt-0.5 block text-sm text-muted">{CPU_WORK_COPY.no.lede}</span>
+        </span>
+      </label>
+      <label class="choice">
+        <input type="radio" name="cpuwork" value="1" checked={DEFAULT_CPU_WORK} />
+        <span>
+          <span class="block font-medium">{CPU_WORK_COPY.yes.label}</span>
+          <span class="mt-0.5 block text-sm text-muted">{CPU_WORK_COPY.yes.lede}</span>
+        </span>
+      </label>
+    </div>
+  </fieldset>
+
   <div class="mt-6">
     <MotherboardPick
       boards={motherboards}
@@ -172,6 +195,12 @@ const expandDefault = defaultExpandGpu(DEFAULT_MIN_BUDGET);
   </div>
   <div class="mt-6">
     <RamPick boards={motherboards} bigModels={DEFAULT_BIG_MODELS} />
+  </div>
+  <div class="mt-6">
+    <CpuPick ask={{ bigModels: DEFAULT_BIG_MODELS, needsOffload: false, cpuWork: DEFAULT_CPU_WORK }} />
+  </div>
+  <div class="mt-6">
+    <PsuPick ask={{ gpuCount: 1, expandGpu: expandDefault }} />
   </div>
 
   <div class="mt-6 flex flex-wrap gap-2">

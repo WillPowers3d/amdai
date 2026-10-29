@@ -191,9 +191,11 @@ describe('vetted dual x8/x8 motherboards', () => {
       '../components/RigWizard.astro',
       '../components/MotherboardPick.astro',
       '../components/RamPick.astro',
+      '../components/CpuPick.astro',
+      '../components/PsuPick.astro',
     ];
     for (const rel of inbound) {
-      assert.match(read(rel), /\/motherboards|MotherboardPick|RamPick|minbudget|bigmodels/, rel);
+      assert.match(read(rel), /\/motherboards|MotherboardPick|RamPick|CpuPick|PsuPick|minbudget|bigmodels/, rel);
     }
     const askToggles = read('../components/AskToggles.astro');
     assert.match(askToggles, /MIN_BUDGET_COPY/);

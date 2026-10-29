@@ -1,0 +1,121 @@
+---
+import BuyButtons from './BuyButtons.astro';
+import AffiliateDisclosure from './AffiliateDisclosure.astro';
+import { PSUS, PSU_NATIVE_CABLE_NOTE, psuRecommendation, type PsuAsk } from '../lib/psu-pick';
+
+interface Props {
+  ask?: PsuAsk;
+  id?: string;
+}
+
+const { ask = { gpuCount: 1, expandGpu: true }, id = 'psu-pick' } = Astro.props;
+const initial = psuRecommendation(ask);
+---
+
+<section id={id} class="space-y-4" data-psu-pick data-psu-gpus={initial.gpus_sized_for}>
+  <div>
+    <p class="kicker">Power supply</p>
+    <h2 class="mt-2 text-2xl tracking-tight sm:text-3xl">Which PSU matches this build?</h2>
+    <p class="mt-2 text-sm leading-relaxed text-muted" data-psu-note>{initial.why}</p>
+    <p class="mt-2 text-sm leading-relaxed text-muted">{PSU_NATIVE_CABLE_NOTE}</p>
+    <p class="mt-2 text-sm leading-relaxed text-muted">
+      Cite:
+      <a class="underline decoration-accent/40 underline-offset-2" href={initial.r9700_cite.url} rel="noopener" target="_blank">
+        {initial.r9700_cite.title}
+      </a>
+      — {initial.r9700_cite.section}. As of {initial.r9700_cite.as_of}.
+    </p>
+    <p class="mt-2 text-sm text-muted">Buttons say Check price. We never invent a PSU price.</p>
+  </div>
+
+  {PSUS.map((psu) => {
+    const shown = initial.picks.some((row) => row.id === psu.id);
+    return (
+      <div class="card p-5 sm:p-6" data-psu-card={psu.id} data-psu-gpus={psu.for_gpus.join(',')} hidden={!shown}>
+        <p class="kicker">{psu.watts} W · {psu.native_12v2x6} native 12V-2x6</p>
+        <h3 class="mt-1 text-2xl tracking-tight">{psu.name}</h3>
+        <p class="mt-2 text-sm leading-relaxed text-muted">{psu.note}</p>
+        <p class="mt-3 text-sm leading-relaxed text-muted">
+          Cite:
+          <a class="underline decoration-accent/40 underline-offset-2" href={psu.citation.url} rel="noopener" target="_blank">
+            {psu.citation.title}
+          </a>
+          — {psu.citation.section}. As of {psu.citation.as_of}.
+        </p>
+        <BuyButtons product={psu.product_id} src={psu.src} disclose={false} />
+      </div>
+    );
+  })}
+
+  <AffiliateDisclosure compact />
+</section>
+
+<script>
+  function gpuCount(): number {
+    const field = document.querySelector<HTMLInputElement>('[name="gpuCount"]');
+    if (field && field.value) {
+      const n = Number(field.value);
+      if (Number.isFinite(n) && n >= 1) return Math.min(4, Math.round(n));
+    }
+    const radio = document.querySelector<HTMLInputElement>('input[name="n"]:checked');
+    if (radio) {
+      const n = Number(radio.value);
+      if (Number.isFinite(n) && n >= 1) return Math.min(4, Math.round(n));
+    }
+    const highlighted = document.querySelector<HTMLElement>('[data-tier].ring-accent, [data-tier].ring-2');
+    if (highlighted?.getAttribute('data-tier') === 'pro') return 2;
+    const q = new URLSearchParams(window.location.search);
+    if (q.get('tier') === 'pro' || q.get('n') === '2') return 2;
+    return 1;
+  }
+
+  function expandGpu(): boolean {
+    const checked = document.querySelector<HTMLInputElement>('input[name="expandgpu"]:checked');
+    if (checked) return checked.value === '1' || checked.value === 'yes';
+    const min = document.querySelector<HTMLInputElement>('input[name="minbudget"]:checked');
+    return !(min?.value === '1' || min?.value === 'minimum');
+  }
+
+  function syncPsu() {
+    const root = document.querySelector<HTMLElement>('[data-psu-pick]');
+    if (!root) return;
+    const n = gpuCount();
+    const expand = expandGpu();
+    const dual = n >= 2 || expand;
+    const note = root.querySelector('[data-psu-note]');
+    if (note) {
+      if (!dual) {
+        note.textContent =
+          'Sized for one R9700. AMD lists 300 W TBP and a 750 W minimum PSU (product page). About 850 W with one native 12V-2x6 cable.';
+      } else {
+        let text =
+          'Sized for two R9700s. AMD lists 300 W TBP per card (product page). Two cards plus a 9950X can reach about 1,100 W. Two native 12V-2x6 cables, one per card.';
+        if (n < 2 && expand) {
+          text += ' You said a second GPU might come later, so this skips the 850 W step and buys the PSU once.';
+        }
+        note.textContent = text;
+      }
+    }
+    root.querySelectorAll<HTMLElement>('[data-psu-card]').forEach((card) => {
+      const id = card.getAttribute('data-psu-card');
+      card.hidden = dual ? id === 'rm850x' : id !== 'rm850x';
+    });
+  }
+
+  document.addEventListener('change', (event) => {
+    const target = event.target as HTMLElement | null;
+    if (
+      target?.matches(
+        '[name="minbudget"], [name="expandgpu"], [name="gpuCount"], [name="n"], [name="priority"], [name="usage"], [name="style"]',
+      )
+    ) {
+      syncPsu();
+    }
+  });
+  document.addEventListener('input', (event) => {
+    const target = event.target as HTMLElement | null;
+    if (target?.matches('[name="gpuCount"]')) syncPsu();
+  });
+  window.addEventListener('amdai-ask-change', syncPsu);
+  syncPsu();
+</script>

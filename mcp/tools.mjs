@@ -286,6 +286,9 @@ function recommendStackTool(args, catalog) {
     quant: plan.quant.id,
     ctx: plan.context,
   });
+  const gpuCount = Array.isArray(args.gpus) ? Math.max(1, args.gpus.length) : 1;
+  const offload = modelId === 'flash' || plan.verdict === 'no' || /agent|flash/.test(goal);
+  const dualPsu = gpuCount >= 2;
   return textResult({
     stack_id: stack?.id,
     title: stack?.title,
@@ -297,6 +300,23 @@ function recommendStackTool(args, catalog) {
     verdict: plan.verdict,
     source_url: cite('/stacks/'),
     note: 'llama.cpp is the default backend recommendation. Quants below Q4 are omitted.',
+    ram: {
+      kit_gb: offload || ram >= 192 ? [192, 256] : 32,
+      title: offload || ram >= 192 ? 'G.SKILL Flare X5 192 GB or Trident Z5 Neo 256 GB' : 'G.SKILL Flare X5 32 GB (2x16) DDR5-6000 CL30',
+    },
+    cpu: {
+      title: offload ? 'AMD Ryzen 9 9900X' : 'AMD Ryzen 5 9600X',
+      why: offload
+        ? 'DDR5 expert offload: two chiplets. Fabric GB/s figures are theoretical spec numbers, not measurements.'
+        : 'The model fits in VRAM. The 9600X is enough. Any Ryzen 9000 has 24 usable PCIe 5.0 lanes.',
+    },
+    psu: {
+      watts: dualPsu ? 1200 : 850,
+      title: dualPsu ? 'Thermaltake Toughpower GT 1200W' : 'Corsair RM850x (2024, ATX 3.1)',
+      why: dualPsu
+        ? 'Two cards need 1200 W or more with two native 12V-2x6 cables. Two cards plus a 9950X can reach about 1,100 W. AMD lists 300 W TBP per R9700.'
+        : 'One card: about 850 W with one native 12V-2x6. AMD lists 300 W TBP and a 750 W minimum PSU.',
+    },
   });
 }
 

@@ -1,6 +1,6 @@
 /**
  * Upfront questions shared by /budget and /calculator.
- * URL params: priority, usage, style, minbudget, expandgpu, bigmodels.
+ * URL params: priority, usage, style, minbudget, expandgpu, bigmodels, cpuwork.
  */
 import type { Priority } from './priority';
 import { DEFAULT_PRIORITY, isPriority, parsePriority, PRIORITY_COPY } from './priority';
@@ -12,6 +12,7 @@ import {
   writeMotherboardAskParams,
 } from './motherboards';
 import { DEFAULT_BIG_MODELS, parseBigModels, writeRamAskParams } from './ram-kit';
+import { DEFAULT_CPU_WORK, parseCpuWork, writeCpuAskParams } from './cpu-pick';
 import { abliteratedGuide, type AbliteratedRow } from './status';
 
 export type Usage = 'local' | 'hybrid';
@@ -19,7 +20,7 @@ export type Style = 'standard' | 'abliterated';
 
 export const DEFAULT_USAGE: Usage = 'local';
 export const DEFAULT_STYLE: Style = 'standard';
-export { DEFAULT_MIN_BUDGET, defaultExpandGpu, DEFAULT_BIG_MODELS };
+export { DEFAULT_MIN_BUDGET, defaultExpandGpu, DEFAULT_BIG_MODELS, DEFAULT_CPU_WORK };
 
 export const USAGE_COPY: Record<Usage, { label: string; short: string; lede: string; verdict: string }> = {
   local: {
@@ -61,6 +62,7 @@ export type AskState = {
   minBudget: boolean;
   expandGpu: boolean;
   bigModels: boolean;
+  cpuWork: boolean;
 };
 
 export function isUsage(value: string | null | undefined): value is Usage {
@@ -83,7 +85,7 @@ export function parseStyle(search: string): Style {
   return isStyle(raw) ? raw : DEFAULT_STYLE;
 }
 
-export { parseMinBudget, parseExpandGpu, parseBigModels };
+export { parseMinBudget, parseExpandGpu, parseBigModels, parseCpuWork };
 
 export function parseAsk(search: string): AskState {
   const minBudget = parseMinBudget(search);
@@ -94,6 +96,7 @@ export function parseAsk(search: string): AskState {
     minBudget,
     expandGpu: parseExpandGpu(search, minBudget),
     bigModels: parseBigModels(search),
+    cpuWork: parseCpuWork(search),
   };
 }
 
@@ -105,6 +108,7 @@ export function askQuery(ask: AskState): Record<string, string> {
     minbudget: ask.minBudget ? '1' : '0',
     expandgpu: ask.expandGpu ? '1' : '0',
     bigmodels: ask.bigModels ? '1' : '0',
+    cpuwork: ask.cpuWork ? '1' : '0',
   };
 }
 
@@ -114,6 +118,7 @@ export function writeAskParams(url: URL, ask: AskState): void {
   url.searchParams.set('style', ask.style);
   writeMotherboardAskParams(url, ask);
   writeRamAskParams(url, ask);
+  writeCpuAskParams(url, ask);
 }
 
 /** Hybrid can take a cheaper tier. Fully local keeps the size/speed ladder. */

@@ -1,0 +1,125 @@
+---
+import BuyButtons from './BuyButtons.astro';
+import AffiliateDisclosure from './AffiliateDisclosure.astro';
+import {
+  APU_WARNING,
+  CPUS,
+  FABRIC_NOTE,
+  RYZEN_9000_PCIE,
+  cpuRecommendation,
+  type CpuAsk,
+} from '../lib/cpu-pick';
+
+interface Props {
+  ask?: CpuAsk;
+  id?: string;
+}
+
+const { ask = { bigModels: false, needsOffload: false, cpuWork: false }, id = 'cpu-pick' } = Astro.props;
+const initial = cpuRecommendation(ask);
+const payload = JSON.stringify({
+  apu: APU_WARNING,
+  fabric: FABRIC_NOTE,
+});
+---
+
+<section id={id} class="space-y-4" data-cpu-pick data-cpu-offload={ask.needsOffload ? '1' : '0'} data-cpu-payload={payload}>
+  <div>
+    <p class="kicker">CPU</p>
+    <h2 class="mt-2 text-2xl tracking-tight sm:text-3xl">Which Ryzen matches this build?</h2>
+    <p class="mt-2 text-sm leading-relaxed text-muted" data-cpu-note>{initial.why}</p>
+    <p class="mt-2 text-sm leading-relaxed text-muted">{RYZEN_9000_PCIE}</p>
+    <p class="mt-2 text-sm leading-relaxed text-muted">{FABRIC_NOTE}</p>
+    <p class="mt-2 text-sm text-muted">Buttons say Check price. We never invent a CPU price.</p>
+  </div>
+
+  {CPUS.map((cpu) => {
+    const shown = cpu.id === initial.id || cpu.id === initial.alt?.id;
+    const isAlt = cpu.id === initial.alt?.id;
+    return (
+      <div
+        class="card p-5 sm:p-6"
+        data-cpu-card={cpu.id}
+        hidden={!shown}
+      >
+        <p class="kicker">{isAlt ? 'If this box also runs other CPU jobs' : 'Pick'}</p>
+        <h3 class="mt-1 text-2xl tracking-tight">{cpu.name}</h3>
+        <p class="mt-2 text-sm text-muted">
+          {cpu.cores} cores · {cpu.ccds === 1 ? 'one chiplet' : 'two chiplets'} · {cpu.tdp_w} W TDP · {cpu.pcie}
+        </p>
+        <p class="mt-2 text-sm leading-relaxed text-muted" data-cpu-card-why={cpu.id}>
+          {cpu.id === initial.id ? initial.why : initial.alt?.why}
+        </p>
+        <p class="mt-3 text-sm leading-relaxed text-muted">
+          Cite:
+          <a class="underline decoration-accent/40 underline-offset-2" href={cpu.citation.url} rel="noopener" target="_blank">
+            {cpu.citation.title}
+          </a>
+          — {cpu.citation.section}. As of {cpu.citation.as_of}.
+        </p>
+        <BuyButtons product={cpu.product_id} src={cpu.src} disclose={false} />
+      </div>
+    );
+  })}
+
+  <div class="rounded-2xl border border-warn/40 bg-warn/10 p-5" data-cpu-warning>
+    <p class="font-medium text-ink">Skip Ryzen 8000G for dual GPU</p>
+    <p class="mt-2 text-sm leading-relaxed text-muted">{APU_WARNING}</p>
+  </div>
+
+  <AffiliateDisclosure compact />
+</section>
+
+<script>
+  function bigModels(): boolean {
+    const checked = document.querySelector<HTMLInputElement>('input[name="bigmodels"]:checked');
+    return checked?.value === '1' || checked?.value === 'yes';
+  }
+
+  function cpuWork(): boolean {
+    const checked = document.querySelector<HTMLInputElement>('input[name="cpuwork"]:checked');
+    return checked?.value === '1' || checked?.value === 'yes';
+  }
+
+  function needsOffload(): boolean {
+    const root = document.querySelector<HTMLElement>('[data-cpu-pick]');
+    return root?.getAttribute('data-cpu-offload') === '1';
+  }
+
+  function syncCpu() {
+    const root = document.querySelector<HTMLElement>('[data-cpu-pick]');
+    if (!root) return;
+    const offload = bigModels() || needsOffload();
+    const jobs = cpuWork();
+    const primary = !offload ? '9600x' : jobs ? '9950x' : '9900x';
+    const alt = offload ? (jobs ? '9900x' : '9950x') : null;
+    const note = root.querySelector('[data-cpu-note]');
+    if (note) {
+      note.textContent = !offload
+        ? 'The model lives in GPU memory, so the CPU mostly feeds the cards. The 9600X is enough. Any Ryzen 9000 desktop chip has 24 usable PCIe 5.0 lanes for x8/x8 on the right board.'
+        : jobs
+          ? 'Offload decode reads experts from DDR5 (~96 GB/s theoretical at 6000), above one chiplet’s ~64 GB/s fabric read cap. Two chiplets lift that theoretical cap, and 16 cores cover compile, vision, STT, or many agents.'
+          : 'Offload decode reads experts from DDR5 (~96 GB/s theoretical at 6000), above one chiplet’s ~64 GB/s fabric read cap. The two-chiplet 9900X is the value pick.';
+    }
+    root.querySelectorAll<HTMLElement>('[data-cpu-card]').forEach((card) => {
+      const id = card.getAttribute('data-cpu-card');
+      card.hidden = id !== primary && id !== alt;
+      const kicker = card.querySelector('.kicker');
+      if (kicker) kicker.textContent = id === alt ? 'If this box also runs other CPU jobs' : 'Pick';
+    });
+    const workRow = document.querySelector<HTMLElement>('[data-cpu-work]');
+    if (workRow) workRow.hidden = !offload;
+  }
+
+  document.addEventListener('change', (event) => {
+    const target = event.target as HTMLElement | null;
+    if (target?.matches('[name="bigmodels"], [name="cpuwork"]')) syncCpu();
+  });
+  window.addEventListener('amdai-ask-change', syncCpu);
+  window.addEventListener('amdai-ram-offload', ((event: CustomEvent<{ needed?: boolean }>) => {
+    const root = document.querySelector<HTMLElement>('[data-cpu-pick]');
+    if (root) root.setAttribute('data-cpu-offload', event.detail?.needed ? '1' : '0');
+    syncCpu();
+  }) as EventListener);
+  syncCpu();
+</script>
