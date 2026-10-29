@@ -35,6 +35,8 @@ import { PII_TEXT } from './pii-denylist';
 import { isQ3Quant, isQ4PlusQuant } from './quant-guard';
 import { liveRecipes, pickRecipes, type Recipe } from './recipes';
 import { ramRecommendation, setupNeedsRamOffload, type RamRecommendation } from './ram-kit';
+import { cpuRecommendation, type CpuRecommendation } from './cpu-pick';
+import { psuRecommendation, type PsuRecommendation } from './psu-pick';
 import { recipes } from './recipes-data';
 import { r9700StreetPrice, R9700_STREET_LOG_HREF, R9700_STREET_POLICY } from './r9700-street-price';
 import { parseRocmProblems, problemPath, type RocmProblemsFile } from './rocm-problems';
@@ -763,6 +765,8 @@ export type StackRecommend = {
   note: string;
   verdict: string;
   ram: RamRecommendation;
+  cpu: CpuRecommendation;
+  psu: PsuRecommendation;
 };
 
 function normalizeGpuToken(value: string): string {
@@ -856,8 +860,18 @@ export function recommendStack(opts: StackRecommendInput): StackRecommend {
     note,
     verdict: fittedResult.verdict,
     ram: ramRecommendation({
-      bigModels: false,
+      bigModels: goal === 'agent' || ram >= 192,
       needsOffload: setupNeedsRamOffload(fitted),
+      gpuCount: Array.isArray(opts.gpus) ? Math.max(1, opts.gpus.length) : 1,
+    }),
+    cpu: cpuRecommendation({
+      bigModels: goal === 'agent',
+      needsOffload: setupNeedsRamOffload(fitted),
+      cpuWork: false,
+    }),
+    psu: psuRecommendation({
+      gpuCount: Array.isArray(opts.gpus) ? Math.max(1, opts.gpus.length) : 1,
+      expandGpu: Array.isArray(opts.gpus) && opts.gpus.length >= 2,
     }),
   };
 }

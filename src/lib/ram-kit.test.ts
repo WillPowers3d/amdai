@@ -9,11 +9,14 @@ import { parseMotherboards } from './motherboards';
 import {
   DEFAULT_BIG_MODELS,
   DIMM_SPEED_NOTE,
+  NAMED_RAM_KITS,
+  OFFICIAL_SPEED_NOTE,
   RAM_256_PRODUCT,
   RAM_256_SRC,
   RAM_32_PRODUCT,
   RAM_32_SRC,
   RAM_ASK_COPY,
+  REPLACE_KIT_NOTE,
   parseBigModels,
   ramCapFlag,
   ramPickPayload,
@@ -50,8 +53,17 @@ describe('builder RAM ask', () => {
     assert.equal(yes.kit, '256');
     assert.deepEqual(yes.kit_gb, [192, 256]);
     assert.match(yes.title, /192 GB or 256 GB/);
-    assert.equal(yes.product_id, RAM_256_PRODUCT);
-    assert.equal(yes.src, RAM_256_SRC);
+    assert.match(yes.primary.name, /G\.SKILL Flare X5 192 GB/);
+    assert.equal(yes.primary.part, 'F5-6000J2836G48GX4-FX5');
+    assert.equal(yes.src, 'builder-ram-192');
+    const two = ramRecommendation({ bigModels: true, needsOffload: false, gpuCount: 2 });
+    assert.match(two.primary.name, /Trident Z5 Neo 256 GB/);
+    assert.equal(two.product_id, RAM_256_PRODUCT);
+    assert.equal(two.src, RAM_256_SRC);
+    assert.ok(yes.alternatives.some((row) => row.id === '128'));
+    assert.match(REPLACE_KIT_NOTE, /cannot top up a 2x16/);
+    assert.match(OFFICIAL_SPEED_NOTE, /DDR5-5600 with 2 DIMMs/);
+    assert.match(OFFICIAL_SPEED_NOTE, /overclock/);
     const url = new URL('https://amdai.net/calculator');
     writeRamAskParams(url, { bigModels: true });
     assert.equal(url.searchParams.get('bigmodels'), '1');
@@ -84,23 +96,27 @@ describe('builder RAM ask', () => {
   });
 
   it('wires buy stubs, disclosure, pick JSON, and the DIMM speed note', () => {
-    for (const id of [RAM_32_PRODUCT, RAM_256_PRODUCT]) {
+    for (const id of [RAM_32_PRODUCT, RAM_256_PRODUCT, 'ddr5-192', 'ddr5-128']) {
       const product = productsFile.products.find((row) => row.id === id);
       assert.ok(product, id);
       assert.ok(product.urls?.newegg, id);
       assert.doesNotMatch(product.urls?.newegg ?? '', /[?&](tag|ranMID|irclickid)=/);
     }
+    assert.ok(NAMED_RAM_KITS.every((kit) => kit.citation.url.startsWith('https://')));
+    assert.match(NAMED_RAM_KITS.find((kit) => kit.id === '256')?.note ?? '', /2025 or newer BIOS/);
     const payload = ramPickPayload();
     assert.equal(payload.param, 'bigmodels');
     assert.match(payload.dimm_speed_note, /Four DIMMs/i);
     assert.match(payload.note, /invented prices/i);
     assert.equal(payload.small.src, RAM_32_SRC);
-    assert.equal(payload.large.src, RAM_256_SRC);
+    assert.equal(payload.large.src, 'builder-ram-192');
+    assert.match(payload.official_speed_note ?? '', /overclock/);
+    assert.match(payload.replace_note ?? '', /cannot top up/);
     assert.match(DIMM_SPEED_NOTE, /Four DIMMs/);
     assert.match(read('../pages/api/v1/pick.json.ts'), /ramPickPayload/);
     assert.match(read('../pages/api/v1/pick/[gpu].json.ts'), /ramPickPayload/);
     assert.match(read('../components/AskToggles.astro'), /RAM_ASK_COPY\.question/);
-    assert.match(read('../components/RamPick.astro'), /RAM_32_SRC/);
+    assert.match(read('../components/RamPick.astro'), /NAMED_RAM_KITS|builder-ram-32|ddr5-32/);
     assert.match(read('../components/RamPick.astro'), /AffiliateDisclosure/);
     assert.match(read('../pages/budget.astro'), /RamPick/);
     assert.match(read('../pages/calculator.astro'), /RamPick/);

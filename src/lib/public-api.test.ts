@@ -126,6 +126,13 @@ describe('public static API generator', () => {
     assert.ok(daily.ram);
     assert.match(String(daily.ram.kit_gb), /32|192|256/);
     assert.doesNotMatch(daily.ram.why, /\$\d|\bMSRP\b/);
+    assert.ok(daily.cpu);
+    assert.match(daily.cpu.title, /Ryzen/);
+    assert.match(daily.cpu.src, /builder-cpu-/);
+    assert.ok(daily.psu);
+    assert.ok(daily.psu.picks.length >= 1);
+    assert.match(daily.psu.picks[0]!.src, /builder-psu-/);
+    assert.doesNotMatch(`${daily.cpu.why} ${daily.psu.why}`, /\$\d|\bMSRP\b/);
     assert.match(daily.href, /\/stacks/);
     const input = planFitInput({ gpu: 'r9700', model: 'qwen36', quant: 'q5_k_m' });
     const share = calculatorShareUrl(input);

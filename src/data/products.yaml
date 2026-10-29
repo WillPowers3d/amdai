@@ -351,24 +351,48 @@ products:
       microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=DDR5+64GB
 
   - id: ddr5-32
-    name: 32 GB DDR5 kit (2x16)
+    name: G.SKILL Flare X5 32 GB (2x16) DDR5-6000 CL30
     kind: part
-    note: Search only — 2x16 GB DDR5. No live or invented price. The GPU does the work on this path.
+    note: Named kit F5-6000J3038F16GX2-FX5. Search only — no live or invented price. A 2x16 kit cannot be topped up later.
     urls:
-      amazon: https://www.amazon.com/s?k=DDR5+32GB+2x16+desktop+kit
-      newegg: https://www.newegg.com/p/pl?d=DDR5+32GB+2x16+desktop+kit
-      bhphoto: https://www.bhphotovideo.com/c/search?Ntt=DDR5+32GB+2x16
-      microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=DDR5+32GB+2x16
+      amazon: https://www.amazon.com/s?k=G.SKILL+Flare+X5+F5-6000J3038F16GX2-FX5
+      newegg: https://www.newegg.com/p/pl?d=F5-6000J3038F16GX2-FX5
+      bhphoto: https://www.bhphotovideo.com/c/search?Ntt=F5-6000J3038F16GX2-FX5
+      microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=F5-6000J3038F16GX2-FX5
+      gskill: https://www.gskill.com/specification/165/396/1673491242/F5-6000J3038F16GX2-FX5-Specification
+
+  - id: ddr5-128
+    name: Kingston FURY Beast 128 GB (2x64) DDR5-5600
+    kind: part
+    note: Named kit KF556C36BBEK2-128. Optional middle. Two DIMMs stay at AMD’s official 5600. Search only — no live or invented price.
+    urls:
+      amazon: https://www.amazon.com/s?k=Kingston+FURY+Beast+KF556C36BBEK2-128
+      newegg: https://www.newegg.com/p/pl?d=KF556C36BBEK2-128
+      bhphoto: https://www.bhphotovideo.com/c/search?Ntt=KF556C36BBEK2-128
+      microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=KF556C36BBEK2-128
+      kingston: https://www.kingston.com/en/memory/search?partid=KF556C36BBEK2-128
+
+  - id: ddr5-192
+    name: G.SKILL Flare X5 192 GB (4x48) DDR5-6000 CL28
+    kind: part
+    note: Named kit F5-6000J2836G48GX4-FX5. Four DIMMs at 6000 is an overclock vs AMD’s official 3600. Search only — no live or invented price.
+    urls:
+      amazon: https://www.amazon.com/s?k=G.SKILL+Flare+X5+F5-6000J2836G48GX4-FX5
+      newegg: https://www.newegg.com/p/pl?d=F5-6000J2836G48GX4-FX5
+      bhphoto: https://www.bhphotovideo.com/c/search?Ntt=F5-6000J2836G48GX4-FX5
+      microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=F5-6000J2836G48GX4-FX5
+      gskill: https://www.gskill.com/specification/165/396/1750729823/F5-6000J2836G48GX4-FX5-Specification
 
   - id: ddr5-256
-    name: 192 GB or 256 GB DDR5 kit (4x48 or 4x64)
+    name: G.SKILL Trident Z5 Neo 256 GB (4x64) DDR5-6000
     kind: part
-    note: Search only — 4x48 GB (192 GB) or 4x64 GB (256 GB) DDR5. No live or invented price. Confirm the board max on the maker spec.
+    note: Named kit F5-6000J3644D64GX4-TZ5NR. Needs a 2025 or newer BIOS. Search only — no live or invented price.
     urls:
-      amazon: https://www.amazon.com/s?k=DDR5+256GB+4x64+desktop+kit
-      newegg: https://www.newegg.com/p/pl?d=DDR5+256GB+4x64+desktop+kit
-      bhphoto: https://www.bhphotovideo.com/c/search?Ntt=DDR5+256GB+4x64
-      microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=DDR5+256GB+4x64
+      amazon: https://www.amazon.com/s?k=G.SKILL+Trident+Z5+Neo+F5-6000J3644D64GX4-TZ5NR
+      newegg: https://www.newegg.com/p/pl?d=F5-6000J3644D64GX4-TZ5NR
+      bhphoto: https://www.bhphotovideo.com/c/search?Ntt=F5-6000J3644D64GX4-TZ5NR
+      microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=F5-6000J3644D64GX4-TZ5NR
+      gskill: https://www.gskill.com/product/165/390/1750238051/F5-6000J3644D64GX4-TZ5NR
 
   - id: nvme
     name: Fast NVMe SSD
@@ -383,12 +407,100 @@ products:
   - id: psu-1000w
     name: 1000W-class PSU
     kind: part
-    note: AMD’s R9700 minimum recommendation is 750 W. A 1000W-class unit is search guidance for headroom, not a SKU.
+    note: AMD’s R9700 minimum recommendation is 750 W. A 1000W-class unit is search guidance for headroom, not a SKU. Budget tiers now name an 850 W or 1200 W unit instead.
     urls:
       amazon: https://www.amazon.com/s?k=1000W+80+Plus+ATX+PSU+12V-2x6
       newegg: https://www.newegg.com/p/pl?d=1000W+ATX+power+supply+12V-2x6
       bhphoto: https://www.bhphotovideo.com/c/search?Ntt=1000W+power+supply
       microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=1000W+power+supply
+
+  - id: corsair-rm850x
+    name: Corsair RM850x (2024, ATX 3.1)
+    kind: part
+    note: 850 W ATX 3.1 with one native 12V-2x6. For one R9700. Search only — no live or invented price.
+    urls:
+      amazon: https://www.amazon.com/s?k=Corsair+RM850x+2024+CP-9020270-NA
+      newegg: https://www.newegg.com/p/pl?d=CP-9020270-NA
+      bhphoto: https://www.bhphotovideo.com/c/search?Ntt=Corsair+RM850x+2024
+      microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=Corsair+RM850x
+      corsair: https://www.corsair.com/us/en/p/psu/cp-9020270-na/rmx-series-rm850x-fully-modular-power-supply-cp-9020270-na
+
+  - id: thermaltake-toughpower-gt-1200
+    name: Thermaltake Toughpower GT 1200W
+    kind: part
+    note: 1200 W ATX 3.1 with two native 12V-2x6 cables. Search only — no live or invented price.
+    urls:
+      amazon: https://www.amazon.com/s?k=Thermaltake+Toughpower+GT+1200W+PS-TPT-1200FNFAGU-3
+      newegg: https://www.newegg.com/p/pl?d=PS-TPT-1200FNFAGU-3
+      bhphoto: https://www.bhphotovideo.com/c/search?Ntt=Thermaltake+Toughpower+GT+1200W
+      microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=Thermaltake+Toughpower+GT+1200W
+      thermaltake: https://www.thermaltake.com/toughpower-gt-1200w.html
+
+  - id: bequiet-straight-power-12-1200
+    name: be quiet! Straight Power 12 1200W
+    kind: part
+    note: 1200 W ATX 3.1 with two native 12V-2x6. Combined 12V-2x6 limit 800 W. Search only — no live or invented price.
+    urls:
+      amazon: https://www.amazon.com/s?k=be+quiet+Straight+Power+12+1200W
+      newegg: https://www.newegg.com/p/pl?d=Straight+Power+12+1200W
+      bhphoto: https://www.bhphotovideo.com/c/search?Ntt=be+quiet+Straight+Power+12+1200W
+      microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=be+quiet+Straight+Power+12+1200W
+      bequiet: https://www.bequiet.com/en/powersupply/4108
+
+  - id: thermaltake-tf3-1300
+    name: Thermaltake Toughpower TF3 1300W
+    kind: part
+    note: 1300 W ATX 3.1 with two native 12V-2x6 cables. Search only — no live or invented price.
+    urls:
+      amazon: https://www.amazon.com/s?k=Thermaltake+Toughpower+TF3+1300W+PS-TPD-1300FNFATU-1
+      newegg: https://www.newegg.com/p/pl?d=PS-TPD-1300FNFATU-1
+      bhphoto: https://www.bhphotovideo.com/c/search?Ntt=Thermaltake+Toughpower+TF3+1300W
+      microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=Thermaltake+Toughpower+TF3+1300W
+      thermaltake: https://www.thermaltake.com/toughpower-tf3-1300w-tt-premium-edition.html
+
+  - id: corsair-hx1500i
+    name: Corsair HX1500i (2025)
+    kind: part
+    note: Two 12V-2x6 cables. 1200 W at 100–115 V, 1500 W at 115–240 V. Search only — no live or invented price.
+    urls:
+      amazon: https://www.amazon.com/s?k=Corsair+HX1500i+2025+CP-9020309-NA
+      newegg: https://www.newegg.com/p/pl?d=CP-9020309-NA
+      bhphoto: https://www.bhphotovideo.com/c/search?Ntt=Corsair+HX1500i
+      microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=Corsair+HX1500i
+      corsair: https://www.corsair.com/us/en/p/psu/cp-9020309-na/hx1500i-fully-modular-ultra-low-noise-platinum-atx-1500-watt-pc-power-supply-cp-9020309-na
+
+  - id: ryzen-5-9600x
+    name: AMD Ryzen 5 9600X
+    kind: part
+    note: 6 cores, 24 usable PCIe 5.0 lanes. Enough when the model fits in VRAM. Search only — no live or invented price.
+    urls:
+      amazon: https://www.amazon.com/s?k=AMD+Ryzen+5+9600X
+      newegg: https://www.newegg.com/p/pl?d=AMD+Ryzen+5+9600X
+      bhphoto: https://www.bhphotovideo.com/c/search?Ntt=AMD+Ryzen+5+9600X
+      microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=AMD+Ryzen+5+9600X
+      amd: https://www.amd.com/en/products/processors/desktops/ryzen/9000-series/amd-ryzen-5-9600x.html
+
+  - id: ryzen-9-9900x
+    name: AMD Ryzen 9 9900X
+    kind: part
+    note: 12 cores, two chiplets, 24 usable PCIe 5.0 lanes. Value pick for DDR5 expert offload. Search only — no live or invented price.
+    urls:
+      amazon: https://www.amazon.com/s?k=AMD+Ryzen+9+9900X
+      newegg: https://www.newegg.com/p/pl?d=AMD+Ryzen+9+9900X
+      bhphoto: https://www.bhphotovideo.com/c/search?Ntt=AMD+Ryzen+9+9900X
+      microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=AMD+Ryzen+9+9900X
+      amd: https://www.amd.com/en/products/processors/desktops/ryzen/9000-series/amd-ryzen-9-9900x.html
+
+  - id: ryzen-9-9950x
+    name: AMD Ryzen 9 9950X
+    kind: part
+    note: 16 cores, two chiplets, 24 usable PCIe 5.0 lanes. Offload plus other CPU jobs. Search only — no live or invented price.
+    urls:
+      amazon: https://www.amazon.com/s?k=AMD+Ryzen+9+9950X
+      newegg: https://www.newegg.com/p/pl?d=AMD+Ryzen+9+9950X
+      bhphoto: https://www.bhphotovideo.com/c/search?Ntt=AMD+Ryzen+9+9950X
+      microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=AMD+Ryzen+9+9950X
+      amd: https://www.amd.com/en/products/processors/desktops/ryzen/9000-series/amd-ryzen-9-9950x.html
 
   - id: asrock-x870-taichi-creator
     name: ASRock X870 Taichi Creator

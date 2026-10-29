@@ -17,6 +17,8 @@ import { defaultExpandGpu } from '../lib/motherboards';
 import { motherboards } from '../lib/motherboards-data';
 import MotherboardPick from '../components/MotherboardPick.astro';
 import RamPick from '../components/RamPick.astro';
+import CpuPick from '../components/CpuPick.astro';
+import PsuPick from '../components/PsuPick.astro';
 
 const hasBands = bandsReady();
 const citedBands = hasCitedBands();
@@ -87,6 +89,8 @@ const payload = JSON.stringify({
         ask={{ gpuCount: 1, minBudget: false, expandGpu: defaultExpandGpu(false) }}
       />
       <RamPick boards={motherboards} />
+      <CpuPick />
+      <PsuPick ask={{ gpuCount: 1, expandGpu: defaultExpandGpu(false) }} />
     </div>
 
     <section class="mt-10 rounded-2xl border border-line bg-raised/40 p-5">
@@ -253,6 +257,7 @@ const payload = JSON.stringify({
   const minBudgetRadios = [...document.querySelectorAll('input[name="minbudget"]')];
   const expandRadios = [...document.querySelectorAll('input[name="expandgpu"]')];
   const bigModelsRadios = [...document.querySelectorAll('input[name="bigmodels"]')];
+  const cpuWorkRadios = [...document.querySelectorAll('input[name="cpuwork"]')];
   const COPY = {
     size: 'Favor more total VRAM — a larger card or a second GPU — and plenty of system RAM so a bigger file can overflow. Pick the largest house model and the highest quant that still makes sense (Q5 or Q6 when they fit; Q3 is listed as estimate/community). Tokens per second will be lower than an in-VRAM load. Speed numbers are estimates unless a “Tested on our rig” badge is showing.',
     speed: 'Favor the whole model in one GPU’s VRAM with no RAM offload. Prefer a MoE with few active parameters (Qwen3.6-35B-A3B style), Q4_K_M to Q5, a shorter context, and a single fast card. Offloading weights or KV into system RAM kills speed.',
@@ -264,8 +269,10 @@ const payload = JSON.stringify({
     minimum: 'Only this choice may drop the dual x8/x8 requirement. A cheaper single-x16 board limits a later second GPU.',
     expandYes: 'A dual x8/x8 board now puts both cards on CPU lanes at the same width.',
     expandNo: 'One card will run on a single x16 slot. Combined with Minimum budget, a cheaper single-x16 board is listed.',
-    ramNo: 'Recommend 32 GB (2x16 DDR5). The GPU does the work on the in-VRAM path, so save the money on system RAM.',
-    ramYes: 'Recommend 192 GB or 256 GB now (4x48 or 4x64 DDR5). That lets big MoE models keep experts in RAM. Adding a matched kit later is harder and usually costs more.',
+    ramNo: 'Recommend the G.SKILL Flare X5 2x16 DDR5-6000 CL30 (32 GB). The GPU does the work on the in-VRAM path, so save the money on system RAM.',
+    ramYes: 'Recommend 192 GB or 256 GB now (G.SKILL Flare X5 4x48 DDR5-6000 CL28, or Trident Z5 Neo 4x64 DDR5-6000). That lets big MoE models keep experts in RAM.',
+    cpuNo: 'The CPU mostly feeds the cards. Stay on the 9600X when the model fits in VRAM, or the 9900X when experts land in DDR5.',
+    cpuYes: 'Same PCIe story. For DDR5 offload the 9950X adds cores for side jobs; for in-VRAM the 9600X is still enough.',
   };
 
   function radioValue(list, fallback) {
@@ -283,6 +290,7 @@ const payload = JSON.stringify({
       minBudget,
       expandGpu: expandRaw === '1' || expandRaw === 'yes',
       bigModels: radioValue(bigModelsRadios, '0') === '1',
+      cpuWork: radioValue(cpuWorkRadios, '0') === '1',
     };
   }
 
@@ -299,6 +307,7 @@ const payload = JSON.stringify({
     next.searchParams.set('minbudget', ask.minBudget ? '1' : '0');
     next.searchParams.set('expandgpu', ask.expandGpu ? '1' : '0');
     next.searchParams.set('bigmodels', ask.bigModels ? '1' : '0');
+    next.searchParams.set('cpuwork', ask.cpuWork ? '1' : '0');
     window.history.replaceState({}, '', next);
     document.querySelectorAll('[data-save-setup]').forEach((link) => {
       const base = link.getAttribute('href')?.split('?')[0] ?? '/account/save';
@@ -314,18 +323,21 @@ const payload = JSON.stringify({
     minBudgetRadios.forEach((el) => { el.checked = (el.value === '1') === ask.minBudget; });
     expandRadios.forEach((el) => { el.checked = (el.value === '1') === ask.expandGpu; });
     bigModelsRadios.forEach((el) => { el.checked = (el.value === '1') === ask.bigModels; });
+    cpuWorkRadios.forEach((el) => { el.checked = (el.value === '1') === ask.cpuWork; });
     const pLede = document.querySelector('[data-priority-lede]');
     const uLede = document.querySelector('[data-usage-lede]');
     const sLede = document.querySelector('[data-style-lede]');
     const mLede = document.querySelector('[data-minbudget-lede]');
     const eLede = document.querySelector('[data-expandgpu-lede]');
     const rLede = document.querySelector('[data-bigmodels-lede]');
+    const cLede = document.querySelector('[data-cpuwork-lede]');
     if (pLede) pLede.textContent = COPY[ask.priority];
     if (uLede) uLede.textContent = COPY[ask.usage];
     if (sLede) sLede.textContent = COPY[ask.style];
     if (mLede) mLede.textContent = ask.minBudget ? COPY.minimum : COPY.recommended;
     if (eLede) eLede.textContent = ask.expandGpu ? COPY.expandYes : COPY.expandNo;
     if (rLede) rLede.textContent = ask.bigModels ? COPY.ramYes : COPY.ramNo;
+    if (cLede) cLede.textContent = ask.cpuWork ? COPY.cpuYes : COPY.cpuNo;
     document.querySelectorAll('[data-abliterated-panel]').forEach((el) => {
       el.hidden = ask.style !== 'abliterated';
     });
@@ -359,6 +371,7 @@ const payload = JSON.stringify({
         url.searchParams.set('minbudget', ask.minBudget ? '1' : '0');
         url.searchParams.set('expandgpu', ask.expandGpu ? '1' : '0');
         url.searchParams.set('bigmodels', ask.bigModels ? '1' : '0');
+        url.searchParams.set('cpuwork', ask.cpuWork ? '1' : '0');
         link.setAttribute('href', url.pathname + '?' + url.searchParams.toString());
       });
     });
@@ -398,6 +411,7 @@ const payload = JSON.stringify({
       minBudget,
       expandGpu: expandRaw === '0' || expandRaw === 'false' || expandRaw === 'no' ? false : expandRaw === '1' || expandRaw === 'true' || expandRaw === 'yes' ? true : !minBudget,
       bigModels: q.get('bigmodels') === '1' || q.get('bigmodels') === 'true' || q.get('bigmodels') === 'yes',
+      cpuWork: q.get('cpuwork') === '1' || q.get('cpuwork') === 'true' || q.get('cpuwork') === 'yes',
     };
     applyAsk(ask);
     const id = q.get('tier');
@@ -428,7 +442,7 @@ const payload = JSON.stringify({
     }
   }
 
-  [...radios, ...usageRadios, ...styleRadios, ...minBudgetRadios, ...expandRadios, ...bigModelsRadios].forEach((el) => {
+  [...radios, ...usageRadios, ...styleRadios, ...minBudgetRadios, ...expandRadios, ...bigModelsRadios, ...cpuWorkRadios].forEach((el) => {
     el.addEventListener('change', onAskChange);
   });
 

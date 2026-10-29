@@ -52,6 +52,11 @@ describe('amdai-fit-mcp tools', () => {
     assert.ok(out.launch);
     assert.match(out.source_url, /\/stacks/);
     assert.match(out.calculator, /\/calculator\?/);
+    assert.ok(out.cpu);
+    assert.match(out.cpu.title, /Ryzen/);
+    assert.ok(out.psu);
+    assert.ok(out.psu.watts >= 850);
+    assert.doesNotMatch(`${out.cpu.why} ${out.psu.why}`, /\$\d|\bMSRP\b/);
   });
 
   it('compare_gpus cites the compare page', () => {
