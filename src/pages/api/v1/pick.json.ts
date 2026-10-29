@@ -5,6 +5,10 @@ import { isPublicQuant, jsonResponse } from '../../../lib/public-api';
 import { ramPickPayload } from '../../../lib/ram-kit';
 import { cpuPickPayload } from '../../../lib/cpu-pick';
 import { psuPickPayload } from '../../../lib/psu-pick';
+import { storagePickPayload } from '../../../lib/storage-pick';
+import { casePickPayload } from '../../../lib/case-pick';
+import { coolerPickPayload } from '../../../lib/cooler-pick';
+import { buildListPayload } from '../../../lib/build-list';
 
 export async function GET() {
   const picks = Object.fromEntries(
@@ -21,6 +25,10 @@ export async function GET() {
     ram: ramPickPayload(),
     cpu: cpuPickPayload(),
     psu: psuPickPayload(),
+    storage: storagePickPayload(),
+    case: casePickPayload(),
+    cooler: coolerPickPayload(),
+    parts: buildListPayload(),
     picks,
   });
 }

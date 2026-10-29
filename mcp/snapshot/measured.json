@@ -1,9 +1,138 @@
 {
   "schema_version": "1.0",
-  "as_of": "2026-10-27T15:11:43-05:00",
+  "as_of": "2026-10-28T22:20:00-05:00",
   "href": "https://amdai.net/lab-log",
   "note": "Measured and cited lab-log rows. Numbers keep their original dates. Quants below Q4 are omitted.",
   "runs": [
+    {
+      "id": "2026-10-28-cpu-cooler-for-dual-r9700",
+      "date": "2026-10-28T22:20:00-05:00",
+      "project": "idea-lab",
+      "kind": "result",
+      "title": "CPU cooler for an R9700 build: Ryzen 9000X has none in the box, and a 360 AIO in the front or bottom of the case feeds warm air to the cards",
+      "summary": "AMD ships the Ryzen 5 9600X, Ryzen 9 9900X and Ryzen 9 9950X without a cooler; AMD recommends a premium air cooler for the 65 W 9600X and a liquid cooler for the 120 W 9900X and 170 W 9950X for best boost. for a local-AI box with blower R9700s, where the radiator goes matters: the cards pull their air from the case's front and bottom intake, so a 360 radiator should go on top as exhaust, and a case that only takes one in front or bottom is better paired with a large dual-tower air cooler.",
+      "setup": {
+        "stack": "Spec review: amd.com product pages for 9600X/9900X/9950X; Fractal, Phanteks, Thermalright, Noctua and ARCTIC product pages; published llama.cpp MoE offload guides"
+      },
+      "metrics": [
+        {
+          "label": "AMD default TDP, 9600X / 9900X / 9950X",
+          "value": "65 / 120 / 170",
+          "unit": "W"
+        },
+        {
+          "label": "Air cooler height limit, Torrent / Meshify 2 / Enthoo Pro 2 Server",
+          "value": "188 / 185 / 195",
+          "unit": "mm"
+        },
+        {
+          "label": "Cooler height, Peerless Assassin 120 SE / NH-D15 G2",
+          "value": "155 / 168",
+          "unit": "mm"
+        }
+      ],
+      "sources": [
+        "https://www.amd.com/en/products/processors/desktops/ryzen/9000-series/amd-ryzen-5-9600x.html",
+        "https://www.amd.com/en/products/processors/desktops/ryzen/9000-series/amd-ryzen-9-9900x.html",
+        "https://www.amd.com/en/products/processors/desktops/ryzen/9000-series/amd-ryzen-9-9950x.html",
+        "https://www.fractal-design.com/products/cases/torrent/torrent/black-solid/",
+        "https://www.fractal-design.com/products/cases/meshify/meshify-2/black-tg-dark-tint/",
+        "https://phanteks.com/product/enthoo-pro-2-server-edition-tg/",
+        "https://www.thermalright.com/product/peerless-assassin-120-se/",
+        "https://noctua.at/en/nh-d15-g2/specification",
+        "https://www.arctic.de/en/Liquid-Freezer-III-Pro-360/ACFRE00180A",
+        "https://gist.github.com/DocShotgun/a02a4c0c0a57e43ff4f038b46ca66ae0"
+      ],
+      "href": "https://amdai.net/lab-log#2026-10-28-cpu-cooler-for-dual-r9700"
+    },
+    {
+      "id": "2026-10-28-case-for-two-r9700s",
+      "date": "2026-10-28T21:20:00-05:00",
+      "project": "idea-lab",
+      "kind": "result",
+      "title": "Case for two R9700s: a standard 7-slot ATX case is enough on 4-slot-spacing x8/x8 boards, and case fans should follow the GPUs, not the CPU",
+      "summary": "Every R9700 board-partner card is a 2-slot blower no longer than 271 mm. on the ASRock X870 Taichi Creator and Gigabyte B850 AI TOP, owners report 4-slot spacing between the two CPU x8/x8 slots, so the bottom card ends by expansion slot 7 and leaves a 2-slot gap above it. that means any 7-slot ATX case with at least 271 mm of card length fits two cards; no 8-slot case is needed unless you plan a third card or a riser. blowers push their heat out the back, so the case's job is fresh intake air for the card area.",
+      "setup": {
+        "stack": "Spec review: R9700 board-partner spec sheets, ASRock/Gigabyte board pages and owner reports, Fractal and Phanteks case pages, one published 4x R9700 build guide"
+      },
+      "metrics": [
+        {
+          "label": "Longest R9700 board-partner card",
+          "value": "271",
+          "unit": "mm"
+        },
+        {
+          "label": "Slot spacing, X870 Taichi Creator / B850 AI TOP (owner reports)",
+          "value": "4",
+          "unit": "slots"
+        },
+        {
+          "label": "Card-area temp, CPU-following vs full-speed case fans (4x R9700, published)",
+          "value": "67 vs 57",
+          "unit": "C"
+        },
+        {
+          "label": "GPU junction change from full-speed case fans (published)",
+          "value": "1-4",
+          "unit": "C"
+        }
+      ],
+      "sources": [
+        "https://forum.level1techs.com/t/asrock-x870-taichi-creator-dual-gpu/243897",
+        "https://pg.asrock.com/general/news.us.asp?id=5643",
+        "https://www.reddit.com/r/LocalLLaMA/comments/1nqi0di/are_there_any_consumer_mobos_that_can_fit_2x/",
+        "https://nicholasreese.com/guides/quad-r9700/quad-r9700-build-guide.md",
+        "https://www.reddit.com/r/LocalLLM/comments/1vyaesz/blower_r9700_cards_stacked_with_very_little_gap/",
+        "https://forum.level1techs.com/t/radeon-pro-ai-r9700-fan-noise-which-model-to-buy/247552?page=2",
+        "https://www.fractal-design.com/products/cases/torrent/torrent/black-solid/",
+        "https://www.fractal-design.com/products/cases/meshify/meshify-2/black-tg-dark-tint/",
+        "https://phanteks.com/product/enthoo-pro-2-server-edition-tg/"
+      ],
+      "href": "https://amdai.net/lab-log#2026-10-28-case-for-two-r9700s"
+    },
+    {
+      "id": "2026-10-28-nvme-for-local-models",
+      "date": "2026-10-28T20:10:00-05:00",
+      "project": "idea-lab",
+      "kind": "result",
+      "title": "How much NVMe a Radeon local-AI box needs: 2 TB holds every Q4-Q6 quant of three model families, and Gen5 barely speeds up loading",
+      "summary": "Every Q4 to Q6 quant of Qwen3.6-35B-A3B (20.6 to 29.7 GiB), Qwen3.8-Flash-Next (103.7 to 157.6 GiB) and GLM-5.3-Flash (186.0 to 271.8 GiB) adds up to about 1,587 GiB once you keep one extra file of room for the next download and 150 GiB for the OS. That fits a 2 TB drive (1,863 GiB) with 10% left free; a fourth Flash-class family such as MiniMax-M3.1-Flash (UD-Q4 232 GiB) needs 4 TB. On llama.cpp's default memory-mapped loader, loading is usually limited by page faults and one CPU core rather than the drive, so a Gen5 SSD helps less than its doubled rating suggests.",
+      "setup": {
+        "stack": "Spec and file-size review: Samsung 990 PRO 2/4 TB, WD_BLACK SN850X 4/8 TB, Samsung 9100 PRO 4/8 TB; unsloth GGUF repos"
+      },
+      "metrics": [
+        {
+          "label": "All Q4-Q6 quants of 3 families + headroom",
+          "value": "1587",
+          "unit": "GiB"
+        },
+        {
+          "label": "Usable space on a 2 TB drive",
+          "value": "1863",
+          "unit": "GiB"
+        },
+        {
+          "label": "Gen4 vs Gen5 cold load, 40.5 GB Q4_K_M (third-party)",
+          "value": "15.2 vs 13.8",
+          "unit": "s"
+        },
+        {
+          "label": "GPT-OSS-120B load, mmap vs direct I/O (llama.cpp PR)",
+          "value": "110 vs 10.5",
+          "unit": "s"
+        }
+      ],
+      "sources": [
+        "https://huggingface.co/unsloth/Qwen3.6-35B-A3B-GGUF",
+        "https://github.com/ggml-org/llama.cpp/pull/18012",
+        "https://github.com/ggml-org/llama.cpp/discussions/12223",
+        "https://craftrigs.com/guides/nvme-speed-llm-load-times-benchmarks/",
+        "https://download.semiconductor.samsung.com/resources/data-sheet/samsung_nvme_ssd_990_pro_datasheet_rev.2.0.pdf",
+        "https://download.semiconductor.samsung.com/resources/data-sheet/Samsung_NVMe_SSD_9100_PRO_Datasheet_Rev.2.0.pdf",
+        "https://documents.sandisk.com/content/dam/asset-library/en_us/assets/public/sandisk/product/internal-drives/wd-black-ssd/data-sheet-wd-black-sn850x-nvme-ssd.pdf"
+      ],
+      "href": "https://amdai.net/lab-log#2026-10-28-nvme-for-local-models"
+    },
     {
       "id": "2026-10-27-sglang-tp2-vs-llamacpp-r9700",
       "date": "2026-10-27T15:20:00-05:00",

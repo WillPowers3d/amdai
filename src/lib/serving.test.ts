@@ -105,5 +105,9 @@ describe('Serving many users on two Radeon cards', () => {
     assert.equal(shouldNoindex('/serving'), false);
     assert.equal(isSitemapExcluded('/serving'), false);
     assert.ok(primaryNav.some((item) => item.href === '/serving'));
+
+    const apiPage = readFileSync(join(here, '../pages/api/index.astro'), 'utf8');
+    assert.match(apiPage, /curl -s https:\/\/amdai\.net\/api\/v1\/backends\.json\ncurl -s https:\/\/amdai\.net\/api\/v1\/serving\.json/);
+    assert.match(apiPage, /id="api-preview"/);
   });
 });

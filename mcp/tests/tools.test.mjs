@@ -56,7 +56,18 @@ describe('amdai-fit-mcp tools', () => {
     assert.match(out.cpu.title, /Ryzen/);
     assert.ok(out.psu);
     assert.ok(out.psu.watts >= 850);
-    assert.doesNotMatch(`${out.cpu.why} ${out.psu.why}`, /\$\d|\bMSRP\b/);
+    assert.ok(out.storage);
+    assert.ok(out.storage.tb === 2 || out.storage.tb === 4);
+    assert.match(out.storage.go, /\/go\/newegg\//);
+    assert.ok(out.case);
+    assert.match(out.case.title, /Torrent/);
+    assert.match(out.case.go, /\/go\/newegg\/fractal-design-torrent/);
+    assert.ok(out.cooler);
+    assert.match(out.cooler.go, /\/go\/newegg\//);
+    assert.ok(out.parts);
+    assert.equal(out.parts.items.length, 8);
+    assert.ok(out.parts.items.every((row) => row.go.startsWith('/go/newegg/')));
+    assert.doesNotMatch(`${out.cpu.why} ${out.psu.why} ${out.storage.why} ${out.case.why} ${out.cooler.why}`, /\$\d|\bMSRP\b/);
   });
 
   it('compare_gpus cites the compare page', () => {

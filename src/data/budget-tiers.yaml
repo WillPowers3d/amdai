@@ -24,7 +24,7 @@ tiers:
       - nvme
       - corsair-rm850x
     ram: 32 GB (G.SKILL Flare X5 2x16 DDR5-6000 CL30) unless you answered yes to larger models later. 64 GB stays search guidance for a one-card floor — not a measured requirement.
-    nvme: House rule — GGUFs on NVMe, not a spinning disk. Search only, not a SKU.
+    nvme: Gen4 NVMe with DRAM — Samsung 990 PRO 2 TB holds every Q4–Q6 of Qwen3.6-35B, Flash-Next and GLM-5.3-Flash. 4 TB if larger models later. Not a price.
     psu: "not recorded: no cited PSU wattage for the 16 GB cards on this page. One-card builder pick is about 850 W (Corsair RM850x 2024) with one native 12V-2x6. AMD’s R9700 minimum is 750 W (product page). Check the card you buy."
     backend: llama.cpp (Vulkan first; HIP if rocminfo is clean). Not Ollama, not vLLM.
     give_up: Versus Mid — 4–8 GB more VRAM, so Qwen3.6-35B-A3B at Q4 has a chance to sit in GPU memory at a modest context. On 16 GB the house GGUF does not fit in VRAM even at Q4 (formula weights alone are above 16 GB; publisher Q5 is 26.6 GB).
@@ -79,7 +79,7 @@ tiers:
       - nvme
       - corsair-rm850x
     ram: 32 GB (G.SKILL Flare X5 2x16 DDR5-6000 CL30) unless larger models later. 64 GB stays search guidance. More RAM only helps if you offload — and offload is slow.
-    nvme: Same house rule — NVMe, not HDD.
+    nvme: Gen4 NVMe with DRAM (Samsung 990 PRO or WD_BLACK SN850X). 2 TB holds the three-family Q4–Q6 set; 4 TB if larger models later. Not a price.
     psu: "not recorded: no cited PSU wattage for the 7900-class cards on this page. One-card builder pick is about 850 W (Corsair RM850x 2024) with one native 12V-2x6. Check the product page for the SKU you buy."
     backend: llama.cpp (HIP gfx1100 / gfx1101, or Vulkan). Still not vLLM.
     give_up: Versus Enthusiast — 32 GB and gfx1201. The daily-driver Q5 at 262K is a one-R9700 stack we actually ran, not a 24 GB guess.
@@ -128,7 +128,7 @@ tiers:
       - nvme
       - corsair-rm850x
     ram: 32 GB (G.SKILL Flare X5 2x16 DDR5-6000 CL30) when the 35B stays in VRAM. Our daily driver used 0% RAM offload; extra DRAM is still useful for the OS and for the Flash file if you try it.
-    nvme: NVMe. Daily-driver GGUF is a 26.6 GB listing — do not park it on a spinner.
+    nvme: Gen4 990 PRO 2 TB is the default for the daily-driver GGUF plus the three-family Q4–Q6 set. 4 TB if larger models later. Datasheet 7,450 MB/s, 1,200 TBW. Not a price.
     psu: AMD product page — R9700 is 300 W TBP and 750 W minimum PSU. One card is about 850 W with one native 12V-2x6 (Corsair RM850x 2024). If a second GPU might come later, buy 1200 W+ with two native 12V-2x6 cables instead.
     backend: llama.cpp Vulkan (the daily-driver path on our rig). HIP if you already have a clean /opt/rocm.
     give_up: Versus Pro — a second R9700 and 128–256 GB DDR5, which is what lets the Flash Q6 file live mostly in RAM on our test rig.
@@ -177,7 +177,7 @@ tiers:
       - nvme
       - thermaltake-toughpower-gt-1200
     ram: 192 GB (G.SKILL Flare X5 4x48 DDR5-6000 CL28) or 256 GB (G.SKILL Trident Z5 Neo 4x64 DDR5-6000; 2025 or newer BIOS). Our test rig is 256 GB. The Flash UD-Q6_K_XL listing is ~169 GB — that is why Pro has this much DRAM.
-    nvme: Fast NVMe. Two large GGUFs plus the OS.
+    nvme: 4 TB Gen4 (990 PRO or SN850X) when two large GGUFs plus a fourth Flash-class family are in the plan. 2 TB still holds the three-family Q4–Q6 set. Not a price.
     psu: Two cards need 1200 W or more with two native 12V-2x6 cables (Thermaltake Toughpower GT 1200W; be quiet! Straight Power 12 1200W with an 800 W combined 12V-2x6 note; Thermaltake TF3 1300W; Corsair HX1500i 2025, 1200 W at 115 V). AMD lists 300 W TBP per R9700 (product page). Two cards plus a 9950X can reach about 1,100 W.
     backend: llama.cpp Vulkan for the daily driver. Strata v0.1.42 for the Flash agent. vLLM remains a try.
     give_up: Nothing on this page’s ladder. You still run one LLM per GPU unless you deliberately combine.
