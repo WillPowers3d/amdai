@@ -1,7 +1,9 @@
 ---
 import Base from '../layouts/Base.astro';
 import NextSteps from '../components/NextSteps.astro';
-import { ABOUT, TRUST_FOOTER_LINKS } from '../lib/trust';
+import { ABOUT, TRUST_FOOTER_LINKS, contactEmail } from '../lib/trust';
+
+const email = contactEmail();
 ---
 
 <Base
@@ -16,6 +18,14 @@ import { ABOUT, TRUST_FOOTER_LINKS } from '../lib/trust';
     <section class="mt-10" aria-labelledby="who-heading">
       <h2 id="who-heading" class="font-serif text-3xl tracking-tight">{ABOUT.who.title}</h2>
       <p class="mt-3 leading-relaxed text-muted">{ABOUT.who.body}</p>
+      {
+        email ? (
+          <p class="mt-3 leading-relaxed text-muted">
+            AMDai is run by the AMDai Lab team. Contact:
+            <a class="underline decoration-accent/40" href={`mailto:${email}`}>{email}</a>
+          </p>
+        ) : null
+      }
       <p class="mt-3 text-sm text-muted">
         Attribution for recipe ideas and the first-party set:
         <a class="underline decoration-accent/40" href="/credits">Credits</a>.

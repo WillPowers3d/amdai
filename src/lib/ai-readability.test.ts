@@ -47,5 +47,7 @@ describe('AI readability', () => {
     assert.match(robots, /OAI-SearchBot/);
     assert.match(robots, /ChatGPT-User/);
     assert.match(robots, /llms\.txt/);
+    assert.match(robots, /Disallow:\s*\/go\//);
+    assert.match(robots, /Sitemap:\s*https:\/\/amdai\.net\/sitemap/);
   });
 });

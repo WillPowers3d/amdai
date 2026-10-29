@@ -36,7 +36,7 @@ describe('sponsor slots', () => {
     assert.equal(sponsorPaymentUrl(''), null);
     assert.equal(sponsorPaymentUrl('https://example.com/pay'), 'https://example.com/pay');
     assert.equal(SPONSOR_PAYMENT_URL_ENV, 'SPONSOR_PAYMENT_URL');
-    assert.equal(sponsorMailto(), null);
+    assert.equal(sponsorMailto(), 'mailto:amdai@mail.grokbot.com?subject=AMDai%20sponsorship');
     assert.ok(REQUIRED_FOOTER_HREFS.includes(SPONSOR_PATH));
   });
 

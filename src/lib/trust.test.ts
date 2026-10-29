@@ -36,7 +36,8 @@ describe('trust / E-E-A-T pack', () => {
     assert.match(ABOUT.rig.body, /motherboard model is not published/i);
     assert.match(ABOUT.what.body, /ROCm/);
     assert.match(TERMS.lead, /not legal advice/i);
-    assert.ok(contactEmailWarning());
+    assert.equal(contactEmailWarning(), null);
+    assert.equal(contactEmail(), 'amdai@mail.grokbot.com');
     assert.match(METHODOLOGY.cards.body, /llama\.cpp/);
     assert.match(METHODOLOGY.estimates.body, /UD-Q3_K_XL/);
     assert.match(METHODOLOGY.estimates.body, /estimate/i);
@@ -51,6 +52,9 @@ describe('trust / E-E-A-T pack', () => {
     for (const required of ['/about', '/methodology', '/contact', '/terms', '/contribute', '/amdai-bench', '/benchmarks', '/results', '/rss.xml', '/forum']) {
       assert.ok(hrefs.includes(required), required);
     }
+    const aboutPage = readFileSync(join(here, '../pages/about.astro'), 'utf8');
+    assert.match(aboutPage, /AMDai is run by the AMDai Lab team/);
+    assert.match(aboutPage, /mailto:\$\{email\}/);
     assert.ok(contactRoutes().some((row) => row.href === '/forum'));
     assert.ok(REQUIRED_FOOTER_HREFS.includes('/rss.xml'));
     assert.ok(REQUIRED_FOOTER_HREFS.includes('/sponsor'));

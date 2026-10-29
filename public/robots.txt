@@ -1,5 +1,6 @@
 User-agent: *
 Allow: /
+Disallow: /go/
 
 # AI search and answer engines. None of these render JavaScript.
 User-agent: GPTBot
