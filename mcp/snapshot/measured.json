@@ -1,9 +1,95 @@
 {
   "schema_version": "1.0",
-  "as_of": "2026-10-28T20:10:00-05:00",
+  "as_of": "2026-10-28T22:20:00-05:00",
   "href": "https://amdai.net/lab-log",
   "note": "Measured and cited lab-log rows. Numbers keep their original dates. Quants below Q4 are omitted.",
   "runs": [
+    {
+      "id": "2026-10-28-cpu-cooler-for-dual-r9700",
+      "date": "2026-10-28T22:20:00-05:00",
+      "project": "idea-lab",
+      "kind": "result",
+      "title": "CPU cooler for an R9700 build: Ryzen 9000X has none in the box, and a 360 AIO in the front or bottom of the case feeds warm air to the cards",
+      "summary": "AMD ships the Ryzen 5 9600X, Ryzen 9 9900X and Ryzen 9 9950X without a cooler; AMD recommends a premium air cooler for the 65 W 9600X and a liquid cooler for the 120 W 9900X and 170 W 9950X for best boost. for a local-AI box with blower R9700s, where the radiator goes matters: the cards pull their air from the case's front and bottom intake, so a 360 radiator should go on top as exhaust, and a case that only takes one in front or bottom is better paired with a large dual-tower air cooler.",
+      "setup": {
+        "stack": "Spec review: amd.com product pages for 9600X/9900X/9950X; Fractal, Phanteks, Thermalright, Noctua and ARCTIC product pages; published llama.cpp MoE offload guides"
+      },
+      "metrics": [
+        {
+          "label": "AMD default TDP, 9600X / 9900X / 9950X",
+          "value": "65 / 120 / 170",
+          "unit": "W"
+        },
+        {
+          "label": "Air cooler height limit, Torrent / Meshify 2 / Enthoo Pro 2 Server",
+          "value": "188 / 185 / 195",
+          "unit": "mm"
+        },
+        {
+          "label": "Cooler height, Peerless Assassin 120 SE / NH-D15 G2",
+          "value": "155 / 168",
+          "unit": "mm"
+        }
+      ],
+      "sources": [
+        "https://www.amd.com/en/products/processors/desktops/ryzen/9000-series/amd-ryzen-5-9600x.html",
+        "https://www.amd.com/en/products/processors/desktops/ryzen/9000-series/amd-ryzen-9-9900x.html",
+        "https://www.amd.com/en/products/processors/desktops/ryzen/9000-series/amd-ryzen-9-9950x.html",
+        "https://www.fractal-design.com/products/cases/torrent/torrent/black-solid/",
+        "https://www.fractal-design.com/products/cases/meshify/meshify-2/black-tg-dark-tint/",
+        "https://phanteks.com/product/enthoo-pro-2-server-edition-tg/",
+        "https://www.thermalright.com/product/peerless-assassin-120-se/",
+        "https://noctua.at/en/nh-d15-g2/specification",
+        "https://www.arctic.de/en/Liquid-Freezer-III-Pro-360/ACFRE00180A",
+        "https://gist.github.com/DocShotgun/a02a4c0c0a57e43ff4f038b46ca66ae0"
+      ],
+      "href": "https://amdai.net/lab-log#2026-10-28-cpu-cooler-for-dual-r9700"
+    },
+    {
+      "id": "2026-10-28-case-for-two-r9700s",
+      "date": "2026-10-28T21:20:00-05:00",
+      "project": "idea-lab",
+      "kind": "result",
+      "title": "Case for two R9700s: a standard 7-slot ATX case is enough on 4-slot-spacing x8/x8 boards, and case fans should follow the GPUs, not the CPU",
+      "summary": "Every R9700 board-partner card is a 2-slot blower no longer than 271 mm. on the ASRock X870 Taichi Creator and Gigabyte B850 AI TOP, owners report 4-slot spacing between the two CPU x8/x8 slots, so the bottom card ends by expansion slot 7 and leaves a 2-slot gap above it. that means any 7-slot ATX case with at least 271 mm of card length fits two cards; no 8-slot case is needed unless you plan a third card or a riser. blowers push their heat out the back, so the case's job is fresh intake air for the card area.",
+      "setup": {
+        "stack": "Spec review: R9700 board-partner spec sheets, ASRock/Gigabyte board pages and owner reports, Fractal and Phanteks case pages, one published 4x R9700 build guide"
+      },
+      "metrics": [
+        {
+          "label": "Longest R9700 board-partner card",
+          "value": "271",
+          "unit": "mm"
+        },
+        {
+          "label": "Slot spacing, X870 Taichi Creator / B850 AI TOP (owner reports)",
+          "value": "4",
+          "unit": "slots"
+        },
+        {
+          "label": "Card-area temp, CPU-following vs full-speed case fans (4x R9700, published)",
+          "value": "67 vs 57",
+          "unit": "C"
+        },
+        {
+          "label": "GPU junction change from full-speed case fans (published)",
+          "value": "1-4",
+          "unit": "C"
+        }
+      ],
+      "sources": [
+        "https://forum.level1techs.com/t/asrock-x870-taichi-creator-dual-gpu/243897",
+        "https://pg.asrock.com/general/news.us.asp?id=5643",
+        "https://www.reddit.com/r/LocalLLaMA/comments/1nqi0di/are_there_any_consumer_mobos_that_can_fit_2x/",
+        "https://nicholasreese.com/guides/quad-r9700/quad-r9700-build-guide.md",
+        "https://www.reddit.com/r/LocalLLM/comments/1vyaesz/blower_r9700_cards_stacked_with_very_little_gap/",
+        "https://forum.level1techs.com/t/radeon-pro-ai-r9700-fan-noise-which-model-to-buy/247552?page=2",
+        "https://www.fractal-design.com/products/cases/torrent/torrent/black-solid/",
+        "https://www.fractal-design.com/products/cases/meshify/meshify-2/black-tg-dark-tint/",
+        "https://phanteks.com/product/enthoo-pro-2-server-edition-tg/"
+      ],
+      "href": "https://amdai.net/lab-log#2026-10-28-case-for-two-r9700s"
+    },
     {
       "id": "2026-10-28-nvme-for-local-models",
       "date": "2026-10-28T20:10:00-05:00",

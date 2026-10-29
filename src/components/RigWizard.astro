@@ -11,6 +11,8 @@ import RamPick from './RamPick.astro';
 import CpuPick from './CpuPick.astro';
 import PsuPick from './PsuPick.astro';
 import StoragePick from './StoragePick.astro';
+import CasePick from './CasePick.astro';
+import CoolerPick from './CoolerPick.astro';
 
 interface Props {
   id?: string;
@@ -226,6 +228,12 @@ const expandDefault = defaultExpandGpu(DEFAULT_MIN_BUDGET);
   </div>
   <div class="mt-6">
     <StoragePick ask={{ bigModels: DEFAULT_BIG_MODELS, coldLoad: DEFAULT_COLD_LOAD }} />
+  </div>
+  <div class="mt-6">
+    <CasePick />
+  </div>
+  <div class="mt-6">
+    <CoolerPick />
   </div>
 
   <div class="mt-6 flex flex-wrap gap-2">

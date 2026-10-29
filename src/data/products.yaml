@@ -733,3 +733,69 @@ products:
       bhphoto: https://www.bhphotovideo.com/c/search?Ntt=MZ-VAP8T0B
       microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=Samsung+9100+PRO+8TB
       samsung: https://download.semiconductor.samsung.com/resources/data-sheet/Samsung_NVMe_SSD_9100_PRO_Datasheet_Rev.2.0.pdf
+
+  - id: fractal-design-torrent
+    name: Fractal Design Torrent
+    kind: part
+    note: 7 expansion slots; E-ATX; GPU 461 mm; PSU 230 mm; 2x 180 mm front + 3x 140 mm bottom included. Search only — no live or invented price.
+    urls:
+      newegg: https://www.newegg.com/p/pl?d=Fractal+Design+Torrent
+      amazon: https://www.amazon.com/s?k=Fractal+Design+Torrent
+      bhphoto: https://www.bhphotovideo.com/c/search?Ntt=Fractal+Design+Torrent
+      microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=Fractal+Design+Torrent
+      fractal: https://www.fractal-design.com/products/cases/torrent/torrent/black-solid/
+
+  - id: fractal-design-meshify-2
+    name: Fractal Design Meshify 2
+    kind: part
+    note: 7 expansion slots; E-ATX; GPU 470 mm; PSU 250 mm; 2x 140 mm front + 1x 140 mm rear included. Search only — no live or invented price.
+    urls:
+      newegg: https://www.newegg.com/p/pl?d=Fractal+Design+Meshify+2
+      amazon: https://www.amazon.com/s?k=Fractal+Design+Meshify+2
+      bhphoto: https://www.bhphotovideo.com/c/search?Ntt=Fractal+Design+Meshify+2
+      microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=Fractal+Design+Meshify+2
+      fractal: https://www.fractal-design.com/products/cases/meshify/meshify-2/black-tg-dark-tint/
+
+  - id: phanteks-enthoo-pro-2-server-edition
+    name: Phanteks Enthoo Pro 2 Server Edition
+    kind: part
+    note: 11 expansion slots; E-ATX / SSI-EEB; GPU 503 mm; PSU 240 mm; fans not listed as included. Search only — no live or invented price.
+    urls:
+      newegg: https://www.newegg.com/p/pl?d=Phanteks+Enthoo+Pro+2+Server+Edition
+      amazon: https://www.amazon.com/s?k=Phanteks+Enthoo+Pro+2+Server+Edition
+      bhphoto: https://www.bhphotovideo.com/c/search?Ntt=Phanteks+Enthoo+Pro+2+Server+Edition
+      microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=Phanteks+Enthoo+Pro+2+Server+Edition
+      phanteks: https://phanteks.com/product/enthoo-pro-2-server-edition-tg/
+
+  - id: thermalright-peerless-assassin-120-se
+    name: Thermalright Peerless Assassin 120 SE
+    kind: part
+    note: Dual-tower 120 mm air cooler, 155 mm tall, 6 heatpipes. Search only — no live or invented price.
+    urls:
+      newegg: https://www.newegg.com/p/pl?d=Thermalright+Peerless+Assassin+120+SE
+      amazon: https://www.amazon.com/s?k=Thermalright+Peerless+Assassin+120+SE
+      bhphoto: https://www.bhphotovideo.com/c/search?Ntt=Thermalright+Peerless+Assassin+120+SE
+      microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=Thermalright+Peerless+Assassin+120+SE
+      thermalright: https://www.thermalright.com/product/peerless-assassin-120-se/
+
+  - id: noctua-nh-d15-g2
+    name: Noctua NH-D15 G2
+    kind: part
+    note: Dual-tower 140 mm air cooler, 168 mm tall, 8 heatpipes, NSPR 228. Search only — no live or invented price.
+    urls:
+      newegg: https://www.newegg.com/p/pl?d=Noctua+NH-D15+G2
+      amazon: https://www.amazon.com/s?k=Noctua+NH-D15+G2
+      bhphoto: https://www.bhphotovideo.com/c/search?Ntt=Noctua+NH-D15+G2
+      microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=Noctua+NH-D15+G2
+      noctua: https://noctua.at/en/nh-d15-g2/specification
+
+  - id: arctic-liquid-freezer-iii-pro-360
+    name: ARCTIC Liquid Freezer III Pro 360
+    kind: part
+    note: 360 mm AIO, 38 mm radiator, 63 mm clearance. Top-mount exhaust only on this builder. Search only — no live or invented price.
+    urls:
+      newegg: https://www.newegg.com/p/pl?d=ARCTIC+Liquid+Freezer+III+Pro+360
+      amazon: https://www.amazon.com/s?k=ARCTIC+Liquid+Freezer+III+Pro+360
+      bhphoto: https://www.bhphotovideo.com/c/search?Ntt=ARCTIC+Liquid+Freezer+III+Pro+360
+      microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=ARCTIC+Liquid+Freezer+III+Pro+360
+      arctic: https://www.arctic.de/en/Liquid-Freezer-III-Pro-360/ACFRE00180A

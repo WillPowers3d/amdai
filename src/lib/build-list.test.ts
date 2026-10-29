@@ -27,12 +27,12 @@ function read(rel: string): string {
 }
 
 describe('one-answer parts list', () => {
-  it('returns GPU, board, CPU, RAM, PSU, and SSD lines through /go/newegg slugs', () => {
+  it('returns GPU, board, CPU, RAM, PSU, SSD, case, and cooler lines through /go/newegg slugs', () => {
     const list = buildList({ gpuCount: 1, minBudget: false, expandGpu: true, bigModels: false });
-    assert.equal(list.parts.length, 6);
+    assert.equal(list.parts.length, 8);
     assert.deepEqual(
       list.parts.map((row) => row.role),
-      ['GPU', 'Motherboard', 'CPU', 'RAM', 'PSU', 'Storage'],
+      ['GPU', 'Motherboard', 'CPU', 'RAM', 'PSU', 'Storage', 'Case', 'Cooler'],
     );
     assert.match(list.parts[0]!.part, /R9700/);
     assert.equal(list.parts[0]!.go, '/go/newegg/r9700?src=builder-list-gpu');
@@ -40,6 +40,10 @@ describe('one-answer parts list', () => {
     assert.ok(list.parts.every((row) => !/newegg\.com/.test(row.go)));
     assert.match(list.parts[5]!.part, /990 PRO 2TB/);
     assert.match(list.parts[5]!.go, /\/go\/newegg\/mz-v9p2t0bw/);
+    assert.match(list.parts[6]!.part, /Torrent/);
+    assert.match(list.parts[6]!.go, /\/go\/newegg\/fractal-design-torrent/);
+    assert.match(list.parts[7]!.part, /Peerless Assassin/);
+    assert.match(list.parts[7]!.go, /\/go\/newegg\/thermalright-peerless-assassin-120-se/);
     assert.equal(list.warnings.length, 0);
     assert.doesNotMatch(JSON.stringify(list), /\$\d|\bMSRP\b/);
   });
@@ -55,10 +59,12 @@ describe('one-answer parts list', () => {
     assert.match(dual.parts.find((row) => row.role === 'PSU')!.part, /1200W/);
     assert.match(dual.parts.find((row) => row.role === 'CPU')!.part, /9900X/);
     assert.match(dual.parts.find((row) => row.role === 'Storage')!.part, /4TB/);
+    assert.match(dual.parts.find((row) => row.role === 'Case')!.part, /Torrent/);
+    assert.match(dual.parts.find((row) => row.role === 'Cooler')!.part, /NH-D15 G2/);
   });
 
-  it('ships the nine draft /go/newegg slugs plus the live R9700 stub', () => {
-    assert.equal(DRAFT_GO_SLUGS.length, 9);
+  it('ships the draft /go/newegg slugs plus the live R9700 stub', () => {
+    assert.equal(DRAFT_GO_SLUGS.length, 15);
     assert.equal(REUSED_GO_SLUG, 'r9700');
     const ids = new Set(productsFile.products.map((row) => row.id));
     for (const slug of [...DRAFT_GO_SLUGS, REUSED_GO_SLUG]) {
@@ -77,8 +83,8 @@ describe('one-answer parts list', () => {
     assert.ok(maps[key]);
     assert.equal(Object.keys(maps).length, 64);
     const compact = compactBuildMaps(key, maps);
-    assert.ok(compact.strings.length < 80);
-    assert.ok(JSON.stringify(compact).length < 20_000);
+    assert.ok(compact.strings.length < 120);
+    assert.ok(JSON.stringify(compact).length < 28_000);
     assert.ok(JSON.stringify(maps).length > 50_000);
     const defaultRow = compact.builds[key]!;
     assert.equal(compact.strings[defaultRow.p[0]![0]!], 'GPU');
@@ -87,7 +93,7 @@ describe('one-answer parts list', () => {
 
   it('wires the box on /budget and into pick + recommend_stack', () => {
     const payload = buildListPayload();
-    assert.equal(payload.default.parts.length, 6);
+    assert.equal(payload.default.parts.length, 8);
     assert.match(read('../pages/budget.astro'), /BuildList/);
     assert.match(read('../components/BuildList.astro'), /AffiliateDisclosure/);
     assert.match(read('../components/BuildList.astro'), /compactBuildMaps/);

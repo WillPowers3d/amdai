@@ -6,6 +6,8 @@ import { ramPickPayload, ramRecommendation, setupNeedsRamOffload } from '../../.
 import { cpuPickPayload, cpuRecommendation } from '../../../../lib/cpu-pick';
 import { psuPickPayload, psuRecommendation } from '../../../../lib/psu-pick';
 import { storagePickPayload, storageRecommendation } from '../../../../lib/storage-pick';
+import { casePickPayload, caseRecommendation } from '../../../../lib/case-pick';
+import { coolerPickPayload, coolerRecommendation } from '../../../../lib/cooler-pick';
 import { buildList } from '../../../../lib/build-list';
 
 export function getStaticPaths() {
@@ -34,6 +36,19 @@ export async function GET({ params }: { params: { gpu: string } }) {
     storage: {
       ...storagePickPayload(),
       recommended: storageRecommendation({ bigModels: false, coldLoad: false }),
+    },
+    case: {
+      ...casePickPayload(),
+      recommended: caseRecommendation({
+        boardId: 'asrock-x870-taichi-creator',
+        formFactor: 'ATX',
+        gpuCount: 1,
+        psuName: 'Corsair RM850x (2024, ATX 3.1)',
+      }),
+    },
+    cooler: {
+      ...coolerPickPayload(),
+      recommended: coolerRecommendation({ cpuId: '9600x', caseId: 'fractal-torrent', gpuCount: 1 }),
     },
     parts: buildList({
       gpuCount: 1,
