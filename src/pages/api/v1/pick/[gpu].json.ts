@@ -5,6 +5,10 @@ import { isPublicQuant, jsonResponse, planFitInput } from '../../../../lib/publi
 import { ramPickPayload, ramRecommendation, setupNeedsRamOffload } from '../../../../lib/ram-kit';
 import { cpuPickPayload, cpuRecommendation } from '../../../../lib/cpu-pick';
 import { psuPickPayload, psuRecommendation } from '../../../../lib/psu-pick';
+import { storagePickPayload, storageRecommendation } from '../../../../lib/storage-pick';
+import { casePickPayload, caseRecommendation } from '../../../../lib/case-pick';
+import { coolerPickPayload, coolerRecommendation } from '../../../../lib/cooler-pick';
+import { buildList } from '../../../../lib/build-list';
 
 export function getStaticPaths() {
   return gpuPages(recipes).map((page) => ({ params: { gpu: page.id } }));
@@ -29,6 +33,32 @@ export async function GET({ params }: { params: { gpu: string } }) {
       ...psuPickPayload(),
       recommended: psuRecommendation({ gpuCount: 1, expandGpu: false }),
     },
+    storage: {
+      ...storagePickPayload(),
+      recommended: storageRecommendation({ bigModels: false, coldLoad: false }),
+    },
+    case: {
+      ...casePickPayload(),
+      recommended: caseRecommendation({
+        boardId: 'asrock-x870-taichi-creator',
+        formFactor: 'ATX',
+        gpuCount: 1,
+        psuName: 'Corsair RM850x (2024, ATX 3.1)',
+      }),
+    },
+    cooler: {
+      ...coolerPickPayload(),
+      recommended: coolerRecommendation({ cpuId: '9600x', caseId: 'fractal-torrent', gpuCount: 1 }),
+    },
+    parts: buildList({
+      gpuCount: 1,
+      minBudget: false,
+      expandGpu: false,
+      bigModels: false,
+      cpuWork: false,
+      coldLoad: false,
+      needsOffload,
+    }),
     recipes: picked,
   });
 }

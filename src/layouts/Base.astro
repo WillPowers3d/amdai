@@ -59,6 +59,20 @@ const jsonld = jsonLdScript(pageJsonLd({ pathname: path, title, description }));
     <link rel="alternate" type="application/json" title={`${site.wordmark} public API v1`} href="/api/v1/index.json" />
     <link rel="alternate" type="text/plain" title="llms.txt" href="/llms.txt" />
     <link rel="preload" href="/fonts/geist-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <style is:inline>
+      /* Main stays before chrome in source order. Reserve the header slot so a late
+         parse of page-chrome does not shove page-main from y=0 to y=64. */
+      .page-body { display: flex; flex-direction: column; }
+      .page-body > .skip-link { order: 0; }
+      .page-chrome,
+      .page-chrome-reserve { order: 1; }
+      .page-chrome-reserve { flex-shrink: 0; pointer-events: none; }
+      .page-chrome { margin-top: -4rem; }
+      .page-body:has(.page-chrome-reserve.has-crumbs) .page-chrome { margin-top: -8.25rem; }
+      .crumb-bar { height: 4.25rem; }
+      .page-main { order: 2; }
+      .page-foot { order: 3; }
+    </style>
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
@@ -88,6 +102,12 @@ const jsonld = jsonLdScript(pageJsonLd({ pathname: path, title, description }));
   </head>
   <body class="page-body min-h-screen antialiased">
     <a class="skip-link" href="#main">Skip to content</a>
+    <div
+      class:list={['page-chrome-reserve', crumbs.length > 1 && 'has-crumbs']}
+      style={crumbs.length > 1 ? 'height:8.25rem' : 'height:4rem'}
+      aria-hidden="true"
+    >
+    </div>
     <div class="page-main" data-pagefind-body>
       <slot />
       {related.length > 0 && (
@@ -96,12 +116,16 @@ const jsonld = jsonLdScript(pageJsonLd({ pathname: path, title, description }));
         </div>
       )}
     </div>
-    <div class="page-chrome" data-pagefind-ignore>
+    <div
+      class="page-chrome"
+      data-pagefind-ignore
+      style={crumbs.length > 1 ? 'margin-top:-8.25rem;min-height:8.25rem' : 'margin-top:-4rem;min-height:4rem'}
+    >
       <ReadingProgress />
       <Header />
       {crumbs.length > 1 && (
-        <div class="border-b border-line">
-          <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-2 px-4 sm:px-6">
+        <div class="crumb-bar border-b border-line" style="height:4.25rem">
+          <div class="mx-auto flex h-full max-w-6xl items-center justify-between gap-2 overflow-hidden px-4 sm:px-6">
             <Breadcrumbs items={crumbs} />
             {dates && (
               <p class="page-updated">

@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "as_of": "2026-10-27",
+  "as_of": "2026-10-28",
   "href": "https://amdai.net/gpus",
   "notes": [
     "Official support means the card appears on AMD’s current ROCm matrix. It is not a tok/s promise.",

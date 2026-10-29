@@ -78,6 +78,11 @@
   --seg-weights: #e24a2f;
   --seg-kv: #e4b36a;
   --seg-oh: #6a6560;
+  --json-key: #f38b6b;
+  --json-string: #e8c98a;
+  --json-number: #8ec8ff;
+  --json-keyword: #7dca8c;
+  --json-punct: #c4bbb0;
   --shadow: 0 24px 80px color-mix(in srgb, #000 45%, transparent);
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
   --header-h: 4rem;
@@ -101,6 +106,11 @@
   --seg-weights: #c73b24;
   --seg-kv: #b8862a;
   --seg-oh: #9a948c;
+  --json-key: #9a2412;
+  --json-string: #1a5c32;
+  --json-number: #0b4a86;
+  --json-keyword: #6a3d00;
+  --json-punct: #4a453e;
   --shadow: 0 20px 50px color-mix(in srgb, #161412 10%, transparent);
 }
 
@@ -154,12 +164,32 @@ body {
   order: 0;
 }
 
+.page-chrome-reserve {
+  order: 1;
+  height: 4rem;
+  flex-shrink: 0;
+  pointer-events: none;
+}
+
+.page-chrome-reserve.has-crumbs {
+  height: 8.25rem;
+}
+
 .page-chrome {
   order: 1;
+  margin-top: -4rem;
   position: sticky;
   top: 0;
   z-index: 40;
   background: var(--canvas);
+}
+
+.page-body:has(.page-chrome-reserve.has-crumbs) .page-chrome {
+  margin-top: -8.25rem;
+}
+
+.crumb-bar {
+  height: 4.25rem;
 }
 
 .page-main {

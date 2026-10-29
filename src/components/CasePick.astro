@@ -1,0 +1,199 @@
+---
+import BuyButtons from './BuyButtons.astro';
+import AffiliateDisclosure from './AffiliateDisclosure.astro';
+import {
+  CASES,
+  CASE_FAN_NOTE,
+  CASE_FAN_TEMP,
+  R9700_MAX_MM,
+  SPACING_SOURCES,
+  UNVERIFIED_SLOT_WARNING,
+  caseRecommendation,
+  type CaseAsk,
+} from '../lib/case-pick';
+
+interface Props {
+  ask?: CaseAsk;
+  id?: string;
+}
+
+const {
+  ask = {
+    boardId: 'asrock-x870-taichi-creator',
+    formFactor: 'ATX',
+    gpuCount: 1,
+    psuName: 'Thermaltake Toughpower GT 1200W',
+  },
+  id = 'case-pick',
+} = Astro.props;
+const initial = caseRecommendation(ask);
+const payload = JSON.stringify({
+  fan: CASE_FAN_NOTE,
+  warn: UNVERIFIED_SLOT_WARNING,
+});
+---
+
+<section id={id} class="space-y-4" data-case-pick data-case-payload={payload}>
+  <div>
+    <p class="kicker">Case</p>
+    <h2 class="mt-2 text-2xl tracking-tight sm:text-3xl">Which case fits the cards?</h2>
+    <p class="mt-2 text-sm leading-relaxed text-muted" data-case-note>
+      Your build needs at least {initial.min_slots} expansion slots and room for a {R9700_MAX_MM} mm card. {initial.why}
+    </p>
+    <p class="mt-2 text-sm leading-relaxed text-muted">{CASE_FAN_NOTE}</p>
+    <p class="mt-2 text-sm leading-relaxed text-muted">
+      Cite:
+      <a class="underline decoration-accent/40 underline-offset-2" href={CASE_FAN_TEMP.source_url} rel="noopener" target="_blank">
+        Published 4x R9700 build guide
+      </a>
+      — card area {CASE_FAN_TEMP.cpu_follow_c} C vs {CASE_FAN_TEMP.full_speed_c} C. As of {CASE_FAN_TEMP.as_of}.
+    </p>
+    <p class="mt-2 text-sm text-muted">Buttons say Check price. We never invent a case price.</p>
+    <ul class="mt-2 list-disc space-y-1 pl-5 text-sm text-muted">
+      {SPACING_SOURCES.map((row) => (
+        <li>
+          <a class="underline decoration-accent/40 underline-offset-2" href={row.url} rel="noopener" target="_blank">
+            {row.title}
+          </a>
+          — {row.claim}
+        </li>
+      ))}
+    </ul>
+  </div>
+
+  <div class="space-y-3" data-case-warnings>
+    <p class="rounded-xl border border-warn/40 bg-warn/10 p-3 text-sm leading-relaxed text-ink">
+      {UNVERIFIED_SLOT_WARNING} That applies to the ASUS ProArt X870E / X670E / B850 boards and the ASRock X870E Taichi.
+    </p>
+  </div>
+
+  {CASES.map((row) => {
+    const shown = initial.picks.some((pick) => pick.id === row.id);
+    const isPrimary = initial.primary.id === row.id;
+    return (
+      <div
+        class="card p-5 sm:p-6"
+        data-case-card={row.id}
+        data-case-slots={row.slots}
+        hidden={!shown}
+      >
+        <p class="kicker">{isPrimary ? 'Pick' : row.slots >= 11 ? 'Room to grow' : 'Also fits'}</p>
+        <h3 class="mt-1 text-2xl tracking-tight">{row.name}</h3>
+        <p class="mt-2 text-sm text-muted">
+          {row.slots} expansion slots · GPU {row.gpu_max_mm} mm · PSU {row.psu_max_mm} mm · cooler {row.cpu_cooler_max_mm} mm · 360 radiator {row.radiator_360.join(' or ')}
+        </p>
+        <p class="mt-2 text-sm leading-relaxed text-muted">{row.role} Fans included: {row.fans_included}.</p>
+        <p class="mt-3 text-sm leading-relaxed text-muted">
+          Cite:
+          <a class="underline decoration-accent/40 underline-offset-2" href={row.citation.url} rel="noopener" target="_blank">
+            {row.citation.title}
+          </a>
+          — {row.citation.section}. As of {row.citation.as_of}.
+        </p>
+        <BuyButtons product={row.product_id} src={row.src} disclose={false} />
+      </div>
+    );
+  })}
+
+  <div class="space-y-2" data-case-notes>
+    {initial.notes.map((note) => (
+      <p class="text-sm leading-relaxed text-muted">{note}</p>
+    ))}
+  </div>
+
+  <AffiliateDisclosure compact />
+</section>
+
+<script>
+  function radioValue(name: string, fallback: string): string {
+    const checked = document.querySelector<HTMLInputElement>(`input[name="${name}"]:checked`);
+    return checked ? checked.value : fallback;
+  }
+
+  function gpuCount(): number {
+    const field = document.querySelector<HTMLInputElement>('[name="gpuCount"]');
+    if (field?.value) {
+      const n = Number(field.value);
+      if (Number.isFinite(n) && n >= 1) return Math.min(4, Math.round(n));
+    }
+    const radio = document.querySelector<HTMLInputElement>('input[name="n"]:checked');
+    if (radio) {
+      const n = Number(radio.value);
+      if (Number.isFinite(n) && n >= 1) return Math.min(4, Math.round(n));
+    }
+    const highlighted = document.querySelector<HTMLElement>('[data-tier].ring-accent, [data-tier].ring-2');
+    if (highlighted?.getAttribute('data-tier') === 'pro') return 2;
+    const q = new URLSearchParams(window.location.search);
+    if (q.get('tier') === 'pro' || q.get('n') === '2') return 2;
+    return 1;
+  }
+
+  function psuUnknown(): boolean {
+    const min = radioValue('minbudget', '0') === '1';
+    const expand = radioValue('expandgpu', min ? '0' : '1');
+    return gpuCount() < 2 && expand !== '1' && expand !== 'yes';
+  }
+
+  function syncCase() {
+    const root = document.querySelector<HTMLElement>('[data-case-pick]');
+    if (!root) return;
+    let data: { fan?: string; warn?: string } = {};
+    try {
+      data = JSON.parse(root.getAttribute('data-case-payload') || '{}');
+    } catch {
+      data = {};
+    }
+    const dual = gpuCount() >= 2;
+    const note = root.querySelector('[data-case-note]');
+    if (note) {
+      note.textContent = dual
+        ? `Your build needs at least 7 expansion slots and room for a 271 mm card. Two 2-slot R9700s (max 271 mm) on a sourced 4-slot-spacing x8/x8 board (ASRock X870 Taichi Creator, Gigabyte B850 AI TOP) end by slot 7. A 7-slot ATX case is enough. ${data.warn ?? ''} ${data.fan ?? ''}`
+        : `Your build needs at least 7 expansion slots and room for a 271 mm card. One card: any of the three maker-checked ATX cases fit a 271 mm R9700. ${data.warn ?? ''} ${data.fan ?? ''}`;
+    }
+    const warnBox = root.querySelector('[data-case-warnings]');
+    if (warnBox && data.warn) {
+      warnBox.replaceChildren();
+      const p = document.createElement('p');
+      p.className = 'rounded-xl border border-warn/40 bg-warn/10 p-3 text-sm leading-relaxed text-ink';
+      p.textContent = data.warn;
+      warnBox.append(p);
+    }
+    root.querySelectorAll<HTMLElement>('[data-case-card]').forEach((card) => {
+      const id = card.getAttribute('data-case-card');
+      card.hidden = false;
+      const kicker = card.querySelector('.kicker');
+      if (kicker) {
+        kicker.textContent =
+          id === 'fractal-torrent' ? 'Pick' : id === 'phanteks-enthoo-pro-2-server' ? 'Room to grow / 8+ slots' : 'Also fits';
+      }
+    });
+    const notes = root.querySelector('[data-case-notes]');
+    if (notes && data.fan) {
+      const extra = psuUnknown()
+        ? ' PSU length for Corsair RM850x (2024, ATX 3.1) is not on file: check it against the case PSU max (Torrent 230 mm, Meshify 2 250 mm, Enthoo 240 mm).'
+        : '';
+      const match =
+        dual
+          ? ' Use two cards of the same model. ASUS Turbo cards may choke without a slot gap; on 4-slot-spacing boards there is a 2-slot gap.'
+          : '';
+      notes.replaceChildren();
+      const p = document.createElement('p');
+      p.className = 'text-sm leading-relaxed text-muted';
+      p.textContent = `${data.fan}${match}${extra}`;
+      notes.append(p);
+    }
+  }
+
+  document.addEventListener('change', (event) => {
+    const target = event.target as HTMLElement | null;
+    if (
+      target?.matches(
+        '[name="minbudget"], [name="expandgpu"], [name="n"], [name="gpuCount"], [name="priority"], [name="usage"], [name="style"]',
+      )
+    ) {
+      syncCase();
+    }
+  });
+  window.addEventListener('amdai-ask-change', syncCase);
+  syncCase();
+</script>

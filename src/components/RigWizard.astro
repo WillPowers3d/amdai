@@ -1,14 +1,18 @@
 ---
 import { DEFAULT_PRIORITY } from '../lib/priority';
-import { DEFAULT_BIG_MODELS, DEFAULT_CPU_WORK, DEFAULT_MIN_BUDGET, DEFAULT_STYLE, DEFAULT_USAGE, defaultExpandGpu } from '../lib/ask';
+import { DEFAULT_BIG_MODELS, DEFAULT_COLD_LOAD, DEFAULT_CPU_WORK, DEFAULT_MIN_BUDGET, DEFAULT_STYLE, DEFAULT_USAGE, defaultExpandGpu } from '../lib/ask';
 import { EXPAND_GPU_COPY, MIN_BUDGET_COPY } from '../lib/motherboards';
 import { RAM_ASK_COPY } from '../lib/ram-kit';
 import { CPU_WORK_COPY } from '../lib/cpu-pick';
+import { STORAGE_ASK_COPY } from '../lib/storage-pick';
 import { motherboards } from '../lib/motherboards-data';
 import MotherboardPick from './MotherboardPick.astro';
 import RamPick from './RamPick.astro';
 import CpuPick from './CpuPick.astro';
 import PsuPick from './PsuPick.astro';
+import StoragePick from './StoragePick.astro';
+import CasePick from './CasePick.astro';
+import CoolerPick from './CoolerPick.astro';
 
 interface Props {
   id?: string;
@@ -187,6 +191,26 @@ const expandDefault = defaultExpandGpu(DEFAULT_MIN_BUDGET);
     </div>
   </fieldset>
 
+  <fieldset class="mt-5" data-cold-load>
+    <legend class="text-sm font-medium">{STORAGE_ASK_COPY.question}</legend>
+    <div class="mt-2 grid gap-2 sm:grid-cols-2">
+      <label class="choice">
+        <input type="radio" name="coldload" value="0" checked={!DEFAULT_COLD_LOAD} />
+        <span>
+          <span class="block font-medium">{STORAGE_ASK_COPY.no.label}</span>
+          <span class="mt-0.5 block text-sm text-muted">{STORAGE_ASK_COPY.no.lede}</span>
+        </span>
+      </label>
+      <label class="choice">
+        <input type="radio" name="coldload" value="1" checked={DEFAULT_COLD_LOAD} />
+        <span>
+          <span class="block font-medium">{STORAGE_ASK_COPY.yes.label}</span>
+          <span class="mt-0.5 block text-sm text-muted">{STORAGE_ASK_COPY.yes.lede}</span>
+        </span>
+      </label>
+    </div>
+  </fieldset>
+
   <div class="mt-6">
     <MotherboardPick
       boards={motherboards}
@@ -201,6 +225,15 @@ const expandDefault = defaultExpandGpu(DEFAULT_MIN_BUDGET);
   </div>
   <div class="mt-6">
     <PsuPick ask={{ gpuCount: 1, expandGpu: expandDefault }} />
+  </div>
+  <div class="mt-6">
+    <StoragePick ask={{ bigModels: DEFAULT_BIG_MODELS, coldLoad: DEFAULT_COLD_LOAD }} />
+  </div>
+  <div class="mt-6">
+    <CasePick />
+  </div>
+  <div class="mt-6">
+    <CoolerPick />
   </div>
 
   <div class="mt-6 flex flex-wrap gap-2">
