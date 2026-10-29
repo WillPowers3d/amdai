@@ -29,42 +29,21 @@ const asOf = apiAsOf();
         <code class="text-ink">href</code> still works without it, and Ctrl or Cmd+click opens the raw file.
       </p>
       <div class="api-endpoints-split mt-6" data-api-split>
-        <ul class="api-endpoint-list space-y-3 text-muted">
-          {endpoints.map((row) => {
-            const stem = apiEndpointStem(row.path) ?? row.path;
-            return (
-              <li id={stem}>
-                <a class="api-endpoint-link font-mono text-ink" href={row.path} data-api-endpoint={stem}>
-                  {row.path}
-                </a>
-                <span class="mt-1 block text-sm">{row.description}</span>
-              </li>
-            );
-          })}
-        </ul>
-        <button type="button" class="api-preview-backdrop" data-api-backdrop hidden aria-label="Close JSON preview"></button>
-        <aside id="api-preview" class="api-preview" hidden aria-labelledby="api-preview-title">
-          <header class="api-preview-header">
-            <h3 id="api-preview-title" class="api-preview-path">Endpoint JSON</h3>
-            <div class="api-preview-actions">
-              <button type="button" class="api-preview-btn" data-api-copy>Copy</button>
-              <a class="api-preview-btn" data-api-raw href="/api/v1/index.json" target="_blank" rel="noopener noreferrer">
-                Open raw
-              </a>
-              <button type="button" class="api-preview-btn" data-api-close>Close</button>
-            </div>
-          </header>
-          <p class="sr-only" data-api-live aria-live="polite" aria-atomic="true"></p>
-          <p class="api-preview-banner" data-api-status hidden>Loading JSON…</p>
-          <p class="api-preview-banner is-error" data-api-error hidden></p>
-          <div class="code-wrap api-preview-code">
-            <pre class="api-preview-pre" tabindex="0"><code data-api-json></code></pre>
-          </div>
-        </aside>
-      </div>
-    </section>
-
-    <div class="mx-auto max-w-3xl">
+        <div class="api-endpoints-main">
+          <ul class="api-endpoint-list space-y-3 text-muted">
+            {endpoints.map((row) => {
+              const stem = apiEndpointStem(row.path) ?? row.path;
+              return (
+                <li id={stem}>
+                  <a class="api-endpoint-link font-mono text-ink" href={row.path} data-api-endpoint={stem}>
+                    {row.path}
+                  </a>
+                  <span class="mt-1 block text-sm">{row.description}</span>
+                </li>
+              );
+            })}
+          </ul>
+          <div class="api-docs-rest mx-auto max-w-3xl">
       <section class="mt-12">
         <h2 class="font-serif text-3xl" id="curl">curl</h2>
         <p class="mt-3 leading-relaxed text-muted">
@@ -124,7 +103,30 @@ curl -s https://amdai.net/api/v1/backends.json`}</code></pre>
         <a class="underline decoration-accent/40" href="/stacks">stacks</a>,
         <a class="underline decoration-accent/40" href="/llms.txt">llms.txt</a>.
       </p>
-    </div>
+          </div>
+        </div>
+        <div class="api-preview-column" data-api-column hidden aria-hidden="true"></div>
+        <button type="button" class="api-preview-backdrop" data-api-backdrop hidden aria-label="Close JSON preview"></button>
+        <aside id="api-preview" class="api-preview" hidden aria-labelledby="api-preview-title">
+          <header class="api-preview-header">
+            <h3 id="api-preview-title" class="api-preview-path">Endpoint JSON</h3>
+            <div class="api-preview-actions">
+              <button type="button" class="api-preview-btn" data-api-copy>Copy</button>
+              <a class="api-preview-btn" data-api-raw href="/api/v1/index.json" target="_blank" rel="noopener noreferrer">
+                Open raw
+              </a>
+              <button type="button" class="api-preview-btn" data-api-close>Close</button>
+            </div>
+          </header>
+          <p class="sr-only" data-api-live aria-live="polite" aria-atomic="true"></p>
+          <p class="api-preview-banner" data-api-status hidden>Loading JSON…</p>
+          <p class="api-preview-banner is-error" data-api-error hidden></p>
+          <div class="code-wrap api-preview-code">
+            <pre class="api-preview-pre" tabindex="0"><code data-api-json></code></pre>
+          </div>
+        </aside>
+      </div>
+    </section>
   </main>
 </Base>
 
@@ -143,8 +145,25 @@ curl -s https://amdai.net/api/v1/backends.json`}</code></pre>
   const rawLink = document.querySelector<HTMLAnchorElement>('[data-api-raw]');
   const closeBtn = document.querySelector<HTMLButtonElement>('[data-api-close]');
   const backdrop = document.querySelector<HTMLButtonElement>('[data-api-backdrop]');
+  const column = document.querySelector<HTMLElement>('[data-api-column]');
   const links = [...document.querySelectorAll<HTMLAnchorElement>('[data-api-endpoint]')];
   const narrow = () => window.matchMedia('(max-width: 1023px)').matches;
+
+  function placePanel() {
+    if (!panel || panel.hidden || !column) {
+      panel?.style.removeProperty('left');
+      panel?.style.removeProperty('width');
+      return;
+    }
+    if (narrow()) {
+      panel.style.removeProperty('left');
+      panel.style.removeProperty('width');
+      return;
+    }
+    const box = column.getBoundingClientRect();
+    panel.style.left = `${Math.round(box.left)}px`;
+    panel.style.width = `${Math.round(box.width)}px`;
+  }
 
   const paths = new Map<string, string>();
   for (const link of links) {
@@ -200,7 +219,9 @@ curl -s https://amdai.net/api/v1/backends.json`}</code></pre>
     markSelected(null);
     split?.removeAttribute('data-open');
     document.body.classList.remove('api-preview-lock');
+    if (column) column.hidden = true;
     if (backdrop) backdrop.hidden = true;
+    placePanel();
     if (panel) {
       panel.hidden = true;
       panel.removeAttribute('data-open');
@@ -235,9 +256,12 @@ curl -s https://amdai.net/api/v1/backends.json`}</code></pre>
     if (narrow()) {
       document.body.classList.add('api-preview-lock');
       if (backdrop) backdrop.hidden = false;
-    } else if (backdrop) {
-      backdrop.hidden = true;
+      if (column) column.hidden = true;
+    } else {
+      if (backdrop) backdrop.hidden = true;
+      if (column) column.hidden = false;
     }
+    placePanel();
     if (title) title.textContent = path;
     if (rawLink) rawLink.href = path;
     markSelected(stem);
@@ -337,11 +361,20 @@ curl -s https://amdai.net/api/v1/backends.json`}</code></pre>
     else if (currentStem) closePreview({ restore: false });
   });
 
+  window.addEventListener('resize', placePanel);
+
   const initial = stemFromHash(window.location.hash);
   if (paths.has(initial)) void openPreview(initial, { focus: false, hash: false });
 </script>
 
 <style is:global>
+  .api-docs {
+    --api-chrome: 8.25rem;
+    --api-gap: 1rem;
+    --api-sticky-top: calc(var(--api-chrome) + var(--api-gap));
+    --api-panel-max: calc(100vh - var(--api-chrome) - 2rem);
+  }
+
   .api-endpoint-list {
     margin: 0;
     padding: 0;
@@ -353,7 +386,7 @@ curl -s https://amdai.net/api/v1/backends.json`}</code></pre>
     border-radius: 1rem;
     background: color-mix(in srgb, var(--raised) 72%, transparent);
     padding: 0.85rem 1rem;
-    scroll-margin-top: calc(var(--header-h) + 5rem);
+    scroll-margin-top: var(--api-sticky-top);
   }
 
   .api-endpoint-link {
@@ -378,7 +411,7 @@ curl -s https://amdai.net/api/v1/backends.json`}</code></pre>
     display: flex;
     flex-direction: column;
     min-width: 0;
-    max-height: calc(100vh - var(--header-h) - 5.5rem);
+    min-height: 0;
     border: 1px solid var(--line);
     border-radius: 1.15rem;
     background: var(--raised);
@@ -390,6 +423,7 @@ curl -s https://amdai.net/api/v1/backends.json`}</code></pre>
 
   .api-preview-header {
     display: flex;
+    flex-shrink: 0;
     flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
@@ -450,6 +484,7 @@ curl -s https://amdai.net/api/v1/backends.json`}</code></pre>
     position: relative;
     display: flex;
     flex: 1 1 auto;
+    flex-direction: column;
     min-width: 0;
     min-height: 0;
     overflow: hidden;
@@ -496,15 +531,20 @@ curl -s https://amdai.net/api/v1/backends.json`}</code></pre>
       align-items: start;
     }
 
+    .api-preview-column {
+      min-height: var(--api-panel-max);
+    }
+
     .api-preview {
-      position: sticky;
-      top: calc(var(--header-h) + 4.5rem);
-      max-height: calc(100vh - var(--header-h) - 5.5rem);
+      position: fixed;
+      top: var(--api-sticky-top);
+      height: var(--api-panel-max);
+      max-height: var(--api-panel-max);
+      z-index: 30;
     }
 
     .api-preview-pre {
       max-height: none;
-      height: 100%;
     }
 
     .api-preview-backdrop {
