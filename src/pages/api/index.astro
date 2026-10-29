@@ -1,5 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
+import { apiEndpointStem } from '../../lib/api-preview';
 import { API_SCHEMA_VERSION, apiAsOf, apiEndpoints, DEFAULT_BACKEND_NAME } from '../../lib/public-api';
 
 const endpoints = apiEndpoints();
@@ -10,71 +11,104 @@ const asOf = apiAsOf();
   title="Public API"
   description="Static JSON API for AMDai GPU, model, stack, measured, and ROCm catalogs. curl examples, CORS note, MIT licence, and the MCP server."
 >
-  <main id="main" class="mx-auto max-w-3xl px-4 py-10 sm:px-6">
-    <p class="kicker">Machine-readable · static JSON</p>
-    <h1 class="display mt-3 text-4xl sm:text-5xl">Public API</h1>
-    <p class="mt-4 text-lg leading-relaxed text-muted">
-      Build-time JSON at <code class="text-ink">/api/v1/</code>. The files are ordinary static assets — Caddy
-      serves them as files. Schema <code class="text-ink">{API_SCHEMA_VERSION}</code>, as of
-      <code class="text-ink">{asOf}</code>. Default backend is {DEFAULT_BACKEND_NAME}. Quants below Q4 are omitted.
-    </p>
+  <main id="main" class="api-docs mx-auto max-w-6xl px-4 py-10 sm:px-6">
+    <div class="mx-auto max-w-3xl">
+      <p class="kicker">Machine-readable · static JSON</p>
+      <h1 class="display mt-3 text-4xl sm:text-5xl">Public API</h1>
+      <p class="mt-4 text-lg leading-relaxed text-muted">
+        Build-time JSON at <code class="text-ink">/api/v1/</code>. The files are ordinary static assets — Caddy
+        serves them as files. Schema <code class="text-ink">{API_SCHEMA_VERSION}</code>, as of
+        <code class="text-ink">{asOf}</code>. Default backend is {DEFAULT_BACKEND_NAME}. Quants below Q4 are omitted.
+      </p>
+    </div>
 
     <section class="mt-12">
       <h2 class="font-serif text-3xl" id="endpoints">Endpoints</h2>
-      <ul class="mt-4 space-y-3 text-muted">
-        {endpoints.map((row) => (
-          <li>
-            <a class="font-mono text-ink underline decoration-accent/40" href={row.path}>{row.path}</a>
-            <span class="block text-sm">{row.description}</span>
-          </li>
-        ))}
-      </ul>
+      <p class="mx-auto mt-3 max-w-3xl leading-relaxed text-muted">
+        Each path is a static file. With JavaScript, a click opens a preview on this page. The same
+        <code class="text-ink">href</code> still works without it, and Ctrl or Cmd+click opens the raw file.
+      </p>
+      <div class="api-endpoints-split mt-6" data-api-split>
+        <ul class="api-endpoint-list space-y-3 text-muted">
+          {endpoints.map((row) => {
+            const stem = apiEndpointStem(row.path) ?? row.path;
+            return (
+              <li id={stem}>
+                <a class="api-endpoint-link font-mono text-ink" href={row.path} data-api-endpoint={stem}>
+                  {row.path}
+                </a>
+                <span class="mt-1 block text-sm">{row.description}</span>
+              </li>
+            );
+          })}
+        </ul>
+        <button type="button" class="api-preview-backdrop" data-api-backdrop hidden aria-label="Close JSON preview"></button>
+        <aside id="api-preview" class="api-preview" hidden aria-labelledby="api-preview-title">
+          <header class="api-preview-header">
+            <h3 id="api-preview-title" class="api-preview-path">Endpoint JSON</h3>
+            <div class="api-preview-actions">
+              <button type="button" class="api-preview-btn" data-api-copy>Copy</button>
+              <a class="api-preview-btn" data-api-raw href="/api/v1/index.json" target="_blank" rel="noopener noreferrer">
+                Open raw
+              </a>
+              <button type="button" class="api-preview-btn" data-api-close>Close</button>
+            </div>
+          </header>
+          <p class="sr-only" data-api-live aria-live="polite" aria-atomic="true"></p>
+          <p class="api-preview-banner" data-api-status hidden>Loading JSON…</p>
+          <p class="api-preview-banner is-error" data-api-error hidden></p>
+          <div class="code-wrap api-preview-code">
+            <pre class="api-preview-pre" tabindex="0"><code data-api-json></code></pre>
+          </div>
+        </aside>
+      </div>
     </section>
 
-    <section class="mt-12">
-      <h2 class="font-serif text-3xl" id="curl">curl</h2>
-      <p class="mt-3 leading-relaxed text-muted">
-        Query strings are not evaluated. Fetch a file, then filter locally.
-      </p>
-      <pre class="mt-4 overflow-x-auto rounded-2xl border border-line bg-raised p-4 text-xs leading-relaxed"><code>{`curl -s https://amdai.net/api/v1/index.json
+    <div class="mx-auto max-w-3xl">
+      <section class="mt-12">
+        <h2 class="font-serif text-3xl" id="curl">curl</h2>
+        <p class="mt-3 leading-relaxed text-muted">
+          Query strings are not evaluated. Fetch a file, then filter locally.
+        </p>
+        <pre class="mt-4 overflow-x-auto rounded-2xl border border-line bg-raised p-4 text-xs leading-relaxed"><code>{`curl -s https://amdai.net/api/v1/index.json
 curl -s https://amdai.net/api/v1/gpus.json
 curl -s https://amdai.net/api/v1/models.json
 curl -s https://amdai.net/api/v1/stacks.json
 curl -s https://amdai.net/api/v1/measured.json
 curl -s https://amdai.net/api/v1/rocm-issues.json
 curl -s https://amdai.net/api/v1/backends.json`}</code></pre>
-    </section>
+      </section>
 
-    <section class="mt-12">
-      <h2 class="font-serif text-3xl" id="cors">CORS</h2>
-      <p class="mt-3 leading-relaxed text-muted">
-        These files are meant to be fetched from a browser or an assistant.
-        The production Caddy file sends <code class="text-ink">Access-Control-Allow-Origin: *</code> on
-        <code class="text-ink">/api/v1/*.json</code>. GET and HEAD only. No cookies. No server code.
-      </p>
-    </section>
+      <section class="mt-12">
+        <h2 class="font-serif text-3xl" id="cors">CORS</h2>
+        <p class="mt-3 leading-relaxed text-muted">
+          These files are meant to be fetched from a browser or an assistant.
+          The production Caddy file sends <code class="text-ink">Access-Control-Allow-Origin: *</code> on
+          <code class="text-ink">/api/v1/*.json</code>. GET and HEAD only. No cookies. No server code.
+        </p>
+      </section>
 
-    <section class="mt-12">
-      <h2 class="font-serif text-3xl" id="attribution">Attribution and licence</h2>
-      <p class="mt-3 leading-relaxed text-muted">
-        Cite <a class="underline decoration-accent/40" href="https://amdai.net">https://amdai.net</a>.
-        Numbers are measured on a local desktop, cited from a public doc with a date, or labeled estimates.
-        Dated GPU street snapshots are not live quotes. Buy links that say “Check price” may be affiliate links.
-        AMDai is not affiliated with AMD. The site and this API are
-        <a class="underline decoration-accent/40" href="https://opensource.org/licenses/MIT">MIT</a>.
-      </p>
-    </section>
+      <section class="mt-12">
+        <h2 class="font-serif text-3xl" id="attribution">Attribution and licence</h2>
+        <p class="mt-3 leading-relaxed text-muted">
+          Cite <a class="underline decoration-accent/40" href="https://amdai.net">https://amdai.net</a>.
+          Numbers are measured on a local desktop, cited from a public doc with a date, or labeled estimates.
+          Dated GPU street snapshots are not live quotes. Buy links that say “Check price” may be affiliate links.
+          AMDai is not affiliated with AMD. The site and this API are
+          <a class="underline decoration-accent/40" href="https://opensource.org/licenses/MIT">MIT</a>.
+        </p>
+      </section>
 
-    <section class="mt-12">
-      <h2 class="font-serif text-3xl" id="mcp">MCP server</h2>
-      <p class="mt-3 leading-relaxed text-muted">
-        <code class="text-ink">amdai-fit-mcp</code> v0.2 lives in this repository under
-        <code class="text-ink">mcp/</code>. It fetches the live
-        <code class="text-ink">https://amdai.net/api/v1/*.json</code> files, falls back to a bundled snapshot,
-        and exposes fit, stack, price, and ROCm-issue tools. Point an assistant at this page or at
-        <a class="underline decoration-accent/40" href="/llms.txt">/llms.txt</a>.
-      </p>
-      <pre class="mt-4 overflow-x-auto rounded-2xl border border-line bg-raised p-4 text-xs leading-relaxed"><code>{`{
+      <section class="mt-12">
+        <h2 class="font-serif text-3xl" id="mcp">MCP server</h2>
+        <p class="mt-3 leading-relaxed text-muted">
+          <code class="text-ink">amdai-fit-mcp</code> v0.2 lives in this repository under
+          <code class="text-ink">mcp/</code>. It fetches the live
+          <code class="text-ink">https://amdai.net/api/v1/*.json</code> files, falls back to a bundled snapshot,
+          and exposes fit, stack, price, and ROCm-issue tools. Point an assistant at this page or at
+          <a class="underline decoration-accent/40" href="/llms.txt">/llms.txt</a>.
+        </p>
+        <pre class="mt-4 overflow-x-auto rounded-2xl border border-line bg-raised p-4 text-xs leading-relaxed"><code>{`{
   "mcpServers": {
     "amdai-fit": {
       "command": "npx",
@@ -82,13 +116,419 @@ curl -s https://amdai.net/api/v1/backends.json`}</code></pre>
     }
   }
 }`}</code></pre>
-    </section>
+      </section>
 
-    <p class="mt-12 text-sm text-muted">
-      Related: <a class="underline decoration-accent/40" href="/calculator">calculator</a>,
-      <a class="underline decoration-accent/40" href="/gpus">GPU directory</a>,
-      <a class="underline decoration-accent/40" href="/stacks">stacks</a>,
-      <a class="underline decoration-accent/40" href="/llms.txt">llms.txt</a>.
-    </p>
+      <p class="mt-12 text-sm text-muted">
+        Related: <a class="underline decoration-accent/40" href="/calculator">calculator</a>,
+        <a class="underline decoration-accent/40" href="/gpus">GPU directory</a>,
+        <a class="underline decoration-accent/40" href="/stacks">stacks</a>,
+        <a class="underline decoration-accent/40" href="/llms.txt">llms.txt</a>.
+      </p>
+    </div>
   </main>
 </Base>
+
+<script>
+  import { hashFromStem, isPlainActivate, isSafeApiPreviewPath, stemFromHash } from '../../lib/api-preview';
+  import { highlightPrettyJson, prettyJson } from '../../lib/json-highlight';
+
+  const split = document.querySelector<HTMLElement>('[data-api-split]');
+  const panel = document.getElementById('api-preview');
+  const title = document.getElementById('api-preview-title');
+  const live = document.querySelector<HTMLElement>('[data-api-live]');
+  const statusEl = document.querySelector<HTMLElement>('[data-api-status]');
+  const errorEl = document.querySelector<HTMLElement>('[data-api-error]');
+  const jsonEl = document.querySelector<HTMLElement>('[data-api-json]');
+  const copyBtn = document.querySelector<HTMLButtonElement>('[data-api-copy]');
+  const rawLink = document.querySelector<HTMLAnchorElement>('[data-api-raw]');
+  const closeBtn = document.querySelector<HTMLButtonElement>('[data-api-close]');
+  const backdrop = document.querySelector<HTMLButtonElement>('[data-api-backdrop]');
+  const links = [...document.querySelectorAll<HTMLAnchorElement>('[data-api-endpoint]')];
+  const narrow = () => window.matchMedia('(max-width: 1023px)').matches;
+
+  const paths = new Map<string, string>();
+  for (const link of links) {
+    const stem = link.dataset.apiEndpoint;
+    const href = link.getAttribute('href') ?? '';
+    if (stem && isSafeApiPreviewPath(href)) paths.set(stem, href);
+  }
+
+  const cache = new Map<string, string>();
+  let currentStem: string | null = null;
+  let currentText = '';
+  let lastTrigger: HTMLElement | null = null;
+  let abort: AbortController | null = null;
+  let copyTimer = 0;
+
+  function announce(message: string) {
+    if (live) live.textContent = message;
+  }
+
+  function setBanner(kind: 'loading' | 'error' | null, message = '') {
+    if (statusEl) {
+      statusEl.hidden = kind !== 'loading';
+      if (kind === 'loading') statusEl.textContent = message || 'Loading JSON…';
+    }
+    if (errorEl) {
+      errorEl.hidden = kind !== 'error';
+      errorEl.textContent = kind === 'error' ? message : '';
+    }
+  }
+
+  function markSelected(stem: string | null) {
+    for (const link of links) {
+      const on = stem !== null && link.dataset.apiEndpoint === stem;
+      if (on) link.setAttribute('aria-current', 'true');
+      else link.removeAttribute('aria-current');
+    }
+  }
+
+  function setHash(stem: string | null) {
+    const url = new URL(window.location.href);
+    url.hash = stem ? hashFromStem(stem) : '';
+    const next = stem ? `${url.pathname}${url.search}${url.hash}` : `${url.pathname}${url.search}`;
+    if (`${window.location.pathname}${window.location.search}${window.location.hash}` !== next) {
+      window.history.replaceState(null, '', next);
+    }
+  }
+
+  function closePreview(opts: { restore?: boolean } = {}) {
+    abort?.abort();
+    abort = null;
+    currentStem = null;
+    currentText = '';
+    markSelected(null);
+    split?.removeAttribute('data-open');
+    document.body.classList.remove('api-preview-lock');
+    if (backdrop) backdrop.hidden = true;
+    if (panel) {
+      panel.hidden = true;
+      panel.removeAttribute('data-open');
+    }
+    if (jsonEl) jsonEl.replaceChildren();
+    setBanner(null);
+    announce('Preview closed');
+    setHash(null);
+    if (opts.restore !== false) lastTrigger?.focus();
+    lastTrigger = null;
+  }
+
+  async function openPreview(stem: string, opts: { focus?: boolean; hash?: boolean } = {}) {
+    const path = paths.get(stem);
+    if (!path || !panel) return;
+    const focus = opts.focus === true;
+    const writeHash = opts.hash !== false;
+    if (currentStem === stem && !panel.hidden && cache.has(stem)) {
+      if (writeHash) setHash(stem);
+      if (focus) closeBtn?.focus();
+      return;
+    }
+
+    abort?.abort();
+    abort = new AbortController();
+    const signal = abort.signal;
+    currentStem = stem;
+    lastTrigger = document.querySelector<HTMLElement>(`[data-api-endpoint="${stem}"]`) ?? lastTrigger;
+    panel.hidden = false;
+    panel.setAttribute('data-open', '');
+    split?.setAttribute('data-open', '');
+    if (narrow()) {
+      document.body.classList.add('api-preview-lock');
+      if (backdrop) backdrop.hidden = false;
+    } else if (backdrop) {
+      backdrop.hidden = true;
+    }
+    if (title) title.textContent = path;
+    if (rawLink) rawLink.href = path;
+    markSelected(stem);
+    if (writeHash) setHash(stem);
+    if (focus) closeBtn?.focus();
+
+    const cached = cache.get(stem);
+    if (cached) {
+      currentText = cached;
+      if (jsonEl) jsonEl.innerHTML = highlightPrettyJson(JSON.parse(cached) as unknown);
+      setBanner(null);
+      announce(`Loaded ${path}`);
+      return;
+    }
+
+    currentText = '';
+    if (jsonEl) jsonEl.replaceChildren();
+    setBanner('loading', `Loading ${path}`);
+    announce(`Loading ${path}`);
+
+    try {
+      const res = await fetch(path, { signal, headers: { Accept: 'application/json' } });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data: unknown = await res.json();
+      if (signal.aborted || currentStem !== stem) return;
+      currentText = prettyJson(data);
+      cache.set(stem, currentText);
+      if (jsonEl) jsonEl.innerHTML = highlightPrettyJson(data);
+      setBanner(null);
+      announce(`Loaded ${path}`);
+    } catch (err) {
+      if (signal.aborted || currentStem !== stem) return;
+      currentText = '';
+      if (jsonEl) jsonEl.replaceChildren();
+      const message = err instanceof Error && err.name === 'AbortError' ? '' : `Could not load ${path}.`;
+      if (message) {
+        setBanner('error', message);
+        announce(message);
+      }
+    }
+  }
+
+  for (const link of links) {
+    link.addEventListener('click', (event) => {
+      const stem = link.dataset.apiEndpoint;
+      if (!stem || !paths.has(stem) || !isPlainActivate(event)) return;
+      event.preventDefault();
+      lastTrigger = link;
+      void openPreview(stem, { focus: true });
+    });
+  }
+
+  closeBtn?.addEventListener('click', () => closePreview());
+  backdrop?.addEventListener('click', () => closePreview());
+
+  panel?.addEventListener('keydown', (event) => {
+    if (event.key !== 'Tab' || !narrow() || !panel) return;
+    const nodes = [...panel.querySelectorAll<HTMLElement>('a[href], button:not([disabled]), [tabindex="0"]')].filter(
+      (node) => !node.closest('[hidden]'),
+    );
+    if (!nodes.length) return;
+    const first = nodes[0]!;
+    const last = nodes[nodes.length - 1]!;
+    const active = document.activeElement;
+    if (event.shiftKey && active === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && active === last) {
+      event.preventDefault();
+      first.focus();
+    }
+  });
+
+  copyBtn?.addEventListener('click', async () => {
+    if (!copyBtn) return;
+    try {
+      await navigator.clipboard.writeText(currentText || title?.textContent || '');
+      copyBtn.textContent = 'Copied';
+    } catch {
+      copyBtn.textContent = 'Copy failed';
+    }
+    window.clearTimeout(copyTimer);
+    copyTimer = window.setTimeout(() => {
+      copyBtn.textContent = 'Copy';
+    }, 1400);
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key !== 'Escape' || !currentStem) return;
+    event.preventDefault();
+    closePreview();
+  });
+
+  window.addEventListener('hashchange', () => {
+    const stem = stemFromHash(window.location.hash);
+    if (paths.has(stem)) void openPreview(stem, { focus: false, hash: false });
+    else if (currentStem) closePreview({ restore: false });
+  });
+
+  const initial = stemFromHash(window.location.hash);
+  if (paths.has(initial)) void openPreview(initial, { focus: false, hash: false });
+</script>
+
+<style is:global>
+  .api-endpoint-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .api-endpoint-list > li {
+    border: 1px solid var(--line);
+    border-radius: 1rem;
+    background: color-mix(in srgb, var(--raised) 72%, transparent);
+    padding: 0.85rem 1rem;
+  }
+
+  .api-endpoint-link {
+    display: inline-flex;
+    min-height: 2.75rem;
+    align-items: center;
+    text-decoration: underline;
+    text-decoration-color: color-mix(in srgb, var(--accent) 40%, transparent);
+    text-underline-offset: 0.16em;
+    border-radius: 0.4rem;
+  }
+
+  .api-endpoint-link[aria-current='true'] {
+    color: var(--accent-ink);
+    background: var(--accent-soft);
+    box-shadow: inset 3px 0 0 var(--accent);
+    padding-inline: 0.45rem;
+    text-decoration: none;
+  }
+
+  .api-preview {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    border: 1px solid var(--line);
+    border-radius: 1.15rem;
+    background: var(--raised);
+    box-shadow: var(--shadow);
+  }
+
+  .api-preview-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.65rem 1rem;
+    padding: 0.75rem 0.9rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .api-preview-path {
+    margin: 0;
+    min-width: 0;
+    overflow-wrap: anywhere;
+    font-family: var(--font-mono);
+    font-size: 0.92rem;
+    font-weight: 550;
+    color: var(--accent-ink);
+  }
+
+  .api-preview-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .api-preview-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.75rem;
+    padding: 0.35rem 0.8rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--canvas);
+    color: var(--ink);
+    font-size: 0.78rem;
+    text-decoration: none;
+  }
+
+  .api-preview-btn:hover {
+    border-color: color-mix(in srgb, var(--accent) 55%, var(--line));
+    color: var(--accent-ink);
+  }
+
+  .api-preview-banner {
+    margin: 0;
+    padding: 0.7rem 0.95rem;
+    font-size: 0.88rem;
+    color: var(--muted);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .api-preview-banner.is-error {
+    color: var(--accent-ink);
+    background: var(--accent-soft);
+  }
+
+  .api-preview-code {
+    position: relative;
+    min-width: 0;
+  }
+
+  .api-preview-pre {
+    margin: 0;
+    overflow: auto;
+    max-height: min(70vh, calc(100vh - 12rem));
+    padding: 0.9rem 1rem 1.1rem;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    line-height: 1.55;
+    overscroll-behavior: contain;
+  }
+
+  .json-key {
+    color: var(--json-key);
+  }
+
+  .json-string {
+    color: var(--json-string);
+  }
+
+  .json-number {
+    color: var(--json-number);
+  }
+
+  .json-keyword {
+    color: var(--json-keyword);
+  }
+
+  .json-punct {
+    color: var(--json-punct);
+  }
+
+  @media (min-width: 1024px) {
+    .api-endpoints-split[data-open] {
+      display: grid;
+      grid-template-columns: minmax(16rem, 1fr) minmax(22rem, 34rem);
+      gap: 1.25rem;
+      align-items: start;
+    }
+
+    .api-preview {
+      position: sticky;
+      top: calc(var(--header-h) + 1rem);
+    }
+
+    .api-preview-pre {
+      max-height: calc(100vh - var(--header-h) - 8.5rem);
+    }
+
+    .api-preview-backdrop {
+      display: none;
+    }
+  }
+
+  .api-preview-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 34;
+    border: 0;
+    padding: 0;
+    background: color-mix(in srgb, #08080b 55%, transparent);
+  }
+
+  @media (max-width: 1023px) {
+    .api-preview[data-open] {
+      position: fixed;
+      inset-inline: 0.6rem;
+      bottom: 0.6rem;
+      z-index: 35;
+      max-height: min(78vh, calc(100vh - var(--header-h) - 1rem));
+    }
+
+    .api-preview-pre {
+      max-height: min(56vh, calc(100vh - var(--header-h) - 11rem));
+    }
+
+    body.api-preview-lock {
+      overflow: hidden;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .api-preview {
+      transition: none;
+    }
+  }
+</style>
