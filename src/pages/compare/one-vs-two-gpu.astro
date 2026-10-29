@@ -4,10 +4,8 @@ import Callout from '../../components/Callout.astro';
 import HowWeTest from '../../components/HowWeTest.astro';
 import HouseRam from '../../components/HouseRam.astro';
 import NewsletterSignup from '../../components/NewsletterSignup.astro';
-import NextStepBuyBox from '../../components/NextStepBuyBox.astro';
+import SecondCardBox from '../../components/SecondCardBox.astro';
 import SystemRamNeed from '../../components/SystemRamNeed.astro';
-import { ONE_VS_TWO_PICKS, ONE_VS_TWO_SRC } from '../../lib/upgrade-pick';
-import { FLASH_RERUN_NOTE } from '../../lib/run-card';
 import { runs } from '../../lib/run-card-data';
 import {
   COMPARE_CONTEXTS,
@@ -22,10 +20,16 @@ import {
   oneVsTwoRows,
   winnerSummary,
 } from '../../lib/local-desktop-compare';
+import {
+  secondCardClientPayload,
+  twoCardFlashStrataRows,
+} from '../../lib/second-card';
 
 const rows = oneVsTwoRows(runs);
 const summary = winnerSummary(rows);
 const q3Ram = q3RamNeed(1);
+const secondCard = secondCardClientPayload(runs);
+const flashStrataRows = twoCardFlashStrataRows(runs);
 const payload = rows.map((row) => ({
   id: `${row.quant}-${row.context}`,
   quant: row.quant,
@@ -64,11 +68,18 @@ const payload = rows.map((row) => ({
     <div class="mt-6">
       <HouseRam which="daily" compact />
     </div>
-    <NextStepBuyBox
-      picks={ONE_VS_TWO_PICKS}
-      src={ONE_VS_TWO_SRC}
-      lead="Your next step for the split column"
-    />
+    <aside class="mt-8 rounded-2xl border border-line bg-raised/40 p-5" aria-labelledby="second-card-verdict-heading">
+      <p class="kicker">Measured verdict</p>
+      <h2 id="second-card-verdict-heading" class="mt-2 font-serif text-2xl tracking-tight">
+        {secondCard.honesty.headline}
+      </h2>
+      <p class="mt-3 text-sm leading-relaxed text-muted">{secondCard.honesty.detail}</p>
+      <p class="mt-3 text-xs text-faint">
+        Counts and percents are derived from the 35B llama.cpp cards on this page, not typed in by hand.
+      </p>
+    </aside>
+    <SecondCardBox verdict={secondCard.defaultVerdict} />
+    <script type="application/json" id="second-card-payload" set:html={JSON.stringify(secondCard)} />
     <p class="mt-3 text-sm text-faint">
       Winner counts on this sweep: one GPU {summary.one} · split {summary.two} · tie {summary.tie} · incomplete {summary.incomplete}.
       Q6_K 1-GPU 4K uses the 23:55 card (103.23 tok/s). The earlier 82.62 card stays on /results.
@@ -77,9 +88,45 @@ const payload = rows.map((row) => ({
     <Callout type="warn" title="Overnight sweep, 2026-10-12">
       <p>{SWEEP_REVERIFY}</p>
     </Callout>
-    <Callout type="warn" title="Flash / Strata / Q3 pending">
-      <p>{FLASH_RERUN_NOTE}</p>
-    </Callout>
+    {flashStrataRows.length ? (
+      <aside class="mt-6 rounded-2xl border border-line bg-raised/40 p-5" aria-labelledby="flash-strata-heading">
+        <p class="kicker">Flash / Strata, two cards</p>
+        <h2 id="flash-strata-heading" class="mt-2 font-serif text-2xl tracking-tight">Measured two-card Strata Flash</h2>
+        <p class="mt-3 text-sm leading-relaxed text-muted">
+          Flash-class files are the job a second card is for. These rows already exist in the repo — they are not a 35B split.
+          Q3 stays a labeled estimate on this page.
+        </p>
+        <div class="mt-4 overflow-x-auto">
+          <table class="table-lab min-w-[36rem]">
+            <caption>Two-card Flash on Strata from official run cards and the lab log. Empty stays empty.</caption>
+            <thead>
+              <tr>
+                <th scope="col">Quant</th>
+                <th scope="col">Context</th>
+                <th scope="col">Decode</th>
+                <th scope="col">Source</th>
+              </tr>
+            </thead>
+            <tbody>
+              {flashStrataRows.map((row) => (
+                <tr>
+                  <td>{row.quant}</td>
+                  <td>{row.contextLabel}</td>
+                  <td class="tabular-nums">
+                    <a class="underline decoration-accent/40" href={row.href}>{row.decode}</a>
+                  </td>
+                  <td class="text-sm text-muted">{row.note}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </aside>
+    ) : (
+      <Callout type="note" title="Flash / Strata">
+        <p>Two-card Strata Flash: measured results coming. Q3 stays a labeled estimate.</p>
+      </Callout>
+    )}
 
     <form id="compare-filters" class="mt-8 space-y-4" aria-controls="compare-table">
       <div>
@@ -263,10 +310,176 @@ const payload = rows.map((row) => ({
 <script is:inline>
   const QUANT_KEY = { 'Q6_K': 'q6', 'UD-Q5_K_XL': 'q5xl', 'Q5_K_M': 'q5', 'Q4_K_M': 'q4' };
   const CTX_KEY = { '4096': '4k', '32768': '32k', '131072': '128k', '262144': '256k' };
+  const CTX_ANSWER = { '4096': 'short', '32768': '32K', '131072': '128K', '262144': '256K' };
   const state = { quant: '', context: '', gpuCount: '' };
   const form = document.getElementById('compare-filters');
   const status = document.querySelector('[data-compare-status]');
   const empty = document.querySelector('[data-compare-empty]');
+  const secondCardBox = document.querySelector('[data-second-card-box]');
+  const secondCardPayloadEl = document.getElementById('second-card-payload');
+  const secondCardData = secondCardPayloadEl ? JSON.parse(secondCardPayloadEl.textContent || '{}') : null;
+  const secondCardRels = window.__secondCardRels || { r9700: 'noopener', ram: 'noopener' };
+
+  function pctChange(from, to) {
+    if (!from) return 0;
+    return ((to - from) / from) * 100;
+  }
+
+  function findCell(quant, ctx) {
+    return (secondCardData?.cells || []).find((row) => row.quant === quant && row.ctx === ctx);
+  }
+
+  function verdictFromAnswers(answers) {
+    const cells = secondCardData?.cells || [];
+    const flash = secondCardData?.flash || {};
+    const r9700 = secondCardData?.r9700Href || '/go/newegg/r9700?src=second-card-verdict';
+    const ram = secondCardData?.ramHref || '/go/newegg/ddr5-256?src=second-card-verdict';
+    if (answers.twoModels) {
+      return {
+        buy: true,
+        pick: 'second R9700',
+        why: 'Running the 35B on one card and a second model on the other is the cleanest reason to own two cards: neither model is split, so neither loses speed.',
+        evidence: 'layout reason, no speed claim',
+        link: r9700,
+        also: null,
+      };
+    }
+    if (answers.model === 'flash') {
+      const bits = ['A Flash-class model does not fit one 32 GB card at Q4+, so the RAM is the must-buy and the second card is the speed add-on.'];
+      if (flash.storyTok != null && flash.codeTok != null) {
+        bits.push('Measured here: two R9700s + DDR5 on Strata, UD-Q5_K_XL, ' + flash.storyTok + ' tok/s story / ' + flash.codeTok + ' code.');
+      }
+      if (flash.citedOneStory != null && flash.citedTwoStory != null && flash.citedOneCode != null && flash.citedTwoCode != null) {
+        bits.push('Cited (maintainer, MTP on, experts in RAM): one card UD-Q5 ' + flash.citedOneStory + '/' + flash.citedOneCode + ' tok/s, two cards ' + flash.citedTwoStory + '/' + flash.citedTwoCode + '.');
+      }
+      let evidence = 'measured + cited';
+      if (flash.citedOneStory != null && flash.citedTwoStory != null && flash.citedOneCode != null && flash.citedTwoCode != null) {
+        const story = Math.round(pctChange(flash.citedOneStory, flash.citedTwoStory));
+        const code = Math.round(pctChange(flash.citedOneCode, flash.citedTwoCode));
+        evidence = 'measured + cited; second card adds ~' + story + '% story, ~' + code + '% code decode on Strata';
+      }
+      return { buy: true, pick: 'second R9700 + 256 GB DDR5', why: bits.join(' '), evidence: evidence, link: r9700, also: ram };
+    }
+    if (answers.ctxOver262k) {
+      return {
+        buy: true,
+        pick: 'second R9700',
+        why: 'Past 262K on the 35B (YaRN to ~1M) needs two cards at f16 KV by our KV math; one card reaches 524K only at UD-Q5 with q8_0 KV.',
+        evidence: 'estimate from GGUF KV sizes',
+        link: r9700,
+        also: null,
+      };
+    }
+    const row = findCell(answers.quant, answers.ctx);
+    if (!row) {
+      return {
+        buy: false,
+        pick: 'keep one R9700',
+        why: 'No measured one-vs-split cell for that filter. We will not invent a tok/s.',
+        evidence: 'measured, pending re-verify after RAM fix',
+        link: null,
+        also: null,
+      };
+    }
+    const dec = pctChange(row.oneDecode, row.splitDecode);
+    const pre = pctChange(row.onePrefill, row.splitPrefill);
+    if (answers.longPrompts && pre >= 10) {
+      return {
+        buy: true,
+        pick: 'second R9700 (prompt speed only)',
+        why: 'At ' + row.contextLabel + ' the split reads prompts ' + Math.round(pre) + '% faster (' + row.onePrefill + ' -> ' + row.splitPrefill + ' tok/s) while decode changes ' + (dec >= 0 ? '+' : '') + Math.round(dec) + '%. Worth it only if long documents are your main workload.',
+        evidence: 'measured, pending re-verify after RAM fix',
+        link: r9700,
+        also: null,
+      };
+    }
+    if (dec > 0 && answers.quant === 'Q6_K') {
+      const udShort = findCell('UD-Q5_K_XL', 'short');
+      const q6Short = findCell('Q6_K', 'short');
+      const ud128 = findCell('UD-Q5_K_XL', '128K');
+      const q6_128 = findCell('Q6_K', '128K');
+      const ud256 = findCell('UD-Q5_K_XL', '256K');
+      const q6_256 = findCell('Q6_K', '256K');
+      const beats = [];
+      if (udShort && q6Short) beats.push(udShort.oneDecode + ' vs ' + q6Short.splitDecode + ' short');
+      if (ud128 && q6_128) beats.push(ud128.oneDecode + ' vs ' + q6_128.splitDecode + ' at 128K');
+      if (ud256 && q6_256) beats.push(ud256.oneDecode + ' vs ' + q6_256.splitDecode + ' at 256K');
+      const beatBit = beats.length ? ' UD-Q5_K_XL on one card beats the Q6_K split at every measured context (' + beats.join(', ') + ') and costs nothing.' : '';
+      return {
+        buy: false,
+        pick: 'UD-Q5_K_XL on the card you have',
+        why: 'Q6_K on one card spills into DDR5 past short context, so a split wins by ' + Math.round(dec) + '% (' + row.oneDecode + ' -> ' + row.splitDecode + ' tok/s).' + beatBit,
+        evidence: 'measured, pending re-verify after RAM fix',
+        link: null,
+        also: null,
+      };
+    }
+    return {
+      buy: false,
+      pick: 'keep one R9700',
+      why: 'Measured: one card decodes ' + row.oneDecode + ' tok/s, a split of the same file ' + row.splitDecode + ' (' + (dec >= 0 ? '+' : '') + Math.round(dec) + '%). A second card does not make the 35B faster here.',
+      evidence: 'measured, pending re-verify after RAM fix',
+      link: null,
+      also: null,
+    };
+  }
+
+  function currentAnswers() {
+    const model = document.querySelector('[data-second-card-model]:checked');
+    return {
+      model: model && model.value === 'flash' ? 'flash' : '35b',
+      quant: state.quant || 'UD-Q5_K_XL',
+      ctx: CTX_ANSWER[state.context] || 'short',
+      longPrompts: Boolean(document.querySelector('[data-second-card-q="longPrompts"]:checked')),
+      twoModels: Boolean(document.querySelector('[data-second-card-q="twoModels"]:checked')),
+      ctxOver262k: Boolean(document.querySelector('[data-second-card-q="ctxOver262k"]:checked')),
+    };
+  }
+
+  function paintSecondCard() {
+    if (!secondCardBox || !secondCardData) return;
+    const verdict = verdictFromAnswers(currentAnswers());
+    secondCardBox.setAttribute('data-verdict', verdict.buy ? 'buy' : 'keep');
+    const title = secondCardBox.querySelector('[data-second-card-title]');
+    const why = secondCardBox.querySelector('[data-second-card-why]');
+    const evidence = secondCardBox.querySelector('[data-second-card-evidence]');
+    if (title) title.textContent = verdict.buy ? 'Worth it for you: ' + verdict.pick : 'Save your money: ' + verdict.pick;
+    if (why) why.textContent = verdict.why;
+    if (evidence) evidence.textContent = 'Source: ' + verdict.evidence + '. Cells cite run cards above.';
+    const actions = secondCardBox.querySelector('[data-second-card-actions]');
+    if (actions) {
+      actions.replaceChildren();
+      if (verdict.buy && verdict.link) {
+        const gpu = document.createElement('a');
+        gpu.className = 'btn-primary';
+        gpu.href = verdict.link;
+        gpu.rel = secondCardRels.r9700;
+        gpu.target = '_blank';
+        gpu.textContent = 'Check R9700 at Newegg';
+        actions.appendChild(gpu);
+      }
+      if (verdict.buy && verdict.also) {
+        const kit = document.createElement('a');
+        kit.className = 'btn-ghost';
+        kit.href = verdict.also;
+        kit.rel = secondCardRels.ram;
+        kit.target = '_blank';
+        kit.textContent = '256 GB DDR5 kit at Newegg';
+        actions.appendChild(kit);
+      }
+      if (!verdict.buy) {
+        const budget = document.createElement('a');
+        budget.className = 'btn-ghost';
+        budget.href = '/budget';
+        budget.textContent = 'Plan a later Flash build instead';
+        actions.appendChild(budget);
+      }
+    }
+    secondCardBox.querySelectorAll('[data-second-card-model]').forEach((input) => {
+      const label = input.closest('label');
+      if (label) label.classList.toggle('is-on', input.checked);
+    });
+  }
 
   function readUrl() {
     const q = new URLSearchParams(location.search);
@@ -318,6 +531,7 @@ const payload = rows.map((row) => ({
       const side = node.getAttribute('data-side');
       node.hidden = !!(state.gpuCount && side !== state.gpuCount);
     });
+    paintSecondCard();
   }
 
   readUrl();
@@ -332,6 +546,9 @@ const payload = rows.map((row) => ({
       if (key === 'gpuCount') state.gpuCount = value;
       apply();
     });
+  }
+  if (secondCardBox) {
+    secondCardBox.addEventListener('change', paintSecondCard);
   }
   apply();
 </script>
