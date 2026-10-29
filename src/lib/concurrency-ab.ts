@@ -288,6 +288,7 @@ export const NP_FAQ: NpFaq[] = [
 ];
 
 export const NP_HUB_LINKS: NpLink[] = [
+  { href: '/serving', label: 'Serving many users' },
   { href: '/setup/server', label: 'Always-on server' },
   { href: '/kv-cache', label: 'KV cache' },
   { href: '/long-context', label: 'Long context' },

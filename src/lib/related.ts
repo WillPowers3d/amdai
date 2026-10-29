@@ -363,9 +363,26 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/thinking', label: 'Thinking mode' },
       { href: '/guides/tool-calling', label: 'Tool calling' },
       { href: '/qwen36-dual', label: '35B on two cards' },
+      { href: '/serving', label: 'Serving many users' },
       { href: '/stack-lab', label: 'Stack Lab' },
       { href: '/amdai-bench', label: 'amdai-bench' },
       { href: '/calculator', label: 'Calculator' },
+    ];
+  }
+  if (path === '/serving') {
+    return [
+      { href: '/backends', label: 'Backends' },
+      { href: '/backends/llamacpp', label: 'llama.cpp' },
+      { href: '/concurrency-ab', label: 'Parallel slots' },
+      { href: '/multi-gpu', label: 'Dual / multi-GPU' },
+      { href: '/setup/multi-gpu', label: 'Multi-GPU llama.cpp' },
+      { href: '/qwen36-dual', label: '35B on two cards' },
+      { href: '/gpus/r9700', label: 'R9700' },
+      { href: '/benchmarks', label: 'Benchmarks' },
+      { href: '/setup/server', label: 'Always-on server' },
+      { href: '/flash-attention', label: 'Flash Attention' },
+      { href: '/kv-cache', label: 'KV cache' },
+      { href: '/stack-lab', label: 'Stack Lab' },
     ];
   }
   if (path === '/flash-attention') {
@@ -531,6 +548,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/long-context', label: 'Long context' },
       { href: '/context-ceiling', label: 'Context ceiling' },
       { href: '/tuning', label: 'Speed up llama.cpp' },
+      { href: '/serving', label: 'Serving many users' },
     ];
   }
   if (path === '/flash-daily' || path === '/flash-ram-offload') {
@@ -973,6 +991,7 @@ export function relatedFor(pathname: string): RelatedLink[] {
     add(out, seen, '/sampling', 'Sampling');
     add(out, seen, '/chat-templates', 'Chat templates');
     add(out, seen, '/concurrency-ab', 'Parallel slots');
+    add(out, seen, '/serving', 'Serving many users');
     add(out, seen, '/flash-attention', 'Flash Attention');
     add(out, seen, '/prefill', 'Prefill');
     add(out, seen, '/prompt-cache', 'Prompt cache');
@@ -1111,6 +1130,7 @@ export function assertRelatedValid(
     '/thinking',
     '/sampling',
     '/chat-templates',
+    '/serving',
     '/concurrency-ab',
     '/flash-attention',
     '/prefill',

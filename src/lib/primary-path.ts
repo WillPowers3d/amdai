@@ -41,6 +41,7 @@ export const PRIMARY_PATH: PathStep[] = [
       { href: '/flash-daily', label: 'Flash daily' },
       { href: '/qwen36-dual', label: 'Two cards' },
       { href: '/multi-gpu', label: 'Dual / multi-GPU' },
+      { href: '/serving', label: 'Serving many users' },
       { href: '/setup/multi-gpu', label: 'Multi-GPU how-to' },
     ],
   },
@@ -106,6 +107,7 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
     { href: '/gpus/r9700', label: 'R9700 measured page' },
     { href: '/benchmarks', label: 'Benchmarks' },
     { href: '/faq', label: 'FAQ' },
+    { href: '/serving', label: 'Serving many users' },
     { href: '/troubleshoot', label: 'Troubleshoot' },
   ],
   '/start': [
@@ -116,6 +118,7 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
     { href: '/compare/gpus', label: 'Compare GPUs' },
     { href: '/compare/models', label: 'Compare models' },
     { href: '/newsletter', label: 'Digest' },
+    { href: '/serving', label: 'Serving many users' },
     { href: '/troubleshoot', label: 'Troubleshoot' },
   ],
   '/setup': [
@@ -526,6 +529,7 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
     { href: '/flash-daily', label: 'Flash daily' },
     { href: '/compare/one-vs-two-gpu', label: 'One vs split' },
     { href: '/setup', label: 'First-run setup' },
+    { href: '/serving', label: 'Serving many users' },
   ],
   '/motherboards': [
     { href: '/budget', label: 'Setup by budget' },
@@ -996,6 +1000,21 @@ const NEXT_STEPS: Record<string, PathLink[]> = {
     { href: '/stack-lab', label: 'Stack Lab' },
     { href: '/amdai-bench', label: 'amdai-bench' },
     { href: '/calculator', label: 'Calculator' },
+    { href: '/serving', label: 'Serving many users' },
+  ],
+  '/serving': [
+    { href: '/backends', label: 'Backends' },
+    { href: '/backends/llamacpp', label: 'llama.cpp' },
+    { href: '/concurrency-ab', label: 'Parallel slots' },
+    { href: '/multi-gpu', label: 'Dual / multi-GPU' },
+    { href: '/setup/multi-gpu', label: 'Multi-GPU llama.cpp' },
+    { href: '/qwen36-dual', label: '35B on two cards' },
+    { href: '/gpus/r9700', label: 'R9700 measured page' },
+    { href: '/benchmarks', label: 'Benchmarks' },
+    { href: '/setup/server', label: 'Always-on server' },
+    { href: '/flash-attention', label: 'Flash Attention' },
+    { href: '/kv-cache', label: 'KV cache' },
+    { href: '/stack-lab', label: 'Stack Lab' },
   ],
   '/flash-attention': [
     { href: '/tuning', label: 'Speed up llama.cpp' },

@@ -54,6 +54,7 @@ describe('public static API generator', () => {
       '/api/v1/measured.json',
       '/api/v1/rocm-issues.json',
       '/api/v1/backends.json',
+      '/api/v1/serving.json',
     ]) {
       assert.ok(paths.includes(path), path);
     }

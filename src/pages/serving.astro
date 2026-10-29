@@ -1,0 +1,333 @@
+---
+import Base from '../layouts/Base.astro';
+import Callout from '../components/Callout.astro';
+import HowWeTest from '../components/HowWeTest.astro';
+import NextSteps from '../components/NextSteps.astro';
+import {
+  SERVING_ANSWER,
+  SERVING_CHECKED,
+  SERVING_CITED_LABEL,
+  SERVING_DESCRIPTION,
+  SERVING_FIGURES,
+  SERVING_GAP,
+  SERVING_H1,
+  SERVING_HUB_LINKS,
+  SERVING_LAYER,
+  SERVING_LEAD,
+  SERVING_LLAMA,
+  SERVING_ONE,
+  SERVING_OTHER,
+  SERVING_PITFALLS,
+  SERVING_PROJECT,
+  SERVING_PROJECT_HEADING,
+  SERVING_RADIANCE,
+  SERVING_SLOTS,
+  SERVING_SOURCES,
+  SERVING_SPLIT,
+  SERVING_STEPS,
+  SERVING_STRATA,
+  SERVING_TENSOR,
+  SERVING_TITLE,
+  SERVING_VLLM,
+  SERVING_WHEN,
+  servingSource,
+} from '../lib/serving';
+
+const labFigures = SERVING_FIGURES.filter((row) => row.ourLab);
+const thirdPartyFigures = SERVING_FIGURES.filter((row) => row.thirdParty);
+---
+
+<Base title={SERVING_TITLE} description={SERVING_DESCRIPTION}>
+  <main id="main" class="mx-auto max-w-3xl px-4 py-10 sm:px-6">
+    <a class="skip-link skip-to-serving-nav" href="#serving-sections">Skip to section nav</a>
+    <p class="kicker">{SERVING_CITED_LABEL}</p>
+    <h1 class="mt-3 font-serif text-4xl tracking-tight sm:text-5xl">{SERVING_H1}</h1>
+    <p class="mt-4 text-lg leading-relaxed text-muted">{SERVING_LEAD}</p>
+    <ul class="mt-4 flex flex-wrap gap-2">
+      {SERVING_HUB_LINKS.map((link) => (
+        <li>
+          <a
+            class="inline-flex min-h-9 items-center rounded-full border border-line bg-canvas px-3 text-sm text-ink hover:border-accent/50 hover:text-accent-ink"
+            href={link.href}
+          >
+            {link.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+
+    <nav id="serving-sections" class="mt-8 scroll-mt-28" aria-label="On this page">
+      <ul class="flex flex-wrap gap-2 text-sm">
+        <li><a class="underline decoration-accent/40" href="#answer">30-second answer</a></li>
+        <li><a class="underline decoration-accent/40" href="#our-lab">Our lab</a></li>
+        <li><a class="underline decoration-accent/40" href="#llamacpp">llama.cpp first</a></li>
+        <li><a class="underline decoration-accent/40" href="#split">Pipeline vs tensor</a></li>
+        <li><a class="underline decoration-accent/40" href="#status">Engine status</a></li>
+        <li><a class="underline decoration-accent/40" href="#vllm">vLLM</a></li>
+        <li><a class="underline decoration-accent/40" href="#strata">Strata</a></li>
+        <li><a class="underline decoration-accent/40" href="#radiance">Radiance</a></li>
+        <li><a class="underline decoration-accent/40" href="#others">Other engines</a></li>
+        <li><a class="underline decoration-accent/40" href="#pitfalls">Pitfalls</a></li>
+        <li><a class="underline decoration-accent/40" href="#project">Open project</a></li>
+        <li><a class="underline decoration-accent/40" href="#sources">Sources</a></li>
+      </ul>
+    </nav>
+
+    <Callout type="linux" title="llama.cpp first">
+      <p>
+        Flags that work today are <code>-np</code> / <code>--parallel</code> and
+        <code>--split-mode layer</code> or <code>tensor</code>.
+        vLLM TP=2 and Radiance are tries, not the daily driver.
+        Third-party tok/s stay labeled. Our lab cells are the house 35B and Flash pair.
+      </p>
+    </Callout>
+
+    <section id="answer" class="mt-12 scroll-mt-28" aria-labelledby="answer-heading">
+      <h2 id="answer-heading" class="font-serif text-3xl tracking-tight">The 30-second answer</h2>
+      <p class="mt-3 leading-relaxed text-muted">{SERVING_ANSWER}</p>
+    </section>
+
+    <section id="our-lab" class="mt-12 scroll-mt-28" aria-labelledby="our-lab-heading">
+      <h2 id="our-lab-heading" class="font-serif text-3xl tracking-tight">Our lab measurements</h2>
+      <p class="mt-3 leading-relaxed text-muted">
+        These two cells are AMDai first-party numbers. They are one-client or Flash-pair
+        cards, not a 16-user serving table.
+      </p>
+      <ul class="mt-4 space-y-3">
+        {labFigures.map((row) => {
+          const source = servingSource(row.source);
+          return (
+            <li class="rounded-2xl border border-line bg-raised/50 p-4">
+              <p class="font-mono text-sm text-ink">{row.value}</p>
+              <p class="mt-1 text-sm text-muted">{row.label}. Our lab.</p>
+              <p class="mt-2 text-sm">
+                <a class="underline decoration-accent/40" href={source.href}>{source.title}</a>
+                <span class="text-muted"> · checked {source.checked} · {source.sourceDate}</span>
+              </p>
+            </li>
+          );
+        })}
+      </ul>
+    </section>
+
+    <section id="llamacpp" class="mt-12 scroll-mt-28" aria-labelledby="llamacpp-heading">
+      <h2 id="llamacpp-heading" class="font-serif text-3xl tracking-tight">llama.cpp first: flags that work today</h2>
+      <p class="mt-3 leading-relaxed text-muted">{SERVING_LLAMA}</p>
+      <p class="mt-4 leading-relaxed text-muted">{SERVING_WHEN}</p>
+      <pre class="mt-4 overflow-x-auto rounded-2xl border border-line bg-raised/50 p-4 text-sm leading-relaxed text-ink"><code>{SERVING_ONE.trim()}</code></pre>
+      <pre class="mt-4 overflow-x-auto rounded-2xl border border-line bg-raised/50 p-4 text-sm leading-relaxed text-ink"><code>{SERVING_SLOTS.trim()}</code></pre>
+      <pre class="mt-4 overflow-x-auto rounded-2xl border border-line bg-raised/50 p-4 text-sm leading-relaxed text-ink"><code>{SERVING_LAYER.trim()}</code></pre>
+      <pre class="mt-4 overflow-x-auto rounded-2xl border border-line bg-raised/50 p-4 text-sm leading-relaxed text-ink"><code>{SERVING_TENSOR.trim()}</code></pre>
+    </section>
+
+    <section id="split" class="mt-12 scroll-mt-28" aria-labelledby="split-heading">
+      <h2 id="split-heading" class="font-serif text-3xl tracking-tight">Two ways to split a model across two GPUs</h2>
+      <p class="mt-3 leading-relaxed text-muted">{SERVING_SPLIT}</p>
+      <div class="mt-6 grid gap-4 sm:grid-cols-2">
+        <article class="rounded-2xl border border-line bg-raised/50 p-5">
+          <h3 class="font-serif text-2xl tracking-tight">Pipeline (layer)</h3>
+          <p class="mt-3 text-sm leading-relaxed text-muted">
+            Some layers on GPU 0, the rest on GPU 1. One user waits on both cards
+            in sequence, so a single stream does not get faster. Extra users can
+            fill the idle card. This is <code>--split-mode layer</code>, the
+            documented default.
+          </p>
+        </article>
+        <article class="rounded-2xl border border-line bg-raised/50 p-5">
+          <h3 class="font-serif text-2xl tracking-tight">Tensor (experimental)</h3>
+          <p class="mt-3 text-sm leading-relaxed text-muted">
+            Each layer is cut across both cards, then an all-reduce. That can cut
+            single-stream latency when P2P and AllReduce are healthy.
+            <code>--split-mode tensor</code> needs flash attention and f16 KV.
+            CUDA is the optimized path.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <section id="status" class="mt-12 scroll-mt-28" aria-labelledby="status-heading">
+      <h2 id="status-heading" class="font-serif text-3xl tracking-tight">Engine status board</h2>
+      <p class="mt-3 text-sm leading-relaxed text-muted">
+        Last checked {SERVING_CHECKED}. Cells paraphrase cited docs plus house rules.
+        Third-party speed cells stay on the figures list below.
+      </p>
+      <div class="card mt-6 overflow-x-auto">
+        <table class="table-lab min-w-[52rem]">
+          <caption>
+            Serving gap on 1–2 Radeon cards. llama.cpp first. Last checked {SERVING_CHECKED}.
+          </caption>
+          <thead>
+            <tr>
+              <th scope="col">Need</th>
+              <th scope="col">llama.cpp</th>
+              <th scope="col">Strata</th>
+              <th scope="col">vLLM (ROCm)</th>
+              <th scope="col">Radiance</th>
+            </tr>
+          </thead>
+          <tbody>
+            {SERVING_GAP.map((row) => (
+              <tr>
+                <th scope="row">{row.need}</th>
+                <td>{row.llamacpp}</td>
+                <td>{row.strata}</td>
+                <td>{row.vllm}</td>
+                <td>{row.radiance}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="third-party" class="mt-12 scroll-mt-28" aria-labelledby="third-party-heading">
+      <h2 id="third-party-heading" class="font-serif text-3xl tracking-tight">Cited third-party figures</h2>
+      <p class="mt-3 leading-relaxed text-muted">
+        Every number below is third-party. Each cell links to its source and the
+        date we checked it. None of these are our lab.
+      </p>
+      <div class="card mt-6 overflow-x-auto">
+        <table class="table-lab min-w-[48rem]">
+          <caption>Third-party serving figures, each linked to its source. Checked {SERVING_CHECKED}.</caption>
+          <thead>
+            <tr>
+              <th scope="col">What</th>
+              <th scope="col">Figure</th>
+              <th scope="col">Source</th>
+            </tr>
+          </thead>
+          <tbody>
+            {thirdPartyFigures.map((row) => {
+              const source = servingSource(row.source);
+              return (
+                <tr>
+                  <th scope="row">{row.label}</th>
+                  <td>{row.value}</td>
+                  <td>
+                    <a class="underline decoration-accent/40" href={source.href} rel="noopener">{source.id}</a>
+                    <span class="block text-xs text-muted">checked {source.checked} · {source.sourceDate}</span>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="vllm" class="mt-12 scroll-mt-28" aria-labelledby="vllm-heading">
+      <h2 id="vllm-heading" class="font-serif text-3xl tracking-tight">vLLM TP=2 on R9700</h2>
+      <p class="mt-3 leading-relaxed text-muted">{SERVING_VLLM}</p>
+    </section>
+
+    <section id="strata" class="mt-12 scroll-mt-28" aria-labelledby="strata-heading">
+      <h2 id="strata-heading" class="font-serif text-3xl tracking-tight">Strata batching</h2>
+      <p class="mt-3 leading-relaxed text-muted">{SERVING_STRATA}</p>
+    </section>
+
+    <section id="radiance" class="mt-12 scroll-mt-28" aria-labelledby="radiance-heading">
+      <h2 id="radiance-heading" class="font-serif text-3xl tracking-tight">Radiance</h2>
+      <p class="mt-3 leading-relaxed text-muted">{SERVING_RADIANCE}</p>
+    </section>
+
+    <section id="others" class="mt-12 scroll-mt-28" aria-labelledby="others-heading">
+      <h2 id="others-heading" class="font-serif text-3xl tracking-tight">Other engines</h2>
+      <p class="mt-3 text-sm leading-relaxed text-muted">
+        Status paraphrases cited docs. We do not invent a tok/s for rows without a
+        linked figure.
+      </p>
+      <div class="card mt-6 overflow-x-auto">
+        <table class="table-lab min-w-[48rem]">
+          <caption>Other serving engines on Radeon / RDNA4. Last checked {SERVING_CHECKED}.</caption>
+          <thead>
+            <tr>
+              <th scope="col">Engine</th>
+              <th scope="col">Radeon / RDNA4</th>
+              <th scope="col">Concurrency / TP</th>
+              <th scope="col">Source</th>
+            </tr>
+          </thead>
+          <tbody>
+            {SERVING_OTHER.map((row) => {
+              const source = servingSource(row.source);
+              return (
+                <tr>
+                  <th scope="row">{row.engine}</th>
+                  <td>{row.radeon}</td>
+                  <td>{row.concurrency}</td>
+                  <td>
+                    <a class="underline decoration-accent/40" href={source.href} rel="noopener">{source.id}</a>
+                    <span class="block text-xs text-muted">checked {source.checked}</span>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="pitfalls" class="mt-12 scroll-mt-28" aria-labelledby="pitfalls-heading">
+      <h2 id="pitfalls-heading" class="font-serif text-3xl tracking-tight">Known pitfalls on R9700</h2>
+      <p class="mt-3 leading-relaxed text-muted">{SERVING_PITFALLS}</p>
+    </section>
+
+    <section id="checklist" class="mt-12 scroll-mt-28" aria-labelledby="checklist-heading">
+      <h2 id="checklist-heading" class="font-serif text-3xl tracking-tight">What to run, in order</h2>
+      <ol class="mt-8 space-y-6">
+        {SERVING_STEPS.map((step, index) => (
+          <li id={step.id} class="scroll-mt-28 rounded-2xl border border-line bg-raised/50 p-5">
+            <p class="font-mono text-[0.68rem] uppercase tracking-[0.14em] text-faint">
+              {index + 1} · {SERVING_CITED_LABEL}
+            </p>
+            <h3 class="mt-2 font-serif text-2xl tracking-tight">{step.title}</h3>
+            <p class="mt-3 leading-relaxed text-ink">{step.body}</p>
+            <ul class="mt-4 flex flex-wrap gap-2">
+              {step.links.map((link) => (
+                <li>
+                  <a
+                    class="inline-flex min-h-9 items-center rounded-full border border-line bg-canvas px-3 text-sm text-ink hover:border-accent/50 hover:text-accent-ink"
+                    href={link.href}
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <section id="project" class="mt-12 scroll-mt-28" aria-labelledby="project-heading">
+      <h2 id="project-heading" class="font-serif text-3xl tracking-tight">{SERVING_PROJECT_HEADING}</h2>
+      <p class="mt-3 leading-relaxed text-muted">{SERVING_PROJECT}</p>
+    </section>
+
+    <section id="sources" class="mt-12 scroll-mt-28" aria-labelledby="sources-heading">
+      <h2 id="sources-heading" class="font-serif text-3xl tracking-tight">Sources</h2>
+      <p class="mt-3 text-sm leading-relaxed text-muted">
+        Every claim on this page links here. Dates are when we checked the URL,
+        plus the source’s own date when it has one.
+      </p>
+      <ul class="mt-4 list-disc space-y-2 pl-5 text-sm leading-relaxed text-muted">
+        {SERVING_SOURCES.map((source) => (
+          <li>
+            <span class="font-mono text-ink">{source.id}</span>
+            {' — '}
+            <a class="underline decoration-accent/40" href={source.href} rel={source.href.startsWith('http') ? 'noopener' : undefined}>
+              {source.title}
+            </a>
+            {source.thirdParty ? ' — third-party' : ' — our lab'}
+            {` · checked ${source.checked} · ${source.sourceDate}`}
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <div class="mt-8">
+      <HowWeTest />
+    </div>
+    <NextSteps path="/serving" />
+  </main>
+</Base>

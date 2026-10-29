@@ -644,13 +644,28 @@ export const FAQ_ENTRIES: FaqItem[] = [
     group: 'speed-vram',
     question: 'How do I serve several clients from one llama-server on a Radeon?',
     answer:
-      'Cited path is llama-server -np / --parallel. Context per slot is total ctx / np unless you raise -c or set --kv-unified-per-slot. AMDai has not measured -np 2/4/8 on one R9700 — run Stack Lab concurrency-ab/1. The shopper page is /concurrency-ab. Two GPU copies stay on /qwen36-dual. Q3 is a labeled estimate. llama.cpp first.',
+      'Cited path is llama-server -np / --parallel. Context per slot is total ctx / np unless you raise -c or set --kv-unified-per-slot. AMDai has not measured -np 2/4/8 on one R9700 — run Stack Lab concurrency-ab/1. The shopper page is /concurrency-ab. Two GPU copies stay on /qwen36-dual. Several users on 1–2 cards, including --split-mode and when to try vLLM or Radiance, live on /serving. Q3 is a labeled estimate. llama.cpp first.',
     links: [
       { href: '/concurrency-ab', label: 'Parallel slots' },
+      { href: '/serving', label: 'Serving many users' },
       { href: '/setup/server', label: 'Always-on server' },
       { href: '/kv-cache', label: 'KV cache' },
       { href: '/stack-lab', label: 'Stack Lab' },
       { href: '/amdai-bench', label: 'amdai-bench' },
+    ],
+  },
+  {
+    id: 'serve-many-users',
+    group: 'speed-vram',
+    question: 'How do I serve several users on one or two Radeon cards?',
+    answer:
+      'llama.cpp first. On one GPU use llama-server -np / --parallel. On two GPUs use --split-mode layer, or two pinned servers when the file fits one card. --split-mode tensor is experimental. Try vLLM TP=2 or Radiance only when you need tensor-parallel throughput and can live with gfx1201 bugs or a convert step. The shopper page is /serving. Third-party tok/s stay labeled. Our lab 35B and Flash cells are one-client or Flash-pair cards. Q3 is a labeled estimate.',
+    links: [
+      { href: '/serving', label: 'Serving many users' },
+      { href: '/concurrency-ab', label: 'Parallel slots' },
+      { href: '/multi-gpu', label: 'Dual / multi-GPU' },
+      { href: '/backends', label: 'Backends' },
+      { href: '/qwen36-dual', label: '35B on two cards' },
     ],
   },
   {
@@ -1205,6 +1220,7 @@ export const REQUIRED_FAQ_HREFS = [
   '/chat-templates',
   '/new-models',
   '/lab-log',
+  '/serving',
   '/concurrency-ab',
   '/flash-attention',
   '/prefill',

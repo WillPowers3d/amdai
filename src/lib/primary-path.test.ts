@@ -171,6 +171,7 @@ describe('primary path and nav IA', () => {
       '/thinking': '../pages/thinking.astro',
       '/sampling': '../pages/sampling.astro',
       '/chat-templates': '../pages/chat-templates.astro',
+      '/serving': '../pages/serving.astro',
       '/concurrency-ab': '../pages/concurrency-ab.astro',
       '/flash-attention': '../pages/flash-attention.astro',
       '/prefill': '../pages/prefill.astro',

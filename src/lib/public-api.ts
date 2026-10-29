@@ -658,6 +658,7 @@ export function apiEndpoints(): ApiEndpoint[] {
     { path: `${API_BASE_PATH}/measured.json`, description: 'Measured runs from the lab log' },
     { path: `${API_BASE_PATH}/rocm-issues.json`, description: 'Consumer ROCm problem tracker' },
     { path: `${API_BASE_PATH}/backends.json`, description: 'Inference engines. llama.cpp is the default' },
+    { path: `${API_BASE_PATH}/serving.json`, description: 'Multi-user serving on 1–2 Radeon cards. llama.cpp first' },
     { path: `${API_BASE_PATH}/catalog.json`, description: 'First-party launch recipes' },
     { path: `${API_BASE_PATH}/pick.json`, description: 'Static per-GPU recipe pick table' },
   ];

@@ -249,6 +249,7 @@ export const CRUMB_LABELS: Record<string, string> = {
   '/thinking': 'Thinking mode',
   '/sampling': 'Sampling',
   '/chat-templates': 'Chat templates',
+  '/serving': 'Serving',
   '/concurrency-ab': 'Parallel slots',
   '/flash-attention': 'Flash Attention',
   '/prefill': 'Prefill',
@@ -565,6 +566,12 @@ setMeta(
   'Chat templates and --jinja on a Radeon GPU with llama.cpp. Cited GGUF tokenizer.chat_template. House recipes pass --jinja. Q3 is a labeled estimate.',
 );
 setDate('/chat-templates', '2026-10-14');
+setMeta(
+  '/serving',
+  'Serve many users on two Radeon cards',
+  'Serve several users on 1–2 Radeon cards. llama.cpp -np and --split-mode first. Third-party figures labeled. Our lab 35B and Flash. Q3 is a labeled estimate.',
+);
+setDate('/serving', '2026-10-28');
 setMeta(
   '/concurrency-ab',
   'Parallel slots (-np) on a Radeon GPU',
