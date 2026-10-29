@@ -1,6 +1,6 @@
 ---
 import AffiliateDisclosure from './AffiliateDisclosure.astro';
-import { allBuildLists, buildList, buildListKey, type BuildAsk } from '../lib/build-list';
+import { allBuildLists, buildList, buildListKey, compactBuildMaps, type BuildAsk } from '../lib/build-list';
 
 interface Props {
   ask?: BuildAsk;
@@ -12,8 +12,7 @@ const {
   id = 'build-list',
 } = Astro.props;
 const initial = buildList(ask);
-const maps = allBuildLists();
-const payload = JSON.stringify({ key: buildListKey(ask), builds: maps });
+const payload = JSON.stringify(compactBuildMaps(buildListKey(ask), allBuildLists()));
 ---
 
 <section id={id} class="build-list rounded-2xl border border-line bg-raised/40 p-5 sm:p-6" aria-labelledby="bl-h" data-build-list data-build-payload={payload}>
@@ -58,6 +57,34 @@ const payload = JSON.stringify({ key: buildListKey(ask), builds: maps });
     parts: BuildPart[];
     warnings: string[];
   };
+  type CompactMaps = {
+    strings?: string[];
+    key?: string;
+    builds?: Record<string, { a: number[]; w: number[]; p: number[][] }>;
+  };
+
+  function expandBuild(data: CompactMaps, mapKey: string): BuildRow | null {
+    const strings = data.strings || [];
+    const raw = data.builds?.[mapKey] || (data.key ? data.builds?.[data.key] : undefined);
+    if (!raw) return null;
+    const str = (index: number | undefined) => (index == null || index < 0 ? null : (strings[index] ?? null));
+    return {
+      answers: {
+        gpus: raw.a[0] ?? 1,
+        later_big: Boolean(raw.a[1]),
+        min_budget: Boolean(raw.a[2]),
+        cold_load: Boolean(raw.a[3]),
+      },
+      warnings: (raw.w || []).map((index) => strings[index] ?? ''),
+      parts: (raw.p || []).map((cells) => ({
+        role: str(cells[0]) ?? '',
+        part: str(cells[1]) ?? '',
+        why: str(cells[2]) ?? '',
+        spec: str(cells[3]),
+        go: str(cells[4]) ?? '',
+      })),
+    };
+  }
 
   function radioValue(name: string, fallback: string): string {
     const checked = document.querySelector<HTMLInputElement>(`input[name="${name}"]:checked`);
@@ -100,13 +127,13 @@ const payload = JSON.stringify({ key: buildListKey(ask), builds: maps });
   function syncBuild() {
     const root = document.querySelector<HTMLElement>('[data-build-list]');
     if (!root) return;
-    let data: { key?: string; builds?: Record<string, BuildRow> };
+    let data: CompactMaps;
     try {
       data = JSON.parse(root.getAttribute('data-build-payload') || '{}');
     } catch {
       return;
     }
-    const build = data.builds?.[askKey()] || (data.key ? data.builds?.[data.key] : undefined);
+    const build = expandBuild(data, askKey());
     if (!build) return;
     const answers = root.querySelector('[data-build-answers]');
     if (answers) answers.textContent = answerLine(build);
