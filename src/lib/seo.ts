@@ -1146,7 +1146,7 @@ setMeta(
   'Public API',
   'Static JSON API for AMDai GPU, model, stack, measured, and ROCm catalogs. curl examples, CORS, MIT licence, MCP server.',
 );
-setDate('/api', '2026-10-28');
+setDate('/api', '2026-10-29');
 setMeta(
   '/terms',
   'Terms of use',
