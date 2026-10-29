@@ -37,6 +37,8 @@ import { liveRecipes, pickRecipes, type Recipe } from './recipes';
 import { ramRecommendation, setupNeedsRamOffload, type RamRecommendation } from './ram-kit';
 import { cpuRecommendation, type CpuRecommendation } from './cpu-pick';
 import { psuRecommendation, type PsuRecommendation } from './psu-pick';
+import { storageRecommendation, type StorageRecommendation } from './storage-pick';
+import { buildList, type BuildList } from './build-list';
 import { recipes } from './recipes-data';
 import { r9700StreetPrice, R9700_STREET_LOG_HREF, R9700_STREET_POLICY } from './r9700-street-price';
 import { parseRocmProblems, problemPath, type RocmProblemsFile } from './rocm-problems';
@@ -767,6 +769,8 @@ export type StackRecommend = {
   ram: RamRecommendation;
   cpu: CpuRecommendation;
   psu: PsuRecommendation;
+  storage: StorageRecommendation;
+  parts: BuildList;
 };
 
 function normalizeGpuToken(value: string): string {
@@ -872,6 +876,19 @@ export function recommendStack(opts: StackRecommendInput): StackRecommend {
     psu: psuRecommendation({
       gpuCount: Array.isArray(opts.gpus) ? Math.max(1, opts.gpus.length) : 1,
       expandGpu: Array.isArray(opts.gpus) && opts.gpus.length >= 2,
+    }),
+    storage: storageRecommendation({
+      bigModels: goal === 'agent' || ram >= 192,
+      coldLoad: false,
+    }),
+    parts: buildList({
+      gpuCount: Array.isArray(opts.gpus) ? Math.max(1, opts.gpus.length) : 1,
+      minBudget: false,
+      expandGpu: Array.isArray(opts.gpus) && opts.gpus.length >= 2,
+      bigModels: goal === 'agent' || ram >= 192,
+      cpuWork: false,
+      coldLoad: false,
+      needsOffload: setupNeedsRamOffload(fitted),
     }),
   };
 }

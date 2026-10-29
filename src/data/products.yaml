@@ -591,3 +591,145 @@ products:
       amazon: https://www.amazon.com/s?k=MSI+B650+GAMING+PLUS+WIFI
       bhphoto: https://www.bhphotovideo.com/c/search?Ntt=MSI+B650+GAMING+PLUS+WIFI
       microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=MSI+B650+GAMING+PLUS+WIFI
+
+  - id: amd-ryzen-5-9600x
+    name: AMD Ryzen 5 9600X
+    kind: part
+    note: Builder /go/newegg slug from the parts-list drafts. Same chip as ryzen-5-9600x. Search only — no live or invented price.
+    urls:
+      amazon: https://www.amazon.com/s?k=AMD+Ryzen+5+9600X
+      newegg: https://www.newegg.com/p/pl?d=AMD+Ryzen+5+9600X
+      bhphoto: https://www.bhphotovideo.com/c/search?Ntt=AMD+Ryzen+5+9600X
+      microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=AMD+Ryzen+5+9600X
+      amd: https://www.amd.com/en/products/processors/desktops/ryzen/9000-series/amd-ryzen-5-9600x.html
+
+  - id: amd-ryzen-7-9700x
+    name: AMD Ryzen 7 9700X
+    kind: part
+    note: Builder /go/newegg slug from the parts-list drafts. Search only — no live or invented price.
+    urls:
+      amazon: https://www.amazon.com/s?k=AMD+Ryzen+7+9700X
+      newegg: https://www.newegg.com/p/pl?d=AMD+Ryzen+7+9700X
+      bhphoto: https://www.bhphotovideo.com/c/search?Ntt=AMD+Ryzen+7+9700X
+      microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=AMD+Ryzen+7+9700X
+      amd: https://www.amd.com/en/products/processors/desktops/ryzen/9000-series/amd-ryzen-7-9700x.html
+
+  - id: asrock-b850-pro-rs
+    name: ASRock B850 Pro RS
+    kind: part
+    note: Builder /go/newegg slug from the parts-list drafts. Search only, not a SKU or a price.
+    urls:
+      newegg: https://www.newegg.com/p/pl?d=ASRock+B850+Pro+RS
+      amazon: https://www.amazon.com/s?k=ASRock+B850+Pro+RS
+      bhphoto: https://www.bhphotovideo.com/c/search?Ntt=ASRock+B850+Pro+RS
+      microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=ASRock+B850+Pro+RS
+
+  - id: cp-9020270-na
+    name: Corsair RM850x (2024, ATX 3.1)
+    kind: part
+    note: Builder /go/newegg slug from the parts-list drafts. Same unit as corsair-rm850x. Search only — no live or invented price.
+    urls:
+      amazon: https://www.amazon.com/s?k=Corsair+RM850x+2024+CP-9020270-NA
+      newegg: https://www.newegg.com/p/pl?d=CP-9020270-NA
+      bhphoto: https://www.bhphotovideo.com/c/search?Ntt=Corsair+RM850x+2024
+      microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=Corsair+RM850x
+      corsair: https://www.corsair.com/us/en/p/psu/cp-9020270-na/rmx-series-rm850x-fully-modular-power-supply-cp-9020270-na
+
+  - id: f5-6000j3038f16gx2-fx5
+    name: G.SKILL Flare X5 32 GB (2x16) DDR5-6000 CL30
+    kind: part
+    note: Builder /go/newegg slug from the parts-list drafts. Same kit as ddr5-32. Search only — no live or invented price.
+    urls:
+      amazon: https://www.amazon.com/s?k=G.SKILL+Flare+X5+F5-6000J3038F16GX2-FX5
+      newegg: https://www.newegg.com/p/pl?d=F5-6000J3038F16GX2-FX5
+      bhphoto: https://www.bhphotovideo.com/c/search?Ntt=F5-6000J3038F16GX2-FX5
+      microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=F5-6000J3038F16GX2-FX5
+      gskill: https://www.gskill.com/specification/165/396/1673491242/F5-6000J3038F16GX2-FX5-Specification
+
+  - id: f5-6000j3644d64gx4-tz5nr
+    name: G.SKILL Trident Z5 Neo 256 GB (4x64) DDR5-6000
+    kind: part
+    note: Builder /go/newegg slug from the parts-list drafts. Same kit as ddr5-256. Search only — no live or invented price.
+    urls:
+      amazon: https://www.amazon.com/s?k=G.SKILL+Trident+Z5+Neo+F5-6000J3644D64GX4-TZ5NR
+      newegg: https://www.newegg.com/p/pl?d=F5-6000J3644D64GX4-TZ5NR
+      bhphoto: https://www.bhphotovideo.com/c/search?Ntt=F5-6000J3644D64GX4-TZ5NR
+      microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=F5-6000J3644D64GX4-TZ5NR
+      gskill: https://www.gskill.com/product/165/390/1750238051/F5-6000J3644D64GX4-TZ5NR
+
+  - id: ps-tpt-1200fnfagu-3
+    name: Thermaltake Toughpower GT 1200W
+    kind: part
+    note: Builder /go/newegg slug from the parts-list drafts. Same unit as thermaltake-toughpower-gt-1200. Search only — no live or invented price.
+    urls:
+      amazon: https://www.amazon.com/s?k=Thermaltake+Toughpower+GT+1200W+PS-TPT-1200FNFAGU-3
+      newegg: https://www.newegg.com/p/pl?d=PS-TPT-1200FNFAGU-3
+      bhphoto: https://www.bhphotovideo.com/c/search?Ntt=Thermaltake+Toughpower+GT+1200W
+      microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=Thermaltake+Toughpower+GT+1200W
+      thermaltake: https://www.thermaltake.com/toughpower-gt-1200w.html
+
+  - id: mz-v9p2t0bw
+    name: Samsung 990 PRO 2TB
+    kind: part
+    note: Gen4 TLC with 2 GB LPDDR4. Datasheet sequential read 7,450 MB/s, 1,200 TBW. Search only — no live or invented price.
+    urls:
+      amazon: https://www.amazon.com/s?k=Samsung+990+PRO+2TB+MZ-V9P2T0BW
+      newegg: https://www.newegg.com/p/pl?d=MZ-V9P2T0BW
+      bhphoto: https://www.bhphotovideo.com/c/search?Ntt=MZ-V9P2T0BW
+      microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=Samsung+990+PRO+2TB
+      samsung: https://download.semiconductor.samsung.com/resources/data-sheet/samsung_nvme_ssd_990_pro_datasheet_rev.2.0.pdf
+
+  - id: mz-v9p4t0bw
+    name: Samsung 990 PRO 4TB
+    kind: part
+    note: Gen4 TLC with 4 GB LPDDR4. Datasheet sequential read 7,450 MB/s, 2,400 TBW. Search only — no live or invented price.
+    urls:
+      amazon: https://www.amazon.com/s?k=Samsung+990+PRO+4TB+MZ-V9P4T0BW
+      newegg: https://www.newegg.com/p/pl?d=MZ-V9P4T0BW
+      bhphoto: https://www.bhphotovideo.com/c/search?Ntt=MZ-V9P4T0BW
+      microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=Samsung+990+PRO+4TB
+      samsung: https://download.semiconductor.samsung.com/resources/data-sheet/samsung_nvme_ssd_990_pro_datasheet_rev.2.0.pdf
+
+  - id: wds400t2x0e
+    name: WD_BLACK SN850X 4TB
+    kind: part
+    note: Gen4 TLC with DRAM. Datasheet sequential read 7,300 MB/s, 2,400 TBW. Search only — no live or invented price.
+    urls:
+      amazon: https://www.amazon.com/s?k=WD_BLACK+SN850X+4TB+WDS400T2X0E
+      newegg: https://www.newegg.com/p/pl?d=WDS400T2X0E
+      bhphoto: https://www.bhphotovideo.com/c/search?Ntt=WDS400T2X0E
+      microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=WD+BLACK+SN850X+4TB
+      sandisk: https://documents.sandisk.com/content/dam/asset-library/en_us/assets/public/sandisk/product/internal-drives/wd-black-ssd/data-sheet-wd-black-sn850x-nvme-ssd.pdf
+
+  - id: wds800t2x0e
+    name: WD_BLACK SN850X 8TB
+    kind: part
+    note: Gen4 TLC with DRAM. Datasheet sequential read 7,200 MB/s, 4,800 TBW. Search only — no live or invented price.
+    urls:
+      amazon: https://www.amazon.com/s?k=WD_BLACK+SN850X+8TB+WDS800T2X0E
+      newegg: https://www.newegg.com/p/pl?d=WDS800T2X0E
+      bhphoto: https://www.bhphotovideo.com/c/search?Ntt=WDS800T2X0E
+      microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=WD+BLACK+SN850X+8TB
+      sandisk: https://documents.sandisk.com/content/dam/asset-library/en_us/assets/public/sandisk/product/internal-drives/wd-black-ssd/data-sheet-wd-black-sn850x-nvme-ssd.pdf
+
+  - id: mz-vap4t0b
+    name: Samsung 9100 PRO 4TB
+    kind: part
+    note: Gen5 TLC with 4 GB LPDDR4X. Datasheet sequential read 14,800 MB/s, 2,400 TBW. Fastest-cold-load option only. Search only — no live or invented price.
+    urls:
+      amazon: https://www.amazon.com/s?k=Samsung+9100+PRO+4TB+MZ-VAP4T0B
+      newegg: https://www.newegg.com/p/pl?d=MZ-VAP4T0B
+      bhphoto: https://www.bhphotovideo.com/c/search?Ntt=MZ-VAP4T0B
+      microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=Samsung+9100+PRO+4TB
+      samsung: https://download.semiconductor.samsung.com/resources/data-sheet/Samsung_NVMe_SSD_9100_PRO_Datasheet_Rev.2.0.pdf
+
+  - id: mz-vap8t0b
+    name: Samsung 9100 PRO 8TB
+    kind: part
+    note: Gen5 TLC with 8 GB LPDDR4X. Datasheet sequential read 14,800 MB/s, 4,800 TBW. Fastest-cold-load option only. Search only — no live or invented price.
+    urls:
+      amazon: https://www.amazon.com/s?k=Samsung+9100+PRO+8TB+MZ-VAP8T0B
+      newegg: https://www.newegg.com/p/pl?d=MZ-VAP8T0B
+      bhphoto: https://www.bhphotovideo.com/c/search?Ntt=MZ-VAP8T0B
+      microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=Samsung+9100+PRO+8TB
+      samsung: https://download.semiconductor.samsung.com/resources/data-sheet/Samsung_NVMe_SSD_9100_PRO_Datasheet_Rev.2.0.pdf

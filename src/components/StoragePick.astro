@@ -1,0 +1,125 @@
+---
+import BuyButtons from './BuyButtons.astro';
+import AffiliateDisclosure from './AffiliateDisclosure.astro';
+import {
+  DRIVES,
+  GEN5_LOAD_NOTE,
+  LOAD_EVIDENCE,
+  MMAP_BOUND_NOTE,
+  NVME_RULE,
+  STORAGE_SIZE_SRC,
+  storageRecommendation,
+  type StorageAsk,
+} from '../lib/storage-pick';
+
+interface Props {
+  ask?: StorageAsk;
+  id?: string;
+}
+
+const { ask = { bigModels: false, coldLoad: false }, id = 'storage-pick' } = Astro.props;
+const initial = storageRecommendation(ask);
+const payload = JSON.stringify({
+  mmap: MMAP_BOUND_NOTE,
+  load: GEN5_LOAD_NOTE,
+});
+---
+
+<section id={id} class="space-y-4" data-storage-pick data-storage-payload={payload}>
+  <div>
+    <p class="kicker">Storage</p>
+    <h2 class="mt-2 text-2xl tracking-tight sm:text-3xl">Which NVMe holds the models?</h2>
+    <p class="mt-2 text-sm leading-relaxed text-muted" data-storage-note>{initial.why}</p>
+    <p class="mt-2 text-sm leading-relaxed text-muted">{NVME_RULE}</p>
+    <p class="mt-2 text-sm leading-relaxed text-muted">{MMAP_BOUND_NOTE} {GEN5_LOAD_NOTE}</p>
+    <p class="mt-2 text-sm leading-relaxed text-muted">
+      File sizes: {STORAGE_SIZE_SRC}. Buttons say Check price. We never invent an SSD price.
+    </p>
+    <ul class="mt-2 list-disc space-y-1 pl-5 text-sm text-muted">
+      {LOAD_EVIDENCE.map((row) => (
+        <li>
+          <a class="underline decoration-accent/40 underline-offset-2" href={row.url} rel="noopener" target="_blank">
+            {row.title}
+          </a>
+          — {row.claim}
+        </li>
+      ))}
+    </ul>
+  </div>
+
+  {DRIVES.map((drive) => {
+    const shown =
+      drive.id === initial.primary.id || initial.alternatives.some((row) => row.id === drive.id);
+    const isAlt = initial.alternatives.some((row) => row.id === drive.id);
+    return (
+      <div class="card p-5 sm:p-6" data-storage-card={drive.id} data-storage-gen={drive.gen} data-storage-tb={drive.tb} hidden={!shown}>
+        <p class="kicker">{isAlt ? 'Also Gen4 with DRAM' : drive.gen === 5 ? 'Fastest cold loads' : 'Pick'}</p>
+        <h3 class="mt-1 text-2xl tracking-tight">{drive.name}</h3>
+        <p class="mt-2 text-sm text-muted">
+          {drive.part} · PCIe Gen{drive.gen} · {drive.seq_read_mbs.toLocaleString('en-US')} MB/s sequential read · {drive.tbw.toLocaleString('en-US')} TBW · {drive.dram} · {drive.nand}
+        </p>
+        <p class="mt-3 text-sm leading-relaxed text-muted">
+          Cite:
+          <a class="underline decoration-accent/40 underline-offset-2" href={drive.citation.url} rel="noopener" target="_blank">
+            {drive.citation.title}
+          </a>
+          — {drive.citation.section}. As of {drive.citation.as_of}.
+        </p>
+        <BuyButtons product={drive.product_id} src={drive.src} disclose={false} />
+      </div>
+    );
+  })}
+
+  <AffiliateDisclosure compact />
+</section>
+
+<script>
+  function bigModels(): boolean {
+    const checked = document.querySelector<HTMLInputElement>('input[name="bigmodels"]:checked');
+    return checked?.value === '1' || checked?.value === 'yes';
+  }
+
+  function coldLoad(): boolean {
+    const checked = document.querySelector<HTMLInputElement>('input[name="coldload"]:checked');
+    return checked?.value === '1' || checked?.value === 'yes';
+  }
+
+  function syncStorage() {
+    const root = document.querySelector<HTMLElement>('[data-storage-pick]');
+    if (!root) return;
+    const four = bigModels();
+    const gen5 = coldLoad();
+    const tb = four ? 4 : 2;
+    const gen = gen5 ? 5 : 4;
+    const note = root.querySelector('[data-storage-note]');
+    if (note) {
+      note.textContent = !four && !gen5
+        ? 'Your lanes need about 1,587 GiB (every Q4–Q6 quant of Qwen3.6-35B, Qwen3.8-Flash-Next and GLM-5.3-Flash, one extra file of download headroom, 150 GiB for the OS). A 2 TB drive is 1,863 GiB usable. Gen4 TLC with DRAM is enough: published tests show Gen5 loads big GGUFs only about 9% faster on the default mmap path (15.2 s vs 13.8 s). Spend the difference on capacity or RAM.'
+        : four && !gen5
+          ? 'Your lanes need about 1,819 GiB once a fourth Flash-class family (MiniMax-M3.1-Flash UD-Q4 is 232 GiB) is in the plan. A 4 TB drive is 3,725 GiB usable. You said larger models later, so this steps up to 4 TB. Gen4 TLC with DRAM is enough: published tests show Gen5 loads big GGUFs only about 9% faster on the default mmap path (15.2 s vs 13.8 s). Spend the difference on capacity or RAM.'
+          : 'Gen5 cuts cold load time only if the engine loads with direct I/O; with the default mmap path the CPU, not the drive, is usually the limit. The cited mmap test was only about 9% faster (15.2 s vs 13.8 s). ' + (four
+            ? 'A 4 TB Gen5 drive is the fastest-cold-load pick when larger models later are in the plan.'
+            : 'A Gen5 drive is the fastest-cold-load option. Capacity can stay 2 TB for the three-family set, but the sourced 9100 PRO SKUs start at 4 TB.');
+    }
+    root.querySelectorAll<HTMLElement>('[data-storage-card]').forEach((card) => {
+      const cardGen = Number(card.getAttribute('data-storage-gen'));
+      const cardTb = Number(card.getAttribute('data-storage-tb'));
+      const id = card.getAttribute('data-storage-card');
+      const matchGen = cardGen === gen;
+      const matchTb = gen === 5 ? cardTb >= 4 && (four ? cardTb === 4 : cardTb === 4) : four ? cardTb === 4 : cardTb === 2 && id === '990pro-2tb';
+      card.hidden = !(matchGen && matchTb);
+      const kicker = card.querySelector('.kicker');
+      if (kicker) {
+        kicker.textContent =
+          cardGen === 5 ? 'Fastest cold loads' : id === 'sn850x-4tb' || id === 'sn850x-8tb' ? 'Also Gen4 with DRAM' : 'Pick';
+      }
+    });
+  }
+
+  document.addEventListener('change', (event) => {
+    const target = event.target as HTMLElement | null;
+    if (target?.matches('[name="bigmodels"], [name="coldload"]')) syncStorage();
+  });
+  window.addEventListener('amdai-ask-change', syncStorage);
+  syncStorage();
+</script>

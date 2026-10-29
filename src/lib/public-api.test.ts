@@ -132,7 +132,12 @@ describe('public static API generator', () => {
     assert.ok(daily.psu);
     assert.ok(daily.psu.picks.length >= 1);
     assert.match(daily.psu.picks[0]!.src, /builder-psu-/);
-    assert.doesNotMatch(`${daily.cpu.why} ${daily.psu.why}`, /\$\d|\bMSRP\b/);
+    assert.ok(daily.storage);
+    assert.ok(daily.storage.tb === 2 || daily.storage.tb === 4);
+    assert.ok(daily.parts);
+    assert.equal(daily.parts.parts.length, 6);
+    assert.ok(daily.parts.parts.every((row) => row.go.startsWith('/go/newegg/')));
+    assert.doesNotMatch(`${daily.cpu.why} ${daily.psu.why} ${daily.storage.why}`, /\$\d|\bMSRP\b/);
     assert.match(daily.href, /\/stacks/);
     const input = planFitInput({ gpu: 'r9700', model: 'qwen36', quant: 'q5_k_m' });
     const share = calculatorShareUrl(input);

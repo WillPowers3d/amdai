@@ -28,6 +28,8 @@ import MotherboardPick from '../components/MotherboardPick.astro';
 import RamPick from '../components/RamPick.astro';
 import CpuPick from '../components/CpuPick.astro';
 import PsuPick from '../components/PsuPick.astro';
+import StoragePick from '../components/StoragePick.astro';
+import BuildList from '../components/BuildList.astro';
 import { gpuProducts } from '../lib/affiliates';
 import { recipes } from '../lib/recipes-data';
 import OpenInStackLab from '../components/OpenInStackLab.astro';
@@ -96,6 +98,8 @@ const olderOpen = olderModelsOpenFromSearch(Astro.url.search);
       <RamPick boards={motherboards} />
       <CpuPick />
       <PsuPick ask={{ gpuCount: 1, expandGpu: defaultExpandGpu(false) }} />
+      <StoragePick />
+      <BuildList />
     </div>
 
     <div id="tested-badge" hidden class="mt-6 inline-flex max-w-3xl items-start gap-2 rounded-2xl border border-ok/40 bg-ok/10 px-4 py-2 text-sm text-ok">
@@ -638,6 +642,9 @@ const olderOpen = olderModelsOpenFromSearch(Astro.url.search);
     document.querySelectorAll<HTMLInputElement>('input[name="cpuwork"]').forEach((el) => {
       el.checked = (el.value === '1') === ask.cpuWork;
     });
+    document.querySelectorAll<HTMLInputElement>('input[name="coldload"]').forEach((el) => {
+      el.checked = (el.value === '1') === ask.coldLoad;
+    });
   }
 
   function readForm(): CalcInput {
@@ -697,6 +704,7 @@ const olderOpen = olderModelsOpenFromSearch(Astro.url.search);
       expandgpu: ask.expandGpu ? '1' : '0',
       bigmodels: ask.bigModels ? '1' : '0',
       cpuwork: ask.cpuWork ? '1' : '0',
+      coldload: ask.coldLoad ? '1' : '0',
     });
   }
 
@@ -718,6 +726,9 @@ const olderOpen = olderModelsOpenFromSearch(Astro.url.search);
     setText('[data-cpuwork-lede]', ask.cpuWork
       ? 'Same PCIe story. For DDR5 offload the 9950X adds cores for side jobs; for in-VRAM the 9600X is still enough.'
       : 'The CPU mostly feeds the cards. Stay on the 9600X when the model fits in VRAM, or the 9900X when experts land in DDR5.');
+    setText('[data-coldload-lede]', ask.coldLoad
+      ? 'Samsung 9100 PRO. Helps most with direct I/O. Default mmap is usually CPU-bound. Cited third-party test: 13.8 s vs 15.2 s (about 9%).'
+      : 'Default. Samsung 990 PRO or WD_BLACK SN850X. A published mmap test loaded a 40.5 GB file only about 9% faster on Gen5 (15.2 s vs 13.8 s).');
     setText('[data-priority-headline]', advice.headline);
     setText('[data-priority-body]', advice.body);
     setText('[data-usage-verdict]', USAGE_COPY[ask.usage].verdict);
@@ -1112,10 +1123,11 @@ const olderOpen = olderModelsOpenFromSearch(Astro.url.search);
       expandGpu: expandRaw == null ? !min : expandRaw === '1',
       bigModels: document.querySelector<HTMLInputElement>('input[name="bigmodels"]:checked')?.value === '1',
       cpuWork: document.querySelector<HTMLInputElement>('input[name="cpuwork"]:checked')?.value === '1',
+      coldLoad: document.querySelector<HTMLInputElement>('input[name="coldload"]:checked')?.value === '1',
     };
   }
 
-  document.querySelectorAll<HTMLInputElement>('input[name="priority"], input[name="usage"], input[name="style"], input[name="minbudget"], input[name="expandgpu"], input[name="bigmodels"], input[name="cpuwork"]').forEach((el) => {
+  document.querySelectorAll<HTMLInputElement>('input[name="priority"], input[name="usage"], input[name="style"], input[name="minbudget"], input[name="expandgpu"], input[name="bigmodels"], input[name="cpuwork"], input[name="coldload"]').forEach((el) => {
     el.addEventListener('change', (event) => {
       const target = event.target as HTMLInputElement;
       if (target.name === 'minbudget') {
@@ -1138,7 +1150,7 @@ const olderOpen = olderModelsOpenFromSearch(Astro.url.search);
 
   if (!window.location.search) {
     input = { ...DEFAULT_INPUT };
-    ask = { priority: 'speed', usage: 'local', style: 'standard', minBudget: false, expandGpu: true, bigModels: false, cpuWork: false };
+    ask = { priority: 'speed', usage: 'local', style: 'standard', minBudget: false, expandGpu: true, bigModels: false, cpuWork: false, coldLoad: false };
   }
   writeForm();
   bindOlderModelPickers();

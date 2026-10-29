@@ -56,7 +56,13 @@ describe('amdai-fit-mcp tools', () => {
     assert.match(out.cpu.title, /Ryzen/);
     assert.ok(out.psu);
     assert.ok(out.psu.watts >= 850);
-    assert.doesNotMatch(`${out.cpu.why} ${out.psu.why}`, /\$\d|\bMSRP\b/);
+    assert.ok(out.storage);
+    assert.ok(out.storage.tb === 2 || out.storage.tb === 4);
+    assert.match(out.storage.go, /\/go\/newegg\//);
+    assert.ok(out.parts);
+    assert.equal(out.parts.items.length, 6);
+    assert.ok(out.parts.items.every((row) => row.go.startsWith('/go/newegg/')));
+    assert.doesNotMatch(`${out.cpu.why} ${out.psu.why} ${out.storage.why}`, /\$\d|\bMSRP\b/);
   });
 
   it('compare_gpus cites the compare page', () => {
