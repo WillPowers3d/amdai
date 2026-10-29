@@ -34,9 +34,17 @@ describe('affiliate /go/ helpers', () => {
     );
     const affiliates = readFileSync(join(here, './affiliates.ts'), 'utf8');
     const buttons = readFileSync(join(here, '../components/BuyButtons.astro'), 'utf8');
+    const disclosure = readFileSync(join(here, '../pages/disclosure.astro'), 'utf8');
     assert.match(affiliates, /NEWEGG_FIRST/);
     assert.match(affiliates, /neweggFirstEnabled/);
     assert.match(buttons, /buyRetailers/);
     assert.match(buttons, /src\?:/);
+    assert.match(disclosure, /AMAZON_ASSOCIATE_DISCLOSURE/);
+    assert.match(
+      disclosure,
+      /Some retailer links, including Newegg links, may be affiliate links through Rakuten Advertising, Amazon Associates or other programs/,
+    );
+    assert.doesNotMatch(disclosure, /No Rakuten publisher token is configured/);
+    assert.doesNotMatch(disclosure, /A Rakuten publisher token is configured/);
   });
 });

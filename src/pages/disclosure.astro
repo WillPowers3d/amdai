@@ -1,6 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
-import { AMAZON_ASSOCIATE_DISCLOSURE, affiliateProgramsActive, amazonTag, retailersFile } from '../lib/affiliates';
+import { AMAZON_ASSOCIATE_DISCLOSURE, affiliateProgramsActive, amazonTag } from '../lib/affiliates';
 
 const active = affiliateProgramsActive();
 const tag = amazonTag();
@@ -38,16 +38,7 @@ const tag = amazonTag();
     <section class="mt-10">
       <h2 class="font-serif text-3xl">Rakuten Advertising (Newegg)</h2>
       <p class="mt-3 leading-relaxed text-muted">
-        Newegg is reached through <strong class="font-medium text-ink">Rakuten Advertising</strong> when both
-        <code class="font-mono text-ink">{retailersFile.rakuten.publisher_id_env}</code> (the encrypted Link Locator
-        <code class="font-mono text-ink">id</code> token — not Site ID {retailersFile.rakuten.sid}) and
-        <code class="font-mono text-ink">RAKUTEN_MID_NEWEGG</code> are set. Public account name is
-        <code class="font-mono text-ink">{retailersFile.rakuten.site_name}</code>, SID
-        <code class="font-mono text-ink">{retailersFile.rakuten.sid}</code>. The builder is a generic
-        <code class="font-mono text-ink">click.linksynergy.com/deeplink</code> URL
-        (<code class="font-mono text-ink">id</code>, <code class="font-mono text-ink">mid</code>, <code class="font-mono text-ink">murl</code>)
-        so other Rakuten merchants can be added later in <code class="font-mono text-ink">src/data/retailers.yaml</code>.
-        {active.rakuten ? 'A Rakuten publisher token is configured on this build. Newegg still needs a MID to wrap.' : 'No Rakuten publisher token is configured — Newegg links are plain newegg.com URLs.'}
+        Some retailer links, including Newegg links, may be affiliate links through Rakuten Advertising, Amazon Associates or other programs. If you buy through them we may earn a commission at no extra cost to you. It never changes which hardware we recommend.
       </p>
     </section>
 

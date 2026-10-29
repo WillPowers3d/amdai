@@ -4,7 +4,7 @@
  * Do not invent bio, email, phone, address, prices, or tok/s.
  */
 
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parse } from 'yaml';
@@ -39,13 +39,18 @@ export const HOW_WE_TEST = {
 
 function contactYamlEmail(): string {
   const here = dirname(fileURLToPath(import.meta.url));
-  const file = join(here, '../data/contact.yaml');
-  try {
-    const parsed = parse(readFileSync(file, 'utf8')) as { email?: unknown };
-    return String(parsed.email ?? '').trim();
-  } catch {
-    return '';
+  const candidates = [join(here, '../data/contact.yaml'), join(process.cwd(), 'src/data/contact.yaml')];
+  for (const file of candidates) {
+    if (!existsSync(file)) continue;
+    try {
+      const parsed = parse(readFileSync(file, 'utf8')) as { email?: unknown };
+      const email = String(parsed.email ?? '').trim();
+      if (email) return email;
+    } catch {
+      // try the next candidate
+    }
   }
+  return '';
 }
 
 /** Public contact inbox. Empty / invalid env or yaml renders nothing — never invent an address. */
