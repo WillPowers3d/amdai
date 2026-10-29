@@ -85,14 +85,15 @@ B&H has run its own program and has also paid through networks. Keep the wrapper
 | `src/lib/affiliates.ts` | Wrappers + `/go` resolver |
 | `src/pages/go/[retailer]/[product].astro` | Static redirect |
 | `src/components/BuyButtons.astro` | “Check price” buttons |
-| `src/components/NextStepBuyBox.astro` | Honest next-step box on /can-run and /compare/one-vs-two-gpu |
+| `src/components/NextStepBuyBox.astro` | Honest next-step box on /can-run |
+| `src/components/SecondCardBox.astro` | Honest second-card verdict on /compare/one-vs-two-gpu (Newegg only; no Amazon) |
 | `src/lib/upgrade-pick.ts` | Build-time pick from the can-run verdict matrix |
 | `src/pages/disclosure.astro` | Public disclosure |
 | `.env.example` | Env names only |
 
 Buy buttons use `rel="sponsored nofollow noopener"` on affiliate programs and `rel="noopener"` on plain links. Optional click ping: `AFFILIATE_CLICK_BEACON` (POST JSON `{ retailer, product, src, t }`). Unset means no tracking.
 
-`/go/{retailer}/{product}` links may carry `?src=` so clicks can be attributed. Tokens are `[a-z0-9-]+`. The can-run next-step box uses `src=canrun-nextstep` (alt links `src=canrun-nextstep-alt`). The footer Check-price box on those pages uses `src=canrun-footer`. The one-vs-two-GPU page uses `src=one-vs-two`.
+`/go/{retailer}/{product}` links may carry `?src=` so clicks can be attributed. Tokens are `[a-z0-9-]+`. The can-run next-step box uses `src=canrun-nextstep` (alt links `src=canrun-nextstep-alt`). The footer Check-price box on those pages uses `src=canrun-footer`. The one-vs-two-GPU page uses `src=second-card-verdict` on Newegg stubs only.
 
 Newegg-first button order is gated by `NEWEGG_FIRST`. Leave it unset or `0` until Rakuten Newegg deep links are wired — Amazon stays first, matching today’s live order.
 
