@@ -1,0 +1,149 @@
+---
+import AffiliateDisclosure from './AffiliateDisclosure.astro';
+import { allBuildLists, buildList, buildListKey, type BuildAsk } from '../lib/build-list';
+
+interface Props {
+  ask?: BuildAsk;
+  id?: string;
+}
+
+const {
+  ask = { gpuCount: 1, minBudget: false, expandGpu: true, bigModels: false, cpuWork: false, coldLoad: false },
+  id = 'build-list',
+} = Astro.props;
+const initial = buildList(ask);
+const maps = allBuildLists();
+const payload = JSON.stringify({ key: buildListKey(ask), builds: maps });
+---
+
+<section id={id} class="build-list rounded-2xl border border-line bg-raised/40 p-5 sm:p-6" aria-labelledby="bl-h" data-build-list data-build-payload={payload}>
+  <p class="kicker">Buy the box</p>
+  <h2 id="bl-h" class="mt-2 text-2xl tracking-tight sm:text-3xl">Your parts list</h2>
+  <p class="mt-2 text-sm leading-relaxed text-muted" data-build-answers>
+    Based on: {initial.answers.gpus} GPU(s), {initial.answers.later_big ? 'larger models later' : 'stay at this size'}{initial.answers.min_budget ? ', minimum budget' : ''}{initial.answers.cold_load ? ', fastest cold loads' : ''}.
+  </p>
+  <div class="mt-3 space-y-2" data-build-warnings>
+    {initial.warnings.map((warning) => (
+      <p class="rounded-xl border border-warn/40 bg-warn/10 p-3 text-sm leading-relaxed text-ink">{warning}</p>
+    ))}
+  </div>
+  <ol class="mt-4 space-y-3">
+    {initial.parts.map((row) => (
+      <li class="rounded-xl border border-line bg-canvas/70 p-4" data-build-role={row.role}>
+        <p class="text-xs font-medium uppercase tracking-[0.08em] text-faint" data-build-role-label>{row.role}</p>
+        <p class="mt-1 font-medium text-ink" data-build-part>{row.part}</p>
+        <p class="mt-2 text-sm leading-relaxed text-muted" data-build-why>{row.why}</p>
+        <p class="mt-3 flex flex-wrap gap-3 text-sm">
+          <a class="text-accent-ink underline decoration-accent/40 underline-offset-2" data-build-go href={row.go} rel="sponsored nofollow">
+            Check price at Newegg
+          </a>
+          {row.spec && (
+            <a class="underline decoration-accent/40 underline-offset-2" data-build-spec href={row.spec} rel="noopener" target="_blank">
+              Maker spec
+            </a>
+          )}
+        </p>
+      </li>
+    ))}
+  </ol>
+  <div class="mt-4">
+    <AffiliateDisclosure compact />
+  </div>
+</section>
+
+<script>
+  function radioValue(name, fallback) {
+    const checked = document.querySelector(`input[name="${name}"]:checked`);
+    return checked ? checked.value : fallback;
+  }
+
+  function gpuCount() {
+    const field = document.querySelector('[name="gpuCount"]');
+    if (field && field.value) {
+      const n = Number(field.value);
+      if (Number.isFinite(n) && n >= 1) return Math.min(4, Math.round(n));
+    }
+    const radio = document.querySelector('input[name="n"]:checked');
+    if (radio) {
+      const n = Number(radio.value);
+      if (Number.isFinite(n) && n >= 1) return Math.min(4, Math.round(n));
+    }
+    const highlighted = document.querySelector('[data-tier].ring-accent, [data-tier].ring-2');
+    if (highlighted?.getAttribute('data-tier') === 'pro') return 2;
+    const q = new URLSearchParams(window.location.search);
+    if (q.get('tier') === 'pro' || q.get('n') === '2') return 2;
+    return 1;
+  }
+
+  function askKey() {
+    const min = radioValue('minbudget', '0') === '1';
+    const expandRaw = radioValue('expandgpu', min ? '0' : '1');
+    const g = gpuCount() >= 2 ? '2' : '1';
+    const expand = expandRaw === '1' || expandRaw === 'yes' ? '1' : '0';
+    const big = radioValue('bigmodels', '0') === '1' ? '1' : '0';
+    const cpu = radioValue('cpuwork', '0') === '1' ? '1' : '0';
+    const cold = radioValue('coldload', '0') === '1' ? '1' : '0';
+    return `${g}${min ? '1' : '0'}${expand}${big}${cpu}${cold}`;
+  }
+
+  function answerLine(build) {
+    return `Based on: ${build.answers.gpus} GPU(s), ${build.answers.later_big ? 'larger models later' : 'stay at this size'}${build.answers.min_budget ? ', minimum budget' : ''}${build.answers.cold_load ? ', fastest cold loads' : ''}.`;
+  }
+
+  function syncBuild() {
+    const root = document.querySelector('[data-build-list]');
+    if (!root) return;
+    let data;
+    try {
+      data = JSON.parse(root.getAttribute('data-build-payload') || '{}');
+    } catch {
+      return;
+    }
+    const build = data.builds?.[askKey()] || data.builds?.[data.key];
+    if (!build) return;
+    const answers = root.querySelector('[data-build-answers]');
+    if (answers) answers.textContent = answerLine(build);
+    const warnBox = root.querySelector('[data-build-warnings]');
+    if (warnBox) {
+      warnBox.replaceChildren();
+      for (const warning of build.warnings || []) {
+        const p = document.createElement('p');
+        p.className = 'rounded-xl border border-warn/40 bg-warn/10 p-3 text-sm leading-relaxed text-ink';
+        p.textContent = warning;
+        warnBox.append(p);
+      }
+    }
+    for (const row of build.parts || []) {
+      const item = root.querySelector(`[data-build-role="${row.role}"]`);
+      if (!item) continue;
+      const part = item.querySelector('[data-build-part]');
+      const why = item.querySelector('[data-build-why]');
+      const go = item.querySelector('[data-build-go]');
+      const spec = item.querySelector('[data-build-spec]');
+      if (part) part.textContent = row.part;
+      if (why) why.textContent = row.why;
+      if (go) go.setAttribute('href', row.go);
+      if (spec) {
+        if (row.spec) {
+          spec.hidden = false;
+          spec.setAttribute('href', row.spec);
+        } else {
+          spec.hidden = true;
+        }
+      }
+    }
+  }
+
+  document.addEventListener('change', (event) => {
+    const target = event.target;
+    if (
+      target?.matches?.(
+        '[name="minbudget"], [name="expandgpu"], [name="bigmodels"], [name="cpuwork"], [name="coldload"], [name="n"], [name="gpuCount"], [name="priority"], [name="usage"], [name="style"]',
+      )
+    ) {
+      syncBuild();
+    }
+  });
+  window.addEventListener('amdai-ask-change', syncBuild);
+  syncBuild();
+</script>

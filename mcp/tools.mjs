@@ -317,6 +317,51 @@ function recommendStackTool(args, catalog) {
         ? 'Two cards need 1200 W or more with two native 12V-2x6 cables. Two cards plus a 9950X can reach about 1,100 W. AMD lists 300 W TBP per R9700.'
         : 'One card: about 850 W with one native 12V-2x6. AMD lists 300 W TBP and a 750 W minimum PSU.',
     },
+    storage: {
+      tb: offload || ram >= 192 ? 4 : 2,
+      gen: 4,
+      title: offload || ram >= 192 ? 'Samsung 990 PRO 4TB (MZ-V9P4T0BW)' : 'Samsung 990 PRO 2TB (MZ-V9P2T0BW)',
+      go: offload || ram >= 192 ? '/go/newegg/mz-v9p4t0bw' : '/go/newegg/mz-v9p2t0bw',
+      why:
+        offload || ram >= 192
+          ? '4 TB when larger models later or a fourth Flash-class family is in the plan. Gen4 TLC with DRAM. Datasheet 7,450 MB/s, 2,400 TBW.'
+          : '2 TB holds every Q4–Q6 of Qwen3.6-35B, Qwen3.8-Flash-Next and GLM-5.3-Flash with headroom. Gen4 TLC with DRAM. Datasheet 7,450 MB/s, 1,200 TBW.',
+    },
+    parts: {
+      answers: {
+        gpus: gpuCount,
+        later_big: offload || ram >= 192,
+        offload: offload || ram >= 192 ? 'yes' : 'no',
+        min_budget: false,
+        expand_gpu: dualPsu,
+        cold_load: false,
+      },
+      warnings: [],
+      items: [
+        { role: 'GPU', part: `AMD Radeon AI PRO R9700 32GB x${gpuCount}`, go: '/go/newegg/r9700' },
+        { role: 'Motherboard', part: 'ASRock X870 Taichi Creator', go: '/go/newegg/asrock-x870-taichi-creator' },
+        {
+          role: 'CPU',
+          part: offload ? 'AMD Ryzen 9 9900X' : 'AMD Ryzen 5 9600X',
+          go: offload ? '/go/newegg/ryzen-9-9900x' : '/go/newegg/amd-ryzen-5-9600x',
+        },
+        {
+          role: 'RAM',
+          part: offload || ram >= 192 ? 'G.SKILL Trident Z5 Neo 256 GB (4x64) DDR5-6000' : 'G.SKILL Flare X5 32 GB (2x16) DDR5-6000 CL30',
+          go: offload || ram >= 192 ? '/go/newegg/f5-6000j3644d64gx4-tz5nr' : '/go/newegg/f5-6000j3038f16gx2-fx5',
+        },
+        {
+          role: 'PSU',
+          part: dualPsu ? 'Thermaltake Toughpower GT 1200W' : 'Corsair RM850x (2024, ATX 3.1)',
+          go: dualPsu ? '/go/newegg/ps-tpt-1200fnfagu-3' : '/go/newegg/cp-9020270-na',
+        },
+        {
+          role: 'Storage',
+          part: offload || ram >= 192 ? 'Samsung 990 PRO 4TB (MZ-V9P4T0BW)' : 'Samsung 990 PRO 2TB (MZ-V9P2T0BW)',
+          go: offload || ram >= 192 ? '/go/newegg/mz-v9p4t0bw' : '/go/newegg/mz-v9p2t0bw',
+        },
+      ],
+    },
   });
 }
 

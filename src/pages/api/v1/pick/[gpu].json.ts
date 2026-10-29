@@ -5,6 +5,8 @@ import { isPublicQuant, jsonResponse, planFitInput } from '../../../../lib/publi
 import { ramPickPayload, ramRecommendation, setupNeedsRamOffload } from '../../../../lib/ram-kit';
 import { cpuPickPayload, cpuRecommendation } from '../../../../lib/cpu-pick';
 import { psuPickPayload, psuRecommendation } from '../../../../lib/psu-pick';
+import { storagePickPayload, storageRecommendation } from '../../../../lib/storage-pick';
+import { buildList } from '../../../../lib/build-list';
 
 export function getStaticPaths() {
   return gpuPages(recipes).map((page) => ({ params: { gpu: page.id } }));
@@ -29,6 +31,19 @@ export async function GET({ params }: { params: { gpu: string } }) {
       ...psuPickPayload(),
       recommended: psuRecommendation({ gpuCount: 1, expandGpu: false }),
     },
+    storage: {
+      ...storagePickPayload(),
+      recommended: storageRecommendation({ bigModels: false, coldLoad: false }),
+    },
+    parts: buildList({
+      gpuCount: 1,
+      minBudget: false,
+      expandGpu: false,
+      bigModels: false,
+      cpuWork: false,
+      coldLoad: false,
+      needsOffload,
+    }),
     recipes: picked,
   });
 }
