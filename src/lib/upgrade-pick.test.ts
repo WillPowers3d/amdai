@@ -87,8 +87,8 @@ describe('can-run next-step upgrade picks', () => {
     assert.equal(CAN_RUN_FOOTER_SRC, 'canrun-footer');
     assert.equal(ONE_VS_TWO_SRC, 'one-vs-two');
     assert.equal(ONE_VS_TWO_PICKS[0]?.productId, 'r9700');
-    assert.match(compare, /NextStepBuyBox/);
-    assert.match(compare, /ONE_VS_TWO_SRC/);
+    assert.match(compare, /SecondCardBox/);
+    assert.doesNotMatch(compare, /NextStepBuyBox/);
     assert.match(hop, /location\.search/);
     assert.match(hop, /src/);
     for (const file of [

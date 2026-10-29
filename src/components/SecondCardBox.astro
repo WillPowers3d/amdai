@@ -1,0 +1,109 @@
+---
+import AffiliateDisclosure from './AffiliateDisclosure.astro';
+import { destinationUrl, retailerById, wrapRetailer } from '../lib/affiliates';
+import {
+  SECOND_CARD_RAM_ID,
+  SECOND_CARD_R9700_ID,
+  type SecondCardVerdict,
+} from '../lib/second-card';
+
+interface Props {
+  verdict: SecondCardVerdict;
+}
+
+const { verdict } = Astro.props;
+const newegg = retailerById('newegg');
+const r9700Dest = destinationUrl(SECOND_CARD_R9700_ID, 'newegg');
+const ramDest = destinationUrl(SECOND_CARD_RAM_ID, 'newegg');
+const r9700Wrap = r9700Dest && newegg ? wrapRetailer(r9700Dest, newegg) : { href: '', affiliate: false };
+const ramWrap = ramDest && newegg ? wrapRetailer(ramDest, newegg) : { href: '', affiliate: false };
+const r9700Rel = r9700Wrap.affiliate ? 'sponsored nofollow noopener' : 'noopener';
+const ramRel = ramWrap.affiliate ? 'sponsored nofollow noopener' : 'noopener';
+---
+
+<aside
+  class="not-prose my-6 rounded-2xl border border-line bg-raised/50 p-5"
+  data-pagefind-ignore
+  data-second-card-box
+  data-verdict={verdict.buy ? 'buy' : 'keep'}
+>
+  <p class="kicker">Second card?</p>
+  <h2 class="mt-2 font-serif text-2xl tracking-tight" data-second-card-title>
+    {verdict.buy ? `Worth it for you: ${verdict.pick}` : `Save your money: ${verdict.pick}`}
+  </h2>
+  <p class="mt-3 text-sm leading-relaxed text-muted" data-second-card-why>{verdict.why}</p>
+  <p class="mt-2 text-sm text-faint" data-second-card-evidence>Source: {verdict.evidence}. Cells cite run cards above.</p>
+
+  <fieldset class="mt-5">
+    <legend class="font-mono text-[0.68rem] uppercase tracking-[0.12em] text-faint">What are you running?</legend>
+    <div class="mt-2 flex flex-wrap gap-2" role="radiogroup" aria-label="Model class">
+      <label class="chip is-on">
+        <input class="sr-only" type="radio" name="second-card-model" value="35b" checked data-second-card-model />
+        35B daily driver
+      </label>
+      <label class="chip">
+        <input class="sr-only" type="radio" name="second-card-model" value="flash" data-second-card-model />
+        Flash-class
+      </label>
+    </div>
+  </fieldset>
+
+  <fieldset class="mt-4">
+    <legend class="font-mono text-[0.68rem] uppercase tracking-[0.12em] text-faint">Does a second card change the job?</legend>
+    <div class="mt-2 grid gap-2 sm:grid-cols-3">
+      <label class="flex cursor-pointer items-start gap-2 rounded-2xl border border-line bg-canvas/70 p-3 text-sm">
+        <input class="mt-0.5" type="checkbox" data-second-card-q="longPrompts" />
+        <span>Long prompts are the main job</span>
+      </label>
+      <label class="flex cursor-pointer items-start gap-2 rounded-2xl border border-line bg-canvas/70 p-3 text-sm">
+        <input class="mt-0.5" type="checkbox" data-second-card-q="twoModels" />
+        <span>Two models at once</span>
+      </label>
+      <label class="flex cursor-pointer items-start gap-2 rounded-2xl border border-line bg-canvas/70 p-3 text-sm">
+        <input class="mt-0.5" type="checkbox" data-second-card-q="ctxOver262k" />
+        <span>Need more than 262K context</span>
+      </label>
+    </div>
+    <p class="mt-2 text-xs text-faint">Quant and context follow the chips on this page. All chips = UD-Q5_K_XL at short context.</p>
+  </fieldset>
+
+  <div class="mt-4 flex flex-wrap gap-2" data-second-card-actions>
+    {verdict.buy && verdict.link ? (
+      <a class="btn-primary" href={verdict.link} rel={r9700Rel} target="_blank" data-second-card-r9700>
+        Check R9700 at Newegg
+      </a>
+    ) : null}
+    {verdict.buy && verdict.also ? (
+      <a class="btn-ghost" href={verdict.also} rel={ramRel} target="_blank" data-second-card-ram>
+        256 GB DDR5 kit at Newegg
+      </a>
+    ) : null}
+    {!verdict.buy ? (
+      <a class="btn-ghost" href="/budget" data-second-card-budget>Plan a later Flash build instead</a>
+    ) : null}
+  </div>
+  <p class="mt-3 text-sm text-muted">A commission never changes the verdict. We do not print a price.</p>
+  <div class="mt-3">
+    <AffiliateDisclosure compact />
+  </div>
+  <script is:inline define:vars={{ r9700Rel, ramRel }}>
+    window.__secondCardRels = { r9700: r9700Rel, ram: ramRel };
+  </script>
+</aside>
+
+<style>
+  .chip {
+    min-height: 2.25rem;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: var(--raised);
+    padding: 0.35rem 0.85rem;
+    font-size: 0.85rem;
+    cursor: pointer;
+  }
+  .chip.is-on {
+    border-color: color-mix(in srgb, var(--accent) 50%, var(--line));
+    background: var(--accent-soft);
+    color: var(--accent-ink);
+  }
+</style>

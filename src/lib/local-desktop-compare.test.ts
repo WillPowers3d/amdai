@@ -81,13 +81,14 @@ describe('local desktop compare tables', () => {
     assert.match(blob, /Q3/);
   });
 
-  it('puts a next-step buy box on the one-vs-two-GPU page', () => {
+  it('puts an honest second-card verdict box on the one-vs-two-GPU page', () => {
     const page = readFileSync(
       join(dirname(fileURLToPath(import.meta.url)), '../pages/compare/one-vs-two-gpu.astro'),
       'utf8',
     );
-    assert.match(page, /NextStepBuyBox/);
-    assert.match(page, /ONE_VS_TWO_PICKS/);
-    assert.match(page, /ONE_VS_TWO_SRC/);
+    assert.match(page, /SecondCardBox/);
+    assert.match(page, /secondCardClientPayload/);
+    assert.doesNotMatch(page, /NextStepBuyBox/);
+    assert.doesNotMatch(page, /ONE_VS_TWO_PICKS/);
   });
 });
