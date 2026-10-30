@@ -55,7 +55,7 @@ describe('one-answer parts list', () => {
 
     const dual = buildList({ gpuCount: 2, minBudget: false, expandGpu: true, bigModels: true });
     assert.match(dual.parts.find((row) => row.role === 'GPU')!.part, /x2/);
-    assert.match(dual.parts.find((row) => row.role === 'RAM')!.part, /256 GB/);
+    assert.match(dual.parts.find((row) => row.role === 'RAM')!.part, /96 GB/);
     assert.match(dual.parts.find((row) => row.role === 'PSU')!.part, /1200W/);
     assert.match(dual.parts.find((row) => row.role === 'CPU')!.part, /9900X/);
     assert.match(dual.parts.find((row) => row.role === 'Storage')!.part, /4TB/);

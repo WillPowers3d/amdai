@@ -1,30 +1,35 @@
 /**
- * Builder RAM ask: named kits. 32 GB default, 192/256 GB when larger models
- * (or offload) are in play. Optional 128 GB 2x64 middle. No invented prices.
- * Sizes are written in GB.
+ * Builder RAM ask: named kits. 96 GB (2x48) is the headline pick for most builds.
+ * 32 GB (2x16) is the 35B-only, one-card alternative. 128 / 192 / 256 GB are the
+ * "more RAM" steps: larger, smarter models, but slower (see ram-worth.ts).
+ * Only dated prices (with the date) — never a live or invented price. Sizes in GB.
  */
 
 import { compute, systemRamNeed, type CalcInput } from './calculator';
 import { goPath } from './go-src';
+import { ramWorthPayload } from './ram-worth';
 
 export const RAM_ASK_PARAM = 'bigmodels';
 
 export const DEFAULT_BIG_MODELS = false;
 
 export const RAM_32_PRODUCT = 'ddr5-32';
+export const RAM_96_PRODUCT = 'ddr5-96';
 export const RAM_192_PRODUCT = 'ddr5-192';
 export const RAM_256_PRODUCT = 'ddr5-256';
 export const RAM_128_PRODUCT = 'ddr5-128';
 export const RAM_32_SRC = 'builder-ram-32';
+export const RAM_96_SRC = 'builder-ram-96';
 export const RAM_192_SRC = 'builder-ram-192';
 export const RAM_256_SRC = 'builder-ram-256';
 export const RAM_128_SRC = 'builder-ram-128';
 
 export const SMALL_KIT_GB = 32;
-export const LARGE_KIT_GB = [192, 256] as const;
+export const DEFAULT_KIT_GB = 96;
+export const MORE_RAM_KIT_GB = [128, 192, 256] as const;
 
 export const REPLACE_KIT_NOTE =
-  'You cannot top up a 2x16 kit later. 192 GB and 256 GB only exist as 4x48 or 4x64, and memory makers say do not mix kits — you would replace the 32 GB kit.';
+  'You cannot top up a 2-DIMM kit later. Memory makers say do not mix kits, and 192 GB / 256 GB only exist as matched 4x48 or 4x64 sets — moving up means replacing the kit you bought.';
 
 export const OFFICIAL_SPEED_NOTE =
   'AMD’s official Ryzen 9000 memory speed is DDR5-5600 with 2 DIMMs and DDR5-3600 with 4 DIMMs (product pages). Running 4 DIMMs at 6000 is an overclock.';
@@ -37,22 +42,35 @@ export const BIOS_2025_NOTE =
 export const RAM_ASK_COPY = {
   question: 'Will you run larger models later?',
   expensive:
-    'DDR4 and DDR5 kits are very expensive right now. Buy the capacity you will actually use. A 2x16 kit cannot be topped up later — you would replace it.',
+    'DDR5 kits are very expensive right now. Buy the capacity you will actually use. A 2-DIMM kit cannot be topped up later — you would replace it.',
   no: {
-    label: 'No — 32 GB is enough',
+    label: 'No — just the 35B for now',
     lede:
-      'Recommend the G.SKILL Flare X5 2x16 DDR5-6000 CL30 (32 GB). The GPU does the work on the in-VRAM path, so save the money on system RAM.',
+      'We still recommend 96 GB (2x48 DDR5) for most builds, so Qwen 3.8 Flash stays an option. 32 GB (2x16) is enough only if you will run the 35B on one card and never want Flash.',
   },
   yes: {
-    label: 'Yes — go big now',
+    label: 'Yes — Qwen 3.8 Flash or bigger',
     lede:
-      'Recommend 192 GB or 256 GB now (G.SKILL Flare X5 4x48 DDR5-6000 CL28, or Trident Z5 Neo 4x64 DDR5-6000). That lets big MoE models keep experts in RAM.',
+      'Recommend 96 GB (2x48 DDR5). With two R9700s it runs Qwen 3.8 Flash Q4 at full 256K context (estimate: about 67 GB needed). 128–256 GB loads larger, smarter models but answers a lot slower — usually not worth it.',
   },
   offload:
-    'This model and setup already need RAM offload, so the large kit is the recommendation even if you answered No. Experts and leftover weights land in system RAM, not in VRAM.',
+    'This model and setup already need RAM offload, so plan on 96 GB or more. 96 GB covers two-card Flash Q4 at 256K (estimate); check Minimum system RAM needed on the calculator for this exact pick.',
 };
 
-export type NamedRamKitId = '32' | '128' | '192' | '256';
+/** Builder headline note, shown with every RAM pick. */
+export const RAM_96_HEADLINE =
+  'Recommend 96 GB (2x48 DDR5) for most builds. With two R9700s it runs Qwen 3.8 Flash Q4 at full 256K context (estimate: about 67 GB needed). Two DIMMs, so it stays at AMD’s official 2-DIMM speed.';
+
+/** Dated Newegg list price for the named 96 GB kit. Show only with its date. */
+export const RAM_96_DATED_PRICE = {
+  usd: 1549.99,
+  label: '$1,549.99',
+  as_of: '2026-10-29',
+  as_of_label: 'Oct 29, 2026',
+  source: 'Newegg listing (list price on the search page, not a cart check)',
+} as const;
+
+export type NamedRamKitId = '32' | '96' | '128' | '192' | '256';
 
 export type NamedRamKit = {
   id: NamedRamKitId;
@@ -66,6 +84,7 @@ export type NamedRamKit = {
   citation: { title: string; url: string; section: string; as_of: string };
   note: string;
   optional?: boolean;
+  dated_price?: { label: string; as_of: string; as_of_label: string; source: string };
 };
 
 export const NAMED_RAM_KITS: readonly NamedRamKit[] = [
@@ -87,6 +106,29 @@ export const NAMED_RAM_KITS: readonly NamedRamKit[] = [
     note: REPLACE_KIT_NOTE,
   },
   {
+    id: '96',
+    name: 'G.SKILL Trident Z5 RGB 96 GB (2x48) DDR5-5600 CL40',
+    kit_gb: 96,
+    dimms: '2x48 DDR5',
+    part: 'F5-5600J4040D48GX2-TZ5RK',
+    product_id: RAM_96_PRODUCT,
+    src: RAM_96_SRC,
+    go_newegg: goPath('newegg', RAM_96_PRODUCT, RAM_96_SRC),
+    citation: {
+      title: 'G.SKILL F5-5600J4040D48GX2-TZ5RK specification',
+      url: 'https://www.gskill.com/specification/165/374/1682577390/F5-5600J4040D48GX2-TZ5RK-Specification',
+      section: '96GB (48GBx2); Dual Channel Kit; SPD Speed (Default) 5600 MT/s; Tested Latency 40-40-40-89; Do not mix memory kits',
+      as_of: '2026-10-29',
+    },
+    note: 'Recommended for most builds. Two DIMMs at a 5600 MT/s default (SPD) speed — AMD’s official 2-DIMM speed — so no overclock is needed. Any matched 2x48 DDR5 kit works the same way.',
+    dated_price: {
+      label: RAM_96_DATED_PRICE.label,
+      as_of: RAM_96_DATED_PRICE.as_of,
+      as_of_label: RAM_96_DATED_PRICE.as_of_label,
+      source: RAM_96_DATED_PRICE.source,
+    },
+  },
+  {
     id: '128',
     name: 'Kingston FURY Beast 128 GB (2x64) DDR5-5600',
     kit_gb: 128,
@@ -101,7 +143,7 @@ export const NAMED_RAM_KITS: readonly NamedRamKit[] = [
       section: '128GB (2x64GB) DDR5 5600MT/s CL36 FURY Beast Black EXPO',
       as_of: '2026-10-29',
     },
-    note: 'Optional middle. Two DIMMs, so it stays inside AMD’s official 2-DIMM speed (DDR5-5600). Still not 192/256 — moving up later means replacing this kit.',
+    note: 'More RAM: fits Qwen 3.8 Flash Q5/Q6 on two cards (estimate ~111–121 GB). Two DIMMs, so it stays inside AMD’s official 2-DIMM speed (DDR5-5600). Slower answers than Q4 on 96 GB.',
     optional: true,
   },
   {
@@ -167,11 +209,12 @@ export function setupNeedsRamOffload(input: CalcInput): boolean {
   return systemRamNeed(input).atSelected.breakdown.offloadedWeightsGiB > 1;
 }
 
-export function recommendLargeRam(ask: { bigModels: boolean; needsOffload: boolean }): boolean {
-  return ask.bigModels || ask.needsOffload;
+export function recommendLargeRam(ask: { bigModels: boolean; needsOffload: boolean; gpuCount?: number }): boolean {
+  const gpuCount = Number.isFinite(ask.gpuCount) ? Math.round(ask.gpuCount ?? 1) : 1;
+  return ask.bigModels || ask.needsOffload || gpuCount >= 2;
 }
 
-export type RamKitId = '32' | '256';
+export type RamKitId = '32' | '96';
 
 export type RamAsk = {
   bigModels: boolean;
@@ -182,7 +225,7 @@ export type RamAsk = {
 export type RamRecommendation = {
   kit: RamKitId;
   title: string;
-  kit_gb: number | readonly number[];
+  kit_gb: number;
   dimms: string;
   why: string;
   product_id: string;
@@ -191,52 +234,40 @@ export type RamRecommendation = {
   offload: boolean;
   primary: NamedRamKit;
   alternatives: NamedRamKit[];
+  /** True when 32 GB is still a fair pick (one card, 35B only, no offload). */
+  only_35b_ok: boolean;
   replace_note: string;
   official_speed_note: string;
 };
 
+/**
+ * 96 GB is the headline for every build. One-card, 35B-only answers also see the
+ * 32 GB card as the alternative; everyone else sees the 128 / 192 / 256 "more RAM" steps.
+ */
 export function ramRecommendation(ask: RamAsk): RamRecommendation {
-  const large = recommendLargeRam(ask);
   const gpuCount = Number.isFinite(ask.gpuCount) ? Math.max(1, Math.round(ask.gpuCount ?? 1)) : 1;
-  if (large) {
-    const primaryId: NamedRamKitId = gpuCount >= 2 ? '256' : '192';
-    const altId: NamedRamKitId = gpuCount >= 2 ? '192' : '256';
-    const primary = kitById(primaryId);
-    const why =
-      ask.needsOffload && !ask.bigModels
-        ? RAM_ASK_COPY.offload
-        : gpuCount >= 2
-          ? 'Two cards plus 256 GB is the layout our measured Flash Q6 runs use. 192 GB is the alternate 4-DIMM size.'
-          : RAM_ASK_COPY.yes.lede;
-    return {
-      kit: '256',
-      title: '192 GB or 256 GB DDR5 (4x48 or 4x64)',
-      kit_gb: LARGE_KIT_GB,
-      dimms: '4x48 or 4x64 DDR5',
-      why,
-      product_id: primary.product_id,
-      src: primary.src,
-      go_newegg: primary.go_newegg,
-      offload: ask.needsOffload,
-      primary,
-      alternatives: [kitById(altId), kitById('128')],
-      replace_note: REPLACE_KIT_NOTE,
-      official_speed_note: OFFICIAL_SPEED_NOTE,
-    };
-  }
-  const primary = kitById('32');
+  const large = recommendLargeRam({ ...ask, gpuCount });
+  const primary = kitById('96');
+  const why =
+    ask.needsOffload && !ask.bigModels
+      ? RAM_ASK_COPY.offload
+      : large
+        ? RAM_ASK_COPY.yes.lede
+        : RAM_ASK_COPY.no.lede;
+  const alternatives = large ? MORE_RAM_KIT_GB.map((gb) => kitById(String(gb) as NamedRamKitId)) : [kitById('32')];
   return {
-    kit: '32',
-    title: '32 GB DDR5 (2x16)',
-    kit_gb: SMALL_KIT_GB,
-    dimms: '2x16 DDR5',
-    why: RAM_ASK_COPY.no.lede,
-    product_id: RAM_32_PRODUCT,
-    src: RAM_32_SRC,
-    go_newegg: goPath('newegg', RAM_32_PRODUCT, RAM_32_SRC),
-    offload: false,
+    kit: '96',
+    title: '96 GB DDR5 (2x48)',
+    kit_gb: DEFAULT_KIT_GB,
+    dimms: '2x48 DDR5',
+    why,
+    product_id: primary.product_id,
+    src: primary.src,
+    go_newegg: primary.go_newegg,
+    offload: ask.needsOffload,
     primary,
-    alternatives: [kitById('128')],
+    alternatives,
+    only_35b_ok: !large,
     replace_note: REPLACE_KIT_NOTE,
     official_speed_note: OFFICIAL_SPEED_NOTE,
   };
@@ -248,38 +279,48 @@ export function ramCapFlag(maxRamGb: number): string | null {
 }
 
 export function ramPickPayload() {
-  const small = ramRecommendation({ bigModels: false, needsOffload: false });
-  const large = ramRecommendation({ bigModels: true, needsOffload: false, gpuCount: 1 });
-  const two = ramRecommendation({ bigModels: true, needsOffload: false, gpuCount: 2 });
+  const small = kitById('32');
+  const rec = ramRecommendation({ bigModels: false, needsOffload: false, gpuCount: 1 });
+  const big = ramRecommendation({ bigModels: true, needsOffload: false, gpuCount: 2 });
   return {
     param: RAM_ASK_PARAM,
     default: DEFAULT_BIG_MODELS ? '1' : '0',
+    headline: RAM_96_HEADLINE,
     dimm_speed_note: DIMM_SPEED_NOTE,
     replace_note: REPLACE_KIT_NOTE,
     official_speed_note: OFFICIAL_SPEED_NOTE,
     note:
-      'No live or invented prices. Query strings are not evaluated on this host. Share param bigmodels=1 selects the large kit. If a pick already needs RAM offload, use the large kit. Named kits only — no invented prices.',
+      'Query strings are not evaluated on this host. 96 GB (2x48) is the pick for most builds. bigmodels=0 on one card also shows 32 GB as the 35B-only option; bigmodels=1, two GPUs, or RAM offload show the 128 / 192 / 256 GB "more RAM" steps. Dated list prices carry their date — no live or invented prices.',
+    recommended: {
+      kit_gb: rec.kit_gb,
+      dimms: rec.dimms,
+      product_id: rec.product_id,
+      src: rec.src,
+      go: rec.go_newegg,
+      name: rec.primary.name,
+      part: rec.primary.part,
+      dated_price: RAM_96_DATED_PRICE,
+      when: 'most builds; two R9700s run Qwen 3.8 Flash Q4 at 256K (estimate ~67 GB needed)',
+    },
     small: {
       kit_gb: small.kit_gb,
       dimms: small.dimms,
       product_id: small.product_id,
       src: small.src,
       go: small.go_newegg,
-      name: small.primary.name,
-      part: small.primary.part,
-      when: 'bigmodels=0 and the file fits in VRAM',
+      name: small.name,
+      part: small.part,
+      when: 'one card, 35B only, never Qwen 3.8 Flash',
     },
-    large: {
-      kit_gb: large.kit_gb,
-      dimms: large.dimms,
-      product_id: large.product_id,
-      src: large.src,
-      go: large.go_newegg,
-      name: large.primary.name,
-      part: large.primary.part,
-      two_gpu_name: two.primary.name,
-      when: 'bigmodels=1 or the setup already needs RAM offload; two GPUs prefer 256 GB',
-    },
+    more_ram: big.alternatives.map((kit) => ({
+      kit_gb: kit.kit_gb,
+      name: kit.name,
+      part: kit.part,
+      product_id: kit.product_id,
+      src: kit.src,
+      go: kit.go_newegg,
+    })),
+    more_ram_worth_it: ramWorthPayload(),
     kits: NAMED_RAM_KITS.map((kit) => ({
       id: kit.id,
       name: kit.name,
@@ -289,6 +330,7 @@ export function ramPickPayload() {
       src: kit.src,
       go: kit.go_newegg,
       citation: kit.citation,
+      ...(kit.dated_price ? { dated_price: kit.dated_price } : {}),
     })),
   };
 }

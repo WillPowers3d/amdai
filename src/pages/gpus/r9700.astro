@@ -338,7 +338,7 @@ const dailyRam = dailyRecipe ? recipeSystemRam(dailyRecipe, measuredRamHits) : n
         Two lines everywhere RAM offload or full context shows up:
         <strong class="text-ink">Minimum system RAM needed</strong> at the context you picked, and
         <strong class="text-ink">RAM needed at full context</strong> (262144 for the house 35B).
-        We round up to a real DIMM kit (64 / 128 / 192 / 256 GB). The house box ships 256 GB DDR5.
+        We round up to a real DIMM kit (48 / 64 / 96 / 128 / 192 / 256 GB). The house box ships 256 GB DDR5.
         A measured peak is labeled measured; a calculator line is labeled estimate until a card records RSS.
       </p>
       {dailyRam && (

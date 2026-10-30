@@ -1,0 +1,62 @@
+---
+import {
+  RAM_35B_ONLY_NOTE,
+  RAM_WORTH_ESTIMATE_NOTE,
+  RAM_WORTH_LEDE,
+  RAM_WORTH_SPEED,
+  RAM_WORTH_TIERS,
+  RAM_WORTH_TITLE,
+  RAM_WORTH_WHY_SLOW,
+  SPEED_35B_ONE_CARD,
+  SPEED_FLASH_Q6_OFFLOAD,
+} from '../lib/ram-worth';
+import { runPath } from '../lib/run-card';
+
+interface Props {
+  id?: string;
+  headingLevel?: 2 | 3;
+  show35bNote?: boolean;
+}
+
+const { id = 'more-ram', headingLevel = 3, show35bNote = true } = Astro.props;
+const Heading = headingLevel === 2 ? 'h2' : 'h3';
+const headingId = `${id}-heading`;
+---
+
+<section id={id} class="card scroll-mt-28 p-5 sm:p-6" aria-labelledby={headingId} data-ram-worth>
+  <p class="kicker">RAM sizes are estimates · speeds measured on our rig</p>
+  <Heading id={headingId} class:list={['mt-1 tracking-tight', headingLevel === 2 ? 'font-serif text-3xl' : 'text-2xl']}>
+    {RAM_WORTH_TITLE}
+  </Heading>
+  <p class="mt-3 text-sm leading-relaxed text-muted">{RAM_WORTH_LEDE}</p>
+  <div class="mt-4 overflow-x-auto">
+    <table class="table-lab min-w-[36rem]">
+      <thead>
+        <tr>
+          <th>RAM kit</th>
+          <th>Largest model it fits (two R9700s, 256K)</th>
+          <th>RAM needed (estimate)</th>
+          <th>What you get</th>
+        </tr>
+      </thead>
+      <tbody>
+        {RAM_WORTH_TIERS.map((tier) => (
+          <tr>
+            <td class="font-medium tabular-nums">{tier.kitGb} GB</td>
+            <td>{tier.model}</td>
+            <td class="tabular-nums">{tier.needGb} est.</td>
+            <td>{tier.smarter}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+  <p class="mt-4 text-sm leading-relaxed text-muted">{RAM_WORTH_WHY_SLOW}</p>
+  <p class="mt-2 text-sm leading-relaxed text-muted">
+    {RAM_WORTH_SPEED} Run cards:
+    <a class="underline decoration-accent/40 underline-offset-2" href={runPath(SPEED_35B_ONE_CARD.run_id)}>35B one card</a>,
+    <a class="underline decoration-accent/40 underline-offset-2" href={runPath(SPEED_FLASH_Q6_OFFLOAD.run_id)}>Flash Q6 offloaded</a>.
+  </p>
+  {show35bNote && <p class="mt-2 text-sm leading-relaxed text-muted">{RAM_35B_ONLY_NOTE}</p>}
+  <p class="mt-2 text-xs leading-relaxed text-faint">{RAM_WORTH_ESTIMATE_NOTE}</p>
+</section>

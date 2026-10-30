@@ -172,7 +172,7 @@ export type QwenCompareState = {
   cols: string[];
 };
 
-export const QWEN_RAM_KITS = [64, 128, 192, 256] as const;
+export const QWEN_RAM_KITS = [48, 64, 96, 128, 192, 256] as const;
 export const QWEN_BACKENDS: { id: QwenBackendId; label: string }[] = [
   { id: 'llamacpp', label: 'llama.cpp' },
   { id: 'strata', label: 'Strata' },

@@ -1,9 +1,11 @@
 ---
 import BuyButtons from './BuyButtons.astro';
 import AffiliateDisclosure from './AffiliateDisclosure.astro';
+import RamWorth from './RamWorth.astro';
 import {
   DIMM_SPEED_NOTE,
   NAMED_RAM_KITS,
+  RAM_96_HEADLINE,
   RAM_ASK_COPY,
   REPLACE_KIT_NOTE,
   ramCapFlag,
@@ -29,22 +31,29 @@ const visibleIds = new Set([initial.primary.id, ...initial.alternatives.map((row
   <div>
     <p class="kicker">System RAM</p>
     <h2 class="mt-2 text-2xl tracking-tight sm:text-3xl">Which DDR5 kit matches this build?</h2>
+    <p class="mt-2 text-sm font-medium leading-relaxed" data-ram-headline>{RAM_96_HEADLINE}</p>
     <p class="mt-2 text-sm leading-relaxed text-muted">{RAM_ASK_COPY.expensive}</p>
     <p class="mt-2 text-sm leading-relaxed text-muted" data-ram-note>{initial.why}</p>
     <p class="mt-2 text-sm leading-relaxed text-muted">{DIMM_SPEED_NOTE}</p>
     <p class="mt-2 text-sm leading-relaxed text-muted">{REPLACE_KIT_NOTE}</p>
-    <p class="mt-2 text-sm text-muted">Buttons say Check price. We never invent a RAM price.</p>
+    <p class="mt-2 text-sm text-muted">Buttons say Check price. Any price shown carries the date we checked it — never a live or invented price.</p>
   </div>
 
   {NAMED_RAM_KITS.map((kit) => {
     const isPrimary = kit.id === initial.primary.id;
     return (
       <div class="card p-5 sm:p-6" data-ram-card={kit.id} hidden={!visibleIds.has(kit.id)}>
-        <p class="kicker">{kit.optional ? 'Optional middle' : isPrimary ? 'Named kit' : 'Alternate size'}</p>
+        <p class="kicker">{isPrimary ? 'Recommended · most builds' : kit.id === '32' ? '35B only · one card' : 'More RAM · larger, slower model'}</p>
         <h3 class="mt-1 text-2xl tracking-tight">{kit.name}</h3>
         <p class="mt-2 text-sm text-muted">{kit.kit_gb} GB · {kit.dimms} · {kit.part}</p>
         <p class="mt-2 text-sm leading-relaxed text-muted">{kit.note}</p>
-        {kit.id === '256' && (
+        {kit.dated_price && (
+          <p class="mt-2 text-sm leading-relaxed" data-ram-dated-price>
+            <strong class="font-medium text-ink">{kit.dated_price.label}</strong> on {kit.dated_price.as_of_label}
+            — {kit.dated_price.source}. Prices change; check the current price before you buy.
+          </p>
+        )}
+        {kit.id === '96' && (
           <p class="mt-2 text-sm leading-relaxed text-muted" data-ram-offload-note hidden={!initial.offload}>
             {RAM_ASK_COPY.offload}
           </p>
@@ -62,7 +71,7 @@ const visibleIds = new Set([initial.primary.id, ...initial.alternatives.map((row
   })}
 
   {capped.length > 0 && (
-    <div data-ram-caps hidden={initial.kit !== '256'}>
+    <div data-ram-caps hidden={initial.only_35b_ok}>
       <p class="text-sm font-medium">Boards that cannot take 256 GB</p>
       <ul class="mt-2 space-y-2 text-sm leading-relaxed text-muted">
         {capped.map((board) => (
@@ -81,6 +90,8 @@ const visibleIds = new Set([initial.primary.id, ...initial.alternatives.map((row
       </ul>
     </div>
   )}
+
+  <RamWorth id={`${id}-more-ram`} />
 
   <AffiliateDisclosure compact />
 </section>
@@ -115,36 +126,29 @@ const visibleIds = new Set([initial.primary.id, ...initial.alternatives.map((row
     return 1;
   }
 
+  const RAM_COPY = {
+    no: 'We still recommend 96 GB (2x48 DDR5) for most builds, so Qwen 3.8 Flash stays an option. 32 GB (2x16) is enough only if you will run the 35B on one card and never want Flash.',
+    yes: 'Recommend 96 GB (2x48 DDR5). With two R9700s it runs Qwen 3.8 Flash Q4 at full 256K context (estimate: about 67 GB needed). 128–256 GB loads larger, smarter models but answers a lot slower — usually not worth it.',
+    offload: 'This model and setup already need RAM offload, so plan on 96 GB or more. 96 GB covers two-card Flash Q4 at 256K (estimate); check Minimum system RAM needed on the calculator for this exact pick.',
+  };
+
   function syncRam() {
     const root = document.querySelector<HTMLElement>('[data-ram-pick]');
     if (!root) return;
-    const large = bigModels() || needsOffload();
     const n = gpuCount();
-    const primary = !large ? '32' : n >= 2 ? '256' : '192';
+    const large = bigModels() || needsOffload() || n >= 2;
     const note = root.querySelector('[data-ram-note]');
     if (note) {
-      note.textContent = large
-        ? needsOffload() && !bigModels()
-          ? 'This model and setup already need RAM offload, so the large kit is the recommendation even if you answered No. Experts and leftover weights land in system RAM, not in VRAM.'
-          : n >= 2
-            ? 'Two cards plus 256 GB is the layout our measured Flash Q6 runs use. 192 GB is the alternate 4-DIMM size.'
-            : 'Recommend 192 GB or 256 GB now (G.SKILL Flare X5 4x48 DDR5-6000 CL28, or Trident Z5 Neo 4x64 DDR5-6000). That lets big MoE models keep experts in RAM.'
-        : 'Recommend the G.SKILL Flare X5 2x16 DDR5-6000 CL30 (32 GB). The GPU does the work on the in-VRAM path, so save the money on system RAM.';
+      note.textContent = needsOffload() && !bigModels() ? RAM_COPY.offload : large ? RAM_COPY.yes : RAM_COPY.no;
     }
     root.querySelectorAll<HTMLElement>('[data-ram-card]').forEach((card) => {
       const id = card.getAttribute('data-ram-card');
-      if (!large) {
-        card.hidden = id !== '32' && id !== '128';
-      } else {
-        card.hidden = id === '32';
-      }
-      const kicker = card.querySelector('.kicker');
-      if (kicker && id) {
-        kicker.textContent = id === '128' ? 'Optional middle' : id === primary ? 'Named kit' : 'Alternate size';
-      }
+      if (id === '96') card.hidden = false;
+      else if (id === '32') card.hidden = large;
+      else card.hidden = !large;
     });
     const offloadNote = root.querySelector<HTMLElement>('[data-ram-offload-note]');
-    if (offloadNote) offloadNote.hidden = !(large && needsOffload());
+    if (offloadNote) offloadNote.hidden = !needsOffload();
     const caps = root.querySelector<HTMLElement>('[data-ram-caps]');
     if (caps) caps.hidden = !large;
     document.querySelectorAll<HTMLElement>('[data-ram-cap]').forEach((el) => {

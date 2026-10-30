@@ -361,6 +361,17 @@ products:
       microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=F5-6000J3038F16GX2-FX5
       gskill: https://www.gskill.com/specification/165/396/1673491242/F5-6000J3038F16GX2-FX5-Specification
 
+  - id: ddr5-96
+    name: G.SKILL Trident Z5 RGB 96 GB (2x48) DDR5-5600 CL40
+    kind: part
+    note: Named kit F5-5600J4040D48GX2-TZ5RK. Recommended size for most builds (2x48). Newegg list price $1,549.99 on 2026-10-29 (dated snapshot, not a live quote). Amazon opens a 96 GB 2x48 DDR5 search.
+    urls:
+      amazon: https://www.amazon.com/s?k=DDR5+96GB+%282x48GB%29+desktop+memory+kit
+      newegg: https://www.newegg.com/p/N82E16820374483
+      bhphoto: https://www.bhphotovideo.com/c/search?Ntt=DDR5+96GB+2x48GB
+      microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=DDR5+96GB+2x48GB
+      gskill: https://www.gskill.com/specification/165/374/1682577390/F5-5600J4040D48GX2-TZ5RK-Specification
+
   - id: ddr5-128
     name: Kingston FURY Beast 128 GB (2x64) DDR5-5600
     kind: part
