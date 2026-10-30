@@ -16,9 +16,17 @@ import {
   RAM_32_PRODUCT,
   RAM_32_SRC,
   RAM_96_DATED_PRICE,
+  RAM_96_FAST_DATED_PRICE,
+  RAM_96_FAST_NOTE,
+  RAM_96_FAST_PART,
+  RAM_96_FAST_PRODUCT,
   RAM_96_HEADLINE,
+  RAM_96_NOTE,
+  RAM_96_PART,
   RAM_96_PRODUCT,
+  RAM_96_QVL_BOARDS,
   RAM_96_SRC,
+  RAM_96_UNTESTED_SITE_BOARDS,
   RAM_ASK_COPY,
   REPLACE_KIT_NOTE,
   parseBigModels,
@@ -53,7 +61,10 @@ describe('builder RAM ask', () => {
     assert.equal(no.product_id, RAM_96_PRODUCT);
     assert.equal(no.src, RAM_96_SRC);
     assert.equal(no.go_newegg, `/go/newegg/${RAM_96_PRODUCT}?src=${RAM_96_SRC}`);
-    assert.equal(no.primary.part, 'F5-5600J4040D48GX2-TZ5RK');
+    assert.equal(no.primary.part, RAM_96_PART);
+    assert.equal(no.primary.part, 'F5-5600J4040D48GX2-FX5');
+    assert.match(no.primary.name, /Flare X5/);
+    assert.doesNotMatch(no.primary.name, /Trident Z5 RGB/);
     assert.equal(no.only_35b_ok, true);
     assert.deepEqual(no.alternatives.map((row) => row.id), ['32']);
     assert.match(no.why, /96 GB/);
@@ -86,9 +97,25 @@ describe('builder RAM ask', () => {
     const kit96 = NAMED_RAM_KITS.find((kit) => kit.id === '96');
     assert.equal(kit96?.kit_gb, 96);
     assert.equal(kit96?.dimms, '2x48 DDR5');
-    assert.equal(kit96?.dated_price?.label, '$1,549.99');
-    assert.equal(RAM_96_DATED_PRICE.as_of, '2026-10-29');
+    assert.equal(kit96?.dated_price?.label, '$1,479.99');
+    assert.equal(RAM_96_DATED_PRICE.as_of, '2026-10-30');
+    assert.equal(RAM_96_DATED_PRICE.usd, 1479.99);
     assert.ok(NAMED_RAM_KITS.filter((kit) => kit.id !== '96').every((kit) => !kit.dated_price));
+    assert.match(RAM_96_NOTE, /Flare X5/);
+    assert.match(RAM_96_NOTE, /F5-5600J4040D48GX2-FX5/);
+    assert.match(RAM_96_NOTE, /EXPO/);
+    for (const board of RAM_96_QVL_BOARDS) assert.match(RAM_96_NOTE, new RegExp(board.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
+    for (const board of RAM_96_UNTESTED_SITE_BOARDS) {
+      assert.match(RAM_96_NOTE, new RegExp(board.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
+    }
+    assert.match(RAM_96_NOTE, /untested/);
+    assert.match(RAM_96_NOTE, /not proof they are incompatible/);
+    assert.doesNotMatch(RAM_96_NOTE, /are incompatible with|not compatible/);
+    assert.doesNotMatch(JSON.stringify(NAMED_RAM_KITS), /TZ5RK/);
+    assert.equal(RAM_96_FAST_DATED_PRICE.label, '$2,399.99');
+    assert.equal(RAM_96_FAST_DATED_PRICE.as_of, '2026-10-30');
+    assert.match(RAM_96_FAST_NOTE, /GODLIKE/);
+    assert.match(RAM_96_FAST_NOTE, /7%/);
     assert.deepEqual(RAM_WORTH_TIERS.map((tier) => tier.kitGb), [96, 128, 192, 256]);
     assert.ok(RAM_WORTH_TIERS.every((tier) => /^~/.test(tier.needGb)));
     assert.match(RAM_WORTH_TIERS[2]!.model, /GLM-5\.3-Flash UD-Q4/);
@@ -143,18 +170,27 @@ describe('builder RAM ask', () => {
   });
 
   it('wires buy stubs, disclosure, pick JSON, and the DIMM speed note', () => {
-    for (const id of [RAM_32_PRODUCT, RAM_96_PRODUCT, RAM_256_PRODUCT, 'ddr5-192', 'ddr5-128']) {
+    for (const id of [RAM_32_PRODUCT, RAM_96_PRODUCT, RAM_96_FAST_PRODUCT, RAM_256_PRODUCT, 'ddr5-192', 'ddr5-128']) {
       const product = productsFile.products.find((row) => row.id === id);
       assert.ok(product, id);
       assert.ok(product.urls?.newegg, id);
       assert.doesNotMatch(product.urls?.newegg ?? '', /[?&](tag|ranMID|irclickid)=/);
     }
     const p96 = productsFile.products.find((row) => row.id === RAM_96_PRODUCT);
-    assert.match(p96?.urls?.amazon ?? '', /96GB.*2x48GB/);
-    assert.match(p96?.urls?.newegg ?? '', /N82E16820374483/);
+    assert.match(p96?.urls?.amazon ?? '', /F5-5600J4040D48GX2-FX5/);
+    assert.equal(p96?.urls?.newegg, 'https://www.newegg.com/p/pl?d=F5-5600J4040D48GX2-FX5&N=8000');
+    assert.doesNotMatch(p96?.urls?.newegg ?? '', /TZ5RK|N82E16820374483/);
+    const p96fast = productsFile.products.find((row) => row.id === RAM_96_FAST_PRODUCT);
+    assert.equal(p96fast?.urls?.newegg, 'https://www.newegg.com/p/pl?d=F5-6000J2836F48GX2&N=8000');
+    assert.match(p96fast?.urls?.amazon ?? '', /F5-6000J2836F48GX2-TZ5NR/);
     assert.ok(NAMED_RAM_KITS.every((kit) => kit.citation.url.startsWith('https://')));
     assert.match(NAMED_RAM_KITS.find((kit) => kit.id === '256')?.note ?? '', /2025 or newer BIOS/);
     const payload = ramPickPayload();
+    assert.equal(payload.recommended.part, RAM_96_PART);
+    assert.equal(payload.fastest_tested.part, RAM_96_FAST_PART);
+    assert.equal(payload.fastest_tested.product_id, RAM_96_FAST_PRODUCT);
+    assert.match(payload.fastest_tested.go, /\/go\/newegg\/ddr5-96-fast/);
+    assert.match(read('../components/RamPick.astro'), /Fastest tested/);
     assert.equal(payload.param, 'bigmodels');
     assert.match(payload.dimm_speed_note, /Four DIMMs/i);
     assert.match(payload.note, /invented prices/i);

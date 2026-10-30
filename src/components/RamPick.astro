@@ -5,12 +5,17 @@ import RamWorth from './RamWorth.astro';
 import {
   DIMM_SPEED_NOTE,
   NAMED_RAM_KITS,
+  RAM_96_FAST_DATED_PRICE,
+  RAM_96_FAST_NOTE,
+  RAM_96_FAST_PRODUCT,
+  RAM_96_FAST_SRC,
   RAM_96_HEADLINE,
   RAM_ASK_COPY,
   REPLACE_KIT_NOTE,
   ramCapFlag,
   ramRecommendation,
 } from '../lib/ram-kit';
+import { goPath } from '../lib/go-src';
 import type { Motherboard } from '../lib/motherboards';
 
 interface Props {
@@ -66,6 +71,25 @@ const visibleIds = new Set([initial.primary.id, ...initial.alternatives.map((row
           — {kit.citation.section}. As of {kit.citation.as_of}.
         </p>
         <BuyButtons product={kit.product_id} src={kit.src} disclose={false} />
+        {kit.id === '96' && (
+          <div class="mt-4 space-y-3" data-ram-fastest>
+            <p class="text-sm leading-relaxed text-muted">{RAM_96_FAST_NOTE}</p>
+            <p class="text-sm leading-relaxed" data-ram-fastest-price>
+              <strong class="font-medium text-ink">{RAM_96_FAST_DATED_PRICE.label}</strong> on {RAM_96_FAST_DATED_PRICE.as_of_label}
+              — {RAM_96_FAST_DATED_PRICE.source}. Prices change; check the current price before you buy.
+            </p>
+            <p>
+              <a
+                class="inline-flex min-h-11 items-center rounded-full bg-[#c73b24] px-4 py-2 text-sm font-semibold text-[#fffaf3]"
+                href={goPath('newegg', RAM_96_FAST_PRODUCT, RAM_96_FAST_SRC)}
+                rel="sponsored nofollow noopener"
+                target="_blank"
+              >
+                Fastest tested · Check price at Newegg
+              </a>
+            </p>
+          </div>
+        )}
       </div>
     );
   })}

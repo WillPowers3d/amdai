@@ -15,14 +15,34 @@ export const DEFAULT_BIG_MODELS = false;
 
 export const RAM_32_PRODUCT = 'ddr5-32';
 export const RAM_96_PRODUCT = 'ddr5-96';
+export const RAM_96_FAST_PRODUCT = 'ddr5-96-fast';
 export const RAM_192_PRODUCT = 'ddr5-192';
 export const RAM_256_PRODUCT = 'ddr5-256';
 export const RAM_128_PRODUCT = 'ddr5-128';
 export const RAM_32_SRC = 'builder-ram-32';
 export const RAM_96_SRC = 'builder-ram-96';
+export const RAM_96_FAST_SRC = 'builder-ram-96-fast';
 export const RAM_192_SRC = 'builder-ram-192';
 export const RAM_256_SRC = 'builder-ram-256';
 export const RAM_128_SRC = 'builder-ram-128';
+
+export const RAM_96_PART = 'F5-5600J4040D48GX2-FX5';
+export const RAM_96_FAST_PART = 'F5-6000J2836F48GX2-TZ5NR';
+
+/** G.SKILL kit-side QVL for the Flare X5 96 GB pick. Absence = untested, not incompatible. */
+export const RAM_96_QVL_BOARDS = [
+  'ASRock X870E Taichi',
+  'Gigabyte B850 AI TOP',
+  'GIGABYTE X870E AORUS MASTER X3D',
+] as const;
+
+export const RAM_96_UNTESTED_SITE_BOARDS = [
+  'ASRock X870 Taichi Creator',
+  'ASUS ProArt X870E-CREATOR WIFI',
+  'ASUS ProArt B850-CREATOR WIFI NEO',
+] as const;
+
+export const RAM_96_FAST_QVL_EXTRA = 'MSI MEG X870E GODLIKE';
 
 export const SMALL_KIT_GB = 32;
 export const DEFAULT_KIT_GB = 96;
@@ -63,12 +83,27 @@ export const RAM_96_HEADLINE =
 
 /** Dated Newegg list price for the named 96 GB kit. Show only with its date. */
 export const RAM_96_DATED_PRICE = {
-  usd: 1549.99,
-  label: '$1,549.99',
-  as_of: '2026-10-29',
-  as_of_label: 'Oct 29, 2026',
-  source: 'Newegg listing (list price on the search page, not a cart check)',
+  usd: 1479.99,
+  label: '$1,479.99',
+  as_of: '2026-10-30',
+  as_of_label: 'Oct 30, 2026',
+  source: 'Newegg listing sold by Newegg (list price on the search page, not a cart check)',
 } as const;
+
+/** Dated Newegg list price for the optional 6000 CL28 96 GB kit. White -TZ5NRW listing. */
+export const RAM_96_FAST_DATED_PRICE = {
+  usd: 2399.99,
+  label: '$2,399.99',
+  as_of: '2026-10-30',
+  as_of_label: 'Oct 30, 2026',
+  source: 'Newegg listing sold by Newegg for the white -TZ5NRW (list price on the search page, not a cart check)',
+} as const;
+
+export const RAM_96_NOTE =
+  '96 GB (2x48 GB) DDR5, the right size for most builds. Our pick: G.SKILL Flare X5 96 GB DDR5-5600 (F5-5600J4040D48GX2-FX5), AMD EXPO + Intel XMP. On G.SKILL’s tested list for the ASRock X870E Taichi, Gigabyte B850 AI TOP, and GIGABYTE X870E AORUS MASTER X3D. Two sticks keep the full 5600 speed on Ryzen 9000; four sticks drop it. ASRock X870 Taichi Creator, ASUS ProArt X870E-CREATOR WIFI, and ASUS ProArt B850-CREATOR WIFI NEO are untested on the 96 GB QVLs we read — not proof they are incompatible. Want the fastest tested kit? The 6000 CL28 version is about $920 more for at most ~7% more memory bandwidth, so only worth it if you already run models out of system RAM all day. Prices change; check the listing.';
+
+export const RAM_96_FAST_NOTE =
+  'Fastest tested: G.SKILL Trident Z5 Neo RGB F5-6000J2836F48GX2-TZ5NR (Newegg sold the white -TZ5NRW). On G.SKILL’s list for the same three boards plus MSI MEG X870E GODLIKE. About $920 more for at most ~7% more theoretical bandwidth (89.6 → 96.0 GB/s).';
 
 export type NamedRamKitId = '32' | '96' | '128' | '192' | '256';
 
@@ -107,20 +142,21 @@ export const NAMED_RAM_KITS: readonly NamedRamKit[] = [
   },
   {
     id: '96',
-    name: 'G.SKILL Trident Z5 RGB 96 GB (2x48) DDR5-5600 CL40',
+    name: 'G.SKILL Flare X5 96 GB (2x48) DDR5-5600 CL40',
     kit_gb: 96,
     dimms: '2x48 DDR5',
-    part: 'F5-5600J4040D48GX2-TZ5RK',
+    part: RAM_96_PART,
     product_id: RAM_96_PRODUCT,
     src: RAM_96_SRC,
     go_newegg: goPath('newegg', RAM_96_PRODUCT, RAM_96_SRC),
     citation: {
-      title: 'G.SKILL F5-5600J4040D48GX2-TZ5RK specification',
-      url: 'https://www.gskill.com/specification/165/374/1682577390/F5-5600J4040D48GX2-TZ5RK-Specification',
-      section: '96GB (48GBx2); Dual Channel Kit; SPD Speed (Default) 5600 MT/s; Tested Latency 40-40-40-89; Do not mix memory kits',
-      as_of: '2026-10-29',
+      title: 'G.SKILL F5-5600J4040D48GX2-FX5 specification',
+      url: 'https://www.gskill.com/specification/165/396/1683011081/F5-5600J4040D48GX2-FX5-Specification',
+      section:
+        '96GB (48GBx2); Dual Channel Kit; AMD EXPO + Intel XMP; SPD Speed (Default) 5600 MT/s; Tested Latency 40-40-40-89; Do not mix memory kits',
+      as_of: '2026-10-30',
     },
-    note: 'Recommended for most builds. Two DIMMs at a 5600 MT/s default (SPD) speed — AMD’s official 2-DIMM speed — so no overclock is needed. Any matched 2x48 DDR5 kit works the same way.',
+    note: RAM_96_NOTE,
     dated_price: {
       label: RAM_96_DATED_PRICE.label,
       as_of: RAM_96_DATED_PRICE.as_of,
@@ -300,7 +336,19 @@ export function ramPickPayload() {
       name: rec.primary.name,
       part: rec.primary.part,
       dated_price: RAM_96_DATED_PRICE,
+      qvl_boards: [...RAM_96_QVL_BOARDS],
+      untested_site_boards: [...RAM_96_UNTESTED_SITE_BOARDS],
       when: 'most builds; two R9700s run Qwen 3.8 Flash Q4 at 256K (estimate ~67 GB needed)',
+    },
+    fastest_tested: {
+      name: 'G.SKILL Trident Z5 Neo RGB 96 GB (2x48) DDR5-6000 CL28',
+      part: RAM_96_FAST_PART,
+      product_id: RAM_96_FAST_PRODUCT,
+      src: RAM_96_FAST_SRC,
+      go: goPath('newegg', RAM_96_FAST_PRODUCT, RAM_96_FAST_SRC),
+      dated_price: RAM_96_FAST_DATED_PRICE,
+      qvl_extra_board: RAM_96_FAST_QVL_EXTRA,
+      note: RAM_96_FAST_NOTE,
     },
     small: {
       kit_gb: small.kit_gb,
