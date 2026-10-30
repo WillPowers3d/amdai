@@ -410,7 +410,7 @@ const payload = rows.map((row) => ({
     const q = new URLSearchParams(location.search);
     if (q.get('n') === '1' || q.get('n') === '2') state.gpuCount = Number(q.get('n'));
     const ram = Number(q.get('ram') || '');
-    if ([64, 128, 192, 256].includes(ram)) state.ramGb = ram;
+    if ((QWEN_RAM_KITS as readonly number[]).includes(ram)) state.ramGb = ram;
     const be = q.get('be');
     if (be === 'llamacpp' || be === 'strata' || be === 'vllm') state.backendId = be;
     state.fitsOnMyRig = q.get('fit') === '1';

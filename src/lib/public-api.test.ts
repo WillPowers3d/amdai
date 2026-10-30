@@ -125,7 +125,7 @@ describe('public static API generator', () => {
     assert.match(daily.calculator, /^https:\/\/amdai\.net\/calculator\?/);
     assert.match(daily.calculator, /model=qwen36/);
     assert.ok(daily.ram);
-    assert.match(String(daily.ram.kit_gb), /32|192|256/);
+    assert.match(String(daily.ram.kit_gb), /^96$/);
     assert.doesNotMatch(daily.ram.why, /\$\d|\bMSRP\b/);
     assert.ok(daily.cpu);
     assert.match(daily.cpu.title, /Ryzen/);

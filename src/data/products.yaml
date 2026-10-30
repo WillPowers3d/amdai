@@ -361,6 +361,28 @@ products:
       microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=F5-6000J3038F16GX2-FX5
       gskill: https://www.gskill.com/specification/165/396/1673491242/F5-6000J3038F16GX2-FX5-Specification
 
+  - id: ddr5-96
+    name: G.SKILL Flare X5 96 GB (2x48) DDR5-5600 CL40
+    kind: part
+    note: Named kit F5-5600J4040D48GX2-FX5 (AMD EXPO + Intel XMP). Recommended size for most builds (2x48). Newegg list price $1,479.99 on 2026-10-30, sold by Newegg (dated snapshot, not a live quote). Amazon searches the FX5 part number.
+    urls:
+      amazon: https://www.amazon.com/s?k=G.SKILL+Flare+X5+F5-5600J4040D48GX2-FX5
+      newegg: https://www.newegg.com/p/pl?d=F5-5600J4040D48GX2-FX5&N=8000
+      bhphoto: https://www.bhphotovideo.com/c/search?Ntt=F5-5600J4040D48GX2-FX5
+      microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=F5-5600J4040D48GX2-FX5
+      gskill: https://www.gskill.com/specification/165/396/1683011081/F5-5600J4040D48GX2-FX5-Specification
+
+  - id: ddr5-96-fast
+    name: G.SKILL Trident Z5 Neo RGB 96 GB (2x48) DDR5-6000 CL28
+    kind: part
+    note: Fastest tested 96 GB kit F5-6000J2836F48GX2-TZ5NR. Newegg sold the white -TZ5NRW at $2,399.99 on 2026-10-30 (dated snapshot, not a live quote). About $920 more than the Flare X5 5600 for at most ~7% more theoretical bandwidth. Adds MSI MEG X870E GODLIKE on G.SKILL’s QVL.
+    urls:
+      amazon: https://www.amazon.com/s?k=F5-6000J2836F48GX2-TZ5NR
+      newegg: https://www.newegg.com/p/pl?d=F5-6000J2836F48GX2&N=8000
+      bhphoto: https://www.bhphotovideo.com/c/search?Ntt=F5-6000J2836F48GX2-TZ5NR
+      microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=F5-6000J2836F48GX2-TZ5NR
+      gskill: https://www.gskill.com/qvl/165/390/1736133551/F5-6000J2836F48GX2-TZ5NR-QVL
+
   - id: ddr5-128
     name: Kingston FURY Beast 128 GB (2x64) DDR5-5600
     kind: part

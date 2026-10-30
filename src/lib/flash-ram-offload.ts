@@ -29,7 +29,7 @@ export const FLASH_OFFLOAD_CONTEXT_LABEL: Record<(typeof FLASH_OFFLOAD_CONTEXTS)
   262144: '256K',
 };
 export const FLASH_OFFLOAD_BACKENDS = ['llama.cpp', 'Strata'] as const;
-export const FLASH_OFFLOAD_KITS = [128, 192, 256] as const;
+export const FLASH_OFFLOAD_KITS = [96, 128, 192, 256] as const;
 export const FLASH_OFFLOAD_QUANTS = ['UD-Q3_K_XL', 'UD-Q4_K_XL', 'UD-Q5_K_XL', 'UD-Q6_K_XL'] as const;
 
 export const LLAMA_EXPERT_OFFLOAD_LAUNCH = [
@@ -169,7 +169,10 @@ export function kitRecommendations(rows: FlashRamOffloadRow[]): KitRec[] {
     const twoQ6 = full.some((row) => row.short === 'Q6' && row.cards === 2);
     const oneQ6 = full.some((row) => row.short === 'Q6' && row.cards === 1);
     let headline = `${kitGb} GB kit — estimate only.`;
-    if (kitGb === 256 && twoQ6) {
+    const twoQ4 = full.some((row) => row.short === 'Q4' && row.cards === 2);
+    if (kitGb === 96 && twoQ4) {
+      headline = '96 GB (2x48) is the pick for most builds. Two-card Q4 at 262K fits on the calculator estimate.';
+    } else if (kitGb === 256 && twoQ6) {
       headline = '256 GB is the local desktop kit. Two-card Q6 at 262K is the measured house fast-agent.';
     } else if (kitGb === 192 && oneQ6) {
       headline = '192 GB covers one-card Q6 at 262K on the calculator estimate. Speeds for that card count are not measured.';

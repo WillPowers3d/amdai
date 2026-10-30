@@ -47,7 +47,7 @@ describe('MoE shopper hub', () => {
     assert.match(blob, /not yet measured by AMDai/);
     assert.ok(blob.includes(RAM_MIN_LABEL));
     assert.ok(blob.includes(RAM_FULL_LABEL));
-    assert.deepEqual([...FLASH_OFFLOAD_KITS], [128, 192, 256]);
+    assert.deepEqual([...FLASH_OFFLOAD_KITS], [96, 128, 192, 256]);
     assert.doesNotMatch(blob, /Qwen2\.5|Qwen3-8B/);
     assert.doesNotMatch(blob, /TODO|TBD|FIXME|coming soon/i);
     assert.doesNotMatch(blob, /\$\d|\bMSRP\b/);

@@ -727,8 +727,8 @@ const olderOpen = olderModelsOpenFromSearch(Astro.url.search);
       ? 'A dual x8/x8 board now puts both cards on CPU lanes at the same width.'
       : 'One card will run on a single x16 slot. Combined with Minimum budget, a cheaper single-x16 board is listed.');
     setText('[data-bigmodels-lede]', ask.bigModels
-      ? 'Recommend 192 GB or 256 GB now (G.SKILL Flare X5 4x48 DDR5-6000 CL28, or Trident Z5 Neo 4x64 DDR5-6000). That lets big MoE models keep experts in RAM.'
-      : 'Recommend the G.SKILL Flare X5 2x16 DDR5-6000 CL30 (32 GB). The GPU does the work on the in-VRAM path, so save the money on system RAM.');
+      ? 'Recommend 96 GB (2x48 DDR5). With two R9700s it runs Qwen 3.8 Flash Q4 at full 256K context (estimate: about 67 GB needed). 128–256 GB loads larger, smarter models but answers a lot slower — usually not worth it.'
+      : 'We still recommend 96 GB (2x48 DDR5) for most builds, so Qwen 3.8 Flash stays an option. 32 GB (2x16) is enough only if you run the 35B on one card and never want Flash.');
     setText('[data-cpuwork-lede]', ask.cpuWork
       ? 'Same PCIe story. For DDR5 offload the 9950X adds cores for side jobs; for in-VRAM the 9600X is still enough.'
       : 'The CPU mostly feeds the cards. Stay on the 9600X when the model fits in VRAM, or the 9900X when experts land in DDR5.');

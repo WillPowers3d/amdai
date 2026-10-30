@@ -80,8 +80,11 @@ describe('Flash RAM-offload page', () => {
     const kits = kitRecommendations(rows);
     assert.deepEqual(
       kits.map((kit) => kit.kitGb),
-      [128, 192, 256],
+      [96, 128, 192, 256],
     );
+    const k96 = kits.find((kit) => kit.kitGb === 96);
+    assert.match(k96?.headline ?? '', /96 GB/);
+    assert.ok(k96?.lines.some((line) => /Q4/.test(line) && /2×R9700/.test(line)));
     const k128 = kits.find((kit) => kit.kitGb === 128);
     const k192 = kits.find((kit) => kit.kitGb === 192);
     const k256 = kits.find((kit) => kit.kitGb === 256);
