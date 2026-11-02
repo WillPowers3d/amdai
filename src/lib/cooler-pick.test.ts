@@ -83,7 +83,7 @@ describe('builder CPU-cooler step', () => {
     for (const slug of COOLER_GO_SLUGS) {
       const product = productsFile.products.find((row) => row.id === slug);
       assert.ok(product, slug);
-      assert.match(product!.urls?.newegg ?? '', /^https:\/\/www\.newegg\.com\/p\/pl\?d=/);
+      assert.match(product!.urls?.newegg ?? '', /^https:\/\/www\.newegg\.com\/(?:p\/pl\?d=|.+\/p\/[A-Z0-9-]+)/);
       assert.doesNotMatch(product!.urls?.newegg ?? '', /[?&](tag|ranMID|irclickid)=|#src=/);
     }
     const payload = coolerPickPayload();

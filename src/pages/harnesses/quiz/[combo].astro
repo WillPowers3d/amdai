@@ -12,6 +12,7 @@ import {
   surfaceLabel,
 } from '../../../lib/harnesses';
 import { harnesses } from '../../../lib/harnesses-data';
+import HarnessHardwareBox from '../../../components/HarnessHardwareBox.astro';
 
 export function getStaticPaths() {
   return quizCombos().map((combo) => ({ params: { combo } }));
@@ -46,6 +47,7 @@ const pick = pickHarness(answers, harnesses());
       {pick.primary.surfaces.map((surface) => <span class="badge">{surfaceLabel(surface)}</span>)}
     </p>
     <p class="mt-4 text-lg text-muted">{pick.reason}</p>
+    <HarnessHardwareBox name={pick.primary.title} />
     <p class="mt-3 text-sm text-muted">{pick.usageNote}</p>
     <p class="mt-6 flex flex-wrap gap-3 text-sm">
       <a class="btn-primary" href={harnessPath(pick.primary.id)}>Open {pick.primary.title}</a>

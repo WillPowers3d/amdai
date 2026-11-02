@@ -71,7 +71,7 @@ describe('one-answer parts list', () => {
       const product = productsFile.products.find((row) => row.id === slug);
       assert.ok(product, slug);
       assert.ok(ids.has(slug), slug);
-      assert.match(product!.urls?.newegg ?? '', /^https:\/\/www\.newegg\.com\/p\/pl\?d=/);
+      assert.match(product!.urls?.newegg ?? '', /^https:\/\/www\.newegg\.com\/(?:p\/pl\?d=|.+\/p\/[A-Z0-9-]+)/);
       assert.doesNotMatch(product!.urls?.newegg ?? '', /[?&](tag|ranMID|irclickid)=|#src=/);
     }
     assert.equal(goSlugForProduct('ryzen-5-9600x'), 'amd-ryzen-5-9600x');

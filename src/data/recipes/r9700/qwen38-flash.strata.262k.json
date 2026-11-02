@@ -17,7 +17,7 @@
   "override": null,
   "ctx": 262144,
   "ctx_label": "262K",
-  "card_count": 1,
+  "card_count": 2,
   "flags_todo": true,
   "needs": { "host_ram_gb": null, "disk_gb": null },
   "proof": [

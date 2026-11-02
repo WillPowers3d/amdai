@@ -1,0 +1,33 @@
+---
+import Base from '../layouts/Base.astro';
+import BuyerArticle from '../components/BuyerArticle.astro';
+import {
+  BEST_GPU_ANSWER,
+  BEST_GPU_DESCRIPTION,
+  BEST_GPU_FAQ,
+  BEST_GPU_H1,
+  BEST_GPU_HUB,
+  BEST_GPU_KICKER,
+  BEST_GPU_LEAD,
+  BEST_GPU_PICK,
+  BEST_GPU_SECTIONS,
+  BEST_GPU_SOURCES,
+  BEST_GPU_TITLE,
+} from '../lib/best-amd-gpu';
+import { BEST_GPU_PATH } from '../lib/buyer-pages';
+---
+
+<Base title={BEST_GPU_TITLE} description={BEST_GPU_DESCRIPTION}>
+  <BuyerArticle
+    path={BEST_GPU_PATH}
+    kicker={BEST_GPU_KICKER}
+    h1={BEST_GPU_H1}
+    lead={BEST_GPU_LEAD}
+    answer={BEST_GPU_ANSWER}
+    hubLinks={BEST_GPU_HUB}
+    sections={BEST_GPU_SECTIONS}
+    faqs={BEST_GPU_FAQ}
+    sources={BEST_GPU_SOURCES}
+    pick={BEST_GPU_PICK}
+  />
+</Base>

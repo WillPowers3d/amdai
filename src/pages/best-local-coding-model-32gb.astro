@@ -1,0 +1,33 @@
+---
+import Base from '../layouts/Base.astro';
+import BuyerArticle from '../components/BuyerArticle.astro';
+import {
+  CODING_ANSWER,
+  CODING_DESCRIPTION,
+  CODING_FAQ,
+  CODING_H1,
+  CODING_HUB,
+  CODING_KICKER,
+  CODING_LEAD,
+  CODING_PICK,
+  CODING_SECTIONS,
+  CODING_SOURCES,
+  CODING_TITLE,
+} from '../lib/best-coding-model';
+import { CODING_MODEL_PATH } from '../lib/buyer-pages';
+---
+
+<Base title={CODING_TITLE} description={CODING_DESCRIPTION}>
+  <BuyerArticle
+    path={CODING_MODEL_PATH}
+    kicker={CODING_KICKER}
+    h1={CODING_H1}
+    lead={CODING_LEAD}
+    answer={CODING_ANSWER}
+    hubLinks={CODING_HUB}
+    sections={CODING_SECTIONS}
+    faqs={CODING_FAQ}
+    sources={CODING_SOURCES}
+    pick={CODING_PICK}
+  />
+</Base>

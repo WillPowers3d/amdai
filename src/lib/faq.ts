@@ -93,6 +93,7 @@ export const FAQ_ENTRIES: FaqItem[] = [
     links: [
       { href: '/disclosure', label: 'Affiliate disclosure' },
       { href: '/budget', label: 'Setup by budget' },
+      { href: '/local-llm-pc-build', label: 'Local LLM PC build' },
       { href: '/about', label: 'About' },
     ],
   },
@@ -129,6 +130,9 @@ export const FAQ_ENTRIES: FaqItem[] = [
       'The measured house box is one AMD Radeon AI PRO R9700 (32 GB, gfx1201). There is no consumer RX 9700. A 16 GB RX 9070 XT is the same generation with half the VRAM — see the RX 9070 XT recipe sheet for calculator fit estimates, not local desktop tok/s. The non-XT RX 9070 is the 16 GB / 220 W gfx1201 sheet next to it; the 12 GB RX 9070 GRE is the 192-bit / 432 GB/s GRE sheet. The cheaper 16 GB RDNA 4 pick is the RX 9060 XT (gfx1200) — same estimate-sheet rules, different family package. The 24 GB RX 7900 XTX is the RDNA 3 gfx1100 used-card sheet — AMD cites 24 GB GDDR6 and 355 W typical board power; official on the cited ROCm 10.1 matrix. The 20 GB RX 7900 XT is the same gfx1100 family with AMD citing 315 W TBP — not the 24 GB XTX and not the 16 GB 7900 GRE. The 16 GB RX 7800 XT is the gfx1101 used-card sheet — AMD cites 16 GB GDDR6 and 263 W typical board power; official on that same 10.1 matrix. The 16 GB 7900 GRE sits between the 7900 XT and 7800 XT on the gfx1100 pin. The 12 GB 7700 XT is the next smaller gfx1101 sheet after the 7800 XT. The 16 GB 7600 XT is the gfx1102 budget 16 GB sheet — not the 8 GB RX 7600, which has its own estimate sheet. The 16 GB RX 6800 XT is the RDNA 2 gfx1030 estimate sheet — unofficial on the current Radeon ROCm row, Vulkan first. The shared RX 6950 XT / 6900 XT sheet is the other 16 GB gfx1030 consumer pair (335 W / 576 GB/s vs 300 W / 512 GB/s). The 12 GB RX 6700 XT is the RDNA 2 gfx1031 used-card sheet — not the 6800 XT and not the 10 GB non-XT 6700; AMD cites 12 GB GDDR6 and 230 W typical board power. Workstation PRO sheets: W7900 is 48 GB gfx1100 (864 GB/s, 295 W TBP); W7800 is 32 GB gfx1100 (576 GB/s, 260 W TBP) with a separate AMD-listed 48 GB SKU; W7700 is 16 GB gfx1101 (576 GB/s, 190 W TBP); W6800 is the official 32 GB gfx1030 RDNA 2 row (512 GB/s, 250 W TBP). None of those four are measured on the local desktop. Mini-PCs on Ryzen AI Max / Strix Halo (Radeon 8060S, gfx1151) are a shared-memory APU, not a discrete VRAM card — see that cited guide. Confirm the SKU on the R9700 measured page and the GPU directory, then size the file on the calculator before you buy a second card.',
     links: [
       { href: '/gpus/r9700', label: 'R9700 measured page' },
+      { href: '/gpus/r9700/review', label: 'R9700 review' },
+      { href: '/best-amd-gpu-for-llm', label: 'Best AMD GPU' },
+      { href: '/local-llm-pc-build', label: 'Local LLM PC build' },
       { href: '/compare/gpus', label: 'Compare GPUs' },
       { href: '/gpus/rx-9070-xt', label: 'RX 9070 XT sheet' },
       { href: '/gpus/rx-9070', label: 'RX 9070 sheet' },
@@ -155,6 +159,10 @@ export const FAQ_ENTRIES: FaqItem[] = [
       { href: '/hardware', label: 'Hardware' },
       { href: '/power', label: 'Power and PSU' },
       { href: '/budget', label: 'Setup by budget' },
+      { href: '/models/qwen36/requirements', label: '35B requirements' },
+      { href: '/models/flash/requirements', label: 'Flash requirements' },
+      { href: '/models/glm-53-flash/requirements', label: 'GLM Flash requirements' },
+      { href: '/best-local-coding-model-32gb', label: 'Best coding model 32 GB' },
     ],
   },
   {
@@ -1246,6 +1254,13 @@ export const REQUIRED_FAQ_HREFS = [
   '/guides/tool-calling',
   '/gpus/ryzen-igpu',
   '/rocm/upgrade',
+  '/models/qwen36/requirements',
+  '/models/flash/requirements',
+  '/models/glm-53-flash/requirements',
+  '/best-amd-gpu-for-llm',
+  '/local-llm-pc-build',
+  '/gpus/r9700/review',
+  '/best-local-coding-model-32gb',
 ] as const;
 
 const BANNED_VISIBLE = /Qwen2\.5|Qwen3-8B/i;

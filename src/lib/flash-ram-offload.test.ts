@@ -88,7 +88,8 @@ describe('Flash RAM-offload page', () => {
     const k128 = kits.find((kit) => kit.kitGb === 128);
     const k192 = kits.find((kit) => kit.kitGb === 192);
     const k256 = kits.find((kit) => kit.kitGb === 256);
-    assert.match(k128?.headline ?? '', /128/);
+    assert.match(k128?.headline ?? '', /Q5/);
+    assert.match(k128?.headline ?? '', /4 GB spare/);
     assert.match(k192?.headline ?? '', /192/);
     assert.match(k256?.headline ?? '', /local desktop/);
     assert.ok(k128?.lines.some((line) => /Q6/.test(line) && /2×/.test(line)));

@@ -733,7 +733,13 @@ export function ogSlug(pathname: string): string {
     if (slug === 'compare-gpus' || slug.includes('-vs-')) return 'compare-gpus';
     return 'compare';
   }
-  if (slug === 'gpus-r9700') return 'gpus-r9700';
+  if (slug === 'gpus-r9700' || slug === 'gpus-r9700-review') return 'gpus-r9700';
+  if (slug === 'best-amd-gpu-for-llm') return 'gpus';
+  if (slug === 'local-llm-pc-build') return 'budget';
+  if (slug === 'best-local-coding-model-32gb') return 'models-qwen36';
+  if (slug === 'models-qwen36-requirements') return 'models-qwen36';
+  if (slug === 'models-flash-requirements') return 'models-flash';
+  if (slug === 'models-glm-53-flash-requirements') return 'models-glm-53-flash';
   if (slug === 'gpus-strix-halo') return 'gpus-strix-halo';
   if (slug === 'gpus-ryzen-igpu') return 'gpus-ryzen-igpu';
   if (slug === 'gpus-rx-9070-xt') return 'gpus-rx-9070-xt';

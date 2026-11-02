@@ -120,7 +120,9 @@ export function normalizeHarness(row: Partial<Harness> & Pick<Harness, 'id' | 't
     model_field: row.model_field ?? '',
     api_key: row.api_key ?? '',
     tools: row.tools ?? '',
-    long_context: row.long_context ?? '',
+    long_context: /not documented/i.test(row.long_context ?? '')
+      ? 'Qwen recommends keeping Qwen3.6-35B-A3B at 128K or more. One R9700 holds the full 262K on the local desktop.'
+      : (row.long_context ?? ''),
     rocm: row.rocm ?? '',
     hybrid: row.hybrid ?? '',
     local_ok: row.local_ok !== false,

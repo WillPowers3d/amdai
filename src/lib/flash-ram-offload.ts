@@ -133,7 +133,7 @@ export type FlashRamOffloadRow = {
 export function flashRamOffloadRows(): FlashRamOffloadRow[] {
   const rows: FlashRamOffloadRow[] = [];
   for (const spec of FLASH_RAM_QUANTS) {
-    const listed = spec.short === 'Q3' ? 90 : spec.short === 'Q4' ? 111 : spec.short === 'Q5' ? 158.3 : 169;
+    const listed = spec.short === 'Q3' ? 83.8 : spec.short === 'Q4' ? 103.7 : spec.short === 'Q5' ? 147.4 : 157.5;
     for (const cards of [1, 2] as const) {
       const input = { ...flashRamInput(spec.quantId, cards), context: 4096 };
       const ram = systemRamNeed(input);
@@ -176,8 +176,8 @@ export function kitRecommendations(rows: FlashRamOffloadRow[]): KitRec[] {
       headline = '256 GB is the local desktop kit. Two-card Q6 at 262K is the measured house fast-agent.';
     } else if (kitGb === 192 && oneQ6) {
       headline = '192 GB covers one-card Q6 at 262K on the calculator estimate. Speeds for that card count are not measured.';
-    } else if (kitGb === 128 && twoQ6) {
-      headline = '128 GB covers two-card Q5/Q6 at 262K on the calculator estimate. One-card Q5/Q6 does not.';
+    } else if (kitGb === 128) {
+      headline = '128 GB covers two-card Q5 at 262K. Q6 only with about 4 GB spare — we size Q6 at 192 GB.';
     }
     const lines = [
       full.length

@@ -1,0 +1,33 @@
+---
+import Base from '../../../layouts/Base.astro';
+import BuyerArticle from '../../../components/BuyerArticle.astro';
+import {
+  QWEN36_REQ_ANSWER,
+  QWEN36_REQ_DESCRIPTION,
+  QWEN36_REQ_FAQ,
+  QWEN36_REQ_H1,
+  QWEN36_REQ_HUB,
+  QWEN36_REQ_KICKER,
+  QWEN36_REQ_LEAD,
+  QWEN36_REQ_PICK,
+  QWEN36_REQ_SECTIONS,
+  QWEN36_REQ_SOURCES,
+  QWEN36_REQ_TITLE,
+} from '../../../lib/qwen36-requirements';
+import { QWEN36_REQ_PATH } from '../../../lib/buyer-pages';
+---
+
+<Base title={QWEN36_REQ_TITLE} description={QWEN36_REQ_DESCRIPTION}>
+  <BuyerArticle
+    path={QWEN36_REQ_PATH}
+    kicker={QWEN36_REQ_KICKER}
+    h1={QWEN36_REQ_H1}
+    lead={QWEN36_REQ_LEAD}
+    answer={QWEN36_REQ_ANSWER}
+    hubLinks={QWEN36_REQ_HUB}
+    sections={QWEN36_REQ_SECTIONS}
+    faqs={QWEN36_REQ_FAQ}
+    sources={QWEN36_REQ_SOURCES}
+    pick={QWEN36_REQ_PICK}
+  />
+</Base>

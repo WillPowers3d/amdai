@@ -98,9 +98,18 @@ export function nextStepPicks(modelId: CanRunModelId, gpuId: CanRunGpuId): Upgra
   }
 
   if (verdict === 'ram-offload') {
-    const picks: UpgradePick[] = [
-      { kind: 'primary', label: 'More DDR5 for the offloaded experts', productId: 'ddr5-kit' },
-    ];
+    if (gpuId === 'strix-halo') {
+      return [{ kind: 'keep', label: 'Strix Halo memory is soldered — a DDR5 kit will not help', productId: null }];
+    }
+    const ramProduct =
+      modelId === 'glm-53-flash' ? 'ddr5-192' : modelId === 'flash' || modelId === 'qwen36' ? 'ddr5-96' : 'ddr5-kit';
+    const ramLabel =
+      ramProduct === 'ddr5-192'
+        ? '192 GB DDR5 for GLM offload at 256K'
+        : ramProduct === 'ddr5-96'
+          ? '96 GB DDR5 for the offloaded experts'
+          : 'More DDR5 for the offloaded experts';
+    const picks: UpgradePick[] = [{ kind: 'primary', label: ramLabel, productId: ramProduct }];
     if (oneR9700 && gpuId !== 'r9700') {
       picks.push({ kind: 'alt', label: 'One R9700 (32 GB) runs it fully', productId: 'r9700' });
     }
@@ -227,7 +236,7 @@ export function upgradePickCounts(): UpgradePickCounts {
         continue;
       }
       counts.boxShown += 1;
-      if (primary.productId === 'ddr5-kit') counts.ddr5 += 1;
+      if (primary.productId.startsWith('ddr5')) counts.ddr5 += 1;
       else if (primary.label.startsWith('One Radeon')) counts.oneR9700 += 1;
       else counts.secondCard += 1;
       if (picks.some((pick) => pick.productId && pick.productId !== current)) {
@@ -271,7 +280,12 @@ export function assertUpgradePicksValid(
       if (verdict === 'fits-fully' && picks.some((pick) => pick.kind === 'primary')) {
         errors.push(`${path} must not upsell when it fits fully`);
       }
-      if (verdict !== 'fits-fully' && verdict !== 'does-not-fit' && !primary?.productId) {
+      if (
+        verdict !== 'fits-fully' &&
+        verdict !== 'does-not-fit' &&
+        !(gpuId === 'strix-halo' && verdict === 'ram-offload') &&
+        !primary?.productId
+      ) {
         errors.push(`${path} missing primary product`);
       }
     }

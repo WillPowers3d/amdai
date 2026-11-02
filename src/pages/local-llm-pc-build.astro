@@ -1,0 +1,33 @@
+---
+import Base from '../layouts/Base.astro';
+import BuyerArticle from '../components/BuyerArticle.astro';
+import {
+  PC_BUILD_ANSWER,
+  PC_BUILD_DESCRIPTION,
+  PC_BUILD_FAQ,
+  PC_BUILD_H1,
+  PC_BUILD_HUB,
+  PC_BUILD_KICKER,
+  PC_BUILD_LEAD,
+  PC_BUILD_PICK,
+  PC_BUILD_SECTIONS,
+  PC_BUILD_SOURCES,
+  PC_BUILD_TITLE,
+} from '../lib/local-llm-pc-build';
+import { PC_BUILD_PATH } from '../lib/buyer-pages';
+---
+
+<Base title={PC_BUILD_TITLE} description={PC_BUILD_DESCRIPTION}>
+  <BuyerArticle
+    path={PC_BUILD_PATH}
+    kicker={PC_BUILD_KICKER}
+    h1={PC_BUILD_H1}
+    lead={PC_BUILD_LEAD}
+    answer={PC_BUILD_ANSWER}
+    hubLinks={PC_BUILD_HUB}
+    sections={PC_BUILD_SECTIONS}
+    faqs={PC_BUILD_FAQ}
+    sources={PC_BUILD_SOURCES}
+    pick={PC_BUILD_PICK}
+  />
+</Base>

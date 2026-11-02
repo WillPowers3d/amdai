@@ -178,7 +178,10 @@ describe('builder RAM ask', () => {
     }
     const p96 = productsFile.products.find((row) => row.id === RAM_96_PRODUCT);
     assert.match(p96?.urls?.amazon ?? '', /F5-5600J4040D48GX2-FX5/);
-    assert.equal(p96?.urls?.newegg, 'https://www.newegg.com/p/pl?d=F5-5600J4040D48GX2-FX5&N=8000');
+    assert.equal(
+      p96?.urls?.newegg,
+      'https://www.newegg.com/g-skill-flare-x5-96gb-ddr5-5600-cas-latency-cl40-desktop-memory-black/p/N82E16820374478',
+    );
     assert.doesNotMatch(p96?.urls?.newegg ?? '', /TZ5RK|N82E16820374483/);
     const p96fast = productsFile.products.find((row) => row.id === RAM_96_FAST_PRODUCT);
     assert.equal(p96fast?.urls?.newegg, 'https://www.newegg.com/p/pl?d=F5-6000J2836F48GX2&N=8000');
