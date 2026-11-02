@@ -9,6 +9,7 @@ import { primaryNav } from './site';
 import {
   ABOUT,
   CONTACT,
+  DEFAULT_CONTACT_EMAIL,
   HOW_WE_TEST,
   METHODOLOGY,
   REQUIRED_FOOTER_HREFS,
@@ -37,7 +38,18 @@ describe('trust / E-E-A-T pack', () => {
     assert.match(ABOUT.what.body, /ROCm/);
     assert.match(TERMS.lead, /not legal advice/i);
     assert.equal(contactEmailWarning(), null);
-    assert.equal(contactEmail(), 'amdai@mail.grokbot.com');
+    assert.equal(DEFAULT_CONTACT_EMAIL, 'hello@amdai.net');
+    assert.equal(contactEmail(), 'hello@amdai.net');
+    assert.match(ABOUT.who.body, /AMDai Lab/);
+    assert.match(ABOUT.who.body, /not affiliated with AMD/i);
+    assert.doesNotMatch(ABOUT.who.body, /handle|local-desktop/);
+    assert.match(ABOUT.what.body, /Radeon/);
+    assert.match(ABOUT.what.body, /ROCm/);
+    assert.match(ABOUT.what.body, /local desktop/);
+    assert.match(ABOUT.affiliates.body, /rel="sponsored"/);
+    assert.match(CONTACT.guidance, /corrections/);
+    assert.match(CONTACT.guidance, /data questions/);
+    assert.doesNotMatch(CONTACT.lead, /CONTACT_EMAIL/);
     assert.match(METHODOLOGY.cards.body, /llama\.cpp/);
     assert.match(METHODOLOGY.estimates.body, /UD-Q3_K_XL/);
     assert.match(METHODOLOGY.estimates.body, /estimate/i);
@@ -53,11 +65,31 @@ describe('trust / E-E-A-T pack', () => {
       assert.ok(hrefs.includes(required), required);
     }
     const aboutPage = readFileSync(join(here, '../pages/about.astro'), 'utf8');
-    assert.match(aboutPage, /AMDai is run by the AMDai Lab team/);
+    assert.match(aboutPage, /ABOUT\.who\.body/);
     assert.match(aboutPage, /mailto:\$\{email\}/);
+    assert.match(aboutPage, /\/methodology/);
+    const contactPage = readFileSync(join(here, '../pages/contact.astro'), 'utf8');
+    assert.match(contactPage, /mailto:\$\{email\}/);
+    assert.match(contactPage, /CONTACT\.guidance/);
+    assert.doesNotMatch(contactPage, /No contact email is configured on this build/);
+    assert.doesNotMatch(readFileSync(join(here, '../data/contact.yaml'), 'utf8'), /grokbot/);
+    for (const rel of [
+      '../data/contact.yaml',
+      '../pages/about.astro',
+      '../pages/contact.astro',
+      '../pages/disclosure.astro',
+      '../pages/sponsor.astro',
+      './trust.ts',
+      './sponsor.ts',
+    ]) {
+      assert.doesNotMatch(readFileSync(join(here, rel), 'utf8'), /mail\.grokbot\.com|amdai@mail/);
+    }
     assert.ok(contactRoutes().some((row) => row.href === '/forum'));
     assert.ok(REQUIRED_FOOTER_HREFS.includes('/rss.xml'));
     assert.ok(REQUIRED_FOOTER_HREFS.includes('/sponsor'));
+    for (const href of ['/contact', '/about', '/disclosure', '/privacy', '/terms']) {
+      assert.ok(REQUIRED_FOOTER_HREFS.includes(href), href);
+    }
   });
 
   it('is in nav and sitemap with AboutPage JSON-LD and no prices', () => {

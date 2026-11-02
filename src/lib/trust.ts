@@ -53,9 +53,14 @@ function contactYamlEmail(): string {
   return '';
 }
 
-/** Public contact inbox. Empty / invalid env or yaml renders nothing — never invent an address. */
+/** Public inbox shown when yaml and CONTACT_EMAIL are both empty. */
+export const DEFAULT_CONTACT_EMAIL = 'hello@amdai.net';
+
+/** Public contact inbox. Empty / invalid override hides the mailto — never invent a different address. */
 export function contactEmail(raw?: string): string | null {
-  const value = (raw ?? process.env.CONTACT_EMAIL ?? contactYamlEmail()).trim();
+  const candidate =
+    raw !== undefined ? raw : process.env.CONTACT_EMAIL || contactYamlEmail() || DEFAULT_CONTACT_EMAIL;
+  const value = candidate.trim();
   if (!value) return null;
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return null;
   return value;
@@ -71,16 +76,16 @@ export const ABOUT = {
   name: 'About AMDai',
   kicker: 'Who runs this notebook',
   lead:
-    'AMDai is an independent consumer notebook for local AI on AMD Radeon and ROCm — llama.cpp first, grounded in a real two-R9700 test rig. Numbers are measured amdai-bench/run@1 cards unless a cell says estimate or cited. It is not an AMD publication.',
+    'AMDai Lab publishes this independent notebook for local AI on AMD Radeon and ROCm — llama.cpp first, grounded in measured results from a local desktop test rig. Numbers are measured amdai-bench/run@1 cards unless a cell says estimate or cited. It is not affiliated with AMD.',
   who: {
     title: 'Who runs it',
     body:
-      `Official first-party cards are credited to ${AMDAI_CREDIT.display} (handle ${AMDAI_CREDIT.handle}). Verified submitter, rig ${AMDAI_CREDIT.rig}. That is the provenance already printed on amdai-bench/run@1 cards. This page does not add a biography, job title, city, or photo.`,
+      'AMDai Lab runs this independent site. It is not affiliated with AMD. This page does not add a biography, job title, city, or photo.',
   },
   what: {
     title: 'What this site is',
     body:
-      'Consumer Radeon / ROCm lab notes for running local LLMs at home. It is not a store, not a leaderboard scrape, and not an AMD channel. Use Benchmarks, run cards, and Stack Lab for the measured path; Privacy and the affiliate disclosure for how the site is funded.',
+      'AMDai covers local AI on AMD Radeon and ROCm. Measured results come from a local desktop test rig. It is not a store, not a leaderboard scrape, and not an AMD channel. Use Benchmarks, run cards, and Stack Lab for the measured path; How we test for the method; Privacy and the affiliate disclosure for how the site is funded.',
   },
   rig: {
     title: 'The test rig (local desktop)',
@@ -95,7 +100,7 @@ export const ABOUT = {
   affiliates: {
     title: 'How affiliate links work',
     body:
-      'Some store buttons are Amazon Associates, Rakuten (Newegg), or B&H when those IDs are set. Buttons say “Check price” — we do not show a live or stale price. Full program notes live on the affiliate disclosure.',
+      'amdai.net may earn a commission from some retailer links — Amazon Associates, and Newegg via Rakuten Advertising where available. A commission does not change the price you pay and does not change which hardware we recommend. Paid links are marked rel="sponsored". Buttons say “Check price” — we do not show a live or stale price. Full program notes live on the affiliate disclosure.',
   },
 };
 
@@ -140,7 +145,9 @@ export const CONTACT = {
   name: 'Contact',
   kicker: 'Honest routes',
   lead:
-    'There is no phone number or postal address on AMDai. Use the public routes below. A contact email appears only when CONTACT_EMAIL or src/data/contact.yaml email is set for this build.',
+    'There is no phone number or postal address on AMDai. Email AMDai Lab, or use the public routes below.',
+  guidance:
+    'Use this address for corrections, sponsorship or partnership inquiries, and data questions.',
   routes: [
     { href: '/contribute', label: 'Contribute', body: 'Recipe JSON plus a log. The path for a sourced correction or a new Radeon card.' },
     { href: '/rocm-problems', label: 'ROCm problems', body: 'Cited consumer ROCm issues, workarounds, and how to help.' },
@@ -214,6 +221,7 @@ export function trustBlob(): string {
     METHODOLOGY.citations.body,
     METHODOLOGY.corrections.body,
     CONTACT.lead,
+    CONTACT.guidance,
     ...CONTACT.routes.map((row) => `${row.label} ${row.body}`),
     TERMS.lead,
     ...TERMS.sections.map((row) => `${row.title} ${row.body}`),
@@ -261,7 +269,11 @@ export function assertTrustValid(): string[] {
   const blob = trustBlob();
   const hrefs = new Set(trustHrefs());
   if (ABOUT.who.body.includes(AMDAI_CREDIT.display) === false) errors.push('about must name AMDai');
-  if (!ABOUT.who.body.includes(AMDAI_CREDIT.handle)) errors.push('about must use the run-card handle');
+  if (!/AMDai Lab/.test(ABOUT.who.body)) errors.push('about must name AMDai Lab');
+  if (ABOUT.who.body.includes(AMDAI_CREDIT.handle)) errors.push('about must not print the run-card handle');
+  if (!/not affiliated with AMD/i.test(ABOUT.who.body)) errors.push('about who must state independence');
+  if (!/Radeon/.test(ABOUT.what.body) || !/ROCm/.test(ABOUT.what.body)) errors.push('about must name Radeon/ROCm');
+  if (!/local desktop/.test(ABOUT.what.body)) errors.push('about must name local desktop results');
   if (!/local desktop/.test(ABOUT.rig.body)) errors.push('about must name local desktop');
   if (!/256 GB/.test(ABOUT.rig.body) || !/R9700/.test(ABOUT.rig.body)) errors.push('about must cite the published kit');
   if (/motherboard model is not published/i.test(ABOUT.rig.body) === false) {
@@ -275,12 +287,17 @@ export function assertTrustValid(): string[] {
     errors.push('Q3 must stay a labeled estimate');
   }
   if (!/Q1\/Q2 stay off/.test(METHODOLOGY.estimates.body)) errors.push('Q1/Q2 stay-off missing');
-  if (!/CONTACT_EMAIL/.test(CONTACT.lead)) errors.push('contact must explain unset email');
+  if (/CONTACT_EMAIL/.test(CONTACT.lead)) errors.push('contact must not name env vars');
+  if (!/corrections/i.test(CONTACT.guidance) || !/sponsorship|partnership/i.test(CONTACT.guidance)) {
+    errors.push('contact must name corrections and sponsorship');
+  }
+  if (!/data questions/i.test(CONTACT.guidance)) errors.push('contact must name data questions');
   if (/phone|postal address|P\.O\. Box/i.test(blob) && /no phone/i.test(CONTACT.lead) === false) {
     errors.push('must not invent a phone or address');
   }
   if (contactEmail('') !== null) errors.push('empty CONTACT_EMAIL must be null');
   if (contactEmail('not-an-email') !== null) errors.push('invalid CONTACT_EMAIL must be null');
+  if (contactEmail() !== DEFAULT_CONTACT_EMAIL) errors.push('default public inbox must be hello@amdai.net');
   if (!/as-is/i.test(TERMS.sections.map((row) => row.body).join(' '))) errors.push('terms need no-warranty');
   if (!TRUST_FOOTER_LINKS.some((link) => link.href === '/disclosure')) errors.push('footer missing disclosure');
   if (BANNED_VISIBLE.test(blob)) errors.push('banned model');
@@ -288,7 +305,11 @@ export function assertTrustValid(): string[] {
   if (Q1Q2.test(blob)) errors.push('Q1/Q2 listed');
   if (/TODO|TBD|FIXME|lorem ipsum|coming soon/i.test(blob)) errors.push('leftover copy');
   if (/\$\d|\bMSRP\b/i.test(blob)) errors.push('invented price');
+  if (/mail\.grokbot\.com/i.test(blob)) errors.push('retired grokbot inbox');
   if (/@amdai\.|mailto:/i.test(blob)) errors.push('invented email in catalog copy');
+  for (const href of ['/contact', '/about', '/disclosure', '/privacy', '/terms']) {
+    if (!TRUST_FOOTER_LINKS.some((link) => link.href === href)) errors.push(`footer missing ${href}`);
+  }
   if (!/not legal advice/i.test(TERMS.lead)) errors.push('terms must say not legal advice');
   if (!ABOUT.what.body.includes('/benchmarks') && !trustHrefs().includes('/stack-lab')) {
     errors.push('about must point at the measured path');
