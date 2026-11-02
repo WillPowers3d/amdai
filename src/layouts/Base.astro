@@ -188,6 +188,9 @@ const jsonld = jsonLdScript(pageJsonLd({ pathname: path, title, description }));
         if (parent && !parent.classList.contains('table-scroll') && !parent.classList.contains('overflow-x-auto') && !parent.classList.contains('qwen-table-wrap') && !parent.classList.contains('compare-table')) {
           parent.classList.add('table-scroll');
         }
+        if (parent && (parent.classList.contains('overflow-x-auto') || parent.classList.contains('table-scroll')) && !parent.hasAttribute('tabindex')) {
+          parent.setAttribute('tabindex', '0');
+        }
       });
     </script>
   </body>

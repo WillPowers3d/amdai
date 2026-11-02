@@ -1,0 +1,98 @@
+---
+import Base from '../layouts/Base.astro';
+import AffiliateDisclosure from '../components/AffiliateDisclosure.astro';
+import { destinationUrl, goPath, productById, retailerById, wrapRetailer } from '../lib/affiliates';
+import { buyButtonAriaLabel, buyLinkRel } from '../lib/buy-label';
+import {
+  WHERE_TO_BUY_CHECKED_LABEL,
+  WHERE_TO_BUY_DESCRIPTION,
+  WHERE_TO_BUY_FITS,
+  WHERE_TO_BUY_HEADING,
+  WHERE_TO_BUY_LEAD,
+  WHERE_TO_BUY_MICRO_NOTE,
+  WHERE_TO_BUY_MICRO_SRC,
+  WHERE_TO_BUY_MSRP_NOTE,
+  WHERE_TO_BUY_NEWEGG_NOTE,
+  WHERE_TO_BUY_NEWEGG_SRC,
+  WHERE_TO_BUY_PICK,
+  WHERE_TO_BUY_ROWS,
+  WHERE_TO_BUY_TITLE,
+} from '../lib/where-to-buy-r9700';
+
+const product = productById('r9700');
+const newegg = retailerById('newegg');
+const micro = retailerById('microcenter');
+const neweggDest = destinationUrl('r9700', 'newegg');
+const microDest = destinationUrl('r9700', 'microcenter');
+const neweggWrap = newegg && neweggDest ? wrapRetailer(neweggDest, newegg) : { href: '', affiliate: false };
+const microWrap = micro && microDest ? wrapRetailer(microDest, micro) : { href: '', affiliate: false };
+const neweggHref = goPath('newegg', 'r9700', WHERE_TO_BUY_NEWEGG_SRC);
+const microHref = goPath('microcenter', 'r9700', WHERE_TO_BUY_MICRO_SRC);
+const name = product?.name ?? 'AMD Radeon AI PRO R9700';
+---
+
+<Base title={WHERE_TO_BUY_TITLE} description={WHERE_TO_BUY_DESCRIPTION}>
+  <main id="main" class="mx-auto max-w-3xl px-4 py-10 sm:px-6">
+    <p class="kicker">Shopper notes · dated snapshot</p>
+    <h1 class="mt-3 font-serif text-4xl tracking-tight sm:text-5xl">{WHERE_TO_BUY_HEADING}</h1>
+    <p class="mt-4 text-lg leading-relaxed text-muted">{WHERE_TO_BUY_LEAD}</p>
+
+    <div class="mt-8 overflow-x-auto">
+      <table class="min-w-full text-left text-sm">
+        <caption class="sr-only">R9700 store listings checked {WHERE_TO_BUY_CHECKED_LABEL}</caption>
+        <thead>
+          <tr class="border-b border-line text-faint">
+            <th class="py-2 pr-3 font-normal" scope="col">Store</th>
+            <th class="py-2 pr-3 font-normal" scope="col">What we found</th>
+            <th class="py-2 font-normal" scope="col">Price</th>
+          </tr>
+        </thead>
+        <tbody>
+          {WHERE_TO_BUY_ROWS.map((row) => (
+            <tr class="border-b border-line/70 align-top">
+              <th class="py-3 pr-3 font-medium text-ink" scope="row">{row.store}</th>
+              <td class="py-3 pr-3 text-muted">{row.found}</td>
+              <td class="py-3 text-muted">{row.price}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+
+    <p class="mt-6 leading-relaxed text-muted">{WHERE_TO_BUY_NEWEGG_NOTE}</p>
+    <p class="mt-3 leading-relaxed text-muted">{WHERE_TO_BUY_MICRO_NOTE}</p>
+    <p class="mt-3 leading-relaxed text-muted">{WHERE_TO_BUY_MSRP_NOTE}</p>
+    <p class="mt-3 leading-relaxed text-muted">{WHERE_TO_BUY_PICK}</p>
+    <p class="mt-3 leading-relaxed text-muted">{WHERE_TO_BUY_FITS}</p>
+
+    <p class="mt-8 flex flex-wrap gap-3">
+      <a
+        class="btn-primary"
+        href={neweggHref}
+        rel={buyLinkRel(neweggWrap.affiliate)}
+        target="_blank"
+        aria-label={buyButtonAriaLabel(name, 'Newegg')}
+        data-retailer="newegg"
+        data-product="r9700"
+      >
+        Check R9700 stock at Newegg
+      </a>
+      <a
+        class="btn-ghost"
+        href={microHref}
+        rel={buyLinkRel(microWrap.affiliate)}
+        target="_blank"
+        aria-label={buyButtonAriaLabel(name, 'Micro Center')}
+        data-retailer="microcenter"
+        data-product="r9700"
+      >
+        Check Micro Center
+      </a>
+      <a class="btn-ghost" href="/gpus/r9700">R9700 measured page</a>
+    </p>
+
+    <div class="mt-8">
+      <AffiliateDisclosure />
+    </div>
+  </main>
+</Base>

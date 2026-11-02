@@ -91,20 +91,6 @@ const olderOpen = olderModelsOpenFromSearch(Astro.url.search);
       and the <code class="text-ink">amdai-fit-mcp</code> server documented there.
     </p>
 
-    <div id="ask-row" class="mt-8 space-y-6">
-      <AskToggles defaultPriority={DEFAULT_PRIORITY} defaultUsage={DEFAULT_USAGE} defaultStyle={DEFAULT_STYLE} />
-      <MotherboardPick
-        boards={motherboards}
-        ask={{ gpuCount: 1, minBudget: false, expandGpu: defaultExpandGpu(false) }}
-      />
-      <RamPick boards={motherboards} />
-      <CpuPick />
-      <PsuPick ask={{ gpuCount: 1, expandGpu: defaultExpandGpu(false) }} />
-      <StoragePick />
-      <CasePick />
-      <CoolerPick />
-    </div>
-
     <div id="tested-badge" hidden class="mt-6 inline-flex max-w-3xl items-start gap-2 rounded-2xl border border-ok/40 bg-ok/10 px-4 py-2 text-sm text-ok">
       <span aria-hidden="true">●</span>
       <span data-tested-label></span>
@@ -367,6 +353,19 @@ const olderOpen = olderModelsOpenFromSearch(Astro.url.search);
         <section class="rounded-2xl border border-line bg-raised p-5" id="calc-panel-model" role="tabpanel" aria-labelledby="calc-tab-model" data-panel="model">
           <p class="kicker">Required VRAM · estimate</p>
           <p class="mt-2 font-serif text-3xl" data-verdict-label>Fits in VRAM (estimate)</p>
+          <aside id="calc-verdict-action" class="mt-4 rounded-2xl border border-line bg-canvas/70 p-4" hidden>
+            <p class="kicker">Next step</p>
+            <p class="mt-2 font-medium text-ink" data-verdict-action-text></p>
+            <p class="mt-3 flex flex-wrap gap-2">
+              <a class="btn-primary" data-verdict-action-primary hidden target="_blank"></a>
+              <a class="btn-ghost" data-verdict-action-alt hidden target="_blank"></a>
+              <a class="btn-ghost" data-verdict-action-check hidden></a>
+            </p>
+            <p class="mt-3 text-xs leading-relaxed text-faint">
+              Some links may earn a commission at no cost to you. We do not print a price.
+              <a class="underline decoration-accent/40" href="/disclosure">Disclosure</a>.
+            </p>
+          </aside>
           <p class="mt-1 text-sm text-faint">Per GPU vs the VRAM you entered. Totals in GiB (1024³). Desktop spare is extra.</p>
           <VramBar />
           <div class="mt-4 rounded-xl border border-line bg-canvas/60 p-3 text-sm leading-relaxed">
@@ -514,6 +513,27 @@ const olderOpen = olderModelsOpenFromSearch(Astro.url.search);
       </div>
     </form>
 
+    <section id="complete-the-build" class="mt-12 border-t border-line pt-10">
+      <p class="kicker">After the verdict</p>
+      <h2 class="mt-2 font-serif text-3xl">Complete the build</h2>
+      <p class="mt-3 max-w-2xl text-muted">
+        Size the rest of the box after you know whether this GPU and model fit. Buttons say check price. We do not invent a figure.
+      </p>
+      <div id="ask-row" class="mt-8 space-y-6">
+        <AskToggles defaultPriority={DEFAULT_PRIORITY} defaultUsage={DEFAULT_USAGE} defaultStyle={DEFAULT_STYLE} />
+        <MotherboardPick
+          boards={motherboards}
+          ask={{ gpuCount: 1, minBudget: false, expandGpu: defaultExpandGpu(false) }}
+        />
+        <RamPick boards={motherboards} />
+        <CpuPick />
+        <PsuPick ask={{ gpuCount: 1, expandGpu: defaultExpandGpu(false) }} />
+        <StoragePick />
+        <CasePick />
+        <CoolerPick />
+      </div>
+    </section>
+
     <section class="mt-12 border-t border-line pt-10">
       <p class="kicker">Check price · no live prices</p>
       <h2 class="mt-2 font-serif text-3xl">Cards in this VRAM neighborhood</h2>
@@ -574,6 +594,7 @@ const olderOpen = olderModelsOpenFromSearch(Astro.url.search);
   import { USAGE_COPY, parseAsk, type AskState } from '../lib/ask';
   import { matchRecipe, recipeTestedLine, type Recipe } from '../lib/recipes';
   import { detectPrimary } from '../lib/gpu-detect';
+  import { offloadModel, verdictAction } from '../lib/verdict-action';
 
   const form = document.getElementById('calc-form') as HTMLFormElement;
   const shareBtn = document.getElementById('share-btn');
@@ -821,6 +842,52 @@ const olderOpen = olderModelsOpenFromSearch(Astro.url.search);
     }
   }
 
+  function setActionLink(el: HTMLAnchorElement | null, href: string | undefined, label: string | undefined, extraRel?: string) {
+    if (!el) return;
+    if (!href || !label) {
+      el.hidden = true;
+      el.removeAttribute('href');
+      return;
+    }
+    el.hidden = false;
+    el.href = href;
+    el.textContent = label;
+    const paid = href.includes('/go/amazon/');
+    const newegg = href.includes('/go/newegg/');
+    el.rel = paid ? 'sponsored nofollow noopener' : extraRel || (newegg ? 'noopener' : '');
+    el.target = href.startsWith('/go/') ? '_blank' : '_self';
+    if (href.startsWith('/go/')) {
+      el.setAttribute('aria-label', `${label} (opens in a new tab)`);
+    } else {
+      el.removeAttribute('aria-label');
+    }
+  }
+
+  function renderVerdictAction(result: { verdict: 'fits' | 'tight' | 'no'; totalGiB: number }) {
+    const box = document.getElementById('calc-verdict-action');
+    const text = document.querySelector('[data-verdict-action-text]');
+    if (!box || !text) return;
+    const action = verdictAction({
+      fits: result.verdict,
+      gpuId: input.gpuId,
+      gpuVramGiB: input.vramGb,
+      gpuCount: input.gpuCount,
+      modelId: input.modelId,
+      totalGiB: result.totalGiB,
+      ramGiB: input.ramGb,
+      offloadOk: offloadModel(input.modelId),
+    });
+    box.hidden = false;
+    text.textContent = action.text;
+    setActionLink(
+      document.querySelector('[data-verdict-action-primary]'),
+      action.link,
+      action.buttonLabel ?? (action.link?.startsWith('/go/') ? 'Check price' : action.link ? 'Next' : undefined),
+    );
+    setActionLink(document.querySelector('[data-verdict-action-alt]'), action.alt, action.altLabel);
+    setActionLink(document.querySelector('[data-verdict-action-check]'), action.check, action.checkLabel);
+  }
+
   function render() {
     const result = applyMeasuredSystemRam(compute(input), measuredRam, input);
     const advice = calculatorAdvice(input, result, ask.priority);
@@ -831,6 +898,7 @@ const olderOpen = olderModelsOpenFromSearch(Astro.url.search);
       verdictEl.classList.toggle('text-ok', result.verdict === 'fits');
       verdictEl.classList.toggle('text-warn', result.verdict !== 'fits');
     }
+    renderVerdictAction(result);
     setText('[data-out="weights"]', `${formatGiB(result.weightsGiB)} GiB`);
     setText('[data-out="kv"]', result.kvReady ? `${formatGiB(result.kvGiB)} GiB` : '—');
     setText('[data-out="overhead"]', `${formatGiB(result.overheadGiB)} GiB`);
@@ -965,7 +1033,7 @@ const olderOpen = olderModelsOpenFromSearch(Astro.url.search);
     document.querySelectorAll<HTMLButtonElement>('[data-stack]').forEach((btn) => {
       const on =
         (btn.dataset.stack === 'daily' && input.modelId === 'qwen36' && input.quantId === 'q5_k_m' && input.gpuId === 'r9700') ||
-        (btn.dataset.stack === 'fast' && input.modelId === 'flash' && input.quantId === 'q6_k') ||
+        (btn.dataset.stack === 'fast' && input.modelId === 'flash' && input.quantId === 'q4_k_m') ||
         (btn.dataset.stack === 'custom' && input.modelId === 'custom');
       btn.classList.toggle('is-on', on);
       btn.setAttribute('aria-pressed', String(on));
