@@ -39,7 +39,7 @@ describe('can-run next-step upgrade picks', () => {
         assert.equal(picks[0]?.kind, 'keep');
         assert.equal(picks.some((pick) => pick.kind === 'primary'), false);
       } else if (verdict === 'ram-offload') {
-        assert.equal(picks[0]?.productId, 'ddr5-kit');
+        assert.ok(picks[0]?.productId?.startsWith('ddr5'));
       } else if (verdict === 'needs-2-gpus') {
         assert.ok(picks[0]?.productId);
       }

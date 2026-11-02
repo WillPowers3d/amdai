@@ -2,6 +2,7 @@
 import Base from '../../layouts/Base.astro';
 import BuyButtons from '../../components/BuyButtons.astro';
 import Callout from '../../components/Callout.astro';
+import CanRunOnCardTable from '../../components/CanRunOnCardTable.astro';
 import EvidenceBadge from '../../components/EvidenceBadge.astro';
 import LaunchCommand from '../../components/LaunchCommand.astro';
 import NewsletterSignup from '../../components/NewsletterSignup.astro';
@@ -118,6 +119,7 @@ const neweggAffiliate = neweggDest && neweggRetailer ? wrapRetailer(neweggDest, 
     <div class="mt-4">
       <OpenInStackLab {...HOUSE_STACK_LAB.daily} compact />
     </div>
+    <CanRunOnCardTable gpuId="r9700" />
 
     <nav
       id="r9700-sections"

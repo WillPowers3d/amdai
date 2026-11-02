@@ -196,7 +196,7 @@ export const TUNING_KNOBS: TuningKnob[] = [
     what:
       '-b is the logical batch (how much prompt llama.cpp plans for). -ub is the physical micro-batch that actually hits the GPU. llama.cpp documents both. Overnight 35B llama-bench cards record their own bench line — they are not a llama-server -b pin we will invent.',
     when:
-      'Single card: raise batch only after the file fits. Dual card: batch still lives on the process; split-mode decides which GPU sees the layers. Long prompts at 128K–262K are a KV problem first — read Long context.',
+      'Single card: raise batch only after the file fits. Dual card: batch still lives on the process; split-mode decides which GPU sees the layers. Long prompts at 128K–262K are a KV problem first — read Long context. Never set -ub 65–256 on Qwen3.5 or Qwen3.6; keep the default 512 unless an allocate forces a cut below 65.',
     tradeoff:
       'Larger batch can raise prefill and VRAM. Smaller batch can fit a tight card and slow prefill. Batch vs tok/s is not measured yet on the local desktop llama-server. Quality is unchanged if the GGUF stays the same.',
     example: [

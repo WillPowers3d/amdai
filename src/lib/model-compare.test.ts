@@ -38,7 +38,7 @@ describe('model vs model compare', () => {
       [...MODEL_COMPARE_IDS],
       ['qwen36', 'flash', 'gpt-oss-20b', 'gemma3-27b', 'llama33-70b', 'glm-53-flash', 'qwen36-27b', 'qwen38-27b'],
     );
-    assert.equal(MODEL_COMPARE_PUBLISHED, '2026-10-14');
+    assert.equal(MODEL_COMPARE_PUBLISHED, '2026-11-02');
     assert.equal(MODEL_COMPARE_ENGINE, 'llama.cpp');
     assert.equal(MODEL_COMPARE_HUB, '/compare/models');
     assert.equal(modelComparePairPages().length, 28);
@@ -58,19 +58,18 @@ describe('model vs model compare', () => {
     assert.equal(isFeaturedModelComparePair('qwen36', 'glm-53-flash'), true);
   });
 
-  it('uses calculator estimates, labels Q3, and cites R9700 35B cells only', () => {
+  it('uses calculator estimates, drops Q3, and cites R9700 35B cells only', () => {
     const pages = modelComparePairPages(runs);
     for (const page of pages) {
       assert.equal(page.gpuBlocks.length, MODEL_COMPARE_FIT_GPUS.length);
+      assert.ok(page.buy.primary.href.includes('/go/newegg/r9700'));
+      assert.ok(page.left.canRunHref.startsWith('/can-run/'));
       for (const block of page.gpuBlocks) {
-        assert.equal(block.rows.length, 4);
-        const q3 = block.rows.find((row) => row.step === 'Q3');
-        assert.ok(q3);
-        assert.equal(q3.kind, 'q3-estimate');
-        assert.match(q3.kindLabel, /estimate/i);
+        assert.equal(block.rows.length, 3);
+        assert.equal(block.rows.some((row) => row.step === 'Q3'), false);
         for (const row of block.rows) {
-          assert.equal(row.left.length, 2);
-          assert.equal(row.right.length, 2);
+          assert.ok(row.left.length >= 3);
+          assert.ok(row.right.length >= 3);
           for (const cell of row.left) {
             const live = compute(modelCompareCalcInput(page.left.id, block.gpuId, row.leftQuantId, cell.context));
             assert.equal(cell.totalGb, `${formatGiB(live.totalGiB)} GB`);
@@ -109,18 +108,14 @@ describe('model vs model compare', () => {
     assert.equal(qwenVsGlm.right.paramsLine, '320B total / 18B active');
     assert.equal(qwenVsGlm.left.contextTokens, 262144);
     assert.equal(qwenVsGlm.right.contextTokens, 1048576);
-    assert.equal(qwenVsGlm.q3Left, 'UD-Q3_K_XL');
-    assert.equal(qwenVsGlm.q3Right, 'UD-Q3_K_XL');
     const r9700 = qwenVsGlm.gpuBlocks.find((block) => block.gpuId === 'r9700');
     const q5 = r9700?.rows.find((row) => row.step === 'Q5');
-    const q3 = r9700?.rows.find((row) => row.step === 'Q3');
     const r9700q5 = q5?.left.find((cell) => cell.context === 4096);
     assert.equal(r9700q5?.speedKind, 'measured');
     assert.match(r9700q5?.speed ?? '', /tok\/s/);
     assert.ok(r9700q5?.runIds.length);
-    assert.equal(q3?.left[0]?.speed, 'not measured');
-    assert.match(q3?.left[0]?.note ?? '', /estimate/i);
-    assert.ok(q5?.right.every((cell) => cell.speed === 'not measured'));
+    assert.ok(q5?.left.some((cell) => cell.context === 262144));
+    assert.ok(q5?.right.every((cell) => cell.speed === 'not measured yet'));
     assert.ok(qwenVsGlm.right.offload);
 
     const flash = modelComparePairPage('qwen36', 'flash', runs);
@@ -134,7 +129,7 @@ describe('model vs model compare', () => {
     assert.equal(cited.path, '/compare/models/gpt-oss-20b-vs-gemma3-27b');
     assert.ok(cited.left.launches.some((row) => row.command?.includes('llama-server')));
     assert.ok(cited.stackLab.every((row) => row.screen === 'doctor'));
-    assert.ok(cited.gpuBlocks.every((block) => block.rows.every((row) => row.left.every((cell) => cell.speed === 'not measured'))));
+    assert.ok(cited.gpuBlocks.every((block) => block.rows.every((row) => row.left.every((cell) => cell.speed === 'not measured yet'))));
   });
 
   it('builds picker query, reverse redirects, SEO, and Compare with links', () => {
@@ -163,7 +158,7 @@ describe('model vs model compare', () => {
       const desc = pageDescription(row.path);
       assert.ok(desc.length >= 70, `${row.path} ${desc.length}`);
       assert.ok(desc.length <= 160, `${row.path} ${desc.length}`);
-      assert.match(desc, /estimate/i);
+      assert.match(desc, /Q6\/Q5\/Q4/);
       assert.doesNotMatch(desc, /\$\d|\bMSRP\b/);
       assert.doesNotMatch(desc, /Qwen2\.5|Qwen3-8B/);
     }

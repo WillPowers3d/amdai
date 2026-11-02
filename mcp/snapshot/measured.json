@@ -1670,7 +1670,7 @@
       "summary": "Joining kyuz0's two public llama-bench grids (same scripts, best backend per row, 8 overlapping Q4+ models), one or two R9700s lead a 128 GB Ryzen AI Max+ 395 by a median ~2.0x on decode (tg128) and ~2.9x on prompt processing (pp512), widening to ~3.6-4.1x prefill at 32K-64K depth. Strix Halo's edge is capacity: it runs 80-90 GiB Q4/Q5 MoE models entirely in unified memory.",
       "setup": {
         "model": "8 overlapping models (gpt-oss-120b, Qwen3.6-35B-A3B, Gemma 4, others)",
-        "quant": "Q4 and up only",
+        "quant": "Q4+",
         "engine": "llama.cpp llama-bench (published grids)",
         "engine_version": "b8990 (R9700), b9187/b9193 (Strix Halo)",
         "gpus": "1-2x Radeon AI PRO R9700 vs Ryzen AI Max+ 395 128 GB",

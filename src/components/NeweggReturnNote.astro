@@ -1,0 +1,11 @@
+---
+import { neweggReturnLine } from '../lib/newegg-returns';
+
+interface Props {
+  productId?: string;
+}
+
+const { productId } = Astro.props;
+---
+
+<p class="mt-2 text-xs leading-relaxed text-faint">{neweggReturnLine(productId)}</p>

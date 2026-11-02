@@ -127,6 +127,9 @@ describe('lab log', () => {
     assert.match(page, /Dual R9700 speed/);
     assert.match(page, /Idea lab/);
     assert.match(page, /NextSteps/);
+    assert.match(page, /hardwareLine/);
+    assert.match(page, /\/go\/newegg\/r9700\//);
+    assert.match(page, /sponsored nofollow/);
     assert.match(strip, /Latest from the lab/);
     assert.match(strip, /Newest findings/);
     assert.match(strip, /\/data\/lab-log\.json/);

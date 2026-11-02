@@ -270,7 +270,7 @@ export const CRUMB_LABELS: Record<string, string> = {
   '/setup/fedora': 'Fedora setup',
   '/setup/arch': 'Arch setup',
   '/setup/docker': 'Docker / Podman',
-  '/setup/lm-studio': 'LM Studio',
+  '/setup/lm-studio': 'Run LM Studio on a Radeon GPU',
   '/setup/coding-assistant': 'Coding assistant',
   '/setup/ollama': 'Ollama',
   '/setup/lemonade': 'Lemonade',

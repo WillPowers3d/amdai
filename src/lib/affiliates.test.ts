@@ -9,14 +9,14 @@ const here = dirname(fileURLToPath(import.meta.url));
 
 describe('affiliate /go/ helpers', () => {
   it('appends a safe src tag and leaves bare paths unchanged', () => {
-    assert.equal(goPath('newegg', 'r9700'), '/go/newegg/r9700');
-    assert.equal(goPath('newegg', 'ddr5-kit', 'canrun-nextstep'), '/go/newegg/ddr5-kit?src=canrun-nextstep');
-    assert.equal(goPath('amazon', 'r9700', 'canrun-footer'), '/go/amazon/r9700?src=canrun-footer');
-    assert.equal(goPath('newegg', 'r9700', 'canrun-nextstep-alt'), '/go/newegg/r9700?src=canrun-nextstep-alt');
+    assert.equal(goPath('newegg', 'r9700'), '/go/newegg/r9700/');
+    assert.equal(goPath('newegg', 'ddr5-kit', 'canrun-nextstep'), '/go/newegg/ddr5-kit/?src=canrun-nextstep');
+    assert.equal(goPath('amazon', 'r9700', 'canrun-footer'), '/go/amazon/r9700/?src=canrun-footer');
+    assert.equal(goPath('newegg', 'r9700', 'canrun-nextstep-alt'), '/go/newegg/r9700/?src=canrun-nextstep-alt');
     assert.equal(sanitizeGoSrc('canrun-nextstep'), 'canrun-nextstep');
     assert.equal(sanitizeGoSrc('not a tag'), '');
     assert.equal(sanitizeGoSrc('../evil'), '');
-    assert.equal(goPath('newegg', 'r9700', '../evil'), '/go/newegg/r9700');
+    assert.equal(goPath('newegg', 'r9700', '../evil'), '/go/newegg/r9700/');
   });
 
   it('keeps Amazon-first retailer order unless NEWEGG_FIRST is on', () => {
