@@ -16,6 +16,7 @@ import {
   kindLabel,
   labLogAsOfDay,
   loadLabLogFile,
+  hardwareLine,
   projectLabel,
   projectsOf,
   setupRows,
@@ -126,6 +127,20 @@ const empty = staticEntries.length === 0;
                   </p>
                   <h3 class="ll-entry-title">{entry.title}</h3>
                   <p class="ll-summary">{entry.summary}</p>
+                  {entry.hardware && entry.kind !== 'failure' ? (
+                    <div class="ll-setup mt-3 text-sm">
+                      <p class="setup">{hardwareLine(entry.hardware)}</p>
+                      <p class="mt-2 flex flex-wrap gap-3">
+                        <a class="underline decoration-accent/40" href="/go/newegg/r9700/" rel="sponsored nofollow noopener">See Radeon AI PRO R9700 cards at Newegg</a>
+                        {entry.hardware.ddr5_gb ? (
+                          <a class="underline decoration-accent/40" href={`/go/newegg/ddr5-${entry.hardware.ddr5_gb}/`} rel="sponsored nofollow noopener">
+                            See {entry.hardware.ddr5_gb} GB DDR5 kits at Newegg
+                          </a>
+                        ) : null}
+                      </p>
+                      <p class="mt-1 text-xs text-faint">Affiliate link: we may earn a commission at no cost to you.</p>
+                    </div>
+                  ) : null}
                 </div>
                 <details class="ll-more">
                   <summary>Setup, metrics, sources</summary>
@@ -193,6 +208,7 @@ const empty = staticEntries.length === 0;
     summary: string;
     details?: string;
     setup?: Record<string, string | undefined>;
+    hardware?: { cards: 1 | 2; ddr5_gb: 96 | 192 | 256 | null; basis: 'measured' | 'estimate' | 'cited' | 'buying' };
     metrics?: Array<{ label: string; value: number | string; unit?: string }>;
     sources?: string[];
     next?: string;
@@ -296,6 +312,21 @@ const empty = staticEntries.length === 0;
     );
   }
 
+  function hardwareLine(hw: NonNullable<Entry['hardware']>): string {
+    const lead = hw.basis === 'measured' ? 'Measured on' : hw.basis === 'estimate' ? 'Estimated for' : hw.basis === 'cited' ? 'Reported on' : 'Parts this covers';
+    const cards = hw.cards === 1 ? 'one Radeon AI PRO R9700 (32 GB)' : 'two Radeon AI PRO R9700 (32 GB each)';
+    const ram = hw.ddr5_gb ? ` + ${hw.ddr5_gb} GB DDR5` : '';
+    return `${lead}: ${cards}${ram}.`;
+  }
+
+  function hardwareHtml(entry: Entry): string {
+    if (!entry.hardware || entry.kind === 'failure') return '';
+    const ram = entry.hardware.ddr5_gb
+      ? ` <a class="underline decoration-accent/40" href="/go/newegg/ddr5-${entry.hardware.ddr5_gb}/" rel="sponsored nofollow noopener">See ${entry.hardware.ddr5_gb} GB DDR5 kits at Newegg</a>`
+      : '';
+    return `<div class="ll-setup mt-3 text-sm"><p class="setup">${escapeHtml(hardwareLine(entry.hardware))}</p><p class="mt-2 flex flex-wrap gap-3"><a class="underline decoration-accent/40" href="/go/newegg/r9700/" rel="sponsored nofollow noopener">See Radeon AI PRO R9700 cards at Newegg</a>${ram}</p><p class="mt-1 text-xs text-faint">Affiliate link: we may earn a commission at no cost to you.</p></div>`;
+  }
+
   function entryHtml(entry: Entry): string {
     const setup = setupRows(entry.setup);
     const setupHtml = setup.length
@@ -326,6 +357,7 @@ const empty = staticEntries.length === 0;
         <p class="ll-meta"><span class="ll-kind is-${escapeHtml(entry.kind)}">${escapeHtml(kindLabel(entry.kind))}</span><span class="ll-project">${escapeHtml(projectLabel(entry.project))}</span></p>
         <h3 class="ll-entry-title">${escapeHtml(entry.title)}</h3>
         <p class="ll-summary">${escapeHtml(entry.summary)}</p>
+        ${hardwareHtml(entry)}
       </div>
       <details class="ll-more">
         <summary>Setup, metrics, sources</summary>

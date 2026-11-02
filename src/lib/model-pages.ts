@@ -32,7 +32,9 @@ import {
   type FlashRamRow,
 } from './flash-daily';
 import { gpuDirectoryHref } from './consumer-gpu';
+import { GPU_COMPARE_IDS, GPU_COMPARE_SHEET_PATH, GPU_COMPARE_SHORT, type GpuCompareId } from './gpu-compare';
 import { MODEL_PAGES } from './gpu-ids';
+import { canRunPairPath, type CanRunGpuId, type CanRunModelId } from './can-run';
 import { houseSystemRam, type HouseRamKind } from './house-ram';
 import { RAM_FULL_LABEL, RAM_MIN_LABEL } from './ram-surfaces';
 import { recipesForModel, type Recipe } from './recipes';
@@ -85,7 +87,7 @@ export const NOT_YET_MEASURED = 'not yet measured on our R9700s';
 
 export const CONTRIBUTE_MODELS = [] as const;
 
-export const MODEL_FIT_GPUS = ['r9700', 'rx7900xtx', 'rx7900xt', 'rx7800xt'] as const;
+export const MODEL_FIT_GPUS = GPU_COMPARE_IDS;
 
 export const REQUIRED_MODEL_HREFS = [
   '/models',
@@ -111,12 +113,7 @@ export const REQUIRED_MODEL_HREFS = [
 const FLASH_CONTEXTS = [4096, 8192, 32768, 100000, 131072, 262144] as const;
 const FLASH_QUANTS = ['UD-Q6_K_XL', 'UD-Q5_K_XL', 'UD-Q4_K_XL', COMPARE_Q3] as const;
 
-const GPU_SHORT: Record<(typeof MODEL_FIT_GPUS)[number], string> = {
-  r9700: 'R9700',
-  rx7900xtx: 'RX 7900 XTX',
-  rx7900xt: 'RX 7900 XT',
-  rx7800xt: 'RX 7800 XT',
-};
+const GPU_SHORT = GPU_COMPARE_SHORT;
 
 function loadFlashDaily(): FlashDailyFile {
   const here = dirname(fileURLToPath(import.meta.url));
@@ -295,6 +292,7 @@ export type ModelFitBadge = {
   gpuId: string;
   name: string;
   href: string;
+  canRunHref: string;
   gpuCount: CompareGpuCount;
   verdict: Verdict;
   verdictLabel: string;
@@ -469,12 +467,13 @@ function fitBadges(id: ModelPageId): ModelFitBadge[] {
   const badges: ModelFitBadge[] = [];
   for (const gpuId of MODEL_FIT_GPUS) {
     for (const gpuCount of [1, 2] as const) {
-      const result = compute(citedCalcInput(id, gpuId, gpuCount, quantId, context));
+      const result = compute(citedCalcInput(id, gpuId as GpuId, gpuCount, quantId, context));
       const measured = gpuId === 'r9700' && id === 'qwen36' && gpuCount === 1;
       badges.push({
         gpuId,
         name: GPU_SHORT[gpuId],
-        href: gpuId === 'r9700' ? '/gpus/r9700' : gpuDirectoryHref(gpuId),
+        href: GPU_COMPARE_SHEET_PATH[gpuId as GpuCompareId] ?? (gpuId === 'r9700' ? '/gpus/r9700' : gpuDirectoryHref(gpuId)),
+        canRunHref: canRunPairPath(id as CanRunModelId, gpuId as CanRunGpuId),
         gpuCount,
         verdict: result.verdict,
         verdictLabel: result.verdictLabel,

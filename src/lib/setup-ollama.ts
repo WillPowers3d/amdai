@@ -221,7 +221,7 @@ export const SETUP_OLLAMA_STEPS: SetupOllamaStep[] = [
   {
     id: 'context',
     title: 'Context, parallel, and KV — Ollama multiplies per request',
-    body: `Ollama FAQ default context is 4096 tokens — not the house 262144. Override with OLLAMA_CONTEXT_LENGTH=8192 ollama serve, /set parameter num_ctx, or API options.num_ctx. Parallel requests grow that window: FAQ example, 2K context × 4 parallel = 8K plus extra allocation. Required RAM scales by OLLAMA_NUM_PARALLEL × OLLAMA_CONTEXT_LENGTH. That is why the calculator’s Ollama backend sizes KV per request — open /calculator and pick Ollama. Flash Attention: OLLAMA_FLASH_ATTENTION=1 to force on, 0 to disable. KV type: OLLAMA_KV_CACHE_TYPE (default f16; q8_0 or q4_0 only with Flash Attention). House llama.cpp uses f16 KV. The calculator prints ${RAM_MIN_LABEL} (rounded kit estimate with a breakdown — 192 or 256 GB when a 35B file spills) and ${RAM_FULL_LABEL} when we have a measured llama.cpp peak (37.32 GB at 4K, 42.9 GB at 256K on UD-Q5). Those peaks are llama.cpp on the local desktop, not Ollama. Label estimate unless measured.`,
+    body: `Ollama picks a default context from total VRAM (v0.40.13 source): under 23 GiB you get 4K, 23–47 GiB gets 32K, and 47 GiB or more gets 256K. The FAQ still says 4096. One 32 GB R9700 therefore starts at 32K, not 256K, even though the 35B fits at 256K on that card. Set it yourself: OLLAMA_CONTEXT_LENGTH=262144 ollama serve, then check ollama ps shows CONTEXT 262144. You can also use /set parameter num_ctx or API options.num_ctx. Parallel requests grow that window: FAQ example, 2K context × 4 parallel = 8K plus extra allocation. Required RAM scales by OLLAMA_NUM_PARALLEL × OLLAMA_CONTEXT_LENGTH. That is why the calculator’s Ollama backend sizes KV per request — open /calculator and pick Ollama. Flash Attention: OLLAMA_FLASH_ATTENTION=1 to force on, 0 to disable. KV type: OLLAMA_KV_CACHE_TYPE (default f16; q8_0 or q4_0 only with Flash Attention). House llama.cpp uses f16 KV. The calculator prints ${RAM_MIN_LABEL} (rounded kit estimate with a breakdown — 192 or 256 GB when a 35B file spills) and ${RAM_FULL_LABEL} when we have a measured llama.cpp peak (37.32 GB at 4K, 42.9 GB at 256K on UD-Q5). Those peaks are llama.cpp on the local desktop, not Ollama. Label estimate unless measured.`,
     links: [
       { href: '/calculator', label: 'Calculator' },
       { href: '/long-context', label: 'Long context' },
@@ -260,6 +260,29 @@ export const SETUP_OLLAMA_HOWTO_STEPS = SETUP_OLLAMA_STEPS.map((step) => ({
   name: step.title,
   text: step.body,
 }));
+
+export const SETUP_OLLAMA_CTX_ROWS = [
+  {
+    cards: 'RX 9060 XT / 9070 / 9070 XT (16 GB)',
+    ctx: '4K',
+    fit: 'No. It spills to system RAM and runs slower.',
+  },
+  {
+    cards: 'RX 7900 XTX (24 GB)',
+    ctx: '32K',
+    fit: 'No at 256K (needs ~26–27 GiB, estimate). Fits at 32K.',
+  },
+  {
+    cards: 'Radeon AI PRO R9700 / PRO W7800 (32 GB)',
+    ctx: '32K',
+    fit: 'Yes at 256K once you set OLLAMA_CONTEXT_LENGTH=262144.',
+  },
+  {
+    cards: 'PRO W7900 (48 GB) or two R9700s',
+    ctx: '256K',
+    fit: 'Yes, by default. A second R9700 is not needed for this model.',
+  },
+] as const;
 
 export const SETUP_OLLAMA_HUB_LINKS: SetupOllamaLink[] = [
   { href: '/setup', label: 'Ubuntu setup (measured)' },
@@ -306,6 +329,7 @@ export function setupOllamaBlob(): string {
     ...SETUP_OLLAMA_TRACKS.map((row) => `${row.title} ${row.body}`),
     ...SETUP_OLLAMA_STEPS.map((row) => `${row.title} ${row.body}`),
     ...SETUP_OLLAMA_QUANTS.map((row) => `${row.quant} ${row.role} ${row.ollama} ${row.note}`),
+    ...SETUP_OLLAMA_CTX_ROWS.map((row) => `${row.cards} ${row.ctx} ${row.fit}`),
   ].join('\n');
 }
 
@@ -344,6 +368,8 @@ export function assertSetupOllamaValid(): string[] {
   if (!blob.includes(SETUP_OLLAMA_LIBRARY_Q4)) errors.push('must cite official Q4 tag');
   if (!blob.includes(SETUP_OLLAMA_HOUSE_FILE)) errors.push('must cite house GGUF');
   if (!blob.includes('OLLAMA_CONTEXT_LENGTH')) errors.push('must cite context env');
+  if (!blob.includes('OLLAMA_CONTEXT_LENGTH=262144')) errors.push('must cite house 256K override');
+  if (!blob.includes('23 GiB')) errors.push('must cite VRAM-tier defaults');
   if (!blob.includes('OLLAMA_NUM_PARALLEL')) errors.push('must cite parallel KV');
   if (!blob.includes('OLLAMA_MODELS')) errors.push('must cite model dir');
   if (!blob.includes('ollama ps')) errors.push('must cite ollama ps');

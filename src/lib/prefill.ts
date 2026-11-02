@@ -475,6 +475,17 @@ export const PP_FAQ: PpFaq[] = [
     ],
   },
   {
+    id: 'qwen36-ub-avoid',
+    question: 'Which -ub values should I skip on Qwen3.5 / Qwen3.6?',
+    answer:
+      'Do not set -ub between 65 and 256 on Qwen3.5 or Qwen3.6 hybrids. House llama-server keeps the default -ub 512. Those mid-range micro-batches are a skip on this family; stay at 512, or cut below 65 only if an allocate forces it. Not a measured A/B on the local desktop.',
+    links: [
+      { href: '/prefill', label: 'Prefill' },
+      { href: '/models/qwen36', label: 'Qwen3.6-35B' },
+      { href: '/tuning', label: 'Speed up llama.cpp' },
+    ],
+  },
+  {
     id: 'prefill-vs-decode',
     question: 'Why do long Hermes and RAG prompts feel stuck when decode is fine?',
     answer:

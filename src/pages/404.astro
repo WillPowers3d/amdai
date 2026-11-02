@@ -3,10 +3,100 @@ import Base from '../layouts/Base.astro';
 ---
 
 <Base title="Page not found" description="That path is not on this site.">
-  <main id="main" class="mx-auto max-w-2xl px-4 py-24 text-center sm:px-6">
+  <main id="main" class="mx-auto max-w-2xl px-4 py-24 sm:px-6">
     <p class="kicker">404</p>
-    <h1 class="display mt-3 text-4xl">No page at this address</h1>
-    <p class="mt-4 text-muted">Try Getting started, or open Search (⌘K) for stacks, ROCm, the calculator, and the rest.</p>
-    <a class="btn-primary mt-8" href="/">Back to the notebook</a>
+    <h1 class="display mt-3 text-4xl">That page isn't here</h1>
+    <p class="mt-4 text-muted">The link may be old or mistyped.</p>
+    <p id="did-you-mean" class="mt-6 hidden text-sm" aria-live="polite">
+      <strong class="text-ink">Did you mean:</strong>
+      <span id="did-you-mean-links" class="mt-2 block"></span>
+    </p>
+    <h2 class="mt-10 font-serif text-2xl tracking-tight">Most readers start with one of these</h2>
+    <ul class="mt-4 grid gap-3 text-sm leading-relaxed">
+      <li>
+        <a class="underline decoration-accent/40" href="/calculator/">Can my PC run it?</a>
+        Check a model against your GPU and RAM at 256K context.
+      </li>
+      <li>
+        <a class="underline decoration-accent/40" href="/gpus/r9700/">Radeon AI PRO R9700</a>
+        The 32 GB card that runs Qwen3.6-35B at 256K on its own (measured ~100 tok/s).
+      </li>
+      <li>
+        <a class="underline decoration-accent/40" href="/budget/">Setup by budget</a>
+        Full part lists from one card to two.
+      </li>
+    </ul>
+    <p class="mt-8 text-sm text-muted">Or press Ctrl K / Cmd K to search.</p>
   </main>
+  <script>
+    const SYN: Record<string, string> = {
+      gpu: 'gpus',
+      gpus: 'gpus',
+      9700: 'r9700',
+      r9700: 'r9700',
+      ram: 'ram',
+      ddr5: 'ram',
+      llm: 'llm',
+      vllm: 'vllm',
+      serving: 'serving',
+      sitemap: 'sitemap',
+    };
+
+    function toks(path: string): Set<string> {
+      return new Set(
+        path
+          .toLowerCase()
+          .split(/[^a-z0-9]+/)
+          .filter((t) => t.length > 1)
+          .map((t) => SYN[t] ?? t),
+      );
+    }
+
+    function nearest(path: string, locs: string[], k = 3): string[] {
+      const t = toks(path);
+      if (!t.size) return [];
+      const scored: Array<[number, string]> = [];
+      for (const u of locs) {
+        const tu = toks(u);
+        let overlap = 0;
+        for (const token of t) if (tu.has(token)) overlap += 1;
+        if (!overlap) continue;
+        const union = new Set([...t, ...tu]).size;
+        scored.push([overlap / union + 0.01 / (1 + (u.split('/').length - 1)), u]);
+      }
+      return scored
+        .sort((a, b) => b[0] - a[0])
+        .filter(([score]) => score >= 0.2)
+        .slice(0, k)
+        .map(([, u]) => u);
+    }
+
+    async function suggest() {
+      try {
+        const res = await fetch('/sitemap-0.xml', { credentials: 'omit' });
+        if (!res.ok) return;
+        const xml = await res.text();
+        const locs = [...xml.matchAll(/<loc>(.*?)<\/loc>/g)].map((m) => {
+          try {
+            return new URL(m[1]!).pathname;
+          } catch {
+            return m[1]!.replace(/^https?:\/\/[^/]+/, '');
+          }
+        });
+        const hits = nearest(location.pathname, locs);
+        if (!hits.length) return;
+        const box = document.getElementById('did-you-mean');
+        const links = document.getElementById('did-you-mean-links');
+        if (!box || !links) return;
+        links.innerHTML = hits
+          .map((href) => `<a class="mr-3 underline decoration-accent/40" href="${href}">${href}</a>`)
+          .join('');
+        box.classList.remove('hidden');
+      } catch {
+        /* sitemap missing in some previews */
+      }
+    }
+
+    void suggest();
+  </script>
 </Base>

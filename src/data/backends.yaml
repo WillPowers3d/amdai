@@ -203,13 +203,16 @@ engines:
       # Default `pip install vllm` with no extra index is CUDA. Do not do that.
     run: |
       # not recorded: exact image tag / measured VRAM if 0.31 is pinned on this rig.
-      # Shape only:
-      # vllm serve Qwen/Qwen3.6-35B-A3B --host 127.0.0.1 --port 8000
+      # Shape only. v0.32.0+ on RDNA: the fast backend is opt-in, not the default.
+      # vllm serve Qwen/Qwen3.6-35B-A3B --host 127.0.0.1 --port 8000 --attention-backend ROCM_SEGMENTED_ATTN
       curl -s http://127.0.0.1:8000/v1/models
     tuning: >-
       One GPU first. Pin the ROCm extra-index or image. Confirm hip/rocm in
-      the version string. After a kernel upgrade, check firmware before you
-      rebuild the wheel.
+      the version string. On v0.32.0+ RDNA3/4, pass --attention-backend
+      ROCM_SEGMENTED_ATTN — it is not in the auto list (author-measured on 2x
+      R9700; not measured here). Qwen 3.8 Flash-Next stays on the QSA Triton
+      path; this flag does not change Flash. After a kernel upgrade, check
+      firmware before you rebuild the wheel.
     choose: Batching, not the daily driver.
     sources:
       - title: vLLM — GPU / ROCm install

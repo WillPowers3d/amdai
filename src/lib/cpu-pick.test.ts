@@ -32,7 +32,7 @@ describe('builder CPU step', () => {
     assert.equal(inVram.id, '9600x');
     assert.match(inVram.title, /9600X/);
     assert.equal(inVram.src, 'builder-cpu-9600x');
-    assert.equal(inVram.go_newegg, '/go/newegg/ryzen-5-9600x?src=builder-cpu-9600x');
+    assert.equal(inVram.go_newegg, '/go/newegg/ryzen-5-9600x/?src=builder-cpu-9600x');
     assert.equal(inVram.alt, null);
 
     const offload = cpuRecommendation({ bigModels: true, needsOffload: false });

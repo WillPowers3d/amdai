@@ -113,7 +113,8 @@ describe('per-model recipe pages', () => {
         assert.ok(hrefs.includes(required), `${page.id} ${required}`);
       }
       assert.ok(page.fitBadges.every((badge) => badge.href.startsWith('/gpus/')));
-      assert.equal(page.fitBadges.length, 8);
+      assert.ok(page.fitBadges.every((badge) => badge.canRunHref.startsWith('/can-run/')));
+      assert.equal(page.fitBadges.length, 40);
     }
   });
 

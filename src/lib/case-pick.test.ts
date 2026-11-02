@@ -40,7 +40,7 @@ describe('builder case step', () => {
     assert.equal(taichi.warnings.length, 0);
     assert.equal(taichi.picks.length, 3);
     assert.equal(taichi.primary.id, 'fractal-torrent');
-    assert.equal(taichi.primary.go, '/go/newegg/fractal-design-torrent?src=builder-case-torrent');
+    assert.equal(taichi.primary.go, '/go/newegg/fractal-design-torrent/?src=builder-case-torrent');
     assert.match(taichi.why, /271/);
     assert.match(taichi.why, /67 C/);
     assert.match(taichi.why, /57 C/);

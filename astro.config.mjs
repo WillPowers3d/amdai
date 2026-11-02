@@ -49,6 +49,10 @@ export default defineConfig({
     sitemapFromDist(),
   ],
   redirects: {
+    // /sitemap.xml stays a Caddy 301 to /sitemap-index.xml — an Astro
+    // redirect would replace dist/sitemap.xml with a directory and break site-qa.
+    '/vllm': '/backends/vllm/',
+    '/vllm/': '/backends/vllm/',
     '/local-ai': '/software',
     '/two-r9700': '/qwen36-dual',
     '/gpus/rx9070xt': '/gpus/rx-9070-xt',

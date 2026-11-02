@@ -56,7 +56,7 @@ describe('second R9700 honesty verdict', () => {
       else assert.equal(verdict.link, null);
     }
     const flash = secondCardVerdict({ model: 'flash' }, cells);
-    assert.equal(flash.also, `/go/newegg/${SECOND_CARD_RAM_ID}?src=${SECOND_CARD_SRC}`);
+    assert.equal(flash.also, `/go/newegg/${SECOND_CARD_RAM_ID}/?src=${SECOND_CARD_SRC}`);
     assert.deepEqual(assertSecondCardValid(runs), []);
   });
 

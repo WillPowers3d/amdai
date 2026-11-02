@@ -163,7 +163,7 @@
       "well": "Several clients, continuous batching, a harness that wants a real server.",
       "badly": "A first home box; mixing AMD’s 0.27 pin with community 0.31 in one venv.",
       "when": "You already have llama.cpp working and you need batching.",
-      "run": "# not recorded: exact image tag / measured VRAM if 0.31 is pinned on this rig.\n# Shape only:\n# vllm serve Qwen/Qwen3.6-35B-A3B --host 127.0.0.1 --port 8000\ncurl -s http://127.0.0.1:8000/v1/models\n"
+      "run": "# not recorded: exact image tag / measured VRAM if 0.31 is pinned on this rig.\n# Shape only. v0.32.0+ on RDNA: the fast backend is opt-in, not the default.\n# vllm serve Qwen/Qwen3.6-35B-A3B --host 127.0.0.1 --port 8000 --attention-backend ROCM_SEGMENTED_ATTN\ncurl -s http://127.0.0.1:8000/v1/models\n"
     }
   ]
 }

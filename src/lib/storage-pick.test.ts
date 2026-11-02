@@ -39,7 +39,7 @@ describe('builder storage step', () => {
     assert.equal(three.gen, 4);
     assert.equal(three.primary.id, '990pro-2tb');
     assert.equal(three.primary.part, 'MZ-V9P2T0BW');
-    assert.equal(three.go_newegg, '/go/newegg/mz-v9p2t0bw?src=builder-ssd-990pro-2tb');
+    assert.equal(three.go_newegg, '/go/newegg/mz-v9p2t0bw/?src=builder-ssd-990pro-2tb');
     assert.equal(three.need_gib, needGib(DEFAULT_LANES));
     assert.ok(three.need_gib > 1500 && three.need_gib < 1700);
     assert.ok(driveUsableGib(2) * 0.9 >= three.need_gib);

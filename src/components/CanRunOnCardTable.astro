@@ -1,0 +1,40 @@
+---
+import { canRunModelsOnGpu, type CanRunGpuId } from '../lib/can-run';
+import { GPU_COMPARE_SHORT } from '../lib/gpu-compare';
+
+interface Props {
+  gpuId: CanRunGpuId;
+}
+
+const { gpuId } = Astro.props;
+const rows = canRunModelsOnGpu(gpuId);
+const card = GPU_COMPARE_SHORT[gpuId];
+---
+
+<section id="can-run-on-card" class="mt-10 scroll-mt-28" aria-labelledby="can-run-on-card-heading">
+  <h2 id="can-run-on-card-heading" class="font-serif text-3xl tracking-tight">What fits on this card (256K context)</h2>
+  <p class="mt-3 max-w-3xl text-sm leading-relaxed text-muted">
+    Shopper verdict at 4K, then follow the pair page for 32K and full context. Q4 and up. No printed prices.
+  </p>
+  <div class="mt-4 overflow-x-auto">
+    <table class="table-lab min-w-[28rem]">
+      <caption class="sr-only">Can-run verdicts for eight models on {card}</caption>
+      <thead>
+        <tr>
+          <th scope="col">Model</th>
+          <th scope="col">Verdict</th>
+        </tr>
+      </thead>
+      <tbody>
+        {rows.map((row) => (
+          <tr>
+            <th scope="row">
+              <a class="underline decoration-accent/40" href={row.href}>{row.name} on {card}</a>
+            </th>
+            <td>{row.verdictLabel}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+</section>

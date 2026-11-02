@@ -6,6 +6,7 @@ import StrataDeepDive from '../../components/backends/StrataDeepDive.astro';
 import { backendPath, verdictLabel } from '../../lib/backends';
 import { backend, backends } from '../../lib/backends-data';
 import HouseRam from '../../components/HouseRam.astro';
+import R9700BeginnerBuy from '../../components/R9700BeginnerBuy.astro';
 import OpenInStackLab from '../../components/OpenInStackLab.astro';
 import { HOUSE_STACK_LAB } from '../../lib/stack-lab-open';
 
@@ -86,6 +87,9 @@ const next = index >= 0 && index < neighbors.length - 1 ? neighbors[index + 1] :
         recipe. If a GPU meter does not move, come back to
         <a href="/backends/llamacpp">llama.cpp</a>.
       </Callout>
+    )}
+    {(row.id === 'ollama' || row.id === 'lmstudio' || row.id === 'lemonade') && (
+      <R9700BeginnerBuy src={`backend-${row.id}`} />
     )}
 
     <article class="prose-lab prose mt-10 max-w-none">

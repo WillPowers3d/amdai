@@ -33,7 +33,7 @@ describe('builder PSU step', () => {
     assert.equal(one.gpus_sized_for, 1);
     assert.equal(one.picks[0]?.watts, 850);
     assert.equal(one.picks[0]?.src, 'builder-psu-850');
-    assert.equal(one.picks[0]?.go_newegg, '/go/newegg/corsair-rm850x?src=builder-psu-850');
+    assert.equal(one.picks[0]?.go_newegg, '/go/newegg/corsair-rm850x/?src=builder-psu-850');
     assert.match(one.why, /300 W TBP/);
     assert.match(one.why, /750 W/);
     assert.equal(one.r9700_tbp_w, R9700_TBP_W);

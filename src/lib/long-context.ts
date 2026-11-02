@@ -102,7 +102,7 @@ export const LONG_CONTEXT_FAQ = [
     id: 'kv-type',
     question: 'Should I switch from f16 KV to q8_0 to fit more context?',
     answer:
-      'House default is f16 KV. q8_0 KV is about one byte per element instead of two, so the cache is smaller. That quality trade is not measured on the local desktop — treat any q8_0 KV speed or recall claim as a labeled estimate. Do not confuse q8_0 KV with Q8 weights.',
+      'House default is f16 KV. Keep f16 on ROCm/HIP for long context until llama.cpp PR #31234 lands — on master HIP, q8_0 KV is slower at depth (author’s R9700 table, cited). Vulkan is already fine with q8_0. q8_0 KV is about one byte per element instead of two, so the cache is smaller. That quality trade is not measured on the local desktop — treat any q8_0 KV speed or recall claim as a labeled estimate. Do not confuse q8_0 KV with Q8 weights.',
     links: [
       { href: '/kv-cache', label: 'KV cache' },
       { href: '/quants', label: 'Quants · KV types' },

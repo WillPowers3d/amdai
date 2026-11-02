@@ -12,7 +12,7 @@ export function sanitizeGoSrc(src: string | undefined | null): string {
 }
 
 export function goPath(retailerId: string, productId: string, src?: string): string {
-  const path = `/go/${retailerId}/${productId}`;
+  const path = `/go/${retailerId}/${productId}/`;
   const tag = sanitizeGoSrc(src);
   return tag ? `${path}?${GO_SRC_PARAM}=${encodeURIComponent(tag)}` : path;
 }

@@ -30,7 +30,7 @@ describe('builder CPU-cooler step', () => {
     assert.equal(pick.id, 'pa120se');
     assert.equal(pick.name, 'Thermalright Peerless Assassin 120 SE');
     assert.equal(pick.type, 'air');
-    assert.equal(pick.go, '/go/newegg/thermalright-peerless-assassin-120-se?src=builder-cooler-pa120se');
+    assert.equal(pick.go, '/go/newegg/thermalright-peerless-assassin-120-se/?src=builder-cooler-pa120se');
     assert.match(pick.why, /65 W/);
     assert.match(AMD_NO_BOX_COOLER, /Not included/);
     assert.equal(pick.alt, null);
@@ -40,7 +40,7 @@ describe('builder CPU-cooler step', () => {
   it('gives 9900X and 9950X the NH-D15 G2 and keeps AIO off the Torrent intake', () => {
     const air = coolerRecommendation({ cpuId: '9900x', caseId: 'fractal-torrent', gpuCount: 2 });
     assert.equal(air.id, 'nhd15g2');
-    assert.equal(air.go, '/go/newegg/noctua-nh-d15-g2?src=builder-cooler-nhd15g2');
+    assert.equal(air.go, '/go/newegg/noctua-nh-d15-g2/?src=builder-cooler-nhd15g2');
     assert.equal(air.alt, null);
     assert.equal(caseHasTop360('fractal-torrent'), false);
 
@@ -69,7 +69,7 @@ describe('builder CPU-cooler step', () => {
     });
     assert.equal(aio.id, 'lf3pro360');
     assert.equal(aio.type, 'aio');
-    assert.equal(aio.go, '/go/newegg/arctic-liquid-freezer-iii-pro-360?src=builder-cooler-lf3pro360');
+    assert.equal(aio.go, '/go/newegg/arctic-liquid-freezer-iii-pro-360/?src=builder-cooler-lf3pro360');
     assert.ok(aio.warnings.some((row) => /M\.2/.test(row)));
     for (const cs of CASES) {
       for (const cooler of COOLERS) {

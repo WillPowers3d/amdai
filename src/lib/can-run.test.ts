@@ -19,6 +19,9 @@ import {
   canRunBlob,
   canRunCalcInput,
   canRunHubRows,
+    canRunLinksForGpu,
+  canRunLinksForModel,
+  canRunModelsOnGpu,
   canRunPairPage,
   canRunPairPages,
   canRunPairPath,
@@ -112,5 +115,11 @@ describe('can-run GPU × model fit', () => {
     assert.ok(seo.some((row) => row.path === '/can-run/qwen36-35b-on-rx-7900-xtx'));
     const redirects = canRunRedirects();
     assert.equal(redirects['/can-run/qwen36-on-rx-7900-xtx'], '/can-run/qwen36-35b-on-rx-7900-xtx');
+    assert.match(pair, /canRunLinksForModel/);
+    assert.match(pair, /canRunLinksForGpu/);
+    assert.equal(canRunLinksForModel('qwen36').length, CAN_RUN_GPU_IDS.length);
+    assert.equal(canRunLinksForGpu('r9700').length, CAN_RUN_MODEL_IDS.length);
+    assert.equal(canRunLinksForModel('qwen36', 'r9700').length, CAN_RUN_GPU_IDS.length - 1);
+    assert.equal(canRunModelsOnGpu('r9700').length, CAN_RUN_MODEL_IDS.length);
   });
 });

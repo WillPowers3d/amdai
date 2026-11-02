@@ -144,10 +144,14 @@ function quantLadder(id: CanRunModelId): QuantSpec[] {
   ];
 }
 
-function shopperQuant(id: CanRunModelId): QuantId {
+export function shopperQuant(id: CanRunModelId): QuantId {
   if (id === 'qwen36') return 'q5_k_m';
   if (id === 'flash') return 'q4_k_m';
   return 'q4_k_m';
+}
+
+export function canRunFullContext(id: CanRunModelId): number {
+  return Math.min(NATIVE_CONTEXT[id].tokens, 262144);
 }
 
 function shopperQuantLabel(id: CanRunModelId): string {
@@ -781,20 +785,39 @@ export function parseCanRunPicker(search: string): {
   return { model, gpu, href: canRunPairPath(model, gpu) };
 }
 
-export function canRunLinksForModel(id: CanRunModelId): Array<{ href: string; label: string }> {
-  const featured: CanRunGpuId[] = ['r9700', 'rx7900xtx', 'rx7800xt', 'rx7600'];
-  return featured.filter(isCanRunGpuId).map((gpuId) => ({
+export function canRunLinksForModel(id: CanRunModelId, exceptGpu?: CanRunGpuId): Array<{ href: string; label: string }> {
+  return CAN_RUN_GPU_IDS.filter((gpuId) => gpuId !== exceptGpu).map((gpuId) => ({
     href: canRunPairPath(id, gpuId),
     label: `on ${GPU_COMPARE_SHORT[gpuId]}`,
   }));
 }
 
-export function canRunLinksForGpu(id: CanRunGpuId): Array<{ href: string; label: string }> {
-  const featured: CanRunModelId[] = ['qwen36', 'flash', 'glm-53-flash', 'llama33-70b'];
-  return featured.filter(isCanRunModelId).map((modelId) => ({
+export function canRunLinksForGpu(id: CanRunGpuId, exceptModel?: CanRunModelId): Array<{ href: string; label: string }> {
+  return CAN_RUN_MODEL_IDS.filter((modelId) => modelId !== exceptModel).map((modelId) => ({
     href: canRunPairPath(modelId, id),
     label: MODEL_COMPARE_SHORT[modelId],
   }));
+}
+
+export type CanRunOnCardRow = {
+  modelId: CanRunModelId;
+  name: string;
+  href: string;
+  verdict: CanRunVerdictId;
+  verdictLabel: string;
+};
+
+export function canRunModelsOnGpu(gpuId: CanRunGpuId): CanRunOnCardRow[] {
+  return CAN_RUN_MODEL_IDS.map((modelId) => {
+    const verdict = canRunVerdict(modelId, gpuId);
+    return {
+      modelId,
+      name: MODEL_COMPARE_SHORT[modelId],
+      href: canRunPairPath(modelId, gpuId),
+      verdict,
+      verdictLabel: CAN_RUN_VERDICT_LABEL[verdict],
+    };
+  });
 }
 
 export function canRunRedirects(): Record<string, string> {

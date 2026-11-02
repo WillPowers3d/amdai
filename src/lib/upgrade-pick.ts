@@ -14,13 +14,18 @@ import {
   CAN_RUN_GPU_IDS,
   CAN_RUN_MODEL_IDS,
   CAN_RUN_VERDICT_LABEL,
+  canRunCalcInput,
+  canRunFullContext,
   canRunPairPath,
   canRunVerdict,
+  shopperQuant,
   type CanRunGpuId,
   type CanRunModelId,
   type CanRunVerdictId,
 } from './can-run';
+import { systemRamNeed } from './calculator';
 import { GPU_COMPARE_PRODUCT, GPU_COMPARE_SHORT } from './gpu-compare';
+import { ramButtonForNeedGb } from './ram-button';
 
 export const CAN_RUN_NEXT_STEP_SRC = 'canrun-nextstep';
 export const CAN_RUN_NEXT_STEP_ALT_SRC = 'canrun-nextstep-alt';
@@ -110,15 +115,13 @@ export function nextStepPicks(modelId: CanRunModelId, gpuId: CanRunGpuId): Upgra
     if (gpuId === 'strix-halo') {
       return [{ kind: 'keep', label: 'Strix Halo memory is soldered — a DDR5 kit will not help', productId: null }];
     }
-    const ramProduct =
-      modelId === 'glm-53-flash' ? 'ddr5-192' : modelId === 'flash' || modelId === 'qwen36' ? 'ddr5-96' : 'ddr5-kit';
-    const ramLabel =
-      ramProduct === 'ddr5-192'
-        ? '192 GB DDR5 for GLM offload at 256K'
-        : ramProduct === 'ddr5-96'
-          ? '96 GB DDR5 for the offloaded experts'
-          : 'More DDR5 for the offloaded experts';
-    const picks: UpgradePick[] = [{ kind: 'primary', label: ramLabel, productId: ramProduct }];
+    const ramNeed = systemRamNeed(
+      canRunCalcInput(modelId, gpuId, shopperQuant(modelId), canRunFullContext(modelId), 1),
+    );
+    const ram = ramButtonForNeedGb(ramNeed.atFullContext.kitGb);
+    const picks: UpgradePick[] = ram
+      ? [{ kind: 'primary', label: `${ram.kitGb} GB DDR5 for the offloaded experts`, productId: ram.productId }]
+      : [{ kind: 'keep', label: 'No consumer AM5 kit covers this RAM need', productId: null }];
     if (oneR9700 && gpuId !== 'r9700') {
       picks.push({ kind: 'alt', label: 'One R9700 (32 GB) runs it fully', productId: 'r9700' });
     }
@@ -136,7 +139,7 @@ export function upgradePickTsvRow(modelId: CanRunModelId, gpuId: CanRunGpuId): U
     verdict: tsvVerdictLabel(canRunVerdict(modelId, gpuId)),
     currentBuy: GPU_COMPARE_PRODUCT[gpuId],
     primaryPick: primary?.label ?? '',
-    neweggRoute: primary?.productId ? `/go/newegg/${primary.productId}` : '',
+    neweggRoute: primary?.productId ? `/go/newegg/${primary.productId}/` : '',
   };
 }
 
@@ -245,7 +248,7 @@ export function upgradePickCounts(): UpgradePickCounts {
         continue;
       }
       counts.boxShown += 1;
-      if (primary.productId.startsWith('ddr5')) counts.ddr5 += 1;
+      if (primary.productId?.startsWith('ddr5')) counts.ddr5 += 1;
       else if (primary.label.startsWith('One Radeon')) counts.oneR9700 += 1;
       else counts.secondCard += 1;
       if (picks.some((pick) => pick.productId && pick.productId !== current)) {
