@@ -1,6 +1,6 @@
 {
  "/": {
-  "hash": "f0ed66fb1600dd03",
+  "hash": "123b5f2b08e8fd52",
   "modified": "2026-11-02"
  },
  "/abliterated": {
@@ -48,7 +48,7 @@
   "modified": "2026-11-02"
  },
  "/backends/lemonade": {
-  "hash": "624b38e716edd661",
+  "hash": "f7b6313e9313fdbf",
   "modified": "2026-11-02"
  },
  "/backends/llamacpp": {
@@ -56,7 +56,7 @@
   "modified": "2026-11-02"
  },
  "/backends/lmstudio": {
-  "hash": "ceaa5388bc00259f",
+  "hash": "0c236c0643b9651b",
   "modified": "2026-11-02"
  },
  "/backends/mlc": {
@@ -64,7 +64,7 @@
   "modified": "2026-11-02"
  },
  "/backends/ollama": {
-  "hash": "972c34ce0d80006d",
+  "hash": "33a7b73746a808fd",
   "modified": "2026-11-02"
  },
  "/backends/pytorch": {
@@ -80,7 +80,7 @@
   "modified": "2026-11-02"
  },
  "/backends/vllm": {
-  "hash": "8139012538a3f83f",
+  "hash": "292361a677681b15",
   "modified": "2026-11-02"
  },
  "/benchmarks": {
@@ -116,11 +116,11 @@
   "modified": "2026-11-02"
  },
  "/budget": {
-  "hash": "b2fb617c9a54941a",
+  "hash": "4e580d1968ee174c",
   "modified": "2026-11-02"
  },
  "/calculator": {
-  "hash": "bd499b0fe4d8acff",
+  "hash": "13f658241ba85c55",
   "modified": "2026-11-02"
  },
  "/can-run": {
@@ -128,11 +128,11 @@
   "modified": "2026-11-02"
  },
  "/can-run/flash-on-r9700": {
-  "hash": "361baa8421cf56a5",
+  "hash": "5a64b3c42bca8b6d",
   "modified": "2026-11-02"
  },
  "/can-run/flash-on-rx-6700-xt": {
-  "hash": "76304f51a43f776e",
+  "hash": "31b484efc1a63ec5",
   "modified": "2026-11-02"
  },
  "/can-run/flash-on-rx-6700xt": {
@@ -140,7 +140,7 @@
   "modified": "2026-11-02"
  },
  "/can-run/flash-on-rx-6800-xt": {
-  "hash": "48c025b7ecd4430e",
+  "hash": "ac2ce14ff679dcdd",
   "modified": "2026-11-02"
  },
  "/can-run/flash-on-rx-6800xt": {
@@ -148,7 +148,7 @@
   "modified": "2026-11-02"
  },
  "/can-run/flash-on-rx-6950-xt": {
-  "hash": "2fb016ff7609d1c6",
+  "hash": "497e990c85821151",
   "modified": "2026-11-02"
  },
  "/can-run/flash-on-rx-6950xt": {
@@ -156,11 +156,11 @@
   "modified": "2026-11-02"
  },
  "/can-run/flash-on-rx-7600": {
-  "hash": "41490311bb20535e",
+  "hash": "f2e15abe772a7d90",
   "modified": "2026-11-02"
  },
  "/can-run/flash-on-rx-7600-xt": {
-  "hash": "edd61b88ec88b747",
+  "hash": "d72a263b1ede3731",
   "modified": "2026-11-02"
  },
  "/can-run/flash-on-rx-7600xt": {
@@ -168,7 +168,7 @@
   "modified": "2026-11-02"
  },
  "/can-run/flash-on-rx-7700-xt": {
-  "hash": "7a2c5134267e514a",
+  "hash": "8c73e5e5b5b130e0",
   "modified": "2026-11-02"
  },
  "/can-run/flash-on-rx-7700xt": {
@@ -176,7 +176,7 @@
   "modified": "2026-11-02"
  },
  "/can-run/flash-on-rx-7800-xt": {
-  "hash": "570a2a08e4c09633",
+  "hash": "bd99f01c21ea0237",
   "modified": "2026-11-02"
  },
  "/can-run/flash-on-rx-7800xt": {
@@ -184,15 +184,15 @@
   "modified": "2026-11-02"
  },
  "/can-run/flash-on-rx-7900-gre": {
-  "hash": "24e3937a56e3f13d",
+  "hash": "b6ee41ef0bbca14f",
   "modified": "2026-11-02"
  },
  "/can-run/flash-on-rx-7900-xt": {
-  "hash": "b409e32f5b78f70a",
+  "hash": "4d956b0a242a5861",
   "modified": "2026-11-02"
  },
  "/can-run/flash-on-rx-7900-xtx": {
-  "hash": "77cb93f0253b5ac2",
+  "hash": "508caf72897a3a09",
   "modified": "2026-11-02"
  },
  "/can-run/flash-on-rx-7900gre": {
@@ -208,7 +208,7 @@
   "modified": "2026-11-02"
  },
  "/can-run/flash-on-rx-9060-xt": {
-  "hash": "31a0150da2020596",
+  "hash": "e11a72b96edd2751",
   "modified": "2026-11-02"
  },
  "/can-run/flash-on-rx-9060xt": {
@@ -216,15 +216,15 @@
   "modified": "2026-11-02"
  },
  "/can-run/flash-on-rx-9070": {
-  "hash": "085de4da482e6ee7",
+  "hash": "b25492769ac4040a",
   "modified": "2026-11-02"
  },
  "/can-run/flash-on-rx-9070-gre": {
-  "hash": "f327d2207fa3bea8",
+  "hash": "cc833581ff43681b",
   "modified": "2026-11-02"
  },
  "/can-run/flash-on-rx-9070-xt": {
-  "hash": "7a5a681dacd04125",
+  "hash": "a7b1636298c5d51a",
   "modified": "2026-11-02"
  },
  "/can-run/flash-on-rx-9070gre": {
@@ -292,31 +292,31 @@
   "modified": "2026-11-02"
  },
  "/can-run/flash-on-strix-halo": {
-  "hash": "4701b0dc1a4b548a",
+  "hash": "f17129d0982084cc",
   "modified": "2026-11-02"
  },
  "/can-run/flash-on-w6800": {
-  "hash": "db913653f8565a9e",
+  "hash": "1dc5b6dee0d02641",
   "modified": "2026-11-02"
  },
  "/can-run/flash-on-w7700": {
-  "hash": "be4c381f2199aca5",
+  "hash": "cbcc94f0d9a9c1c8",
   "modified": "2026-11-02"
  },
  "/can-run/flash-on-w7800": {
-  "hash": "31af37699fd9be84",
+  "hash": "249df4ab0205154e",
   "modified": "2026-11-02"
  },
  "/can-run/flash-on-w7900": {
-  "hash": "ae232c797dbf00d3",
+  "hash": "f8e8bc3bb8f7ff35",
   "modified": "2026-11-02"
  },
  "/can-run/gemma3-27b-on-r9700": {
-  "hash": "ddd48bc10dbaf4d0",
+  "hash": "3367b450c71143a1",
   "modified": "2026-11-02"
  },
  "/can-run/gemma3-27b-on-rx-6700-xt": {
-  "hash": "0b2b627bb1c7435f",
+  "hash": "2fb462672351649f",
   "modified": "2026-11-02"
  },
  "/can-run/gemma3-27b-on-rx-6700xt": {
@@ -324,7 +324,7 @@
   "modified": "2026-11-02"
  },
  "/can-run/gemma3-27b-on-rx-6800-xt": {
-  "hash": "fa86aed55c2aaadb",
+  "hash": "ee8b636864d571d1",
   "modified": "2026-11-02"
  },
  "/can-run/gemma3-27b-on-rx-6800xt": {
@@ -332,7 +332,7 @@
   "modified": "2026-11-02"
  },
  "/can-run/gemma3-27b-on-rx-6950-xt": {
-  "hash": "17762bcb557fdeee",
+  "hash": "d40dc6b0ca01e89f",
   "modified": "2026-11-02"
  },
  "/can-run/gemma3-27b-on-rx-6950xt": {
@@ -340,11 +340,11 @@
   "modified": "2026-11-02"
  },
  "/can-run/gemma3-27b-on-rx-7600": {
-  "hash": "0e31dfc2a86b6edd",
+  "hash": "976f4bc88ca6eef3",
   "modified": "2026-11-02"
  },
  "/can-run/gemma3-27b-on-rx-7600-xt": {
-  "hash": "6348cee5c4269967",
+  "hash": "0eaa8482a6bcddb8",
   "modified": "2026-11-02"
  },
  "/can-run/gemma3-27b-on-rx-7600xt": {
@@ -352,7 +352,7 @@
   "modified": "2026-11-02"
  },
  "/can-run/gemma3-27b-on-rx-7700-xt": {
-  "hash": "525f3b89701fa21f",
+  "hash": "004bc81fb1a02e19",
   "modified": "2026-11-02"
  },
  "/can-run/gemma3-27b-on-rx-7700xt": {
@@ -360,7 +360,7 @@
   "modified": "2026-11-02"
  },
  "/can-run/gemma3-27b-on-rx-7800-xt": {
-  "hash": "5789567f0892cc9a",
+  "hash": "8a80dfa782dfbc90",
   "modified": "2026-11-02"
  },
  "/can-run/gemma3-27b-on-rx-7800xt": {
@@ -368,15 +368,15 @@
   "modified": "2026-11-02"
  },
  "/can-run/gemma3-27b-on-rx-7900-gre": {
-  "hash": "d882ee916342df05",
+  "hash": "64ce0be8f1afaf9c",
   "modified": "2026-11-02"
  },
  "/can-run/gemma3-27b-on-rx-7900-xt": {
-  "hash": "6f38a34858ca8cb6",
+  "hash": "15cba1cd14d0088f",
   "modified": "2026-11-02"
  },
  "/can-run/gemma3-27b-on-rx-7900-xtx": {
-  "hash": "468224b486d17659",
+  "hash": "5831b950d6b597b4",
   "modified": "2026-11-02"
  },
  "/can-run/gemma3-27b-on-rx-7900gre": {
@@ -392,7 +392,7 @@
   "modified": "2026-11-02"
  },
  "/can-run/gemma3-27b-on-rx-9060-xt": {
-  "hash": "4bdaab9a310ae7d0",
+  "hash": "ca4472c89e99dc7b",
   "modified": "2026-11-02"
  },
  "/can-run/gemma3-27b-on-rx-9060xt": {
@@ -400,15 +400,15 @@
   "modified": "2026-11-02"
  },
  "/can-run/gemma3-27b-on-rx-9070": {
-  "hash": "f1d4911e50774dd9",
+  "hash": "df053e7cb1594514",
   "modified": "2026-11-02"
  },
  "/can-run/gemma3-27b-on-rx-9070-gre": {
-  "hash": "c1b858c015c31e90",
+  "hash": "879139a4131ddb5a",
   "modified": "2026-11-02"
  },
  "/can-run/gemma3-27b-on-rx-9070-xt": {
-  "hash": "b69e308fbae64b22",
+  "hash": "3657cbadd4dcee1f",
   "modified": "2026-11-02"
  },
  "/can-run/gemma3-27b-on-rx-9070gre": {
@@ -476,31 +476,31 @@
   "modified": "2026-11-02"
  },
  "/can-run/gemma3-27b-on-strix-halo": {
-  "hash": "ebdcbe41082d5b5f",
+  "hash": "2b960faeb7dc90a2",
   "modified": "2026-11-02"
  },
  "/can-run/gemma3-27b-on-w6800": {
-  "hash": "a594f3d297cb88b3",
+  "hash": "b35985ddf975a545",
   "modified": "2026-11-02"
  },
  "/can-run/gemma3-27b-on-w7700": {
-  "hash": "1fdea05012a51860",
+  "hash": "d2b0e2279f41996d",
   "modified": "2026-11-02"
  },
  "/can-run/gemma3-27b-on-w7800": {
-  "hash": "4b77cc9f7d431abd",
+  "hash": "11235058bc20cb67",
   "modified": "2026-11-02"
  },
  "/can-run/gemma3-27b-on-w7900": {
-  "hash": "d56b6c347a434d2a",
+  "hash": "9ba99b6b9b52a215",
   "modified": "2026-11-02"
  },
  "/can-run/glm-53-flash-on-r9700": {
-  "hash": "633553727aa1c600",
+  "hash": "f9ebec8b3b754cf9",
   "modified": "2026-11-02"
  },
  "/can-run/glm-53-flash-on-rx-6700-xt": {
-  "hash": "28fb328a0079b805",
+  "hash": "60f5988b536a5e15",
   "modified": "2026-11-02"
  },
  "/can-run/glm-53-flash-on-rx-6700xt": {
@@ -508,7 +508,7 @@
   "modified": "2026-11-02"
  },
  "/can-run/glm-53-flash-on-rx-6800-xt": {
-  "hash": "bd61120a4943d508",
+  "hash": "2d6a43b315fae6d5",
   "modified": "2026-11-02"
  },
  "/can-run/glm-53-flash-on-rx-6800xt": {
@@ -516,7 +516,7 @@
   "modified": "2026-11-02"
  },
  "/can-run/glm-53-flash-on-rx-6950-xt": {
-  "hash": "9155466ff4b1e037",
+  "hash": "b1123083f3d01bbe",
   "modified": "2026-11-02"
  },
  "/can-run/glm-53-flash-on-rx-6950xt": {
@@ -524,11 +524,11 @@
   "modified": "2026-11-02"
  },
  "/can-run/glm-53-flash-on-rx-7600": {
-  "hash": "0cc5ce57767f68c9",
+  "hash": "2e88e8dbc00bf508",
   "modified": "2026-11-02"
  },
  "/can-run/glm-53-flash-on-rx-7600-xt": {
-  "hash": "8cc5611465e39a30",
+  "hash": "acfce13b0e729011",
   "modified": "2026-11-02"
  },
  "/can-run/glm-53-flash-on-rx-7600xt": {
@@ -536,7 +536,7 @@
   "modified": "2026-11-02"
  },
  "/can-run/glm-53-flash-on-rx-7700-xt": {
-  "hash": "79881ef793e3e248",
+  "hash": "25af36d539eb1148",
   "modified": "2026-11-02"
  },
  "/can-run/glm-53-flash-on-rx-7700xt": {
@@ -544,7 +544,7 @@
   "modified": "2026-11-02"
  },
  "/can-run/glm-53-flash-on-rx-7800-xt": {
-  "hash": "eba1e34aa4746f9d",
+  "hash": "4011438cfc1270ea",
   "modified": "2026-11-02"
  },
  "/can-run/glm-53-flash-on-rx-7800xt": {
@@ -552,15 +552,15 @@
   "modified": "2026-11-02"
  },
  "/can-run/glm-53-flash-on-rx-7900-gre": {
-  "hash": "db953cf498f7522a",
+  "hash": "20d41877f1ef256c",
   "modified": "2026-11-02"
  },
  "/can-run/glm-53-flash-on-rx-7900-xt": {
-  "hash": "c846bace6615fa1c",
+  "hash": "bafeb88a0f6b06be",
   "modified": "2026-11-02"
  },
  "/can-run/glm-53-flash-on-rx-7900-xtx": {
-  "hash": "b3df7f79ae8b9af3",
+  "hash": "e3a7b1e189705640",
   "modified": "2026-11-02"
  },
  "/can-run/glm-53-flash-on-rx-7900gre": {
@@ -576,7 +576,7 @@
   "modified": "2026-11-02"
  },
  "/can-run/glm-53-flash-on-rx-9060-xt": {
-  "hash": "41ab946ce21b0d5a",
+  "hash": "2206ca3a8671a7a4",
   "modified": "2026-11-02"
  },
  "/can-run/glm-53-flash-on-rx-9060xt": {
@@ -584,15 +584,15 @@
   "modified": "2026-11-02"
  },
  "/can-run/glm-53-flash-on-rx-9070": {
-  "hash": "1f79bdd939d8cddc",
+  "hash": "3fdd1500daaf3a48",
   "modified": "2026-11-02"
  },
  "/can-run/glm-53-flash-on-rx-9070-gre": {
-  "hash": "3af99e38208a6422",
+  "hash": "b29abd9ba3ef9bc3",
   "modified": "2026-11-02"
  },
  "/can-run/glm-53-flash-on-rx-9070-xt": {
-  "hash": "ec56e1d3fda295d7",
+  "hash": "688f619811e65eec",
   "modified": "2026-11-02"
  },
  "/can-run/glm-53-flash-on-rx-9070gre": {
@@ -660,31 +660,31 @@
   "modified": "2026-11-02"
  },
  "/can-run/glm-53-flash-on-strix-halo": {
-  "hash": "4c091b541d6cc95c",
+  "hash": "34313f2593536e78",
   "modified": "2026-11-02"
  },
  "/can-run/glm-53-flash-on-w6800": {
-  "hash": "e64f8755ecbd56f9",
+  "hash": "fd57944151a448e4",
   "modified": "2026-11-02"
  },
  "/can-run/glm-53-flash-on-w7700": {
-  "hash": "0f6e18240c4cc963",
+  "hash": "0ea76a3917afb844",
   "modified": "2026-11-02"
  },
  "/can-run/glm-53-flash-on-w7800": {
-  "hash": "d09f0d4035ef1d3f",
+  "hash": "7da418a0fce8b6d9",
   "modified": "2026-11-02"
  },
  "/can-run/glm-53-flash-on-w7900": {
-  "hash": "42fccf2da84558b5",
+  "hash": "381f71dce7b4c8d7",
   "modified": "2026-11-02"
  },
  "/can-run/gpt-oss-20b-on-r9700": {
-  "hash": "4c543cb22c539710",
+  "hash": "6a1de21eb2f4378b",
   "modified": "2026-11-02"
  },
  "/can-run/gpt-oss-20b-on-rx-6700-xt": {
-  "hash": "a8a447100ce719ab",
+  "hash": "9c4d84fbfe6da659",
   "modified": "2026-11-02"
  },
  "/can-run/gpt-oss-20b-on-rx-6700xt": {
@@ -692,7 +692,7 @@
   "modified": "2026-11-02"
  },
  "/can-run/gpt-oss-20b-on-rx-6800-xt": {
-  "hash": "3baf924f8c1fc490",
+  "hash": "d358584e5111a56e",
   "modified": "2026-11-02"
  },
  "/can-run/gpt-oss-20b-on-rx-6800xt": {
@@ -700,7 +700,7 @@
   "modified": "2026-11-02"
  },
  "/can-run/gpt-oss-20b-on-rx-6950-xt": {
-  "hash": "1c280c820cd3b2d2",
+  "hash": "90a3d92abdd137af",
   "modified": "2026-11-02"
  },
  "/can-run/gpt-oss-20b-on-rx-6950xt": {
@@ -708,11 +708,11 @@
   "modified": "2026-11-02"
  },
  "/can-run/gpt-oss-20b-on-rx-7600": {
-  "hash": "f862e1057d929a46",
+  "hash": "0e9766f94a21bc61",
   "modified": "2026-11-02"
  },
  "/can-run/gpt-oss-20b-on-rx-7600-xt": {
-  "hash": "a2032e7bb96e6f28",
+  "hash": "6caa542b608afa9c",
   "modified": "2026-11-02"
  },
  "/can-run/gpt-oss-20b-on-rx-7600xt": {
@@ -720,7 +720,7 @@
   "modified": "2026-11-02"
  },
  "/can-run/gpt-oss-20b-on-rx-7700-xt": {
-  "hash": "b69f6eee511cbc90",
+  "hash": "e4d3beb55f1707c7",
   "modified": "2026-11-02"
  },
  "/can-run/gpt-oss-20b-on-rx-7700xt": {
@@ -728,7 +728,7 @@
   "modified": "2026-11-02"
  },
  "/can-run/gpt-oss-20b-on-rx-7800-xt": {
-  "hash": "80dc7b875500e459",
+  "hash": "0bacc78889cc1707",
   "modified": "2026-11-02"
  },
  "/can-run/gpt-oss-20b-on-rx-7800xt": {
@@ -736,15 +736,15 @@
   "modified": "2026-11-02"
  },
  "/can-run/gpt-oss-20b-on-rx-7900-gre": {
-  "hash": "0bca95a44eab5d08",
+  "hash": "a91f62b15ede9811",
   "modified": "2026-11-02"
  },
  "/can-run/gpt-oss-20b-on-rx-7900-xt": {
-  "hash": "a360349c2e401244",
+  "hash": "8f609c8494cbd0f6",
   "modified": "2026-11-02"
  },
  "/can-run/gpt-oss-20b-on-rx-7900-xtx": {
-  "hash": "eec89b92f523f77d",
+  "hash": "67907e6ba1b7437c",
   "modified": "2026-11-02"
  },
  "/can-run/gpt-oss-20b-on-rx-7900gre": {
@@ -760,7 +760,7 @@
   "modified": "2026-11-02"
  },
  "/can-run/gpt-oss-20b-on-rx-9060-xt": {
-  "hash": "bf193325b4266616",
+  "hash": "de56270028fd6ef4",
   "modified": "2026-11-02"
  },
  "/can-run/gpt-oss-20b-on-rx-9060xt": {
@@ -768,15 +768,15 @@
   "modified": "2026-11-02"
  },
  "/can-run/gpt-oss-20b-on-rx-9070": {
-  "hash": "106a29f06ccd5b68",
+  "hash": "e24a2baa35418986",
   "modified": "2026-11-02"
  },
  "/can-run/gpt-oss-20b-on-rx-9070-gre": {
-  "hash": "2d837f04609c4b8f",
+  "hash": "6835480431f57b7b",
   "modified": "2026-11-02"
  },
  "/can-run/gpt-oss-20b-on-rx-9070-xt": {
-  "hash": "1720c3f7b92f0c2e",
+  "hash": "ea302f5385583e21",
   "modified": "2026-11-02"
  },
  "/can-run/gpt-oss-20b-on-rx-9070gre": {
@@ -844,31 +844,31 @@
   "modified": "2026-11-02"
  },
  "/can-run/gpt-oss-20b-on-strix-halo": {
-  "hash": "6a6bf61b5dbdc636",
+  "hash": "d5f2020ef8afaafa",
   "modified": "2026-11-02"
  },
  "/can-run/gpt-oss-20b-on-w6800": {
-  "hash": "362fe6a1137f5768",
+  "hash": "2501f47ec4ec404f",
   "modified": "2026-11-02"
  },
  "/can-run/gpt-oss-20b-on-w7700": {
-  "hash": "2be8782453f94cbd",
+  "hash": "7282d4d7c4e72938",
   "modified": "2026-11-02"
  },
  "/can-run/gpt-oss-20b-on-w7800": {
-  "hash": "960f04b8a8abe815",
+  "hash": "f5bb6be37bdaf7ce",
   "modified": "2026-11-02"
  },
  "/can-run/gpt-oss-20b-on-w7900": {
-  "hash": "5b650e78b0c2019b",
+  "hash": "726ca04408aa46ec",
   "modified": "2026-11-02"
  },
  "/can-run/llama33-70b-on-r9700": {
-  "hash": "637496f018dea269",
+  "hash": "a60f0f8e3ca1a6db",
   "modified": "2026-11-02"
  },
  "/can-run/llama33-70b-on-rx-6700-xt": {
-  "hash": "caa2a9d6268b3a82",
+  "hash": "9bd4fa77e771cbd6",
   "modified": "2026-11-02"
  },
  "/can-run/llama33-70b-on-rx-6700xt": {
@@ -876,7 +876,7 @@
   "modified": "2026-11-02"
  },
  "/can-run/llama33-70b-on-rx-6800-xt": {
-  "hash": "da8267c086530c29",
+  "hash": "307273683988a61e",
   "modified": "2026-11-02"
  },
  "/can-run/llama33-70b-on-rx-6800xt": {
@@ -884,7 +884,7 @@
   "modified": "2026-11-02"
  },
  "/can-run/llama33-70b-on-rx-6950-xt": {
-  "hash": "72393786dd8ef0e8",
+  "hash": "65eeb39339632b8f",
   "modified": "2026-11-02"
  },
  "/can-run/llama33-70b-on-rx-6950xt": {
@@ -892,11 +892,11 @@
   "modified": "2026-11-02"
  },
  "/can-run/llama33-70b-on-rx-7600": {
-  "hash": "cecd5be34566fa9b",
+  "hash": "b3d247fb1da46368",
   "modified": "2026-11-02"
  },
  "/can-run/llama33-70b-on-rx-7600-xt": {
-  "hash": "7f2a389277cbd51d",
+  "hash": "e204e826381e7854",
   "modified": "2026-11-02"
  },
  "/can-run/llama33-70b-on-rx-7600xt": {
@@ -904,7 +904,7 @@
   "modified": "2026-11-02"
  },
  "/can-run/llama33-70b-on-rx-7700-xt": {
-  "hash": "72c8a3ce112cd42f",
+  "hash": "22987aa3cd84d115",
   "modified": "2026-11-02"
  },
  "/can-run/llama33-70b-on-rx-7700xt": {
@@ -912,7 +912,7 @@
   "modified": "2026-11-02"
  },
  "/can-run/llama33-70b-on-rx-7800-xt": {
-  "hash": "cf6ad39c8000e42d",
+  "hash": "3cc08029d027ec25",
   "modified": "2026-11-02"
  },
  "/can-run/llama33-70b-on-rx-7800xt": {
@@ -920,15 +920,15 @@
   "modified": "2026-11-02"
  },
  "/can-run/llama33-70b-on-rx-7900-gre": {
-  "hash": "23a13437c83dbad3",
+  "hash": "70a02842ab316cf8",
   "modified": "2026-11-02"
  },
  "/can-run/llama33-70b-on-rx-7900-xt": {
-  "hash": "5e3437d628b5eba9",
+  "hash": "c72c3fc18dd18f70",
   "modified": "2026-11-02"
  },
  "/can-run/llama33-70b-on-rx-7900-xtx": {
-  "hash": "d219361c6e13c6d8",
+  "hash": "b760ba2f494c72b2",
   "modified": "2026-11-02"
  },
  "/can-run/llama33-70b-on-rx-7900gre": {
@@ -944,7 +944,7 @@
   "modified": "2026-11-02"
  },
  "/can-run/llama33-70b-on-rx-9060-xt": {
-  "hash": "aa6f259c6bd1f542",
+  "hash": "8935468b97ff6020",
   "modified": "2026-11-02"
  },
  "/can-run/llama33-70b-on-rx-9060xt": {
@@ -952,15 +952,15 @@
   "modified": "2026-11-02"
  },
  "/can-run/llama33-70b-on-rx-9070": {
-  "hash": "edb1c9bc394a8d47",
+  "hash": "ced6b2a98e55e0c2",
   "modified": "2026-11-02"
  },
  "/can-run/llama33-70b-on-rx-9070-gre": {
-  "hash": "67993ad8fa535ae9",
+  "hash": "780fdc6702c62463",
   "modified": "2026-11-02"
  },
  "/can-run/llama33-70b-on-rx-9070-xt": {
-  "hash": "2eef98a5f89b1a0f",
+  "hash": "11b049ff2d5ca597",
   "modified": "2026-11-02"
  },
  "/can-run/llama33-70b-on-rx-9070gre": {
@@ -1028,23 +1028,23 @@
   "modified": "2026-11-02"
  },
  "/can-run/llama33-70b-on-strix-halo": {
-  "hash": "9a89c70b8b759247",
+  "hash": "f4f95bfb8c50ff9d",
   "modified": "2026-11-02"
  },
  "/can-run/llama33-70b-on-w6800": {
-  "hash": "a35f1a9b424a0894",
+  "hash": "705d50604365a773",
   "modified": "2026-11-02"
  },
  "/can-run/llama33-70b-on-w7700": {
-  "hash": "e3615ea1a50cfa72",
+  "hash": "c92d3a8129e392b4",
   "modified": "2026-11-02"
  },
  "/can-run/llama33-70b-on-w7800": {
-  "hash": "dd7eeb0720495b20",
+  "hash": "676af366cdad2592",
   "modified": "2026-11-02"
  },
  "/can-run/llama33-70b-on-w7900": {
-  "hash": "6296a7703c022ac5",
+  "hash": "e0394a40bd5cafbe",
   "modified": "2026-11-02"
  },
  "/can-run/qwen-38-flash-on-r9700": {
@@ -1416,11 +1416,11 @@
   "modified": "2026-11-02"
  },
  "/can-run/qwen36-27b-on-r9700": {
-  "hash": "f238d6e8c58bebf1",
+  "hash": "6d458c1c18344433",
   "modified": "2026-11-02"
  },
  "/can-run/qwen36-27b-on-rx-6700-xt": {
-  "hash": "d2e196bd9cf951a6",
+  "hash": "08387ab83501ec7c",
   "modified": "2026-11-02"
  },
  "/can-run/qwen36-27b-on-rx-6700xt": {
@@ -1428,7 +1428,7 @@
   "modified": "2026-11-02"
  },
  "/can-run/qwen36-27b-on-rx-6800-xt": {
-  "hash": "2ae1f78d49f3e3f7",
+  "hash": "922a3ca44bd9b5b4",
   "modified": "2026-11-02"
  },
  "/can-run/qwen36-27b-on-rx-6800xt": {
@@ -1436,7 +1436,7 @@
   "modified": "2026-11-02"
  },
  "/can-run/qwen36-27b-on-rx-6950-xt": {
-  "hash": "44dbeed050b2bf0d",
+  "hash": "56d301f14c228bc7",
   "modified": "2026-11-02"
  },
  "/can-run/qwen36-27b-on-rx-6950xt": {
@@ -1444,11 +1444,11 @@
   "modified": "2026-11-02"
  },
  "/can-run/qwen36-27b-on-rx-7600": {
-  "hash": "2ccaaeae9866c16a",
+  "hash": "3598ba09341e6723",
   "modified": "2026-11-02"
  },
  "/can-run/qwen36-27b-on-rx-7600-xt": {
-  "hash": "ad5dd90615b616e3",
+  "hash": "dadb782d0cd30025",
   "modified": "2026-11-02"
  },
  "/can-run/qwen36-27b-on-rx-7600xt": {
@@ -1456,7 +1456,7 @@
   "modified": "2026-11-02"
  },
  "/can-run/qwen36-27b-on-rx-7700-xt": {
-  "hash": "d8f8c426a6499b32",
+  "hash": "abfc5a5f4e14d689",
   "modified": "2026-11-02"
  },
  "/can-run/qwen36-27b-on-rx-7700xt": {
@@ -1464,7 +1464,7 @@
   "modified": "2026-11-02"
  },
  "/can-run/qwen36-27b-on-rx-7800-xt": {
-  "hash": "ad7f5033ce1d72c3",
+  "hash": "78183b82afaa3c10",
   "modified": "2026-11-02"
  },
  "/can-run/qwen36-27b-on-rx-7800xt": {
@@ -1472,15 +1472,15 @@
   "modified": "2026-11-02"
  },
  "/can-run/qwen36-27b-on-rx-7900-gre": {
-  "hash": "8452d81caa8f062c",
+  "hash": "2a4b228ae0236901",
   "modified": "2026-11-02"
  },
  "/can-run/qwen36-27b-on-rx-7900-xt": {
-  "hash": "86083a58a60a8bb6",
+  "hash": "20121b55225d34bb",
   "modified": "2026-11-02"
  },
  "/can-run/qwen36-27b-on-rx-7900-xtx": {
-  "hash": "b50b5d010ebdae2b",
+  "hash": "c33cb965c9cc4785",
   "modified": "2026-11-02"
  },
  "/can-run/qwen36-27b-on-rx-7900gre": {
@@ -1496,7 +1496,7 @@
   "modified": "2026-11-02"
  },
  "/can-run/qwen36-27b-on-rx-9060-xt": {
-  "hash": "a342f241fb074c03",
+  "hash": "809b0831ee135493",
   "modified": "2026-11-02"
  },
  "/can-run/qwen36-27b-on-rx-9060xt": {
@@ -1504,15 +1504,15 @@
   "modified": "2026-11-02"
  },
  "/can-run/qwen36-27b-on-rx-9070": {
-  "hash": "82a62a10bf957b7e",
+  "hash": "fe0d364d15636137",
   "modified": "2026-11-02"
  },
  "/can-run/qwen36-27b-on-rx-9070-gre": {
-  "hash": "1b1a09378321d17f",
+  "hash": "0a37fa72789d5d19",
   "modified": "2026-11-02"
  },
  "/can-run/qwen36-27b-on-rx-9070-xt": {
-  "hash": "3a6ffecfa41c0c87",
+  "hash": "abae6d4dff12230c",
   "modified": "2026-11-02"
  },
  "/can-run/qwen36-27b-on-rx-9070gre": {
@@ -1580,31 +1580,31 @@
   "modified": "2026-11-02"
  },
  "/can-run/qwen36-27b-on-strix-halo": {
-  "hash": "e24f24d89981e3f4",
+  "hash": "c0a1941fb6eb54f0",
   "modified": "2026-11-02"
  },
  "/can-run/qwen36-27b-on-w6800": {
-  "hash": "21f639db012420b9",
+  "hash": "aa7ba996c0f1d4f6",
   "modified": "2026-11-02"
  },
  "/can-run/qwen36-27b-on-w7700": {
-  "hash": "5ad82993f1abc8d5",
+  "hash": "56ea070b5f843ed5",
   "modified": "2026-11-02"
  },
  "/can-run/qwen36-27b-on-w7800": {
-  "hash": "dfc70fb1e6418d59",
+  "hash": "cb16d920fbc3b3a6",
   "modified": "2026-11-02"
  },
  "/can-run/qwen36-27b-on-w7900": {
-  "hash": "3b66481cd1c6cbc5",
+  "hash": "367fd73328b5f717",
   "modified": "2026-11-02"
  },
  "/can-run/qwen36-35b-on-r9700": {
-  "hash": "44a061c6ef618e3c",
+  "hash": "d9f4c7fb72c8e6be",
   "modified": "2026-11-02"
  },
  "/can-run/qwen36-35b-on-rx-6700-xt": {
-  "hash": "bcd9362b8eea7509",
+  "hash": "4a71ecf03c100e78",
   "modified": "2026-11-02"
  },
  "/can-run/qwen36-35b-on-rx-6700xt": {
@@ -1612,7 +1612,7 @@
   "modified": "2026-11-02"
  },
  "/can-run/qwen36-35b-on-rx-6800-xt": {
-  "hash": "8c4cbaab53eaec27",
+  "hash": "642c20a0403f5572",
   "modified": "2026-11-02"
  },
  "/can-run/qwen36-35b-on-rx-6800xt": {
@@ -1620,7 +1620,7 @@
   "modified": "2026-11-02"
  },
  "/can-run/qwen36-35b-on-rx-6950-xt": {
-  "hash": "ff36e5db71f2c86b",
+  "hash": "1e191e24bfa7b6b3",
   "modified": "2026-11-02"
  },
  "/can-run/qwen36-35b-on-rx-6950xt": {
@@ -1628,11 +1628,11 @@
   "modified": "2026-11-02"
  },
  "/can-run/qwen36-35b-on-rx-7600": {
-  "hash": "60eb0d06535827e1",
+  "hash": "e61921a6489ad835",
   "modified": "2026-11-02"
  },
  "/can-run/qwen36-35b-on-rx-7600-xt": {
-  "hash": "15f3b45e5872d00a",
+  "hash": "1c43802ac380b4fc",
   "modified": "2026-11-02"
  },
  "/can-run/qwen36-35b-on-rx-7600xt": {
@@ -1640,7 +1640,7 @@
   "modified": "2026-11-02"
  },
  "/can-run/qwen36-35b-on-rx-7700-xt": {
-  "hash": "ec5a83708faa7ceb",
+  "hash": "c3d527521db55299",
   "modified": "2026-11-02"
  },
  "/can-run/qwen36-35b-on-rx-7700xt": {
@@ -1648,7 +1648,7 @@
   "modified": "2026-11-02"
  },
  "/can-run/qwen36-35b-on-rx-7800-xt": {
-  "hash": "faebbc0d61d9a0d9",
+  "hash": "34637ffaea356ea2",
   "modified": "2026-11-02"
  },
  "/can-run/qwen36-35b-on-rx-7800xt": {
@@ -1656,15 +1656,15 @@
   "modified": "2026-11-02"
  },
  "/can-run/qwen36-35b-on-rx-7900-gre": {
-  "hash": "e7c08abd8958e601",
+  "hash": "8156350dbc5b22c9",
   "modified": "2026-11-02"
  },
  "/can-run/qwen36-35b-on-rx-7900-xt": {
-  "hash": "45a0a98672f44edf",
+  "hash": "b4eeb1237126d95d",
   "modified": "2026-11-02"
  },
  "/can-run/qwen36-35b-on-rx-7900-xtx": {
-  "hash": "ab6b0423e9759372",
+  "hash": "bb4a9fad32120d81",
   "modified": "2026-11-02"
  },
  "/can-run/qwen36-35b-on-rx-7900gre": {
@@ -1680,7 +1680,7 @@
   "modified": "2026-11-02"
  },
  "/can-run/qwen36-35b-on-rx-9060-xt": {
-  "hash": "abb71a83098e1ca6",
+  "hash": "53c830f3599fa7b9",
   "modified": "2026-11-02"
  },
  "/can-run/qwen36-35b-on-rx-9060xt": {
@@ -1688,15 +1688,15 @@
   "modified": "2026-11-02"
  },
  "/can-run/qwen36-35b-on-rx-9070": {
-  "hash": "ca4b890b83e7a53b",
+  "hash": "d7536e7fd4d51685",
   "modified": "2026-11-02"
  },
  "/can-run/qwen36-35b-on-rx-9070-gre": {
-  "hash": "6bbc09edf4a237bd",
+  "hash": "d95dcb6ad8762ac0",
   "modified": "2026-11-02"
  },
  "/can-run/qwen36-35b-on-rx-9070-xt": {
-  "hash": "cbedca64fee1f815",
+  "hash": "3a27dc0088cc5678",
   "modified": "2026-11-02"
  },
  "/can-run/qwen36-35b-on-rx-9070gre": {
@@ -1764,23 +1764,23 @@
   "modified": "2026-11-02"
  },
  "/can-run/qwen36-35b-on-strix-halo": {
-  "hash": "b909effdf0ce66e7",
+  "hash": "336667117e08e446",
   "modified": "2026-11-02"
  },
  "/can-run/qwen36-35b-on-w6800": {
-  "hash": "eadd6be238a14fa6",
+  "hash": "92dc458f55e3b97f",
   "modified": "2026-11-02"
  },
  "/can-run/qwen36-35b-on-w7700": {
-  "hash": "427705e45d0332a8",
+  "hash": "5387cf787ed15bbd",
   "modified": "2026-11-02"
  },
  "/can-run/qwen36-35b-on-w7800": {
-  "hash": "4f0afb8ab737818d",
+  "hash": "c7d944c219514dbc",
   "modified": "2026-11-02"
  },
  "/can-run/qwen36-35b-on-w7900": {
-  "hash": "383aebeef384b003",
+  "hash": "377017b6168425a6",
   "modified": "2026-11-02"
  },
  "/can-run/qwen36-on-r9700": {
@@ -1968,11 +1968,11 @@
   "modified": "2026-11-02"
  },
  "/can-run/qwen38-27b-on-r9700": {
-  "hash": "474fbc17ad7df9ce",
+  "hash": "b4ec38b243a38a6d",
   "modified": "2026-11-02"
  },
  "/can-run/qwen38-27b-on-rx-6700-xt": {
-  "hash": "b7284056ae6e2ebe",
+  "hash": "73b57a3ece2731c9",
   "modified": "2026-11-02"
  },
  "/can-run/qwen38-27b-on-rx-6700xt": {
@@ -1980,7 +1980,7 @@
   "modified": "2026-11-02"
  },
  "/can-run/qwen38-27b-on-rx-6800-xt": {
-  "hash": "f784f2eb2e8fd129",
+  "hash": "0a8a98ad9721326b",
   "modified": "2026-11-02"
  },
  "/can-run/qwen38-27b-on-rx-6800xt": {
@@ -1988,7 +1988,7 @@
   "modified": "2026-11-02"
  },
  "/can-run/qwen38-27b-on-rx-6950-xt": {
-  "hash": "709d45c17109fe28",
+  "hash": "b0b6a97fd110d957",
   "modified": "2026-11-02"
  },
  "/can-run/qwen38-27b-on-rx-6950xt": {
@@ -1996,11 +1996,11 @@
   "modified": "2026-11-02"
  },
  "/can-run/qwen38-27b-on-rx-7600": {
-  "hash": "92119ccaa95c467b",
+  "hash": "515644af928407b9",
   "modified": "2026-11-02"
  },
  "/can-run/qwen38-27b-on-rx-7600-xt": {
-  "hash": "1b6b7745a416de7e",
+  "hash": "d9a2ae4f29412aa0",
   "modified": "2026-11-02"
  },
  "/can-run/qwen38-27b-on-rx-7600xt": {
@@ -2008,7 +2008,7 @@
   "modified": "2026-11-02"
  },
  "/can-run/qwen38-27b-on-rx-7700-xt": {
-  "hash": "0be6f599f669625f",
+  "hash": "a1e1f959472236de",
   "modified": "2026-11-02"
  },
  "/can-run/qwen38-27b-on-rx-7700xt": {
@@ -2016,7 +2016,7 @@
   "modified": "2026-11-02"
  },
  "/can-run/qwen38-27b-on-rx-7800-xt": {
-  "hash": "79919031fc0434c7",
+  "hash": "d3f2b3bb83b01321",
   "modified": "2026-11-02"
  },
  "/can-run/qwen38-27b-on-rx-7800xt": {
@@ -2024,15 +2024,15 @@
   "modified": "2026-11-02"
  },
  "/can-run/qwen38-27b-on-rx-7900-gre": {
-  "hash": "76e171e30cf9051f",
+  "hash": "63f68ec3ccde7ec8",
   "modified": "2026-11-02"
  },
  "/can-run/qwen38-27b-on-rx-7900-xt": {
-  "hash": "a5429a54cdd76f35",
+  "hash": "d43217f22e558168",
   "modified": "2026-11-02"
  },
  "/can-run/qwen38-27b-on-rx-7900-xtx": {
-  "hash": "25dc177cb1824075",
+  "hash": "79b8dbac3a2799bf",
   "modified": "2026-11-02"
  },
  "/can-run/qwen38-27b-on-rx-7900gre": {
@@ -2048,7 +2048,7 @@
   "modified": "2026-11-02"
  },
  "/can-run/qwen38-27b-on-rx-9060-xt": {
-  "hash": "af5d26e6fa22288f",
+  "hash": "be99ed2c35a2e294",
   "modified": "2026-11-02"
  },
  "/can-run/qwen38-27b-on-rx-9060xt": {
@@ -2056,15 +2056,15 @@
   "modified": "2026-11-02"
  },
  "/can-run/qwen38-27b-on-rx-9070": {
-  "hash": "b47d37049074c424",
+  "hash": "4e227c2974162144",
   "modified": "2026-11-02"
  },
  "/can-run/qwen38-27b-on-rx-9070-gre": {
-  "hash": "c81ede3d7cd83e3e",
+  "hash": "595ac6906e222767",
   "modified": "2026-11-02"
  },
  "/can-run/qwen38-27b-on-rx-9070-xt": {
-  "hash": "454d7bc66b09731c",
+  "hash": "9eeaafc1e58eec41",
   "modified": "2026-11-02"
  },
  "/can-run/qwen38-27b-on-rx-9070gre": {
@@ -2132,23 +2132,23 @@
   "modified": "2026-11-02"
  },
  "/can-run/qwen38-27b-on-strix-halo": {
-  "hash": "3420776be14a39f1",
+  "hash": "5afc5dfa2ea4c8ad",
   "modified": "2026-11-02"
  },
  "/can-run/qwen38-27b-on-w6800": {
-  "hash": "cc998a3506c21c60",
+  "hash": "ce9741ddbd1b0deb",
   "modified": "2026-11-02"
  },
  "/can-run/qwen38-27b-on-w7700": {
-  "hash": "a266789973462791",
+  "hash": "16277d44abdb509f",
   "modified": "2026-11-02"
  },
  "/can-run/qwen38-27b-on-w7800": {
-  "hash": "6c92c11ce06ebdc4",
+  "hash": "942da25e0cab1c0c",
   "modified": "2026-11-02"
  },
  "/can-run/qwen38-27b-on-w7900": {
-  "hash": "0ec81a70ebdea4bf",
+  "hash": "4165751d401b0d52",
   "modified": "2026-11-02"
  },
  "/can-run/qwen38-flash-on-r9700": {
@@ -2348,23 +2348,23 @@
   "modified": "2026-11-02"
  },
  "/compare/models": {
-  "hash": "08581ce01dc35158",
+  "hash": "81345b74c7be4c20",
   "modified": "2026-11-02"
  },
  "/compare/models/flash-vs-gemma3-27b": {
-  "hash": "f5b887993c15cb89",
+  "hash": "995dd4c99606857a",
   "modified": "2026-11-02"
  },
  "/compare/models/flash-vs-glm-53-flash": {
-  "hash": "751e3d24ae40da18",
+  "hash": "7c969ce73edf2a9e",
   "modified": "2026-11-02"
  },
  "/compare/models/flash-vs-gpt-oss-20b": {
-  "hash": "8eaa2dce4f682631",
+  "hash": "40a0d07b96ac94e5",
   "modified": "2026-11-02"
  },
  "/compare/models/flash-vs-llama33-70b": {
-  "hash": "21229687e81fa7f7",
+  "hash": "832e0a92a743d218",
   "modified": "2026-11-02"
  },
  "/compare/models/flash-vs-qwen36": {
@@ -2372,11 +2372,11 @@
   "modified": "2026-11-02"
  },
  "/compare/models/flash-vs-qwen36-27b": {
-  "hash": "1182dfa798f8bf7a",
+  "hash": "38e27569a41aba5b",
   "modified": "2026-11-02"
  },
  "/compare/models/flash-vs-qwen38-27b": {
-  "hash": "fbc7a8763c7c209f",
+  "hash": "5a5c1c76c8422caf",
   "modified": "2026-11-02"
  },
  "/compare/models/gemma3-27b-vs-flash": {
@@ -2384,7 +2384,7 @@
   "modified": "2026-11-02"
  },
  "/compare/models/gemma3-27b-vs-glm-53-flash": {
-  "hash": "fb196767d26ce5d5",
+  "hash": "3bafca078e73f79b",
   "modified": "2026-11-02"
  },
  "/compare/models/gemma3-27b-vs-gpt-oss-20b": {
@@ -2392,7 +2392,7 @@
   "modified": "2026-11-02"
  },
  "/compare/models/gemma3-27b-vs-llama33-70b": {
-  "hash": "30e8fd1689a25c5d",
+  "hash": "b98d184e1a365197",
   "modified": "2026-11-02"
  },
  "/compare/models/gemma3-27b-vs-qwen36": {
@@ -2400,11 +2400,11 @@
   "modified": "2026-11-02"
  },
  "/compare/models/gemma3-27b-vs-qwen36-27b": {
-  "hash": "c38c90852947c5fc",
+  "hash": "a659ac86616159a2",
   "modified": "2026-11-02"
  },
  "/compare/models/gemma3-27b-vs-qwen38-27b": {
-  "hash": "2a961e380b38f5f8",
+  "hash": "efc5bde9ea91412e",
   "modified": "2026-11-02"
  },
  "/compare/models/glm-53-flash-vs-flash": {
@@ -2428,11 +2428,11 @@
   "modified": "2026-11-02"
  },
  "/compare/models/glm-53-flash-vs-qwen36-27b": {
-  "hash": "a997d64a8632c222",
+  "hash": "2c415bc22bb43749",
   "modified": "2026-11-02"
  },
  "/compare/models/glm-53-flash-vs-qwen38-27b": {
-  "hash": "7e97fc5adba525c0",
+  "hash": "37db99439236fe85",
   "modified": "2026-11-02"
  },
  "/compare/models/gpt-oss-20b-vs-flash": {
@@ -2440,15 +2440,15 @@
   "modified": "2026-11-02"
  },
  "/compare/models/gpt-oss-20b-vs-gemma3-27b": {
-  "hash": "9544ebc61b0892b4",
+  "hash": "5e789451d24a9a82",
   "modified": "2026-11-02"
  },
  "/compare/models/gpt-oss-20b-vs-glm-53-flash": {
-  "hash": "e8add0b26231ea6c",
+  "hash": "531fe5020eb5c07f",
   "modified": "2026-11-02"
  },
  "/compare/models/gpt-oss-20b-vs-llama33-70b": {
-  "hash": "745126958e978798",
+  "hash": "dee8462f3a5f9a98",
   "modified": "2026-11-02"
  },
  "/compare/models/gpt-oss-20b-vs-qwen36": {
@@ -2456,11 +2456,11 @@
   "modified": "2026-11-02"
  },
  "/compare/models/gpt-oss-20b-vs-qwen36-27b": {
-  "hash": "9e5a57527f34d5a9",
+  "hash": "5505c25e20aaa4b0",
   "modified": "2026-11-02"
  },
  "/compare/models/gpt-oss-20b-vs-qwen38-27b": {
-  "hash": "2f8763bd9409ae9d",
+  "hash": "af67b2308812e1df",
   "modified": "2026-11-02"
  },
  "/compare/models/llama33-70b-vs-flash": {
@@ -2472,7 +2472,7 @@
   "modified": "2026-11-02"
  },
  "/compare/models/llama33-70b-vs-glm-53-flash": {
-  "hash": "47914b6156f68259",
+  "hash": "665874c28cb83f62",
   "modified": "2026-11-02"
  },
  "/compare/models/llama33-70b-vs-gpt-oss-20b": {
@@ -2484,11 +2484,11 @@
   "modified": "2026-11-02"
  },
  "/compare/models/llama33-70b-vs-qwen36-27b": {
-  "hash": "029f274fa7855d0e",
+  "hash": "2efcf3d6f86e57db",
   "modified": "2026-11-02"
  },
  "/compare/models/llama33-70b-vs-qwen38-27b": {
-  "hash": "29324a52a729b6dd",
+  "hash": "4fdf311cbf2bde39",
   "modified": "2026-11-02"
  },
  "/compare/models/qwen36-27b-vs-flash": {
@@ -2516,35 +2516,35 @@
   "modified": "2026-11-02"
  },
  "/compare/models/qwen36-27b-vs-qwen38-27b": {
-  "hash": "3911a011b3d950ff",
+  "hash": "a220a31d653ac487",
   "modified": "2026-11-02"
  },
  "/compare/models/qwen36-vs-flash": {
-  "hash": "d41e14f80bc17514",
+  "hash": "7e20f41703accd90",
   "modified": "2026-11-02"
  },
  "/compare/models/qwen36-vs-gemma3-27b": {
-  "hash": "4f062a9dab7769c2",
+  "hash": "eebaf8721287dc32",
   "modified": "2026-11-02"
  },
  "/compare/models/qwen36-vs-glm-53-flash": {
-  "hash": "12f88a4b4626db8e",
+  "hash": "290457839437ff81",
   "modified": "2026-11-02"
  },
  "/compare/models/qwen36-vs-gpt-oss-20b": {
-  "hash": "56fe0c7a1cec2d90",
+  "hash": "6d9d9f3e070c8aa7",
   "modified": "2026-11-02"
  },
  "/compare/models/qwen36-vs-llama33-70b": {
-  "hash": "0062e4b5d3102353",
+  "hash": "13e9009d06553964",
   "modified": "2026-11-02"
  },
  "/compare/models/qwen36-vs-qwen36-27b": {
-  "hash": "6b2e78215b19f389",
+  "hash": "b19a167db678c02a",
   "modified": "2026-11-02"
  },
  "/compare/models/qwen36-vs-qwen38-27b": {
-  "hash": "13f2aae65b929ec7",
+  "hash": "781bfa4416139f50",
   "modified": "2026-11-02"
  },
  "/compare/models/qwen38-27b-vs-flash": {
@@ -2584,87 +2584,87 @@
   "modified": "2026-11-02"
  },
  "/compare/r9700-vs-rx-6700-xt": {
-  "hash": "5a287982cd21e625",
+  "hash": "95298b5f6fb9fc06",
   "modified": "2026-11-02"
  },
  "/compare/r9700-vs-rx-6800-xt": {
-  "hash": "651fdb7165ca126b",
+  "hash": "0cf311977ba3d4a9",
   "modified": "2026-11-02"
  },
  "/compare/r9700-vs-rx-6950-xt": {
-  "hash": "87726c66f6c7dca3",
+  "hash": "6e70bf1a28c6beae",
   "modified": "2026-11-02"
  },
  "/compare/r9700-vs-rx-7600": {
-  "hash": "ed47ae315a9c29a3",
+  "hash": "9c4035c61db9698f",
   "modified": "2026-11-02"
  },
  "/compare/r9700-vs-rx-7600-xt": {
-  "hash": "2bcbbc2388527d4f",
+  "hash": "4bf017013679128a",
   "modified": "2026-11-02"
  },
  "/compare/r9700-vs-rx-7700-xt": {
-  "hash": "24c203d8168a0130",
+  "hash": "ae49710118b2a936",
   "modified": "2026-11-02"
  },
  "/compare/r9700-vs-rx-7800-xt": {
-  "hash": "900ab3194007650a",
+  "hash": "fff1ec009c197ed8",
   "modified": "2026-11-02"
  },
  "/compare/r9700-vs-rx-7900-gre": {
-  "hash": "f78cea9091e28390",
+  "hash": "1e131e1f7d2b859e",
   "modified": "2026-11-02"
  },
  "/compare/r9700-vs-rx-7900-xt": {
-  "hash": "986521d02f18ec22",
+  "hash": "d33ea2728a04ce35",
   "modified": "2026-11-02"
  },
  "/compare/r9700-vs-rx-7900-xtx": {
-  "hash": "32719cfe4d26feb3",
+  "hash": "9fba66abf7f157a9",
   "modified": "2026-11-02"
  },
  "/compare/r9700-vs-rx-9060-xt": {
-  "hash": "4bbf47e83d7aa909",
+  "hash": "93904db8ad246c2c",
   "modified": "2026-11-02"
  },
  "/compare/r9700-vs-rx-9070": {
-  "hash": "cac2a8076c2c2c78",
+  "hash": "e21daccb792bd37d",
   "modified": "2026-11-02"
  },
  "/compare/r9700-vs-rx-9070-gre": {
-  "hash": "53bda4bec1d7ed55",
+  "hash": "3a26d9430ef0f1ba",
   "modified": "2026-11-02"
  },
  "/compare/r9700-vs-rx-9070-xt": {
-  "hash": "7198c737c3eeaf9b",
+  "hash": "d1e91dffd74bd382",
   "modified": "2026-11-02"
  },
  "/compare/r9700-vs-strix-halo": {
-  "hash": "7e5065bcc4739689",
+  "hash": "1e623987f5186f96",
   "modified": "2026-11-02"
  },
  "/compare/r9700-vs-w6800": {
-  "hash": "b823e75e36fff7d9",
+  "hash": "101bf4621cda9ad8",
   "modified": "2026-11-02"
  },
  "/compare/r9700-vs-w7700": {
-  "hash": "a5da57566c1959ac",
+  "hash": "383827e5b8fa81c0",
   "modified": "2026-11-02"
  },
  "/compare/r9700-vs-w7800": {
-  "hash": "13d7b6c84c9afd16",
+  "hash": "39c63cff136484f9",
   "modified": "2026-11-02"
  },
  "/compare/r9700-vs-w7900": {
-  "hash": "be28e56c34410c57",
+  "hash": "365101be2e81cf2d",
   "modified": "2026-11-02"
  },
  "/compare/radeon-vs-mac": {
-  "hash": "35303d2aa4e63620",
+  "hash": "4bd3c81e967f9a78",
   "modified": "2026-11-02"
  },
  "/compare/radeon-vs-nvidia": {
-  "hash": "3c45dae1b5105acc",
+  "hash": "9d468742f0afa750",
   "modified": "2026-11-02"
  },
  "/compare/rx-6700-xt-vs-r9700": {
@@ -2724,7 +2724,7 @@
   "modified": "2026-11-02"
  },
  "/compare/rx-6700-xt-vs-strix-halo": {
-  "hash": "ac3686433ce79e1d",
+  "hash": "68dcf043da0ed5c4",
   "modified": "2026-11-02"
  },
  "/compare/rx-6700-xt-vs-w6800": {
@@ -2748,11 +2748,11 @@
   "modified": "2026-11-02"
  },
  "/compare/rx-6800-xt-vs-rx-6700-xt": {
-  "hash": "064574fc6a66ce79",
+  "hash": "ecb9eb5a1fdc9c14",
   "modified": "2026-11-02"
  },
  "/compare/rx-6800-xt-vs-rx-6950-xt": {
-  "hash": "7780c306167afad7",
+  "hash": "d3049505813ec016",
   "modified": "2026-11-02"
  },
  "/compare/rx-6800-xt-vs-rx-7600": {
@@ -2800,7 +2800,7 @@
   "modified": "2026-11-02"
  },
  "/compare/rx-6800-xt-vs-strix-halo": {
-  "hash": "ec742b3d49210e75",
+  "hash": "ee5e1a3da09b5602",
   "modified": "2026-11-02"
  },
  "/compare/rx-6800-xt-vs-w6800": {
@@ -2824,7 +2824,7 @@
   "modified": "2026-11-02"
  },
  "/compare/rx-6950-xt-vs-rx-6700-xt": {
-  "hash": "7dc0be2704f9bfef",
+  "hash": "8fc632c85d2020c2",
   "modified": "2026-11-02"
  },
  "/compare/rx-6950-xt-vs-rx-6800-xt": {
@@ -2876,7 +2876,7 @@
   "modified": "2026-11-02"
  },
  "/compare/rx-6950-xt-vs-strix-halo": {
-  "hash": "74b7fd916df3c6c2",
+  "hash": "e8ba3bf6651f687b",
   "modified": "2026-11-02"
  },
  "/compare/rx-6950-xt-vs-w6800": {
@@ -2900,15 +2900,15 @@
   "modified": "2026-11-02"
  },
  "/compare/rx-7600-vs-rx-6700-xt": {
-  "hash": "7b620e8b8c060c44",
+  "hash": "a39365a71e79b1b4",
   "modified": "2026-11-02"
  },
  "/compare/rx-7600-vs-rx-6800-xt": {
-  "hash": "5955940bc077225d",
+  "hash": "c906575e991a4607",
   "modified": "2026-11-02"
  },
  "/compare/rx-7600-vs-rx-6950-xt": {
-  "hash": "96900aa1a672f7da",
+  "hash": "1edda266562b508e",
   "modified": "2026-11-02"
  },
  "/compare/rx-7600-vs-rx-7600-xt": {
@@ -2952,7 +2952,7 @@
   "modified": "2026-11-02"
  },
  "/compare/rx-7600-vs-strix-halo": {
-  "hash": "23c3ab5cfae0fdbb",
+  "hash": "e64023a505a1768b",
   "modified": "2026-11-02"
  },
  "/compare/rx-7600-vs-w6800": {
@@ -2976,19 +2976,19 @@
   "modified": "2026-11-02"
  },
  "/compare/rx-7600-xt-vs-rx-6700-xt": {
-  "hash": "049499dfa91b7245",
+  "hash": "eb29d053939f1462",
   "modified": "2026-11-02"
  },
  "/compare/rx-7600-xt-vs-rx-6800-xt": {
-  "hash": "0ec0adc47c731666",
+  "hash": "49fbcf796c8f7b77",
   "modified": "2026-11-02"
  },
  "/compare/rx-7600-xt-vs-rx-6950-xt": {
-  "hash": "9ea4a99db8f27229",
+  "hash": "2e4d65fa99d719c0",
   "modified": "2026-11-02"
  },
  "/compare/rx-7600-xt-vs-rx-7600": {
-  "hash": "a1bcc2d311bf1433",
+  "hash": "2f2ff26ecc6d00f5",
   "modified": "2026-11-02"
  },
  "/compare/rx-7600-xt-vs-rx-7700-xt": {
@@ -3028,7 +3028,7 @@
   "modified": "2026-11-02"
  },
  "/compare/rx-7600-xt-vs-strix-halo": {
-  "hash": "c3150d1e84bd277d",
+  "hash": "6ae9a00dbae557d3",
   "modified": "2026-11-02"
  },
  "/compare/rx-7600-xt-vs-w6800": {
@@ -3052,23 +3052,23 @@
   "modified": "2026-11-02"
  },
  "/compare/rx-7700-xt-vs-rx-6700-xt": {
-  "hash": "1b474ea062ded432",
+  "hash": "e1b567b66732327c",
   "modified": "2026-11-02"
  },
  "/compare/rx-7700-xt-vs-rx-6800-xt": {
-  "hash": "71fc7481b8f7f55e",
+  "hash": "adb38a053ecd070b",
   "modified": "2026-11-02"
  },
  "/compare/rx-7700-xt-vs-rx-6950-xt": {
-  "hash": "3c960a53b03a2722",
+  "hash": "2bda6650fa73def0",
   "modified": "2026-11-02"
  },
  "/compare/rx-7700-xt-vs-rx-7600": {
-  "hash": "fd53532de88a4df9",
+  "hash": "8aaefc85a388833c",
   "modified": "2026-11-02"
  },
  "/compare/rx-7700-xt-vs-rx-7600-xt": {
-  "hash": "d085e5896bd18b26",
+  "hash": "ed4ceebc4d899315",
   "modified": "2026-11-02"
  },
  "/compare/rx-7700-xt-vs-rx-7800-xt": {
@@ -3104,7 +3104,7 @@
   "modified": "2026-11-02"
  },
  "/compare/rx-7700-xt-vs-strix-halo": {
-  "hash": "51302a5cddae4e46",
+  "hash": "2d36c3a55a0b8b1c",
   "modified": "2026-11-02"
  },
  "/compare/rx-7700-xt-vs-w6800": {
@@ -3128,27 +3128,27 @@
   "modified": "2026-11-02"
  },
  "/compare/rx-7800-xt-vs-rx-6700-xt": {
-  "hash": "bfc9553ff4a0b655",
+  "hash": "d133ce01fa1ef402",
   "modified": "2026-11-02"
  },
  "/compare/rx-7800-xt-vs-rx-6800-xt": {
-  "hash": "bd391b66f7543b8d",
+  "hash": "11d12aeda01217fb",
   "modified": "2026-11-02"
  },
  "/compare/rx-7800-xt-vs-rx-6950-xt": {
-  "hash": "2a2fdb0081838df9",
+  "hash": "46ffe127f0c7f871",
   "modified": "2026-11-02"
  },
  "/compare/rx-7800-xt-vs-rx-7600": {
-  "hash": "084735f086fa8b66",
+  "hash": "81d336e53abbb7e3",
   "modified": "2026-11-02"
  },
  "/compare/rx-7800-xt-vs-rx-7600-xt": {
-  "hash": "af29c9c565e7c3c0",
+  "hash": "54823aeeb2ef2c6a",
   "modified": "2026-11-02"
  },
  "/compare/rx-7800-xt-vs-rx-7700-xt": {
-  "hash": "b0a20dc878d61016",
+  "hash": "e5ecfa276be79ede",
   "modified": "2026-11-02"
  },
  "/compare/rx-7800-xt-vs-rx-7900-gre": {
@@ -3180,7 +3180,7 @@
   "modified": "2026-11-02"
  },
  "/compare/rx-7800-xt-vs-strix-halo": {
-  "hash": "a1aa87c0bf5b0401",
+  "hash": "b9ac9255ae03bf42",
   "modified": "2026-11-02"
  },
  "/compare/rx-7800-xt-vs-w6800": {
@@ -3204,31 +3204,31 @@
   "modified": "2026-11-02"
  },
  "/compare/rx-7900-gre-vs-rx-6700-xt": {
-  "hash": "e048ea8b787ef517",
+  "hash": "e700b941fa050c1b",
   "modified": "2026-11-02"
  },
  "/compare/rx-7900-gre-vs-rx-6800-xt": {
-  "hash": "74287699529aae5a",
+  "hash": "83c517bc800285a8",
   "modified": "2026-11-02"
  },
  "/compare/rx-7900-gre-vs-rx-6950-xt": {
-  "hash": "97d755a33f9c66d7",
+  "hash": "1b057d9f1b0b5f68",
   "modified": "2026-11-02"
  },
  "/compare/rx-7900-gre-vs-rx-7600": {
-  "hash": "3f54a8857f4f3d01",
+  "hash": "c2e30b9cd10543db",
   "modified": "2026-11-02"
  },
  "/compare/rx-7900-gre-vs-rx-7600-xt": {
-  "hash": "8e594b71357da164",
+  "hash": "f2b94143784f5472",
   "modified": "2026-11-02"
  },
  "/compare/rx-7900-gre-vs-rx-7700-xt": {
-  "hash": "12b8345e3be18e1d",
+  "hash": "a869f11c6a41420c",
   "modified": "2026-11-02"
  },
  "/compare/rx-7900-gre-vs-rx-7800-xt": {
-  "hash": "2cc475a9baca1ce0",
+  "hash": "c7f5811884e5da75",
   "modified": "2026-11-02"
  },
  "/compare/rx-7900-gre-vs-rx-7900-xt": {
@@ -3256,7 +3256,7 @@
   "modified": "2026-11-02"
  },
  "/compare/rx-7900-gre-vs-strix-halo": {
-  "hash": "68e2aa0d70af76cd",
+  "hash": "3fb0b26aab9468c0",
   "modified": "2026-11-02"
  },
  "/compare/rx-7900-gre-vs-w6800": {
@@ -3280,35 +3280,35 @@
   "modified": "2026-11-02"
  },
  "/compare/rx-7900-xt-vs-rx-6700-xt": {
-  "hash": "89c1f1df70a81cb9",
+  "hash": "ae6bbdcaf9e0380f",
   "modified": "2026-11-02"
  },
  "/compare/rx-7900-xt-vs-rx-6800-xt": {
-  "hash": "a6917c834459b651",
+  "hash": "a4d59fd866bbf4eb",
   "modified": "2026-11-02"
  },
  "/compare/rx-7900-xt-vs-rx-6950-xt": {
-  "hash": "65c99eec37c12f8b",
+  "hash": "4bfcd3a511f7e032",
   "modified": "2026-11-02"
  },
  "/compare/rx-7900-xt-vs-rx-7600": {
-  "hash": "5a0041fc5dab55dd",
+  "hash": "35b6a2a8639afcc2",
   "modified": "2026-11-02"
  },
  "/compare/rx-7900-xt-vs-rx-7600-xt": {
-  "hash": "c2e70de64049c318",
+  "hash": "8c05eb052d0494ab",
   "modified": "2026-11-02"
  },
  "/compare/rx-7900-xt-vs-rx-7700-xt": {
-  "hash": "52e950d94e24d0ae",
+  "hash": "25a7e026727bc271",
   "modified": "2026-11-02"
  },
  "/compare/rx-7900-xt-vs-rx-7800-xt": {
-  "hash": "a45526e8813ea26b",
+  "hash": "348355e4abe48a64",
   "modified": "2026-11-02"
  },
  "/compare/rx-7900-xt-vs-rx-7900-gre": {
-  "hash": "cbd2685391356ae5",
+  "hash": "fec226cfa047764a",
   "modified": "2026-11-02"
  },
  "/compare/rx-7900-xt-vs-rx-7900-xtx": {
@@ -3316,23 +3316,23 @@
   "modified": "2026-11-02"
  },
  "/compare/rx-7900-xt-vs-rx-9060-xt": {
-  "hash": "0f4eae43cc659ca9",
+  "hash": "ec18a0dc3f917ecc",
   "modified": "2026-11-02"
  },
  "/compare/rx-7900-xt-vs-rx-9070": {
-  "hash": "ac1ceb8e3a25c54d",
+  "hash": "b465977628bb5941",
   "modified": "2026-11-02"
  },
  "/compare/rx-7900-xt-vs-rx-9070-gre": {
-  "hash": "84271d25d338554a",
+  "hash": "41084edcfbd2bde0",
   "modified": "2026-11-02"
  },
  "/compare/rx-7900-xt-vs-rx-9070-xt": {
-  "hash": "a4d0316155b0d11e",
+  "hash": "eb2a80f7af174ce4",
   "modified": "2026-11-02"
  },
  "/compare/rx-7900-xt-vs-strix-halo": {
-  "hash": "bcbf7d75b828589b",
+  "hash": "e308fc3020d3dab5",
   "modified": "2026-11-02"
  },
  "/compare/rx-7900-xt-vs-w6800": {
@@ -3356,59 +3356,59 @@
   "modified": "2026-11-02"
  },
  "/compare/rx-7900-xtx-vs-rx-6700-xt": {
-  "hash": "0c402c9cb315a018",
+  "hash": "2c1c4d87e7805ac0",
   "modified": "2026-11-02"
  },
  "/compare/rx-7900-xtx-vs-rx-6800-xt": {
-  "hash": "c496ca68b772b5bf",
+  "hash": "03abf4b93fcf04d6",
   "modified": "2026-11-02"
  },
  "/compare/rx-7900-xtx-vs-rx-6950-xt": {
-  "hash": "7df541503a219650",
+  "hash": "595031a81e84dc43",
   "modified": "2026-11-02"
  },
  "/compare/rx-7900-xtx-vs-rx-7600": {
-  "hash": "e0fd2b220e146f5e",
+  "hash": "2759251fcf50ff79",
   "modified": "2026-11-02"
  },
  "/compare/rx-7900-xtx-vs-rx-7600-xt": {
-  "hash": "dbf69ce9bda57343",
+  "hash": "798de441bb005eab",
   "modified": "2026-11-02"
  },
  "/compare/rx-7900-xtx-vs-rx-7700-xt": {
-  "hash": "c9fd717a7b70b6a3",
+  "hash": "7220e3cb71106609",
   "modified": "2026-11-02"
  },
  "/compare/rx-7900-xtx-vs-rx-7800-xt": {
-  "hash": "bf2516d7ed6095ad",
+  "hash": "e2b954c6463f3f23",
   "modified": "2026-11-02"
  },
  "/compare/rx-7900-xtx-vs-rx-7900-gre": {
-  "hash": "3a5290c61583de37",
+  "hash": "1e74bf05bed5aa83",
   "modified": "2026-11-02"
  },
  "/compare/rx-7900-xtx-vs-rx-7900-xt": {
-  "hash": "44ac2479aab7763a",
+  "hash": "f5829bc58c319e3e",
   "modified": "2026-11-02"
  },
  "/compare/rx-7900-xtx-vs-rx-9060-xt": {
-  "hash": "4feaf860456bbda4",
+  "hash": "8f9b8a1ed97ee932",
   "modified": "2026-11-02"
  },
  "/compare/rx-7900-xtx-vs-rx-9070": {
-  "hash": "f39338b6faf15bb5",
+  "hash": "88f908f26abacada",
   "modified": "2026-11-02"
  },
  "/compare/rx-7900-xtx-vs-rx-9070-gre": {
-  "hash": "13417b4e8d7d1343",
+  "hash": "f97e4d777c3626b1",
   "modified": "2026-11-02"
  },
  "/compare/rx-7900-xtx-vs-rx-9070-xt": {
-  "hash": "08fe8aeead596ce6",
+  "hash": "6e2a6e0f5242fe11",
   "modified": "2026-11-02"
  },
  "/compare/rx-7900-xtx-vs-strix-halo": {
-  "hash": "af093ba92002052a",
+  "hash": "1c345fb851070252",
   "modified": "2026-11-02"
  },
  "/compare/rx-7900-xtx-vs-w6800": {
@@ -3432,35 +3432,35 @@
   "modified": "2026-11-02"
  },
  "/compare/rx-9060-xt-vs-rx-6700-xt": {
-  "hash": "6c6c549257261228",
+  "hash": "6a7527e0316e83d6",
   "modified": "2026-11-02"
  },
  "/compare/rx-9060-xt-vs-rx-6800-xt": {
-  "hash": "92153616f88db175",
+  "hash": "9f4de544acfb9fdc",
   "modified": "2026-11-02"
  },
  "/compare/rx-9060-xt-vs-rx-6950-xt": {
-  "hash": "5c4d07d90b97b1eb",
+  "hash": "bf33bb2b8e6a2c83",
   "modified": "2026-11-02"
  },
  "/compare/rx-9060-xt-vs-rx-7600": {
-  "hash": "229a0c171b83a0f7",
+  "hash": "3bf3bcd1a0ded6c5",
   "modified": "2026-11-02"
  },
  "/compare/rx-9060-xt-vs-rx-7600-xt": {
-  "hash": "dcd638a7c1a65e10",
+  "hash": "1c962452b2f7b20a",
   "modified": "2026-11-02"
  },
  "/compare/rx-9060-xt-vs-rx-7700-xt": {
-  "hash": "dafc05edc03ae1cf",
+  "hash": "e14867b9267946ec",
   "modified": "2026-11-02"
  },
  "/compare/rx-9060-xt-vs-rx-7800-xt": {
-  "hash": "f99ae7ba2383bd47",
+  "hash": "b3e9d6e076b4ced9",
   "modified": "2026-11-02"
  },
  "/compare/rx-9060-xt-vs-rx-7900-gre": {
-  "hash": "90e1878ae6b51bf2",
+  "hash": "ab024801eab2be08",
   "modified": "2026-11-02"
  },
  "/compare/rx-9060-xt-vs-rx-7900-xt": {
@@ -3484,7 +3484,7 @@
   "modified": "2026-11-02"
  },
  "/compare/rx-9060-xt-vs-strix-halo": {
-  "hash": "5e29762f54f48e9e",
+  "hash": "628ba3393119d191",
   "modified": "2026-11-02"
  },
  "/compare/rx-9060-xt-vs-w6800": {
@@ -3508,35 +3508,35 @@
   "modified": "2026-11-02"
  },
  "/compare/rx-9070-gre-vs-rx-6700-xt": {
-  "hash": "f5c4d85ff467fd76",
+  "hash": "2f5e0ef051252dc8",
   "modified": "2026-11-02"
  },
  "/compare/rx-9070-gre-vs-rx-6800-xt": {
-  "hash": "2633bbf8fa2b936f",
+  "hash": "4cea354903394c38",
   "modified": "2026-11-02"
  },
  "/compare/rx-9070-gre-vs-rx-6950-xt": {
-  "hash": "160fd601271cbd24",
+  "hash": "6a4c9570de114f14",
   "modified": "2026-11-02"
  },
  "/compare/rx-9070-gre-vs-rx-7600": {
-  "hash": "4b4463d372e194ff",
+  "hash": "ee6597c88e41710e",
   "modified": "2026-11-02"
  },
  "/compare/rx-9070-gre-vs-rx-7600-xt": {
-  "hash": "e2936b59bd0e97cb",
+  "hash": "db8a0392d19ea612",
   "modified": "2026-11-02"
  },
  "/compare/rx-9070-gre-vs-rx-7700-xt": {
-  "hash": "d3fc95d8ed3bd6d1",
+  "hash": "89ce834e409558e2",
   "modified": "2026-11-02"
  },
  "/compare/rx-9070-gre-vs-rx-7800-xt": {
-  "hash": "8ef60651ca6589cb",
+  "hash": "dd9f824cf6c0b16c",
   "modified": "2026-11-02"
  },
  "/compare/rx-9070-gre-vs-rx-7900-gre": {
-  "hash": "c3037b005053ca07",
+  "hash": "707d5afe5df3692d",
   "modified": "2026-11-02"
  },
  "/compare/rx-9070-gre-vs-rx-7900-xt": {
@@ -3548,7 +3548,7 @@
   "modified": "2026-11-02"
  },
  "/compare/rx-9070-gre-vs-rx-9060-xt": {
-  "hash": "80684260f72107d2",
+  "hash": "53d5a75896c0622a",
   "modified": "2026-11-02"
  },
  "/compare/rx-9070-gre-vs-rx-9070": {
@@ -3560,7 +3560,7 @@
   "modified": "2026-11-02"
  },
  "/compare/rx-9070-gre-vs-strix-halo": {
-  "hash": "299b8dc045fb7ce1",
+  "hash": "dfadcd6a47956db7",
   "modified": "2026-11-02"
  },
  "/compare/rx-9070-gre-vs-w6800": {
@@ -3584,35 +3584,35 @@
   "modified": "2026-11-02"
  },
  "/compare/rx-9070-vs-rx-6700-xt": {
-  "hash": "521faef35ff435ce",
+  "hash": "7db133d6ade2a473",
   "modified": "2026-11-02"
  },
  "/compare/rx-9070-vs-rx-6800-xt": {
-  "hash": "d1ed43eb66a9f6ea",
+  "hash": "d7d3edd8f449d5c8",
   "modified": "2026-11-02"
  },
  "/compare/rx-9070-vs-rx-6950-xt": {
-  "hash": "6d713603f616a9d1",
+  "hash": "7388b03a310d3e0e",
   "modified": "2026-11-02"
  },
  "/compare/rx-9070-vs-rx-7600": {
-  "hash": "a066fd3b5682aafc",
+  "hash": "1a526d441c88bc8e",
   "modified": "2026-11-02"
  },
  "/compare/rx-9070-vs-rx-7600-xt": {
-  "hash": "6fb6da758fac40d4",
+  "hash": "4fe6ac52a3370840",
   "modified": "2026-11-02"
  },
  "/compare/rx-9070-vs-rx-7700-xt": {
-  "hash": "0b91a41d80b9279b",
+  "hash": "5a06db0194dcd8b3",
   "modified": "2026-11-02"
  },
  "/compare/rx-9070-vs-rx-7800-xt": {
-  "hash": "c2e4fcc777c3ccd0",
+  "hash": "3acdd00aa411ab6b",
   "modified": "2026-11-02"
  },
  "/compare/rx-9070-vs-rx-7900-gre": {
-  "hash": "8eda66ad8c9c77e4",
+  "hash": "20d9a2f205188f63",
   "modified": "2026-11-02"
  },
  "/compare/rx-9070-vs-rx-7900-xt": {
@@ -3624,11 +3624,11 @@
   "modified": "2026-11-02"
  },
  "/compare/rx-9070-vs-rx-9060-xt": {
-  "hash": "c0a1870dd6a3399d",
+  "hash": "0d66ce4e288c5385",
   "modified": "2026-11-02"
  },
  "/compare/rx-9070-vs-rx-9070-gre": {
-  "hash": "0acd6ffb83d7a9b8",
+  "hash": "1844d50e5aa64486",
   "modified": "2026-11-02"
  },
  "/compare/rx-9070-vs-rx-9070-xt": {
@@ -3636,7 +3636,7 @@
   "modified": "2026-11-02"
  },
  "/compare/rx-9070-vs-strix-halo": {
-  "hash": "6903a6934ba5e732",
+  "hash": "2e320370e7a45712",
   "modified": "2026-11-02"
  },
  "/compare/rx-9070-vs-w6800": {
@@ -3660,35 +3660,35 @@
   "modified": "2026-11-02"
  },
  "/compare/rx-9070-xt-vs-rx-6700-xt": {
-  "hash": "2b4830f716495389",
+  "hash": "64e832ce6ae2b5d5",
   "modified": "2026-11-02"
  },
  "/compare/rx-9070-xt-vs-rx-6800-xt": {
-  "hash": "0d779e31827f7426",
+  "hash": "aafac09013963066",
   "modified": "2026-11-02"
  },
  "/compare/rx-9070-xt-vs-rx-6950-xt": {
-  "hash": "00f5cd0b4c4267a4",
+  "hash": "cadbc549d9f9c7b5",
   "modified": "2026-11-02"
  },
  "/compare/rx-9070-xt-vs-rx-7600": {
-  "hash": "c6e0810be9e7d594",
+  "hash": "e7fe8e8e3621d229",
   "modified": "2026-11-02"
  },
  "/compare/rx-9070-xt-vs-rx-7600-xt": {
-  "hash": "d20852223ff29238",
+  "hash": "68e2b984d348da3c",
   "modified": "2026-11-02"
  },
  "/compare/rx-9070-xt-vs-rx-7700-xt": {
-  "hash": "44009d20f545b62d",
+  "hash": "6e3b05aae3b3a850",
   "modified": "2026-11-02"
  },
  "/compare/rx-9070-xt-vs-rx-7800-xt": {
-  "hash": "4109cb83f1bded8a",
+  "hash": "06b44d2cc8067613",
   "modified": "2026-11-02"
  },
  "/compare/rx-9070-xt-vs-rx-7900-gre": {
-  "hash": "b9c1f20fcf766a95",
+  "hash": "7fe5913acefb4a1a",
   "modified": "2026-11-02"
  },
  "/compare/rx-9070-xt-vs-rx-7900-xt": {
@@ -3700,19 +3700,19 @@
   "modified": "2026-11-02"
  },
  "/compare/rx-9070-xt-vs-rx-9060-xt": {
-  "hash": "5c4d8316cc36136b",
+  "hash": "c52c25833a15d615",
   "modified": "2026-11-02"
  },
  "/compare/rx-9070-xt-vs-rx-9070": {
-  "hash": "392567c3a15aae7e",
+  "hash": "8f85fc9db6d15858",
   "modified": "2026-11-02"
  },
  "/compare/rx-9070-xt-vs-rx-9070-gre": {
-  "hash": "7178f5fe74270203",
+  "hash": "c4a142f19ff0f664",
   "modified": "2026-11-02"
  },
  "/compare/rx-9070-xt-vs-strix-halo": {
-  "hash": "788a7cdff56878ae",
+  "hash": "be9fd53d88a82ffd",
   "modified": "2026-11-02"
  },
  "/compare/rx-9070-xt-vs-w6800": {
@@ -3816,63 +3816,63 @@
   "modified": "2026-11-02"
  },
  "/compare/w6800-vs-rx-6700-xt": {
-  "hash": "422f251d29999708",
+  "hash": "5c57b2067b4d5ca0",
   "modified": "2026-11-02"
  },
  "/compare/w6800-vs-rx-6800-xt": {
-  "hash": "b13c07099d60b092",
+  "hash": "9f09a795f5a9a333",
   "modified": "2026-11-02"
  },
  "/compare/w6800-vs-rx-6950-xt": {
-  "hash": "91dd1c45b1ef8f9f",
+  "hash": "be329937f3615c6f",
   "modified": "2026-11-02"
  },
  "/compare/w6800-vs-rx-7600": {
-  "hash": "ca177cccec7dc530",
+  "hash": "430c6064c3585c44",
   "modified": "2026-11-02"
  },
  "/compare/w6800-vs-rx-7600-xt": {
-  "hash": "63faac7208ddf85c",
+  "hash": "d3facee24a6996be",
   "modified": "2026-11-02"
  },
  "/compare/w6800-vs-rx-7700-xt": {
-  "hash": "d605083d47e8fea0",
+  "hash": "be431ee30e8940cc",
   "modified": "2026-11-02"
  },
  "/compare/w6800-vs-rx-7800-xt": {
-  "hash": "7380e866700d4631",
+  "hash": "ca0a081db4a23031",
   "modified": "2026-11-02"
  },
  "/compare/w6800-vs-rx-7900-gre": {
-  "hash": "bb61ba1671b48409",
+  "hash": "19290df62824d298",
   "modified": "2026-11-02"
  },
  "/compare/w6800-vs-rx-7900-xt": {
-  "hash": "26837a2a13312d02",
+  "hash": "0700299135ce8e81",
   "modified": "2026-11-02"
  },
  "/compare/w6800-vs-rx-7900-xtx": {
-  "hash": "24739aea2a6bf656",
+  "hash": "18229b4e791fc9be",
   "modified": "2026-11-02"
  },
  "/compare/w6800-vs-rx-9060-xt": {
-  "hash": "7bc7a0b7a771e15b",
+  "hash": "bba9bd6f423dd7cf",
   "modified": "2026-11-02"
  },
  "/compare/w6800-vs-rx-9070": {
-  "hash": "77903a42a27c7d05",
+  "hash": "c8ea9e31b1181006",
   "modified": "2026-11-02"
  },
  "/compare/w6800-vs-rx-9070-gre": {
-  "hash": "92cda4deb58b1476",
+  "hash": "e0dcecbb77b4d9ba",
   "modified": "2026-11-02"
  },
  "/compare/w6800-vs-rx-9070-xt": {
-  "hash": "8229a568ea08baf5",
+  "hash": "e869c0632cb16f69",
   "modified": "2026-11-02"
  },
  "/compare/w6800-vs-strix-halo": {
-  "hash": "7f7b0c9cf2843b7f",
+  "hash": "85c4557d1376bbaa",
   "modified": "2026-11-02"
  },
  "/compare/w6800-vs-w7700": {
@@ -3892,67 +3892,67 @@
   "modified": "2026-11-02"
  },
  "/compare/w7700-vs-rx-6700-xt": {
-  "hash": "1b7d3555669cba25",
+  "hash": "bd867b75f2cf0aff",
   "modified": "2026-11-02"
  },
  "/compare/w7700-vs-rx-6800-xt": {
-  "hash": "1bb2095044be4169",
+  "hash": "42b1ed8e2e28fc6a",
   "modified": "2026-11-02"
  },
  "/compare/w7700-vs-rx-6950-xt": {
-  "hash": "40641ad1c202f22f",
+  "hash": "86c84ae1939c86a4",
   "modified": "2026-11-02"
  },
  "/compare/w7700-vs-rx-7600": {
-  "hash": "a2d8c3cf2a78fffe",
+  "hash": "1e4eade5a96748a5",
   "modified": "2026-11-02"
  },
  "/compare/w7700-vs-rx-7600-xt": {
-  "hash": "e3efc3161af7de56",
+  "hash": "efd6fe32390692c1",
   "modified": "2026-11-02"
  },
  "/compare/w7700-vs-rx-7700-xt": {
-  "hash": "9fd2daf65751139f",
+  "hash": "d17e649173a5abd7",
   "modified": "2026-11-02"
  },
  "/compare/w7700-vs-rx-7800-xt": {
-  "hash": "525844b6fd8d5784",
+  "hash": "780e4d13989a7608",
   "modified": "2026-11-02"
  },
  "/compare/w7700-vs-rx-7900-gre": {
-  "hash": "4dd4971379a857f5",
+  "hash": "456b1c68ad3bf123",
   "modified": "2026-11-02"
  },
  "/compare/w7700-vs-rx-7900-xt": {
-  "hash": "4d3f27c517fc12c9",
+  "hash": "868d1b5a3151ad2d",
   "modified": "2026-11-02"
  },
  "/compare/w7700-vs-rx-7900-xtx": {
-  "hash": "d6a874e4342365ce",
+  "hash": "788255d7750f77cc",
   "modified": "2026-11-02"
  },
  "/compare/w7700-vs-rx-9060-xt": {
-  "hash": "960205e73da68ddc",
+  "hash": "9a0f6f34c20b05b7",
   "modified": "2026-11-02"
  },
  "/compare/w7700-vs-rx-9070": {
-  "hash": "cb7007826c1bdda3",
+  "hash": "c0456fb31ba28150",
   "modified": "2026-11-02"
  },
  "/compare/w7700-vs-rx-9070-gre": {
-  "hash": "b99826ecbb315be8",
+  "hash": "b8f0d8fbdf2c492f",
   "modified": "2026-11-02"
  },
  "/compare/w7700-vs-rx-9070-xt": {
-  "hash": "836f7c0af35d2e6b",
+  "hash": "c4a80dbb055d6562",
   "modified": "2026-11-02"
  },
  "/compare/w7700-vs-strix-halo": {
-  "hash": "6a1e08f8f1d12acb",
+  "hash": "407382fd648f668d",
   "modified": "2026-11-02"
  },
  "/compare/w7700-vs-w6800": {
-  "hash": "e46bf84653abcb1a",
+  "hash": "8c221c854a12a6b7",
   "modified": "2026-11-02"
  },
  "/compare/w7700-vs-w7800": {
@@ -3968,71 +3968,71 @@
   "modified": "2026-11-02"
  },
  "/compare/w7800-vs-rx-6700-xt": {
-  "hash": "3d1c2351f112442d",
+  "hash": "74c602747b9ee941",
   "modified": "2026-11-02"
  },
  "/compare/w7800-vs-rx-6800-xt": {
-  "hash": "7589873903e4baa4",
+  "hash": "86dea4e96e943422",
   "modified": "2026-11-02"
  },
  "/compare/w7800-vs-rx-6950-xt": {
-  "hash": "c751d11fbb978b96",
+  "hash": "fbbbff0ccba14506",
   "modified": "2026-11-02"
  },
  "/compare/w7800-vs-rx-7600": {
-  "hash": "ca0de81cf9fc6193",
+  "hash": "4f3eeaabe8064126",
   "modified": "2026-11-02"
  },
  "/compare/w7800-vs-rx-7600-xt": {
-  "hash": "c9d58553b2e19c67",
+  "hash": "ba6827db5b80601b",
   "modified": "2026-11-02"
  },
  "/compare/w7800-vs-rx-7700-xt": {
-  "hash": "29df0630d8acbea0",
+  "hash": "504ff3c07fb374f8",
   "modified": "2026-11-02"
  },
  "/compare/w7800-vs-rx-7800-xt": {
-  "hash": "539653be83a57755",
+  "hash": "8aed48121ce6ad8b",
   "modified": "2026-11-02"
  },
  "/compare/w7800-vs-rx-7900-gre": {
-  "hash": "436339f9d4877b36",
+  "hash": "bcb1c4e7f3c292f3",
   "modified": "2026-11-02"
  },
  "/compare/w7800-vs-rx-7900-xt": {
-  "hash": "6a29a572e59e70dd",
+  "hash": "4155c0d1238266cd",
   "modified": "2026-11-02"
  },
  "/compare/w7800-vs-rx-7900-xtx": {
-  "hash": "44a2aa158e9ad5f4",
+  "hash": "4b5fbb979a0eb7f4",
   "modified": "2026-11-02"
  },
  "/compare/w7800-vs-rx-9060-xt": {
-  "hash": "a6bb570b305675a7",
+  "hash": "4bfcd50ba27023b8",
   "modified": "2026-11-02"
  },
  "/compare/w7800-vs-rx-9070": {
-  "hash": "ec99610a084234d4",
+  "hash": "7d96afabbfd676de",
   "modified": "2026-11-02"
  },
  "/compare/w7800-vs-rx-9070-gre": {
-  "hash": "bd3ba3ae1efade83",
+  "hash": "e96ce30c5fc6eebb",
   "modified": "2026-11-02"
  },
  "/compare/w7800-vs-rx-9070-xt": {
-  "hash": "f68b3dc494739b7b",
+  "hash": "483d5a51f0990612",
   "modified": "2026-11-02"
  },
  "/compare/w7800-vs-strix-halo": {
-  "hash": "c0ecaef78e24da7c",
+  "hash": "73da59bc198a8300",
   "modified": "2026-11-02"
  },
  "/compare/w7800-vs-w6800": {
-  "hash": "1e9cd08924f49bd1",
+  "hash": "f0306a70098d6b2d",
   "modified": "2026-11-02"
  },
  "/compare/w7800-vs-w7700": {
-  "hash": "dc49cf42cd1b4451",
+  "hash": "247882a988e2f4bd",
   "modified": "2026-11-02"
  },
  "/compare/w7800-vs-w7900": {
@@ -4044,75 +4044,75 @@
   "modified": "2026-11-02"
  },
  "/compare/w7900-vs-rx-6700-xt": {
-  "hash": "f52cc75e69bccdf1",
+  "hash": "6d8df16d4e295c51",
   "modified": "2026-11-02"
  },
  "/compare/w7900-vs-rx-6800-xt": {
-  "hash": "2cfe42c24c5aba35",
+  "hash": "92c83f1a35355036",
   "modified": "2026-11-02"
  },
  "/compare/w7900-vs-rx-6950-xt": {
-  "hash": "3c4c03b825e95260",
+  "hash": "f8846e18116d7f4b",
   "modified": "2026-11-02"
  },
  "/compare/w7900-vs-rx-7600": {
-  "hash": "2d12404b882e2aa2",
+  "hash": "e3bb8b6e14651e2f",
   "modified": "2026-11-02"
  },
  "/compare/w7900-vs-rx-7600-xt": {
-  "hash": "edbadac0dbfad397",
+  "hash": "fcca3411a0c8deb5",
   "modified": "2026-11-02"
  },
  "/compare/w7900-vs-rx-7700-xt": {
-  "hash": "252d71e727c5b3d4",
+  "hash": "2ca091a5e5430015",
   "modified": "2026-11-02"
  },
  "/compare/w7900-vs-rx-7800-xt": {
-  "hash": "f88f3a83b1103c20",
+  "hash": "343ab8b7af5ca2c5",
   "modified": "2026-11-02"
  },
  "/compare/w7900-vs-rx-7900-gre": {
-  "hash": "ed9105a6ddcaa5c8",
+  "hash": "a8cc8495f355b21c",
   "modified": "2026-11-02"
  },
  "/compare/w7900-vs-rx-7900-xt": {
-  "hash": "051095a1b002e57a",
+  "hash": "bcab82aeb3f83796",
   "modified": "2026-11-02"
  },
  "/compare/w7900-vs-rx-7900-xtx": {
-  "hash": "3f68b4cf4cd89ac0",
+  "hash": "65b6997d6830bd4f",
   "modified": "2026-11-02"
  },
  "/compare/w7900-vs-rx-9060-xt": {
-  "hash": "4efd91055b9cc4e7",
+  "hash": "843a5e327fe0910b",
   "modified": "2026-11-02"
  },
  "/compare/w7900-vs-rx-9070": {
-  "hash": "0a99fa6660312aa4",
+  "hash": "979f045b222db1f3",
   "modified": "2026-11-02"
  },
  "/compare/w7900-vs-rx-9070-gre": {
-  "hash": "455170fe62b5a33b",
+  "hash": "2baac426a9205927",
   "modified": "2026-11-02"
  },
  "/compare/w7900-vs-rx-9070-xt": {
-  "hash": "5d8b84752a8d633c",
+  "hash": "75c43fe363c5300e",
   "modified": "2026-11-02"
  },
  "/compare/w7900-vs-strix-halo": {
-  "hash": "111f44fa307710d4",
+  "hash": "aace3fe8bd5afdbd",
   "modified": "2026-11-02"
  },
  "/compare/w7900-vs-w6800": {
-  "hash": "b9019bb7d823e9ef",
+  "hash": "226c32f1199d7fa2",
   "modified": "2026-11-02"
  },
  "/compare/w7900-vs-w7700": {
-  "hash": "40d140dc3075dabc",
+  "hash": "e41ad818aeca8ccb",
   "modified": "2026-11-02"
  },
  "/compare/w7900-vs-w7800": {
-  "hash": "836a97f9bc51c4b6",
+  "hash": "4d5f5b5882a6a532",
   "modified": "2026-11-02"
  },
  "/concurrency-ab": {
@@ -4240,7 +4240,7 @@
   "modified": "2026-11-02"
  },
  "/glossary": {
-  "hash": "a2f8dc9c0420953d",
+  "hash": "940a17ad823ce2af",
   "modified": "2026-11-02"
  },
  "/go/amazon/amd-ryzen-5-9600x": {
@@ -5524,7 +5524,7 @@
   "modified": "2026-11-02"
  },
  "/gpus": {
-  "hash": "fe8edf9445ef9779",
+  "hash": "9128efbae03dfcde",
   "modified": "2026-11-02"
  },
  "/gpus/pro-w6800": {
@@ -5552,7 +5552,7 @@
   "modified": "2026-11-02"
  },
  "/gpus/r9700": {
-  "hash": "cbe7cb07b6eecf63",
+  "hash": "544c11bab357cc00",
   "modified": "2026-11-02"
  },
  "/gpus/r9700s": {
@@ -5576,7 +5576,7 @@
   "modified": "2026-11-02"
  },
  "/gpus/rx-6700-xt": {
-  "hash": "aa576f25eb3bf1fe",
+  "hash": "8360257d79c46829",
   "modified": "2026-11-02"
  },
  "/gpus/rx-6700xt": {
@@ -5584,7 +5584,7 @@
   "modified": "2026-11-02"
  },
  "/gpus/rx-6800-xt": {
-  "hash": "df1c1805ca0516d1",
+  "hash": "4fd1252ec6fe1074",
   "modified": "2026-11-02"
  },
  "/gpus/rx-6800xt": {
@@ -5600,7 +5600,7 @@
   "modified": "2026-11-02"
  },
  "/gpus/rx-6950-xt": {
-  "hash": "237aea0936bb20f2",
+  "hash": "26e2954bbaa9aed6",
   "modified": "2026-11-02"
  },
  "/gpus/rx-6950xt": {
@@ -5608,19 +5608,19 @@
   "modified": "2026-11-02"
  },
  "/gpus/rx-7600": {
-  "hash": "7967cc4be62ca620",
+  "hash": "744559c8fe084df6",
   "modified": "2026-11-02"
  },
  "/gpus/rx-7600-xt": {
-  "hash": "249772e03a57723f",
+  "hash": "b9de776f3e440a14",
   "modified": "2026-11-02"
  },
  "/gpus/rx-7700-xt": {
-  "hash": "3d5219eccd222c3d",
+  "hash": "c1bb63854f37fa7f",
   "modified": "2026-11-02"
  },
  "/gpus/rx-7800-xt": {
-  "hash": "cdc69ceac80f2494",
+  "hash": "6f7d927e264c63fe",
   "modified": "2026-11-02"
  },
  "/gpus/rx-7800xt": {
@@ -5628,15 +5628,15 @@
   "modified": "2026-11-02"
  },
  "/gpus/rx-7900-gre": {
-  "hash": "bff28111f4226db8",
+  "hash": "1f990eedb15d1103",
   "modified": "2026-11-02"
  },
  "/gpus/rx-7900-xt": {
-  "hash": "ec939359622d8e63",
+  "hash": "a4680402c6406baf",
   "modified": "2026-11-02"
  },
  "/gpus/rx-7900-xtx": {
-  "hash": "ec23bc1657b3cd86",
+  "hash": "6b76e664f0ef7bd3",
   "modified": "2026-11-02"
  },
  "/gpus/rx-7900xt": {
@@ -5648,19 +5648,19 @@
   "modified": "2026-11-02"
  },
  "/gpus/rx-9060-xt": {
-  "hash": "8bdbbbb27902243c",
+  "hash": "71a55e696fdbfcb0",
   "modified": "2026-11-02"
  },
  "/gpus/rx-9070": {
-  "hash": "12c2e60bac962695",
+  "hash": "c34e02d8bc481339",
   "modified": "2026-11-02"
  },
  "/gpus/rx-9070-gre": {
-  "hash": "0a56fd01e5f7754b",
+  "hash": "c7c943418fcbe7b2",
   "modified": "2026-11-02"
  },
  "/gpus/rx-9070-xt": {
-  "hash": "85ec5f8bbd065f5e",
+  "hash": "742df80189b81ed6",
   "modified": "2026-11-02"
  },
  "/gpus/rx-9070gre": {
@@ -5800,7 +5800,7 @@
   "modified": "2026-11-02"
  },
  "/gpus/strix-halo": {
-  "hash": "90e1d751b2765e61",
+  "hash": "70d72ba3ff494cf9",
   "modified": "2026-11-02"
  },
  "/gpus/w-6800": {
@@ -5820,23 +5820,23 @@
   "modified": "2026-11-02"
  },
  "/gpus/w6800": {
-  "hash": "9dc0d25f5a465d95",
+  "hash": "0adc6b9b84e13e4b",
   "modified": "2026-11-02"
  },
  "/gpus/w7700": {
-  "hash": "3fe8b24e57be742e",
+  "hash": "d2aedb550a899050",
   "modified": "2026-11-02"
  },
  "/gpus/w7800": {
-  "hash": "345a6ec4ffe6f893",
+  "hash": "80b30e58f88cc237",
   "modified": "2026-11-02"
  },
  "/gpus/w7900": {
-  "hash": "fbeea19a80209328",
+  "hash": "cd9949b25af5dca0",
   "modified": "2026-11-02"
  },
  "/guides/buying-used-radeon": {
-  "hash": "7eeabb16c0abefbb",
+  "hash": "ee9389ab67b1773e",
   "modified": "2026-11-02"
  },
  "/guides/quantize-gguf": {
@@ -5848,7 +5848,7 @@
   "modified": "2026-11-02"
  },
  "/hardware": {
-  "hash": "b1cc59287a6eb4d2",
+  "hash": "490afdc328b6a844",
   "modified": "2026-11-02"
  },
  "/harnesses": {
@@ -6164,11 +6164,11 @@
   "modified": "2026-11-02"
  },
  "/kv-cache": {
-  "hash": "83c7e19d93f8c61a",
+  "hash": "b1d7b32654a43d82",
   "modified": "2026-11-02"
  },
  "/lab-log": {
-  "hash": "c3d6064408822245",
+  "hash": "064f575857154750",
   "modified": "2026-11-02"
  },
  "/labs": {
@@ -6188,7 +6188,7 @@
   "modified": "2026-11-02"
  },
  "/long-context": {
-  "hash": "6ad72fcb92b6cc6c",
+  "hash": "e0c9469efca4e916",
   "modified": "2026-11-02"
  },
  "/maintain": {
@@ -6208,35 +6208,35 @@
   "modified": "2026-11-02"
  },
  "/models/flash": {
-  "hash": "fce3784139b11577",
+  "hash": "ee9f1a865466eb14",
   "modified": "2026-11-02"
  },
  "/models/gemma3-27b": {
-  "hash": "4ef6a33c1cef7276",
+  "hash": "622642c485674e13",
   "modified": "2026-11-02"
  },
  "/models/glm-53-flash": {
-  "hash": "91da9176e0f9f56c",
+  "hash": "ea094580520f9325",
   "modified": "2026-11-02"
  },
  "/models/gpt-oss-20b": {
-  "hash": "07275de0fe5292da",
+  "hash": "73071ca041883f41",
   "modified": "2026-11-02"
  },
  "/models/llama33-70b": {
-  "hash": "43bc5681a429dd08",
+  "hash": "a56153d51c3caf8f",
   "modified": "2026-11-02"
  },
  "/models/qwen36": {
-  "hash": "c6f93faea1057aad",
+  "hash": "546c4a0f7845eced",
   "modified": "2026-11-02"
  },
  "/models/qwen36-27b": {
-  "hash": "f67ae1fa0f5812c7",
+  "hash": "b6f77cd13839a071",
   "modified": "2026-11-02"
  },
  "/models/qwen38-27b": {
-  "hash": "9806c88444a454ce",
+  "hash": "e245d8c7068f08cb",
   "modified": "2026-11-02"
  },
  "/moe": {
@@ -6244,7 +6244,7 @@
   "modified": "2026-11-02"
  },
  "/motherboards": {
-  "hash": "86101c56973e6825",
+  "hash": "b9b2ef72e6f17ca8",
   "modified": "2026-11-02"
  },
  "/multi-gpu": {
@@ -6268,7 +6268,7 @@
   "modified": "2026-11-02"
  },
  "/power": {
-  "hash": "44670035636b03bd",
+  "hash": "14a7cee8e5de47d5",
   "modified": "2026-11-02"
  },
  "/prefill": {
@@ -6644,7 +6644,7 @@
   "modified": "2026-11-02"
  },
  "/serving": {
-  "hash": "a9f23b3fbb41df70",
+  "hash": "28937c5cd94fc64c",
   "modified": "2026-11-02"
  },
  "/setup": {
@@ -6672,11 +6672,11 @@
   "modified": "2026-11-02"
  },
  "/setup/lemonade": {
-  "hash": "15c0cae84e404ce6",
+  "hash": "e2d42417344bfc8f",
   "modified": "2026-11-02"
  },
  "/setup/lm-studio": {
-  "hash": "61713899b2259767",
+  "hash": "e8286e110b5152d4",
   "modified": "2026-11-02"
  },
  "/setup/multi-gpu": {
@@ -6684,7 +6684,7 @@
   "modified": "2026-11-02"
  },
  "/setup/ollama": {
-  "hash": "708fb819cbc99703",
+  "hash": "4850880ef2e4fb37",
   "modified": "2026-11-02"
  },
  "/setup/open-webui": {
@@ -6692,11 +6692,11 @@
   "modified": "2026-11-02"
  },
  "/setup/server": {
-  "hash": "651cd2ec99baeb98",
+  "hash": "95ae04047f40b617",
   "modified": "2026-11-02"
  },
  "/setup/windows": {
-  "hash": "da174d8b4198525a",
+  "hash": "7d4de79e439d14f1",
   "modified": "2026-11-02"
  },
  "/setup/wsl": {
@@ -6724,7 +6724,7 @@
   "modified": "2026-11-02"
  },
  "/stacks": {
-  "hash": "067da8f44e967cff",
+  "hash": "b53fa3560ba51a5d",
   "modified": "2026-11-02"
  },
  "/start": {
@@ -6752,7 +6752,7 @@
   "modified": "2026-11-02"
  },
  "/tuning": {
-  "hash": "11f98225ec7e1e01",
+  "hash": "2bbc2e740e41e2bd",
   "modified": "2026-11-02"
  },
  "/tutorials": {
@@ -6795,12 +6795,16 @@
   "hash": "c4a9233437c473ce",
   "modified": "2026-11-02"
  },
+ "/vllm": {
+  "hash": "9b155ab23543cbaa",
+  "modified": "2026-11-02"
+ },
  "/wanted": {
   "hash": "4eea0c0b5db27ff8",
   "modified": "2026-11-02"
  },
  "/where-to-buy-r9700": {
-  "hash": "c88d10a31dff915d",
+  "hash": "79487ccfad02e4a5",
   "modified": "2026-11-02"
  }
 }
