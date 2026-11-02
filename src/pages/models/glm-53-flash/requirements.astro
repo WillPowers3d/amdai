@@ -1,0 +1,33 @@
+---
+import Base from '../../../layouts/Base.astro';
+import BuyerArticle from '../../../components/BuyerArticle.astro';
+import {
+  GLM_REQ_ANSWER,
+  GLM_REQ_DESCRIPTION,
+  GLM_REQ_FAQ,
+  GLM_REQ_H1,
+  GLM_REQ_HUB,
+  GLM_REQ_KICKER,
+  GLM_REQ_LEAD,
+  GLM_REQ_PICK,
+  GLM_REQ_SECTIONS,
+  GLM_REQ_SOURCES,
+  GLM_REQ_TITLE,
+} from '../../../lib/glm-requirements';
+import { GLM_REQ_PATH } from '../../../lib/buyer-pages';
+---
+
+<Base title={GLM_REQ_TITLE} description={GLM_REQ_DESCRIPTION}>
+  <BuyerArticle
+    path={GLM_REQ_PATH}
+    kicker={GLM_REQ_KICKER}
+    h1={GLM_REQ_H1}
+    lead={GLM_REQ_LEAD}
+    answer={GLM_REQ_ANSWER}
+    hubLinks={GLM_REQ_HUB}
+    sections={GLM_REQ_SECTIONS}
+    faqs={GLM_REQ_FAQ}
+    sources={GLM_REQ_SOURCES}
+    pick={GLM_REQ_PICK}
+  />
+</Base>

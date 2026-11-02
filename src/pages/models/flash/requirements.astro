@@ -1,0 +1,33 @@
+---
+import Base from '../../../layouts/Base.astro';
+import BuyerArticle from '../../../components/BuyerArticle.astro';
+import {
+  FLASH_REQ_ANSWER,
+  FLASH_REQ_DESCRIPTION,
+  FLASH_REQ_FAQ,
+  FLASH_REQ_H1,
+  FLASH_REQ_HUB,
+  FLASH_REQ_KICKER,
+  FLASH_REQ_LEAD,
+  FLASH_REQ_PICK,
+  FLASH_REQ_SECTIONS,
+  FLASH_REQ_SOURCES,
+  FLASH_REQ_TITLE,
+} from '../../../lib/flash-requirements';
+import { FLASH_REQ_PATH } from '../../../lib/buyer-pages';
+---
+
+<Base title={FLASH_REQ_TITLE} description={FLASH_REQ_DESCRIPTION}>
+  <BuyerArticle
+    path={FLASH_REQ_PATH}
+    kicker={FLASH_REQ_KICKER}
+    h1={FLASH_REQ_H1}
+    lead={FLASH_REQ_LEAD}
+    answer={FLASH_REQ_ANSWER}
+    hubLinks={FLASH_REQ_HUB}
+    sections={FLASH_REQ_SECTIONS}
+    faqs={FLASH_REQ_FAQ}
+    sources={FLASH_REQ_SOURCES}
+    pick={FLASH_REQ_PICK}
+  />
+</Base>

@@ -106,6 +106,8 @@ export default defineConfig({
     '/gpus/radeon-pro-w6800': '/gpus/w6800',
     '/gpus/pro-w6800': '/gpus/w6800',
     '/embeddings': '/rag',
+    '/models/qwen36-35b/requirements': '/models/qwen36/requirements',
+    '/r9700-review': '/gpus/r9700/review',
     ...gpuCompareRedirects(),
     ...modelCompareRedirects(),
     ...canRunRedirects(),

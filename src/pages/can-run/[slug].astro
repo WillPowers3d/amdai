@@ -48,6 +48,11 @@ const otherModels = canRunLinksForGpu(page.gpuId, page.modelId);
     <h1 class="display mt-3 text-4xl sm:text-5xl">{page.heading}</h1>
     <p class="mt-3 font-serif text-2xl tracking-tight text-accent-ink">{page.headlineLabel}</p>
     <p class="mt-4 max-w-3xl text-lg leading-relaxed text-muted">{page.lead}</p>
+    {page.requirementsHref && (
+      <p class="mt-4">
+        <a class="underline decoration-accent/40" href={page.requirementsHref}>Full requirements at 256K</a>
+      </p>
+    )}
     <NextStepBuyBox picks={nextStep} src={CAN_RUN_NEXT_STEP_SRC} />
     <div class="mt-4">
       <HowWeTest />

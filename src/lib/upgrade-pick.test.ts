@@ -39,7 +39,11 @@ describe('can-run next-step upgrade picks', () => {
         assert.equal(picks[0]?.kind, 'keep');
         assert.equal(picks.some((pick) => pick.kind === 'primary'), false);
       } else if (verdict === 'ram-offload') {
-        assert.ok(picks[0]?.productId?.startsWith('ddr5'));
+        if (page.gpuId === 'strix-halo') {
+          assert.equal(picks[0]?.kind, 'keep');
+        } else {
+          assert.ok(picks[0]?.productId?.startsWith('ddr5'));
+        }
       } else if (verdict === 'needs-2-gpus') {
         assert.ok(picks[0]?.productId);
       }
@@ -61,11 +65,11 @@ describe('can-run next-step upgrade picks', () => {
     assert.equal(counts.pages, 160);
     assert.equal(counts.keep + counts.ddr5 + counts.oneR9700 + counts.secondCard, 160);
     assert.equal(counts.boxShown, counts.pages - counts.keep);
-    assert.equal(counts.keep, 44);
-    assert.equal(counts.ddr5, 61);
-    assert.equal(counts.oneR9700, 51);
-    assert.equal(counts.secondCard, 4);
-    assert.equal(counts.addsNewProduct, 115);
+    assert.equal(counts.keep, 21);
+    assert.equal(counts.ddr5, 112);
+    assert.equal(counts.oneR9700, 12);
+    assert.equal(counts.secondCard, 15);
+    assert.equal(counts.addsNewProduct, 136);
   });
 
   it('wires the box under the verdict and tags /go/ clicks', () => {

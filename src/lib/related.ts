@@ -76,11 +76,38 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/guides/buying-used-radeon', label: 'Buying a used Radeon' },
     ];
   }
+  if (
+    path === '/best-amd-gpu-for-llm' ||
+    path === '/local-llm-pc-build' ||
+    path === '/best-local-coding-model-32gb' ||
+    path === '/gpus/r9700/review' ||
+    path === '/models/qwen36/requirements' ||
+    path === '/models/flash/requirements' ||
+    path === '/models/glm-53-flash/requirements'
+  ) {
+    return [
+      { href: '/best-amd-gpu-for-llm', label: 'Best AMD GPU' },
+      { href: '/local-llm-pc-build', label: 'Local LLM PC build' },
+      { href: '/gpus/r9700/review', label: 'R9700 review' },
+      { href: '/models/qwen36/requirements', label: '35B requirements' },
+      { href: '/models/flash/requirements', label: 'Flash requirements' },
+      { href: '/models/glm-53-flash/requirements', label: 'GLM Flash requirements' },
+      { href: '/best-local-coding-model-32gb', label: 'Best coding model 32 GB' },
+      { href: '/gpus/r9700', label: 'R9700 measured page' },
+      { href: '/where-to-buy-r9700', label: 'Where to buy R9700' },
+      { href: '/can-run', label: 'Can my Radeon run it?' },
+      { href: '/calculator', label: 'Calculator' },
+      { href: '/budget', label: 'Budget' },
+      { href: '/motherboards', label: 'Dual x8/x8 motherboards' },
+    ];
+  }
   if (path === '/guides/buying-used-radeon' || path === '/budget' || path === '/hardware' || path === '/where-to-buy-r9700') {
     return [
       { href: '/where-to-buy-r9700', label: 'Where to buy R9700' },
       { href: '/guides/buying-used-radeon', label: 'Buying a used Radeon' },
       { href: '/budget', label: 'Budget' },
+      { href: '/local-llm-pc-build', label: 'Local LLM PC build' },
+      { href: '/best-amd-gpu-for-llm', label: 'Best AMD GPU' },
       { href: '/motherboards', label: 'Dual x8/x8 motherboards' },
       { href: '/compare/gpus', label: 'Compare GPUs' },
       { href: '/gpus', label: 'GPU directory' },

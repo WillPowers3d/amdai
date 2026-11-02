@@ -825,7 +825,7 @@ function flashRows(cards: RunCard[], file: FlashDailyFile): ModelConfigRow[] {
               href: '/benchmarks#flash',
               hrefLabel: 'Flash pair',
               runIds: [],
-              note: 'House recipes list card_count 1. The prior first-party pair did not publish GPU count — treat layout as cited on those recipes, not a new bench.',
+              note: 'House recipes list card_count 2. Recorded on the two-R9700 local desktop. Treat layout as cited on those recipes, not a new bench.',
             });
             continue;
           }
@@ -871,7 +871,7 @@ function houseCopy(id: HouseModelId): { title: string; description: string; lead
     description:
       'House recipe page for Qwen 3.8 Flash: cited UD-Q6_K_XL pair, two-card Q6, RAM lines, llama.cpp first. Q3 is a labeled estimate.',
     lead:
-      'the house fast agent: Unsloth UD-Q6_K_XL. Strata is the cited Hermes path (~32.6 tok/s); llama.cpp is first on this page (~16 tok/s). Two-card Q6 lives on Flash daily. Untested cells say contribute. Q3 is a labeled estimate.',
+        'the house fast agent: Unsloth UD-Q6_K_XL. Two 32 GB cards plus 96 GB DDR5 run Q4 at 256K — see Flash requirements. Strata is the cited Hermes path (~32.6 tok/s); llama.cpp is first on this page (~16 tok/s). Two-card Q6 lives on Flash daily. Untested cells say contribute. Q3 is a labeled estimate, not a shopper pick.',
     engine: 'llama.cpp first · Strata where cited',
   };
 }
@@ -882,7 +882,7 @@ export function houseModelPage(id: ModelPageId, cards: RunCard[] = runs): HouseM
   const flashFile = id === 'flash' ? loadFlashDaily() : null;
   const copy = cited ? citedCopy(id) : houseCopy(id as HouseModelId);
   const recommendedQuant = cited ? citedQ4Label(id) : id === 'qwen36' ? 'UD-Q5_K_XL' : 'UD-Q6_K_XL';
-  const recommendedContext = cited ? preset.defaultCtx : 262144;
+  const recommendedContext = cited ? (id === 'glm-53-flash' ? 262144 : preset.defaultCtx) : 262144;
   const ramKind: HouseRamKind | null = cited ? null : id === 'flash' ? 'flash' : 'daily';
   const q3 = cited
     ? systemRamNeed(citedCalcInput(id, 'r9700', 1, 'q3_k_m', preset.defaultCtx))
@@ -930,18 +930,21 @@ export function houseModelPage(id: ModelPageId, cards: RunCard[] = runs): HouseM
     deepLinks: cited
       ? [
           { href: `/calculator?model=${id}`, label: 'Calculator' },
+          ...(id === 'glm-53-flash' ? [{ href: '/models/glm-53-flash/requirements', label: 'RAM / VRAM requirements' }] : []),
           { href: '/gpus/r9700', label: 'R9700' },
           { href: '/gpus/rx-7900-xtx', label: 'RX 7900 XTX' },
           { href: '/amdai-bench', label: 'amdai-bench' },
         ]
       : id === 'qwen36'
         ? [
+            { href: '/models/qwen36/requirements', label: 'VRAM requirements' },
             { href: '/qwen36-dual', label: '35B on two cards' },
             { href: '/compare/one-vs-two-gpu', label: 'One vs split' },
             { href: '/compare/q4-q5-q6', label: 'Q6 vs Q5 vs Q4' },
             { href: '/benchmarks', label: '35B matrix' },
           ]
         : [
+            { href: '/models/flash/requirements', label: 'RAM / VRAM requirements' },
             { href: '/flash-daily', label: 'Flash daily' },
             { href: '/flash-ram-offload', label: 'Flash RAM offload' },
             { href: '/backends/strata', label: 'Strata' },

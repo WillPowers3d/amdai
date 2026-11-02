@@ -112,6 +112,9 @@ export function nextStepPicks(modelId: CanRunModelId, gpuId: CanRunGpuId): Upgra
   }
 
   if (verdict === 'ram-offload') {
+    if (gpuId === 'strix-halo') {
+      return [{ kind: 'keep', label: 'Strix Halo memory is soldered — a DDR5 kit will not help', productId: null }];
+    }
     const ramNeed = systemRamNeed(
       canRunCalcInput(modelId, gpuId, shopperQuant(modelId), canRunFullContext(modelId), 1),
     );
@@ -289,7 +292,12 @@ export function assertUpgradePicksValid(
       if (verdict === 'fits-fully' && picks.some((pick) => pick.kind === 'primary')) {
         errors.push(`${path} must not upsell when it fits fully`);
       }
-      if (verdict !== 'fits-fully' && verdict !== 'does-not-fit' && !primary?.productId) {
+      if (
+        verdict !== 'fits-fully' &&
+        verdict !== 'does-not-fit' &&
+        !(gpuId === 'strix-halo' && verdict === 'ram-offload') &&
+        !primary?.productId
+      ) {
         errors.push(`${path} missing primary product`);
       }
     }

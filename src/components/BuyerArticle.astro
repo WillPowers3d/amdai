@@ -1,0 +1,152 @@
+---
+import AffiliateDisclosure from './AffiliateDisclosure.astro';
+import HowWeTest from './HowWeTest.astro';
+import NextSteps from './NextSteps.astro';
+import type { BuyerFaq, BuyerLink, BuyerPick, BuyerSection, BuyerSource } from '../lib/buyer-pages';
+import { BUYER_REL } from '../lib/buyer-pages';
+
+interface Props {
+  path: string;
+  kicker: string;
+  h1: string;
+  lead: string;
+  answer: string;
+  hubLinks: BuyerLink[];
+  sections: BuyerSection[];
+  faqs: BuyerFaq[];
+  sources: BuyerSource[];
+  pick?: BuyerPick;
+}
+
+const { path, kicker, h1, lead, answer, hubLinks, sections, faqs, sources, pick } = Astro.props;
+---
+
+<main id="main" class="mx-auto max-w-3xl px-4 py-10 sm:px-6">
+  <p class="kicker">{kicker}</p>
+  <h1 class="mt-3 font-serif text-4xl tracking-tight sm:text-5xl">{h1}</h1>
+  <p class="mt-4 text-lg leading-relaxed text-muted">{lead}</p>
+  <ul class="mt-4 flex flex-wrap gap-2">
+    {hubLinks.map((link) => (
+      <li>
+        <a
+          class="inline-flex min-h-9 items-center rounded-full border border-line bg-canvas px-3 text-sm text-ink hover:border-accent/50 hover:text-accent-ink"
+          href={link.href}
+        >
+          {link.label}
+        </a>
+      </li>
+    ))}
+  </ul>
+  <div class="mt-6">
+    <AffiliateDisclosure compact />
+  </div>
+
+  <section id="answer" class="mt-12 scroll-mt-28" aria-labelledby="answer-heading">
+    <h2 id="answer-heading" class="font-serif text-3xl tracking-tight">The short answer</h2>
+    <p class="mt-3 leading-relaxed text-muted">{answer}</p>
+  </section>
+
+  {sections.map((section) => (
+    <section id={section.id} class="mt-12 scroll-mt-28" aria-labelledby={`${section.id}-heading`}>
+      <h2 id={`${section.id}-heading`} class="font-serif text-3xl tracking-tight">{section.title}</h2>
+      {section.body && <p class="mt-3 leading-relaxed text-muted">{section.body}</p>}
+      {section.table && (
+        <div class="card mt-6 overflow-x-auto">
+          <table class="table-lab min-w-[36rem]">
+            <caption>{section.table.caption}</caption>
+            <thead>
+              <tr>
+                {section.table.headers.map((header) => (
+                  <th scope="col">{header}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {section.table.rows.map((row) => (
+                <tr>
+                  {row.map((cell, index) => (index === 0 ? <th scope="row">{cell}</th> : <td>{cell}</td>))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+      {section.code && (
+        <pre class="mt-4 overflow-x-auto rounded-2xl border border-line bg-raised/50 p-4 text-sm leading-relaxed text-ink"><code>{section.code.trim()}</code></pre>
+      )}
+      {section.links && section.links.length > 0 && (
+        <ul class="mt-4 flex flex-wrap gap-2">
+          {section.links.map((link) => (
+            <li>
+              <a
+                class="inline-flex min-h-9 items-center rounded-full border border-line bg-canvas px-3 text-sm text-ink hover:border-accent/50 hover:text-accent-ink"
+                href={link.href}
+              >
+                {link.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      )}
+    </section>
+  ))}
+
+  {pick && (
+    <section id="pick" class="mt-12 scroll-mt-28" aria-labelledby="pick-heading">
+      <h2 id="pick-heading" class="font-serif text-3xl tracking-tight">{pick.title}</h2>
+      <p class="mt-3 leading-relaxed text-muted">{pick.body}</p>
+      <p class="mt-4">
+        <a
+          class="inline-flex min-h-11 items-center rounded-full border border-accent/40 bg-raised px-4 text-sm text-ink hover:border-accent hover:text-accent-ink"
+          href={pick.href}
+          rel={pick.href.startsWith('/go/') ? BUYER_REL : undefined}
+          target={pick.href.startsWith('/go/') ? '_blank' : undefined}
+        >
+          {pick.label}
+        </a>
+      </p>
+    </section>
+  )}
+
+  <section id="faq" class="mt-12 scroll-mt-28" aria-labelledby="faq-heading">
+    <h2 id="faq-heading" class="font-serif text-3xl tracking-tight">FAQ</h2>
+    <dl class="mt-6 space-y-6">
+      {faqs.map((item) => (
+        <div>
+          <dt class="font-serif text-2xl tracking-tight">{item.question}</dt>
+          <dd class="mt-2 leading-relaxed text-muted">{item.answer}</dd>
+          <dd class="mt-2 text-sm">
+            {item.links.map((link, index) => (
+              <>
+                {index > 0 ? ' · ' : ''}
+                <a class="underline decoration-accent/40" href={link.href}>{link.label}</a>
+              </>
+            ))}
+          </dd>
+        </div>
+      ))}
+    </dl>
+  </section>
+
+  <section id="sources" class="mt-12 scroll-mt-28" aria-labelledby="sources-heading">
+    <h2 id="sources-heading" class="font-serif text-3xl tracking-tight">Sources</h2>
+    <ul class="mt-4 list-disc space-y-2 pl-5 text-sm leading-relaxed text-muted">
+      {sources.map((source) => (
+        <li>
+          <span class="font-mono text-ink">{source.id}</span>
+          {' — '}
+          <a class="underline decoration-accent/40" href={source.href} rel={source.href.startsWith('http') ? 'noopener' : undefined}>
+            {source.title}
+          </a>
+          {source.thirdParty ? ' — third-party' : ' — our lab'}
+          {` · checked ${source.checked} · ${source.sourceDate}`}
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <div class="mt-8">
+    <HowWeTest />
+  </div>
+  <NextSteps path={path} />
+</main>

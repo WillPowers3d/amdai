@@ -38,6 +38,13 @@ import { THINK_FAQ, THINK_HOWTO_STEPS, THINK_PUBLISHED } from './thinking';
 import { SAM_FAQ, SAM_HOWTO_STEPS, SAM_PUBLISHED } from './sampling';
 import { CT_FAQ, CT_HOWTO_STEPS, CT_PUBLISHED } from './chat-templates';
 import { SERVING_FAQ, SERVING_HOWTO_STEPS, SERVING_PUBLISHED } from './serving';
+import { QWEN36_REQ_FAQ } from './qwen36-requirements';
+import { FLASH_REQ_FAQ } from './flash-requirements';
+import { GLM_REQ_FAQ } from './glm-requirements';
+import { BEST_GPU_FAQ } from './best-amd-gpu';
+import { PC_BUILD_FAQ } from './local-llm-pc-build';
+import { R9700_REVIEW_FAQ } from './r9700-review';
+import { CODING_FAQ } from './best-coding-model';
 import { NP_FAQ, NP_HOWTO_STEPS, NP_PUBLISHED } from './concurrency-ab';
 import { FA_FAQ, FA_HOWTO_STEPS, FA_PUBLISHED } from './flash-attention';
 import { PP_FAQ, PP_HOWTO_STEPS, PP_PUBLISHED } from './prefill';
@@ -970,6 +977,34 @@ export function pageJsonLd(input: {
       }),
     );
     nodes.push(faqPageJsonLd(CT_FAQ, url));
+    return nodes;
+  }
+  if (path === '/models/qwen36/requirements') {
+    nodes.push(faqPageJsonLd(QWEN36_REQ_FAQ, url));
+    return nodes;
+  }
+  if (path === '/models/flash/requirements') {
+    nodes.push(faqPageJsonLd(FLASH_REQ_FAQ, url));
+    return nodes;
+  }
+  if (path === '/models/glm-53-flash/requirements') {
+    nodes.push(faqPageJsonLd(GLM_REQ_FAQ, url));
+    return nodes;
+  }
+  if (path === '/best-amd-gpu-for-llm') {
+    nodes.push(faqPageJsonLd(BEST_GPU_FAQ, url));
+    return nodes;
+  }
+  if (path === '/local-llm-pc-build') {
+    nodes.push(faqPageJsonLd(PC_BUILD_FAQ, url));
+    return nodes;
+  }
+  if (path === '/gpus/r9700/review') {
+    nodes.push(faqPageJsonLd(R9700_REVIEW_FAQ, url));
+    return nodes;
+  }
+  if (path === '/best-local-coding-model-32gb') {
+    nodes.push(faqPageJsonLd(CODING_FAQ, url));
     return nodes;
   }
   if (path === '/serving') {

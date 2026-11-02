@@ -59,6 +59,7 @@ export const R9700_SECTIONS = [
 ] as const;
 
 export const R9700_INTRO_LINKS: R9700Link[] = [
+  { href: '/gpus/r9700/review', label: 'Review' },
   { href: '/start', label: 'Start' },
   { href: '/setup', label: 'First-run setup' },
   { href: '/setup/multi-gpu', label: 'Multi-GPU how-to' },
@@ -105,6 +106,26 @@ export type R9700MoreLink = {
 };
 
 export const R9700_MORE: R9700MoreLink[] = [
+  {
+    href: '/gpus/r9700/review',
+    label: 'R9700 review for local LLMs',
+    body: 'Measured 35B llama.cpp review from the local desktop. 256K context. When to buy a second card.',
+  },
+  {
+    href: '/models/qwen36/requirements',
+    label: '35B requirements',
+    body: 'VRAM and GPU needs at 256K for Q6/Q5/Q4. Which cards run it fully.',
+  },
+  {
+    href: '/models/flash/requirements',
+    label: 'Flash requirements',
+    body: 'Two R9700s plus 96 GB DDR5 runs Qwen 3.8 Flash Q4 at 256K.',
+  },
+  {
+    href: '/best-amd-gpu-for-llm',
+    label: 'Best AMD GPU for local LLMs',
+    body: 'R9700 first. 16 GB cards offload. No invented street prices.',
+  },
   {
     href: `/recipes/${R9700_DAILY_RECIPE}`,
     label: '35B daily-driver recipe',

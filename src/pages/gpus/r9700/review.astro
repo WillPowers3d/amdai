@@ -1,0 +1,33 @@
+---
+import Base from '../../../layouts/Base.astro';
+import BuyerArticle from '../../../components/BuyerArticle.astro';
+import {
+  R9700_REVIEW_ANSWER,
+  R9700_REVIEW_DESCRIPTION,
+  R9700_REVIEW_FAQ,
+  R9700_REVIEW_H1,
+  R9700_REVIEW_HUB,
+  R9700_REVIEW_KICKER,
+  R9700_REVIEW_LEAD,
+  R9700_REVIEW_PICK,
+  R9700_REVIEW_SECTIONS,
+  R9700_REVIEW_SOURCES,
+  R9700_REVIEW_TITLE,
+} from '../../../lib/r9700-review';
+import { R9700_REVIEW_PATH } from '../../../lib/buyer-pages';
+---
+
+<Base title={R9700_REVIEW_TITLE} description={R9700_REVIEW_DESCRIPTION}>
+  <BuyerArticle
+    path={R9700_REVIEW_PATH}
+    kicker={R9700_REVIEW_KICKER}
+    h1={R9700_REVIEW_H1}
+    lead={R9700_REVIEW_LEAD}
+    answer={R9700_REVIEW_ANSWER}
+    hubLinks={R9700_REVIEW_HUB}
+    sections={R9700_REVIEW_SECTIONS}
+    faqs={R9700_REVIEW_FAQ}
+    sources={R9700_REVIEW_SOURCES}
+    pick={R9700_REVIEW_PICK}
+  />
+</Base>

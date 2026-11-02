@@ -93,7 +93,7 @@ describe('builder storage step', () => {
       const product = productsFile.products.find((row) => row.id === drive.product_id);
       assert.ok(product, drive.id);
       assert.ok(product.urls?.newegg, drive.id);
-      assert.match(product.urls?.newegg ?? '', /^https:\/\/www\.newegg\.com\/p\/pl\?d=/);
+      assert.match(product.urls?.newegg ?? '', /^https:\/\/www\.newegg\.com\/(?:p\/pl\?d=|.+\/p\/[A-Z0-9-]+)/);
       assert.doesNotMatch(product.urls?.newegg ?? '', /[?&](tag|ranMID|irclickid)=/);
       assert.doesNotMatch(product.urls?.newegg ?? '', /#src=/);
       assert.doesNotMatch(`${drive.name} ${drive.citation.section}`, /\$\d|\bMSRP\b/);

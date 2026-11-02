@@ -14,7 +14,6 @@ import {
   applyGpuPreset,
   applyModelPreset,
   compute,
-  fitsInVram,
   formatCtx,
   formatGiB,
   inputToQuery,
@@ -40,6 +39,7 @@ import {
   type ModelCompareId,
 } from './model-compare';
 import { RAM_FULL_LABEL, RAM_MIN_LABEL } from './ram-surfaces';
+import { canRunRequirementsPath } from './buyer-pages';
 import { officialLinks } from './site';
 import { HOUSE_STACK_LAB, type StackLabOpenInput } from './stack-lab-open';
 import { oneVsTwoRows } from './local-desktop-compare';
@@ -50,7 +50,8 @@ export const CAN_RUN_HUB = '/can-run';
 export const CAN_RUN_ENGINE = 'llama.cpp';
 export const CAN_RUN_UNMEASURED = 'not measured yet';
 export const CAN_RUN_CONTEXTS = [4096, 32768] as const;
-export const CAN_RUN_HEADLINE_CONTEXT = 4096;
+export const CAN_RUN_HEADLINE_CONTEXT = 262144;
+export const CAN_RUN_MOE_IDS = ['qwen36', 'flash', 'glm-53-flash'] as const;
 
 export const CAN_RUN_MODEL_IDS = MODEL_COMPARE_IDS;
 export type CanRunModelId = ModelCompareId;
@@ -145,7 +146,7 @@ function quantLadder(id: CanRunModelId): QuantSpec[] {
 
 export function shopperQuant(id: CanRunModelId): QuantId {
   if (id === 'qwen36') return 'q5_k_m';
-  if (id === 'flash') return 'q6_k';
+  if (id === 'flash') return 'q4_k_m';
   return 'q4_k_m';
 }
 
@@ -192,6 +193,7 @@ const OFFICIAL_GGUF: Record<CanRunModelId, string> = {
 
 const CITED_SHOPPER_FILE: Partial<Record<CanRunModelId, string>> = {
   qwen36: 'Qwen3.6-35B-A3B-UD-Q5_K_XL.gguf',
+  flash: 'UD-Q4_K_XL/Qwen3.8-Flash-Next-UD-Q4_K_XL-00001-of-00004.gguf',
   'gpt-oss-20b': 'gpt-oss-20b-Q4_K_M.gguf',
   'gemma3-27b': 'gemma-3-27b-it-Q4_K_M.gguf',
   'llama33-70b': 'Llama-3.3-70B-Instruct-Q4_K_M.gguf',
@@ -290,6 +292,7 @@ export type CanRunPairPage = {
   hfHref: string;
   ggufHref: string;
   faq: CanRunFaq[];
+  requirementsHref: string | null;
 };
 
 export type CanRunGridCell = {
@@ -394,12 +397,33 @@ export function canRunContexts(modelId: CanRunModelId): number[] {
   return out;
 }
 
+function isMoeShopper(id: CanRunModelId): boolean {
+  return (CAN_RUN_MOE_IDS as readonly string[]).includes(id);
+}
+
+function canRunFitsOnGpu(
+  modelId: CanRunModelId,
+  gpuId: CanRunGpuId,
+  quant: QuantId,
+  context: number,
+  gpuCount: 1 | 2,
+): boolean {
+  const result = compute(canRunCalcInput(modelId, gpuId, quant, context, gpuCount));
+  // "tight" still lives in VRAM — the 5% desktop-spare factor is not offload.
+  return result.verdict === 'fits' || result.verdict === 'tight';
+}
+
 export function canRunVerdict(modelId: CanRunModelId, gpuId: CanRunGpuId): CanRunVerdictId {
   const quant = shopperQuant(modelId);
-  if (fitsInVram(canRunCalcInput(modelId, gpuId, quant, CAN_RUN_HEADLINE_CONTEXT, 1))) {
+  if (canRunFitsOnGpu(modelId, gpuId, quant, CAN_RUN_HEADLINE_CONTEXT, 1)) {
     return 'fits-fully';
   }
-  if (fitsInVram(canRunCalcInput(modelId, gpuId, quant, CAN_RUN_HEADLINE_CONTEXT, 2))) {
+  // Strix Halo memory is soldered. Flash Q4 is 103.7 GiB; GLM Q4 is 186 GiB.
+  if (gpuId === 'strix-halo' && (modelId === 'flash' || modelId === 'glm-53-flash')) {
+    return 'does-not-fit';
+  }
+  // House MoE: “fits on 2 GPUs” is expert offload, not a split. 35B on two cards = two copies.
+  if (!isMoeShopper(modelId) && canRunFitsOnGpu(modelId, gpuId, quant, CAN_RUN_HEADLINE_CONTEXT, 2)) {
     return 'needs-2-gpus';
   }
   const ram = systemRamNeed(canRunCalcInput(modelId, gpuId, quant, CAN_RUN_HEADLINE_CONTEXT, 1));
@@ -416,11 +440,12 @@ function fileRow(id: CanRunModelId, spec: QuantSpec): CanRunFile {
   const listed = preset.publisherFiles[spec.id];
   const weights = compute(canRunCalcInput(id, 'r9700', spec.id, CAN_RUN_HEADLINE_CONTEXT));
   if (listed) {
+    const gib = (listed.decimalGb * 1e9) / 1024 ** 3;
     return {
       step: spec.step,
       quant: spec.label,
       quantId: spec.id,
-      sizeGb: `${listed.decimalGb} GB`,
+      sizeGb: `${formatGiB(gib)} GB`,
       cite: listed.label,
       kind: spec.kind === 'q3-estimate' ? 'q3-estimate' : 'cited',
     };
@@ -493,7 +518,8 @@ function fitCell(
   return {
     context,
     contextLabel: formatCtx(context),
-    totalGb: `${formatGiB(result.totalGiB)} GB`,
+    totalGb:
+      gpuCount === 2 ? `${formatGiB(result.totalGiB / 2)} GB/GPU` : `${formatGiB(result.totalGiB)} GB`,
     verdict: result.verdict,
     verdictLabel: result.verdictLabel,
     gpuCount,
@@ -517,7 +543,7 @@ function llamaServerCommand(file: string | null, hip: boolean): string {
     `${bin} \\`,
     weights,
     '  -ngl 99 \\',
-    '  -c 4096 \\',
+    '  -c 262144 \\',
     '  --cache-type-k f16 \\',
     '  --cache-type-v f16 \\',
     '  --host 127.0.0.1 --port 8080',
@@ -537,7 +563,7 @@ function launchesFor(modelId: CanRunModelId): CanRunLaunch[] {
         ? {
             href: '/models/flash',
             label: 'llama.cpp first (Flash)',
-            note: 'Flash UD-Q6_K_XL is a sharded folder on the model page — do not invent a single filename. Strata is the house speed try on /backends.',
+            note: 'Flash shopper is UD-Q4_K_XL at 262K. Two 32 GB cards plus 96 GB DDR5 is the house path. The GGUF is a sharded folder — do not invent a single filename.',
           }
         : {
             href: '/backends/llamacpp',
@@ -583,7 +609,7 @@ function pairLead(
   shopper: string,
 ): string {
   const fit = CAN_RUN_VERDICT_LABEL[verdict];
-  return `${gpuShort} (${vramLabel}) × ${modelShort}. Shopper file is ${shopper} at 4K. Calculator verdict: ${fit.toLowerCase()}. llama.cpp first (Vulkan, then HIP). Q3 is a labeled estimate, not a house pick. Measured decode appears only where a local desktop card already exists. We do not invent a price.`;
+  return `${gpuShort} (${vramLabel}) × ${modelShort}. Shopper file is ${shopper} at 256K. Calculator verdict: ${fit.toLowerCase()}. llama.cpp first (Vulkan, then HIP). Q3 is a labeled estimate, not a house pick. Measured decode appears only where a local desktop card already exists. We do not invent a price.`;
 }
 
 function pairFaq(page: {
@@ -595,17 +621,21 @@ function pairFaq(page: {
   headlineLabel: string;
   q3: string;
   shopperQuant: string;
+  requirementsHref: string | null;
 }): CanRunFaq[] {
   return [
     {
       id: 'can-it-run',
       question: `Can ${page.gpuShort} run ${page.modelShort}?`,
-      answer: `${page.headlineLabel} on the calculator at the shopper ${page.shopperQuant} file and 4K. Q6 / Q5 / Q4 are listed. ${page.q3} is a labeled estimate. llama.cpp first.`,
+      answer: `${page.headlineLabel} on the calculator at the shopper ${page.shopperQuant} file and 256K. Q6 / Q5 / Q4 are listed. ${page.q3} is a labeled estimate. llama.cpp first.`,
       links: [
         { href: page.path, label: 'This pair' },
         { href: page.gpuPath, label: page.gpuShort },
         { href: page.modelPath, label: page.modelShort },
         { href: '/calculator', label: 'Calculator' },
+        ...(page.requirementsHref
+          ? [{ href: page.requirementsHref, label: 'Full requirements at 256K' }]
+          : []),
       ],
     },
     {
@@ -639,7 +669,7 @@ export function canRunPairPage(modelId: CanRunModelId, gpuId: CanRunGpuId, cards
   const q3 = files.find((file) => file.step === 'Q3')!;
   const headline = canRunVerdict(modelId, gpuId);
   const shopper = shopperQuantLabel(modelId);
-  const ramInput = canRunCalcInput(modelId, gpuId, shopperQuant(modelId), 32768, 1);
+  const ramInput = canRunCalcInput(modelId, gpuId, shopperQuant(modelId), CAN_RUN_HEADLINE_CONTEXT, 1);
   const ramNeed = systemRamNeed(ramInput);
   const rows = ladder.map((spec) => {
     const weights = files.find((file) => file.step === spec.step)!;
@@ -701,6 +731,7 @@ export function canRunPairPage(modelId: CanRunModelId, gpuId: CanRunGpuId, cards
     calculatorHref: `/calculator?${inputToQuery(ramInput)}`,
     hfHref: OFFICIAL_HF[modelId],
     ggufHref: OFFICIAL_GGUF[modelId],
+    requirementsHref: canRunRequirementsPath(modelId),
     faq: [] as CanRunFaq[],
   };
   page.faq = pairFaq(page);

@@ -356,7 +356,7 @@ products:
     note: Named kit F5-6000J3038F16GX2-FX5. Search only — no live or invented price. A 2x16 kit cannot be topped up later.
     urls:
       amazon: https://www.amazon.com/s?k=G.SKILL+Flare+X5+F5-6000J3038F16GX2-FX5
-      newegg: https://www.newegg.com/p/pl?d=F5-6000J3038F16GX2-FX5
+      newegg: https://www.newegg.com/g-skill-flare-x5-32gb-ddr5-6000-cas-latency-cl30-desktop-memory-black/p/N82E16820374457
       bhphoto: https://www.bhphotovideo.com/c/search?Ntt=F5-6000J3038F16GX2-FX5
       microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=F5-6000J3038F16GX2-FX5
       gskill: https://www.gskill.com/specification/165/396/1673491242/F5-6000J3038F16GX2-FX5-Specification
@@ -367,7 +367,7 @@ products:
     note: Named kit F5-5600J4040D48GX2-FX5 (AMD EXPO + Intel XMP). Recommended size for most builds (2x48). Newegg list price $1,479.99 on 2026-10-30, sold by Newegg (dated snapshot, not a live quote). Amazon searches the FX5 part number.
     urls:
       amazon: https://www.amazon.com/s?k=G.SKILL+Flare+X5+F5-5600J4040D48GX2-FX5
-      newegg: https://www.newegg.com/p/pl?d=F5-5600J4040D48GX2-FX5&N=8000
+      newegg: https://www.newegg.com/g-skill-flare-x5-96gb-ddr5-5600-cas-latency-cl40-desktop-memory-black/p/N82E16820374478
       bhphoto: https://www.bhphotovideo.com/c/search?Ntt=F5-5600J4040D48GX2-FX5
       microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=F5-5600J4040D48GX2-FX5
       gskill: https://www.gskill.com/specification/165/396/1683011081/F5-5600J4040D48GX2-FX5-Specification
@@ -442,7 +442,7 @@ products:
     note: 850 W ATX 3.1 with one native 12V-2x6. For one R9700. Search only — no live or invented price.
     urls:
       amazon: https://www.amazon.com/s?k=Corsair+RM850x+2024+CP-9020270-NA
-      newegg: https://www.newegg.com/p/pl?d=CP-9020270-NA
+      newegg: https://www.newegg.com/corsair-rmx-series-atx-3-1-compatible-850-w-cybenetics-gold-power-supply-black-rm850x/p/N82E16817139333
       bhphoto: https://www.bhphotovideo.com/c/search?Ntt=Corsair+RM850x+2024
       microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=Corsair+RM850x
       corsair: https://www.corsair.com/us/en/p/psu/cp-9020270-na/rmx-series-rm850x-fully-modular-power-supply-cp-9020270-na
@@ -453,7 +453,7 @@ products:
     note: 1200 W ATX 3.1 with two native 12V-2x6 cables. Search only — no live or invented price.
     urls:
       amazon: https://www.amazon.com/s?k=Thermaltake+Toughpower+GT+1200W+PS-TPT-1200FNFAGU-3
-      newegg: https://www.newegg.com/p/pl?d=PS-TPT-1200FNFAGU-3
+      newegg: https://www.newegg.com/thermaltake-atx-fully-modular-1200-w-80-plus-gold-certified-power-supply-black-ps-tpt-1200fnfagu-3/p/N82E16817153476
       bhphoto: https://www.bhphotovideo.com/c/search?Ntt=Thermaltake+Toughpower+GT+1200W
       microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=Thermaltake+Toughpower+GT+1200W
       thermaltake: https://www.thermaltake.com/toughpower-gt-1200w.html
@@ -529,7 +529,7 @@ products:
     kind: part
     note: Local desktop board. Maker spec — two PCIe 5.0 x16 slots, x16 or x8/x8. Search only, not a SKU or a price.
     urls:
-      newegg: https://www.newegg.com/p/pl?d=ASRock+X870+Taichi+Creator
+      newegg: https://www.newegg.com/asrock-x870-taichi-creator-motherboard-amd-x870-am5/p/N82E16813162237
       amazon: https://www.amazon.com/s?k=ASRock+X870+Taichi+Creator
       bhphoto: https://www.bhphotovideo.com/c/search?Ntt=ASRock+X870+Taichi+Creator
       microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=ASRock+X870+Taichi+Creator
@@ -631,7 +631,7 @@ products:
     note: Builder /go/newegg slug from the parts-list drafts. Search only — no live or invented price.
     urls:
       amazon: https://www.amazon.com/s?k=AMD+Ryzen+7+9700X
-      newegg: https://www.newegg.com/p/pl?d=AMD+Ryzen+7+9700X
+      newegg: https://www.newegg.com/amd-ryzen-7-9000-series-ryzen-7-9700x-granite-ridge-socket-am5-desktop-cpu-processor/p/N82E16819113843
       bhphoto: https://www.bhphotovideo.com/c/search?Ntt=AMD+Ryzen+7+9700X
       microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=AMD+Ryzen+7+9700X
       amd: https://www.amd.com/en/products/processors/desktops/ryzen/9000-series/amd-ryzen-7-9700x.html
@@ -652,7 +652,7 @@ products:
     note: Builder /go/newegg slug from the parts-list drafts. Same unit as corsair-rm850x. Search only — no live or invented price.
     urls:
       amazon: https://www.amazon.com/s?k=Corsair+RM850x+2024+CP-9020270-NA
-      newegg: https://www.newegg.com/p/pl?d=CP-9020270-NA
+      newegg: https://www.newegg.com/corsair-rmx-series-atx-3-1-compatible-850-w-cybenetics-gold-power-supply-black-rm850x/p/N82E16817139333
       bhphoto: https://www.bhphotovideo.com/c/search?Ntt=Corsair+RM850x+2024
       microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=Corsair+RM850x
       corsair: https://www.corsair.com/us/en/p/psu/cp-9020270-na/rmx-series-rm850x-fully-modular-power-supply-cp-9020270-na
@@ -663,7 +663,7 @@ products:
     note: Builder /go/newegg slug from the parts-list drafts. Same kit as ddr5-32. Search only — no live or invented price.
     urls:
       amazon: https://www.amazon.com/s?k=G.SKILL+Flare+X5+F5-6000J3038F16GX2-FX5
-      newegg: https://www.newegg.com/p/pl?d=F5-6000J3038F16GX2-FX5
+      newegg: https://www.newegg.com/g-skill-flare-x5-32gb-ddr5-6000-cas-latency-cl30-desktop-memory-black/p/N82E16820374457
       bhphoto: https://www.bhphotovideo.com/c/search?Ntt=F5-6000J3038F16GX2-FX5
       microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=F5-6000J3038F16GX2-FX5
       gskill: https://www.gskill.com/specification/165/396/1673491242/F5-6000J3038F16GX2-FX5-Specification
@@ -685,7 +685,7 @@ products:
     note: Builder /go/newegg slug from the parts-list drafts. Same unit as thermaltake-toughpower-gt-1200. Search only — no live or invented price.
     urls:
       amazon: https://www.amazon.com/s?k=Thermaltake+Toughpower+GT+1200W+PS-TPT-1200FNFAGU-3
-      newegg: https://www.newegg.com/p/pl?d=PS-TPT-1200FNFAGU-3
+      newegg: https://www.newegg.com/thermaltake-atx-fully-modular-1200-w-80-plus-gold-certified-power-supply-black-ps-tpt-1200fnfagu-3/p/N82E16817153476
       bhphoto: https://www.bhphotovideo.com/c/search?Ntt=Thermaltake+Toughpower+GT+1200W
       microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=Thermaltake+Toughpower+GT+1200W
       thermaltake: https://www.thermaltake.com/toughpower-gt-1200w.html
@@ -696,7 +696,7 @@ products:
     note: Gen4 TLC with 2 GB LPDDR4. Datasheet sequential read 7,450 MB/s, 1,200 TBW. Search only — no live or invented price.
     urls:
       amazon: https://www.amazon.com/s?k=Samsung+990+PRO+2TB+MZ-V9P2T0BW
-      newegg: https://www.newegg.com/p/pl?d=MZ-V9P2T0BW
+      newegg: https://www.newegg.com/samsung-2tb-990-pro-nvme-2-0/p/N82E16820147861
       bhphoto: https://www.bhphotovideo.com/c/search?Ntt=MZ-V9P2T0BW
       microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=Samsung+990+PRO+2TB
       samsung: https://download.semiconductor.samsung.com/resources/data-sheet/samsung_nvme_ssd_990_pro_datasheet_rev.2.0.pdf
@@ -772,7 +772,7 @@ products:
     kind: part
     note: 7 expansion slots; E-ATX; GPU 470 mm; PSU 250 mm; 2x 140 mm front + 1x 140 mm rear included. Search only — no live or invented price.
     urls:
-      newegg: https://www.newegg.com/p/pl?d=Fractal+Design+Meshify+2
+      newegg: https://www.newegg.com/fractal-design-atx-mid-tower-meshify-2-steel-computer-case-black-fd-c-mes2a-03/p/N82E16811352133
       amazon: https://www.amazon.com/s?k=Fractal+Design+Meshify+2
       bhphoto: https://www.bhphotovideo.com/c/search?Ntt=Fractal+Design+Meshify+2
       microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=Fractal+Design+Meshify+2
@@ -794,7 +794,7 @@ products:
     kind: part
     note: Dual-tower 120 mm air cooler, 155 mm tall, 6 heatpipes. Search only — no live or invented price.
     urls:
-      newegg: https://www.newegg.com/p/pl?d=Thermalright+Peerless+Assassin+120+SE
+      newegg: https://www.newegg.com/thermalright-pa120se-black-pa120se-black-d6/p/13C-000Y-000P5
       amazon: https://www.amazon.com/s?k=Thermalright+Peerless+Assassin+120+SE
       bhphoto: https://www.bhphotovideo.com/c/search?Ntt=Thermalright+Peerless+Assassin+120+SE
       microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=Thermalright+Peerless+Assassin+120+SE

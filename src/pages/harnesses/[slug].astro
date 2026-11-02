@@ -13,6 +13,7 @@ import {
 } from '../../lib/harnesses';
 import { harness, harnesses, harnessesFile } from '../../lib/harnesses-data';
 import HouseRam from '../../components/HouseRam.astro';
+import HarnessHardwareBox from '../../components/HarnessHardwareBox.astro';
 
 export function getStaticPaths() {
   return harnesses().map((row) => ({ params: { slug: row.id } }));
@@ -76,6 +77,7 @@ const strata = endpointSet(harnessesFile, 'strata');
     <article class="prose-lab prose mt-10 max-w-none">
       <h2 id="what">What it’s for</h2>
       <p>{row.what_for}</p>
+      <HarnessHardwareBox name={row.title} />
 
       <h2 id="endpoint">Local endpoint</h2>
       <dl>
