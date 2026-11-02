@@ -4,7 +4,7 @@ export const BRAND = 'AMDai';
 export const OG_SITE_NAME = 'AMDai';
 
 /** Homepage hero. Keep this exact string everywhere it is shown. */
-export const HERO_HEADLINE = 'Local Qwen on a R9700. Reliably.';
+export const HERO_HEADLINE = 'Local Qwen on an R9700. Reliably.';
 
 export const site = {
   name: 'R9700 Lab Notes',

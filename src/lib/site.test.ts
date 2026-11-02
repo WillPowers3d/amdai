@@ -17,7 +17,7 @@ describe('AMDai brand and hero', () => {
   });
 
   it('keeps the exact hero headline and leaves lowercase product ids alone', () => {
-    assert.equal(HERO_HEADLINE, 'Local Qwen on a R9700. Reliably.');
+    assert.equal(HERO_HEADLINE, 'Local Qwen on an R9700. Reliably.');
     assert.notEqual(HERO_HEADLINE, 'Local Qwen on a real R9700. Not a brochure.');
     assert.equal(AMDAI_BENCH_SCHEMA, 'amdai-bench');
     assert.match(site.tagline, /R9700/);

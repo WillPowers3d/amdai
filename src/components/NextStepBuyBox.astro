@@ -11,6 +11,7 @@ import {
   wrapRetailer,
 } from '../lib/affiliates';
 import { CAN_RUN_NEXT_STEP_ALT_SRC, CAN_RUN_NEXT_STEP_SRC, type UpgradePick } from '../lib/upgrade-pick';
+import { buyButtonAriaLabel, buyButtonLabel, buyLinkRel } from '../lib/buy-label';
 
 interface Props {
   picks: UpgradePick[];
@@ -56,10 +57,13 @@ const altHref = altProduct ? goPath('newegg', altProduct.id, altSrc) : '';
             <a
               class:list={[primaryBtn ? 'btn-primary' : 'btn-ghost']}
               href={href}
-              rel={wrapped.affiliate ? 'sponsored nofollow noopener' : 'noopener'}
+              rel={buyLinkRel(wrapped.affiliate)}
               target="_blank"
+              aria-label={buyButtonAriaLabel(product.name, retailer.name)}
+              data-retailer={retailer.id}
+              data-product={product.id}
             >
-              {wrapped.affiliate ? `Check price at ${retailer.name}` : `Also at ${retailer.name}`}
+              {buyButtonLabel(retailer.name)}
             </a>
           </li>
         );
@@ -70,7 +74,10 @@ const altHref = altProduct ? goPath('newegg', altProduct.id, altSrc) : '';
         <a
           class="underline decoration-accent/40"
           href={altHref}
-          rel={altWrapped.affiliate ? 'sponsored nofollow noopener' : 'noopener'}
+          rel={buyLinkRel(altWrapped.affiliate)}
+          aria-label={buyButtonAriaLabel(altProduct.name, 'Newegg')}
+          data-retailer="newegg"
+          data-product={altProduct.id}
         >
           {alt.label}
         </a>

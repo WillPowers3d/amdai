@@ -93,9 +93,9 @@ describe('R9700 cited street snapshot', () => {
     const r9700 = read('../pages/gpus/r9700.astro');
     const budget = read('../pages/budget.astro');
     const hardware = read('../content/guides/hardware.mdx');
-    assert.match(r9700, /R9700_STREET_SNAPSHOT/);
+    assert.match(r9700, /WHERE_TO_BUY_NEWEGG_NOTE/);
     assert.match(r9700, /R9700_STREET_POLICY/);
-    assert.match(r9700, /\/lab-log/);
+    assert.match(r9700, /gpu-r9700-top/);
     assert.doesNotMatch(r9700, /No live or invented prices\./);
     assert.match(budget, /hasCitedBands/);
     assert.match(budget, /dated, sourced GPU street snapshots only/);

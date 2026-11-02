@@ -24,7 +24,7 @@ import {
   type CanRunVerdictId,
 } from './can-run';
 import { systemRamNeed } from './calculator';
-import { GPU_COMPARE_PRODUCT, GPU_COMPARE_SLUG } from './gpu-compare';
+import { GPU_COMPARE_PRODUCT, GPU_COMPARE_SHORT } from './gpu-compare';
 import { ramButtonForNeedGb } from './ram-button';
 
 export const CAN_RUN_NEXT_STEP_SRC = 'canrun-nextstep';
@@ -59,9 +59,18 @@ function readData(name: string): string {
   throw new Error(`${name} missing`);
 }
 
+function catalogProducts(): Array<{ id: string; name: string }> {
+  const file = parse(readData('products.yaml')) as { products?: Array<{ id?: string; name?: string }> };
+  return (file.products ?? []).filter((row): row is { id: string; name: string } => Boolean(row.id && row.name));
+}
+
 function catalogProductIds(): Set<string> {
-  const file = parse(readData('products.yaml')) as { products?: Array<{ id?: string }> };
-  return new Set((file.products ?? []).map((row) => row.id).filter((id): id is string => Boolean(id)));
+  return new Set(catalogProducts().map((row) => row.id));
+}
+
+function productName(id: string | null | undefined): string | undefined {
+  if (!id) return undefined;
+  return catalogProducts().find((row) => row.id === id)?.name;
 }
 
 export function tsvVerdictLabel(verdict: CanRunVerdictId): string {
@@ -70,8 +79,8 @@ export function tsvVerdictLabel(verdict: CanRunVerdictId): string {
 
 export function nextStepPicks(modelId: CanRunModelId, gpuId: CanRunGpuId): UpgradePick[] {
   const verdict = canRunVerdict(modelId, gpuId);
-  const gpuSlug = GPU_COMPARE_SLUG[gpuId];
   const productId = GPU_COMPARE_PRODUCT[gpuId];
+  const gpuName = productName(productId) ?? GPU_COMPARE_SHORT[gpuId];
   const oneR9700 = canRunVerdict(modelId, 'r9700') === 'fits-fully';
 
   if (verdict === 'fits-fully') {
@@ -88,7 +97,7 @@ export function nextStepPicks(modelId: CanRunModelId, gpuId: CanRunGpuId): Upgra
         },
         {
           kind: 'alt',
-          label: `Or add a second ${gpuSlug} (see the 2x columns)`,
+          label: `Or add a second ${gpuName} (see the 2x columns)`,
           productId,
         },
       ];
@@ -96,7 +105,7 @@ export function nextStepPicks(modelId: CanRunModelId, gpuId: CanRunGpuId): Upgra
     const primary: UpgradePick =
       gpuId === 'r9700'
         ? { kind: 'primary', label: 'A second R9700 (2x 32 GB)', productId: 'r9700' }
-        : { kind: 'primary', label: `A second ${gpuSlug} for the 2x columns`, productId };
+        : { kind: 'primary', label: `A second ${gpuName} for the 2x columns`, productId };
     return gpuId === 'r9700'
       ? [primary]
       : [primary, { kind: 'alt', label: 'Or a pair of R9700s (64 GB)', productId: 'r9700' }];

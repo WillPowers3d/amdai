@@ -3,6 +3,7 @@ import Base from '../layouts/Base.astro';
 import Callout from '../components/Callout.astro';
 import HowWeTest from '../components/HowWeTest.astro';
 import NextSteps from '../components/NextSteps.astro';
+import ServingBuildBox from '../components/ServingBuildBox.astro';
 import {
   SERVING_ANSWER,
   SERVING_CHECKED,
@@ -85,7 +86,14 @@ const thirdPartyFigures = SERVING_FIGURES.filter((row) => row.thirdParty);
     <section id="answer" class="mt-12 scroll-mt-28" aria-labelledby="answer-heading">
       <h2 id="answer-heading" class="font-serif text-3xl tracking-tight">The 30-second answer</h2>
       <p class="mt-3 leading-relaxed text-muted">{SERVING_ANSWER}</p>
+      <p class="mt-4 leading-relaxed text-muted">
+        Building a two-card box? See the
+        <a class="underline decoration-accent/40" href="#build-2">two-R9700 parts list</a>
+        (board with x8/x8 slots, 1200 W PSU, 96 GB DDR5), each part linked to its Newegg search.
+      </p>
     </section>
+
+    <ServingBuildBox />
 
     <section id="our-lab" class="mt-12 scroll-mt-28" aria-labelledby="our-lab-heading">
       <h2 id="our-lab-heading" class="font-serif text-3xl tracking-tight">Our lab measurements</h2>

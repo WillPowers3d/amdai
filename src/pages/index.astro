@@ -8,10 +8,9 @@ import RigWizard from '../components/RigWizard.astro';
 import NextSteps from '../components/NextSteps.astro';
 import PrimaryPath from '../components/PrimaryPath.astro';
 import LabLogStrip from '../components/LabLogStrip.astro';
-import OpenInStackLab from '../components/OpenInStackLab.astro';
 import NewsletterSignup from '../components/NewsletterSignup.astro';
 import SponsoredSlot from '../components/SponsoredSlot.astro';
-import { HOUSE_STACK_LAB } from '../lib/stack-lab-open';
+import StartHere from '../components/StartHere.astro';
 import { HERO_HEADLINE, officialLinks, site } from '../lib/site';
 
 const tutorials = (await getCollection('tutorials')).sort((a, b) => a.data.order - b.data.order);
@@ -37,6 +36,7 @@ const updates = (await getCollection('updates')).sort((a, b) => b.data.date.valu
           <h1 class="display mt-5 max-w-xl text-4xl sm:text-6xl lg:text-[4.4rem]">
             {HERO_HEADLINE}
           </h1>
+          <StartHere />
           <p class="mt-6 max-w-xl text-lg leading-relaxed text-muted">
             AMDai is the independent notebook for home-lab AI on Radeon. Which GGUF, which engine, whether it fits your VRAM — grounded in a two-card test rig, written for people who buy one GPU.
           </p>
@@ -52,7 +52,7 @@ const updates = (await getCollection('updates')).sort((a, b) => b.data.date.valu
             <a class="btn-ghost" href="/benchmarks">Benchmarks</a>
           </p>
           <div class="mt-4 max-w-xl">
-            <OpenInStackLab {...HOUSE_STACK_LAB.recipes} compact />
+            <a class="text-sm underline decoration-accent/40" href="/stack-lab">Radeon Stack Lab notes</a>
           </div>
         </div>
         <RigWizard />

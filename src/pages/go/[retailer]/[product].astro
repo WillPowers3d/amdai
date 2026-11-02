@@ -36,17 +36,22 @@ const rel = resolved.affiliate ? 'sponsored nofollow noopener' : 'noopener';
     </p>
     <script is:inline define:vars={{ dest, beacon, retailer, product }}>
       try {
-        const src = new URLSearchParams(location.search).get('src') || '';
+        const params = new URLSearchParams(location.search);
+        const src = params.get('src') || params.get('utm_source') || '';
         if (beacon) {
           navigator.sendBeacon?.(
             beacon,
             new Blob([JSON.stringify({ retailer, product, src, t: Date.now() })], { type: 'application/json' }),
           );
         }
+        const next = new URL(dest);
+        for (const [key, value] of params.entries()) {
+          if (key.startsWith('utm_') && value) next.searchParams.set(key, value);
+        }
+        location.replace(next.toString());
       } catch {
-        /* no tracking if the beacon fails */
+        location.replace(dest);
       }
-      location.replace(dest);
     </script>
   </body>
 </html>

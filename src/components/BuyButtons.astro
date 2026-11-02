@@ -2,6 +2,7 @@
 import AffiliateDisclosure from './AffiliateDisclosure.astro';
 import NeweggReturnNote from './NeweggReturnNote.astro';
 import { buyRetailers, destinationUrl, goPath, productById, productHasRetailer, wrapRetailer } from '../lib/affiliates';
+import { buyButtonAriaLabel, buyButtonLabel, buyLinkRel } from '../lib/buy-label';
 
 interface Props {
   product?: string;
@@ -34,18 +35,21 @@ const items = ids.map((id) => productById(id)).filter((item): item is NonNullabl
           <h3 class="mt-1 text-2xl tracking-tight">{heading && items.length === 1 ? heading : item.name}</h3>
           {item.note && <p class="mt-1 text-sm text-muted">{item.note}</p>}
           <ul class="mt-4 flex flex-wrap gap-2">
-            {links.map(({ retailer, href, affiliate }) => (
+            {links.map(({ retailer, href, affiliate }, index) => (
               <li>
                 <a
                   class:list={[
                     'inline-flex min-h-11 items-center rounded-full px-4 py-2 text-sm',
-                    affiliate ? 'bg-[#c73b24] font-semibold text-[#fffaf3]' : 'border border-line bg-canvas text-ink',
+                    index === 0 ? 'bg-[#c73b24] font-semibold text-[#fffaf3]' : 'border border-line bg-canvas text-ink',
                   ]}
                   href={href}
-                  rel={affiliate ? 'sponsored nofollow noopener' : 'noopener'}
+                  rel={buyLinkRel(affiliate)}
                   target="_blank"
+                  aria-label={buyButtonAriaLabel(item.name, retailer.name)}
+                  data-retailer={retailer.id}
+                  data-product={item.id}
                 >
-                  {affiliate ? `Check price at ${retailer.name}` : `Also at ${retailer.name}`}
+                  {buyButtonLabel(retailer.name)}
                 </a>
               </li>
             ))}

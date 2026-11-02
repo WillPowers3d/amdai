@@ -81,10 +81,10 @@ url	verdict	current_buy	primary_pick	newegg_route
 /can-run/gemma3-27b-on-strix-halo/	fits fully on gpu	strix-halo	current card box unchanged	
 /can-run/llama33-70b-on-r9700/	needs 2 gpus	r9700	A second R9700 (2x 32 GB)	/go/newegg/r9700/
 /can-run/llama33-70b-on-w7900/	fits fully on gpu	w7900	current card box unchanged	
-/can-run/llama33-70b-on-w7800/	needs 2 gpus	w7800	A second w7800 for the 2x columns	/go/newegg/w7800/
+/can-run/llama33-70b-on-w7800/	needs 2 gpus	w7800	A second AMD Radeon PRO W7800 for the 2x columns	/go/newegg/w7800/
 /can-run/llama33-70b-on-w7700/	fits with ram offload	w7700	64 GB DDR5 for the offloaded experts	/go/newegg/ddr5-kit/
-/can-run/llama33-70b-on-w6800/	needs 2 gpus	w6800	A second w6800 for the 2x columns	/go/newegg/w6800/
-/can-run/llama33-70b-on-rx-7900-xtx/	needs 2 gpus	rx7900xtx	A second rx-7900-xtx for the 2x columns	/go/newegg/rx7900xtx/
+/can-run/llama33-70b-on-w6800/	needs 2 gpus	w6800	A second AMD Radeon PRO W6800 for the 2x columns	/go/newegg/w6800/
+/can-run/llama33-70b-on-rx-7900-xtx/	needs 2 gpus	rx7900xtx	A second AMD Radeon RX 7900 XTX for the 2x columns	/go/newegg/rx7900xtx/
 /can-run/llama33-70b-on-rx-7900-xt/	fits with ram offload	rx7900xt	64 GB DDR5 for the offloaded experts	/go/newegg/ddr5-kit/
 /can-run/llama33-70b-on-rx-9070-xt/	fits with ram offload	rx9070xt	64 GB DDR5 for the offloaded experts	/go/newegg/ddr5-kit/
 /can-run/llama33-70b-on-rx-9070/	fits with ram offload	rx9070	64 GB DDR5 for the offloaded experts	/go/newegg/ddr5-kit/
