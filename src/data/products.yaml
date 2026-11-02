@@ -22,7 +22,7 @@ products:
     calculator_gpu: r9700
     urls:
       amazon: https://www.amazon.com/s?k=AMD+Radeon+AI+PRO+R9700
-      newegg: https://www.newegg.com/p/pl?d=AMD+Radeon+AI+PRO+R9700
+      newegg: https://www.newegg.com/p/pl?d=AMD+Radeon+AI+PRO+R9700&N=100007709
       bhphoto: https://www.bhphotovideo.com/c/search?Ntt=AMD+Radeon+AI+PRO+R9700
       microcenter: https://www.microcenter.com/search/search_results.aspx?Ntt=AMD+Radeon+AI+PRO+R9700
       amd: https://www.amd.com/en/products/graphics/workstations/radeon-ai-pro/ai-9000-series/amd-radeon-ai-pro-r9700.html

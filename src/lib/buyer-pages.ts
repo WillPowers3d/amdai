@@ -9,7 +9,7 @@ import { PII_TEXT } from './pii-denylist';
 export const BUYER_PUBLISHED = '2026-11-02';
 export const BUYER_CHECKED = '2026-11-02';
 export const BUYER_REL = 'sponsored nofollow noopener';
-export const BUY_R9700_HREF = '/gpus/r9700';
+export const BUY_R9700_HREF = '/where-to-buy-r9700';
 export const LOCAL_DESKTOP = 'local desktop';
 /** AMD launch MSRP already published on this site (r9700-street-price.yaml). */
 export const R9700_MSRP = '$1,299';

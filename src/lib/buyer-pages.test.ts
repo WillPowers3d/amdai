@@ -11,6 +11,7 @@ import {
   BUYER_CHECKED,
   BUYER_PATHS,
   BUYER_REL,
+  BUY_R9700_HREF,
   CODING_MODEL_PATH,
   FLASH_REQ_PATH,
   GLM_REQ_PATH,
@@ -39,6 +40,7 @@ describe('Buyer-query pages (PR B)', () => {
     assert.deepEqual(assertCodingValid(), []);
     assert.equal(BUYER_CHECKED, '2026-11-02');
     assert.equal(BUYER_REL, 'sponsored nofollow noopener');
+    assert.equal(BUY_R9700_HREF, '/where-to-buy-r9700');
     assert.equal(FLASH_Q4_GIB, 103.7);
     assert.equal(GLM_Q4_GIB, 186.0);
     assert.ok(QWEN36_REQ_DESCRIPTION.length >= 70 && QWEN36_REQ_DESCRIPTION.length <= 160);

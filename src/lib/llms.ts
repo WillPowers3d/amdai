@@ -81,6 +81,11 @@ const SHORT: LlmsLink[] = [
     summary: 'Measured 35B llama.cpp on the house 32 GB card — one GPU vs two.',
   },
   {
+    href: '/where-to-buy-r9700',
+    title: 'Where to buy the Radeon AI PRO R9700',
+    summary: 'US store listings for the 32 GB R9700. Dated Newegg snapshot. No invented price.',
+  },
+  {
     href: '/backends',
     title: 'Inference engines',
     summary: 'llama.cpp first. Vulkan daily driver. Cited engines, no invented benches.',

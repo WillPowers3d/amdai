@@ -94,14 +94,16 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/models/glm-53-flash/requirements', label: 'GLM Flash requirements' },
       { href: '/best-local-coding-model-32gb', label: 'Best coding model 32 GB' },
       { href: '/gpus/r9700', label: 'R9700 measured page' },
+      { href: '/where-to-buy-r9700', label: 'Where to buy R9700' },
       { href: '/can-run', label: 'Can my Radeon run it?' },
       { href: '/calculator', label: 'Calculator' },
       { href: '/budget', label: 'Budget' },
       { href: '/motherboards', label: 'Dual x8/x8 motherboards' },
     ];
   }
-  if (path === '/guides/buying-used-radeon' || path === '/budget' || path === '/hardware') {
+  if (path === '/guides/buying-used-radeon' || path === '/budget' || path === '/hardware' || path === '/where-to-buy-r9700') {
     return [
+      { href: '/where-to-buy-r9700', label: 'Where to buy R9700' },
       { href: '/guides/buying-used-radeon', label: 'Buying a used Radeon' },
       { href: '/budget', label: 'Budget' },
       { href: '/local-llm-pc-build', label: 'Local LLM PC build' },
@@ -404,6 +406,7 @@ function topicLinks(path: string): RelatedLink[] {
       { href: '/setup/multi-gpu', label: 'Multi-GPU llama.cpp' },
       { href: '/qwen36-dual', label: '35B on two cards' },
       { href: '/gpus/r9700', label: 'R9700' },
+      { href: '/where-to-buy-r9700', label: 'Where to buy R9700' },
       { href: '/benchmarks', label: 'Benchmarks' },
       { href: '/setup/server', label: 'Always-on server' },
       { href: '/flash-attention', label: 'Flash Attention' },
@@ -889,6 +892,7 @@ export function relatedFor(pathname: string): RelatedLink[] {
     add(out, seen, '/out-of-vram', 'Out of VRAM');
     add(out, seen, '/mmap', 'mmap / mlock');
     add(out, seen, '/gpus/r9700', 'R9700 measured page');
+    add(out, seen, '/where-to-buy-r9700', 'Where to buy R9700');
     if (id) {
       const compareId = gpuCompareIdFromInput(id);
       if (compareId) {
@@ -1126,6 +1130,7 @@ export function assertRelatedValid(
     '/setup/multi-gpu',
     '/setup/server',
     '/guides/buying-used-radeon',
+    '/where-to-buy-r9700',
     '/guides/quantize-gguf',
     '/faq',
     '/qwen',

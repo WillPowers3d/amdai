@@ -39,7 +39,14 @@ import {
   r9700OneVsTwo,
   r9700RamKitRows,
 } from '../../lib/r9700';
-import { R9700_STREET_POLICY, R9700_STREET_SNAPSHOT } from '../../lib/r9700-street-price';
+import { goPath, destinationUrl, retailerById, wrapRetailer } from '../../lib/affiliates';
+import { buyButtonAriaLabel, buyLinkRel } from '../../lib/buy-label';
+import { R9700_STREET_POLICY } from '../../lib/r9700-street-price';
+import {
+  WHERE_TO_BUY_CHECKED_LABEL,
+  WHERE_TO_BUY_NEWEGG_NOTE,
+  WHERE_TO_BUY_PATH,
+} from '../../lib/where-to-buy-r9700';
 
 const page = gpuPageById(recipes, 'r9700');
 if (!page) throw new Error('missing r9700 GPU page');
@@ -53,6 +60,9 @@ const layout = r9700OneVsTwo(runs);
 const ramRows = r9700RamKitRows(runs);
 const dailyRecipe = llamaFirst.find((recipe) => recipe.id.includes('qwen36-35b.llamacpp-vulkan.262k'));
 const dailyRam = dailyRecipe ? recipeSystemRam(dailyRecipe, measuredRamHits) : null;
+const neweggRetailer = retailerById('newegg');
+const neweggDest = destinationUrl('r9700', 'newegg');
+const neweggAffiliate = neweggDest && neweggRetailer ? wrapRetailer(neweggDest, neweggRetailer).affiliate : false;
 ---
 
 <Base
@@ -132,6 +142,29 @@ const dailyRam = dailyRecipe ? recipeSystemRam(dailyRecipe, measuredRamHits) : n
     <section id="what-it-is" class="mt-10 scroll-mt-36" aria-labelledby="what-it-is-heading">
       <h2 id="what-it-is-heading" class="font-serif text-3xl tracking-tight">What this card is for</h2>
       <p class="mt-3 max-w-3xl leading-relaxed text-muted">{R9700_WHAT.forWhom}</p>
+      <aside class="not-prose mt-6 rounded-2xl border border-line bg-raised/50 p-5" data-r9700-buy-top>
+        <p class="kicker">Where to buy · GPU only, new, US, checked {WHERE_TO_BUY_CHECKED_LABEL}</p>
+        <p class="mt-3 text-sm leading-relaxed text-muted">{WHERE_TO_BUY_NEWEGG_NOTE}</p>
+        <p class="mt-3 flex flex-wrap gap-3">
+          <a
+            class="btn-primary"
+            href={goPath('newegg', 'r9700', 'gpu-r9700-top')}
+            rel={buyLinkRel(neweggAffiliate)}
+            target="_blank"
+            aria-label={buyButtonAriaLabel('AMD Radeon AI PRO R9700', 'Newegg')}
+            data-retailer="newegg"
+            data-product="r9700"
+          >
+            Check Newegg
+          </a>
+          <a class="btn-ghost" href={WHERE_TO_BUY_PATH}>All stores</a>
+          <a class="btn-ghost" href="#buy">Price log on this page</a>
+        </p>
+        <p class="mt-3 text-xs text-faint">
+          {R9700_STREET_POLICY} Paid links use the
+          <a class="underline decoration-accent/40" href="/disclosure">disclosure</a> path.
+        </p>
+      </aside>
       <p class="mt-3 max-w-3xl leading-relaxed text-muted">{R9700_WHAT.vram}</p>
       <p class="mt-3 text-sm text-muted">
         AMD product page:
@@ -482,12 +515,12 @@ const dailyRam = dailyRecipe ? recipeSystemRam(dailyRecipe, measuredRamHits) : n
         ))}
       </ul>
       <p class="mt-10 max-w-3xl text-sm leading-relaxed text-muted">
-        {R9700_STREET_SNAPSHOT} Prices move daily — see the
-        <a class="underline decoration-accent/40" href="/lab-log">price log</a>
-        for the full table.
+        Newegg GPU listings checked {WHERE_TO_BUY_CHECKED_LABEL}. {WHERE_TO_BUY_NEWEGG_NOTE}
+        Full store notes:
+        <a class="underline decoration-accent/40" href={WHERE_TO_BUY_PATH}>where to buy an R9700</a>.
       </p>
-      <div id="buy" class="mt-6 scroll-mt-28">
-        <BuyButtons products={['r9700']} heading={R9700_NAME} />
+      <div id="buy" class="mt-6 scroll-mt-36">
+        <BuyButtons products={['r9700']} heading={R9700_NAME} src="gpu-r9700-buy" />
       </div>
       <p class="mt-4 text-sm text-faint">
         {R9700_STREET_POLICY} Retailer hops use the existing

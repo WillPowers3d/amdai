@@ -1148,6 +1148,17 @@ export function pageJsonLd(input: {
     return nodes;
   }
   if (path === '/can-run') {
+    if (dates) {
+      nodes.push(
+        webPageJsonLd({
+          name: input.title.replace(/ · AMDai$/, ''),
+          description: input.description,
+          url,
+          published: dates.published,
+          modified: dates.modified,
+        }),
+      );
+    }
     nodes.push(faqPageJsonLd(CAN_RUN_HUB_FAQ, url));
     return nodes;
   }
@@ -1155,6 +1166,17 @@ export function pageJsonLd(input: {
     const parsed = parseCanRunSlug(path.slice('/can-run/'.length));
     if (parsed) {
       const page = canRunPairPage(parsed.modelId, parsed.gpuId);
+      if (dates) {
+        nodes.push(
+          webPageJsonLd({
+            name: input.title.replace(/ · AMDai$/, ''),
+            description: input.description,
+            url,
+            published: dates.published,
+            modified: dates.modified,
+          }),
+        );
+      }
       nodes.push(faqPageJsonLd(page.faq, url));
     }
     return nodes;

@@ -15,6 +15,13 @@ import { forumCategories } from './forum-categories';
 import { canRunSeoRows } from './can-run';
 import { gpuCompareSeoRows } from './gpu-compare';
 import { modelCompareSeoRows } from './model-compare';
+import { pageHashModified } from './page-hashes';
+import {
+  WHERE_TO_BUY_DESCRIPTION,
+  WHERE_TO_BUY_PATH,
+  WHERE_TO_BUY_PUBLISHED,
+  WHERE_TO_BUY_TITLE,
+} from './where-to-buy-r9700';
 import { NEW_MODELS_DESCRIPTION, NEW_MODELS_TITLE } from './new-models';
 import { LAB_LOG_DESCRIPTION, LAB_LOG_PUBLISHED, LAB_LOG_TITLE, labLogAsOfDay, loadLabLogFile } from './lab-log';
 
@@ -578,7 +585,7 @@ setMeta(
   'Serve many users on two Radeon cards',
   'Serve several users on 1–2 Radeon cards. llama.cpp -np and --split-mode first. Third-party figures labeled. Our lab 35B and Flash. Q3 is a labeled estimate.',
 );
-setDate('/serving', '2026-10-28');
+setDate('/serving', '2026-10-28', '2026-11-02');
 setMeta(
   '/concurrency-ab',
   'Parallel slots (-np) on a Radeon GPU',
@@ -667,17 +674,17 @@ setDate('/compare/vulkan-vs-rocm', '2026-10-14');
 for (const row of gpuCompareSeoRows()) {
   CRUMB_LABELS[row.path] = row.title;
   setMeta(row.path, row.title, row.description);
-  setDate(row.path, row.published);
+  setDate(row.path, row.published, pageHashModified(row.path, row.published));
 }
 for (const row of modelCompareSeoRows()) {
   CRUMB_LABELS[row.path] = row.title;
   setMeta(row.path, row.title, row.description);
-  setDate(row.path, row.published);
+  setDate(row.path, row.published, pageHashModified(row.path, row.published));
 }
 for (const row of canRunSeoRows()) {
   CRUMB_LABELS[row.path] = row.title;
   setMeta(row.path, row.title, row.description);
-  setDate(row.path, row.published);
+  setDate(row.path, row.published, pageHashModified(row.path, row.published));
 }
 setMeta(
   '/qwen36-dual',
@@ -746,7 +753,10 @@ setMeta(
   'Radeon AI PRO R9700',
   'Measured 35B llama.cpp on the Radeon AI PRO R9700 — 32 GB VRAM, one GPU vs two, cited decode and prefill from local desktop run cards.',
 );
-setDate('/gpus/r9700', '2026-10-13', '2026-10-27');
+setDate('/gpus/r9700', '2026-10-13', '2026-11-02');
+setMeta(WHERE_TO_BUY_PATH, WHERE_TO_BUY_TITLE, WHERE_TO_BUY_DESCRIPTION);
+setDate(WHERE_TO_BUY_PATH, WHERE_TO_BUY_PUBLISHED, WHERE_TO_BUY_PUBLISHED);
+CRUMB_LABELS[WHERE_TO_BUY_PATH] = 'Where to buy R9700';
 setMeta(
   '/gpus/strix-halo',
   'Ryzen AI Max / Strix Halo',

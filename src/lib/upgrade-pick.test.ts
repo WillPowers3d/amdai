@@ -84,7 +84,7 @@ describe('can-run next-step upgrade picks', () => {
     assert.match(box, /AffiliateDisclosure/);
     assert.match(box, /data-pagefind-ignore/);
     assert.match(box, /goPath/);
-    assert.match(box, /Check price at/);
+    assert.match(box, /buyButtonLabel|check price/);
     assert.doesNotMatch(box, /\$\d|\bMSRP\b|hurry|limited time|act now|buy now/i);
     assert.equal(CAN_RUN_NEXT_STEP_SRC, 'canrun-nextstep');
     assert.equal(CAN_RUN_NEXT_STEP_ALT_SRC, 'canrun-nextstep-alt');

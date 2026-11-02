@@ -110,7 +110,7 @@
       "kv_layers": 12,
       "kv_heads": 2,
       "head_dim": 256,
-      "default_quant": "q6_k",
+      "default_quant": "q4_k_m",
       "default_ctx": 262144,
       "quants": [
         {
