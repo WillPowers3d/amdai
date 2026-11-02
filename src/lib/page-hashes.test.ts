@@ -12,7 +12,7 @@ describe('buyer-page freshness', () => {
     assert.equal(BUYER_PAGE_BASELINE, '2026-10-30');
     assert.equal(pageHashModified('/can-run/missing-row', '2026-10-14'), BUYER_PAGE_BASELINE);
     assert.equal(pageHashModified('/compare/missing-row', '2026-10-14'), BUYER_PAGE_BASELINE);
-    assert.equal(pageHashModified('/faq', '2026-10-16'), '2026-10-16');
+    assert.equal(pageHashModified('/not-in-manifest', '2026-10-16'), '2026-10-16');
   });
 
   it('passes the freshness manifest selftest', () => {
