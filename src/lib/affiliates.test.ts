@@ -44,7 +44,15 @@ describe('affiliate /go/ helpers', () => {
       disclosure,
       /Some retailer links, including Newegg links, may be affiliate links through Rakuten Advertising, Amazon Associates or other programs/,
     );
+    assert.match(disclosure, /rel=&quot;sponsored&quot;/);
+    assert.match(disclosure, /may earn commissions from retailer links/);
+    assert.match(disclosure, /Newegg links may use Rakuten Advertising where that program is available/);
     assert.doesNotMatch(disclosure, /No Rakuten publisher token is configured/);
     assert.doesNotMatch(disclosure, /A Rakuten publisher token is configured/);
+    assert.doesNotMatch(
+      disclosure,
+      /RAKUTEN_PUBLISHER_ID|AMAZON_ASSOCIATE_TAG|BHPHOTO_AFFILIATE_ID|CONTACT_EMAIL|publisher token/,
+    );
+    assert.doesNotMatch(disclosure, /mail\.grokbot\.com|No contact email is configured/);
   });
 });
