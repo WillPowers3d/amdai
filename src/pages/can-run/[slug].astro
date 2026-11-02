@@ -13,6 +13,8 @@ import { runPath } from '../../lib/run-card';
 import {
   CAN_RUN_HUB,
   CAN_RUN_UNMEASURED,
+  canRunLinksForGpu,
+  canRunLinksForModel,
   canRunPairPage,
   canRunPairPages,
   parseCanRunSlug,
@@ -29,6 +31,8 @@ const parsed = parseCanRunSlug(slug);
 if (!parsed) throw new Error(`unknown can-run slug ${slug}`);
 const page = canRunPairPage(parsed.modelId, parsed.gpuId, runs);
 const nextStep = nextStepPicks(page.modelId, page.gpuId);
+const otherCards = canRunLinksForModel(page.modelId, page.gpuId);
+const otherModels = canRunLinksForGpu(page.gpuId, page.modelId);
 ---
 
 <Base title={page.title} description={page.description}>
@@ -176,6 +180,26 @@ const nextStep = nextStepPicks(page.modelId, page.gpuId);
           </article>
         ))}
       </div>
+    </section>
+
+    <section id="siblings" class="mt-12" aria-labelledby="siblings-heading">
+      <h2 id="siblings-heading" class="font-serif text-3xl tracking-tight">Same model, other cards</h2>
+      <p class="mt-3 text-sm text-muted">{page.modelShort} on the other published Radeon sheets.</p>
+      <ul class="mt-4 columns-1 gap-x-8 text-sm sm:columns-2">
+        {otherCards.map((link) => (
+          <li class="break-inside-avoid py-1">
+            <a class="underline decoration-accent/40" href={link.href}>{page.modelShort} {link.label}</a>
+          </li>
+        ))}
+      </ul>
+      <h3 class="mt-8 font-serif text-2xl tracking-tight">Other models on {page.gpuShort}</h3>
+      <ul class="mt-3 flex flex-wrap gap-2 text-sm">
+        {otherModels.map((link) => (
+          <li>
+            <a class="inline-flex min-h-9 items-center rounded-full border border-line bg-canvas px-3" href={link.href}>{link.label}</a>
+          </li>
+        ))}
+      </ul>
     </section>
 
     <section id="buy" class="mt-12" aria-labelledby="buy-heading">

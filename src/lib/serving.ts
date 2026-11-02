@@ -542,7 +542,9 @@ export const SERVING_PROJECT = `
 `.replace(/\s+/g, ' ').trim();
 
 export const SERVING_ONE = `# One interactive user on one R9700 (house daily driver).
-# llama-server README: -np / --parallel N (default -1 = auto).
+# llama-server README: -np / --parallel N (default -1 = auto, four slots).
+# Default idle-slot save copies empty slots on each new task (slow path on Radeon).
+# Keep -np 1 for a single-user lane so those empty slots do not stall the stream.
 ./build-vk/bin/llama-server \\
   -m /path/to/nvme/${SERVING_HOUSE_FILE} \\
   -ngl 99 -c 262144 --cache-type-k f16 --cache-type-v f16 --jinja \\

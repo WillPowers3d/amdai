@@ -1,5 +1,6 @@
 ---
 import AffiliateDisclosure from './AffiliateDisclosure.astro';
+import NeweggReturnNote from './NeweggReturnNote.astro';
 import { buyRetailers, destinationUrl, goPath, productById, productHasRetailer, wrapRetailer } from '../lib/affiliates';
 
 interface Props {
@@ -49,6 +50,7 @@ const items = ids.map((id) => productById(id)).filter((item): item is NonNullabl
               </li>
             ))}
           </ul>
+          {links.some(({ retailer }) => retailer.id === 'newegg') && <NeweggReturnNote productId={item.id} />}
         </div>
       );
     })}

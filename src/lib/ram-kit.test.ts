@@ -60,7 +60,7 @@ describe('builder RAM ask', () => {
     assert.match(no.title, /96 GB/);
     assert.equal(no.product_id, RAM_96_PRODUCT);
     assert.equal(no.src, RAM_96_SRC);
-    assert.equal(no.go_newegg, `/go/newegg/${RAM_96_PRODUCT}?src=${RAM_96_SRC}`);
+    assert.equal(no.go_newegg, `/go/newegg/${RAM_96_PRODUCT}/?src=${RAM_96_SRC}`);
     assert.equal(no.primary.part, RAM_96_PART);
     assert.equal(no.primary.part, 'F5-5600J4040D48GX2-FX5');
     assert.match(no.primary.name, /Flare X5/);

@@ -1,6 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
 import Callout from '../../components/Callout.astro';
+import R9700BeginnerBuy from '../../components/R9700BeginnerBuy.astro';
 import HouseRam from '../../components/HouseRam.astro';
 import HowWeTest from '../../components/HowWeTest.astro';
 import NextSteps from '../../components/NextSteps.astro';
@@ -125,6 +126,16 @@ import {
           </li>
         ))}
       </ul>
+    </section>
+
+    <section id="fit-card" class="mt-12" aria-labelledby="fit-card-heading">
+      <h2 id="fit-card-heading" class="font-serif text-3xl tracking-tight">Does your card fit the house 35B?</h2>
+      <p class="mt-3 text-sm text-muted">
+        Open
+        <a class="underline decoration-accent/40" href="/can-run/">Can my Radeon run it?</a>
+        for the card you have. Windows ROCm stops at RX 7000 / PRO W7000 — R9700 and RX 9000 use Vulkan there.
+      </p>
+      <R9700BeginnerBuy src="setup-windows" />
     </section>
 
     <div class="mt-8">

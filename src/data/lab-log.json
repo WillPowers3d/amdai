@@ -41,7 +41,12 @@
     "https://www.arctic.de/en/Liquid-Freezer-III-Pro-360/ACFRE00180A",
     "https://gist.github.com/DocShotgun/a02a4c0c0a57e43ff4f038b46ca66ae0"
    ],
-   "next": "Add a CPU-cooler line to the amdai.net builder parts list."
+   "next": "Add a CPU-cooler line to the amdai.net builder parts list.",
+   "hardware": {
+    "cards": 2,
+    "ddr5_gb": null,
+    "basis": "buying"
+   }
   },
   {
    "id": "2026-10-28-case-for-two-r9700s",
@@ -87,7 +92,12 @@
     "https://www.fractal-design.com/products/cases/meshify/meshify-2/black-tg-dark-tint/",
     "https://phanteks.com/product/enthoo-pro-2-server-edition-tg/"
    ],
-   "next": "Add a case step to the amdai.net builder parts list, and verify slot spacing for the ASUS ProArt boards from their manuals."
+   "next": "Add a case step to the amdai.net builder parts list, and verify slot spacing for the ASUS ProArt boards from their manuals.",
+   "hardware": {
+    "cards": 2,
+    "ddr5_gb": null,
+    "basis": "buying"
+   }
   },
   {
    "id": "2026-10-28-nvme-for-local-models",
@@ -153,12 +163,12 @@
    "metrics": [
     {
      "label": "SGLang TP2 35B-A3B AWQ, short",
-     "value": 67.0,
+     "value": 67,
      "unit": "tok/s"
     },
     {
      "label": "SGLang TP2 35B-A3B AWQ, 197K input",
-     "value": 22.0,
+     "value": 22,
      "unit": "tok/s"
     },
     {
@@ -185,7 +195,12 @@
     "https://rocm.docs.amd.com/projects/ai-ecosystem/en/latest/inference/sglang.html",
     "https://www.lmsys.org/blog/2025-10-22-KTransformers/"
    ],
-   "next": "Keep llama.cpp and Strata for the Flash lanes. Check the TP2 kernel and IOMMU prerequisites before the next vLLM tensor-parallel test."
+   "next": "Keep llama.cpp and Strata for the Flash lanes. Check the TP2 kernel and IOMMU prerequisites before the next vLLM tensor-parallel test.",
+   "hardware": {
+    "cards": 2,
+    "ddr5_gb": null,
+    "basis": "cited"
+   }
   },
   {
    "id": "2026-10-27-rocm-smi-gone-in-rocm-10",
@@ -255,7 +270,7 @@
     },
     {
      "label": "Qwen3.8-Flash-Next KV at 262K (old site estimate)",
-     "value": 6.0,
+     "value": 6,
      "unit": "GiB"
     }
    ],
@@ -295,7 +310,7 @@
     },
     {
      "label": "Change since Oct 26 snapshot",
-     "value": 250.0,
+     "value": 250,
      "unit": "USD"
     },
     {
@@ -323,7 +338,12 @@
     "https://vga.live/gpus/radeon-ai-pro-r9700",
     "https://www.amd.com/en/products/graphics/workstations/radeon-ai-pro.html"
    ],
-   "next": "Keep the daily price snapshot; flag when the cheapest new card drops back to $1,599.99."
+   "next": "Keep the daily price snapshot; flag when the cheapest new card drops back to $1,599.99.",
+   "hardware": {
+    "cards": 1,
+    "ddr5_gb": null,
+    "basis": "buying"
+   }
   },
   {
    "id": "2026-10-27-llama-cpp-removed-load-flags",
@@ -427,7 +447,12 @@
     "https://github.com/vllm-project/vllm-gguf-plugin/issues/142",
     "https://github.com/ggml-org/llama.cpp/blob/master/ggml/src/ggml-cuda/common.cuh"
    ],
-   "next": "Measure on two R9700s: attention backend correctness, the gfx115x tuning enabled on gfx12, a tuned int4 MoE file, int4 lm_head, then try the W4A8 MoE kernel on gfx12."
+   "next": "Measure on two R9700s: attention backend correctness, the gfx115x tuning enabled on gfx12, a tuned int4 MoE file, int4 lm_head, then try the W4A8 MoE kernel on gfx12.",
+   "hardware": {
+    "cards": 1,
+    "ddr5_gb": null,
+    "basis": "cited"
+   }
   },
   {
    "id": "2026-10-27-llama-server-metrics-gauges",
@@ -469,7 +494,12 @@
     "https://github.com/Niko1221/Strata/blob/main/serve/server.py",
     "https://docs.kernel.org/gpu/amdgpu/thermal.html"
    ],
-   "next": "Build 7-day per-depth speed baselines for the always-on dual-R9700 lanes and check them after every driver or engine update."
+   "next": "Build 7-day per-depth speed baselines for the always-on dual-R9700 lanes and check them after every driver or engine update.",
+   "hardware": {
+    "cards": 2,
+    "ddr5_gb": null,
+    "basis": "cited"
+   }
   },
   {
    "id": "2026-10-27-vram-per-dollar",
@@ -526,7 +556,12 @@
     "https://rtx.live/gpus/geforce-rtx-5090",
     "https://www.amd.com/en/products/graphics/workstations/radeon-ai-pro.html"
    ],
-   "next": "Add a VRAM-per-dollar table to the buying pages, refreshed with the price data; for a two-card purchase, wait for the R9700 to return to about $1,600."
+   "next": "Add a VRAM-per-dollar table to the buying pages, refreshed with the price data; for a two-card purchase, wait for the R9700 to return to about $1,600.",
+   "hardware": {
+    "cards": 2,
+    "ddr5_gb": null,
+    "basis": "cited"
+   }
   },
   {
    "id": "2026-10-27-gfx1201-upstream-bugs",
@@ -576,7 +611,12 @@
     "https://github.com/ROCm/rocm-libraries/issues/12346",
     "https://github.com/ROCm/rocm-libraries/issues/7992"
    ],
-   "next": "Check our own cards' MES firmware, launcher environment and iGPU state against this list, rerun the search weekly, and add an open-upstream-bugs panel to /rocm-problems."
+   "next": "Check our own cards' MES firmware, launcher environment and iGPU state against this list, rerun the search weekly, and add an open-upstream-bugs panel to /rocm-problems.",
+   "hardware": {
+    "cards": 1,
+    "ddr5_gb": null,
+    "basis": "measured"
+   }
   },
   {
    "id": "2026-10-27-new-model-licenses",
@@ -715,7 +755,7 @@
     },
     {
      "label": "Decode, RCCL on vs off (2x R9700, 27B Q4, 60K-120K)",
-     "value": 0.0,
+     "value": 0,
      "unit": "%"
     },
     {
@@ -733,7 +773,12 @@
     "https://github.com/ggml-org/llama.cpp/pull/28079",
     "https://github.com/ggml-org/llama.cpp/pull/26419"
    ],
-   "next": "Audit the build cache of each local lane, and A/B RCCL off vs on only if a tensor-split lane is used."
+   "next": "Audit the build cache of each local lane, and A/B RCCL off vs on only if a tensor-split lane is used.",
+   "hardware": {
+    "cards": 2,
+    "ddr5_gb": null,
+    "basis": "cited"
+   }
   },
   {
    "id": "2026-10-26-ddr5-dimm-heat-hybrid-decode",
@@ -762,7 +807,7 @@
     },
     {
      "label": "Time refreshing, 32 Gb chips, 85-95 C (calc)",
-     "value": 21.0,
+     "value": 21,
      "unit": "%"
     },
     {
@@ -787,7 +832,12 @@
     "https://forum.level1techs.com/t/ddr5-4-dimms-on-am5-whats-working-whats-not/197153?page=14",
     "https://pakt.cc/en/ddr5/testing/"
    ],
-   "next": "Log DIMM temperatures next to tok/s during a 30-minute hybrid decode on our dual-R9700 desktop with four 64 GB sticks, and test whether better airflow changes the speed."
+   "next": "Log DIMM temperatures next to tok/s during a 30-minute hybrid decode on our dual-R9700 desktop with four 64 GB sticks, and test whether better airflow changes the speed.",
+   "hardware": {
+    "cards": 2,
+    "ddr5_gb": null,
+    "basis": "estimate"
+   }
   },
   {
    "id": "2026-10-26-four-r9700-two-desktops-power-budget",
@@ -826,7 +876,7 @@
     },
     {
      "label": "Decode loss at 260 W cap (published sweep)",
-     "value": 0.0,
+     "value": 0,
      "unit": "%"
     }
    ],
@@ -841,7 +891,12 @@
     "https://electricaltoolbox.com/continuous-load-calculator/",
     "https://www.se.com/us/en/faqs/FA158939/"
    ],
-   "next": "Measure real CPU, GPU and rest-of-system draw per workload on our dual-R9700 desktop to replace the estimates, and pick the second desktop's supply (1,200-1,300 W with two native 12V-2x6 cables, or 1,000 W only with cards capped at 260 W)."
+   "next": "Measure real CPU, GPU and rest-of-system draw per workload on our dual-R9700 desktop to replace the estimates, and pick the second desktop's supply (1,200-1,300 W with two native 12V-2x6 cables, or 1,000 W only with cards capped at 260 W).",
+   "hardware": {
+    "cards": 2,
+    "ddr5_gb": null,
+    "basis": "estimate"
+   }
   },
   {
    "id": "2026-10-26-llama-bench-noise-aa-test",
@@ -1029,7 +1084,12 @@
     "https://vga.live/cards/asrock-amd-radeon-ai-pro-r9700-creator-single-fan-ai-workstation",
     "https://www.amd.com/en/products/graphics/workstations/radeon-ai-pro.html"
    ],
-   "next": "Track the cheapest new price daily and flag when it returns to the $1,599.99 floor."
+   "next": "Track the cheapest new price daily and flag when it returns to the $1,599.99 floor.",
+   "hardware": {
+    "cards": 1,
+    "ddr5_gb": null,
+    "basis": "buying"
+   }
   },
   {
    "id": "2026-10-26-strata-mtp-q2-only-second-card",
@@ -1075,7 +1135,12 @@
     "https://github.com/Niko1221/Strata/blob/4b9e05a2a806a3fe24f7b2560d98626c37dade35/docs/QUANTS.md",
     "https://github.com/Niko1221/Strata/issues/3728"
    ],
-   "next": "Test on the local desktop: engine 0.1.42 vs 0.1.50 on one card, then layer split, split overlap and helper-cache arms with no draft layer, gated by a correctness check. A Q8_0 or Q4_0 draft-expert runtime (#3728) would unlock drafts under a Q4+ rule."
+   "next": "Test on the local desktop: engine 0.1.42 vs 0.1.50 on one card, then layer split, split overlap and helper-cache arms with no draft layer, gated by a correctness check. A Q8_0 or Q4_0 draft-expert runtime (#3728) would unlock drafts under a Q4+ rule.",
+   "hardware": {
+    "cards": 2,
+    "ddr5_gb": null,
+    "basis": "cited"
+   }
   },
   {
    "id": "2026-10-26-vllm-tp2-allreduce-rccl-only",
@@ -1137,7 +1202,12 @@
     "https://github.com/ROCm/rocm-systems/issues/13616",
     "https://forum.level1techs.com/t/amd-radeon-r9700-linux-tp2-and-tp4-the-definitive-guide/250504"
    ],
-   "next": "Measure 2-card RCCL all-reduce latency (Simple vs shared-memory path vs a time-limited LL run) and vLLM TP2 decode with HIP graphs vs eager on the local desktop."
+   "next": "Measure 2-card RCCL all-reduce latency (Simple vs shared-memory path vs a time-limited LL run) and vLLM TP2 decode with HIP graphs vs eager on the local desktop.",
+   "hardware": {
+    "cards": 2,
+    "ddr5_gb": null,
+    "basis": "cited"
+   }
   },
   {
    "id": "2026-10-26-gguf-reupload-drift",
@@ -1157,7 +1227,7 @@
    "metrics": [
     {
      "label": "GLM-5.3-Flash shard that changed (metadata only)",
-     "value": 9.0,
+     "value": 9,
      "unit": "MiB"
     },
     {
@@ -1167,7 +1237,7 @@
     },
     {
      "label": "GLM-5.3-Flash UD-Q4_K_XL full set",
-     "value": 186.0,
+     "value": 186,
      "unit": "GiB"
     },
     {
@@ -1248,7 +1318,12 @@
     "https://github.com/ggml-org/llama.cpp/discussions/26230",
     "https://huggingface.co/unsloth/Qwen3.6-35B-A3B-MTP-GGUF"
    ],
-   "next": "Measure MTP at 1, 2 and 3 draft tokens on our single-R9700 UD-Q5_K_XL lane at 128K, then test whether 262K fits with a q8_0 draft cache."
+   "next": "Measure MTP at 1, 2 and 3 draft tokens on our single-R9700 UD-Q5_K_XL lane at 128K, then test whether 262K fits with a q8_0 draft cache.",
+   "hardware": {
+    "cards": 1,
+    "ddr5_gb": null,
+    "basis": "cited"
+   }
   },
   {
    "id": "2026-10-26-multi-gpu-silent-corruption",
@@ -1297,7 +1372,12 @@
     "https://github.com/ROCm/rocm-systems/issues/13715",
     "https://github.com/ROCm/ROCm/issues/6342"
    ],
-   "next": "Run the same exact-answer check on our dual-R9700 Linux launchers (Vulkan and HIP, layer and tensor) and make it a required step before every benchmark."
+   "next": "Run the same exact-answer check on our dual-R9700 Linux launchers (Vulkan and HIP, layer and tensor) and make it a required step before every benchmark.",
+   "hardware": {
+    "cards": 2,
+    "ddr5_gb": null,
+    "basis": "cited"
+   }
   },
   {
    "id": "2026-10-26-slot-restore-hybrid-checkpoints",
@@ -1400,7 +1480,12 @@
     "https://huggingface.co/ManniX-ITA/Qwen3.6-27B-A3B-Coder/commit/59aa5b59f6ecd7a7fa9cc191e1e40d064ad2b2e7",
     "https://arxiv.org/abs/2505.09388"
    ],
-   "next": "Measure natural thinking length and capped accuracy on real agent turns for both models, then pick a default cap or deadline."
+   "next": "Measure natural thinking length and capped accuracy on real agent turns for both models, then pick a default cap or deadline.",
+   "hardware": {
+    "cards": 2,
+    "ddr5_gb": null,
+    "basis": "measured"
+   }
   },
   {
    "id": "2026-10-26-r9700-hang-recovery-classes",
@@ -1439,7 +1524,12 @@
     "https://github.com/ROCm/ROCm/issues/6127",
     "https://docs.kernel.org/gpu/amdgpu/debugfs.html"
    ],
-   "next": "Run the watchdog in log-only mode for three nights on the dual-R9700 desktop, then turn on automatic restart, fallback and stop-and-alert."
+   "next": "Run the watchdog in log-only mode for three nights on the dual-R9700 desktop, then turn on automatic restart, fallback and stop-and-alert.",
+   "hardware": {
+    "cards": 1,
+    "ddr5_gb": null,
+    "basis": "cited"
+   }
   },
   {
    "id": "2026-10-26-endpoint-security",
@@ -1486,7 +1576,12 @@
     "https://docs.vllm.ai/en/latest/usage/security/",
     "https://www.mysteriumvpn.com/blog/data-and-research/we-exposed-ai-supply-chain"
    ],
-   "next": "Run the read-only probe against every listener on our own box and from a second LAN machine, then pin all llama.cpp builds at b11393 or newer before the two-box RPC test."
+   "next": "Run the read-only probe against every listener on our own box and from a second LAN machine, then pin all llama.cpp builds at b11393 or newer before the two-box RPC test.",
+   "hardware": {
+    "cards": 2,
+    "ddr5_gb": null,
+    "basis": "measured"
+   }
   },
   {
    "id": "2026-10-26-r9700-tts-llama-server",
@@ -1541,7 +1636,12 @@
     "https://flynnbody.com/blog/running-qwen3-tts-on-amd-r9700/",
     "https://github.com/piedshag/qwen3-tts-hip"
    ],
-   "next": "Measure llama-server /tts on our own R9700s (Vulkan vs HIP vs CPU), then again while the Flash model decodes, to see what speaking costs the LLM."
+   "next": "Measure llama-server /tts on our own R9700s (Vulkan vs HIP vs CPU), then again while the Flash model decodes, to see what speaking costs the LLM.",
+   "hardware": {
+    "cards": 1,
+    "ddr5_gb": null,
+    "basis": "cited"
+   }
   },
   {
    "id": "2026-10-26-r9700-image-video-gen",
@@ -1596,7 +1696,12 @@
     "https://brookesia.app/boards/ai-hardware/78",
     "https://rocm.blogs.amd.com/artificial-intelligence/comfyui-radeon-9000/README.html"
    ],
-   "next": "Measure an SDXL baseline, an ABBA test of the two flags, and two ComfyUI instances (one per card) on our own pair of R9700s."
+   "next": "Measure an SDXL baseline, an ABBA test of the two flags, and two ComfyUI instances (one per card) on our own pair of R9700s.",
+   "hardware": {
+    "cards": 1,
+    "ddr5_gb": null,
+    "basis": "cited"
+   }
   },
   {
    "id": "2026-10-26-r9700-lora-pagefault",
@@ -1640,7 +1745,12 @@
     "https://unsloth.ai/docs/basics/amd",
     "https://github.com/ROCm/TheRock/blob/main/SUPPORTED_GPUS.md"
    ],
-   "next": "Run a one-card LoRA smoke test on the local desktop comparing stock, allocator rounding and hipBLASLt-off, then QLoRA NF4."
+   "next": "Run a one-card LoRA smoke test on the local desktop comparing stock, allocator rounding and hipBLASLt-off, then QLoRA NF4.",
+   "hardware": {
+    "cards": 1,
+    "ddr5_gb": null,
+    "basis": "cited"
+   }
   },
   {
    "id": "2026-10-26-embed-rerank-pick",
@@ -1690,7 +1800,12 @@
     "https://huggingface.co/ggml-org/Qwen3-Reranker-0.6B-Q8_0-GGUF",
     "https://github.com/ggml-org/llama.cpp/blob/master/tools/server/README.md"
    ],
-   "next": "Measure CPU vs one-R9700 placement for the 0.6B pair and the 4B embedder, including the decode drop on a co-resident Flash model."
+   "next": "Measure CPU vs one-R9700 placement for the 0.6B pair and the 4B embedder, including the decode drop on a co-resident Flash model.",
+   "hardware": {
+    "cards": 1,
+    "ddr5_gb": null,
+    "basis": "cited"
+   }
   },
   {
    "id": "2026-10-25-strix-halo-vs-r9700",
@@ -1702,7 +1817,7 @@
    "details": "gpt-oss-120b MXFP4 (59 GiB, two R9700s): 98.0 vs 56.6 tok/s decode, 1956 vs 720 tok/s pp512. Qwen3.6-35B-A3B UD-Q4_K_XL (one R9700): 108.3 vs 60.4 tok/s decode; at 64K depth 82.4 vs 43.2 tok/s decode and 2048 vs 548 tok/s prefill. Strix Halo runs Qwen3.5-122B-A10B UD-Q5_K_XL (85.6 GiB) at 22.3 tok/s and Nemotron-3-Super-120B-A12B UD-Q4_K_XL (78 GiB) at 14.9 tok/s; those exceed 64 GB of R9700 VRAM and need DDR5 expert offload on a desktop. Caveats: different llama.cpp builds (b8990 vs b9187/b9193) and OS versions; best backend chosen separately per platform; Q1-Q3 rows excluded.",
    "setup": {
     "model": "8 overlapping models (gpt-oss-120b, Qwen3.6-35B-A3B, Gemma 4, others)",
-    "quant": "Q4 and up only",
+    "quant": "Q4+",
     "engine": "llama.cpp llama-bench (published grids)",
     "engine_version": "b8990 (R9700), b9187/b9193 (Strix Halo)",
     "gpus": "1-2x Radeon AI PRO R9700 vs Ryzen AI Max+ 395 128 GB",
@@ -1712,7 +1827,7 @@
    "metrics": [
     {
      "label": "Median decode lead, R9700 vs Strix Halo (tg128)",
-     "value": 2.0,
+     "value": 2,
      "unit": "x"
     },
     {
@@ -1722,12 +1837,12 @@
     },
     {
      "label": "Median prefill lead at 64K depth",
-     "value": 4.0,
+     "value": 4,
      "unit": "x"
     },
     {
      "label": "gpt-oss-120b decode, 2x R9700",
-     "value": 98.0,
+     "value": 98,
      "unit": "tok/s"
     },
     {
@@ -1746,7 +1861,12 @@
     "https://kyuz0.github.io/amd-strix-halo-toolboxes/",
     "https://github.com/lhl/strix-halo-testing/tree/main/llm-bench"
    ],
-   "next": "Measure Qwen3.5-122B-A10B UD-Q5_K_XL on two R9700s with experts in DDR5, with the same tests, against Strix Halo's 22.3 tok/s."
+   "next": "Measure Qwen3.5-122B-A10B UD-Q5_K_XL on two R9700s with experts in DDR5, with the same tests, against Strix Halo's 22.3 tok/s.",
+   "hardware": {
+    "cards": 2,
+    "ddr5_gb": null,
+    "basis": "cited"
+   }
   },
   {
    "id": "2026-10-25-model-swap-router",
@@ -1784,7 +1904,12 @@
     "https://github.com/mostlygeek/llama-swap/blob/v266/docs/config.example.yaml",
     "https://github.com/mostlygeek/llama-swap/blob/v266/README.md"
    ],
-   "next": "Measure each preset's per-card VRAM and DDR5 footprint, cold-load, swap-in and wake times on 2x R9700, then decide whether the always-on agent model goes behind the swap endpoint."
+   "next": "Measure each preset's per-card VRAM and DDR5 footprint, cold-load, swap-in and wake times on 2x R9700, then decide whether the always-on agent model goes behind the swap endpoint.",
+   "hardware": {
+    "cards": 2,
+    "ddr5_gb": null,
+    "basis": "measured"
+   }
   },
   {
    "id": "2026-10-25-llamacpp-grammar-sampling-cost",
@@ -1880,7 +2005,12 @@
     "https://github.com/ggml-org/llama.cpp/pull/21863",
     "https://huggingface.co/ggerganov/whisper.cpp"
    ],
-   "next": "Measure HIP, Vulkan and CPU-only Whisper lanes on a dual-R9700 box, and how much a loaded speech model slows Flash decode."
+   "next": "Measure HIP, Vulkan and CPU-only Whisper lanes on a dual-R9700 box, and how much a loaded speech model slows Flash decode.",
+   "hardware": {
+    "cards": 2,
+    "ddr5_gb": null,
+    "basis": "cited"
+   }
   },
   {
    "id": "2026-10-25-flash-next-vision-cost",
@@ -1930,7 +2060,12 @@
     "https://github.com/Niko1221/Strata/blob/main/docs/QUANTS.md",
     "https://0xbakeer.com/flash-next/vision"
    ],
-   "next": "Measure time to first token, VRAM per card and text decode with the encoder on and off on two R9700s at Q5 and Q6, at 1,024 and 4,096 image-token caps."
+   "next": "Measure time to first token, VRAM per card and text decode with the encoder on and off on two R9700s at Q5 and Q6, at 1,024 and 4,096 image-token caps.",
+   "hardware": {
+    "cards": 2,
+    "ddr5_gb": null,
+    "basis": "measured"
+   }
   },
   {
    "id": "2026-10-25-r9700-scoreboard-band",
@@ -1976,7 +2111,12 @@
     "https://github.com/ggml-org/llama.cpp/discussions/10879",
     "https://github.com/ggml-org/llama.cpp/discussions/15021"
    ],
-   "next": "Measure both local R9700s with the same test (Vulkan and HIP, each card alone) and check them against this band before further dual-card Flash tuning."
+   "next": "Measure both local R9700s with the same test (Vulkan and HIP, each card alone) and check them against this band before further dual-card Flash tuning.",
+   "hardware": {
+    "cards": 1,
+    "ddr5_gb": null,
+    "basis": "buying"
+   }
   },
   {
    "id": "2026-10-25-r9700-driver-stack-traps",
@@ -2027,7 +2167,12 @@
     "https://github.com/ggml-org/llama.cpp/issues/26795",
     "https://github.com/ROCm/ROCm/issues/6101"
    ],
-   "next": "Fingerprint the stack (kernel, Mesa, ICD, firmware, llama.cpp build) on both desktops and record it with every benchmark; A/B RADV vs AMDVLK only if AMDVLK is installed."
+   "next": "Fingerprint the stack (kernel, Mesa, ICD, firmware, llama.cpp build) on both desktops and record it with every benchmark; A/B RADV vs AMDVLK only if AMDVLK is installed.",
+   "hardware": {
+    "cards": 1,
+    "ddr5_gb": null,
+    "basis": "measured"
+   }
   },
   {
    "id": "2026-10-25-ep-vs-tp-moe-imbalance",
@@ -2071,7 +2216,12 @@
     "https://github.com/vllm-project/vllm/blob/main/vllm/config/parallel.py",
     "https://0xsero.github.io/blackwell-gpu-wiki/interconnect/moe-parallelism/"
    ],
-   "next": "Benchmark plain TP2 vs TP2+EP in vLLM at 1, 4, 16 and 32 concurrent streams on a 4-bit-or-better MoE that fits two R9700s."
+   "next": "Benchmark plain TP2 vs TP2+EP in vLLM at 1, 4, 16 and 32 concurrent streams on a 4-bit-or-better MoE that fits two R9700s.",
+   "hardware": {
+    "cards": 2,
+    "ddr5_gb": null,
+    "basis": "estimate"
+   }
   },
   {
    "id": "2026-10-25-new-models-moe-active-params-audit",
@@ -2126,7 +2276,12 @@
     "https://huggingface.co/api/models/unsloth/Qwen3.8-Flash-Next-GGUF?blobs=true",
     "https://huggingface.co/unsloth/MiniMax-M3.1-Flash-GGUF"
    ],
-   "next": "Ship the corrected script, then show measured vs estimated sizes and two DDR5-hybrid fit columns (128 GB, 256 GB) on /new-models."
+   "next": "Ship the corrected script, then show measured vs estimated sizes and two DDR5-hybrid fit columns (128 GB, 256 GB) on /new-models.",
+   "hardware": {
+    "cards": 2,
+    "ddr5_gb": null,
+    "basis": "estimate"
+   }
   },
   {
    "id": "2026-10-25-measured-quant-quality-speed",
@@ -2135,7 +2290,12 @@
    "kind": "result",
    "title": "Measured: Qwen 3.8 Flash quants on dual R9700, quality vs speed",
    "summary": "Measured on the local desktop (2x R9700, 262K f16 KV, reference Q8_0). Strata 0.2.3.1 UD-Q5_K_XL decodes 58 tok/s short / 52 at 36K with 2,192 tok/s prefill and 24/26 tool calls, so it stays the default. llama.cpp hybrid decode was only 17-22 tok/s (UD-Q5 17.6/17.1/14.2 at 1K/36K/163K; UD-Q4 21.2/19.9/16.0); our earlier bandwidth-model estimate of ~34-45 tok/s was far too optimistic. UD-Q5 drifts least from Q8_0 (KLD 0.036 text / 0.019 code vs 0.060/0.034 for UD-Q4).",
-   "details": "llama.cpp (decode ~1K/36K/163K; prefill 36K/163K; KLD text/code; tools): UD-Q5_K_XL 147 GB 17.6/17.1/14.2, 226/195, 0.036/0.019, top-1 92.2%/96.3%, 24/26. UD-Q4_K_XL 104 GB 21.2/19.9/16.0, 314/273, 0.060/0.034, top-1 90.1%/95.1%, 24/26. AP-Q5_K_M 104 GB 20.1/20.3/16.5, 330/301, 0.065/0.033, 24/26. AP-Q4_K_XL 94 GB 22.2/21.8/17.6, 416/359, 0.070/0.038, 24/26. Strata UD-Q5: 25/26 tools with thinking on; greedy exact match vs Q8_0 37.5% (llama.cpp UD-Q5 43.8%). vLLM community MXFP4: best tools 25/26 but lowest exact match 18.8%; KLD run failed, not speed-benched. KLD = llama-perplexity KL vs Q8_0 on held-out post-Oct-1 corpus (152K text / 51K code tokens); 26-case tool-call eval. Q3 estimate: not applicable for this project."
+   "details": "llama.cpp (decode ~1K/36K/163K; prefill 36K/163K; KLD text/code; tools): UD-Q5_K_XL 147 GB 17.6/17.1/14.2, 226/195, 0.036/0.019, top-1 92.2%/96.3%, 24/26. UD-Q4_K_XL 104 GB 21.2/19.9/16.0, 314/273, 0.060/0.034, top-1 90.1%/95.1%, 24/26. AP-Q5_K_M 104 GB 20.1/20.3/16.5, 330/301, 0.065/0.033, 24/26. AP-Q4_K_XL 94 GB 22.2/21.8/17.6, 416/359, 0.070/0.038, 24/26. Strata UD-Q5: 25/26 tools with thinking on; greedy exact match vs Q8_0 37.5% (llama.cpp UD-Q5 43.8%). vLLM community MXFP4: best tools 25/26 but lowest exact match 18.8%; KLD run failed, not speed-benched. KLD = llama-perplexity KL vs Q8_0 on held-out post-Oct-1 corpus (152K text / 51K code tokens); 26-case tool-call eval. Q3 estimate: not applicable for this project.",
+   "hardware": {
+    "cards": 2,
+    "ddr5_gb": null,
+    "basis": "estimate"
+   }
   },
   {
    "id": "2026-10-25-strata-mmap-experts-ab",
@@ -2181,7 +2341,12 @@
     "https://github.com/ggml-org/llama.cpp/issues/22592",
     "https://github.com/ggml-org/llama.cpp/blob/master/docs/multi-gpu.md"
    ],
-   "next": "Measure fitted vs hand-tuned placement for Flash-class Q4/Q5/Q6 on two R9700s with DDR5 experts, at 0 and 32K depth."
+   "next": "Measure fitted vs hand-tuned placement for Flash-class Q4/Q5/Q6 on two R9700s with DDR5 experts, at 0 and 32K depth.",
+   "hardware": {
+    "cards": 2,
+    "ddr5_gb": null,
+    "basis": "measured"
+   }
   },
   {
    "id": "2026-10-25-hip-graphs-r9700",
@@ -2229,7 +2394,12 @@
     "https://github.com/ggml-org/llama.cpp/issues/25082",
     "https://github.com/ggml-org/llama.cpp/blob/6050b467c07a95c7b87debd4ddac2f8ba8d9b807/ggml/src/ggml-cuda/ggml-cuda.cu"
    ],
-   "next": "A/B on R9700: default vs graphs off vs chunk 0/128 vs GRAPH_OPT=1, single-GPU MoE and the dual-R9700 Flash hybrid, with graph event counts."
+   "next": "A/B on R9700: default vs graphs off vs chunk 0/128 vs GRAPH_OPT=1, single-GPU MoE and the dual-R9700 Flash hybrid, with graph event counts.",
+   "hardware": {
+    "cards": 1,
+    "ddr5_gb": null,
+    "basis": "cited"
+   }
   },
   {
    "id": "2026-10-25-easy-apps-dual-r9700-traps",
@@ -2276,7 +2446,12 @@
     "https://github.com/lmstudio-ai/lmstudio-bug-tracker/issues/1916",
     "https://github.com/ggml-org/llama.cpp/blob/master/docs/multi-gpu.md"
    ],
-   "next": "Check whether the iGPU is visible as a device on our dual-R9700 desktop, and measure Ollama against raw llama.cpp on the same 35B Q5 file."
+   "next": "Check whether the iGPU is visible as a device on our dual-R9700 desktop, and measure Ollama against raw llama.cpp on the same 35B Q5 file.",
+   "hardware": {
+    "cards": 2,
+    "ddr5_gb": null,
+    "basis": "measured"
+   }
   },
   {
    "id": "2026-10-25-longctx-quant-evidence",
@@ -2356,7 +2531,12 @@
     "https://github.com/ggml-org/llama.cpp/pull/20330",
     "https://hub.docker.com/r/rocm/dev-ubuntu-24.04/tags"
    ],
-   "next": "Build a pinned gfx1201 image with RPC on, confirm it matches native speed on one box, then measure RPC loopback overhead and cold vs warm load time before the second desktop joins."
+   "next": "Build a pinned gfx1201 image with RPC on, confirm it matches native speed on one box, then measure RPC loopback overhead and cold vs warm load time before the second desktop joins.",
+   "hardware": {
+    "cards": 1,
+    "ddr5_gb": null,
+    "basis": "measured"
+   }
   },
   {
    "id": "2026-10-25-vllm-r9700-moe-config-names",
@@ -2396,7 +2576,12 @@
     "https://github.com/vllm-project/vllm/blob/main/vllm/platforms/rocm.py",
     "https://github.com/vllm-project/vllm/blob/main/benchmarks/kernels/benchmark_moe.py"
    ],
-   "next": "Tune the four Flash-Next keys on R9700 and measure default vs tuned per-layer time."
+   "next": "Tune the four Flash-Next keys on R9700 and measure default vs tuned per-layer time.",
+   "hardware": {
+    "cards": 1,
+    "ddr5_gb": null,
+    "basis": "cited"
+   }
   },
   {
    "id": "2026-10-25-rocm-pinned-memory-thp",
@@ -2421,7 +2606,7 @@
     },
     {
      "label": "Expert cache page-lock, THP off for the process (median of 4)",
-     "value": 34.0,
+     "value": 34,
      "unit": "s"
     },
     {
@@ -2499,7 +2684,12 @@
     "https://github.com/vllm-project/vllm/pull/37826",
     "https://github.com/ggml-org/llama.cpp/pull/17156"
    ],
-   "next": "Check the startup log of the dual-R9700 vLLM Flash lane for which FP8 and MXFP4 kernels it selects, and A/B any slow pick."
+   "next": "Check the startup log of the dual-R9700 vLLM Flash lane for which FP8 and MXFP4 kernels it selects, and A/B any slow pick.",
+   "hardware": {
+    "cards": 1,
+    "ddr5_gb": null,
+    "basis": "cited"
+   }
   },
   {
    "id": "2026-10-25-rdna4-q6k-hip-prefill",
@@ -2558,7 +2748,12 @@
     "https://github.com/ggml-org/llama.cpp/pull/22970",
     "https://huggingface.co/unsloth/Qwen3.8-Flash-Next-GGUF"
    ],
-   "next": "Measure HIP master vs master + PR #25940 on Flash-Next UD-Q6_K_XL and UD-Q5_K_XL hybrid prefill on 2x R9700 (decode expected flat)."
+   "next": "Measure HIP master vs master + PR #25940 on Flash-Next UD-Q6_K_XL and UD-Q5_K_XL hybrid prefill on 2x R9700 (decode expected flat).",
+   "hardware": {
+    "cards": 1,
+    "ddr5_gb": null,
+    "basis": "estimate"
+   }
   },
   {
    "id": "2026-10-25-r9700-vs-arc-pro-b70",
@@ -2624,7 +2819,12 @@
     "https://github.com/Niko1221/Strata/blob/main/docs/QUANTS.md",
     "https://www.newegg.com/p/pl?N=100008333+601191745"
    ],
-   "next": "Watch for a 4-bit-or-higher dual-B70 Flash-Next result on vLLM or llm-scaler and refresh prices before turning this into a full comparison page."
+   "next": "Watch for a 4-bit-or-higher dual-B70 Flash-Next result on vLLM or llm-scaler and refresh prices before turning this into a full comparison page.",
+   "hardware": {
+    "cards": 2,
+    "ddr5_gb": null,
+    "basis": "cited"
+   }
   },
   {
    "id": "2026-10-25-flash-next-cold-ngram-table",
@@ -2674,7 +2874,12 @@
     "https://github.com/ggml-org/llama.cpp/pull/28334",
     "https://github.com/ggml-org/llama.cpp/blob/master/src/llama-model-loader.cpp"
    ],
-   "next": "A/B on 2x R9700 at Q5: cold table vs pre-warmed vs --lazy-mode off vs --lazy-mode off with --load-mode none, using varied real prompts at 3K/13K/30K tokens."
+   "next": "A/B on 2x R9700 at Q5: cold table vs pre-warmed vs --lazy-mode off vs --lazy-mode off with --load-mode none, using varied real prompts at 3K/13K/30K tokens.",
+   "hardware": {
+    "cards": 2,
+    "ddr5_gb": 256,
+    "basis": "cited"
+   }
   },
   {
    "id": "2026-10-25-r9700-thermal-gating",
@@ -2729,7 +2934,12 @@
     "https://branetechnologies.com/blog/local-35b-model-gpu-thermals-waterblock",
     "https://slybase.com/en/gpu-inference-tuning-same-performance-quieter-cheaper/"
    ],
-   "next": "Baseline both of our R9700s under a 20-minute in-VRAM prefill load (per-card gap, power, clock, plus single-card runs) and re-check monthly."
+   "next": "Baseline both of our R9700s under a 20-minute in-VRAM prefill load (per-card gap, power, clock, plus single-card runs) and re-check monthly.",
+   "hardware": {
+    "cards": 2,
+    "ddr5_gb": null,
+    "basis": "cited"
+   }
   },
   {
    "id": "2026-10-25-gpu-max-hw-queues",
@@ -2791,7 +3001,12 @@
     "https://github.com/ROCm/legacy-rocm-build/issues/6347",
     "https://www.eia.gov/electricity/monthly/epm_table_grapher.php?t=epmt_5_6_a"
    ],
-   "next": "Spawn-lottery A/B on 2x R9700 (unset vs 1 vs 2, 8 cold starts each) for llama.cpp UD-Q5 (then Q4, Q6) and Strata Q6, plus idle watts with the model resident."
+   "next": "Spawn-lottery A/B on 2x R9700 (unset vs 1 vs 2, 8 cold starts each) for llama.cpp UD-Q5 (then Q4, Q6) and Strata Q6, plus idle watts with the model resident.",
+   "hardware": {
+    "cards": 1,
+    "ddr5_gb": null,
+    "basis": "cited"
+   }
   },
   {
    "id": "2026-10-24-pp-host-experts-gate",
@@ -2822,7 +3037,7 @@
     },
     {
      "label": "ROCm 4x MI50 prefill gain at 8K prompt",
-     "value": 28.0,
+     "value": 28,
      "unit": "%"
     },
     {
@@ -2846,7 +3061,12 @@
     "https://github.com/ggml-org/llama.cpp/pull/30449",
     "https://github.com/ggml-org/llama.cpp/pull/24156"
    ],
-   "next": "A/B on 2x R9700 with HIP: master --n-cpu-moe vs the PR with a spread override list and --load-mode none, Q4 then Q5 then Q6, pp8192/pp32768/tg64."
+   "next": "A/B on 2x R9700 with HIP: master --n-cpu-moe vs the PR with a spread override list and --load-mode none, Q4 then Q5 then Q6, pp8192/pp32768/tg64.",
+   "hardware": {
+    "cards": 2,
+    "ddr5_gb": null,
+    "basis": "cited"
+   }
   },
   {
    "id": "2026-10-24-r9700-ecc-vram",
@@ -2898,7 +3118,12 @@
     "https://zolotukhin.ai/zinc/docs/rdna4-tuning/",
     "https://github.com/daimonionnn/amd-r9700-vllm-and-tuning-toolkit/blob/main/docs/r9700-oc-uv-findings.md"
    ],
-   "next": "Measure ECC on vs off with llama-bench on two R9700s at Q4 and Q5, 32K depth, with a soak test before keeping it off."
+   "next": "Measure ECC on vs off with llama-bench on two R9700s at Q4 and Q5, 32K depth, with a soak test before keeping it off.",
+   "hardware": {
+    "cards": 2,
+    "ddr5_gb": null,
+    "basis": "estimate"
+   }
   },
   {
    "id": "2026-10-24-placement-aware-quant",
@@ -2954,7 +3179,12 @@
     "https://huggingface.co/unsloth/Qwen3.8-Flash-Next-GGUF",
     "https://unsloth.ai/docs/models/qwen3.8-next"
    ],
-   "next": "Build the mix from BF16 with Unsloth's imatrix and measure held-out KLD and decode against UD-Q4 and UD-Q5 on the local desktop; adopt only if KLD is within 15% of UD-Q5 at 10%+ more speed."
+   "next": "Build the mix from BF16 with Unsloth's imatrix and measure held-out KLD and decode against UD-Q4 and UD-Q5 on the local desktop; adopt only if KLD is within 15% of UD-Q5 at 10%+ more speed.",
+   "hardware": {
+    "cards": 2,
+    "ddr5_gb": null,
+    "basis": "estimate"
+   }
   },
   {
    "id": "2026-10-24-flash-depth-decay",
@@ -3001,7 +3231,7 @@
     },
     {
      "label": "f16 KV cache at 262K, both cards",
-     "value": 6.0,
+     "value": 6,
      "unit": "GiB"
     }
    ],
@@ -3014,7 +3244,12 @@
     "https://github.com/ggml-org/llama.cpp/issues/27796",
     "https://github.com/ggml-org/llama.cpp/issues/30005"
    ],
-   "next": "Measure decode at 0, 32K, 128K and 200K on 2x R9700 with f16 and q8_0 KV on a current HIP build. If 128K decode is below 75% of short-context decode, look at bringing the sparse decode path to HIP."
+   "next": "Measure decode at 0, 32K, 128K and 200K on 2x R9700 with f16 and q8_0 KV on a current HIP build. If 128K decode is below 75% of short-context decode, look at bringing the sparse decode path to HIP.",
+   "hardware": {
+    "cards": 2,
+    "ddr5_gb": null,
+    "basis": "estimate"
+   }
   },
   {
    "id": "2026-10-24-flash-model-shootout",
@@ -3040,7 +3275,7 @@
     },
     {
      "label": "DeepSeek-V4-Flash UD-Q4_K_XL ceiling",
-     "value": 17.0,
+     "value": 17,
      "unit": "tok/s (est.)"
     },
     {
@@ -3067,7 +3302,12 @@
     "https://huggingface.co/unsloth/DeepSeek-V4.1-Flash-1017-GGUF",
     "https://github.com/ggml-org/llama.cpp/blob/master/src/llama-arch.cpp"
    ],
-   "next": "Measure DeepSeek-V4-Flash UD-Q4 against GLM-5.3-Flash UD-Q5 on the local desktop to check the ~1.6x estimate; Qwen3.8-Flash-Next stays the main dual-R9700 lane."
+   "next": "Measure DeepSeek-V4-Flash UD-Q4 against GLM-5.3-Flash UD-Q5 on the local desktop to check the ~1.6x estimate; Qwen3.8-Flash-Next stays the main dual-R9700 lane.",
+   "hardware": {
+    "cards": 2,
+    "ddr5_gb": null,
+    "basis": "estimate"
+   }
   },
   {
    "id": "2026-10-24-reap-q4plus",
@@ -3111,7 +3351,12 @@
     "https://huggingface.co/sh0wie/Qwen3.8-Flash-Next-REAP-288-GGUF",
     "https://github.com/CerebrasResearch/reap"
    ],
-   "next": "Slice UD-Q4_K_XL with the published 320-expert list, measure decode at 8K and 98K on two R9700s, and run a tool-call plus fabrication gate against the unpruned file before using it for anything beyond coding agents."
+   "next": "Slice UD-Q4_K_XL with the published 320-expert list, measure decode at 8K and 98K on two R9700s, and run a tool-call plus fabrication gate against the unpruned file before using it for anything beyond coding agents.",
+   "hardware": {
+    "cards": 2,
+    "ddr5_gb": null,
+    "basis": "estimate"
+   }
   },
   {
    "id": "2026-10-24-rdna4-fa-head256",
@@ -3150,7 +3395,12 @@
     "https://github.com/ggml-org/llama.cpp/issues/28867",
     "https://github.com/ggml-org/llama.cpp/issues/24961"
    ],
-   "next": "Measure Flash-Next UD-Q5_K_XL prefill at 0/32K/128K on two R9700s: pre- vs post-#28102 ROCm builds vs Vulkan, with a kernel trace to confirm which attention kernel runs (its sparse-attention indexer path is unverified)."
+   "next": "Measure Flash-Next UD-Q5_K_XL prefill at 0/32K/128K on two R9700s: pre- vs post-#28102 ROCm builds vs Vulkan, with a kernel trace to confirm which attention kernel runs (its sparse-attention indexer path is unverified).",
+   "hardware": {
+    "cards": 2,
+    "ddr5_gb": null,
+    "basis": "cited"
+   }
   },
   {
    "id": "2026-10-24-two-box-4x-r9700-link",
@@ -3204,7 +3454,12 @@
     "https://jingchaozhang.github.io/LLM-Inference-Across-NVLink-and-InfiniBand/",
     "https://www.asrock.com/MB/AMD/X870%20Taichi%20Creator/"
    ],
-   "next": "Measure it: iperf3 and RTT on the 10GbE link, then llama-bench with --rpc at Q4, Q5 and Q6 once the second desktop is built."
+   "next": "Measure it: iperf3 and RTT on the 10GbE link, then llama-bench with --rpc at Q4, Q5 and Q6 once the second desktop is built.",
+   "hardware": {
+    "cards": 2,
+    "ddr5_gb": null,
+    "basis": "estimate"
+   }
   },
   {
    "id": "2026-10-24-card-count-resident",
@@ -3260,7 +3515,12 @@
     "https://docs.vllm.ai/en/stable/serving/parallelism_scaling/",
     "https://github.com/vllm-project/vllm/issues/11797"
    ],
-   "next": "Measure a 3-card resident UD-Q4_K_XL run and a 4-card vLLM TP4 run if extra cards are pooled into one box."
+   "next": "Measure a 3-card resident UD-Q4_K_XL run and a 4-card vLLM TP4 run if extra cards are pooled into one box.",
+   "hardware": {
+    "cards": 2,
+    "ddr5_gb": null,
+    "basis": "estimate"
+   }
   },
   {
    "id": "2026-10-24-alt-engines-gfx1201",
@@ -3299,7 +3559,12 @@
     "https://github.com/ikawrakow/ik_llama.cpp/discussions/562",
     "https://ktransformers.net/en/docs/hardware-platforms/cpu-gpu-requirements"
    ],
-   "next": "Gated test of ik_llama.cpp (HIP) vs mainline on 2x R9700 with a Q5 Flash model: build, correctness check, then speed with identical expert placement. Watch for HRX gfx1201 support."
+   "next": "Gated test of ik_llama.cpp (HIP) vs mainline on 2x R9700 with a Q5 Flash model: build, correctness check, then speed with identical expert placement. Watch for HRX gfx1201 support.",
+   "hardware": {
+    "cards": 1,
+    "ddr5_gb": null,
+    "basis": "cited"
+   }
   },
   {
    "id": "2026-10-24-toolcall-eval-noise",
@@ -3320,7 +3585,7 @@
    "metrics": [
     {
      "label": "BFCL v4, llama.cpp UD-Q4_K_XL, mean of 3",
-     "value": 73.0,
+     "value": 73,
      "unit": "%"
     },
     {
@@ -3354,7 +3619,12 @@
     "https://unsloth.ai/docs/models/qwen3.8-next",
     "https://huggingface.co/Cyronius/Qwen3.8-Flash-Next-131B-A6B-GGUF"
    ],
-   "next": "Run the paired 40-case tool-call harness on Q4, Q5 and Q6 Flash on two R9700s with identical server flags, 5 repeats each, and publish pass rates, leaked-call counts and McNemar results."
+   "next": "Run the paired 40-case tool-call harness on Q4, Q5 and Q6 Flash on two R9700s with identical server flags, 5 repeats each, and publish pass rates, leaked-call counts and McNemar results.",
+   "hardware": {
+    "cards": 1,
+    "ddr5_gb": null,
+    "basis": "cited"
+   }
   },
   {
    "id": "2026-10-24-local-vs-api-cost-flash",
@@ -3411,7 +3681,12 @@
     "http://www.nowinstock.net/computers/videocards/amd/aipror9700/",
     "https://github.com/ROCm/ROCm/issues/6453"
    ],
-   "next": "Measure GPU and CPU power on our machine during vLLM and Strata runs, plus vLLM aggregate speed at 2, 4 and 8 streams, to replace the estimates."
+   "next": "Measure GPU and CPU power on our machine during vLLM and Strata runs, plus vLLM aggregate speed at 2, 4 and 8 streams, to replace the estimates.",
+   "hardware": {
+    "cards": 2,
+    "ddr5_gb": null,
+    "basis": "estimate"
+   }
   },
   {
    "id": "2026-10-24-ngram-spec-hybrid-offload",
@@ -3471,7 +3746,12 @@
     "https://ai-muninn.com/en/blog/qwen4exp-177b-three-2080ti",
     "https://github.com/ggml-org/llama.cpp/blob/master/docs/speculative.md"
    ],
-   "next": "Measure on 2x R9700: baseline vs ngram-mod (defaults, MIN_BATCH=256, n-max 30) on rewrite, agent and prose turns, plus the checkpoint cost. MTP with native rollback is the likelier win once a Q4-or-better MTP head is confirmed."
+   "next": "Measure on 2x R9700: baseline vs ngram-mod (defaults, MIN_BATCH=256, n-max 30) on rewrite, agent and prose turns, plus the checkpoint cost. MTP with native rollback is the likelier win once a Q4-or-better MTP head is confirmed.",
+   "hardware": {
+    "cards": 2,
+    "ddr5_gb": null,
+    "basis": "estimate"
+   }
   },
   {
    "id": "2026-10-24-vllm-tp2-mxfp4-flash-fastest",
@@ -3523,7 +3803,12 @@
     }
    ],
    "sources": [],
-   "next": "Measure KL divergence / top-token match of the MXFP4 pack against a Q8_0 reference before calling it the default."
+   "next": "Measure KL divergence / top-token match of the MXFP4 pack against a Q8_0 reference before calling it the default.",
+   "hardware": {
+    "cards": 2,
+    "ddr5_gb": null,
+    "basis": "cited"
+   }
   },
   {
    "id": "2026-10-24-strata-q5-tuning-ab",
@@ -3565,7 +3850,12 @@
     }
    ],
    "sources": [],
-   "next": "No further Strata tuning planned; vLLM MXFP4 is now faster."
+   "next": "No further Strata tuning planned; vLLM MXFP4 is now faster.",
+   "hardware": {
+    "cards": 2,
+    "ddr5_gb": null,
+    "basis": "measured"
+   }
   },
   {
    "id": "2026-10-24-llamacpp-moe-cache-mib-measured",
@@ -3612,7 +3902,12 @@
     }
    ],
    "sources": [],
-   "next": "Use a modest cache size if prefill matters; the prompt-batch hit rate is the limiter."
+   "next": "Use a modest cache size if prefill matters; the prompt-batch hit rate is the limiter.",
+   "hardware": {
+    "cards": 2,
+    "ddr5_gb": null,
+    "basis": "measured"
+   }
   },
   {
    "id": "2026-10-24-glm53-flash-q5-dual-r9700",
@@ -3639,7 +3934,7 @@
     },
     {
      "label": "Decode at 36K",
-     "value": 6.0,
+     "value": 6,
      "unit": "tok/s"
     },
     {
@@ -3664,7 +3959,12 @@
     }
    ],
    "sources": [],
-   "next": "Revisit if Strata or vLLM adds GLM 5.3 support."
+   "next": "Revisit if Strata or vLLM adds GLM 5.3 support.",
+   "hardware": {
+    "cards": 2,
+    "ddr5_gb": null,
+    "basis": "measured"
+   }
   },
   {
    "id": "2026-10-24-deepseek-v4-flash-q4-dual-r9700",
@@ -3686,7 +3986,7 @@
    "metrics": [
     {
      "label": "Decode, short",
-     "value": 10.0,
+     "value": 10,
      "unit": "tok/s"
     },
     {
@@ -3716,7 +4016,12 @@
     }
    ],
    "sources": [],
-   "next": "None planned."
+   "next": "None planned.",
+   "hardware": {
+    "cards": 2,
+    "ddr5_gb": null,
+    "basis": "measured"
+   }
   },
   {
    "id": "2026-10-24-systemd-oomd-mmap-kill",
@@ -3778,7 +4083,7 @@
     },
     {
      "label": "x86 repack-eligible expert bytes, AP-Q5_K_M",
-     "value": 29.0,
+     "value": 29,
      "unit": "%"
     },
     {
@@ -3808,7 +4113,12 @@
     "https://github.com/ggml-org/llama.cpp/pull/20596",
     "https://chipsandcheese.com/p/amds-ryzen-9950x-zen-5-on-desktop"
    ],
-   "next": "Check the CPU's CCD count, measure read bandwidth with threads on one CCD vs both, then a llama-bench thread and CPU-mask ladder and -lm none vs mlock at UD-Q5."
+   "next": "Check the CPU's CCD count, measure read bandwidth with threads on one CCD vs both, then a llama-bench thread and CPU-mask ladder and -lm none vs mlock at UD-Q5.",
+   "hardware": {
+    "cards": 2,
+    "ddr5_gb": null,
+    "basis": "cited"
+   }
   },
   {
    "id": "2026-10-24-vulkan-vs-rocm-flash",
@@ -3850,7 +4160,7 @@
     },
     {
      "label": "27B Q4_K_M decode, 2 GPU tensor, Vulkan",
-     "value": 45.0,
+     "value": 45,
      "unit": "tok/s"
     },
     {
@@ -3870,7 +4180,12 @@
     "https://deepindeepsea.github.io/r9700-vllm-blogs/part12-r9700-the-full-sweep.html",
     "https://finaltype.github.io/quant-blog/en/devlog/2026-09/2026-09-26_moe35b-r9700-speed-tuning/"
    ],
-   "next": "Same-commit Vulkan vs HIP A/B on Flash-Next Q5 with experts in DDR5 on the local desktop; test Vulkan tensor split with CPU-resident experts once the PR merges."
+   "next": "Same-commit Vulkan vs HIP A/B on Flash-Next Q5 with experts in DDR5 on the local desktop; test Vulkan tensor split with CPU-resident experts once the PR merges.",
+   "hardware": {
+    "cards": 2,
+    "ddr5_gb": null,
+    "basis": "estimate"
+   }
   },
   {
    "id": "2026-10-24-parallel-slots-offload-cliff",
@@ -3922,7 +4237,12 @@
     "https://github.com/ggml-org/llama.cpp/blob/3642238cc12050c8ab70afdf4b3121ea365c7579/src/llama-context.cpp",
     "https://github.com/ggml-org/llama.cpp/blob/3642238cc12050c8ab70afdf4b3121ea365c7579/tools/batched-bench/README.md"
    ],
-   "next": "Measure with llama-batched-bench at 1-48 parallel sequences, default threshold vs GGML_OP_OFFLOAD_MIN_BATCH=256, Q5 first."
+   "next": "Measure with llama-batched-bench at 1-48 parallel sequences, default threshold vs GGML_OP_OFFLOAD_MIN_BATCH=256, Q5 first.",
+   "hardware": {
+    "cards": 2,
+    "ddr5_gb": null,
+    "basis": "estimate"
+   }
   },
   {
    "id": "2026-10-24-dual-r9700-platform-lanes-ddr5",
@@ -3951,7 +4271,7 @@
     },
     {
      "label": "Est. UD-Q5 decode, AM5 4x64 GB @6000",
-     "value": 37.0,
+     "value": 37,
      "unit": "tok/s"
     },
     {
@@ -3970,7 +4290,12 @@
     "https://www.tweaktown.com/news/105825/msi-releases-amd-agesa-1-2-0-3e-bios-officially-supports-4-64gb-sticks-up-to-256gb-ram/index.html",
     "https://www.kingston.com/en/memory/server-memory/memory-population-rules-wrx90-trx50"
    ],
-   "next": "Verify both cards train at x8 Gen5 under load and DDR5 runs at its set speed on our dual-R9700 machine."
+   "next": "Verify both cards train at x8 Gen5 under load and DDR5 runs at its set speed on our dual-R9700 machine.",
+   "hardware": {
+    "cards": 2,
+    "ddr5_gb": null,
+    "basis": "estimate"
+   }
   },
   {
    "id": "2026-10-24-quality-per-gib-q4plus",
@@ -4016,7 +4341,12 @@
     "https://huggingface.co/unsloth/Qwen3.8-Flash-Next-GGUF",
     "https://huggingface.co/bitlamas/Qwen3.8-Flash-Next-Q4_K_XL-DN4"
    ],
-   "next": "Measure held-out KL and decode speed for AP-Q5_K_M, AP-Q4_K_XL, UD-Q4_K_XL and UD-Q5_K_XL on 2x R9700 with identical flags."
+   "next": "Measure held-out KL and decode speed for AP-Q5_K_M, AP-Q4_K_XL, UD-Q4_K_XL and UD-Q5_K_XL on 2x R9700 with identical flags.",
+   "hardware": {
+    "cards": 2,
+    "ddr5_gb": null,
+    "basis": "estimate"
+   }
   },
   {
    "id": "2026-10-24-native-4bit-gate0",
@@ -4063,7 +4393,12 @@
     "https://hub.docker.com/r/stilldeadcode/vllm-radiance/",
     "https://codeberg.org/StillDeadcode/radiance"
    ],
-   "next": "Run the vLLM pack's TP2 recipe on two R9700s and measure decode, prefill and memory against our GGUF Q5/Q6 results."
+   "next": "Run the vLLM pack's TP2 recipe on two R9700s and measure decode, prefill and memory against our GGUF Q5/Q6 results.",
+   "hardware": {
+    "cards": 2,
+    "ddr5_gb": null,
+    "basis": "measured"
+   }
   },
   {
    "id": "2026-10-24-llamacpp-hip-rdna4-llvm23-fix",
@@ -4084,7 +4419,12 @@
     "https://github.com/ggml-org/llama.cpp/issues/30839",
     "https://github.com/ggml-org/llama.cpp/releases/tag/b11847"
    ],
-   "next": "Use b11847 or later for the dual-R9700 HIP test lane."
+   "next": "Use b11847 or later for the dual-R9700 HIP test lane.",
+   "hardware": {
+    "cards": 1,
+    "ddr5_gb": null,
+    "basis": "cited"
+   }
   },
   {
    "id": "2026-10-24-offload-prefill-pcie",
@@ -4110,7 +4450,7 @@
     },
     {
      "label": "Implied PCIe copy speed at baseline",
-     "value": 23.0,
+     "value": 23,
      "unit": "GB/s"
     },
     {
@@ -4141,7 +4481,12 @@
     "https://bittide.aicompass.dev/article/c9df2d89-8522-46ec-aa3f-fc1aed5b17d3",
     "https://deepindeepsea.github.io/r9700-vllm-blogs/part12-r9700-the-full-sweep.html"
    ],
-   "next": "Measure on our two R9700s, Q5 first: -ub 512 vs 2048 vs 4096 with -b 8192, then --load-mode none, RADV's transfer queue, HIP vs Vulkan, a higher offload threshold for short prompts, and whether only one card's link carries the copies."
+   "next": "Measure on our two R9700s, Q5 first: -ub 512 vs 2048 vs 4096 with -b 8192, then --load-mode none, RADV's transfer queue, HIP vs Vulkan, a higher offload threshold for short prompts, and whether only one card's link carries the copies.",
+   "hardware": {
+    "cards": 2,
+    "ddr5_gb": null,
+    "basis": "estimate"
+   }
   },
   {
    "id": "2026-10-23-hybrid-flash-prompt-cache",
@@ -4296,7 +4641,12 @@
     "https://github.com/ROCm/legacy-rocm-build/issues/6630",
     "https://www.reddit.com/r/LocalLLaMA/comments/1vjtokl/dual_radeon_ai_pro_r9700_server_much_slower_than/"
    ],
-   "next": "Measure GPU_MAX_HW_QUEUES=1 against unset on our dual-R9700 Flash config for decode speed, and run a small tp=2 vLLM smoke test with NCCL_PROTO=Simple before the vLLM lane."
+   "next": "Measure GPU_MAX_HW_QUEUES=1 against unset on our dual-R9700 Flash config for decode speed, and run a small tp=2 vLLM smoke test with NCCL_PROTO=Simple before the vLLM lane.",
+   "hardware": {
+    "cards": 2,
+    "ddr5_gb": null,
+    "basis": "cited"
+   }
   },
   {
    "id": "2026-10-23-flash-decode-roofline",
@@ -4351,7 +4701,12 @@
     "https://huggingface.co/unsloth/Qwen3.8-Flash-Next-GGUF",
     "https://www.techpowerup.com/gpu-specs/geforce-rtx-3090.c3622"
    ],
-   "next": "Check the model's slope with a llama.cpp --n-cpu-moe and thread sweep, and run Strata Q5 with MTP on vs off to split MTP gains from expert-cache gains."
+   "next": "Check the model's slope with a llama.cpp --n-cpu-moe and thread sweep, and run Strata Q5 with MTP on vs off to split MTP gains from expert-cache gains.",
+   "hardware": {
+    "cards": 2,
+    "ddr5_gb": null,
+    "basis": "estimate"
+   }
   },
   {
    "id": "2026-10-23-35b-one-card-vram-budget",
@@ -4382,7 +4737,7 @@
     },
     {
      "label": "f16 KV at 262K",
-     "value": 5.0,
+     "value": 5,
      "unit": "GB"
     },
     {
@@ -4394,7 +4749,12 @@
    "sources": [
     "https://huggingface.co/unsloth/Qwen3.6-35B-A3B-GGUF"
    ],
-   "next": "Measure actual VRAM in use on the card to pin the compute-buffer number exactly, and use it as the default in amdai.net's fit calculator."
+   "next": "Measure actual VRAM in use on the card to pin the compute-buffer number exactly, and use it as the default in amdai.net's fit calculator.",
+   "hardware": {
+    "cards": 1,
+    "ddr5_gb": null,
+    "basis": "measured"
+   }
   },
   {
    "id": "2026-10-23-measured-flash-q5-vs-q6-strata",
@@ -4454,7 +4814,12 @@
     }
    ],
    "sources": [],
-   "next": "Measure Q4 (UD-Q4_K_XL) on the same Strata setup to confirm the 2-7% Q5 penalty we expect from published numbers."
+   "next": "Measure Q4 (UD-Q4_K_XL) on the same Strata setup to confirm the 2-7% Q5 penalty we expect from published numbers.",
+   "hardware": {
+    "cards": 2,
+    "ddr5_gb": null,
+    "basis": "measured"
+   }
   },
   {
    "id": "2026-10-23-measured-rdna4-fork-vs-strata",
@@ -4499,7 +4864,12 @@
     }
    ],
    "sources": [],
-   "next": "Use -t16 (physical cores minus headroom), not all threads, for hybrid CPU-expert runs."
+   "next": "Use -t16 (physical cores minus headroom), not all threads, for hybrid CPU-expert runs.",
+   "hardware": {
+    "cards": 2,
+    "ddr5_gb": null,
+    "basis": "measured"
+   }
   },
   {
    "id": "2026-10-23-hsa-override-segfault",
@@ -4564,7 +4934,12 @@
     "https://github.com/ggml-org/llama.cpp/discussions/21043",
     "https://arxiv.org/abs/2605.11999"
    ],
-   "next": "A/B test power caps, a locked memory clock, COMPUTE profile and PCIe ASPM on dual R9700s with Flash experts in DDR5, where idle gaps between expert steps may make clock ramp-up matter more."
+   "next": "A/B test power caps, a locked memory clock, COMPUTE profile and PCIe ASPM on dual R9700s with Flash experts in DDR5, where idle gaps between expert steps may make clock ramp-up matter more.",
+   "hardware": {
+    "cards": 1,
+    "ddr5_gb": null,
+    "basis": "cited"
+   }
   },
   {
    "id": "2026-10-23-x-community-4bit-native",
@@ -4615,7 +4990,12 @@
     "https://x.com/dad__vibes/status/2111908353802998061",
     "https://x.com/sincoice/status/2113225429679210835"
    ],
-   "next": "Confirm Radiance and r9700-stack expert formats are at least 4-bit, then measure both at TP2 against the best GGUF Q5 result."
+   "next": "Confirm Radiance and r9700-stack expert formats are at least 4-bit, then measure both at TP2 against the best GGUF Q5 result.",
+   "hardware": {
+    "cards": 2,
+    "ddr5_gb": null,
+    "basis": "measured"
+   }
   },
   {
    "id": "2026-10-23-llamacpp-moe-expert-cache",
@@ -4661,7 +5041,12 @@
     "https://github.com/JohnTDI-cpu/llama-hip-p2p-allreduce",
     "https://forum.level1techs.com/t/does-the-lrlink-pcie-bridge-fix-rccls-broken-p2p-on-dual-r9700-update-yes-it-does/249623"
    ],
-   "next": "Measure UD-Q5_K_XL at 262K on two R9700s: the current -ncmoe baseline vs --fit with a partial cache vs all experts cached, with real hit rates, then Q4 and Q6 and a tensor-split check."
+   "next": "Measure UD-Q5_K_XL at 262K on two R9700s: the current -ncmoe baseline vs --fit with a partial cache vs all experts cached, with real hit rates, then Q4 and Q6 and a tensor-split check.",
+   "hardware": {
+    "cards": 2,
+    "ddr5_gb": null,
+    "basis": "measured"
+   }
   },
   {
    "id": "2026-10-23-ngram-table-vram-budget",
@@ -4708,7 +5093,12 @@
     "https://huggingface.co/unsloth/Qwen3.8-Flash-Next-GGUF",
     "https://github.com/ggml-org/llama.cpp/blob/master/src/llama-arch.cpp"
    ],
-   "next": "Check n-gram table placement in Strata and run an -ncmoe sweep around the estimated start points on the local desktop."
+   "next": "Check n-gram table placement in Strata and run an -ncmoe sweep around the estimated start points on the local desktop.",
+   "hardware": {
+    "cards": 2,
+    "ddr5_gb": null,
+    "basis": "measured"
+   }
   },
   {
    "id": "2026-10-23-ddr5-offload-failure",
@@ -4783,7 +5173,12 @@
     "https://github.com/Niko1221/Strata/blob/main/docs/QUANTS.md",
     "https://www.techpowerup.com/gpu-specs/geforce-rtx-3090.c3622"
    ],
-   "next": "Reproduce on the local desktop with Strata 0.2.3 and the RDNA4 Flash-Next llama.cpp fork."
+   "next": "Reproduce on the local desktop with Strata 0.2.3 and the RDNA4 Flash-Next llama.cpp fork.",
+   "hardware": {
+    "cards": 2,
+    "ddr5_gb": null,
+    "basis": "cited"
+   }
   },
   {
    "id": "2026-10-23-sweet-spot-q5",
@@ -4829,7 +5224,12 @@
     "https://huggingface.co/unsloth/Qwen3.8-Flash-Next-GGUF",
     "https://unsloth.ai/docs/models/qwen3.8-next"
    ],
-   "next": "Run the ordered Q5 benchmark sequence on the local desktop, with Q4 and Q6 as secondary runs."
+   "next": "Run the ordered Q5 benchmark sequence on the local desktop, with Q4 and Q6 as secondary runs.",
+   "hardware": {
+    "cards": 2,
+    "ddr5_gb": null,
+    "basis": "cited"
+   }
   }
  ]
 }

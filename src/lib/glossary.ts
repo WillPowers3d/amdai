@@ -1038,7 +1038,7 @@ export const GLOSSARY: GlossaryEntry[] = [
     letter: 'U',
     definition:
       'Official llama.cpp physical maximum batch size. llama-server README: -ub / --ubatch-size N (default 512; env LLAMA_ARG_UBATCH). The chunk that actually hits the GPU during prefill.',
-    why: 'Larger -ub can raise prefill when unused VRAM remains for the compute buffer. Smaller -ub can fit a tight card. House llama-server does not record a pin. llama-server -ub stays not measured yet — run amdai-bench ab-prefill.',
+    why: 'Larger -ub can raise prefill when unused VRAM remains for the compute buffer. Smaller -ub can fit a tight card. Never set -ub 65–256 on Qwen3.5 or Qwen3.6. House llama-server does not record a pin. llama-server -ub stays not measured yet — run amdai-bench ab-prefill.',
     deeper:
       'Unused VRAM after weights + KV is the shopper headroom. House 32 GB R9700 at 256K UD-Q5 leaves about 2.7 GB after the measured 29.34 GB peak. llama.cpp #14836 failed to allocate Vulkan compute pp buffers at -b 4096 -ub 4096. Cut -ub when that allocate appears.',
     links: [

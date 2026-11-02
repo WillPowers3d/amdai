@@ -298,8 +298,12 @@ const fitTwo = page.fitBadges.filter((row) => row.gpuCount === 2);
           return (
             <tr>
               <th scope="row">
-                <a class="underline decoration-accent/40" href={one.href}>{one.name}</a>
-                <span class="mt-1 block text-xs font-normal text-faint">{one.kindLabel}</span>
+                <a class="underline decoration-accent/40" href={one.canRunHref}>Can {one.name} run {page.name}?</a>
+                <span class="mt-1 block text-xs font-normal text-faint">
+                  <a class="underline decoration-accent/40" href={one.href}>{one.name} sheet</a>
+                  {' · '}
+                  {one.kindLabel}
+                </span>
               </th>
               <td>
                 {one.verdictLabel}

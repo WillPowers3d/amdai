@@ -1,8 +1,10 @@
 ---
 import Callout from './Callout.astro';
+import CanRunOnCardTable from './CanRunOnCardTable.astro';
 import GpuCompareLinks from './GpuCompareLinks.astro';
 import SystemRamNeed from './SystemRamNeed.astro';
 import type { ConsumerRecipePage } from '../lib/consumer-gpu';
+import type { CanRunGpuId } from '../lib/can-run';
 
 interface Props {
   sheet: ConsumerRecipePage;
@@ -48,6 +50,8 @@ const { sheet } = Astro.props;
   </p>
   <p class="mt-2 text-sm text-muted">HSA_OVERRIDE: {sheet.hsaOverride}</p>
 </section>
+
+<CanRunOnCardTable gpuId={sheet.id as CanRunGpuId} />
 
 <Callout type="note" title="Not measured on the local desktop">
   <p>{sheet.notMeasured}</p>

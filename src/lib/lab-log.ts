@@ -55,6 +55,16 @@ export type LabLogMetric = {
   unit?: string;
 };
 
+export const LAB_LOG_HARDWARE_BASIS = ['measured', 'estimate', 'cited', 'buying'] as const;
+export type LabLogHardwareBasis = (typeof LAB_LOG_HARDWARE_BASIS)[number];
+export const LAB_LOG_DDR5_TIERS = [96, 192, 256] as const;
+
+export type LabLogHardware = {
+  cards: 1 | 2;
+  ddr5_gb: 96 | 192 | 256 | null;
+  basis: LabLogHardwareBasis;
+};
+
 export type LabLogEntry = {
   id: string;
   date: string;
@@ -64,6 +74,7 @@ export type LabLogEntry = {
   summary: string;
   details?: string;
   setup?: LabLogSetup;
+  hardware?: LabLogHardware;
   metrics?: LabLogMetric[];
   sources?: string[];
   next?: string;
@@ -174,7 +185,32 @@ function normalizeEntry(raw: Partial<LabLogEntry>): LabLogEntry | null {
     metrics: metrics?.length ? metrics : undefined,
     sources: sources?.length ? sources : undefined,
     next: raw.next ? String(raw.next) : undefined,
+    hardware: normalizeHardware((raw as LabLogEntry).hardware),
   };
+}
+
+function normalizeHardware(raw: LabLogHardware | undefined): LabLogHardware | undefined {
+  if (!raw || typeof raw !== 'object') return undefined;
+  const cards = raw.cards;
+  const basis = raw.basis;
+  const ddr5 = raw.ddr5_gb;
+  if (cards !== 1 && cards !== 2) return undefined;
+  if (!LAB_LOG_HARDWARE_BASIS.includes(basis)) return undefined;
+  if (ddr5 != null && !LAB_LOG_DDR5_TIERS.includes(ddr5 as (typeof LAB_LOG_DDR5_TIERS)[number])) return undefined;
+  return { cards, ddr5_gb: ddr5 ?? null, basis };
+}
+
+export function hardwareLead(basis: LabLogHardwareBasis): string {
+  if (basis === 'measured') return 'Measured on';
+  if (basis === 'estimate') return 'Estimated for';
+  if (basis === 'cited') return 'Reported on';
+  return 'Parts this covers';
+}
+
+export function hardwareLine(hw: LabLogHardware): string {
+  const cards = hw.cards === 1 ? 'one Radeon AI PRO R9700 (32 GB)' : 'two Radeon AI PRO R9700 (32 GB each)';
+  const ram = hw.ddr5_gb ? ` + ${hw.ddr5_gb} GB DDR5` : '';
+  return `${hardwareLead(hw.basis)}: ${cards}${ram}.`;
 }
 
 export function normalizeLabLog(raw: Partial<LabLogFile> | null | undefined): LabLogFile {
@@ -390,6 +426,12 @@ export function assertLabLogValid(file: LabLogFile): string[] {
     const blob = JSON.stringify(entry);
     if (PII_TEXT.test(blob)) errors.push(`banned:${entry.id}`);
     if (HOME_PATH.test(blob)) errors.push(`home-path:${entry.id}`);
+    if (entry.hardware) {
+      if (entry.hardware.cards !== 1 && entry.hardware.cards !== 2) errors.push(`hardware-cards:${entry.id}`);
+      if (!LAB_LOG_HARDWARE_BASIS.includes(entry.hardware.basis)) errors.push(`hardware-basis:${entry.id}`);
+      const ram = entry.hardware.ddr5_gb;
+      if (ram != null && !LAB_LOG_DDR5_TIERS.includes(ram)) errors.push(`hardware-ram:${entry.id}`);
+    }
   }
   const whole = JSON.stringify(file);
   if (PII_TEXT.test(whole)) errors.push('banned');

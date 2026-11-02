@@ -46,7 +46,7 @@ for (const recipe of recipes) {
 for (const row of backends()) {
   extra.push({
     path: `/backends/${row.id}`,
-    title: row.name,
+    title: `${row.name} engine`,
     description: `${row.name} on a home Radeon box — ${row.short} llama.cpp stays first unless this page says otherwise.`,
   });
 }
@@ -54,7 +54,7 @@ for (const row of backends()) {
 for (const row of harnesses()) {
   extra.push({
     path: `/harnesses/${row.id}`,
-    title: row.title,
+    title: `${row.title} harness`,
     description: `${row.title}: ${row.summary}`.slice(0, 200),
   });
 }

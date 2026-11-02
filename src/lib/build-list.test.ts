@@ -35,8 +35,8 @@ describe('one-answer parts list', () => {
       ['GPU', 'Motherboard', 'CPU', 'RAM', 'PSU', 'Storage', 'Case', 'Cooler'],
     );
     assert.match(list.parts[0]!.part, /R9700/);
-    assert.equal(list.parts[0]!.go, '/go/newegg/r9700?src=builder-list-gpu');
-    assert.ok(list.parts.every((row) => /^\/go\/newegg\/[a-z0-9-]+(\?src=[a-z0-9-]+)?$/.test(row.go)));
+    assert.equal(list.parts[0]!.go, '/go/newegg/r9700/?src=builder-list-gpu');
+    assert.ok(list.parts.every((row) => /^\/go\/newegg\/[a-z0-9-]+\/(\?src=[a-z0-9-]+)?$/.test(row.go)));
     assert.ok(list.parts.every((row) => !/newegg\.com/.test(row.go)));
     assert.match(list.parts[5]!.part, /990 PRO 2TB/);
     assert.match(list.parts[5]!.go, /\/go\/newegg\/mz-v9p2t0bw/);

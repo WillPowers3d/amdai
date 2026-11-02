@@ -1,7 +1,8 @@
 /**
  * Head-to-head model compare under /compare/models.
  * Built only from cited /models pages, calculator presets, GPU sheets,
- * and existing R9700 run-card helpers. Q3 is a labeled estimate. Q1/Q2 stay off.
+ * and existing R9700 run-card helpers. This table lists Q6 / Q5 / Q4.
+ * Q3 stays on the calculator as a labeled estimate. Q1/Q2 stay off.
  * No invented prices or tok/s. Never recommend Qwen2.5 or Qwen3-8B.
  *
  * Do not import model-pages (recipes-data glob) — this module is loaded from
@@ -32,12 +33,14 @@ import { officialLinks } from './site';
 import { HOUSE_STACK_LAB, type StackLabOpenInput } from './stack-lab-open';
 import { oneVsTwoRows } from './local-desktop-compare';
 import type { RunCard } from './run-card';
+import { goPath } from './go-src';
 
-export const MODEL_COMPARE_PUBLISHED = '2026-10-14';
+export const MODEL_COMPARE_PUBLISHED = '2026-11-02';
 export const MODEL_COMPARE_HUB = '/compare/models';
 export const MODEL_COMPARE_ENGINE = 'llama.cpp';
 export const MODEL_COMPARE_CONTEXTS = [4096, 32768] as const;
 export const MODEL_COMPARE_RAM_CONTEXT = 32768;
+export const MODEL_COMPARE_FULL_CAP = 262144;
 
 export const MODEL_COMPARE_IDS = [
   'qwen36',
@@ -174,14 +177,14 @@ const HOUSE_LAUNCH: Partial<Record<ModelCompareId, ModelCompareLaunch[]>> = {
   ],
 };
 
-export type ModelCompareQuantStep = 'Q6' | 'Q5' | 'Q4' | 'Q3';
-export type ModelCompareFitKind = 'estimate' | 'q3-estimate' | 'measured';
+export type ModelCompareQuantStep = 'Q6' | 'Q5' | 'Q4';
+export type ModelCompareFitKind = 'estimate' | 'measured';
 
 type QuantSpec = {
   step: ModelCompareQuantStep;
   id: QuantId;
   label: string;
-  kind: 'estimate' | 'q3-estimate';
+  kind: 'estimate';
 };
 
 function quantLadder(id: ModelCompareId): QuantSpec[] {
@@ -190,7 +193,6 @@ function quantLadder(id: ModelCompareId): QuantSpec[] {
       { step: 'Q6', id: 'q6_k', label: 'Q6_K', kind: 'estimate' },
       { step: 'Q5', id: 'q5_k_m', label: 'UD-Q5_K_XL', kind: 'estimate' },
       { step: 'Q4', id: 'q4_k_m', label: 'Q4_K_M', kind: 'estimate' },
-      { step: 'Q3', id: 'q3_k_xl', label: 'UD-Q3_K_XL', kind: 'q3-estimate' },
     ];
   }
   if (id === 'flash') {
@@ -198,7 +200,6 @@ function quantLadder(id: ModelCompareId): QuantSpec[] {
       { step: 'Q6', id: 'q6_k', label: 'UD-Q6_K_XL', kind: 'estimate' },
       { step: 'Q5', id: 'q5_k_m', label: 'UD-Q5_K_XL', kind: 'estimate' },
       { step: 'Q4', id: 'q4_k_m', label: 'UD-Q4_K_XL', kind: 'estimate' },
-      { step: 'Q3', id: 'q3_k_xl', label: 'UD-Q3_K_XL', kind: 'q3-estimate' },
     ];
   }
   if (id === 'glm-53-flash') {
@@ -206,7 +207,6 @@ function quantLadder(id: ModelCompareId): QuantSpec[] {
       { step: 'Q6', id: 'q6_k', label: 'UD-Q6_K_XL', kind: 'estimate' },
       { step: 'Q5', id: 'q5_k_m', label: 'UD-Q5_K_XL', kind: 'estimate' },
       { step: 'Q4', id: 'q4_k_m', label: 'UD-Q4_K_XL', kind: 'estimate' },
-      { step: 'Q3', id: 'q3_k_m', label: 'UD-Q3_K_XL', kind: 'q3-estimate' },
     ];
   }
   if (id === 'qwen38-27b') {
@@ -214,15 +214,20 @@ function quantLadder(id: ModelCompareId): QuantSpec[] {
       { step: 'Q6', id: 'q6_k', label: 'UD-Q6_K', kind: 'estimate' },
       { step: 'Q5', id: 'q5_k_m', label: 'UD-Q5_K_M', kind: 'estimate' },
       { step: 'Q4', id: 'q4_k_m', label: 'UD-Q4_K_M', kind: 'estimate' },
-      { step: 'Q3', id: 'q3_k_m', label: 'UD-Q3_K_XL', kind: 'q3-estimate' },
     ];
   }
   return [
     { step: 'Q6', id: 'q6_k', label: 'Q6_K', kind: 'estimate' },
     { step: 'Q5', id: 'q5_k_m', label: 'Q5_K_M', kind: 'estimate' },
     { step: 'Q4', id: 'q4_k_m', label: 'Q4_K_M', kind: 'estimate' },
-    { step: 'Q3', id: 'q3_k_m', label: 'Q3_K_M', kind: 'q3-estimate' },
   ];
+}
+
+export function modelCompareContexts(id: ModelCompareId): number[] {
+  const full = Math.min(NATIVE_CONTEXT[id].tokens, MODEL_COMPARE_FULL_CAP);
+  const out = [...MODEL_COMPARE_CONTEXTS];
+  if (!out.includes(full as (typeof MODEL_COMPARE_CONTEXTS)[number])) out.push(full);
+  return out;
 }
 
 function shopperQuant(id: ModelCompareId): QuantId {
@@ -257,7 +262,7 @@ export type ModelCompareFitRow = {
   rightQuant: string;
   leftQuantId: QuantId;
   rightQuantId: QuantId;
-  kind: 'estimate' | 'q3-estimate';
+  kind: 'estimate';
   kindLabel: string;
   leftWeightsGb: string;
   rightWeightsGb: string;
@@ -281,7 +286,7 @@ export type ModelCompareFile = {
   quantId: QuantId;
   sizeGb: string;
   cite: string;
-  kind: 'cited' | 'q3-estimate' | 'estimate';
+  kind: 'cited' | 'estimate';
 };
 
 export type ModelCompareLaunch = {
@@ -314,6 +319,7 @@ export type ModelCompareSide = {
   house: boolean;
   measured: boolean;
   calculatorHref: string;
+  canRunHref: string;
   ramNeed: SystemRamNeed;
   ramQuant: string;
   offload: boolean;
@@ -335,14 +341,35 @@ export type ModelComparePairPage = {
   description: string;
   lead: string;
   engine: string;
-  q3Left: string;
-  q3Right: string;
-  q3CiteLeft: string;
-  q3CiteRight: string;
+  buy: ModelCompareBuyBox;
   gpuBlocks: ModelCompareGpuBlock[];
   useCases: ModelCompareUseCase[];
   stackLab: StackLabOpenInput[];
   featured: boolean;
+};
+
+export type ModelCompareBuyNeed = {
+  id: ModelCompareId;
+  shortName: string;
+  line: string;
+  cards: 1 | 2;
+  ramProduct?: 'ddr5-96' | 'ddr5-192';
+  ramLabel?: string;
+};
+
+export type ModelCompareBuyLink = {
+  href: string;
+  label: string;
+  aria: string;
+  productId: string;
+};
+
+export type ModelCompareBuyBox = {
+  heading: string;
+  lines: ModelCompareBuyNeed[];
+  primary: ModelCompareBuyLink;
+  second?: ModelCompareBuyLink;
+  ram: ModelCompareBuyLink[];
 };
 
 export type ModelCompareLink = {
@@ -458,8 +485,99 @@ export function modelCompareCalcInput(
   };
 }
 
-function kindLabel(kind: 'estimate' | 'q3-estimate'): string {
-  return kind === 'q3-estimate' ? 'Q3 estimate' : 'Estimate';
+function kindLabel(_kind: 'estimate'): string {
+  return 'Estimate';
+}
+
+const CAN_RUN_SLUG: Record<ModelCompareId, string> = {
+  qwen36: 'qwen36-35b',
+  flash: 'flash',
+  'gpt-oss-20b': 'gpt-oss-20b',
+  'gemma3-27b': 'gemma3-27b',
+  'llama33-70b': 'llama33-70b',
+  'glm-53-flash': 'glm-53-flash',
+  'qwen36-27b': 'qwen36-27b',
+  'qwen38-27b': 'qwen38-27b',
+};
+
+export function modelCompareCanRunHref(id: ModelCompareId, gpu = 'r9700'): string {
+  return `/can-run/${CAN_RUN_SLUG[id]}-on-${gpu === 'r9700' ? 'r9700' : gpu}`;
+}
+
+const BUY_NEED: Record<ModelCompareId, Omit<ModelCompareBuyNeed, 'id' | 'shortName'>> = {
+  qwen36: {
+    line: 'Qwen3.6-35B at 256K: house Q5 on one R9700 (measured on one card).',
+    cards: 1,
+  },
+  flash: {
+    line: 'Qwen 3.8 Flash at 256K: Q4 on two R9700s + 96 GB DDR5.',
+    cards: 2,
+    ramProduct: 'ddr5-96',
+    ramLabel: '96 GB DDR5 kits',
+  },
+  'gpt-oss-20b': {
+    line: 'gpt-oss 20B at 128K: Q6 on one R9700.',
+    cards: 1,
+  },
+  'gemma3-27b': {
+    line: 'Gemma 3 27B at 128K: Q6 on one R9700 (tight).',
+    cards: 1,
+  },
+  'llama33-70b': {
+    line: 'Llama 3.3 70B at 128K: two R9700s with q8_0 KV (Q4 only). f16 KV does not fit two cards.',
+    cards: 2,
+  },
+  'glm-53-flash': {
+    line: 'GLM 5.3 Flash at 256K: Q4 on one R9700 + 192 GB DDR5.',
+    cards: 1,
+    ramProduct: 'ddr5-192',
+    ramLabel: '192 GB DDR5 kits',
+  },
+  'qwen36-27b': {
+    line: 'Qwen3.6 27B at 256K: Q6 on one R9700 with q8_0 KV. f16 KV needs two cards.',
+    cards: 1,
+  },
+  'qwen38-27b': {
+    line: 'Qwen3.8 27B at 256K: Q6 on one R9700 with q8_0 KV. f16 KV needs two cards.',
+    cards: 1,
+  },
+};
+
+export function modelCompareBuyBox(left: ModelCompareId, right: ModelCompareId): ModelCompareBuyBox {
+  const ids = [left, right];
+  const lines = ids.map((id) => ({ id, shortName: MODEL_COMPARE_SHORT[id], ...BUY_NEED[id] }));
+  const secondFor = lines.find((row) => row.cards === 2);
+  const ramSeen = new Set<string>();
+  const ram: ModelCompareBuyLink[] = [];
+  for (const row of lines) {
+    if (!row.ramProduct || ramSeen.has(row.ramProduct)) continue;
+    ramSeen.add(row.ramProduct);
+    ram.push({
+      href: goPath('newegg', row.ramProduct, 'model-compare-ram'),
+      label: `Newegg: check ${row.ramLabel}`,
+      aria: `Check ${row.ramLabel} at Newegg`,
+      productId: row.ramProduct,
+    });
+  }
+  return {
+    heading: 'What you would buy to run each at full context',
+    lines,
+    primary: {
+      href: goPath('newegg', 'r9700', 'model-compare-r9700'),
+      label: 'Newegg: check R9700 price',
+      aria: 'Check AMD Radeon AI PRO R9700 price at Newegg',
+      productId: 'r9700',
+    },
+    second: secondFor
+      ? {
+          href: goPath('newegg', 'r9700', 'model-compare-r9700-2'),
+          label: `Second R9700, only if you'll run ${secondFor.shortName}`,
+          aria: `Check a second AMD Radeon AI PRO R9700 price at Newegg for ${secondFor.shortName}`,
+          productId: 'r9700',
+        }
+      : undefined,
+    ram,
+  };
 }
 
 function paramsLine(total: number | null | undefined, active: number | null | undefined): string {
@@ -479,7 +597,7 @@ function fileRow(id: ModelCompareId, spec: QuantSpec): ModelCompareFile {
       quantId: spec.id,
       sizeGb: `${listed.decimalGb} GB`,
       cite: listed.label,
-      kind: spec.kind === 'q3-estimate' ? 'q3-estimate' : 'cited',
+      kind: 'cited',
     };
   }
   return {
@@ -488,7 +606,7 @@ function fileRow(id: ModelCompareId, spec: QuantSpec): ModelCompareFile {
     quantId: spec.id,
     sizeGb: `${formatGiB(weights.weightsGiB)} GB`,
     cite: `${weights.weightsNote} No listed publisher file size for this quant.`,
-    kind: spec.kind === 'q3-estimate' ? 'q3-estimate' : 'estimate',
+    kind: 'estimate',
   };
 }
 
@@ -570,6 +688,7 @@ export function modelCompareSide(id: ModelCompareId): ModelCompareSide {
     house: id === 'qwen36' || id === 'flash',
     measured: id === 'qwen36',
     calculatorHref: `/calculator?${inputToQuery(ramInput)}`,
+    canRunHref: modelCompareCanRunHref(id),
     ramNeed,
     ramQuant: shopperQuantLabel(id),
     offload: sideOffload(id),
@@ -583,30 +702,22 @@ function r9700MeasuredDecode(
   context: number,
   cards: RunCard[],
 ): { decode: string; kind: ModelCompareFitKind; runIds: string[]; note: string } {
-  if (spec.kind === 'q3-estimate') {
-    return {
-      decode: 'not measured',
-      kind: 'q3-estimate',
-      runIds: [],
-      note: `${spec.label} is a labeled estimate — not a local desktop run.`,
-    };
-  }
   if (modelId !== 'qwen36' || gpuId !== 'r9700') {
     return {
-      decode: 'not measured',
+      decode: 'not measured yet',
       kind: 'estimate',
       runIds: [],
-      note: 'No official local desktop cell for this model × card. Empty stays not measured.',
+      note: 'No official local desktop cell for this model × card. Not measured yet.',
     };
   }
   const row = oneVsTwoRows(cards).find((item) => item.quant === spec.label && item.context === context);
-  const decode = row?.one.decode ?? 'not measured';
-  if (!row || decode === 'not measured') {
+  const decode = row?.one.decode ?? 'not measured yet';
+  if (!row || decode === 'not measured' || decode === 'not measured yet') {
     return {
-      decode: 'not measured',
+      decode: 'not measured yet',
       kind: 'estimate',
       runIds: [],
-      note: 'No official local desktop cell for this quant × context. Empty stays not measured.',
+      note: 'No official local desktop cell for this quant × context. Not measured yet.',
     };
   }
   return {
@@ -653,21 +764,20 @@ function gpuBlocks(left: ModelCompareId, right: ModelCompareId, cards: RunCard[]
         const rightSpec = rightLadder[index]!;
         const leftWeights = compute(modelCompareCalcInput(left, gpuId, leftSpec.id, MODEL_COMPARE_CONTEXTS[0]));
         const rightWeights = compute(modelCompareCalcInput(right, gpuId, rightSpec.id, MODEL_COMPARE_CONTEXTS[0]));
-        const q3 = leftSpec.kind === 'q3-estimate' || rightSpec.kind === 'q3-estimate';
         return {
           step: leftSpec.step,
           leftQuant: leftSpec.label,
           rightQuant: rightSpec.label,
           leftQuantId: leftSpec.id,
           rightQuantId: rightSpec.id,
-          kind: q3 ? 'q3-estimate' : 'estimate',
-          kindLabel: kindLabel(q3 ? 'q3-estimate' : 'estimate'),
+          kind: 'estimate',
+          kindLabel: kindLabel('estimate'),
           leftWeightsGb: `${formatGiB(leftWeights.weightsGiB)} GB`,
           rightWeightsGb: `${formatGiB(rightWeights.weightsGiB)} GB`,
           leftWeightsNote: leftWeights.weightsNote,
           rightWeightsNote: rightWeights.weightsNote,
-          left: MODEL_COMPARE_CONTEXTS.map((context) => fitCell(left, gpuId, leftSpec, context, cards)),
-          right: MODEL_COMPARE_CONTEXTS.map((context) => fitCell(right, gpuId, rightSpec, context, cards)),
+          left: modelCompareContexts(left).map((context) => fitCell(left, gpuId, leftSpec, context, cards)),
+          right: modelCompareContexts(right).map((context) => fitCell(right, gpuId, rightSpec, context, cards)),
         };
       }),
     };
@@ -683,27 +793,27 @@ function q4Fits(id: ModelCompareId, gpuId: ModelCompareFitGpuId, context: number
 function pairLead(left: ModelCompareSide, right: ModelCompareSide): string {
   const sizeBit = `${left.shortName} is ${left.paramsLine}, ${left.contextLabel} on the official card. ${right.shortName} is ${right.paramsLine}, ${right.contextLabel}.`;
   const quantBit =
-    `Q6 / Q5 / Q4 file sizes come from the listed GGUFs on each /models page, or a calculator estimate when a listing is missing. ${left.files.find((file) => file.step === 'Q3')?.quant} and ${right.files.find((file) => file.step === 'Q3')?.quant} are labeled estimates.`;
+    `Q6 / Q5 / Q4 file sizes come from the listed GGUFs on each /models page, or a calculator estimate when a listing is missing. Q3 stays off.`;
   const leftFit = q4Fits(left.id, 'r9700', 4096);
   const rightFit = q4Fits(right.id, 'r9700', 4096);
   const fitBit =
     leftFit && rightFit
-      ? `Shopper Q4 files fit one R9700 at 4K on the calculator for both sides.`
+      ? `Q4 files fit one R9700 at 4K on the calculator for both sides.`
       : leftFit && !rightFit
-        ? `Shopper Q4 fits ${left.shortName} on one R9700 at 4K and spills on ${right.shortName}.`
+        ? `Q4 fits ${left.shortName} on one R9700 at 4K and spills on ${right.shortName}.`
         : !leftFit && rightFit
-          ? `Shopper Q4 fits ${right.shortName} on one R9700 at 4K and spills on ${left.shortName}.`
-          : `Shopper Q4 does not sit in one R9700 VRAM on either side — expect RAM offload.`;
+          ? `Q4 fits ${right.shortName} on one R9700 at 4K and spills on ${left.shortName}.`
+          : `Q4 does not sit in one R9700 VRAM on either side — expect RAM offload.`;
   const measuredBit = left.measured
-    ? `${left.shortName} has measured llama.cpp cells on the local desktop. ${right.shortName} speed stays not measured.`
+    ? `${left.shortName} has measured llama.cpp cells on the local desktop. ${right.shortName} speed is not measured yet.`
     : right.measured
-      ? `${right.shortName} has measured llama.cpp cells on the local desktop. ${left.shortName} speed stays not measured.`
+      ? `${right.shortName} has measured llama.cpp cells on the local desktop. ${left.shortName} speed is not measured yet.`
       : `Neither model was measured on the local desktop. Fit numbers are calculator estimates.`;
   return `${sizeBit} ${quantBit} ${fitBit} ${measuredBit} llama.cpp first.`;
 }
 
 function pairDescription(left: ModelCompareSide, right: ModelCompareSide): string {
-  return `${left.shortName} vs ${right.shortName} on Radeon — sizes, cited context, Q6/Q5/Q4 fit estimates, labeled Q3. No invented prices.`;
+  return `${left.shortName} vs ${right.shortName} on Radeon — sizes, cited context, and Q6/Q5/Q4 fit at 4K, 32K, and full context. No invented prices.`;
 }
 
 function useCases(left: ModelCompareSide, right: ModelCompareSide): ModelCompareUseCase[] {
@@ -716,10 +826,10 @@ function useCases(left: ModelCompareSide, right: ModelCompareSide): ModelCompare
 
   const chat =
     leftQ4 && rightQ4
-      ? `Both models hold a shopper Q4 file on one R9700 at 4K on the calculator. ${measured ? `${measured.shortName} is the measured local desktop side — read those cards, do not copy a decode figure onto ${other.shortName}.` : 'Neither side has a local desktop decode cell. Pick on size, active params, and VRAM headroom, not a speed we invent.'}`
+      ? `Both models hold a Q4 file on one R9700 at 4K on the calculator. ${measured ? `${measured.shortName} is the measured local desktop side — read those cards, do not copy a decode figure onto ${other.shortName}.` : 'Neither side has a local desktop decode cell. Pick on size, active params, and VRAM headroom, not a speed we invent.'}`
       : leftQ4 !== rightQ4
-        ? `${leftQ4 ? left.shortName : right.shortName} holds shopper Q4 on one R9700 at 4K. ${leftQ4 ? right.shortName : left.shortName} needs RAM offload or its listed Q3 file — that Q3 is a labeled estimate.`
-        : `Neither model holds shopper Q4 in one R9700 VRAM on the calculator. Chat still works with RAM offload — read ${RAM_MIN_LABEL} and ${RAM_FULL_LABEL} below — or a listed Q3 estimate.`;
+        ? `${leftQ4 ? left.shortName : right.shortName} holds Q4 on one R9700 at 4K. ${leftQ4 ? right.shortName : left.shortName} needs RAM offload.`
+        : `Neither model holds Q4 in one R9700 VRAM on the calculator. Chat still works with RAM offload — read ${RAM_MIN_LABEL} and ${RAM_FULL_LABEL} below.`;
 
   const coding =
     measured && measured.id === 'qwen36'
@@ -730,7 +840,7 @@ function useCases(left: ModelCompareSide, right: ModelCompareSide): ModelCompare
 
   const longCtx = `Cited context is ${left.contextLabel} vs ${right.contextLabel}. KV grows with context. Q4 at 32K ${leftQ432 ? `fits ${left.shortName}` : `spills on ${left.shortName}`} and ${rightQ432 ? `fits ${right.shortName}` : `spills on ${right.shortName}`} on one R9700. Read /long-context for measured R9700 35B 128K–262K cards. We do not invent a 128K decode figure here.`;
 
-  const size = `${left.shortName} files: ${left.files.map((file) => `${file.quant} ${file.sizeGb}`).join(', ')}. ${right.shortName} files: ${right.files.map((file) => `${file.quant} ${file.sizeGb}`).join(', ')}. Q3 rows are labeled estimates. Fit on the four existing GPU sheets below. Empty speed cells stay not measured.`;
+  const size = `${left.shortName} files: ${left.files.map((file) => `${file.quant} ${file.sizeGb}`).join(', ')}. ${right.shortName} files: ${right.files.map((file) => `${file.quant} ${file.sizeGb}`).join(', ')}. Fit on the four existing GPU sheets below. Empty speed cells stay not measured yet.`;
 
   return [
     { id: 'chat', title: 'Chat', body: chat },
@@ -750,8 +860,6 @@ export function modelComparePairPage(
   const left = modelCompareSide(leftId);
   const right = modelCompareSide(rightId);
   const slug = modelComparePairSlug(leftId, rightId);
-  const q3Left = left.files.find((file) => file.step === 'Q3')!;
-  const q3Right = right.files.find((file) => file.step === 'Q3')!;
   return {
     slug,
     path: `${MODEL_COMPARE_HUB}/${slug}`,
@@ -762,10 +870,7 @@ export function modelComparePairPage(
     description: pairDescription(left, right),
     lead: pairLead(left, right),
     engine: MODEL_COMPARE_ENGINE,
-    q3Left: q3Left.quant,
-    q3Right: q3Right.quant,
-    q3CiteLeft: q3Left.cite,
-    q3CiteRight: q3Right.cite,
+    buy: modelCompareBuyBox(leftId, rightId),
     gpuBlocks: gpuBlocks(leftId, rightId, cards),
     useCases: useCases(left, right),
     stackLab: stackLabFor(leftId, rightId),
@@ -831,7 +936,7 @@ export function modelCompareSeoRows(): Array<{ path: string; title: string; desc
     path: MODEL_COMPARE_HUB,
     title: 'Compare models',
     description:
-      'Pick two cited AMDai model pages. Compare sizes, cited context, Q6/Q5/Q4 fit, and a labeled Q3 estimate. No invented prices.',
+      'Pick two cited AMDai model pages. Compare sizes, cited context, and Q6/Q5/Q4 fit at 4K, 32K, and full context. No invented prices.',
     published: MODEL_COMPARE_PUBLISHED,
   };
   return [
@@ -851,10 +956,8 @@ export function modelCompareBlob(page: ModelComparePairPage): string {
     page.heading,
     page.description,
     page.lead,
-    page.q3Left,
-    page.q3Right,
-    page.q3CiteLeft,
-    page.q3CiteRight,
+    page.buy.heading,
+    page.buy.lines.map((row) => row.line).join('\n'),
     page.left.archNote,
     page.right.archNote,
     page.left.contextCite,
@@ -873,7 +976,7 @@ export function modelCompareBlob(page: ModelComparePairPage): string {
 }
 
 export const MODEL_COMPARE_HUB_LEAD =
-  `Pick two models that already have cited AMDai /models pages — Qwen3.6-35B, Qwen 3.8 Flash, gpt-oss 20B, Gemma 3 27B, Llama 3.3 70B, GLM 5.3 Flash, Qwen3.6 27B, and Qwen3.8 27B. Each pair page uses official-card sizes and context claims, calculator fit on the existing R9700 / RX 7900 XTX / RX 7900 XT / RX 7800 XT sheets at Q6 / Q5 / Q4 plus a labeled Q3 estimate, and llama.cpp-first commands already on those model pages. Measured decode appears only from existing local desktop run cards. We do not invent a price or a benchmark. ${RAM_MIN_LABEL} and ${RAM_FULL_LABEL} print wherever a file spills to system RAM.`;
+  `Pick two models that already have cited AMDai /models pages — Qwen3.6-35B, Qwen 3.8 Flash, gpt-oss 20B, Gemma 3 27B, Llama 3.3 70B, GLM 5.3 Flash, Qwen3.6 27B, and Qwen3.8 27B. Each pair page uses official-card sizes and context claims, calculator fit on the existing R9700 / RX 7900 XTX / RX 7900 XT / RX 7800 XT sheets at Q6 / Q5 / Q4 (no Q3), and llama.cpp-first commands already on those model pages. Measured decode appears only from existing local desktop run cards. We do not invent a price or a benchmark. ${RAM_MIN_LABEL} and ${RAM_FULL_LABEL} print wherever a file spills to system RAM.`;
 
 export function modelCompareHrefs(page: ModelComparePairPage): string[] {
   return [
@@ -895,6 +998,8 @@ export function modelCompareHrefs(page: ModelComparePairPage): string[] {
     '/faq',
     '/methodology',
     '/long-context',
+    page.left.canRunHref,
+    page.right.canRunHref,
   ];
 }
 
@@ -939,33 +1044,27 @@ export function assertModelCompareValid(cards: RunCard[] = []): string[] {
       if (!steps.includes('Q6')) errors.push(`${page.path} ${block.gpuId} missing Q6`);
       if (!steps.includes('Q5')) errors.push(`${page.path} ${block.gpuId} missing Q5`);
       if (!steps.includes('Q4')) errors.push(`${page.path} ${block.gpuId} missing Q4`);
-      if (!steps.includes('Q3')) errors.push(`${page.path} ${block.gpuId} missing Q3`);
+      if (steps.includes('Q3')) errors.push(`${page.path} ${block.gpuId} still lists Q3`);
       for (const row of block.rows) {
-        if (row.step === 'Q3') {
-          if (row.kind !== 'q3-estimate') errors.push(`${page.path} Q3 row unlabeled`);
-          if (!/estimate/i.test(row.kindLabel)) errors.push(`${page.path} Q3 kind unlabeled`);
-        }
+        const leftCtx = modelCompareContexts(page.left.id);
+        const rightCtx = modelCompareContexts(page.right.id);
+        if (row.left.length !== leftCtx.length) errors.push(`${page.path} left context columns`);
+        if (row.right.length !== rightCtx.length) errors.push(`${page.path} right context columns`);
         for (const cell of [...row.left, ...row.right]) {
           if (!cell.totalGb.endsWith(' GB')) errors.push(`${page.path} ${row.step} missing GB label`);
-          if (row.kind === 'q3-estimate' && !/estimate/i.test(cell.note)) {
-            errors.push(`${page.path} Q3 cell unlabeled`);
-          }
         }
-        const leftMeasuredOk = page.left.id === 'qwen36' && block.gpuId === 'r9700' && row.step !== 'Q3';
-        const rightMeasuredOk = page.right.id === 'qwen36' && block.gpuId === 'r9700' && row.step !== 'Q3';
+        const leftMeasuredOk = page.left.id === 'qwen36' && block.gpuId === 'r9700';
+        const rightMeasuredOk = page.right.id === 'qwen36' && block.gpuId === 'r9700';
         for (const cell of row.left) {
-          if (!leftMeasuredOk && cell.speed !== 'not measured') {
+          if (!leftMeasuredOk && cell.speed !== 'not measured yet') {
             errors.push(`${page.path} invented ${page.left.shortName} tok/s on ${block.gpuId}`);
           }
           if (!leftMeasuredOk && cell.speedKind === 'measured') {
             errors.push(`${page.path} measured badge on a non-card side`);
           }
-          if (row.step === 'Q3' && cell.speed !== 'not measured') {
-            errors.push(`${page.path} invented Q3 tok/s`);
-          }
         }
         for (const cell of row.right) {
-          if (!rightMeasuredOk && cell.speed !== 'not measured') {
+          if (!rightMeasuredOk && cell.speed !== 'not measured yet') {
             errors.push(`${page.path} invented ${page.right.shortName} tok/s on ${block.gpuId}`);
           }
           if (!rightMeasuredOk && cell.speedKind === 'measured') {
@@ -975,8 +1074,11 @@ export function assertModelCompareValid(cards: RunCard[] = []): string[] {
       }
     }
 
+    if (!page.buy.primary.href.includes('/go/newegg/r9700')) errors.push(`${page.path} missing R9700 buy`);
+    if (!page.left.canRunHref.includes('/can-run/')) errors.push(`${page.path} missing can-run`);
+
     for (const side of [page.left, page.right]) {
-      if (side.files.length !== 4) errors.push(`${page.path} ${side.id} missing quant files`);
+      if (side.files.length !== 3) errors.push(`${page.path} ${side.id} missing quant files`);
       if (!(DIMM_KIT_GB as readonly number[]).includes(side.ramNeed.atSelected.kitGb)) {
         errors.push(`${page.path} ${side.id} min kit ${side.ramNeed.atSelected.kitGb} is not a real DIMM size`);
       }

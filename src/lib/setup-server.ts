@@ -116,7 +116,7 @@ After=network-online.target
 [Service]
 Type=simple
 User=YOUR_LOGIN
-ExecStart=/path/to/llama.cpp/build-vk/bin/llama-server -m /path/to/nvme/${SETUP_SERVER_HOUSE_FILE} -ngl 99 -c 262144 --cache-type-k f16 --cache-type-v f16 --jinja --host 127.0.0.1 --port ${SETUP_SERVER_PORT}
+ExecStart=/path/to/llama.cpp/build-vk/bin/llama-server -m /path/to/nvme/${SETUP_SERVER_HOUSE_FILE} -ngl 99 -c 262144 --cache-type-k f16 --cache-type-v f16 --jinja -np 1 --host 127.0.0.1 --port ${SETUP_SERVER_PORT}
 Restart=on-failure
 
 [Install]
@@ -166,7 +166,7 @@ export const SETUP_SERVER_STEPS: SetupServerStep[] = [
   {
     id: 'unit',
     title: 'Write one systemd unit for the house 35B',
-    body: `Drop a Type=simple unit under /etc/systemd/system/llama-server.service. systemd.service documents Type, ExecStart, Restart, and User. Run as the login that already reaches /dev/dri — not root. Restart=on-failure. The ExecStart line is the serve-qwen command, not a new flag set. This is an example, not a measured local desktop service. Two-card split or combo units stay on /setup/multi-gpu.`,
+    body: `Drop a Type=simple unit under /etc/systemd/system/llama-server.service. systemd.service documents Type, ExecStart, Restart, and User. Run as the login that already reaches /dev/dri — not root. Restart=on-failure. The ExecStart line is the serve-qwen command plus -np 1 for a single-user lane (default llama-server auto-slots copy idle KV on each new task). This is an example, not a measured local desktop service. Two-card split or combo units stay on /setup/multi-gpu.`,
     links: [
       { href: '/tutorials/serve-qwen', label: 'Serve Qwen' },
       { href: '/setup/multi-gpu', label: 'Multi-GPU systemd notes' },
