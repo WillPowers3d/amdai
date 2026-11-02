@@ -527,7 +527,7 @@ export const MODEL_PRESETS: ModelPreset[] = [
     embedHidden: 2560,
     embedTied: false,
     separableParamsB: 51.2,
-    defaultQuant: 'q6_k',
+    defaultQuant: 'q4_k_m',
     defaultCtx: 262144,
     defaultKv: 'f16',
     indexerLayers: 12,

@@ -15,6 +15,8 @@ import {
   ramCapFlag,
   ramRecommendation,
 } from '../lib/ram-kit';
+import { destinationUrl, retailerById, wrapRetailer } from '../lib/affiliates';
+import { buyButtonAriaLabel, buyLinkRel } from '../lib/buy-label';
 import { goPath } from '../lib/go-src';
 import type { Motherboard } from '../lib/motherboards';
 
@@ -30,6 +32,9 @@ const { boards, bigModels = false, needsOffload = false, gpuCount = 1, id = 'ram
 const initial = ramRecommendation({ bigModels, needsOffload, gpuCount });
 const capped = boards.filter((board) => board.max_ram_gb < 256);
 const visibleIds = new Set([initial.primary.id, ...initial.alternatives.map((row) => row.id)]);
+const newegg = retailerById('newegg');
+const fastDest = destinationUrl(RAM_96_FAST_PRODUCT, 'newegg');
+const fastWrap = fastDest && newegg ? wrapRetailer(fastDest, newegg) : { href: '', affiliate: false };
 ---
 
 <section id={id} class="space-y-4" data-ram-pick data-ram-offload={needsOffload ? '1' : '0'}>
@@ -82,8 +87,11 @@ const visibleIds = new Set([initial.primary.id, ...initial.alternatives.map((row
               <a
                 class="inline-flex min-h-11 items-center rounded-full bg-[#c73b24] px-4 py-2 text-sm font-semibold text-[#fffaf3]"
                 href={goPath('newegg', RAM_96_FAST_PRODUCT, RAM_96_FAST_SRC)}
-                rel="sponsored nofollow noopener"
+                rel={buyLinkRel(fastWrap.affiliate)}
                 target="_blank"
+                aria-label={buyButtonAriaLabel('Fastest tested 96 GB DDR5 kit', 'Newegg')}
+                data-retailer="newegg"
+                data-product={RAM_96_FAST_PRODUCT}
               >
                 Fastest tested · Check price at Newegg
               </a>

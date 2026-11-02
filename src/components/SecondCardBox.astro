@@ -69,12 +69,26 @@ const ramRel = ramWrap.affiliate ? 'sponsored nofollow noopener' : 'noopener';
 
   <div class="mt-4 flex flex-wrap gap-2" data-second-card-actions>
     {verdict.buy && verdict.link ? (
-      <a class="btn-primary" href={verdict.link} rel={r9700Rel} target="_blank" data-second-card-r9700>
+      <a
+        class="btn-primary"
+        href={verdict.link}
+        rel={r9700Rel}
+        target="_blank"
+        data-second-card-r9700
+        aria-label="Check AMD Radeon AI PRO R9700 price at Newegg (opens in a new tab)"
+      >
         Check R9700 at Newegg
       </a>
     ) : null}
     {verdict.buy && verdict.also ? (
-      <a class="btn-ghost" href={verdict.also} rel={ramRel} target="_blank" data-second-card-ram>
+      <a
+        class="btn-ghost"
+        href={verdict.also}
+        rel={ramRel}
+        target="_blank"
+        data-second-card-ram
+        aria-label="Check 256 GB DDR5 kit price at Newegg (opens in a new tab)"
+      >
         256 GB DDR5 kit at Newegg
       </a>
     ) : null}

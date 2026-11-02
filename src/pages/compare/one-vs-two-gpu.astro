@@ -455,6 +455,7 @@ const payload = rows.map((row) => ({
         gpu.href = verdict.link;
         gpu.rel = secondCardRels.r9700;
         gpu.target = '_blank';
+        gpu.setAttribute('aria-label', 'Check AMD Radeon AI PRO R9700 price at Newegg (opens in a new tab)');
         gpu.textContent = 'Check R9700 at Newegg';
         actions.appendChild(gpu);
       }
@@ -464,6 +465,7 @@ const payload = rows.map((row) => ({
         kit.href = verdict.also;
         kit.rel = secondCardRels.ram;
         kit.target = '_blank';
+        kit.setAttribute('aria-label', 'Check 256 GB DDR5 kit price at Newegg (opens in a new tab)');
         kit.textContent = '256 GB DDR5 kit at Newegg';
         actions.appendChild(kit);
       }

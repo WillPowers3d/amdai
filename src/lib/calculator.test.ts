@@ -115,6 +115,7 @@ describe('calculator catalog guards', () => {
     assert.ok(BACKENDS[0].id === 'llamacpp');
     assert.ok(GPU_PRESETS[0].id === 'r9700');
     const flash = MODEL_PRESETS.find((m) => m.id === 'flash');
+    assert.equal(flash?.defaultQuant, 'q4_k_m');
     assert.equal(flash?.publisherFiles.q3_k_xl?.decimalGb, 90);
     assert.equal(flash?.publisherFiles.iq3?.decimalGb, 81.96);
     assert.equal(flash?.publisherFiles.q4_k_m?.decimalGb, 111);
@@ -329,9 +330,10 @@ describe('calculator math and modes', () => {
   });
 
   it('reports Flash host RAM as a kit with a breakdown, not a bare offload figure', () => {
-    const flash = compute(
-      applyModelPreset('flash', { ...DEFAULT_INPUT, gpuCount: 1, split: false, context: 32768, backendId: 'strata' }),
-    );
+    const flash = compute({
+      ...applyModelPreset('flash', { ...DEFAULT_INPUT, gpuCount: 1, split: false, context: 32768, backendId: 'strata' }),
+      quantId: 'q6_k',
+    });
     assert.ok(flash.overflowGiB > 1);
     const ram = flash.systemRam;
     assert.ok(ram.atSelected.kitGb >= 192);
