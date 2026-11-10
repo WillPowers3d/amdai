@@ -48,7 +48,10 @@ const jsonld = jsonLdScript(pageJsonLd({ pathname: path, title, description }));
     <meta name="description" content={description} />
     {noindex && <meta name="robots" content="noindex,nofollow" />}
     <meta name="theme-color" content="#08080b" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
     <link rel="canonical" href={canonical} />
     {dates && <meta property="article:published_time" content={dates.published} />}
     {dates && <meta property="article:modified_time" content={dates.modified} />}
