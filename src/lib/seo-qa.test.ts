@@ -11,13 +11,17 @@ import {
   formatSeoReport,
   requiredFieldsFor,
 } from './seo-qa';
+import { execFileSync } from 'node:child_process';
 import {
   SEARCH_ACTION_TEMPLATE,
   SITE_ORIGIN,
+  articleDates,
   breadcrumbsFor,
   canonicalUrl,
   documentTitle,
   isSitemapExcluded,
+  lastmodFor,
+  pageSourceRels,
   shouldNoindex,
 } from './seo';
 import { breadcrumbJsonLd, forbiddenJsonLdHits, organizationJsonLd, pageJsonLd, personJsonLdHits, websiteJsonLd } from './jsonld';
@@ -40,7 +44,12 @@ describe('SEO helpers', () => {
     assert.equal(canonicalUrl('/'), `${SITE_ORIGIN}/`);
     assert.equal(canonicalUrl('/llms.txt'), `${SITE_ORIGIN}/llms.txt`);
     assert.equal(canonicalUrl('/lab-log.md'), `${SITE_ORIGIN}/lab-log.md`);
-    assert.match(SEARCH_ACTION_TEMPLATE, /\/search\?q=\{search_term_string\}/);
+    assert.match(SEARCH_ACTION_TEMPLATE, /\/search\/\?q=\{search_term_string\}/);
+    assert.equal(
+      (websiteJsonLd().potentialAction as { target: { urlTemplate: string } }).target.urlTemplate,
+      SEARCH_ACTION_TEMPLATE,
+    );
+    assert.equal(SEARCH_ACTION_TEMPLATE, `${SITE_ORIGIN}/search/?q={search_term_string}`);
   });
 
   it('builds Home + page breadcrumbs for every path below the homepage', () => {
@@ -97,6 +106,46 @@ describe('SEO helpers', () => {
       'applicationCategory',
       'operatingSystem',
     ]);
+    assert.equal('sameAs' in organizationJsonLd(), false);
+  });
+
+  it('lastmodFor uses PAGE_DATES then the page source file, never src or repo HEAD', () => {
+    function gitCs(rel: string): string {
+      return execFileSync('git', ['--literal-pathspecs', 'log', '-1', '--format=%cs', '--', rel], {
+        encoding: 'utf8',
+        cwd: process.cwd(),
+        stdio: ['ignore', 'pipe', 'ignore'],
+      }).trim();
+    }
+    assert.equal(lastmodFor('/blog/rocm-versions-are-a-matching-problem'), '2026-09-15');
+    assert.equal(lastmodFor('/blog/living-status-not-gospel'), '2026-09-20');
+    assert.deepEqual(articleDates('/blog/rocm-versions-are-a-matching-problem'), {
+      published: '2026-09-15',
+      modified: '2026-09-15',
+    });
+    assert.deepEqual(articleDates('/blog/living-status-not-gospel'), {
+      published: '2026-09-20',
+      modified: '2026-09-20',
+    });
+    const homeGit = gitCs('src/pages/index.astro');
+    const blogGit = gitCs('src/pages/blog/index.astro');
+    const repoHead = gitCs('.');
+    const srcHead = gitCs('src');
+    assert.equal(lastmodFor('/'), homeGit);
+    assert.equal(lastmodFor('/blog'), blogGit);
+    assert.deepEqual(pageSourceRels('/'), ['src/pages/index.astro']);
+    assert.deepEqual(pageSourceRels('/blog'), ['src/pages/blog/index.astro']);
+    assert.ok(pageSourceRels('/blog/vulkan-is-an-on-ramp').includes('src/content/blog/vulkan-is-an-on-ramp.mdx'));
+    assert.ok(pageSourceRels('/forum/c/vllm').some((rel) => rel.includes('[slug].astro') || rel.endsWith('forum-categories.ts')));
+    if (homeGit !== repoHead) assert.notEqual(lastmodFor('/'), repoHead);
+    if (blogGit !== repoHead) assert.notEqual(lastmodFor('/blog'), repoHead);
+    if (homeGit !== srcHead) assert.notEqual(lastmodFor('/'), srcHead);
+    if (blogGit !== srcHead) assert.notEqual(lastmodFor('/blog'), srcHead);
+    const forum = lastmodFor('/forum/c/vllm');
+    if (forum) {
+      assert.notEqual(forum, repoHead);
+      assert.notEqual(forum, srcHead);
+    }
   });
 });
 

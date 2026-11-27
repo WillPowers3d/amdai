@@ -117,7 +117,7 @@ export function websiteJsonLd(): JsonLd {
       '@type': 'SearchAction',
       target: {
         '@type': 'EntryPoint',
-        urlTemplate: SEARCH_ACTION_TEMPLATE,
+        urlTemplate: SEARCH_ACTION_TEMPLATE, // live site 308s /search → /search/
       },
       'query-input': 'required name=search_term_string',
     },
