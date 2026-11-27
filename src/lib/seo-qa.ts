@@ -380,22 +380,6 @@ export function checkSeoIndex(index: DistIndex): SeoIssue[] {
     if (isSitemapExcluded(path)) {
       issues.push({ kind: 'sitemap', path, message: `noindex URL appears in sitemap: ${loc}` });
     }
-    if (!loc.includes('<lastmod') && !readSitemapHasLastmod(index.root, loc)) {
-      /* lastmod checked once below */
-    }
-  }
-
-  const sitemap0 = join(index.root, 'sitemap-0.xml');
-  if (existsSync(sitemap0)) {
-    const xml = readFileSync(sitemap0, 'utf8');
-    const urlBlocks = xml.match(/<url>[\s\S]*?<\/url>/g) ?? [];
-    for (const block of urlBlocks) {
-      const loc = block.match(/<loc>\s*([^<]+)\s*<\/loc>/i)?.[1]?.trim();
-      if (!loc) continue;
-      if (!/<lastmod>/i.test(block)) {
-        issues.push({ kind: 'sitemap', path: loc, message: `sitemap entry missing lastmod: ${loc}` });
-      }
-    }
   }
 
   const robots = join(index.root, 'robots.txt');
@@ -419,15 +403,6 @@ export function checkSeoIndex(index: DistIndex): SeoIssue[] {
   void collectJsonLdKeys;
   void FORBIDDEN_JSONLD_KEYS;
   return issues;
-}
-
-function readSitemapHasLastmod(root: string, loc: string): boolean {
-  const file = join(root, 'sitemap-0.xml');
-  if (!existsSync(file)) return false;
-  const xml = readFileSync(file, 'utf8');
-  const escaped = loc.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  const block = xml.match(new RegExp(`<url>[\\s\\S]*?<loc>\\s*${escaped}\\s*</loc>[\\s\\S]*?</url>`));
-  return !!block && /<lastmod>/i.test(block[0]);
 }
 
 export function formatSeoReport(input: { asOf: string; pages: number; issues: SeoIssue[] }): string {

@@ -38,11 +38,10 @@ export default defineConfig({
       serialize(item) {
         const path = urlPath(new URL(item.url).pathname);
         const lastmod = lastmodFor(path);
-        return {
-          ...item,
-          url: canonicalUrl(path),
-          lastmod,
-        };
+        const next = { ...item, url: canonicalUrl(path) };
+        if (lastmod) next.lastmod = lastmod;
+        else delete next.lastmod;
+        return next;
       },
     }),
     htmlSeparators(),

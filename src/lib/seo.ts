@@ -4,7 +4,7 @@
  * Never invent prices, ratings, or tok/s here.
  */
 
-import { execSync } from 'node:child_process';
+import { execFileSync } from 'node:child_process';
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -30,7 +30,7 @@ export const TITLE_SUFFIX = ` · ${BRAND}`;
 export const TITLE_MAX = 60;
 export const DESC_MIN = 70;
 export const DESC_MAX = 160;
-export const SEARCH_ACTION_TEMPLATE = `${SITE_ORIGIN}/search?q={search_term_string}`;
+export const SEARCH_ACTION_TEMPLATE = `${SITE_ORIGIN}/search/?q={search_term_string}`;
 
 export const NOINDEX_EXACT = new Set([
   '/login',
@@ -1435,13 +1435,68 @@ export function datasetCoverage(cards: RunCard[]): { start: string; end: string 
 }
 
 const gitDayCache = new Map<string, string | null>();
+const PAGE_FILE_EXTS = ['.astro', '.ts', '.js', '.mdx', '.md'] as const;
+const GENERATED_DATA_PREFIXES: Array<readonly [string, readonly string[]]> = [
+  ['/compare/models/', ['src/lib/model-compare.ts']],
+  ['/harnesses/quiz/', ['src/data/harnesses.yaml', 'src/lib/harnesses.ts']],
+  ['/can-run/', ['src/lib/can-run.ts']],
+  ['/compare/', ['src/lib/gpu-compare.ts']],
+  ['/backends/', ['src/data/backends.yaml']],
+  ['/harnesses/', ['src/data/harnesses.yaml']],
+  ['/rocm-problems/', ['src/data/rocm-problems.yaml']],
+  ['/gpus/', ['src/data/gpus.yaml']],
+  ['/models/', ['src/lib/model-pages.ts']],
+  ['/forum/', ['src/lib/forum-categories.ts']],
+  ['/results/', ['src/lib/run-card-data.ts']],
+];
+
+let cachedRepoRoot: string | null = null;
+let cachedDynamicTemplates: Array<{ rel: string; pattern: RegExp }> | null = null;
+let cachedRecipeFiles: Map<string, string> | null = null;
+
+function repoRoot(): string {
+  if (cachedRepoRoot) return cachedRepoRoot;
+  const starts = [process.cwd(), join(hereDir(), '../..')];
+  for (const start of starts) {
+    let dir = start;
+    for (let i = 0; i < 10; i += 1) {
+      if (existsSync(join(dir, '.git'))) {
+        cachedRepoRoot = dir;
+        return dir;
+      }
+      const parent = dirname(dir);
+      if (parent === dir) break;
+      dir = parent;
+    }
+  }
+  cachedRepoRoot = process.cwd();
+  return cachedRepoRoot;
+}
+
+function posixRel(abs: string, root: string): string {
+  return abs.slice(root.length).replaceAll('\\', '/').replace(/^\//, '');
+}
+
+function resolveRepoFile(rel: string): string | null {
+  if (!rel || rel === '.' || rel === 'src' || rel.includes('..') || rel.endsWith('/')) return null;
+  try {
+    const abs = join(repoRoot(), rel);
+    return statSync(abs).isFile() ? abs : null;
+  } catch {
+    return null;
+  }
+}
 
 function gitDay(rel: string): string | null {
   if (gitDayCache.has(rel)) return gitDayCache.get(rel) ?? null;
+  if (!resolveRepoFile(rel)) {
+    gitDayCache.set(rel, null);
+    return null;
+  }
   try {
-    const out = execSync(`git log -1 --format=%cs -- ${rel}`, {
+    const out = execFileSync('git', ['--literal-pathspecs', 'log', '-1', '--format=%cs', '--', rel], {
       encoding: 'utf8',
-      cwd: process.cwd(),
+      cwd: repoRoot(),
       stdio: ['ignore', 'pipe', 'ignore'],
     }).trim();
     const day = /^\d{4}-\d{2}-\d{2}$/.test(out) ? out : null;
@@ -1453,6 +1508,113 @@ function gitDay(rel: string): string | null {
   }
 }
 
+function latestGitDay(rels: readonly string[]): string | undefined {
+  let latest: string | undefined;
+  for (const rel of rels) {
+    const day = gitDay(rel);
+    if (day && (!latest || day > latest)) latest = day;
+  }
+  return latest;
+}
+
+function staticPageRels(path: string): string[] {
+  const candidates =
+    path === '/'
+      ? PAGE_FILE_EXTS.map((ext) => `src/pages/index${ext}`)
+      : [
+          ...PAGE_FILE_EXTS.map((ext) => `src/pages${path}${ext}`),
+          ...PAGE_FILE_EXTS.map((ext) => `src/pages${path}/index${ext}`),
+        ];
+  return candidates.filter((rel) => !rel.includes('[') && resolveRepoFile(rel));
+}
+
+function uniqueContentRels(path: string): string[] {
+  const bases: string[] = [];
+  if (path.startsWith('/blog/')) bases.push(`src/content/blog/${path.slice('/blog/'.length)}`);
+  else if (path.startsWith('/tutorials/')) bases.push(`src/content/tutorials/${path.slice('/tutorials/'.length)}`);
+  else if (path.startsWith('/guides/')) bases.push(`src/content/guides/${path.slice('/guides/'.length)}`);
+  else if (path.startsWith('/updates/') && path !== '/updates/matrix') {
+    bases.push(`src/content/updates/${path.slice('/updates/'.length)}`);
+  } else if (/^\/[^/]+$/.test(path)) {
+    bases.push(`src/content/guides${path}`);
+  }
+  return bases.flatMap((base) => [`${base}.mdx`, `${base}.md`]).filter((rel) => resolveRepoFile(rel));
+}
+
+function recipeFileMap(): Map<string, string> {
+  if (cachedRecipeFiles) return cachedRecipeFiles;
+  const map = new Map<string, string>();
+  const root = join(repoRoot(), 'src/data/recipes');
+  if (existsSync(root)) {
+    for (const abs of walk(root)) {
+      if (!abs.endsWith('.json')) continue;
+      const rel = `src/data/recipes/${posixRel(abs, root)}`;
+      const id = rel.split('/').pop()!.replace(/\.json$/, '');
+      map.set(id, rel);
+    }
+  }
+  cachedRecipeFiles = map;
+  return map;
+}
+
+function uniqueRecipeRels(path: string): string[] {
+  if (!path.startsWith('/recipes/')) return [];
+  const rel = recipeFileMap().get(path.slice('/recipes/'.length));
+  return rel && resolveRepoFile(rel) ? [rel] : [];
+}
+
+function dynamicTemplates(): Array<{ rel: string; pattern: RegExp }> {
+  if (cachedDynamicTemplates) return cachedDynamicTemplates;
+  const pages = join(repoRoot(), 'src/pages');
+  const out: Array<{ rel: string; pattern: RegExp; len: number }> = [];
+  for (const abs of walk(pages)) {
+    const rel = `src/pages/${posixRel(abs, pages)}`;
+    if (rel.includes('/api/') || !rel.includes('[') || !/\.(astro|ts|js|mdx|md)$/.test(rel)) continue;
+    let route = rel.slice('src/pages'.length).replace(/\.(astro|ts|js|mdx|md)$/, '');
+    if (route.endsWith('/index')) route = route.slice(0, -'/index'.length);
+    const parts = route.split('/').filter(Boolean);
+    if (!parts.some((part) => part.startsWith('[') && part.endsWith(']'))) continue;
+    const source = parts
+      .map((part) => {
+        if (part.startsWith('[...') && part.endsWith(']')) return '.+';
+        if (part.startsWith('[') && part.endsWith(']')) return '[^/]+';
+        return part.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      })
+      .join('/');
+    out.push({ rel, pattern: new RegExp(`^/${source}$`), len: rel.length });
+  }
+  out.sort((a, b) => b.len - a.len);
+  cachedDynamicTemplates = out.map(({ rel, pattern }) => ({ rel, pattern }));
+  return cachedDynamicTemplates;
+}
+
+function generatedDataRels(path: string): string[] {
+  for (const [prefix, files] of GENERATED_DATA_PREFIXES) {
+    if (path.startsWith(prefix)) return files.filter((rel) => resolveRepoFile(rel));
+  }
+  return [];
+}
+
+/** Own source files for a URL: dedicated page, then unique content/data, then the generating template. */
+export function pageSourceRels(pathname: string): string[] {
+  const path = urlPath(pathname);
+  const staticRels = staticPageRels(path);
+  if (staticRels.length) return staticRels;
+  const unique = [...uniqueContentRels(path), ...uniqueRecipeRels(path)];
+  if (unique.length) return unique;
+  const templates = dynamicTemplates()
+    .filter((row) => row.pattern.test(path))
+    .map((row) => row.rel)
+    .filter((rel) => resolveRepoFile(rel));
+  return [...templates, ...generatedDataRels(path)];
+}
+
+/**
+ * Sitemap lastmod. Prefer PAGE_DATES / frontmatter, then git of this page's own
+ * source file. Never fall back to src-wide or repo-wide git dates — Google's
+ * gen-AI attribution guidance says not to bump a page date unless the content
+ * substantially changed.
+ */
 export function lastmodFor(pathname: string): string | undefined {
   const path = urlPath(pathname);
   if (path === '/lab-log' || path === '/lab-log.md' || path === '/lab-log/rss.xml') {
@@ -1460,16 +1622,7 @@ export function lastmodFor(pathname: string): string | undefined {
   }
   const hit = PAGE_DATES.get(path);
   if (hit) return hit.modified;
-  if (path.startsWith('/rocm')) return isoDay(GUIDE_UPDATED) ?? undefined;
-  const rels =
-    path === '/'
-      ? ['src/pages/index.astro']
-      : [`src/pages${path}.astro`, `src/pages${path}/index.astro`, `src/content/guides${path}.mdx`];
-  for (const rel of rels) {
-    const day = gitDay(rel);
-    if (day) return day;
-  }
-  return gitDay('src') ?? gitDay('.') ?? undefined;
+  return latestGitDay(pageSourceRels(path));
 }
 
 export function articleDates(pathname: string): { published: string; modified: string } | null {
